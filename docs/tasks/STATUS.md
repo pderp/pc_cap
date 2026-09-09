@@ -1,13 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 19:20 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:23 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 17 |
-| ready | 9 |
-| pending | 59 |
+| done | 18 |
+| ready | 10 |
+| pending | 57 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -26,7 +26,7 @@ GPU seconds charged to tasks so far: 0
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | DATA-00 | Fetch and hash public assets into assets/ | **done** | DATA | ENV-01 | none | no | orchestrator |  |  |
 | REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **ready** | DATA | DATA-00 | none | no |  |  |  |
-| DATA-01 | Editing pools | **pending** | DATA | S0-09 | lease | yes |  |  |  |
+| DATA-01 | Editing pools | **ready** | DATA | S0-09 | lease | yes |  |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **pending** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
 | DATA-04 | LM, probe and property sets with inventory | **ready** | DATA+METRICS | DATA-00 | none | no |  |  |  |
@@ -45,7 +45,7 @@ GPU seconds charged to tasks so far: 0
 | S0-07 | Metric library with known-answer tests | **done** | METRICS | ENV-03 | none | yes | codex | a39be6b | Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths. |
 | S0-07b | HVP small-matrix controls (optional) | **done** | METRICS | S0-07 | none | no | codex | 65ffe84 | 6 small-matrix controls plus all 33 metric controls pass. Based on task/S0-07. Awaiting Claude integration; no real HVP runs. |
 | S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **done** | INTEGRATOR | S0-03, CAP-02 | none | yes | orchestrator |  |  |
-| S0-09 | Development reservation, tokenization helper, reference decoder | **ready** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
+| S0-09 | Development reservation, tokenization helper, reference decoder | **done** | DATA | DATA-00, S0-03 | short | yes | orchestrator |  | HF decode parity pending REF-01 |
 | CAP-01 | Key features and deterministic retrieval | **done** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
 | CAP-02 | Slot metadata, use-count semantics, byte layout | **done** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
 | CAP-03 | Byte ceiling and capacity | **done** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
@@ -91,7 +91,7 @@ GPU seconds charged to tasks so far: 0
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S2-01 | Residual scales and radius calibration | **pending** | BASE+MEMORY | S0-10, DATA-01 | lease | yes |  |  |  |
 | S2-02 | Aggregate step screening | **pending** | MEMORY+METRICS | S2-01 | lease | yes |  |  |  |
-| S2-03 | LoRA baselines B1 (and B0) | **pending** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
+| S2-03 | LoRA baselines B1 (and B0) | **ready** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
 | S2-04 | Replay baseline B3 | **pending** | BASELINES | S2-03, S0-08 | short | no |  |  |  |
 | S2-05a | GRACE reference environment and smoke (PA-6) | **ready** | BASELINES | DATA-00 | none | no |  |  |  |
 | S2-05b | GRACE reference parity cases | **pending** | BASELINES | S2-05a, S0-09 | none | no |  |  |  |

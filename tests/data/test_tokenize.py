@@ -3,7 +3,13 @@
 import numpy as np
 import pytest
 
-from pccap.data.tokenize import MAX_ANSWER_TOKENS, NEWLINE_ID, GPT2Tokenizer, count_exclusions, tokenize_pair
+from pccap.data.tokenize import (
+    MAX_ANSWER_TOKENS,
+    NEWLINE_ID,
+    GPT2Tokenizer,
+    count_exclusions,
+    tokenize_pair,
+)
 
 
 @pytest.fixture(scope="module")
