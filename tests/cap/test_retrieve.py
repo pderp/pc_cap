@@ -52,7 +52,7 @@ def test_retrieval_identical_across_insertion_orders():
     keys = rng.standard_normal((6, 4)).astype(np.float32)
     queries = rng.standard_normal((20, 4)).astype(np.float32)
     ref = None
-    for shuffle in range(100):
+    for _shuffle in range(100):
         perm = rng.permutation(6)
         b = mk()
         for i in perm:

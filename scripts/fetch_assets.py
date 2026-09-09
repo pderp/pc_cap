@@ -142,22 +142,31 @@ def fetch_wikitext(spec: dict) -> dict:
     return out
 
 
+def _latest_ud_tag(repo: str) -> str:
+    """Latest UD release tag ``rX.Y`` by numeric version (the repo has tags, not GitHub releases)."""
+    import re
+
+    tags: list[str] = []
+    page = 1
+    while page <= 10:
+        r = requests.get(f"https://api.github.com/repos/{repo}/tags", params={"per_page": 100, "page": page}, timeout=60)
+        if r.status_code != 200:
+            break
+        batch = [t["name"] for t in r.json()]
+        if not batch:
+            break
+        tags += batch
+        page += 1
+    versions = []
+    for t in tags:
+        m = re.fullmatch(r"r(\d+)\.(\d+)", t)
+        if m:
+            versions.append(((int(m.group(1)), int(m.group(2))), t))
+    return max(versions)[1] if versions else "master"
+
+
 def fetch_ud_ewt(spec: dict) -> dict:
-    api = f"https://api.github.com/repos/{spec['repo']}/releases/latest"
-    tag = None
-    try:
-        r = requests.get(api, timeout=60)
-        if r.status_code == 200:
-            tag = r.json().get("tag_name")
-    except requests.RequestException:
-        pass
-    if tag is None:  # fall back to the tags list, else master
-        try:
-            r = requests.get(f"https://api.github.com/repos/{spec['repo']}/tags", timeout=60)
-            tags = [t["name"] for t in r.json()] if r.status_code == 200 else []
-            tag = sorted(tags)[-1] if tags else "master"
-        except Exception:
-            tag = "master"
+    tag = _latest_ud_tag(spec["repo"])
     out = {"status": "present", "licence": spec["licence"], "revision": tag, "files": {},
            "url": f"https://github.com/{spec['repo']}/tree/{tag}"}
     for f in spec["files"]:
@@ -253,7 +262,7 @@ def main(argv=None) -> int:
 def write_sums(manifest: dict) -> None:
     SUMS.parent.mkdir(parents=True, exist_ok=True)
     lines = []
-    for name, rec in sorted(manifest.items()):
+    for _name, rec in sorted(manifest.items()):
         for rel, h in sorted(rec.get("files", {}).items()):
             lines.append(f"{h}  {rel}")
     SUMS.write_text("\n".join(lines) + "\n")

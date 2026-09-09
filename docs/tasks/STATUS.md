@@ -1,14 +1,14 @@
 # Task status board
 
-Regenerated 2026-09-09 19:07 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:12 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 10 |
-| in_progress | 4 |
-| ready | 2 |
-| pending | 69 |
+| done | 12 |
+| in_progress | 2 |
+| ready | 9 |
+| pending | 62 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -17,7 +17,7 @@ GPU seconds charged to tasks so far: 0
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ENV-01 | Python environment (JAX venv) verified and completed | **done** | INTEGRATOR | — | short | no | orchestrator | pending |  |
-| ENV-02 | Shared-workload benchmark and kappa | **pending** | INTEGRATOR | ENV-01, DATA-00 | lease | no |  |  |  |
+| ENV-02 | Shared-workload benchmark and kappa | **ready** | INTEGRATOR | ENV-01, DATA-00 | lease | no |  |  |  |
 | ENV-03 | Package scaffold, contracts v0, Makefile, docs skeleton | **done** | INTEGRATOR | ENV-01 | none | yes | orchestrator | pending |  |
 | ENV-04 | Sibling reference recorder (read-only sibling, DEC-003) | **done** | INTEGRATOR | ENV-03 | none | no | orchestrator | pending |  |
 
@@ -25,12 +25,12 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| DATA-00 | Fetch and hash public assets into assets/ | **in_progress** | DATA | ENV-01 | none | no | orchestrator |  |  |
-| REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **pending** | DATA | DATA-00 | none | no |  |  |  |
+| DATA-00 | Fetch and hash public assets into assets/ | **done** | DATA | ENV-01 | none | no | orchestrator |  |  |
+| REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **ready** | DATA | DATA-00 | none | no |  |  |  |
 | DATA-01 | Editing pools | **pending** | DATA | S0-09 | lease | yes |  |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **pending** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
-| DATA-04 | LM, probe and property sets with inventory | **pending** | DATA+METRICS | DATA-00 | none | no |  |  |  |
+| DATA-04 | LM, probe and property sets with inventory | **ready** | DATA+METRICS | DATA-00 | none | no |  |  |  |
 | DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
 | DATA-08 | Challenge sets | **pending** | DATA+BASELINES | DATA-01 | short | no |  |  |  |
 
@@ -38,7 +38,7 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S0-01 | Asset inventory and lead queue (T1) | **pending** | INTEGRATOR+BASE | ENV-04, DATA-00 | none | no |  |  |  |
+| S0-01 | Asset inventory and lead queue (T1) | **ready** | INTEGRATOR+BASE | ENV-04, DATA-00 | none | no |  |  |  |
 | S0-03 | Schemas, outcome codes, CLI skeleton, ledger, records | **done** | INTEGRATOR | ENV-03 | none | yes | orchestrator |  |  |
 | S0-04 | BP base wrapper (GPT-2 small in JAX) | **done** | BASE | ENV-01, ENV-03, DATA-00 | short | yes | orchestrator |  | HF-oracle rows pending REF-01 |
 | S0-05 | Hidden-site adjoints and forced interventions | **done** | BASE | S0-04 | short | yes | orchestrator |  |  |
@@ -46,8 +46,8 @@ GPU seconds charged to tasks so far: 0
 | S0-07 | Metric library with known-answer tests | **done** | METRICS | ENV-03 | none | yes | codex | a39be6b | Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths. |
 | S0-07b | HVP small-matrix controls (optional) | **done** | METRICS | S0-07 | none | no | codex | 65ffe84 | 6 small-matrix controls plus all 33 metric controls pass. Based on task/S0-07. Awaiting Claude integration; no real HVP runs. |
 | S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **pending** | INTEGRATOR | S0-03, CAP-02 | none | yes |  |  |  |
-| S0-09 | Development reservation, tokenization helper, reference decoder | **pending** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
-| CAP-01 | Key features and deterministic retrieval | **in_progress** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
+| S0-09 | Development reservation, tokenization helper, reference decoder | **ready** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
+| CAP-01 | Key features and deterministic retrieval | **done** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
 | CAP-02 | Slot metadata, use-count semantics, byte layout | **in_progress** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
 | CAP-03 | Byte ceiling and capacity | **in_progress** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
 | CAP-04 | Transactions, conflicts, eviction, revisions | **pending** | MEMORY | CAP-03, S0-08 | none | yes |  |  |  |
@@ -61,7 +61,7 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| REG-00 | JAX distillation driver for ePC regeneration (PA-1 enabler) | **pending** | BASE | DATA-00 | short | no |  |  |  |
+| REG-00 | JAX distillation driver for ePC regeneration (PA-1 enabler) | **ready** | BASE | DATA-00 | short | no |  |  |  |
 | REG-01 | Cost pilot (100 steps) | **pending** | BASE | ENV-04, S0-01, REG-00, S0-06 | lease | no |  |  |  |
 | REG-02 | Full regeneration (<= 10 GPU-h) | **pending** | BASE | REG-01 | lease | no |  |  |  |
 | REG-03 | Load and preflight | **pending** | BASE | REG-02, S0-06 | short | yes |  |  |  |
@@ -94,7 +94,7 @@ GPU seconds charged to tasks so far: 0
 | S2-02 | Aggregate step screening | **pending** | MEMORY+METRICS | S2-01 | lease | yes |  |  |  |
 | S2-03 | LoRA baselines B1 (and B0) | **pending** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
 | S2-04 | Replay baseline B3 | **pending** | BASELINES | S2-03, S0-08 | short | no |  |  |  |
-| S2-05a | GRACE reference environment and smoke (PA-6) | **pending** | BASELINES | DATA-00 | none | no |  |  |  |
+| S2-05a | GRACE reference environment and smoke (PA-6) | **ready** | BASELINES | DATA-00 | none | no |  |  |  |
 | S2-05b | GRACE reference parity cases | **pending** | BASELINES | S2-05a, S0-09 | none | no |  |  |  |
 | S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **pending** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
 | S2-06 | Throughput profile | **pending** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes |  |  |  |
