@@ -246,3 +246,26 @@ def load_tokenizer(snapshot: Path = DEFAULT_SNAPSHOT):
     from tokenizers import Tokenizer
 
     return Tokenizer.from_file(str(Path(snapshot) / "tokenizer.json"))
+
+
+def save_params_npz(params_np: dict, path: Path) -> str:
+    """Write the nested param dict as an ``.npz`` of ``flatten_named`` entries; returns sha256."""
+    import hashlib
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez(path, **{k: np.asarray(v, np.float32) for k, v in flatten_named(params_np)})
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_params_npz(path: Path) -> dict:
+    """Inverse of ``save_params_npz`` (used by REG-03 to load a distilled checkpoint by path)."""
+    z = np.load(Path(path))
+    n_layer = 1 + max(int(k.split(".")[1]) for k in z.files if k.startswith("h."))
+    blocks = []
+    for l in range(n_layer):
+        blk: dict = {}
+        for grp, sub, _ in PARAM_KEYS_BLOCK:
+            blk.setdefault(grp, {})[sub] = z[f"h.{l}.{grp}.{sub}"]
+        blocks.append(blk)
+    return {"wte": z["wte"], "wpe": z["wpe"], "ln_f": {"g": z["ln_f.g"], "b": z["ln_f.b"]}, "blocks": blocks}

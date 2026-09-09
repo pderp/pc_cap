@@ -1,14 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 18:59 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:07 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 8 |
-| in_progress | 1 |
+| done | 10 |
 | ready | 4 |
-| pending | 72 |
+| pending | 71 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -42,9 +41,9 @@ GPU seconds charged to tasks so far: 0
 | S0-03 | Schemas, outcome codes, CLI skeleton, ledger, records | **done** | INTEGRATOR | ENV-03 | none | yes | orchestrator |  |  |
 | S0-04 | BP base wrapper (GPT-2 small in JAX) | **done** | BASE | ENV-01, ENV-03, DATA-00 | short | yes | orchestrator |  | HF-oracle rows pending REF-01 |
 | S0-05 | Hidden-site adjoints and forced interventions | **done** | BASE | S0-04 | short | yes | orchestrator |  |  |
-| S0-06 | ePC base wrapper on FabricPC and declared energy (BP weights first) | **ready** | BASE | S0-04, ENV-04 | short | yes |  |  |  |
-| S0-07 | Metric library with known-answer tests | **done** | METRICS | ENV-03 | none | yes | codex | d9f9f5e | Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths. |
-| S0-07b | HVP small-matrix controls (optional) | **in_progress** | METRICS | S0-07 | none | no | codex |  | Optional Lane B exact small-matrix controls; based on task/S0-07, no GPU. |
+| S0-06 | ePC base wrapper on FabricPC and declared energy (BP weights first) | **done** | BASE | S0-04, ENV-04 | short | yes | orchestrator |  |  |
+| S0-07 | Metric library with known-answer tests | **done** | METRICS | ENV-03 | none | yes | codex | a39be6b | Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths. |
+| S0-07b | HVP small-matrix controls (optional) | **done** | METRICS | S0-07 | none | no | codex | 65ffe84 | 6 small-matrix controls plus all 33 metric controls pass. Based on task/S0-07. Awaiting Claude integration; no real HVP runs. |
 | S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **pending** | INTEGRATOR | S0-03, CAP-02 | none | yes |  |  |  |
 | S0-09 | Development reservation, tokenization helper, reference decoder | **pending** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
 | CAP-01 | Key features and deterministic retrieval | **ready** | MEMORY | ENV-03 | none | no |  |  |  |
@@ -83,7 +82,7 @@ GPU seconds charged to tasks so far: 0
 | S1-03 | P3 localization and coverage | **pending** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no |  |  |  |
 | S1-04 | P4 separability | **pending** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
 | S1-05 | P5 write locality | **pending** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no |  |  |  |
-| S1-06 | P6 finite settling and informativeness | **pending** | BASE+METRICS | S0-06 | lease | no |  |  |  |
+| S1-06 | P6 finite settling and informativeness | **ready** | BASE+METRICS | S0-06 | lease | no |  |  |  |
 | S1-07 | S1 report and D1 input | **pending** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes |  |  |  |
 
 ## S2
