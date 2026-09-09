@@ -1,0 +1,83 @@
+{
+  "fixture": "fixed_4x4_integer_hessians",
+  "scope": "small-matrix controls only",
+  "passed": true,
+  "checks": {
+    "antisymmetry": true,
+    "gram_sign": true,
+    "gram_psd": true,
+    "loop_sign": true,
+    "loop_cubic_remainder": true,
+    "full_block_identity": true,
+    "nonzero_cross_blocks": true
+  },
+  "gram": [
+    [
+      20.0,
+      24.0,
+      24.0
+    ],
+    [
+      24.0,
+      42.0,
+      24.0
+    ],
+    [
+      24.0,
+      24.0,
+      38.0
+    ]
+  ],
+  "gram_eigenvalues": [
+    1.4894748504267505,
+    16.01658268186973,
+    82.49394246770353
+  ],
+  "loop": [
+    {
+      "eta": 0.001,
+      "correct_sign_remainder": 2.9505530179360837e-08,
+      "wrong_sign_remainder": 8.971261071785302e-06
+    },
+    {
+      "eta": 0.0005,
+      "correct_sign_remainder": 3.6769212145725014e-09,
+      "wrong_sign_remainder": 2.239431821649922e-06
+    }
+  ],
+  "remainder_reduction_on_halving_eta": 8.024520640372575,
+  "block_accounting": {
+    "full_squared_frobenius": {
+      "value": 20.0,
+      "status": "ok",
+      "units": "squared_operator_norm",
+      "numerator": 20.0,
+      "denominator": 1.0,
+      "n": 16,
+      "strata": {},
+      "exclusions": []
+    },
+    "sum_block_squared_frobenius": {
+      "value": 20.0,
+      "status": "ok",
+      "units": "squared_operator_norm",
+      "numerator": 20.0,
+      "denominator": 1.0,
+      "n": 4,
+      "strata": {},
+      "exclusions": []
+    },
+    "block_squared_frobenius": [
+      [
+        2.0,
+        8.0
+      ],
+      [
+        8.0,
+        2.0
+      ]
+    ],
+    "cross_block_squared_frobenius": 16.0,
+    "residual": 0.0
+  }
+}
