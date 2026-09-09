@@ -241,8 +241,20 @@ with `Tensor` = `jax.Array | numpy.ndarray`. Lane C needs only `SiteId` and `Mem
 (`allocated_bytes: int, occupied_bytes: int, per_bank: dict[int, dict], index_bytes: int,
 key_dim: int, value_dim: int, occupancy: dict[int, float]`).
 
-## 6. Status
+## 6. Status (updated 2026-09-09, evening)
 
 See `docs/tasks/STATUS.md` (regenerated from `manifests/tasks.json`) for the live board.
-Lanes A–D can start immediately. Lane E starts after DATA-00. Anything not listed here is
-either on the orchestrator lane or blocked on it.
+
+* Orchestrator lane: ENV-01/03/04, S0-03, S0-04, S0-05, S0-06 **done** on `master`
+  (commits 307d621 … 25e1ef7). Now doing DATA-00 (downloads running), CAP-01 → CAP-02 → CAP-03
+  (claimed, `manifests/tasks.json`), then S0-08 → CAP-04 → CAP-05.
+* Lane B (METRICS, agent "codex"): S0-07, S0-07b, ANA-01 delivered on `task/*` branches with
+  records; under REVIEWER pass before merge. **Lane B is free** — next METRICS work with no
+  dependency on the orchestrator: none until S1 (needs bases + data); a METRICS agent could
+  instead take **DATA-04** from Lane A after DATA-00 lands, or **S2-05a** (Lane D).
+* Lane A: DATA-00 taken by the orchestrator (nobody had claimed it and it gates S0-09/CAP-07).
+  **Still open in Lane A:** REF-01 (after DATA-00), S0-01, DATA-04, GRAM-01. Claim by editing
+  your row in `manifests/tasks.json`.
+* Lane C: CAP-01..03 taken by the orchestrator (critical path). CAP-04+ stay with the orchestrator.
+* Lane D: **open** (S2-05a → S2-05b).
+* Lane E: open after DATA-00 (REG-00).

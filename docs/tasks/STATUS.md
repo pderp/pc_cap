@@ -6,8 +6,9 @@ Do not edit by hand.
 | status | count |
 | --- | ---: |
 | done | 10 |
-| ready | 4 |
-| pending | 71 |
+| in_progress | 4 |
+| ready | 2 |
+| pending | 69 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -24,7 +25,7 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| DATA-00 | Fetch and hash public assets into assets/ | **ready** | DATA | ENV-01 | none | no |  |  |  |
+| DATA-00 | Fetch and hash public assets into assets/ | **in_progress** | DATA | ENV-01 | none | no | orchestrator |  |  |
 | REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **pending** | DATA | DATA-00 | none | no |  |  |  |
 | DATA-01 | Editing pools | **pending** | DATA | S0-09 | lease | yes |  |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
@@ -46,9 +47,9 @@ GPU seconds charged to tasks so far: 0
 | S0-07b | HVP small-matrix controls (optional) | **done** | METRICS | S0-07 | none | no | codex | 65ffe84 | 6 small-matrix controls plus all 33 metric controls pass. Based on task/S0-07. Awaiting Claude integration; no real HVP runs. |
 | S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **pending** | INTEGRATOR | S0-03, CAP-02 | none | yes |  |  |  |
 | S0-09 | Development reservation, tokenization helper, reference decoder | **pending** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
-| CAP-01 | Key features and deterministic retrieval | **ready** | MEMORY | ENV-03 | none | no |  |  |  |
-| CAP-02 | Slot metadata, use-count semantics, byte layout | **pending** | MEMORY | CAP-01 | none | no |  |  |  |
-| CAP-03 | Byte ceiling and capacity | **pending** | MEMORY | CAP-02 | none | no |  |  |  |
+| CAP-01 | Key features and deterministic retrieval | **in_progress** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
+| CAP-02 | Slot metadata, use-count semantics, byte layout | **in_progress** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
+| CAP-03 | Byte ceiling and capacity | **in_progress** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
 | CAP-04 | Transactions, conflicts, eviction, revisions | **pending** | MEMORY | CAP-03, S0-08 | none | yes |  |  |  |
 | CAP-05 | Routers | **pending** | MEMORY+BASE | CAP-04, S0-05 | short | yes |  |  |  |
 | CAP-06 | Transactional candidate search and budget | **pending** | MEMORY | CAP-05 | short | yes |  |  |  |
