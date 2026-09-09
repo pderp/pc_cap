@@ -217,13 +217,17 @@
    ],
    "gpu": "short",
    "review": true,
-   "status": "pending",
-   "agent": null,
+   "status": "done",
+   "agent": "orchestrator",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-09T18:59:16+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "tests/bases/test_adjoint.py",
+    "tests/transport/test_transport.py",
+    "results/S0/controls/sign_convention.json"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": ""
@@ -284,16 +288,16 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "pending",
+   "status": "in_progress",
    "agent": "codex",
-   "worktree": null,
-   "started": null,
+   "worktree": "/home/derp/cap/pc_cap/.worktrees/S0-07b",
+   "started": "2026-09-09T18:57:49.604801+00:00",
    "finished": null,
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "Reserved Lane B; task branches only, no GPU. Claude owns review/integration."
+   "note": "Optional Lane B exact small-matrix controls; based on task/S0-07, no GPU."
   },
   {
    "id": "S0-08",
@@ -825,16 +829,19 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "in_progress",
+   "status": "done",
    "agent": "codex",
    "worktree": "/home/derp/cap/pc_cap/.worktrees/ANA-01",
    "started": "2026-09-09T18:51:50.751497+00:00",
-   "finished": null,
-   "commit": null,
-   "evidence": [],
+   "finished": "2026-09-09T18:57:49.604833+00:00",
+   "commit": "bc04bc5",
+   "evidence": [
+    ".worktrees/ANA-01/docs/tasks/ANA-01.md",
+    ".worktrees/ANA-01/results/ANA-01/verify.txt"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "Reserved Lane B; task branches only, no GPU. Claude owns review/integration."
+   "note": "19 analysis controls passed; task branch awaiting Claude review/merge. CPU-only."
   },
   {
    "id": "S1-01",
