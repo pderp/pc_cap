@@ -198,7 +198,7 @@ memory contents under `assets/reference/grace/` with hashes. These are the PC-10
 **REG-00 — JAX distillation driver for the ePC checkpoint (PA-1 enabler).** The sibling's
 `hdpc-distill` is PyTorch and cannot run under DEC-001. Regeneration therefore needs a JAX
 implementation of the same recipe (teacher = pinned GPT-2, student = same architecture with
-error variables, `relaxation_steps = 1`, `error_lr = 0.1`, `weight_lr = 1e-6`, batch 10 × 512,
+error variables, error-relaxation homotopy T ∈ {1,2,4,8,16,32,64} at `error_lr = 0.1` (DEC-006; the `relaxation_steps = 1` in its summary.json is an unused default), AdamW `weight_lr = 1e-6`, batch 10 × 512,
 fp32, seed 1729, 9,766 steps, the sibling's KD/CE mixing and schedule file — copy the exact
 formulas from `llm-by-neural-predictive-coding/src/hdpc/{energy,relax,train_distill}.py` with
 file/line citations). Owned: `src/pccap/distill/`, `scripts/distill_epc.py`, `tests/distill/`,

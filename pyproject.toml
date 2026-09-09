@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pccap"
+version = "0.0.1"
+description = "Continual-learning predictive-coding caps on GPT-2-scale transformers (JAX)"
+requires-python = ">=3.12"
+# Runtime dependencies are provided by the pre-existing venv at /home/derp/cap/venv
+# (DEC-001); requirements.lock records the exact frozen set. Nothing is installed by this file.
+dependencies = []
+
+[project.scripts]
+pccap = "pccap.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "gpu: needs the CUDA device (short, < 60 s, no lease required)",
+  "slow: long-running; excluded from test-fast",
+  "lease: needs the GPU lease (run only via the harness)",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = ["E501", "B905"]
