@@ -59,7 +59,9 @@ def test_newer_version_replaces_and_same_version_replays():
     wt = resolve_write_target(bs, key, target=7, item_digest=D16("fact"), version=2, item_index=3, radius0=1.0,
                               revision=rev2, correction_track=True)
     assert "revision_replaced" in wt.codes and wt.allocated and not wt.rejected
-    assert not b.view().active(s0) and bs.cindex.versions(D16("fact")) == {2: [wt.slot]}
+    # the retired slot is released (and may be reused as the new slot); only version 2 remains indexed
+    assert bs.cindex.versions(D16("fact")) == {2: [wt.slot]}
+    assert b.view().version(wt.slot) == 2 and b.view().last_target(wt.slot) == 7 and b.occupancy() == 1
     tx.commit()
     # replay of the same version, same target: idempotent
     tx = Transaction(bs).begin()
