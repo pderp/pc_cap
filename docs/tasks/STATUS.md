@@ -1,12 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 18:46 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 18:51 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 3 |
-| ready | 6 |
+| done | 4 |
+| in_progress | 1 |
+| ready | 4 |
 | pending | 76 |
 
 GPU seconds charged to tasks so far: 0
@@ -38,11 +39,11 @@ GPU seconds charged to tasks so far: 0
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S0-01 | Asset inventory and lead queue (T1) | **pending** | INTEGRATOR+BASE | ENV-04, DATA-00 | none | no |  |  |  |
-| S0-03 | Schemas, outcome codes, CLI skeleton, ledger, records | **ready** | INTEGRATOR | ENV-03 | none | yes |  |  |  |
+| S0-03 | Schemas, outcome codes, CLI skeleton, ledger, records | **done** | INTEGRATOR | ENV-03 | none | yes | orchestrator |  |  |
 | S0-04 | BP base wrapper (GPT-2 small in JAX) | **pending** | BASE | ENV-01, ENV-03, DATA-00 | short | yes |  |  |  |
 | S0-05 | Hidden-site adjoints and forced interventions | **pending** | BASE | S0-04 | short | yes |  |  |  |
 | S0-06 | ePC base wrapper on FabricPC and declared energy (BP weights first) | **pending** | BASE | S0-04, ENV-04 | short | yes |  |  |  |
-| S0-07 | Metric library with known-answer tests | **ready** | METRICS | ENV-03 | none | yes |  |  |  |
+| S0-07 | Metric library with known-answer tests | **in_progress** | METRICS | ENV-03 | none | yes | codex |  | Lane B reserved by Codex: S0-07 -> ANA-01 -> S0-07b; CPU-only, task branches for orchestrator integration. |
 | S0-07b | HVP small-matrix controls (optional) | **pending** | METRICS | S0-07 | none | no |  |  |  |
 | S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **pending** | INTEGRATOR | S0-03, CAP-02 | none | yes |  |  |  |
 | S0-09 | Development reservation, tokenization helper, reference decoder | **pending** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
