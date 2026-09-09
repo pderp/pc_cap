@@ -1,21 +1,16 @@
 [1] [GPT5.6-Pro and B. Goertzel, “Causally Designed Error Highways: Long-Range Credit Transport Without Diffuse Task Entanglement,” working note, July 2026.](https://drive.google.com/file/d/14Z5dKCDJL3qOQEjP7JEzmG_QJ7GJvfTl/view?usp=drive_link)
 
-[2] ZeroBot, ProtoMegaBot and B. Goertzel, “A Multiscale, Laterally Connected Predictive-Coding
-Cap for Continual Learning on ePC Transformers,” design document, July 2026.
+[2] [ZeroBot, ProtoMegaBot and B. Goertzel, “A Multiscale, Laterally Connected Predictive-Coding Cap for Continual Learning on ePC Transformers,” design document, July 2026.](https://earthland.ai/snet/pc_cap/multiscale_pc_cap_for_epc_transformers_20260730.pdf)
 
 [3] [B. Goertzel and Claude Fable, “The Coupling Dilemma: Reach versus Conditioning, Sharing
 versus Forgetting, and Catastrophic Forgetting as Curvature of the Task Manifold,” working
 draft, 2026.](https://drive.google.com/file/d/1m5oz006WLqshf7l6Fh82S59uv0JrX_6n/view?usp=drive_link)
 
-[4] [B. Goertzel, “The Shadow Calculus: Which Curriculum Interference Is Observable?” working
-note, 2026.](https://drive.google.com/file/d/1JiqbO8-Ssuz6V1rQy1Thj3C7enaCYU81/view?usp=drive_link)
+[4] [B. Goertzel, “The Shadow Calculus: Which Curriculum Interference Is Observable?” working note, 2026.](https://drive.google.com/file/d/1JiqbO8-Ssuz6V1rQy1Thj3C7enaCYU81/view?usp=drive_link)
 
-[5] B. Goertzel and collaborators, “Causal Fibres for Partial Transformer Distillation,” synthesis
-report and programme document v1.1, July 2026.
+[5] [B. Goertzel and collaborators, “Causal Fibres for Partial Transformer Distillation,” synthesis report and programme document v1.1, July 2026.](https://earthland.ai/snet/pc_cap/causal_fibres.pdf)
 
-[6] C. Goemaere, G. Oliviers, R. Bogacz and T. Demeester, “ePC: Fast and Deep Predictive
-Coding in Digital Simulation,” arXiv:2505.20137v5, 8 June 2026. Earlier versions titled “Error
-Optimization: Overcoming Exponential Signal Decay in Deep Predictive Coding Networks.”
+[6] C. Goemaere, G. Oliviers, R. Bogacz and T. Demeester, “ePC: Fast and Deep Predictive Coding in Digital Simulation,” arXiv:2505.20137v5, 8 June 2026. Earlier versions titled “Error Optimization: Overcoming Exponential Signal Decay in Deep Predictive Coding Networks.”
 https://arxiv.org/html/2505.20137v5.
 
 [7] T. Hartvigsen, S. Sankaranarayanan, H. Palangi, Y. Kim and M. Ghassemi, “Aging with
