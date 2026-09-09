@@ -64,7 +64,7 @@ def summarize(mass: np.ndarray, label: str) -> dict:
         prs.append(p["value"])
         nprs.append(p["value"] / N_cells)
         final_share.append(float(m[-1].sum() / tot))
-        active.append(active_fraction(m, ACTIVE_THRESHOLD)["value"])
+        active.append(active_fraction(m, threshold=ACTIVE_THRESHOLD)["value"])
         layer_share_sum += m.sum(1) / tot
     n = len(prs)
     ls = (layer_share_sum / n).tolist() if n else None

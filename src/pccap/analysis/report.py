@@ -149,12 +149,106 @@ def render_s0() -> str:
     return "\n".join(lines)
 
 
+def _m(d: dict, key: str, fmt: str = "{:.4f}") -> str:
+    v = d.get("metrics", {}).get(key)
+    if v is None:
+        return "—"
+    if v.get("value") is None:
+        return f"{v.get('status')}"
+    return fmt.format(v["value"])
+
+
+def render_s1() -> str:
+    b = stages_summary()
+    s1 = b["stages"]["S1"]
+    cov = json.loads((RESULTS / "S1" / "coverage.json").read_text()) if (RESULTS / "S1" / "coverage.json").exists() else {}
+    p2 = json.loads((RESULTS / "S1" / "P2_bp.json").read_text()) if (RESULTS / "S1" / "P2_bp.json").exists() else None
+    p3 = json.loads((RESULTS / "S1" / "P3_bp.json").read_text()) if (RESULTS / "S1" / "P3_bp.json").exists() else None
+    p6 = json.loads((RESULTS / "S1" / "P6_bp.json").read_text()) if (RESULTS / "S1" / "P6_bp.json").exists() else None
+    L = ["# S1 stage report (Appendix G) — development, BP rows", "",
+         f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S1`.", "",
+         "## 1. Header", "", f"- Stage: S1 substrate report card. Code commit: `{_git()}`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: absent (REG pending).",
+         "- Sets: `manifests/dev/lm_sets.json` (H 2×10⁶ train tokens seed 11; drift = validation 247,289 tokens; P2 4,096 positions; P3 1,000 × 128; POS UD-EWT).",
+         f"- Cost: {s1['local_hours_total']:.2f} local GPU-h = {s1['a100_equivalent_hours']:.2f} A100-eq h of 12 (κ {b['kappa']['kappa']} {b['kappa']['status']}).", "",
+         "## 2. Status", "", "Development. BP rows of P2, P3, P6 complete where files exist below; P1 (needs a second base), P4 (needs the grammar), P5 (needs S2-01, running) pending. No confirmatory access.", "",
+         "## 3. Controls", "", "S0 controls unchanged (`results/S0/report.md`). Alerts below are alerts, not exclusions (PDF §5).", "",
+         "## 4. Coverage", "", "| property | signal | status |", "| --- | --- | --- |"]
+    for prop, rows in sorted(cov.items()):
+        for sig, st in rows.items():
+            L.append(f"| {prop} | {sig} | {st} |")
+    L += ["", "## 5. Results", ""]
+    if p2:
+        L += ["**P2 geometry (BP).** Effective rank of centred features at 4,096 held-out positions and POS-probe accuracy per layer boundary (0 = embedding, 12 = pre-`ln_f`):", "",
+              "| layer | effective rank | POS probe acc |", "| ---: | ---: | ---: |"]
+        for l in range(13):
+            L.append(f"| {l} | {_m(p2, f'effective_rank_layer{l}', '{:.1f}')} | {_m(p2, f'pos_probe_acc_layer{l}', '{:.3f}')} |")
+        L += ["", "Teacher ratios and the 0.9 / 0.02 alerts apply when an ePC checkpoint exists (pending REG-03).", ""]
+    if p3:
+        L += ["**P3 localization (BP adjoint mass = squared adjoint norm per block output × token, summed sequence loss, 1,000 × 127 cells).**", "",
+              "| quantity | raw | layer-normalized |", "| --- | ---: | ---: |"]
+        for k, name in (("pr_mean", "PR (effective cells)"), ("npr_mean", "nPR = PR/N"), ("final_block_share_mean", "final-block share"),
+                        ("active_fraction_mean", "active fraction (> 1% of max)"), ("zero_fields", "zero fields")):
+            L.append(f"| {name} | {_m(p3, f'{k}_raw')} | {_m(p3, f'{k}_layer_normalized')} |")
+        fs = p3["metrics"]["final_block_share_mean_raw"]
+        L += ["", f"Final-block share alert (> 0.4): **{fs.get('strata', {}).get('alert_above_0.4')}** (raw). Dataset layer shares: `distributions` in `results/S1/P3_bp.json`.", ""]
+    if p6:
+        L += ["**P6 finite settling (ePC procedure on BP weights; declared solver in `docs/epc_energy.md`).**", "",
+              f"- r₈ mean {_m(p6, 'r_8_mean')}, r₆₄ mean {_m(p6, 'r_64_mean')} (max {_m(p6, 'r_64_max')}); E₀ − E₆₄ mean {_m(p6, 'E0_minus_E64_mean')} nats; first iteration reaching 95% of the 64-step reduction: median {_m(p6, 'first_iter_95pct_median', '{:.0f}')}.",
+              f"- Label: **{p6['label']}** ({p6['settled_criterion']}).",
+              f"- cos(e₈, −adjoint) at banks 1/2/3: {_m(p6, 'cos_bank1_cos_e8_negadj', '{:.3f}')} / {_m(p6, 'cos_bank2_cos_e8_negadj', '{:.3f}')} / {_m(p6, 'cos_bank3_cos_e8_negadj', '{:.3f}')}; cos(e₆₄, −adjoint): {_m(p6, 'cos_bank1_cos_e64_negadj', '{:.3f}')} / {_m(p6, 'cos_bank2_cos_e64_negadj', '{:.3f}')} / {_m(p6, 'cos_bank3_cos_e64_negadj', '{:.3f}')} (inherited claim > 0.998 is for the distilled checkpoint; this row is the BP-weights procedure).",
+              f"- Error–loss Spearman (bank 3, e₈): {_m(p6, 'spearman_bank3_e8', '{:.3f}')}; seconds per call: {_m(p6, 'seconds_per_call_8', '{:.3f}')} (8 it) / {_m(p6, 'seconds_per_call_64', '{:.3f}')} (64 it); reverses per 8-iteration call: {_m(p6, 'reverses_per_call_8', '{:.0f}')}.", ""]
+    L += ["## 6. Mechanism evidence", "", "None at S1.", "", "## 7. Optional mathematics", "", "None.", "",
+          "## 8. Deviations", "", "SD-17 (radii per dataset); P6 measured on BP weights pending the ePC checkpoint; H/P2/P3 by the level-1-heading document rule (DATA-04 record).", "",
+          "## 9. Interpretation", "", "Descriptive report card of one base; no eligibility decision for matched-fidelity claims can be made without a second base (D1 will record 'ePC unavailable, not failed').", "",
+          "## 10. Reproduction", "", "```", "python -m pccap.data.lm_sets --build && python -m pccap.data.lm_sets --audit",
+          "python -m pccap.analysis.s1_p6 && python -m pccap.analysis.s1_p2 && python -m pccap.analysis.s1_p3", "python -m pccap.cli report --stage S1", "```", ""]
+    return "\n".join(L)
+
+
+def render_s2() -> str:
+    b = stages_summary()
+    s2 = b["stages"]["S2"]
+    rs = json.loads((RESULTS / "S2" / "residual_scales.json").read_text()) if (RESULTS / "S2" / "residual_scales.json").exists() else None
+    rc = json.loads((RESULTS / "S2" / "radius_calibration.json").read_text()) if (RESULTS / "S2" / "radius_calibration.json").exists() else None
+    sc = json.loads((RESULTS / "S2" / "A_screening.json").read_text()) if (RESULTS / "S2" / "A_screening.json").exists() else None
+    L = ["# S2 stage report (Appendix G) — development", "", f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S2`.", "",
+         "## 1. Header", "", f"- Stage: S2 calibration, baselines, throughput. Code commit: `{_git()}`. Development pools: `manifests/dev/{{zsre,counterfact}}_dev.json` (300 edits + ≥ 1,000 unrelated prompts each; DATA-01).",
+         f"- Cost: {s2['local_hours_total']:.2f} local GPU-h = {s2['a100_equivalent_hours']:.2f} A100-eq h of 12 (κ {b['kappa']['kappa']} {b['kappa']['status']}).", "",
+         "## 2. Status", "", "Development. S2-01 and S2-02 complete where files exist; S2-03/04/05 (baselines) and S2-06/07 (throughput, D1) pending.", "",
+         "## 3. Controls", "", "S0 controls unchanged. Every configuration tried is logged (Op. rule 3): A ∈ {0.03, 0.1, 0.3} only.", "",
+         "## 4. Coverage", ""]
+    if rs and rc:
+        L += ["**S2-01.** b_m (pooled medians): " + ", ".join(f"bank {m}: {v:.2f}" for m, v in rs["pooled_b_m"].items()) + ".", ""]
+        L += ["| dataset | bank | radius | coverage | false-fire | note |", "| --- | ---: | ---: | ---: | ---: | --- |"]
+        for ds, banks in rc["per_dataset"].items():
+            for m, r in banks.items():
+                ch = next((c for c in r["candidates"] if c["radius"] == r["radius"]), {"coverage": 0.0, "false_fire": 0.0})
+                L.append(f"| {ds} | {m} | {r['radius']:.3f} | {ch['coverage']:.2f} | {ch['false_fire']:.3f} | {r['note'][:60]} |")
+        L.append("")
+    L += ["## 5. Results", ""]
+    if sc:
+        L += ["**S2-02 step screening (C1, calibrated radii, ε = 0.01, R = 5, τ = 0.1, 100 development edits per dataset).**", "",
+              "| A | dataset | immediate ES | threshold acquisition | false-fire | locality ok | seconds |", "| ---: | --- | ---: | ---: | ---: | --- | ---: |"]
+        for A, c in sc["candidates"].items():
+            for ds, r in c["per_dataset"].items():
+                L.append(f"| {A} | {ds} | {r['es_immediate']:.3f} | {r['threshold_acquisition']:.3f} | {r['false_fire']['rate']:.4f} | {r['locality_ok']} | {r['seconds']:.0f} |")
+        L += ["", f"Chosen A: **{sc['chosen_A']}** ({sc['rule']}).", ""]
+    L += ["## 6. Mechanism evidence", "", "None at S2 (routing arms are screened in S3).", "", "## 7. Optional mathematics", "", "None.", "",
+          "## 8. Deviations", "", "SD-17 radii per dataset; CounterFact exact-key pilot (CR-4); zsRE teacher answers are mostly empty (DATA-01 record).", "",
+          "## 9. Interpretation", "", "Calibration and numerics only; no scientific claim. Immediate ES on zsRE is acquisition from an empty baseline answer.", "",
+          "## 10. Reproduction", "", "```", "python -m pccap.data.streams --build && python -m pccap.data.streams --audit", "python -m pccap.cap.calibrate",
+          "python -m pccap.harness.stage_s2 --n 100", "python -m pccap.cli report --stage S2", "```", ""]
+    return "\n".join(L)
+
+
 def main(args) -> int:
     stage = getattr(args, "stage", None) or "S0"
-    if stage != "S0":
+    renderers = {"S0": render_s0, "S1": render_s1, "S2": render_s2}
+    if stage not in renderers:
         print(f"report for stage {stage} not implemented yet")
         return 3
-    out = RESULTS / "S0" / "report.md"
-    out.write_text(render_s0())
+    out = RESULTS / stage / "report.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(renderers[stage]())
     print("wrote", out)
     return 0

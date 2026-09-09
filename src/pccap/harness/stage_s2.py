@@ -54,11 +54,15 @@ def load_dev_items(ds: str, n: int, seed: int = 21, exclude_s0: bool = True) -> 
     return items, man["unrelated_prompts"]
 
 
-def calibration() -> tuple[dict[int, float], dict[int, float]]:
+def calibration(dataset: str | None = None) -> tuple[dict[int, float], dict[int, float]]:
+    """b_m pooled over datasets (base/read property); radii per dataset (SD-17), shared across arms."""
     rs = json.loads((S2 / "residual_scales.json").read_text())
     rc = json.loads((S2 / "radius_calibration.json").read_text())
     b_m = {int(k): float(v) for k, v in rs["pooled_b_m"].items()}
-    radii = {int(k): float(v) for k, v in rc["pooled_radii_min_over_datasets"].items()}
+    if dataset is None:
+        radii = {int(k): float(v) for k, v in rc["pooled_radii_min_over_datasets"].items()}
+    else:
+        radii = {int(k): float(v["radius"]) for k, v in rc["per_dataset"][dataset].items()}
     return b_m, radii
 
 
@@ -116,15 +120,16 @@ def main(argv=None) -> int:
     for a in args.A:
         if a not in A_CANDIDATES:
             raise SystemExit(f"A={a} is not one of the contract candidates {A_CANDIDATES} (Op. rule 3)")
-    b_m, radii = calibration()
+    b_m, _ = calibration()
+    radii_ds = {ds: calibration(ds)[1] for ds in args.datasets}
     tok = GPT2Tokenizer()
-    results = {"candidates": {}, "b_m": b_m, "radii": radii, "n_per_dataset": args.n}
+    results = {"candidates": {}, "b_m": b_m, "radii_per_dataset": radii_ds, "n_per_dataset": args.n}
     with gpu_lease("S2-02", stage="S2", projected_seconds=3 * 3600) as lease:
         for A in args.A:
             per_ds = {}
             for ds in args.datasets:
                 items, unrelated = load_dev_items(ds, args.n)
-                per_ds[ds] = screen_one(A, items, unrelated, b_m, radii, tok, S2 / "screen" / f"A{A}" / ds)
+                per_ds[ds] = screen_one(A, items, unrelated, b_m, radii_ds[ds], tok, S2 / "screen" / f"A{A}" / ds)
                 print(f"A={A} {ds}: ES {per_ds[ds]['es_immediate']:.3f} thr {per_ds[ds]['threshold_acquisition']:.3f} "
                       f"false-fire {per_ds[ds]['false_fire']['rate']:.4f} ({per_ds[ds]['seconds']:.0f}s)", flush=True)
             es = float(np.mean([per_ds[ds]["es_immediate"] for ds in args.datasets]))

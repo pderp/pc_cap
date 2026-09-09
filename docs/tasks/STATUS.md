@@ -1,14 +1,14 @@
 # Task status board
 
-Regenerated 2026-09-09 23:25 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 23:27 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 25 |
-| in_progress | 1 |
-| ready | 11 |
-| pending | 48 |
+| done | 27 |
+| in_progress | 4 |
+| ready | 10 |
+| pending | 44 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -30,7 +30,7 @@ GPU seconds charged to tasks so far: 0
 | DATA-01 | Editing pools | **done** | DATA | S0-09 | lease | yes | orchestrator |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **ready** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
-| DATA-04 | LM, probe and property sets with inventory | **in_progress** | DATA+METRICS | DATA-00 | none | no | orchestrator |  |  |
+| DATA-04 | LM, probe and property sets with inventory | **done** | DATA+METRICS | DATA-00 | none | no | orchestrator |  |  |
 | DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
 | DATA-08 | Challenge sets | **ready** | DATA+BASELINES | DATA-01 | short | no |  |  |  |
 
@@ -79,19 +79,19 @@ GPU seconds charged to tasks so far: 0
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S1-01 | P1 fidelity | **pending** | METRICS+BASE | REG-03, DATA-04, S0-11 | lease | yes |  |  |  |
-| S1-02 | P2 geometry | **pending** | METRICS | S0-07, DATA-04, S0-04 | short | no |  |  |  |
-| S1-03 | P3 localization and coverage | **pending** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no |  |  |  |
+| S1-02 | P2 geometry | **in_progress** | METRICS | S0-07, DATA-04, S0-04 | short | no | orchestrator |  |  |
+| S1-03 | P3 localization and coverage | **in_progress** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no | orchestrator |  |  |
 | S1-04 | P4 separability | **pending** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
-| S1-05 | P5 write locality | **pending** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no |  |  |  |
-| S1-06 | P6 finite settling and informativeness | **ready** | BASE+METRICS | S0-06 | lease | no |  |  |  |
+| S1-05 | P5 write locality | **ready** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no |  |  |  |
+| S1-06 | P6 finite settling and informativeness | **in_progress** | BASE+METRICS | S0-06 | lease | no | orchestrator |  |  |
 | S1-07 | S1 report and D1 input | **pending** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes |  |  |  |
 
 ## S2
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S2-01 | Residual scales and radius calibration | **ready** | BASE+MEMORY | S0-10, DATA-01 | lease | yes |  |  |  |
-| S2-02 | Aggregate step screening | **pending** | MEMORY+METRICS | S2-01 | lease | yes |  |  |  |
+| S2-01 | Residual scales and radius calibration | **done** | BASE+MEMORY | S0-10, DATA-01 | lease | yes | orchestrator |  |  |
+| S2-02 | Aggregate step screening | **in_progress** | MEMORY+METRICS | S2-01 | lease | yes | orchestrator |  |  |
 | S2-03 | LoRA baselines B1 (and B0) | **ready** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
 | S2-04 | Replay baseline B3 | **pending** | BASELINES | S2-03, S0-08 | short | no |  |  |  |
 | S2-05a | GRACE reference environment and smoke (PA-6) | **ready** | BASELINES | DATA-00 | none | no |  |  |  |
