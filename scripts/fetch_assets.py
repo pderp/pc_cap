@@ -104,7 +104,8 @@ def fetch_gpt2(spec: dict) -> dict:
     tgt.parent.mkdir(parents=True, exist_ok=True)
     if not tgt.exists():
         os.symlink(p, tgt)
-    files = {f: sha256(p / f) for f in ["model.safetensors", "config.json", "tokenizer.json", "vocab.json", "merges.txt"]}
+    files = {str((tgt / f).relative_to(ASSETS)): sha256(p / f)
+             for f in ["model.safetensors", "config.json", "tokenizer.json", "vocab.json", "merges.txt"]}
     return {"status": "present", "path": str(p), "revision": spec["revision"], "licence": spec["licence"], "files": files,
             "url": f"https://huggingface.co/{spec['repo']}/tree/{spec['revision']}"}
 
