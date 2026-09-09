@@ -29,3 +29,15 @@ items 3–6 are marked `unavailable` and the optional work that needs them is `u
 ## T3 — reserved (D3, only if a required core pair must be dropped)
 
 ## T4 — reserved (CP-F, report review before any external release)
+
+### T1 measured absent list (S0-01, 2026-09-09)
+
+Absent on this host, in `~/repos`, and in the sibling: the ePC checkpoint `4f0c23aa…` and its
+resume state; the R8/R9 six-layer grammar (model, tokenizer, generator); causal-fibres v0.3;
+comcrit; RelaLeap. Documents [2] and [5] have no link. Drive links [1], [3], [4] resolve (not
+downloaded). Details: `manifests/assets.json` (`assets`, `inventory`).
+
+**Clock:** CP-A = 2026-09-09. PA-1 (REG-00 → REG-01 pilot) and PA-2 (GRAM-01/02) fire after
+**2026-09-11 23:59 (America/New_York)** unless T1 names a location. GRAM-01 (the generator) and
+REG-00 (the JAX distillation driver) are pure engineering and may start before the clock; only
+the GPU regeneration/training waits.

@@ -1,12 +1,12 @@
 # Task status board
 
-Regenerated 2026-09-09 19:35 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:38 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 22 |
-| ready | 13 |
+| done | 24 |
+| ready | 11 |
 | pending | 50 |
 
 GPU seconds charged to tasks so far: 0
@@ -37,7 +37,7 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S0-01 | Asset inventory and lead queue (T1) | **ready** | INTEGRATOR+BASE | ENV-04, DATA-00 | none | no |  |  |  |
+| S0-01 | Asset inventory and lead queue (T1) | **done** | INTEGRATOR+BASE | ENV-04, DATA-00 | none | no | orchestrator |  |  |
 | S0-03 | Schemas, outcome codes, CLI skeleton, ledger, records | **done** | INTEGRATOR | ENV-03 | none | yes | orchestrator |  |  |
 | S0-04 | BP base wrapper (GPT-2 small in JAX) | **done** | BASE | ENV-01, ENV-03, DATA-00 | short | yes | orchestrator |  | HF-oracle rows pending REF-01 |
 | S0-05 | Hidden-site adjoints and forced interventions | **done** | BASE | S0-04 | short | yes | orchestrator |  |  |
@@ -54,7 +54,7 @@ GPU seconds charged to tasks so far: 0
 | CAP-06 | Transactional candidate search and budget | **done** | MEMORY | CAP-05 | short | yes | orchestrator |  |  |
 | CAP-07 | Complete-edit learning loop | **done** | MEMORY+DATA | CAP-06, S0-09 | short | yes | orchestrator |  |  |
 | S0-10 | Minimal cap integration smoke and the four pre-run invariants | **done** | MEMORY | CAP-07, S0-08, S0-04 | short | yes | orchestrator |  |  |
-| S0-11 | S0 stage report and CP-C | **ready** | INTEGRATOR | S0-10, S0-06, S0-07, S0-09 | none | yes |  |  |  |
+| S0-11 | S0 stage report and CP-C | **done** | INTEGRATOR | S0-10, S0-06, S0-07, S0-09 | none | yes | orchestrator |  |  |
 
 ## REG
 

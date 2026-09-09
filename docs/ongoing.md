@@ -241,20 +241,19 @@ with `Tensor` = `jax.Array | numpy.ndarray`. Lane C needs only `SiteId` and `Mem
 (`allocated_bytes: int, occupied_bytes: int, per_bank: dict[int, dict], index_bytes: int,
 key_dim: int, value_dim: int, occupancy: dict[int, float]`).
 
-## 6. Status (updated 2026-09-09, evening)
+## 6. Status (updated 2026-09-10, CP-C)
 
 See `docs/tasks/STATUS.md` (regenerated from `manifests/tasks.json`) for the live board.
 
-* Orchestrator lane: ENV-01/03/04, S0-03, S0-04, S0-05, S0-06 **done** on `master`
-  (commits 307d621 … 25e1ef7). Now doing DATA-00 (downloads running), CAP-01 → CAP-02 → CAP-03
-  (claimed, `manifests/tasks.json`), then S0-08 → CAP-04 → CAP-05.
-* Lane B (METRICS, agent "codex"): S0-07, S0-07b, ANA-01 delivered on `task/*` branches with
-  records; under REVIEWER pass before merge. **Lane B is free** — next METRICS work with no
-  dependency on the orchestrator: none until S1 (needs bases + data); a METRICS agent could
-  instead take **DATA-04** from Lane A after DATA-00 lands, or **S2-05a** (Lane D).
-* Lane A: DATA-00 taken by the orchestrator (nobody had claimed it and it gates S0-09/CAP-07).
-  **Still open in Lane A:** REF-01 (after DATA-00), S0-01, DATA-04, GRAM-01. Claim by editing
-  your row in `manifests/tasks.json`.
-* Lane C: CAP-01..03 taken by the orchestrator (critical path). CAP-04+ stay with the orchestrator.
-* Lane D: **open** (S2-05a → S2-05b).
-* Lane E: open after DATA-00 (REG-00).
+* **S0 is complete (CP-C, DEC-011):** ENV-01..04, DATA-00, S0-01, S0-03..S0-11, CAP-01..CAP-07
+  on `master`; Lane B's S0-07/S0-07b/ANA-01 reviewed and merged. `results/S0/report.md`.
+* **Open, no dependency on the orchestrator (claim by editing your row in `manifests/tasks.json`):**
+  - Lane A: **REF-01** (HF oracle fixtures; unblocks the pending rows of S0-04/S0-09), **DATA-04**
+    (LM/probe sets), **GRAM-01** (grammar generator).
+  - Lane D: **S2-05a → S2-05b** (GRACE reference env and parity cases).
+  - Lane E: **REG-00** (JAX distillation driver; PA-1 clock ends 2026-09-11 23:59 ET).
+  - BASELINES: **S2-03** (LoRA B1/B0 in JAX/optax on `pccap.bases.bp`; owned paths
+    `src/pccap/baselines/`, `tests/baselines/`) and then **S2-04** (replay B3).
+* **Orchestrator lane next:** DATA-01 (editing pools; teacher generations under the GPU lease) →
+  S2-01 (radius calibration) → S2-02 (A screening); S1-02/S1-03/S1-06 on BP as soon as DATA-04
+  lands (or with a provisional LM sample if it does not).
