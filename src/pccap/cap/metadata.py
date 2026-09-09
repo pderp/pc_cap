@@ -147,6 +147,10 @@ class UseTracker:
         self._item: bytes | None = None
         self._used: set[int] = set()
 
+    @property
+    def active(self) -> bool:
+        return self._item is not None
+
     def begin_item(self, digest: bytes) -> None:
         if self._item is not None:
             raise RuntimeError("previous item not ended")
