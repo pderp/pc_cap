@@ -70,7 +70,7 @@ class MetadataView:
         return int(self.__meta["last_target"][s])
 
     def owner_digest(self, s: int) -> bytes:
-        return bytes(self.__meta["owner_digest"][s])
+        return bytes(self.__meta["owner_digest"][s]).ljust(16, b"\0")  # always 16 bytes
 
     def version(self, s: int) -> int:
         return int(self.__meta["version"][s])

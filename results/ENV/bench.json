@@ -1,0 +1,102 @@
+{
+ "device": "NVIDIA GeForce RTX 5070",
+ "compute_capability": "12.0",
+ "env_lock_sha16": "b8bc3a542813e294",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ },
+ "python": "3.12.14",
+ "train_step": {
+  "batch": 8,
+  "tokens_per_step": 1024,
+  "steps": 1158,
+  "seconds": 60.049329438013956,
+  "tokens_per_second": 19746.964888659353,
+  "seconds_per_step": 0.05185607032643692,
+  "warmup": {
+   "steps": 538,
+   "seconds": 30.038030319963582
+  },
+  "last_loss": 12.678852081298828
+ },
+ "forward_latency": {
+  "16": {
+   "calls": 500,
+   "median_ms": 1.5974795678630471,
+   "p95_ms": 1.6988080751616508,
+   "mean_ms": 1.611656138440594,
+   "bucket": 16
+  },
+  "32": {
+   "calls": 500,
+   "median_ms": 1.7465545097365975,
+   "p95_ms": 1.8348070851061493,
+   "mean_ms": 1.7612818307243288,
+   "bucket": 32
+  },
+  "64": {
+   "calls": 500,
+   "median_ms": 2.1200344781391323,
+   "p95_ms": 2.2189686482306565,
+   "mean_ms": 2.137069585500285,
+   "bucket": 64
+  }
+ },
+ "peak_bytes_in_use": 2710698240,
+ "peak_mib": 2585.123291015625,
+ "params_bytes": 497759232,
+ "lease": {
+  "waited_seconds": 4.5299530029296875e-06,
+  "started": "2026-09-09T19:16:37Z",
+  "compute_apps_before": [
+   {
+    "pid": "8835",
+    "name": "/usr/bin/kwin_wayland",
+    "used_memory": "70 MiB"
+   },
+   {
+    "pid": "242885",
+    "name": "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=wayland --render-n",
+    "used_memory": "244 MiB"
+   },
+   {
+    "pid": "323265",
+    "name": "swipl",
+    "used_memory": "1526 MiB"
+   }
+  ],
+  "compute_apps_after": [
+   {
+    "pid": "8835",
+    "name": "/usr/bin/kwin_wayland",
+    "used_memory": "70 MiB"
+   },
+   {
+    "pid": "242885",
+    "name": "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=wayland --render-n",
+    "used_memory": "244 MiB"
+   },
+   {
+    "pid": "323265",
+    "name": "swipl",
+    "used_memory": "1526 MiB"
+   },
+   {
+    "pid": "324274",
+    "name": "/home/derp/cap/venv/bin/python",
+    "used_memory": "3338 MiB"
+   }
+  ],
+  "finished": "2026-09-09T19:18:12Z"
+ },
+ "timestamp": "2026-09-09T19:18:12Z"
+}

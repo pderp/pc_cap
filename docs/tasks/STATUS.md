@@ -1,13 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 19:17 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:20 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 15 |
-| ready | 10 |
-| pending | 60 |
+| done | 17 |
+| ready | 9 |
+| pending | 59 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -16,7 +16,7 @@ GPU seconds charged to tasks so far: 0
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ENV-01 | Python environment (JAX venv) verified and completed | **done** | INTEGRATOR | — | short | no | orchestrator | pending |  |
-| ENV-02 | Shared-workload benchmark and kappa | **ready** | INTEGRATOR | ENV-01, DATA-00 | lease | no |  |  |  |
+| ENV-02 | Shared-workload benchmark and kappa | **done** | INTEGRATOR | ENV-01, DATA-00 | lease | no | orchestrator |  |  |
 | ENV-03 | Package scaffold, contracts v0, Makefile, docs skeleton | **done** | INTEGRATOR | ENV-01 | none | yes | orchestrator | pending |  |
 | ENV-04 | Sibling reference recorder (read-only sibling, DEC-003) | **done** | INTEGRATOR | ENV-03 | none | no | orchestrator | pending |  |
 
@@ -49,8 +49,8 @@ GPU seconds charged to tasks so far: 0
 | CAP-01 | Key features and deterministic retrieval | **done** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
 | CAP-02 | Slot metadata, use-count semantics, byte layout | **done** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
 | CAP-03 | Byte ceiling and capacity | **done** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
-| CAP-04 | Transactions, conflicts, eviction, revisions | **ready** | MEMORY | CAP-03, S0-08 | none | yes |  |  |  |
-| CAP-05 | Routers | **pending** | MEMORY+BASE | CAP-04, S0-05 | short | yes |  |  |  |
+| CAP-04 | Transactions, conflicts, eviction, revisions | **done** | MEMORY | CAP-03, S0-08 | none | yes | orchestrator |  |  |
+| CAP-05 | Routers | **ready** | MEMORY+BASE | CAP-04, S0-05 | short | yes |  |  |  |
 | CAP-06 | Transactional candidate search and budget | **pending** | MEMORY | CAP-05 | short | yes |  |  |  |
 | CAP-07 | Complete-edit learning loop | **pending** | MEMORY+DATA | CAP-06, S0-09 | short | yes |  |  |  |
 | S0-10 | Minimal cap integration smoke and the four pre-run invariants | **pending** | MEMORY | CAP-07, S0-08, S0-04 | short | yes |  |  |  |
