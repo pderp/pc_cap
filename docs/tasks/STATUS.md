@@ -1,13 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 19:15 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:17 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 14 |
+| done | 15 |
 | ready | 10 |
-| pending | 61 |
+| pending | 60 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -44,12 +44,12 @@ GPU seconds charged to tasks so far: 0
 | S0-06 | ePC base wrapper on FabricPC and declared energy (BP weights first) | **done** | BASE | S0-04, ENV-04 | short | yes | orchestrator |  |  |
 | S0-07 | Metric library with known-answer tests | **done** | METRICS | ENV-03 | none | yes | codex | a39be6b | Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths. |
 | S0-07b | HVP small-matrix controls (optional) | **done** | METRICS | S0-07 | none | no | codex | 65ffe84 | 6 small-matrix controls plus all 33 metric controls pass. Based on task/S0-07. Awaiting Claude integration; no real HVP runs. |
-| S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **ready** | INTEGRATOR | S0-03, CAP-02 | none | yes |  |  |  |
+| S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **done** | INTEGRATOR | S0-03, CAP-02 | none | yes | orchestrator |  |  |
 | S0-09 | Development reservation, tokenization helper, reference decoder | **ready** | DATA | DATA-00, S0-03 | short | yes |  |  |  |
 | CAP-01 | Key features and deterministic retrieval | **done** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
 | CAP-02 | Slot metadata, use-count semantics, byte layout | **done** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
 | CAP-03 | Byte ceiling and capacity | **done** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
-| CAP-04 | Transactions, conflicts, eviction, revisions | **pending** | MEMORY | CAP-03, S0-08 | none | yes |  |  |  |
+| CAP-04 | Transactions, conflicts, eviction, revisions | **ready** | MEMORY | CAP-03, S0-08 | none | yes |  |  |  |
 | CAP-05 | Routers | **pending** | MEMORY+BASE | CAP-04, S0-05 | short | yes |  |  |  |
 | CAP-06 | Transactional candidate search and budget | **pending** | MEMORY | CAP-05 | short | yes |  |  |  |
 | CAP-07 | Complete-edit learning loop | **pending** | MEMORY+DATA | CAP-06, S0-09 | short | yes |  |  |  |
