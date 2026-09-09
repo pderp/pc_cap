@@ -100,6 +100,8 @@ def main(args) -> int:
     if args.dry_run:
         print(json.dumps(cfg, indent=1))
         return 0
+    import pccap.harness.stage_s0  # noqa: F401  (registers "S0")
+
     runner = RUNNERS.get(args.stage)
     if runner is None:
         print(f"no runner registered for stage {args.stage}", file=sys.stderr)

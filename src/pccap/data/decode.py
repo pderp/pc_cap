@@ -73,17 +73,18 @@ def score_generation(result: DecodeResult, aliases: Iterable[str]) -> Metric:
     return exact_match_aliases(result.text, list(aliases), truncated=result.truncated)
 
 
-def teacher_forced_nll(predict_full: PredictFn, prompt_ids: np.ndarray, answer_ids: np.ndarray) -> Metric:
-    """Sum of −log p(y_t | x, y_<t) over the answer tokens (incl. the terminator) from one forward."""
-    ids = np.concatenate([np.asarray(prompt_ids, np.int32), np.asarray(answer_ids, np.int32)])
-    logits = np.asarray(predict_full(ids), np.float64)
-    n_p = len(prompt_ids)
+def teacher_forced_nll(predict: PredictFn, prompt_ids: np.ndarray, answer_ids: np.ndarray) -> Metric:
+    """Sum of −log p(y_t | x, y_<t) over the answer tokens (incl. the terminator), one prediction
+    per gold prefix so that a cap's writes act at each prediction position (E.2)."""
+    ids = np.asarray(prompt_ids, np.int32).reshape(-1)
     total = 0.0
-    for t, y in enumerate(np.asarray(answer_ids)):
-        row = logits[n_p + t - 1]
+    for y in np.asarray(answer_ids, np.int32).reshape(-1):
+        row = _last_logits(predict(ids)).astype(np.float64)
         m = row.max()
         total += float(m + np.log(np.exp(row - m).sum()) - row[int(y)])
-    return metric(total, units="nats", numerator=total, denominator=len(answer_ids), n=len(answer_ids))
+        ids = np.concatenate([ids, np.int32([y])])
+    n = int(np.asarray(answer_ids).size)
+    return metric(total, units="nats", numerator=total, denominator=n, n=n)
 
 
 def canonical(text: str) -> str:

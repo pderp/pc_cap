@@ -12,8 +12,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import numpy as np
-
 from pccap import ASSETS_ROOT
 from pccap.bases.bp import BPBase
 from pccap.bases.checksum import assert_frozen
@@ -83,7 +81,6 @@ def run_s0(ctx: dict, run_dir: Path) -> dict:
     results = []
     for item in items:
         pre = evaluate_item(cap, item, tok)
-        out = cap.update_item.__func__(cap, item, router, budget) if False else None  # placeholder (see below)
         from pccap.cap.learn import update_item
 
         out = update_item(cap, item, router, budget, Transport(), on_decision=lambda r: append_jsonl(dec_path, r),

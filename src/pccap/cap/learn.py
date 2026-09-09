@@ -236,6 +236,9 @@ def update_item(cap, item: EditItem, router: Router, budget: Budget, transport: 
                                   seed, permitted_banks)
                 cost.add(rr.cost)
                 cost.prefix_microsteps += 1
+                # base calls were charged by the base; charge the round-level counters once here
+                cap.ledger.charge(CostRecord(phase="learning", prefix_microsteps=1, search_candidates=rr.cost.search_candidates,
+                                             router_probes=rr.cost.router_probes))
                 used += 1
                 rounds_total += 1
                 pcodes += rr.codes

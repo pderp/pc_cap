@@ -1,0 +1,171 @@
+{
+ "stage": "S0",
+ "arm": "C1",
+ "base": "BP",
+ "metrics": {
+  "threshold_acquisition": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": 1.0,
+   "denominator": 1.0,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  },
+  "es_immediate": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": 1.0,
+   "denominator": 1.0,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 56664.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_allocated_bytes": {
+   "value": 38535384.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "items": [
+  {
+   "item_id": "zsre-eval-100",
+   "outcome": "accepted",
+   "rounds": 8,
+   "prefixes": [
+    {
+     "prefix_index": 0,
+     "target": 15281,
+     "loss_start": 14.642432542619716,
+     "loss_end": 0.025108674196033576,
+     "rounds": 5,
+     "reached_threshold": true,
+     "codes": [
+      "accepted:1",
+      "accepted:2",
+      "accepted:3",
+      "rejected_no_improvement:1",
+      "rejected_no_improvement:2",
+      "accepted:3",
+      "rejected_no_improvement:1",
+      "rejected_no_improvement:2",
+      "accepted:3",
+      "rejected_no_improvement:1",
+      "rejected_no_improvement:2",
+      "accepted:3",
+      "rejected_no_improvement:1",
+      "rejected_no_improvement:2",
+      "accepted:3"
+     ]
+    },
+    {
+     "prefix_index": 1,
+     "target": 5866,
+     "loss_start": 5.819945278424129,
+     "loss_end": 0.0809564895376127,
+     "rounds": 1,
+     "reached_threshold": true,
+     "codes": [
+      "accepted:1",
+      "accepted:2",
+      "accepted:3"
+     ]
+    },
+    {
+     "prefix_index": 2,
+     "target": 198,
+     "loss_start": 3.2579753882907596,
+     "loss_end": 0.05777130656116469,
+     "rounds": 2,
+     "reached_threshold": true,
+     "codes": [
+      "accepted:1",
+      "accepted:2",
+      "accepted:3",
+      "rejected_no_improvement:1",
+      "rejected_no_improvement:2",
+      "accepted:3"
+     ]
+    }
+   ],
+   "es_before": 0.0,
+   "es_after": 1.0,
+   "generated_before": "",
+   "generated_after": " Manning River",
+   "nll_before": 23.720353209334604,
+   "nll_after": 0.16383647029481097
+  }
+ ],
+ "learner_ckpt": {
+  "path": "/home/derp/cap/assets/runs/S0/C1/BP/h/0/0/learner.ckpt",
+  "sha256": "d8c5c3158a3c284ed304935bdfd69367788b5e052cb899e20d94cc69436600e4",
+  "state_hash": "8962ff3f620f8ce31cfbb14db69c79bd5a527928fa288fb9b797eb77c255abd1"
+ },
+ "memory": {
+  "allocated_bytes": 38535384,
+  "occupied_bytes": 56664,
+  "per_bank": {
+   "1": {
+    "allocated": 12845056,
+    "occupied": 18816,
+    "capacity": 2048,
+    "active": 3,
+    "ceiling": 12845056,
+    "key_dim": 768,
+    "value_dim": 768,
+    "overhead": 0,
+    "within_ceiling": true
+   },
+   "2": {
+    "allocated": 12845056,
+    "occupied": 18816,
+    "capacity": 2048,
+    "active": 3,
+    "ceiling": 12845056,
+    "key_dim": 768,
+    "value_dim": 768,
+    "overhead": 0,
+    "within_ceiling": true
+   },
+   "3": {
+    "allocated": 12845056,
+    "occupied": 18816,
+    "capacity": 2048,
+    "active": 3,
+    "ceiling": 12845056,
+    "key_dim": 768,
+    "value_dim": 768,
+    "overhead": 0,
+    "within_ceiling": true
+   }
+  },
+  "index_bytes": 216,
+  "key_dim": 768,
+  "value_dim": 768,
+  "occupancy": {
+   "1": 0.00146484375,
+   "2": 0.00146484375,
+   "3": 0.00146484375
+  },
+  "ceiling_bytes": 38535168
+ },
+ "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+ "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+}

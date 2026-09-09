@@ -39,14 +39,7 @@ def test_wrong_second_token_fails_es():
     es = score_generation(dec, ["New York"])
     assert es["value"] == 0.0 and es["status"] == "ok"
     # teacher-forced NLL is finite/small-ish but does NOT override the free-generation failure
-
-    def predict_full(ids):
-        out = np.zeros((len(ids), V), np.float32)
-        for t in range(len(gold)):
-            out[len(prompt) + t - 1] = rows[t]
-        return out
-
-    nll = teacher_forced_nll(predict_full, prompt, gold)
+    nll = teacher_forced_nll(_predict_from_table(table), prompt, gold)
     assert nll["status"] == "ok" and nll["value"] < 20
     assert es["value"] == 0.0
 

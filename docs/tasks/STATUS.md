@@ -1,13 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 19:27 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:35 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 19 |
-| ready | 11 |
-| pending | 55 |
+| done | 22 |
+| ready | 13 |
+| pending | 50 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -51,10 +51,10 @@ GPU seconds charged to tasks so far: 0
 | CAP-03 | Byte ceiling and capacity | **done** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
 | CAP-04 | Transactions, conflicts, eviction, revisions | **done** | MEMORY | CAP-03, S0-08 | none | yes | orchestrator |  |  |
 | CAP-05 | Routers | **done** | MEMORY+BASE | CAP-04, S0-05 | short | yes | orchestrator |  |  |
-| CAP-06 | Transactional candidate search and budget | **ready** | MEMORY | CAP-05 | short | yes |  |  |  |
-| CAP-07 | Complete-edit learning loop | **pending** | MEMORY+DATA | CAP-06, S0-09 | short | yes |  |  |  |
-| S0-10 | Minimal cap integration smoke and the four pre-run invariants | **pending** | MEMORY | CAP-07, S0-08, S0-04 | short | yes |  |  |  |
-| S0-11 | S0 stage report and CP-C | **pending** | INTEGRATOR | S0-10, S0-06, S0-07, S0-09 | none | yes |  |  |  |
+| CAP-06 | Transactional candidate search and budget | **done** | MEMORY | CAP-05 | short | yes | orchestrator |  |  |
+| CAP-07 | Complete-edit learning loop | **done** | MEMORY+DATA | CAP-06, S0-09 | short | yes | orchestrator |  |  |
+| S0-10 | Minimal cap integration smoke and the four pre-run invariants | **done** | MEMORY | CAP-07, S0-08, S0-04 | short | yes | orchestrator |  |  |
+| S0-11 | S0 stage report and CP-C | **ready** | INTEGRATOR | S0-10, S0-06, S0-07, S0-09 | none | yes |  |  |  |
 
 ## REG
 
@@ -98,8 +98,8 @@ GPU seconds charged to tasks so far: 0
 | S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **pending** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
 | S2-06 | Throughput profile | **pending** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes |  |  |  |
 | S2-07 | Full cost projection and D1 memo | **pending** | INTEGRATOR+METRICS | S2-06, S1-07, ENV-02 | none | yes |  |  |  |
-| CAP-08 | Read variants R-h0, R-g, R-e (optional) | **pending** | BASE+MEMORY | S0-10, S0-06 | short | yes |  |  |  |
-| CAP-09 | Optional difficulty weight | **pending** | MEMORY | CAP-07 | none | no |  |  |  |
+| CAP-08 | Read variants R-h0, R-g, R-e (optional) | **ready** | BASE+MEMORY | S0-10, S0-06 | short | yes |  |  |  |
+| CAP-09 | Optional difficulty weight | **ready** | MEMORY | CAP-07 | none | no |  |  |  |
 
 ## S3
 
