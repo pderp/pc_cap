@@ -190,18 +190,20 @@ def forward_jit(params: dict, ids: jax.Array, n: jax.Array, writes: jax.Array, c
     return logits, rows, (full if retain else {})
 
 
-@functools.partial(jax.jit, static_argnames=("cfg", "bank"))
+@functools.partial(jax.jit, static_argnames=("cfg", "bank", "retain"))
 def forward_from_jit(params: dict, hidden: jax.Array, n: jax.Array, writes: jax.Array,
-                     cfg: GPT2Config, bank: int):
+                     cfg: GPT2Config, bank: int, retain: bool = False):
     """Resume after bank ``bank``'s site. ``hidden`` is the *pre-write* residual at that site;
-    this applies ``writes[bank-1]`` at ``p`` and every later bank's write downstream."""
+    this applies ``writes[bank-1]`` at ``p`` and every later bank's write downstream.
+    ``retain`` also returns the full pre-write residual of every later site."""
     p = n - 1
     row = lax.dynamic_index_in_dim(hidden, p, axis=0, keepdims=False)
     h = lax.dynamic_update_index_in_dim(hidden, row + writes[bank - 1], p, axis=0)
-    h, rows, _ = run_blocks(params, h, p, writes, cfg, BANK_BLOCK[bank] + 1)
+    h, rows, full = run_blocks(params, h, p, writes, cfg, BANK_BLOCK[bank] + 1)
     rows[bank] = row
+    full[bank] = hidden
     logits = head(params, h, cfg)
-    return logits, rows
+    return logits, rows, (full if retain else {})
 
 
 def loss_at(logits: jax.Array, p: jax.Array, target: jax.Array) -> jax.Array:

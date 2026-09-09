@@ -87,7 +87,7 @@ class BPBase:
         return ForwardResult(logits=logits[:n], sites=self._sites(rows, p), cost=rec, hidden=hidden)
 
     def forward_from(self, bank: int, hidden, ids, writes: Sequence[Write] = (),
-                     phase: str = "learning") -> ForwardResult:
+                     phase: str = "learning", retain_sites: bool = False) -> ForwardResult:
         ids_d, n_d, W, n, p = self._prep(ids, writes)
         T = int(ids_d.shape[0])
         hidden = jnp.asarray(hidden, dtype=jnp.float32)
@@ -95,9 +95,10 @@ class BPBase:
             hpad = jnp.zeros((T, self.d), dtype=jnp.float32).at[: hidden.shape[0]].set(hidden[:T])
             hidden = hpad
         with self.ledger.call(phase, partial_forwards=1, tokens=n) as rec:
-            logits, rows = g.forward_from_jit(self.params, hidden, n_d, W, self.cfg, bank)
-            rec.outputs = (logits, rows)
-        return ForwardResult(logits=logits[:n], sites=self._sites(rows, p), cost=rec)
+            logits, rows, full = g.forward_from_jit(self.params, hidden, n_d, W, self.cfg, bank, retain_sites)
+            rec.outputs = (logits, rows, full)
+        hid = {m: full[m][:n] for m in full} if retain_sites else {}
+        return ForwardResult(logits=logits[:n], sites=self._sites(rows, p), cost=rec, hidden=hid)
 
     def adjoint(self, ids, target: int, writes: Sequence[Write] = (), phase: str = "learning",
                 return_loss: bool = False):

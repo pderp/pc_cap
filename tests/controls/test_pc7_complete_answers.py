@@ -52,7 +52,6 @@ def test_wrong_second_token_fails_es():
 
 
 def test_terminators_and_truncation():
-    tok = GPT2Tokenizer()
     ok = DecodeResult(np.array([6342, NEWLINE_ID]), " Paris", "newline", False, 2)
     assert score_generation(ok, ["Paris"])["value"] == 1.0
     eos = DecodeResult(np.array([6342, EOS_ID]), " Paris", "eos", False, 2)

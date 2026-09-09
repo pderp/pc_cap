@@ -1,13 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-09 19:23 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 19:27 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 18 |
-| ready | 10 |
-| pending | 57 |
+| done | 19 |
+| ready | 11 |
+| pending | 55 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -28,7 +28,7 @@ GPU seconds charged to tasks so far: 0
 | REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **ready** | DATA | DATA-00 | none | no |  |  |  |
 | DATA-01 | Editing pools | **ready** | DATA | S0-09 | lease | yes |  |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
-| DATA-03 | MODULAR-CONTROL fixture | **pending** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
+| DATA-03 | MODULAR-CONTROL fixture | **ready** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
 | DATA-04 | LM, probe and property sets with inventory | **ready** | DATA+METRICS | DATA-00 | none | no |  |  |  |
 | DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
 | DATA-08 | Challenge sets | **pending** | DATA+BASELINES | DATA-01 | short | no |  |  |  |
@@ -50,8 +50,8 @@ GPU seconds charged to tasks so far: 0
 | CAP-02 | Slot metadata, use-count semantics, byte layout | **done** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
 | CAP-03 | Byte ceiling and capacity | **done** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
 | CAP-04 | Transactions, conflicts, eviction, revisions | **done** | MEMORY | CAP-03, S0-08 | none | yes | orchestrator |  |  |
-| CAP-05 | Routers | **ready** | MEMORY+BASE | CAP-04, S0-05 | short | yes |  |  |  |
-| CAP-06 | Transactional candidate search and budget | **pending** | MEMORY | CAP-05 | short | yes |  |  |  |
+| CAP-05 | Routers | **done** | MEMORY+BASE | CAP-04, S0-05 | short | yes | orchestrator |  |  |
+| CAP-06 | Transactional candidate search and budget | **ready** | MEMORY | CAP-05 | short | yes |  |  |  |
 | CAP-07 | Complete-edit learning loop | **pending** | MEMORY+DATA | CAP-06, S0-09 | short | yes |  |  |  |
 | S0-10 | Minimal cap integration smoke and the four pre-run invariants | **pending** | MEMORY | CAP-07, S0-08, S0-04 | short | yes |  |  |  |
 | S0-11 | S0 stage report and CP-C | **pending** | INTEGRATOR | S0-10, S0-06, S0-07, S0-09 | none | yes |  |  |  |
