@@ -193,16 +193,19 @@
    ],
    "gpu": "short",
    "review": true,
-   "status": "pending",
-   "agent": null,
+   "status": "done",
+   "agent": "orchestrator",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-09T18:56:14+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "tests/bases/test_bp_base.py",
+    "results/S0/controls"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": ""
+   "note": "HF-oracle rows pending REF-01"
   },
   {
    "id": "S0-05",
@@ -257,16 +260,19 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "in_progress",
+   "status": "done",
    "agent": "codex",
    "worktree": "/home/derp/cap/pc_cap/.worktrees/S0-07",
    "started": "2026-09-09T18:46:37.301056+00:00",
-   "finished": null,
-   "commit": null,
-   "evidence": [],
+   "finished": "2026-09-09T18:51:50.751446+00:00",
+   "commit": "d9f9f5e",
+   "evidence": [
+    ".worktrees/S0-07/docs/tasks/S0-07.md",
+    ".worktrees/S0-07/results/S0/metrics/verify.txt"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "Lane B reserved by Codex: S0-07 -> ANA-01 -> S0-07b; CPU-only, task branches for orchestrator integration."
+   "note": "Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths."
   },
   {
    "id": "S0-07b",
@@ -279,7 +285,7 @@
    "gpu": "none",
    "review": false,
    "status": "pending",
-   "agent": null,
+   "agent": "codex",
    "worktree": null,
    "started": null,
    "finished": null,
@@ -287,7 +293,7 @@
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": ""
+   "note": "Reserved Lane B; task branches only, no GPU. Claude owns review/integration."
   },
   {
    "id": "S0-08",
@@ -819,16 +825,16 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "pending",
-   "agent": null,
-   "worktree": null,
-   "started": null,
+   "status": "in_progress",
+   "agent": "codex",
+   "worktree": "/home/derp/cap/pc_cap/.worktrees/ANA-01",
+   "started": "2026-09-09T18:51:50.751497+00:00",
    "finished": null,
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": ""
+   "note": "Reserved Lane B; task branches only, no GPU. Claude owns review/integration."
   },
   {
    "id": "S1-01",
