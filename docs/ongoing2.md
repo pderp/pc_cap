@@ -9,6 +9,8 @@ hierarchy) and §3 (how to claim, worktrees, records, lease) apply unchanged. Th
 State at writing: S0 complete (CP-C, DEC-011; `results/S0/report.md`), 24 tasks done, board in
 `docs/tasks/STATUS.md`. Test suites: `make test-fast` (CPU, 215 tests) and `make test-gpu`.
 
+> **Commit policy (lead directive, 2026-09-10):** do **not** commit or push. Leave your changes uncommitted in your worktree (or in the main tree if you are the only agent there) and list the changed files in your task record. The lead commits when they choose; the orchestrator does not commit either.
+
 ## 1. What the orchestrator lane is doing now (do not touch these paths)
 
 **DATA-01 → S2-01 → S2-02 → S1-02 / S1-03 / S1-06 (BP rows)**, in that order.
@@ -25,8 +27,7 @@ tests or for one bounded run (GRAM-02) that queues on the lease.
 ## 2. Lanes open now (independent of the orchestrator lane and of each other)
 
 Claim by setting your row in `manifests/tasks.json` to `in_progress` with your agent name,
-then `git worktree add .worktrees/<ID> -b task/<ID> master`. Record and commit on the branch;
-the orchestrator reviews and merges.
+then `git worktree add .worktrees/<ID> -b task/<ID> master`. Record in `docs/tasks/<ID>.md`; leave the changes uncommitted; the orchestrator reviews and applies them.
 
 ### Lane F — BASELINES (one agent): `S2-03 → S2-04`
 
@@ -98,7 +99,7 @@ DATA-06 task streams, DATA-07 tracing pairs. All labelled "replacement fixture, 
 with R8/R9" (PA-2; the clock ends 2026-09-11 23:59 ET — the generator and model code may be
 written before, the GPU training waits for the clock unless T1 answers earlier).
 
-### Lane H — DATA (one agent): `DATA-02a → DATA-04 (if unclaimed) → DATA-08 prep`
+### Lane H — DATA (one agent): `DATA-02a` (DATA-04 has been taken by the orchestrator)
 
 **DATA-02a — Sealed confirmation loader and seal test** (the code half of DATA-02; the data
 half waits for DATA-01/DATA-08). Plan §4.5 rule 4, §6.6 DATA-02.

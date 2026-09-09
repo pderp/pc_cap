@@ -1,13 +1,14 @@
 # Task status board
 
-Regenerated 2026-09-09 19:38 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-09 23:25 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 24 |
+| done | 25 |
+| in_progress | 1 |
 | ready | 11 |
-| pending | 50 |
+| pending | 48 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -26,12 +27,12 @@ GPU seconds charged to tasks so far: 0
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | DATA-00 | Fetch and hash public assets into assets/ | **done** | DATA | ENV-01 | none | no | orchestrator |  |  |
 | REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **ready** | DATA | DATA-00 | none | no |  |  |  |
-| DATA-01 | Editing pools | **ready** | DATA | S0-09 | lease | yes |  |  |  |
+| DATA-01 | Editing pools | **done** | DATA | S0-09 | lease | yes | orchestrator |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **ready** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
-| DATA-04 | LM, probe and property sets with inventory | **ready** | DATA+METRICS | DATA-00 | none | no |  |  |  |
+| DATA-04 | LM, probe and property sets with inventory | **in_progress** | DATA+METRICS | DATA-00 | none | no | orchestrator |  |  |
 | DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
-| DATA-08 | Challenge sets | **pending** | DATA+BASELINES | DATA-01 | short | no |  |  |  |
+| DATA-08 | Challenge sets | **ready** | DATA+BASELINES | DATA-01 | short | no |  |  |  |
 
 ## S0
 
@@ -89,7 +90,7 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S2-01 | Residual scales and radius calibration | **pending** | BASE+MEMORY | S0-10, DATA-01 | lease | yes |  |  |  |
+| S2-01 | Residual scales and radius calibration | **ready** | BASE+MEMORY | S0-10, DATA-01 | lease | yes |  |  |  |
 | S2-02 | Aggregate step screening | **pending** | MEMORY+METRICS | S2-01 | lease | yes |  |  |  |
 | S2-03 | LoRA baselines B1 (and B0) | **ready** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
 | S2-04 | Replay baseline B3 | **pending** | BASELINES | S2-03, S0-08 | short | no |  |  |  |

@@ -117,6 +117,37 @@ class BPBase:
         row = fr.logits[p]
         return float(jax.nn.logsumexp(row) - row[target]), fr
 
+    def last_logits_batch(self, seqs: list[np.ndarray], phase: str = "query") -> np.ndarray:
+        """Cap-off last-position logits for a list of prefixes (one bucket for the batch)."""
+        n = np.asarray([len(s) for s in seqs], np.int32)
+        T = g.bucket_len(int(n.max()))
+        ids = np.stack([g.pad_ids(np.asarray(s, np.int32), T) for s in seqs])
+        with self.ledger.call(phase, full_forwards=len(seqs), tokens=int(n.sum())) as rec:
+            out = g.last_logits_batch_jit(self.params, jnp.asarray(ids), jnp.asarray(n), self.cfg)
+            rec.outputs = out
+        return np.asarray(out)
+
+    def all_hidden_batch(self, seqs: np.ndarray, phase: str = "query") -> np.ndarray:
+        """Residual stream at every layer boundary for equal-length sequences ``[B, T]`` → ``[B, 13, T, d]``."""
+        seqs = np.asarray(seqs, np.int32)
+        with self.ledger.call(phase, full_forwards=int(seqs.shape[0]), tokens=int(seqs.size)) as rec:
+            out = g.all_hidden_batch_jit(self.params, jnp.asarray(seqs), self.cfg)
+            rec.outputs = out
+        return np.asarray(out)
+
+    def seq_adjoints_batch(self, seqs: np.ndarray, phase: str = "learning") -> tuple[np.ndarray, np.ndarray]:
+        """Adjoint field of the summed next-token loss at every block output for ``[B, T]`` sequences
+        (targets = shifted tokens; the last position has no target) → (loss [B], grads [B, 12, T, d])."""
+        seqs = np.asarray(seqs, np.int32)
+        B, T = seqs.shape
+        targets = np.concatenate([seqs[:, 1:], np.zeros((B, 1), np.int32)], axis=1)
+        mask = np.ones((B, T), np.float32)
+        mask[:, -1] = 0.0
+        with self.ledger.call(phase, full_forwards=B, reverses=B, tokens=int(seqs.size)) as rec:
+            loss, grads = g.seq_adjoint_all_layers_jit(self.params, jnp.asarray(seqs), jnp.asarray(targets), jnp.asarray(mask), self.cfg)
+            rec.outputs = (loss, grads)
+        return np.asarray(loss), np.asarray(grads)
+
     def checksum(self, recompute: bool = True) -> str:
         if not recompute:
             return self._checksum_at_load

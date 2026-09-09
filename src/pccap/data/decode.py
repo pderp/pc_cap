@@ -87,5 +87,39 @@ def teacher_forced_nll(predict: PredictFn, prompt_ids: np.ndarray, answer_ids: n
     return metric(total, units="nats", numerator=total, denominator=n, n=n)
 
 
+def greedy_decode_batch(base, prompts: list[np.ndarray], tok: GPT2Tokenizer, max_new: int = MAX_ANSWER_TOKENS,
+                        batch_size: int = 64, phase: str = "query") -> list[DecodeResult]:
+    """Bulk cap-off greedy decoding with the same semantics as ``greedy_decode`` (full prefix
+    recompute per step, stop at newline/EOS, ``max_new``), batched over prompts through
+    ``base.last_logits_batch``. Used for teacher generations in data selection (DATA-01); the
+    per-item reference decoder remains ``greedy_decode``."""
+    results: list[DecodeResult | None] = [None] * len(prompts)
+    order = sorted(range(len(prompts)), key=lambda i: len(prompts[i]))
+    for start in range(0, len(order), batch_size):
+        idx = order[start : start + batch_size]
+        cur = [np.asarray(prompts[i], np.int32).reshape(-1) for i in idx]
+        new = [[] for _ in idx]
+        done = [False] * len(idx)
+        stopped = ["max"] * len(idx)
+        for _ in range(max_new):
+            live = [j for j in range(len(idx)) if not done[j]]
+            if not live:
+                break
+            logits = base.last_logits_batch([cur[j] for j in live], phase=phase)
+            nxt = np.argmax(logits.astype(np.float64), axis=-1)
+            for j, t in zip(live, nxt):
+                t = int(t)
+                new[j].append(t)
+                cur[j] = np.concatenate([cur[j], np.int32([t])])
+                if t == NEWLINE_ID:
+                    done[j], stopped[j] = True, "newline"
+                elif t == EOS_ID:
+                    done[j], stopped[j] = True, "eos"
+        for j, i in enumerate(idx):
+            body = [t for t in new[j] if t not in (NEWLINE_ID, EOS_ID)] if stopped[j] != "max" else new[j]
+            results[i] = DecodeResult(np.asarray(new[j], np.int32), tok.decode(body), stopped[j], stopped[j] == "max", len(new[j]))
+    return results  # type: ignore[return-value]
+
+
 def canonical(text: str) -> str:
     return normalize_answer(text)

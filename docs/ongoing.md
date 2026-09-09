@@ -8,6 +8,8 @@ are updated. The plan (updated_plan2.md) stays the task specification; the PDF
 (`docs/pc_cap_month_plan_readable.pdf`, text extract at `docs/pdf_text/plan.txt`) stays the
 scientific contract. Nothing below changes a threshold, endpoint, arm, or budget.
 
+> **Commit policy (lead directive, 2026-09-10):** do **not** commit or push. Leave your changes uncommitted in your worktree (or in the main tree if you are the only agent there) and list the changed files in your task record. The lead commits when they choose; the orchestrator does not commit either.
+
 ## 1. Ground rules that differ from updated_plan2.md (lead directives, 2026-09-09)
 
 These were given by the lead when execution started and override the corresponding lines of
@@ -58,8 +60,7 @@ assets/
 3. Edit only the owned paths listed for the task. Anything else → write a patch to
    `docs/tasks/<ID>.patch` and say so in the task record.
 4. Run the Verify command; write `docs/tasks/<ID>.md` in the §4.3 format of updated_plan2.md;
-   commit on your branch as `<ID>: <one line>`; do **not** merge to `master` (the
-   orchestrator merges) and do not push.
+   do **not** commit, merge or push (see the commit policy above); report the worktree path and changed files in the record.
 5. GPU use > 60 s requires the lease file `results/.gpu_lease` (`pccap.harness.lease`,
    available after S0-03; until then use `flock results/.gpu_lease <cmd>` and write a JSON
    line with pid, task ID and projected seconds). The lanes below are chosen so that none of

@@ -271,3 +271,62 @@ def load_params_npz(path: Path) -> dict:
             blk.setdefault(grp, {})[sub] = z[f"h.{l}.{grp}.{sub}"]
         blocks.append(blk)
     return {"wte": z["wte"], "wpe": z["wpe"], "ln_f": {"g": z["ln_f.g"], "b": z["ln_f.b"]}, "blocks": blocks}
+
+
+def _last_row_logits(params: dict, ids: jax.Array, n: jax.Array, cfg: GPT2Config) -> jax.Array:
+    """Logits at position p = n-1 only (no writes); the head projects one row."""
+    p = n - 1
+    h = embed(params, ids)
+    h, _, _ = run_blocks(params, h, p, jnp.zeros((3, cfg.d), jnp.float32), cfg, 0)
+    row = lax.dynamic_index_in_dim(h, p, axis=0, keepdims=False)
+    return layer_norm(row, params["ln_f"]["g"], params["ln_f"]["b"], cfg.eps) @ params["wte"].T
+
+
+@functools.partial(jax.jit, static_argnames=("cfg",))
+def last_logits_batch_jit(params: dict, ids: jax.Array, n: jax.Array, cfg: GPT2Config) -> jax.Array:
+    """Batched cap-off last-position logits ``[B, V]`` for padded ``ids [B, T]`` with lengths ``n [B]``.
+    Used for bulk teacher generation (DATA-01 selection); the reference decoder stays single-sequence."""
+    return jax.vmap(lambda i, k: _last_row_logits(params, i, k, cfg))(ids, n)
+
+
+def _all_hidden(params: dict, ids: jax.Array, cfg: GPT2Config) -> jax.Array:
+    """Residual stream at every layer boundary: ``[n_layer+1, T, d]`` (row 0 = embedding output,
+    row l+1 = block l output, the last before ``ln_f``). Cap-off."""
+    h = embed(params, ids)
+    hs = [h]
+    for l in range(cfg.n_layer):
+        h = block(params["blocks"][l], h, cfg)
+        hs.append(h)
+    return jnp.stack(hs)
+
+
+@functools.partial(jax.jit, static_argnames=("cfg",))
+def all_hidden_batch_jit(params: dict, ids: jax.Array, cfg: GPT2Config) -> jax.Array:
+    """``[B, n_layer+1, T, d]`` for padded ``ids [B, T]`` (positions beyond each sequence's length
+    are causally inert; the caller masks them)."""
+    return jax.vmap(lambda i: _all_hidden(params, i, cfg))(ids)
+
+
+def _seq_loss_with_errors(params: dict, errors: jax.Array, ids: jax.Array, targets: jax.Array, mask: jax.Array, cfg: GPT2Config):
+    """Summed next-token CE over ``mask`` positions with zero 'errors' ``[n_layer, T, d]`` added at
+    every block output; the gradient w.r.t. ``errors`` is the adjoint field of D.3."""
+    h = embed(params, ids)
+    for l in range(cfg.n_layer):
+        h = block(params["blocks"][l], h, cfg) + errors[l]
+    logits = head(params, h, cfg)
+    lp = jax.nn.log_softmax(logits, axis=-1)
+    nll = -jnp.take_along_axis(lp, targets[:, None], axis=-1)[:, 0]
+    return jnp.sum(nll * mask)
+
+
+@functools.partial(jax.jit, static_argnames=("cfg",))
+def seq_adjoint_all_layers_jit(params: dict, ids: jax.Array, targets: jax.Array, mask: jax.Array, cfg: GPT2Config):
+    """Adjoint of the summed sequence loss at every block output and position: ``[n_layer, T, d]``
+    plus the loss. One reverse pass per sequence (vmapped over a batch)."""
+
+    def one(i, t, m):
+        e0 = jnp.zeros((cfg.n_layer, i.shape[0], cfg.d), jnp.float32)
+        loss, g = jax.value_and_grad(_seq_loss_with_errors, argnums=1)(params, e0, i, t, m, cfg)
+        return loss, g
+
+    return jax.vmap(one)(ids, targets, mask)
