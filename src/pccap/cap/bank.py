@@ -1,15 +1,18 @@
-"""Fixed-capacity bank storage and deterministic retrieval (CAP-01; PDF F.1).
+"""Fixed-capacity bank storage and deterministic retrieval (CAP-01/02; PDF F.1, F.2).
 
 * keys ``[S, dk]`` and values ``[S, d]`` float32 NumPy arrays (host-side learner state, so
-  snapshots are byte-exact); immutable slot ids ``0..S-1``; ``active`` mask; radii ``[S]``.
+  snapshots are byte-exact) plus the packed 128-byte metadata record per slot
+  (``cap.metadata.SLOT_DTYPE``): radius and the active flag are read from that record, so there
+  is exactly one source of truth. Slot ids are implicit array indices (``0..S-1``), immutable,
+  and cost no bytes.
 * ``retrieve(q)``: among active slots with ``‖q − k_s‖₂ ≤ ρ_s`` (inclusive) return the nearest;
   ties → smallest id; a zero radius fires only on an exactly equal key (``‖q − k‖ = 0`` in
-  float32 arithmetic iff ``q == k`` elementwise). Implemented on sorted arrays; no dict/set
-  iteration order is involved (PDF F.1 "distance and tie rules must not depend on unordered
-  containers").
+  float32 arithmetic iff ``q == k`` elementwise). Implemented on arrays with ``lexsort``; no
+  dict/set iteration order is involved (PDF F.1).
 
-Metadata, use counts, transactions and eviction live in ``cap.metadata`` / ``cap.transaction``
-(CAP-02/04); this module only holds arrays and the read path.
+Use counts, transactions, conflicts and eviction live in ``cap.metadata`` / ``cap.transaction``
+(CAP-02/04); this module holds arrays and the read path, plus raw allocate/release used inside
+transactions.
 """
 
 from __future__ import annotations
@@ -17,6 +20,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
+
+from pccap.cap.metadata import NO_TARGET, SLOT_BYTES, MetadataView, SlotMetadata, new_meta
 
 
 @dataclass
@@ -37,9 +42,24 @@ class Bank:
         self.radius_default = float(radius_default)
         self.keys = np.zeros((self.S, self.dk), np.float32)
         self.values = np.zeros((self.S, self.d), np.float32)
-        self.radii = np.zeros((self.S,), np.float32)
-        self.active = np.zeros((self.S,), bool)
-        self.ids = np.arange(self.S, dtype=np.int64)  # immutable
+        self.meta = new_meta(self.S)
+        self.metadata = SlotMetadata(self.meta)  # mutable access (learning path only)
+
+    # ---------------------------------------------------------------- derived views
+    @property
+    def radii(self) -> np.ndarray:
+        return self.meta["radius"]
+
+    @property
+    def active(self) -> np.ndarray:
+        return self.meta["active"] == 1
+
+    @property
+    def ids(self) -> np.ndarray:
+        return np.arange(self.S, dtype=np.int64)
+
+    def view(self) -> MetadataView:
+        return MetadataView(self.meta)
 
     # ---------------------------------------------------------------- read path
     def distances(self, q: np.ndarray) -> np.ndarray:
@@ -49,12 +69,12 @@ class Bank:
 
     def retrieve(self, q: np.ndarray) -> Retrieval:
         dist = self.distances(q)
-        eligible = self.active & (dist <= self.radii)
+        eligible = self.active & (dist <= self.meta["radius"])
         n = int(eligible.sum())
         if n == 0:
             return Retrieval(slot=-1, distance=float("inf"), candidates=0)
         idx = np.flatnonzero(eligible)
-        order = np.lexsort((self.ids[idx], dist[idx]))  # primary: distance, secondary: id
+        order = np.lexsort((idx, dist[idx]))  # primary: distance, secondary: id
         best = int(idx[order[0]])
         return Retrieval(slot=best, distance=float(dist[best]), candidates=n)
 
@@ -68,41 +88,46 @@ class Bank:
     # ---------------------------------------------------------------- write path (raw; CAP-04 wraps it)
     def free_slot(self) -> int:
         """Lowest inactive id, or -1 when full."""
-        inactive = np.flatnonzero(~self.active)
+        inactive = np.flatnonzero(self.meta["active"] == 0)
         return int(inactive[0]) if inactive.size else -1
 
     def occupancy(self) -> int:
-        return int(self.active.sum())
+        return int((self.meta["active"] == 1).sum())
 
     def is_full(self) -> bool:
         return self.occupancy() >= self.S
 
-    def allocate(self, key: np.ndarray, radius: float | None = None, value: np.ndarray | None = None) -> int:
+    def allocate(self, key: np.ndarray, radius: float | None = None, value: np.ndarray | None = None,
+                 created: int = 0, digest: bytes = b"", version: int = 0, target: int = NO_TARGET) -> int:
         s = self.free_slot()
         if s < 0:
             raise RuntimeError("bank full; eviction is CAP-04's responsibility")
         self.keys[s] = np.asarray(key, np.float32).reshape(self.dk)
         self.values[s] = 0.0 if value is None else np.asarray(value, np.float32).reshape(self.d)
-        self.radii[s] = self.radius_default if radius is None else float(radius)
-        self.active[s] = True
+        self.metadata.on_allocate(s, self.radius_default if radius is None else float(radius), created, digest,
+                                  version, target)
         return s
 
     def release(self, slot: int) -> None:
-        self.active[slot] = False
         self.keys[slot] = 0.0
         self.values[slot] = 0.0
-        self.radii[slot] = 0.0
+        self.metadata.on_release(slot)
 
     # ---------------------------------------------------------------- bytes / snapshot
+    def slot_bytes(self) -> int:
+        return 4 * self.dk + 4 * self.d + SLOT_BYTES
+
     def array_bytes(self) -> dict[str, int]:
-        return {"keys": self.keys.nbytes, "values": self.values.nbytes, "radii": self.radii.nbytes,
-                "active": self.active.nbytes, "ids": self.ids.nbytes}
+        return {"keys": self.keys.nbytes, "values": self.values.nbytes, "meta": self.meta.nbytes}
+
+    def index_bytes(self) -> int:
+        return 0  # slot ids are implicit; the correction index (CAP-04) reports its own bytes
 
     def arrays(self) -> dict[str, np.ndarray]:
-        return {"keys": self.keys, "values": self.values, "radii": self.radii, "active": self.active}
+        return {"keys": self.keys, "values": self.values, "meta": self.meta}
 
     def load_arrays(self, arrays: dict[str, np.ndarray]) -> None:
-        for k in ("keys", "values", "radii", "active"):
+        for k in ("keys", "values", "meta"):
             src = arrays[k]
             dst = getattr(self, k)
             if src.shape != dst.shape or src.dtype != dst.dtype:
