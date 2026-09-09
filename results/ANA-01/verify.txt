@@ -1,0 +1,8 @@
+Earlier report-generation command used system python and failed importing jax; no tests or experiments ran in that attempt. Rerun with the authorized venv below.
+$ /home/derp/cap/venv/bin/python -m pytest -q tests/analysis/ --basetemp=results/ANA-01/pytest-tmp
+...................                                                      [100%]
+19 passed in 0.31s
+exit_code=0
+$ /home/derp/cap/venv/bin/python -m ruff check src/pccap/analysis/paired.py src/pccap/analysis/bootstrap.py src/pccap/analysis/__init__.py tests/analysis
+All checks passed!
+exit_code=0
