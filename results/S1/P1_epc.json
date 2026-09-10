@@ -1,0 +1,163 @@
+{
+ "stage": "S1",
+ "property": "P1",
+ "base": "EPC (regenerated, REG-02) vs BP teacher",
+ "weights": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+ "H": {
+  "tokens_used": 1999872,
+  "source": "DATA-04 H_tokens (SD-1)"
+ },
+ "metrics": {
+  "kl_mean": {
+   "value": 2.9230592777653206e-05,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "kl_p95": {
+   "value": 9.306735591962928e-05,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "kl_p99": {
+   "value": 0.0002444585532066413,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "kl_max_finite": {
+   "value": 0.1161019504070282,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "kl_feedforward_vs_unclamped8_consistency_max_abs": {
+   "value": 0.000701904296875,
+   "status": "ok",
+   "units": "logits",
+   "numerator": null,
+   "denominator": null,
+   "n": 8,
+   "strata": {},
+   "exclusions": []
+  },
+  "teacher_argmax_accuracy_H": {
+   "value": 0.35985478505629476,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "student_argmax_accuracy_H": {
+   "value": 0.36005169683981575,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "argmax_agreement_H": {
+   "value": 0.9964915717758445,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "teacher_nll_H": {
+   "value": 3.5702249383975198,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "student_nll_H": {
+   "value": 3.5697239523900324,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  },
+  "kd_beta2_x4_mean_H": {
+   "value": 5.549240603136171e-05,
+   "status": "ok",
+   "units": "nats(beta=2, x4)",
+   "numerator": null,
+   "denominator": null,
+   "n": 1999872,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "dev_pool": {
+  "zsre": {
+   "n": 280,
+   "last_position_argmax_agreement": 1.0,
+   "initially_correct_first_token_fraction": {
+    "bp": 0.0,
+    "epc": 0.0
+   },
+   "common_initially_incorrect_first_token_fraction": 1.0,
+   "note": "first answer token at the prompt's last position (the stream is BP-selected: teacher-incorrect by construction, DATA-01 E.2)"
+  },
+  "counterfact": {
+   "n": 262,
+   "last_position_argmax_agreement": 1.0,
+   "initially_correct_first_token_fraction": {
+    "bp": 0.003816793893129771,
+    "epc": 0.003816793893129771
+   },
+   "common_initially_incorrect_first_token_fraction": 0.9961832061068703,
+   "note": "first answer token at the prompt's last position (the stream is BP-selected: teacher-incorrect by construction, DATA-01 E.2)"
+  }
+ },
+ "nonfinite_positions": 0,
+ "reconciliation": {
+  "sibling_terminal_fidelity_kl": 0.000124,
+  "sibling_scaling": "kd_kl_loss at temperature 2 times beta^2 = 4 (OWT-unseen, 409,600 positions)",
+  "pdf_inherited_figure": 3e-05,
+  "ours_beta1_mean": 2.9230592777653206e-05,
+  "ours_beta2_x4_mean": 5.549240603136171e-05,
+  "note": "the regenerated checkpoint is a new run (PA-1); its OWT-tail figures are in results/REG/preflight.json"
+ },
+ "eligibility": {
+  "matched_fidelity_claims": "eligible",
+  "rule": "mean KL <= 1e-3 on H and zero non-finite positions (both bases; the BP row is the teacher against itself = 0)"
+ },
+ "lease": {
+  "waited_seconds": 5.4836273193359375e-06,
+  "started": "2026-09-10T23:24:40Z",
+  "finished": "2026-09-10T23:26:14Z"
+ },
+ "seconds": 94.1838731765747
+}

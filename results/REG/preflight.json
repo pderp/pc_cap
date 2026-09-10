@@ -1,0 +1,158 @@
+{
+ "written": "2026-09-10T23:24:40Z",
+ "checkpoint": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766",
+ "params_sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51",
+ "state": {
+  "global_step": 9766,
+  "tokens_seen": 50001920,
+  "stage_index": 6,
+  "kind": "final",
+  "protocol_hash": "8ec5feae4d5db48e",
+  "data_sha256": "ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+  "sibling_commit": "298fc719a0bb3e50a2b818990dd61ccca438ee62",
+  "gpu_seconds": 43858.022898197174,
+  "elapsed_seconds": 44005.16772055626
+ },
+ "final": true,
+ "params_finite": true,
+ "config_equal_to_teacher": true,
+ "dtypes": [
+  "float32"
+ ],
+ "max_abs_param_shift": 0.0006846338510513306,
+ "relative_param_shift": 0.00044597495457675805,
+ "capoff_identity_max_abs_logit_diff": 0.0,
+ "capoff_identity_ok": true,
+ "energy_descent_8_iters": {
+  "all_non_increasing": true,
+  "rows": [
+   {
+    "prompt": "The capital of France is",
+    "E0": 2.471325397491455,
+    "E8": 2.3014228343963623,
+    "non_increasing": true
+   },
+   {
+    "prompt": "Albert Einstein was born in",
+    "E0": 1.6364812850952148,
+    "E8": 1.2731013298034668,
+    "non_increasing": true
+   },
+   {
+    "prompt": "In 1492, Columbus sailed",
+    "E0": 1.36775803565979,
+    "E8": 1.1619762182235718,
+    "non_increasing": true
+   },
+   {
+    "prompt": "def fibonacci(n):",
+    "E0": 1.415470838546753,
+    "E8": 1.0528017282485962,
+    "non_increasing": true
+   },
+   {
+    "prompt": "The quick brown fox jumps over the lazy dog.",
+    "E0": 1.3606857061386108,
+    "E8": 1.2427159547805786,
+    "non_increasing": true
+   },
+   {
+    "prompt": "Water boils at",
+    "E0": 2.607727289199829,
+    "E8": 2.2374775409698486,
+    "non_increasing": true
+   },
+   {
+    "prompt": "My favourite colour is",
+    "E0": 2.2488675117492676,
+    "E8": 1.8351980447769165,
+    "non_increasing": true
+   },
+   {
+    "prompt": "The Eiffel Tower is located in",
+    "E0": 0.9226934909820557,
+    "E8": 0.8139519095420837,
+    "non_increasing": true
+   }
+  ]
+ },
+ "unseen_tail": {
+  "windows": 97,
+  "positions": 49664,
+  "kl_beta1_teacher_student": 1.4139612603128403e-05,
+  "kd_beta2_x4": 4.6006607219020894e-05,
+  "teacher_nll": 3.226369166860775,
+  "student_nll": 3.2263518596182066,
+  "sibling_reference": "terminal-fidelity.json OWT-unseen mean KL 1.24e-4 (its scaling; 409,600 positions) \u2014 inherited, re-measured in S1-01"
+ },
+ "prompt_kl_beta2": 6.8384383666852955e-06,
+ "prompt_kl_sibling_terminal": 5.8076857385458425e-06,
+ "tokenizer": {
+  "snapshot": "/home/derp/cap/assets/models/gpt2",
+  "equal_to_teacher": true,
+  "note": "student and teacher share the pinned snapshot tokenizer"
+ },
+ "seconds": 11.007854700088501,
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 0,
+   "partial_forwards": 0,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "accel_seconds": 0.0,
+   "peak_mem_mib": 0.0,
+   "tokens": 0
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 112,
+   "partial_forwards": 0,
+   "reverses": 72,
+   "settle_iters": 64,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 4.450903274002485,
+   "accel_seconds": 4.450903274002485,
+   "peak_mem_mib": 1189.486572265625,
+   "tokens": 264
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 112,
+   "partial_forwards": 0,
+   "reverses": 72,
+   "settle_iters": 64,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 4.450903274002485,
+   "accel_seconds": 4.450903274002485,
+   "peak_mem_mib": 1189.486572265625,
+   "tokens": 264
+  },
+  "events": 48,
+  "elapsed_wall_seconds": 10.656193256378174,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "validity": {
+  "checks": {
+   "params_finite": true,
+   "config_equal_to_teacher": true,
+   "capoff_identity_ok": true,
+   "energy_descent_ok": true,
+   "prompt_kl_below_abort": true,
+   "dtype_float32": true
+  },
+  "valid": true,
+  "identity_criterion": "graph derive vs functional forward, max |\u0394 logit| <= 1e-4 (the S0-06 test criterion; SD-10's exact equality applies to the same-code cap-off path, which these two paths are not)"
+ }
+}

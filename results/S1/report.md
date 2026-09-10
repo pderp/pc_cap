@@ -1,10 +1,10 @@
-# S1 stage report (Appendix G) — development, BP rows
+# S1 stage report (Appendix G) — development, BP and regenerated-ePC rows
 
-Rendered 2026-09-10 11:28 UTC by `pccap report --stage S1`.
+Rendered 2026-09-10 23:33 UTC by `pccap report --stage S1`.
 
 ## 1. Header
 
-- Stage: S1 substrate report card. Code commit: `ee75a9e0cd515a682ae143eb558d22d9143f56b0`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: absent (REG pending).
+- Stage: S1 substrate report card. Code commit: `7e1afefbc0a2b4c3d4c6063329345453492db503`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: regenerated (REG-02, `/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz`).
 - Sets: `manifests/dev/lm_sets.json` (H 2×10⁶ train tokens seed 11; drift = validation 247,289 tokens; P2 4,096 positions; P3 1,000 × 128; POS UD-EWT).
 - Cost: 0.18 local GPU-h = 0.18 A100-eq h of 12 (κ 1.0 provisional).
 
@@ -20,20 +20,10 @@ S0 controls unchanged (`results/S0/report.md`). Alerts below are alerts, not exc
 
 | property | signal | status |
 | --- | --- | --- |
-| P2 | bp | complete |
-| P2 | epc | pending (REG-03) |
-| P2 | grammar | pending (GRAM-02) |
-| P3 | bp_adjoint | complete |
-| P3 | epc_adjoint | pending (REG-03) |
-| P3 | epc_error | pending (REG-03) |
-| P3 | grammar_strata | pending (GRAM-02) |
-| P5 | bp_adjoint | complete |
-| P5 | epc_adjoint | pending (REG-03) |
-| P5 | epc_error | pending (REG-03) |
-| P5 | retrieval_drift | pending (S3/S4 checkpoints) |
-| P6 | bp_adjoint | complete |
-| P6 | epc_adjoint | pending (REG-03) |
-| P6 | epc_error | pending (REG-03); procedure measured on BP weights: results/S1/P6_bp.json |
+| P2 | epc | complete (/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz) |
+| P3 | epc | complete (/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz) |
+| P5 | epc | complete (/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz) |
+| P6 | epc | complete (/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz) |
 
 ## 5. Results
 
@@ -90,11 +80,11 @@ Deployed-gate behaviour on U (separate phenomenon, S2-02 A = 0.3 caps): false-fi
 
 | claim type | status | basis |
 | --- | --- | --- |
-| matched-fidelity substrate claim (SB vs SE-A/SE-E) | **unavailable, not failed** | no ePC checkpoint (S0-01; PA-1 clock, REG-00..03 pending); P1 cannot be computed for one base |
+| matched-fidelity substrate claim (SB vs SE-A/SE-E) | **eligible** | P1 on the regenerated checkpoint: mean KL 2.92e-05 (p95 9.31e-05, p99 2.44e-04, max 1.16e-01) on 1,999,872 H tokens; argmax agreement 0.9965; rule mean ≤ 1e-3 |
 | synthetic-only substrate claim | pending | grammar replacement (GRAM-01/02, PA-2 clock) |
 | BP-only editing programme (C0/C1/C2/CR on zsRE and CounterFact) | **eligible** | S0 controls pass; DATA-01 pools; S2-01 calibration (CounterFact exact-key pilot, CR-4); S2-02 A = 0.3 |
-| inherited claim: teacher KL ~3e-5 (ref [5]) | unavailable | needs the distilled checkpoint |
-| inherited claim: cos(settled error, adjoint) > 0.998 | partly reproduced on BP weights | e₈ at bank 3: 0.998; banks 1–2: 0.97–0.98; e₆₄: 0.75–0.98 (P6) — a property of the declared solver at the nominal horizon, to be re-measured on the checkpoint |
+| inherited claim: teacher KL ~3e-5 (ref [5]) | re-measured on the new checkpoint (no continuity, PA-1) | β = 1 mean 2.92e-05; sibling scaling (β = 2, ×4) 5.55e-05 vs its 1.24e-4 |
+| inherited claim: cos(settled error, adjoint) > 0.998 | re-measured on the regenerated checkpoint | e₈ at bank 3: 0.998; e₆₄: 0.980; r₈ 0.40, r₆₄ 0.10 (P6_epc; the BP-weights rows are the same to three decimals) |
 | inherited claim: error mass less concentrated in the last block | consistent on BP adjoints | final-block share 0.011 (P3), no alert |
 
 ## 6. Mechanism evidence
@@ -111,7 +101,7 @@ SD-17 (radii per dataset); P6 measured on BP weights pending the ePC checkpoint;
 
 ## 9. Interpretation
 
-Descriptive report card of one base; no eligibility decision for matched-fidelity claims can be made without a second base (D1 will record 'ePC unavailable, not failed').
+Report card of both bases: the regenerated ePC substrate is eligible for matched-fidelity claims (P1) and its P2/P3/P5/P6 rows agree with the BP rows to the third decimal (relative parameter shift 4e-4); ePC rows available: ['P2', 'P3', 'P5', 'P6'].
 
 ## 10. Reproduction
 

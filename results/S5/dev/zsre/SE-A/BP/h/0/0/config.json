@@ -1,0 +1,240 @@
+{
+ "stage": "S5",
+ "arm": "SE-A",
+ "base": "EPC",
+ "read": "h",
+ "dataset": "zsre",
+ "realization": 0,
+ "perm": 0,
+ "manifest": "manifests/dev/s5_smoke.json",
+ "manifest_sha256": "fbfdb5156cafa3462b0820114311c38cbb100186d70f19b53daca54930341bde",
+ "frozen_manifest_sha256": null,
+ "experiment_id": "dev",
+ "mode": "dev",
+ "task": null,
+ "code_commit": "7e1afefbc0a2b4c3d4c6063329345453492db503",
+ "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "status": "complete",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ },
+ "items_completed": 20,
+ "items_planned": 20,
+ "metrics": {
+  "es_immediate": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.4,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.3,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 20,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 635,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 635,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 1611776.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 3,
+   "3": 5,
+   "4": 6,
+   "5": 3,
+   "8": 1,
+   "10": 1,
+   "11": 1
+  }
+ },
+ "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "wall_seconds": 55.503122091293335,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 1855,
+   "partial_forwards": 1351,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 39.1160258265445,
+   "accel_seconds": 39.1160258265445,
+   "peak_mem_mib": 1178.077880859375,
+   "tokens": 107547
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 2027,
+   "partial_forwards": 3427,
+   "reverses": 306,
+   "settle_iters": 0,
+   "prefix_microsteps": 102,
+   "router_probes": 0,
+   "search_candidates": 1224,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 11.048471502494067,
+   "accel_seconds": 11.048471502494067,
+   "peak_mem_mib": 1178.077880859375,
+   "tokens": 71399
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 3882,
+   "partial_forwards": 4778,
+   "reverses": 306,
+   "settle_iters": 0,
+   "prefix_microsteps": 102,
+   "router_probes": 0,
+   "search_candidates": 1224,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 50.16449732903857,
+   "accel_seconds": 50.16449732903857,
+   "peak_mem_mib": 1178.077880859375,
+   "tokens": 178946
+  },
+  "events": 6301,
+  "elapsed_wall_seconds": 63.1775860786438,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": null,
+ "config": {
+  "dataset": "zsre",
+  "realization": 0,
+  "perm": 0,
+  "substrate_arm": "SE-A",
+  "base": "EPC",
+  "weights": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "credit": "adjoint",
+  "credit_iters": null,
+  "A": 0.3,
+  "radii": {
+   "1": 0.2807123899459839,
+   "2": 0.414623761177063,
+   "3": 0.18841182291507722
+  },
+  "b_m": {
+   "1": 70.72388458251953,
+   "2": 106.60531616210938,
+   "3": 425.7003860473633
+  },
+  "n_items": 20
+ }
+}

@@ -1,0 +1,40 @@
+2026-09-10T23:35:07Z STEP gpu-credit-test
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________________ test_error_credit_round_on_epc_wrapper ____________________
+
+    def test_error_credit_round_on_epc_wrapper():
+        ledger = Ledger()
+        base = EPCBase(ledger=ledger)
+>       item = load_items()[0]
+               ^^^^^^^^^^^^
+E       TypeError: load_items() missing 2 required positional arguments: 'spec' and 'tok'
+
+tests/cap/test_error_credit_gpu.py:26: TypeError
+=========================== short test summary info ============================
+FAILED tests/cap/test_error_credit_gpu.py::test_error_credit_round_on_epc_wrapper
+1 failed in 1.26s
+2026-09-10T23:35:09Z CHAIN_FAILED at gpu-credit-test
+2026-09-10T23:35:45Z STEP gpu-credit-test
+.                                                                        [100%]
+1 passed in 12.47s
+2026-09-10T23:35:58Z STEP epc-calibration
+zsre b_m {'1': 68.10340881347656, '2': 103.91311645507812, '3': 437.06103515625} radii {'1': 0.2807123899459839, '2': 0.414623761177063, '3': 0.18841182291507722}
+counterfact b_m {'1': 73.3443603515625, '2': 109.29751586914062, '3': 414.33973693847656} radii {'1': 0.0, '2': 0.0, '3': 0.0}
+{
+ "b_m": {
+  "1": 70.72388458251953,
+  "2": 106.60531616210938,
+  "3": 425.7003860473633
+ },
+ "radii": {
+  "1": 0.0,
+  "2": 0.0,
+  "3": 0.0
+ }
+}
+2026-09-10T23:36:12Z STEP smoke-SB
+complete: /home/derp/cap/pc_cap/results/S5/dev/zsre/SB/BP/h/0/0
+2026-09-10T23:37:17Z STEP smoke-SE-A
+complete: /home/derp/cap/pc_cap/results/S5/dev/zsre/SE-A/BP/h/0/0
+2026-09-10T23:38:22Z STEP smoke-SE-E

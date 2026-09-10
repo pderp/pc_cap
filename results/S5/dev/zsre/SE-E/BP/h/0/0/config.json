@@ -1,0 +1,30 @@
+{
+ "stage": "S5",
+ "arm": "SE-E",
+ "base": "BP",
+ "read": "h",
+ "dataset": "zsre",
+ "realization": 0,
+ "perm": 0,
+ "manifest": "manifests/dev/s5_smoke.json",
+ "manifest_sha256": "fbfdb5156cafa3462b0820114311c38cbb100186d70f19b53daca54930341bde",
+ "frozen_manifest_sha256": null,
+ "experiment_id": "dev",
+ "mode": "dev",
+ "task": null,
+ "code_commit": "7e1afefbc0a2b4c3d4c6063329345453492db503",
+ "base_hash_before": "",
+ "status": "running",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ }
+}

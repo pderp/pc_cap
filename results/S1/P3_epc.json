@@ -1,0 +1,249 @@
+{
+ "stage": "S1",
+ "property": "P3",
+ "base": "epc",
+ "signal": "BP adjoint of the summed next-token loss; mass = squared adjoint norm per (block output, token)",
+ "sequences": 1000,
+ "cells_per_sequence": 1524,
+ "metrics": {
+  "pr_mean_raw": {
+   "value": 265.92767328415545,
+   "status": "ok",
+   "units": "cells",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "npr_mean_raw": {
+   "value": 0.17449322393973454,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "final_block_share_mean_raw": {
+   "value": 0.010983534878747158,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {
+    "alert_above_0.4": false
+   },
+   "exclusions": []
+  },
+  "active_fraction_mean_raw": {
+   "value": 0.4998930446194225,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "zero_fields_raw": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "count",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "pr_mean_layer_normalized": {
+   "value": 176.54076964140455,
+   "status": "ok",
+   "units": "cells",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "npr_mean_layer_normalized": {
+   "value": 0.11584040002716833,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "final_block_share_mean_layer_normalized": {
+   "value": 0.00022475080500171534,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {
+    "alert_above_0.4": false
+   },
+   "exclusions": []
+  },
+  "active_fraction_mean_layer_normalized": {
+   "value": 0.3513254593175853,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "zero_fields_layer_normalized": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "count",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "distributions": {
+  "distribution_raw": {
+   "pr_quantiles": [
+    53.6735430000348,
+    165.33887609639717,
+    258.86748261385554,
+    357.2695981705919,
+    496.69952384255254
+   ],
+   "final_share_quantiles": [
+    0.006280807576927039,
+    0.009007847727935414,
+    0.011090468372566914,
+    0.012820904363449901,
+    0.015737895825495913
+   ],
+   "dataset_layer_shares": [
+    0.089830056585237,
+    0.24564885560463015,
+    0.16712409364547182,
+    0.11986195258856808,
+    0.10414609760622291,
+    0.08042904201193285,
+    0.06597348083521586,
+    0.048640639339424065,
+    0.03198060532403284,
+    0.02124747727203651,
+    0.014134164308480409,
+    0.010983534878747163
+   ]
+  },
+  "distribution_layer_normalized": {
+   "pr_quantiles": [
+    37.8002206666402,
+    105.63724074173862,
+    170.67865573838753,
+    237.1290889172556,
+    335.96421760864615
+   ],
+   "final_share_quantiles": [
+    0.00011687425119338566,
+    0.00017610562390869212,
+    0.00022420440541370606,
+    0.0002687210977150292,
+    0.00033911943618939144
+   ],
+   "dataset_layer_shares": [
+    0.14821624644768597,
+    0.3266596380855622,
+    0.1924886412350322,
+    0.11728604501393494,
+    0.0868441051810373,
+    0.056047902110202205,
+    0.037125734797869715,
+    0.020428479036900905,
+    0.009487985392168528,
+    0.003949228627686292,
+    0.0012412432669181512,
+    0.00022475080500171545
+   ]
+  }
+ },
+ "layer_scale_median_residual_norm2": [
+  2592.535584314235,
+  3193.7308888201715,
+  3718.641718624208,
+  4395.055369149017,
+  5171.632481190009,
+  6203.737859409701,
+  7694.223952638667,
+  10323.067399000827,
+  14616.37207535743,
+  23348.59464040766,
+  49446.56208013368,
+  212261.17802392744
+ ],
+ "loss_mean": 519.2138671875,
+ "coordinates": "raw fp32 residual coordinates; normalized variant divides each layer's mass by its median residual norm\u00b2 (neither is coordinate invariant, D.3)",
+ "mechanism_strata": "grammar-only (pending GRAM-02/DATA-06)",
+ "lease": {
+  "waited_seconds": 4.0531158447265625e-06,
+  "started": "2026-09-10T23:26:38Z",
+  "finished": "2026-09-10T23:26:54Z"
+ },
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 1000,
+   "partial_forwards": 0,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 2.935294753755443,
+   "accel_seconds": 2.935294753755443,
+   "peak_mem_mib": 2619.00146484375,
+   "tokens": 128000
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 1000,
+   "partial_forwards": 0,
+   "reverses": 1000,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 8.742133712745272,
+   "accel_seconds": 8.742133712745272,
+   "peak_mem_mib": 2619.00146484375,
+   "tokens": 128000
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 2000,
+   "partial_forwards": 0,
+   "reverses": 1000,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 11.677428466500714,
+   "accel_seconds": 11.677428466500714,
+   "peak_mem_mib": 2619.00146484375,
+   "tokens": 256000
+  },
+  "events": 126,
+  "elapsed_wall_seconds": 15.990107774734497,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "timestamp": "2026-09-10T23:26:54Z"
+}

@@ -13,7 +13,7 @@ from pccap.cap.cap import Cap, CapConfig
 from pccap.cap.learn import directions_at, update_item
 from pccap.contracts import Budget
 from pccap.harness.ledger import Ledger
-from pccap.harness.stage_s0 import load_items
+from pccap.harness.stage_s2 import load_dev_items
 from pccap.routers import Full
 from pccap.transport.transport import Transport
 
@@ -23,7 +23,7 @@ pytestmark = pytest.mark.gpu
 def test_error_credit_round_on_epc_wrapper():
     ledger = Ledger()
     base = EPCBase(ledger=ledger)
-    item = load_items()[0]
+    item = load_dev_items("zsre", 1, seed=7)[0][0]
     ids = np.asarray(item.prompt_ids, np.int32)
     target = int(item.answer_ids[0])
     radii = {1: 0.3, 2: 0.4, 3: 0.2}

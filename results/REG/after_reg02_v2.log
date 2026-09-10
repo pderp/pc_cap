@@ -1,1 +1,167 @@
 2026-09-10T12:50:28Z REG state: paused_chunk step 4500
+2026-09-10T19:48:28Z REG state: paused_deadline step 8873
+2026-09-10T23:24:28Z REG state: completed step 9766
+FINAL_CHECKPOINT /home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766
+2026-09-10T23:24:28Z STEP preflight
+validity: {'checks': {'params_finite': True, 'config_equal_to_teacher': True, 'capoff_identity_ok': True, 'energy_descent_ok': True, 'prompt_kl_below_abort': True, 'dtype_float32': True}, 'valid': True, 'identity_criterion': "graph derive vs functional forward, max |Δ logit| <= 1e-4 (the S0-06 test criterion; SD-10's exact equality applies to the same-code cap-off path, which these two paths are not)"}
+{
+ "final": true,
+ "params_finite": true,
+ "config_equal_to_teacher": true,
+ "capoff_identity_max_abs_logit_diff": 0.0,
+ "relative_param_shift": 0.00044597495457675805,
+ "prompt_kl_beta2": 6.8384383666852955e-06
+}
+unseen tail: {'windows': 97, 'positions': 49664, 'kl_beta1_teacher_student': 1.4139612603128403e-05, 'kd_beta2_x4': 4.6006607219020894e-05, 'teacher_nll': 3.226369166860775, 'student_nll': 3.2263518596182066}
+assets.json updated
+2026-09-10T23:24:40Z STEP p1
+{
+ "kl_mean": 2.9230592777653206e-05,
+ "kl_p95": 9.306735591962928e-05,
+ "kl_p99": 0.0002444585532066413,
+ "kl_max_finite": 0.1161019504070282,
+ "kl_feedforward_vs_unclamped8_consistency_max_abs": 0.000701904296875,
+ "teacher_argmax_accuracy_H": 0.35985478505629476,
+ "student_argmax_accuracy_H": 0.36005169683981575,
+ "argmax_agreement_H": 0.9964915717758445,
+ "teacher_nll_H": 3.5702249383975198,
+ "student_nll_H": 3.5697239523900324,
+ "kd_beta2_x4_mean_H": 5.549240603136171e-05
+}
+eligibility: eligible
+2026-09-10T23:26:15Z STEP p2
+{'effective_rank_layer0': 103.26, 'effective_rank_layer1': 153.65, 'effective_rank_layer2': 180.8, 'effective_rank_layer3': 225.51, 'effective_rank_layer4': 266.2, 'effective_rank_layer5': 293.64, 'effective_rank_layer6': 315.09, 'effective_rank_layer7': 332.16, 'effective_rank_layer8': 344.53, 'effective_rank_layer9': 349.37, 'effective_rank_layer10': 345.71, 'effective_rank_layer11': 316.77, 'effective_rank_layer12': 104.44, 'pos_probe_acc_layer0': 0.88, 'pos_probe_acc_layer1': 0.89, 'pos_probe_acc_layer2': 0.9, 'pos_probe_acc_layer3': 0.91, 'pos_probe_acc_layer4': 0.91, 'pos_probe_acc_layer5': 0.92, 'pos_probe_acc_layer6': 0.92, 'pos_probe_acc_layer7': 0.92, 'pos_probe_acc_layer8': 0.91, 'pos_probe_acc_layer9': 0.91, 'pos_probe_acc_layer10': 0.9, 'pos_probe_acc_layer11': 0.89, 'pos_probe_acc_layer12': 0.87}
+2026-09-10T23:26:38Z STEP p3
+{'pr_mean_raw': 265.92767328415545, 'npr_mean_raw': 0.17449322393973454, 'final_block_share_mean_raw': 0.010983534878747158, 'active_fraction_mean_raw': 0.4998930446194225, 'zero_fields_raw': 0.0, 'pr_mean_layer_normalized': 176.54076964140455, 'npr_mean_layer_normalized': 0.11584040002716833, 'final_block_share_mean_layer_normalized': 0.00022475080500171534, 'active_fraction_mean_layer_normalized': 0.3513254593175853, 'zero_fields_layer_normalized': 0.0}
+2026-09-10T23:26:54Z STEP p5
+{
+ "bank1_reached_50pct": 0.945,
+ "bank1_unreachable": 11.0,
+ "bank1_norm_at_target_median": 0.7999999523162842,
+ "bank1_collateral_kl_mean": 1.0862169498835506,
+ "bank1_collateral_kl_at_target_mean": 1.046019504732445,
+ "bank1_improvement_mean": 5.214283924102784,
+ "bank2_reached_50pct": 1.0,
+ "bank2_unreachable": 0.0,
+ "bank2_norm_at_target_median": 0.19999998807907104,
+ "bank2_collateral_kl_mean": 0.13665010434934782,
+ "bank2_collateral_kl_at_target_mean": 0.13665010434934782,
+ "bank2_improvement_mean": 5.57635196685791,
+ "bank3_reached_50pct": 1.0,
+ "bank3_unreachable": 0.0,
+ "bank3_norm_at_target_median": 0.05000000447034836,
+ "bank3_collateral_kl_mean": 0.20230584188519984,
+ "bank3_collateral_kl_at_target_mean": 0.20230584188519984,
+ "bank3_improvement_mean": 6.4711220169067385
+}
+2026-09-10T23:31:59Z STEP p6
+{
+ "r_8_mean": {
+  "value": 0.4038577411082338,
+  "status": "ok",
+  "units": "ratio",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "r_64_mean": {
+  "value": 0.09806851057127097,
+  "status": "ok",
+  "units": "ratio",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "r_64_max": {
+  "value": 1.349807229998552,
+  "status": "ok",
+  "units": "ratio",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "E0_minus_E64_mean": {
+  "value": 2.4234871231019497,
+  "status": "ok",
+  "units": "nats",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "first_iter_95pct_median": {
+  "value": 17.5,
+  "status": "ok",
+  "units": "iterations",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "seconds_per_call_8": {
+  "value": 0.15037229928384477,
+  "status": "ok",
+  "units": "s",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "seconds_per_call_64": {
+  "value": 0.3782366038431064,
+  "status": "ok",
+  "units": "s",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "cos_bank3_cos_e8_negadj": {
+  "value": 0.997991362058045,
+  "status": "ok",
+  "units": "cosine",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "cos_bank3_cos_e64_negadj": {
+  "value": 0.9801469140017285,
+  "status": "ok",
+  "units": "cosine",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ },
+ "cos_bank3_cos_e8_e64": {
+  "value": 0.9876973451152327,
+  "status": "ok",
+  "units": "cosine",
+  "numerator": null,
+  "denominator": null,
+  "n": 64,
+  "strata": {},
+  "exclusions": []
+ }
+}
+label: finite-iteration error credit
+2026-09-10T23:32:52Z STEP report
+wrote /home/derp/cap/pc_cap/results/S1/report.md
+2026-09-10T23:32:52Z STEP freeze-draft
+wrote /home/derp/cap/pc_cap/manifests/frozen.draft.json
+schema errors: none
+pending inputs: ['dataset_ids.grammar (GRAM-02 / DATA-06)']
+2026-09-10T23:32:53Z CHAIN_AFTER_REG02_DONE

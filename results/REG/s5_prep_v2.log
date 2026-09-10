@@ -1,0 +1,16 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________________ test_error_credit_round_on_epc_wrapper ____________________
+
+    def test_error_credit_round_on_epc_wrapper():
+        ledger = Ledger()
+        base = EPCBase(ledger=ledger)
+>       item = load_items()[0]
+               ^^^^^^^^^^^^
+E       TypeError: load_items() missing 2 required positional arguments: 'spec' and 'tok'
+
+tests/cap/test_error_credit_gpu.py:26: TypeError
+=========================== short test summary info ============================
+FAILED tests/cap/test_error_credit_gpu.py::test_error_credit_round_on_epc_wrapper
+1 failed in 1.06s
+2026-09-10T23:33:30Z S5_PREP_FAILED at gpu-credit-test

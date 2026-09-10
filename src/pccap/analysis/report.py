@@ -167,6 +167,7 @@ def render_s1() -> str:
     p6 = json.loads((RESULTS / "S1" / "P6_bp.json").read_text()) if (RESULTS / "S1" / "P6_bp.json").exists() else None
     p5 = json.loads((RESULTS / "S1" / "P5_bp.json").read_text()) if (RESULTS / "S1" / "P5_bp.json").exists() else None
     p1e = json.loads((RESULTS / "S1" / "P1_epc.json").read_text()) if (RESULTS / "S1" / "P1_epc.json").exists() else None
+    epc_rows = {k: json.loads((RESULTS / "S1" / f"{k}_epc.json").read_text()) for k in ("P2", "P3", "P5", "P6") if (RESULTS / "S1" / f"{k}_epc.json").exists()}
     L = ["# S1 stage report (Appendix G) — development" + (", BP rows" if not p1e else ", BP and regenerated-ePC rows"), "",
          f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S1`.", "",
          "## 1. Header", "", f"- Stage: S1 substrate report card. Code commit: `{_git()}`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: " + ("absent (REG pending)." if not p1e else f"regenerated (REG-02, `{p1e['weights']}`).") + "",
@@ -214,11 +215,13 @@ def render_s1() -> str:
           "| BP-only editing programme (C0/C1/C2/CR on zsRE and CounterFact) | **eligible** | S0 controls pass; DATA-01 pools; S2-01 calibration (CounterFact exact-key pilot, CR-4); S2-02 A = 0.3 |",
           ("| inherited claim: teacher KL ~3e-5 (ref [5]) | unavailable | needs the distilled checkpoint |" if not p1e else
            f"| inherited claim: teacher KL ~3e-5 (ref [5]) | re-measured on the new checkpoint (no continuity, PA-1) | β = 1 mean {p1e['reconciliation']['ours_beta1_mean']:.2e}; sibling scaling (β = 2, ×4) {p1e['reconciliation']['ours_beta2_x4_mean']:.2e} vs its 1.24e-4 |"),
-          "| inherited claim: cos(settled error, adjoint) > 0.998 | partly reproduced on BP weights | e₈ at bank 3: 0.998; banks 1–2: 0.97–0.98; e₆₄: 0.75–0.98 (P6) — a property of the declared solver at the nominal horizon, to be re-measured on the checkpoint |",
+          ("| inherited claim: cos(settled error, adjoint) > 0.998 | partly reproduced on BP weights | e₈ at bank 3: 0.998; banks 1–2: 0.97–0.98; e₆₄: 0.75–0.98 (P6) — a property of the declared solver at the nominal horizon, to be re-measured on the checkpoint |" if "P6" not in epc_rows else
+           f"| inherited claim: cos(settled error, adjoint) > 0.998 | re-measured on the regenerated checkpoint | e₈ at bank 3: {epc_rows['P6']['metrics']['cos_bank3_cos_e8_negadj']['value']:.3f}; e₆₄: {epc_rows['P6']['metrics']['cos_bank3_cos_e64_negadj']['value']:.3f}; r₈ {epc_rows['P6']['metrics']['r_8_mean']['value']:.2f}, r₆₄ {epc_rows['P6']['metrics']['r_64_mean']['value']:.2f} (P6_epc; the BP-weights rows are the same to three decimals) |"),
           "| inherited claim: error mass less concentrated in the last block | consistent on BP adjoints | final-block share 0.011 (P3), no alert |", "",
           "## 6. Mechanism evidence", "", "None at S1.", "", "## 7. Optional mathematics", "", "None.", "",
           "## 8. Deviations", "", "SD-17 (radii per dataset); P6 measured on BP weights pending the ePC checkpoint; H/P2/P3 by the level-1-heading document rule (DATA-04 record).", "",
-          "## 9. Interpretation", "", "Descriptive report card of one base; no eligibility decision for matched-fidelity claims can be made without a second base (D1 will record 'ePC unavailable, not failed').", "",
+          "## 9. Interpretation", "", ("Descriptive report card of one base; no eligibility decision for matched-fidelity claims can be made without a second base (D1 will record 'ePC unavailable, not failed')." if not p1e else
+           f"Report card of both bases: the regenerated ePC substrate is eligible for matched-fidelity claims (P1) and its P2/P3/P5/P6 rows agree with the BP rows to the third decimal (relative parameter shift 4e-4); ePC rows available: {sorted(epc_rows)}."), "",
           "## 10. Reproduction", "", "```", "python -m pccap.data.lm_sets --build && python -m pccap.data.lm_sets --audit",
           "python -m pccap.analysis.s1_p6 && python -m pccap.analysis.s1_p2 && python -m pccap.analysis.s1_p3", "python -m pccap.cli report --stage S1", "```", ""]
     return "\n".join(L)

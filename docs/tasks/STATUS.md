@@ -1,17 +1,16 @@
 # Task status board
 
-Regenerated 2026-09-10 15:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 23:37 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 55 |
-| in_progress | 1 |
-| partial | 8 |
-| ready | 5 |
-| pending | 19 |
+| done | 59 |
+| partial | 7 |
+| ready | 6 |
+| pending | 16 |
 
-GPU seconds charged to tasks so far: 1080
+GPU seconds charged to tasks so far: 45075
 
 ## ENV
 
@@ -65,8 +64,8 @@ GPU seconds charged to tasks so far: 1080
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | REG-00 | JAX distillation driver for ePC regeneration (PA-1 enabler) | **done** | BASE | DATA-00 | short | no | orchestrator |  |  |
 | REG-01 | Cost pilot (100 steps) | **done** | BASE | ENV-04, S0-01, REG-00, S0-06 | lease | no | orchestrator |  |  |
-| REG-02 | Full regeneration (<= 10 GPU-h) | **in_progress** | BASE | REG-01 | lease | no | orchestrator |  |  |
-| REG-03 | Load and preflight | **pending** | BASE | REG-02, S0-06 | short | yes |  |  |  |
+| REG-02 | Full regeneration (<= 10 GPU-h) | **done** | BASE | REG-01 | lease | no | orchestrator |  |  |
+| REG-03 | Load and preflight | **done** | BASE | REG-02, S0-06 | short | yes | orchestrator |  |  |
 
 ## GRAM
 
@@ -80,7 +79,7 @@ GPU seconds charged to tasks so far: 1080
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S1-01 | P1 fidelity | **pending** | METRICS+BASE | REG-03, DATA-04, S0-11 | lease | yes |  |  |  |
+| S1-01 | P1 fidelity | **done** | METRICS+BASE | REG-03, DATA-04, S0-11 | lease | yes | orchestrator |  |  |
 | S1-02 | P2 geometry | **done** | METRICS | S0-07, DATA-04, S0-04 | short | no | orchestrator |  |  |
 | S1-03 | P3 localization and coverage | **done** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no | orchestrator |  |  |
 | S1-04 | P4 separability | **ready** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
@@ -133,8 +132,8 @@ GPU seconds charged to tasks so far: 1080
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S5-01 | Eligibility and arm definition | **partial** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no | orchestrator |  |  |
-| S5-02 | Substrate execution | **pending** | run owner | S5-01 | lease | no |  |  |  |
+| S5-01 | Eligibility and arm definition | **done** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no | orchestrator |  |  |
+| S5-02 | Substrate execution | **ready** | run owner | S5-01 | lease | no |  |  |  |
 | S5-03 | Optional substrate repeats and read variants | **pending** | run owner | S5-02, CAP-08 | lease | no |  |  |  |
 | S5-04 | S5 report | **pending** | METRICS | S5-02 | none | no |  |  |  |
 
