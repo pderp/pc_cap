@@ -1,0 +1,52 @@
+{
+  "task": "DATA-02a",
+  "completed": "2026-09-10T12:03:22.395689+00:00",
+  "implementation": "Imported actual pccap.data.confirm.load after the approved patch; no in-memory replacement.",
+  "default_freeze_path": "/home/derp/cap/pc_cap/manifests/frozen.json",
+  "checks": [
+    {
+      "case": "valid",
+      "status": "pass",
+      "payload_reads": 1,
+      "error": null
+    },
+    {
+      "case": "missing_freeze",
+      "status": "pass",
+      "payload_reads": 0,
+      "error": "PermissionError"
+    },
+    {
+      "case": "invalid_freeze_schema",
+      "status": "pass",
+      "payload_reads": 0,
+      "error": "SchemaError"
+    },
+    {
+      "case": "missing_index_entry",
+      "status": "pass",
+      "payload_reads": 0,
+      "error": "ConfirmationIntegrityError"
+    },
+    {
+      "case": "payload_hash_mismatch",
+      "status": "pass",
+      "payload_reads": 1,
+      "error": "ConfirmationIntegrityError"
+    }
+  ],
+  "unmodified_protected_files": {
+    "manifests/confirm/SHA256SUMS": true,
+    "manifests/confirm/DATA-02.meta.json": true,
+    "requirements.lock": true
+  },
+  "sidecar_hashes_unchanged": true,
+  "real_confirmation_payloads_read": false,
+  "gpu_seconds": 0,
+  "wall_seconds": 0.0266873340588063,
+  "synthetic_fixture_root": "/home/derp/cap/assets/tmp/data02a_public_api_20260910_01",
+  "approved_file_sha256": {
+    "src/pccap/data/confirm.py": "23cce559bad48daa0f81c51a92ac91358a804389aef9008b1e016f57668465e6",
+    "docs/tasks/DATA-02a.md": "37df91e22cd52dbf4821a966756c9e450332d014de281f5e450856209687ef4a"
+  }
+}

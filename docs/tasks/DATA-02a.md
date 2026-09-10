@@ -8,7 +8,7 @@ commit: none; the lead handles commits
 
 ## Inputs
 
-- PDF source of truth, Appendix A rules 3–4 and Appendix H harness/frozen-manifest contract
+- PDF source of truth, Appendix A rules 3–4 and section F.7 harness/frozen-manifest contract
   (`docs/pdf_text/plan.txt`, extracted from `docs/pc_cap_month_plan_readable.pdf`).
 - DATA-02 manifest contract from `scripts/sample_confirm.py` and `docs/tasks/DATA-02.md`.
 - Existing `manifest_frozen` schema and S4's `pccap.data.confirm.load` call.
