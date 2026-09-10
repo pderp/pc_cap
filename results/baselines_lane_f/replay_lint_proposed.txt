@@ -1,0 +1,19 @@
+Current file: I001 import order. Proposed correction checked via stdin without modifying the file.
+--- a/tests/baselines/test_replay.py
++++ b/tests/baselines/test_replay.py
+@@ -9,11 +9,11 @@
+ 
+ import numpy as np
+ import pytest
++from tests.baselines.test_lora import item, small_base
+ 
+ from pccap.baselines.lora import LoRALearner
+ from pccap.baselines.replay import POLICY, ReplayLearner
+ from pccap.harness.snapshot import ItemGuard, SnapshotError, restore, serialize
+-from tests.baselines.test_lora import item, small_base
+ 
+ 
+ class ReservoirOnly:
+
+All checks passed!
+exit_code=0

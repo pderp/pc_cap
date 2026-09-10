@@ -83,6 +83,11 @@ def stages_summary() -> dict:
 
 
 def main(argv=None) -> int:
+    import sys
+
+    if "--project" in (argv if argv is not None else sys.argv[1:]):
+        a = [x for x in (argv if argv is not None else sys.argv[1:]) if x != "--project"]
+        return main_project(a)
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(RESULTS / "ledger" / "stages.json"))
     args = ap.parse_args(argv)
@@ -95,6 +100,108 @@ def main(argv=None) -> int:
     print("wrote", args.out)
     return 0
 
+
+
+# ----------------------------------------------------------------------------- S2-07 projection
+SCOPES_ZS = (3000, 1000, 300)
+SCOPES_CF = (1000, 300)
+SCOPES_GR = (10000, 1024, 256)
+CHECKPOINTS = (100, 300, 1000, 3000)
+EDIT_ARMS = ("C1", "C2", "CR", "B3", "B4")
+REALIZATIONS_X_ORDERS = 15
+S4_CEILING_A100_H = 36
+HEADROOM = 0.75  # SD-5
+
+
+def _per_edit(th: dict, arm: str, ds: str) -> dict | None:
+    r = th["runs"].get(f"{arm}/{ds}")
+    if r is None:
+        return None
+    # rescoring pass at the checkpoint: query seconds attributable to re-evaluating `n` items at the end of the run
+    # (the run includes one checkpoint at 100 = end, so the query column holds immediate evals + one rescore + LS + drift).
+    return {"learn_s": r["learning_accel_seconds_per_edit"], "query_s": r["query_accel_seconds_per_edit"],
+            "wall_s": r["wall_seconds_per_edit"], "n": r["n_items"]}
+
+
+def project(th: dict, kappa_value: float, grammar_learn_s: float | None = None, baseline_factor: float = 1.0) -> dict:
+    """Section 9 scope-selection algorithm on measured per-edit costs.
+
+    Cost of one editing run of `n` items = n × (learn_s + query_s) [immediate evaluation included]
+    + rescoring at checkpoints ≤ n (each ≈ items_so_far × immediate-eval cost, approximated by
+    query_s × items_so_far) + endpoint rescore. Arms without a measurement (B3/B4) use the C1 cost ×
+    ``baseline_factor`` and are flagged. Grammar cost needs ``grammar_learn_s`` (GRAM-02); if
+    absent the grammar term is reported unknown and excluded, and the memo says so.
+    """
+    ceiling_s = S4_CEILING_A100_H * 3600.0 / kappa_value
+    budget_s = HEADROOM * ceiling_s
+    assumed = []
+
+    def edit_run_cost(arm: str, ds: str, n: int) -> float:
+        pe = _per_edit(th, arm, ds)
+        if pe is None:
+            pe = _per_edit(th, "C1", ds)
+            if pe is None:
+                return float("nan")
+            pe = {**pe, "learn_s": pe["learn_s"] * baseline_factor}
+            assumed.append(f"{arm}/{ds}")
+        immediate = n * (pe["learn_s"] + pe["query_s"])
+        rescore = sum(c * pe["query_s"] for c in CHECKPOINTS if c < n) + n * pe["query_s"]
+        return immediate + rescore
+
+    def total(zs: int, cf: int, gr: int) -> tuple[float, dict]:
+        parts = {}
+        s = 0.0
+        for arm in EDIT_ARMS:
+            for ds, n in (("zsre", zs), ("counterfact", cf)):
+                c = REALIZATIONS_X_ORDERS * edit_run_cost(arm, ds, n)
+                parts[f"{arm}/{ds}"] = c
+                s += c
+        for ds in ("zsre", "counterfact"):
+            c = REALIZATIONS_X_ORDERS * edit_run_cost("C0", ds, 300)
+            parts[f"C0/{ds}/initial300"] = c
+            s += c
+        if grammar_learn_s is not None:
+            c = 4 * REALIZATIONS_X_ORDERS * gr * grammar_learn_s
+            parts["grammar"] = c
+            s += c
+        else:
+            parts["grammar"] = None
+        return s, parts
+
+    table = []
+    selected = None
+    for zs in SCOPES_ZS:
+        for cf in SCOPES_CF:
+            for gr in SCOPES_GR:
+                s, parts = total(zs, cf, gr)
+                row = {"zsre": zs, "counterfact": cf, "grammar": gr, "seconds": s, "local_hours": s / 3600, "a100_eq_hours": s * kappa_value / 3600,
+                       "affordable": s <= budget_s, "parts": parts}
+                table.append(row)
+                if selected is None and s <= budget_s:
+                    selected = {"zsre": zs, "counterfact": cf, "grammar": gr, "seconds": s}
+    return {"kappa": kappa_value, "ceiling_seconds_local": ceiling_s, "budget_seconds_after_headroom": budget_s, "headroom": HEADROOM,
+            "selected": selected, "assumed_arms": sorted(set(assumed)), "baseline_factor": baseline_factor,
+            "grammar_included": grammar_learn_s is not None, "table": table,
+            "rule": "first affordable (zs, cf, gr) in the order 3000/1000/300 x 1000/300 x 10000/1024/256; scope selection uses pilot throughput only (PDF App. B)"}
+
+
+def main_project(argv=None) -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--throughput", default=str(RESULTS / "S2" / "throughput.json"))
+    ap.add_argument("--baseline-factor", type=float, default=1.0)
+    ap.add_argument("--grammar-learn-s", type=float, default=None)
+    ap.add_argument("--out", default=str(RESULTS / "S2" / "projection.json"))
+    args = ap.parse_args(argv)
+    th = json.loads(Path(args.throughput).read_text())
+    k = float(kappa()["kappa"])
+    p = project(th, k, args.grammar_learn_s, args.baseline_factor)
+    Path(args.out).write_text(json.dumps(p, indent=1, default=float))
+    print("selected:", p["selected"], "assumed:", p["assumed_arms"], "grammar included:", p["grammar_included"])
+    for r in p["table"][:6]:
+        print(f"zs {r['zsre']} cf {r['counterfact']} gr {r['grammar']}: {r['local_hours']:.1f} h  affordable={r['affordable']}")
+    return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())

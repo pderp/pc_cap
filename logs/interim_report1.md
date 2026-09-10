@@ -161,3 +161,16 @@ its work was CPU-only and touched only its owned paths.
 Orchestrator: C2 probe binding in the stage harness (all four routing arms through `pccap run`),
 then S3-01 once DATA-03 exists; S2-03/S2-04 baselines if the lane stays unclaimed. Open lanes
 for other agents: S2-03/S2-04, DATA-03 → GRAM chain, DATA-02a, S2-05a/b, REG-00.
+
+
+---
+
+## Addendum (2026-09-10, later): D1 reached
+
+- **HARN-C2 / HARN-BATCH:** all four routing arms run through `pccap run --stage S3`; the cap-on evaluation is batched with token-for-token parity to the sequential reference decoder on zsRE and CounterFact (`results/S0/controls/harn_batch_parity.json`). Doing so exposed that bit-exact keys are not a stable property across kernels; **SD-18** adds a 1e-4 float32 key-equality tolerance.
+- **DATA-03 / S3-02 (MODULAR-CONTROL):** PC-1 passes (oracle 20/20 and 120/120, unrelated exact; wrong-router 1/30). C2 routing precision 0.88 [0.83, 0.93], recall 0.89 vs oracle 1.00, random 0.55, majority-bank 0.67; no-sharing makes shared items unfixable for every arm; C2 fixes bank-3 mixed items through the shared path (0/20 multi-cause coverage vs C1 20/20).
+- **DATA-08:** near-neighbour 20,085 available (400 fixed), temporal corrections 100, compositions 54 (46 `unsupported`).
+- **S2-06 throughput** (batched evaluator): 0.5–1.4 wall s/edit (accelerator 0.15–0.8 s/edit) for C0/C1/C2/CR on both datasets.
+- **S2-07 / D1 (DEC-013):** scope zsRE 1000 / CounterFact 300 / grammar 10000 at 25.4 of 27.0 accelerator hours; ≈ 27 wall hours for the confirmatory core; fallback 300/300/256. BP-only programme eligible; substrate claims unavailable-not-failed.
+- **S3-04 (cap arms, one order):** zsRE RET-GS(100) C0 0.43, C1 0.31, C2 0.30, CR 0.18; C2 routes to bank 3 in 97% of rounds on zsRE and 100% on CounterFact; no abstentions; LS 0.93–1.00; LM drift ratio 1.0000.
+- Board: 40 tasks done, 2 partial (S1-07, S3-04). Nothing committed since the lead's instruction.

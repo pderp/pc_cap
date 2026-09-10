@@ -36,7 +36,7 @@ def test_pc2_cap_off_identity_and_oracle_false_gate():
     worst = 0.0
     for ids in probes:
         a = np.asarray(base.forward(ids).logits)
-        b = cap.predict(ids).logits
+        b = cap.predict(ids, full=True).logits
         worst = max(worst, float(np.abs(a - b).max()))
     # oracle-false gate: slots exist (exact-key radius 0) but never fire on unrelated inputs
     ep = cap.edited_forward(probes[0])
@@ -45,7 +45,7 @@ def test_pc2_cap_off_identity_and_oracle_false_gate():
     gate_worst = 0.0
     fired = 0
     for ids in probes[1:]:
-        e = cap.edited_forward(ids, phase="query")
+        e = cap.edited_forward(ids, phase="query", full=True)
         fired += any(v >= 0 for v in e.fired.values())
         gate_worst = max(gate_worst, float(np.abs(np.asarray(base.forward(ids).logits) - e.logits).max()))
     RESULTS.mkdir(parents=True, exist_ok=True)

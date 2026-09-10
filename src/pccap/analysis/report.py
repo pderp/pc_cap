@@ -257,9 +257,70 @@ def render_s2() -> str:
     return "\n".join(L)
 
 
+def render_s3_controls() -> str:
+    """S3-01: every applicable PC-1..PC-10 control with expected / observed / pass and what a failure blocks."""
+    rows = []
+    for name, evidence, expected, blocks in CONTROL_REGISTER:
+        obs, ok = _observed(name, evidence)
+        rows.append((name, expected, obs, ok, blocks))
+    pc1 = _load("pc1_planted.json")
+    pc1f = _load("pc1_full_fixture.json")
+    if pc1:
+        rows.insert(1, ("PC-1 planted acquisition", ">= 19/20 targets; full fixture >= 95%; unrelated <= 1e-6",
+                        f"oracle {pc1['recovered']}/{pc1['total']}, unrelated max |dp| {pc1['unrelated_max_abs_dp']}; full {pc1f['oracle']['recovered']}/{pc1f['oracle']['total']}; wrong-router {pc1f['wrong_router']['recovered']}/{pc1f['wrong_router']['total']}" if pc1f else f"oracle {pc1['recovered']}/{pc1['total']}",
+                        "pass" if pc1["recovered"] >= 19 and pc1["unrelated_max_abs_dp"] <= 1e-6 else "FAIL", "S3-02"))
+    rows.append(("PC-10 parity (GRACE)", "single/multi-token parity with the reference within fp32 tolerance", "pending S2-05 (PA-6; reference env exists)", "pending", "B4 comparison"))
+    L = ["# S3-01 control suite (CP-D input)", "", f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.", "",
+         "| control | expected | observed | pass | blocks if failing |", "| --- | --- | --- | --- | --- |"]
+    for r in rows:
+        L.append("| " + " | ".join(str(x) for x in r) + " |")
+    L += ["", "Applicability: PC-8 label isolation for R-g/R-e keys applies only once CAP-08 exists (optional keys). PC-10 is pending the GRACE adapter.", "",
+          "## Development run matrix (frozen for S3)", "",
+          "- Realization: development pools (`manifests/dev/{zsre,counterfact}_dev.json`, seed 13), one realization.",
+          "- Orders: two (order seeds 100 and 101 via `--perm 0/1`), 100 items per dataset per arm (S3-04), all four routing arms C0/C1/C2/CR; CR uniform (SD-11, `cr_profile_uniform`) for this first pass.",
+          "- Fixture: MODULAR-CONTROL variants useful-sharing / no-sharing / wrong-router, 60 items per kind, arms C0/C1/C2/CR/CO (S3-02).",
+          "- Grammar: pending GRAM-02/DATA-06 (S3-03).", "- Numerics: A = 0.3 (DEC-012), radii per dataset (SD-17), b_m from S2-01, ε = 0.01, R = 5, τ = 0.1.", ""]
+    return "\n".join(L)
+
+
+def render_s3() -> str:
+    b = stages_summary()
+    s3 = b["stages"]["S3"]
+    fx = json.loads((RESULTS / "S3" / "fixture" / "summary.json").read_text()) if (RESULTS / "S3" / "fixture" / "summary.json").exists() else None
+    L = ["# S3 stage report (Appendix G) — development, BP mechanism screening", "",
+         f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S3`.", "",
+         "## 1. Header", "", f"- Stage: S3. Code commit: `{_git()}`. Numerics: A = 0.3 (DEC-012), radii per dataset (SD-17), b_m (S2-01), ε 0.01, R 5, τ 0.1.",
+         f"- Cost: {s3['local_hours_total']:.2f} local GPU-h of 16 (fixture runs are CPU).", "",
+         "## 2. Status", "", "Development. S3-01 controls (results/S3/controls.md) done except PC-10; S3-02 fixture runs done; S3-03 (grammar) pending GRAM-02; S3-04 (short editing checks) pending baselines; S3-05/06 pending.", "",
+         "## 3. Controls", "", "See `results/S3/controls.md` (17 pass, PC-10 pending).", "",
+         "## 4. Coverage", ""]
+    if fx:
+        L += [f"MODULAR-CONTROL: {fx['n_per_kind']} items per kind (private/shared/mixed) + held-out combinations, arms C0/C1/C2/CR/CO, variants useful-sharing / no-sharing / wrong-router. Unrelated outputs unchanged (max |Δp| = 0) in every run.", "",
+              "## 5. Results", "", "| variant | arm | recovery | precision [95% CI] | recall | majority-bank | multi-cause coverage | abstained |", "| --- | --- | ---: | --- | ---: | ---: | --- | ---: |"]
+        for v, arms in fx["variants"].items():
+            for a, r in arms.items():
+                d = r["delivery"]
+                p = d["precision"]["value"]
+                ci = d["precision_ci95"]
+                L.append(f"| {v} | {a} | {r['recovery_rate']:.2f} | {'—' if p is None else f'{p:.2f} [{ci[0]:.2f}, {ci[1]:.2f}]'} | {'—' if d['recall']['value'] is None else f'{d['recall']['value']:.2f}'} | {r['majority_bank_baseline'].get('precision', float('nan')):.2f} | {r['multi_cause_coverage']['covered']}/{r['multi_cause_coverage']['n']} | {d['abstained_items']} |")
+        c2 = fx["variants"]["useful_sharing"]["C2"]["confusion"]
+        L += ["", "C2 per-latent confusion (useful sharing; delivered bank counts): " + "; ".join(f"{k}: {v}" for k, v in c2.items()), ""]
+    L += ["## 6. Mechanism evidence", "", "Oracle (CO) reaches every planted target with exact unrelated invariance; C2's measured routing agrees with R* at precision 0.88 / recall 0.89 (PR-C band ≥ 0.8, descriptive), above the random control (0.55) and the majority-bank baseline (0.67). C2 never abstains on the fixture. Under no sharing, shared items are unfixable by any arm (0/60) and C2 precision on private/mixed rises to 0.98. C2's systematic shortcut: bank-3 mixed items are fixed through the shared path (bank 2) rather than covering bank 3 (0/20 coverage vs C1 20/20).", "",
+          "## 7. Optional mathematics", "", "None.", "", "## 8. Deviations", "", "Fixture budget A = 1.0 with exact keys (fixture manifest); held-out transfer pass pending; last-row logits path introduced 2026-09-10 (same arithmetic per row; identity controls re-verified).", "",
+          "## 9. Interpretation", "", "The apparatus recovers an identifiable case (PC-1) and C2's measured intervention scores track the constructed causal structure on private latents; the shared-path shortcut is a scientific observation about intervention-based routing (a late/shared bank can fix a mixed target without touching the private mechanism), to be classified at D2, not an implementation failure.", "",
+          "## 10. Reproduction", "", "```", "JAX_PLATFORMS=cpu python -m pccap.harness.stage_s3_fixture --n 60", "python -m pccap.cli report --stage S3-controls && python -m pccap.cli report --stage S3", "```", ""]
+    return "\n".join(L)
+
+
 def main(args) -> int:
     stage = getattr(args, "stage", None) or "S0"
-    renderers = {"S0": render_s0, "S1": render_s1, "S2": render_s2}
+    if stage == "S3-controls":
+        out = RESULTS / "S3" / "controls.md"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(render_s3_controls())
+        print("wrote", out)
+        return 0
+    renderers = {"S0": render_s0, "S1": render_s1, "S2": render_s2, "S3": render_s3}
     if stage not in renderers:
         print(f"report for stage {stage} not implemented yet")
         return 3

@@ -101,6 +101,7 @@ def main(args) -> int:
         print(json.dumps(cfg, indent=1))
         return 0
     import pccap.harness.stage_s0  # noqa: F401  (registers "S0")
+    import pccap.harness.stage_s3  # noqa: F401  (registers "S3")
 
     runner = RUNNERS.get(args.stage)
     if runner is None:

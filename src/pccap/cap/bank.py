@@ -5,10 +5,12 @@
   (``cap.metadata.SLOT_DTYPE``): radius and the active flag are read from that record, so there
   is exactly one source of truth. Slot ids are implicit array indices (``0..S-1``), immutable,
   and cost no bytes.
-* ``retrieve(q)``: among active slots with ``‖q − k_s‖₂ ≤ ρ_s`` (inclusive) return the nearest;
-  ties → smallest id; a zero radius fires only on an exactly equal key (``‖q − k‖ = 0`` in
-  float32 arithmetic iff ``q == k`` elementwise). Implemented on arrays with ``lexsort``; no
-  dict/set iteration order is involved (PDF F.1).
+* ``retrieve(q)``: among active slots with ``‖q − k_s‖₂ ≤ ρ_s + KEY_TOL`` (inclusive) return the
+  nearest; ties → smallest id. ``KEY_TOL = 1e-4`` is the float32 key-equality tolerance (SD-18):
+  keys are unit-scale, and the same residual computed through differently fused kernels (single
+  call vs batched dispatch) differs by ~1e-5, so "exactly equal key" (zero radius) means equal
+  within this tolerance; positive radii shift by 1e-4, far below the calibration grid's
+  resolution. Implemented on arrays with ``lexsort``; no dict/set iteration order (PDF F.1).
 
 Use counts, transactions, conflicts and eviction live in ``cap.metadata`` / ``cap.transaction``
 (CAP-02/04); this module holds arrays and the read path, plus raw allocate/release used inside
@@ -22,6 +24,8 @@ from dataclasses import dataclass
 import numpy as np
 
 from pccap.cap.metadata import NO_TARGET, SLOT_BYTES, MetadataView, SlotMetadata, new_meta
+
+KEY_TOL = np.float32(1e-4)  # SD-18 float32 key-equality tolerance (unit-scale keys)
 
 
 @dataclass
@@ -69,7 +73,7 @@ class Bank:
 
     def retrieve(self, q: np.ndarray) -> Retrieval:
         dist = self.distances(q)
-        eligible = self.active & (dist <= self.meta["radius"])
+        eligible = self.active & (dist <= self.meta["radius"] + KEY_TOL)
         n = int(eligible.sum())
         if n == 0:
             return Retrieval(slot=-1, distance=float("inf"), candidates=0)

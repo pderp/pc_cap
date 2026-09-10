@@ -68,19 +68,19 @@ class MockBase:
             W[w.site.bank - 1] += np.asarray(w.vector, np.float32)
         return ids, p, W
 
-    def forward(self, ids, writes=(), retain_sites=False, phase="learning"):
+    def forward(self, ids, writes=(), retain_sites=False, phase="learning", last_only=False):
         ids, p, W = self._W(ids, writes)
         with self.ledger.call(phase, full_forwards=1, tokens=len(ids)) as rec:
             logits, rows, full = self._stages(self.E[ids], p, W, 1)
         sites = {SiteId(m, BANK_BLOCK[m], p): rows[m] for m in rows}
-        return ForwardResult(logits=logits, sites=sites, cost=rec, hidden=full if retain_sites else {})
+        return ForwardResult(logits=logits[p] if last_only else logits, sites=sites, cost=rec, hidden=full if retain_sites else {})
 
-    def forward_from(self, bank, hidden, ids, writes=(), phase="learning", retain_sites=False):
+    def forward_from(self, bank, hidden, ids, writes=(), phase="learning", retain_sites=False, last_only=False):
         ids, p, W = self._W(ids, writes)
         with self.ledger.call(phase, partial_forwards=1, tokens=len(ids)) as rec:
             logits, rows, full = self._stages(np.asarray(hidden, np.float32), p, W, bank)
         sites = {SiteId(m, BANK_BLOCK[m], p): rows[m] for m in rows}
-        return ForwardResult(logits=logits, sites=sites, cost=rec, hidden=full if retain_sites else {})
+        return ForwardResult(logits=logits[p] if last_only else logits, sites=sites, cost=rec, hidden=full if retain_sites else {})
 
     # ---------------------------------------------------------------- adjoint (jax)
     def _loss_w(self, W, H0, p, target):

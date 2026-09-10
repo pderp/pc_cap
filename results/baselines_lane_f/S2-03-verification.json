@@ -1,0 +1,114 @@
+{
+  "status": "verified",
+  "task": "S2-03",
+  "verified_utc": "2026-09-10T09:59:11.927137+00:00",
+  "cpu_tests": {
+    "passed": 6,
+    "seconds": 2.25
+  },
+  "gpu_tests": {
+    "passed": 1,
+    "seconds": 4.31
+  },
+  "lint": "passed",
+  "gpu_lock": "exclusive flock on existing lease opened read-only; no lease data written; bounded to 55 seconds",
+  "gpu_result": {
+    "base_checksum": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "greedy_after": "",
+    "greedy_before": "",
+    "greedy_changed": false,
+    "item_id": "zsre-eval-100",
+    "ledger": {
+      "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)",
+      "elapsed_wall_seconds": 3.40437388420105,
+      "events": 18,
+      "learning": {
+        "accel_seconds": 1.8614490679465234,
+        "full_forwards": 10,
+        "memory_search_seconds": 0.0,
+        "partial_forwards": 0,
+        "peak_mem_mib": 809.92431640625,
+        "phase": "learning",
+        "prefix_microsteps": 0,
+        "reverses": 10,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "settle_iters": 0,
+        "tokens": 110,
+        "wall_seconds": 1.8614490679465234
+      },
+      "query": {
+        "accel_seconds": 0.46154452790506184,
+        "full_forwards": 8,
+        "memory_search_seconds": 0.0,
+        "partial_forwards": 0,
+        "peak_mem_mib": 809.92431640625,
+        "phase": "query",
+        "prefix_microsteps": 0,
+        "reverses": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "settle_iters": 0,
+        "tokens": 78,
+        "wall_seconds": 0.46154452790506184
+      },
+      "total": {
+        "accel_seconds": 2.3229935958515853,
+        "full_forwards": 18,
+        "memory_search_seconds": 0.0,
+        "partial_forwards": 0,
+        "peak_mem_mib": 809.92431640625,
+        "phase": "total",
+        "prefix_microsteps": 0,
+        "reverses": 10,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "settle_iters": 0,
+        "tokens": 188,
+        "wall_seconds": 2.3229935958515853
+      }
+    },
+    "memory": {
+      "allocated_bytes": 3549498,
+      "ceiling_bytes": 38535168,
+      "index_bytes": 10550,
+      "key_dim": 0,
+      "occupancy": {},
+      "occupied_bytes": 3549498,
+      "per_bank": {
+        "0": {
+          "adapter_bytes": 1179648,
+          "buffer_bytes": 0,
+          "metadata_bytes": 10550,
+          "optimizer_bytes": 2359300
+        }
+      },
+      "value_dim": 768
+    },
+    "nll_after": 22.762440756634803,
+    "nll_before": 23.72034499014407,
+    "task": "S2-03",
+    "token_ids_after": [
+      198
+    ],
+    "token_ids_before": [
+      198
+    ],
+    "trainable_tensors": 48,
+    "update_cost": {
+      "accel_seconds": 1.8614490679465234,
+      "full_forwards": 10,
+      "memory_search_seconds": 0.0,
+      "partial_forwards": 0,
+      "peak_mem_mib": 809.92431640625,
+      "phase": "learning",
+      "prefix_microsteps": 0,
+      "reverses": 10,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "settle_iters": 0,
+      "tokens": 110,
+      "wall_seconds": 1.8614490679465234
+    }
+  }
+}

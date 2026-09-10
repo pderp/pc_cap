@@ -180,19 +180,28 @@ def run_blocks(params: dict, h: jax.Array, p: jax.Array, writes: jax.Array, cfg:
     return h, site_rows, site_full
 
 
-@functools.partial(jax.jit, static_argnames=("cfg", "retain"))
+def _head_rows(params: dict, h: jax.Array, p: jax.Array, cfg: GPT2Config, last_only: bool) -> jax.Array:
+    """Full ``[T, V]`` logits, or only the row at ``p`` (``[V]``) when ``last_only`` (the head then
+    projects one row: this is the same arithmetic on that row, so results are identical)."""
+    if last_only:
+        row = lax.dynamic_index_in_dim(h, p, axis=0, keepdims=False)
+        return layer_norm(row, params["ln_f"]["g"], params["ln_f"]["b"], cfg.eps) @ params["wte"].T
+    return head(params, h, cfg)
+
+
+@functools.partial(jax.jit, static_argnames=("cfg", "retain", "last_only"))
 def forward_jit(params: dict, ids: jax.Array, n: jax.Array, writes: jax.Array, cfg: GPT2Config,
-                retain: bool):
+                retain: bool, last_only: bool = False):
     p = n - 1
     h = embed(params, ids)
     h, rows, full = run_blocks(params, h, p, writes, cfg, 0)
-    logits = head(params, h, cfg)
+    logits = _head_rows(params, h, p, cfg, last_only)
     return logits, rows, (full if retain else {})
 
 
-@functools.partial(jax.jit, static_argnames=("cfg", "bank", "retain"))
+@functools.partial(jax.jit, static_argnames=("cfg", "bank", "retain", "last_only"))
 def forward_from_jit(params: dict, hidden: jax.Array, n: jax.Array, writes: jax.Array,
-                     cfg: GPT2Config, bank: int, retain: bool = False):
+                     cfg: GPT2Config, bank: int, retain: bool = False, last_only: bool = False):
     """Resume after bank ``bank``'s site. ``hidden`` is the *pre-write* residual at that site;
     this applies ``writes[bank-1]`` at ``p`` and every later bank's write downstream.
     ``retain`` also returns the full pre-write residual of every later site."""
@@ -202,7 +211,7 @@ def forward_from_jit(params: dict, hidden: jax.Array, n: jax.Array, writes: jax.
     h, rows, full = run_blocks(params, h, p, writes, cfg, BANK_BLOCK[bank] + 1)
     rows[bank] = row
     full[bank] = hidden
-    logits = head(params, h, cfg)
+    logits = _head_rows(params, h, p, cfg, last_only)
     return logits, rows, (full if retain else {})
 
 
@@ -330,3 +339,35 @@ def seq_adjoint_all_layers_jit(params: dict, ids: jax.Array, targets: jax.Array,
         return loss, g
 
     return jax.vmap(one)(ids, targets, mask)
+
+
+# ----------------------------------------------------------------------------- batched cap-on kernels
+@functools.partial(jax.jit, static_argnames=("cfg",))
+def forward_batch_jit(params: dict, ids: jax.Array, n: jax.Array, writes: jax.Array, cfg: GPT2Config):
+    """vmapped ``forward_jit`` (last-row logits, site rows, full pre-write residuals) over ``[B, T]``
+    padded ids with lengths ``n [B]`` and writes ``[B, 3, d]``."""
+
+    def one(i, k, w):
+        p = k - 1
+        h = embed(params, i)
+        h, rows, full = run_blocks(params, h, p, w, cfg, 0)
+        return _head_rows(params, h, p, cfg, True), jnp.stack([rows[1], rows[2], rows[3]]), jnp.stack([full[1], full[2], full[3]])
+
+    return jax.vmap(one)(ids, n, writes)
+
+
+@functools.partial(jax.jit, static_argnames=("cfg", "bank"))
+def forward_from_batch_jit(params: dict, hidden: jax.Array, n: jax.Array, writes: jax.Array, cfg: GPT2Config, bank: int):
+    """vmapped ``forward_from_jit`` (last-row logits, later site rows, later full residuals)."""
+
+    def one(hid, k, w):
+        p = k - 1
+        row = lax.dynamic_index_in_dim(hid, p, axis=0, keepdims=False)
+        h = lax.dynamic_update_index_in_dim(hid, row + w[bank - 1], p, axis=0)
+        h, rows, full = run_blocks(params, h, p, w, cfg, BANK_BLOCK[bank] + 1)
+        later = [m for m in (1, 2, 3) if m > bank]
+        rows_s = jnp.stack([rows[m] for m in later]) if later else jnp.zeros((0, cfg.d), jnp.float32)
+        full_s = jnp.stack([full[m] for m in later]) if later else jnp.zeros((0, hid.shape[0], cfg.d), jnp.float32)
+        return _head_rows(params, h, p, cfg, True), rows_s, full_s
+
+    return jax.vmap(one)(hidden, n, writes)

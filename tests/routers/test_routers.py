@@ -49,7 +49,7 @@ def test_real_cap_probe_is_read_only_and_charged():
     cap.banks[1].bank.allocate(ep0.keys[1], radius=0.5, value=np.full(base.d, 0.5, np.float32))
     ep = cap.edited_forward(ids)
     assert ep.fired[1] >= 0 and ep.fired[2] < 0
-    target = int(np.argsort(ep.logits[p])[-2])
+    target = int(np.argsort(ep.logits)[-2])  # ep.logits is the last row [V]
     L = cap.loss_of(ep, target)
     grads = base.adjoint(ids, target, [])
     tr = Transport()

@@ -1,0 +1,42 @@
+{
+  "tasks": [
+    "S2-03",
+    "S2-04"
+  ],
+  "status": "implementation_verified_ready_for_owner_review",
+  "verified_utc": "2026-09-10T10:06:54.436059+00:00",
+  "approved_change": "Applied docs/tasks/S2-04-import-order.patch only to tests/baselines/test_replay.py",
+  "current_checks": {
+    "replay_cpu_tests": {
+      "passed": 7,
+      "seconds": 1.59
+    },
+    "lane_lint": "passed",
+    "approved_module_diff_check": "passed"
+  },
+  "earlier_checks": {
+    "lora_b0_cpu_tests": {
+      "passed": 6,
+      "seconds": 2.25
+    },
+    "gpt2_gpu_tests": {
+      "passed": 1,
+      "seconds": 4.31
+    }
+  },
+  "evidence": [
+    "results/baselines_lane_f/replay_verification_approved.txt",
+    "results/baselines_lane_f/S2-03-verification.json"
+  ],
+  "source_sha256": {
+    "src/pccap/baselines/lora.py": "90a621deb79e525bbd204344859e473d7d6db688512e967bc671b209dcf44434",
+    "src/pccap/baselines/lora_forward.py": "854a51a4cea8b880adeb1a9836bfe341354f8693ddda8cb2540f6de2fc8570c4",
+    "src/pccap/baselines/b0.py": "c4541c61e968e464c9a8c36795a0e6401c9aa4083593374313fbf9de8bdd8607",
+    "src/pccap/baselines/replay.py": "836e229f2cc2d517222e5dcaf0df92e12a86f0820f4b43477c11c7afc9633463",
+    "tests/baselines/test_lora.py": "5035c2925373e04a28e8d5319312921acfd7fc55902656f3e833422b55062486",
+    "tests/baselines/test_replay.py": "7ea97ffab49f2eff53fff40252d2feaa0dc80062d56f26a8d195c3d3bada0466"
+  },
+  "sampling_review_pending": "B3 uses growing-capacity Algorithm R with floor rounding; it is not uniform over the full history. Scientific use needs owner review of this documented interpretation.",
+  "gpu_seconds_this_continuation": 0,
+  "commit": null
+}

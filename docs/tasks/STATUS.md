@@ -1,16 +1,16 @@
 # Task status board
 
-Regenerated 2026-09-10 00:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 04:12 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 33 |
-| partial | 1 |
-| ready | 8 |
-| pending | 43 |
+| done | 40 |
+| partial | 2 |
+| ready | 7 |
+| pending | 38 |
 
-GPU seconds charged to tasks so far: 0
+GPU seconds charged to tasks so far: 180
 
 ## ENV
 
@@ -28,11 +28,11 @@ GPU seconds charged to tasks so far: 0
 | DATA-00 | Fetch and hash public assets into assets/ | **done** | DATA | ENV-01 | none | no | orchestrator |  |  |
 | REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **done** | DATA | DATA-00 | none | no | codex |  | fixtures verified by orchestrator; parity tests pass |
 | DATA-01 | Editing pools | **done** | DATA | S0-09 | lease | yes | orchestrator |  |  |
-| DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
-| DATA-03 | MODULAR-CONTROL fixture | **ready** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
+| DATA-02 | Realizations, orders, sealed confirmation manifests | **ready** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
+| DATA-03 | MODULAR-CONTROL fixture | **done** | DATA+MEMORY | ENV-03, CAP-05 | none | yes | orchestrator |  |  |
 | DATA-04 | LM, probe and property sets with inventory | **done** | DATA+METRICS | DATA-00 | none | no | orchestrator |  |  |
 | DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
-| DATA-08 | Challenge sets | **ready** | DATA+BASELINES | DATA-01 | short | no |  |  |  |
+| DATA-08 | Challenge sets | **done** | DATA+BASELINES | DATA-01 | short | no | orchestrator |  |  |
 
 ## S0
 
@@ -97,8 +97,9 @@ GPU seconds charged to tasks so far: 0
 | S2-05a | GRACE reference environment and smoke (PA-6) | **ready** | BASELINES | DATA-00 | none | no |  |  |  |
 | S2-05b | GRACE reference parity cases | **pending** | BASELINES | S2-05a, S0-09 | none | no |  |  |  |
 | S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **pending** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
-| S2-06 | Throughput profile | **pending** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes |  |  |  |
-| S2-07 | Full cost projection and D1 memo | **pending** | INTEGRATOR+METRICS | S2-06, S1-07, ENV-02 | none | yes |  |  |  |
+| HARN-BATCH | Batched cap-on evaluation with sequential-decoder parity (E.2 optimization) | **done** | INTEGRATOR | HARN-C2 | short | no | orchestrator |  |  |
+| S2-06 | Throughput profile | **done** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes | orchestrator |  |  |
+| S2-07 | Full cost projection and D1 memo | **done** | INTEGRATOR+METRICS | S2-06, S1-07, ENV-02 | none | yes | orchestrator |  |  |
 | CAP-08 | Read variants R-h0, R-g, R-e (optional) | **ready** | BASE+MEMORY | S0-10, S0-06 | short | yes |  |  |  |
 | CAP-09 | Optional difficulty weight | **ready** | MEMORY | CAP-07 | none | no |  |  |  |
 
@@ -106,10 +107,11 @@ GPU seconds charged to tasks so far: 0
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| HARN-C2 | C2 probe binding and general stream runner (pccap run --stage S3, all cap arms) | **done** | INTEGRATOR | S0-10, S2-02 | short | no | orchestrator |  |  |
 | S3-01 | Full control suite and development run matrix | **pending** | INTEGRATOR | S0-11, DATA-03, CAP-07, S2-05, DATA-06 | short | yes |  |  |  |
-| S3-02 | Constructed fixture runs | **pending** | MEMORY+DATA | S3-01 | short | no |  |  |  |
+| S3-02 | Constructed fixture runs | **done** | MEMORY+DATA | S3-01 | short | no | orchestrator |  |  |
 | S3-03 | Learned grammar runs and tracing | **pending** | DATA+METRICS | S3-01, DATA-07 | lease | no |  |  |  |
-| S3-04 | Short editing checks | **pending** | BASELINES+MEMORY | S3-01 | lease | no |  |  |  |
+| S3-04 | Short editing checks | **partial** | BASELINES+MEMORY | S3-01 | lease | no | orchestrator |  | cap arms done; baselines + second order pending |
 | S3-05 | CR distribution and re-profile | **pending** | METRICS+INTEGRATOR | S3-02, S3-03, S3-04 | lease | yes |  |  |  |
 | S3-06 | D2 memo | **pending** | INTEGRATOR | S3-05, S1-07 | none | yes |  |  |  |
 

@@ -17,6 +17,7 @@ def test_boundary_inclusive_and_nearest():
     assert r.slot == 0 and r.candidates == 2  # tie in distance -> smallest id
     r = b.retrieve(np.array([1.25, 0, 0, 0], np.float32))
     assert r.slot == 1
+    assert b.retrieve(np.array([2.0 + 1.0 + 5e-4, 0, 0, 0], np.float32)).slot == -1  # beyond radius + KEY_TOL
     r = b.retrieve(np.array([3.5, 0, 0, 0], np.float32))
     assert r.slot == -1 and r.candidates == 0 and r.distance == float("inf")
 
@@ -30,13 +31,15 @@ def test_tie_smallest_id_regardless_of_allocation_order():
     assert r.slot == 1
 
 
-def test_zero_radius_exact_only():
+def test_zero_radius_exact_within_key_tolerance():
+    """SD-18: a zero radius matches keys equal within KEY_TOL = 1e-4 (float32 kernel tolerance)."""
     b = mk()
     key = np.array([0.1, 0.2, 0.3, 0.4], np.float32)
     b.allocate(key, radius=0.0)
     assert b.retrieve(key).slot == 0
-    assert b.retrieve(key + np.float32(1e-7)).slot == -1
-    assert b.retrieve(key.astype(np.float64) * 1.0).slot == 0  # same values after float32 cast
+    assert b.retrieve(key + np.float32(1e-6)).slot == 0  # within tolerance (distance 2e-6)
+    assert b.retrieve(key + np.float32(1e-3)).slot == -1  # distance 2e-3 > tolerance
+    assert b.retrieve(key.astype(np.float64) * 1.0).slot == 0
 
 
 def test_zero_vector_query():

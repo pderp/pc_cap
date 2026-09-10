@@ -132,8 +132,11 @@ class GPT2BlockNode(NodeBase):
 
 
 class GPT2HeadNode(NodeBase):
-    def __init__(self, shape: Tuple[int, int], name: str, eps: float):
-        super().__init__(shape=shape, name=name, activation=IdentityActivation(), energy=TokenCrossEntropyEnergy(),
+    def __init__(self, shape: Tuple[int, int], name: str, eps: float, energy: EnergyFunctional | None = None):
+        # ``energy`` defaults to the one-hot cross-entropy (editing credit); REG-00 passes
+        # ``pccap.pc.kd_energy.KDEnergy`` so the clamp holds teacher logits instead of one-hots.
+        super().__init__(shape=shape, name=name, activation=IdentityActivation(),
+                         energy=energy if energy is not None else TokenCrossEntropyEnergy(),
                          latent_init=NormalInitializer(std=0.0), weight_init=NormalInitializer(std=0.02),
                          eps=eps, epc_free=False)
 
@@ -161,14 +164,16 @@ def node_names(n_layer: int) -> Dict[str, Any]:
     return {"ids": "ids", "embed": "embed", "blocks": [f"block_{l}" for l in range(n_layer)], "logits": "logits"}
 
 
-def build_gpt2_graph(cfg: g.GPT2Config, T: int, inference) -> Any:
-    """Chain ids -> embed -> block_0 -> ... -> block_11 -> logits as a FabricPC GraphStructure."""
+def build_gpt2_graph(cfg: g.GPT2Config, T: int, inference, head_energy: EnergyFunctional | None = None) -> Any:
+    """Chain ids -> embed -> block_0 -> ... -> block_11 -> logits as a FabricPC GraphStructure.
+
+    ``head_energy`` selects the logits node's energy functional (default: one-hot cross-entropy)."""
     names = node_names(cfg.n_layer)
     ids = Linear(shape=(T,), name=names["ids"])
     embed = GPT2EmbedNode(shape=(T, cfg.d), name=names["embed"], vocab=cfg.vocab, n_pos=cfg.n_pos)
     blocks = [GPT2BlockNode(shape=(T, cfg.d), name=names["blocks"][l], layer=l, cfg=cfg, bank=g.BLOCK_BANK.get(l, 0))
               for l in range(cfg.n_layer)]
-    head = GPT2HeadNode(shape=(T, cfg.vocab), name=names["logits"], eps=cfg.eps)
+    head = GPT2HeadNode(shape=(T, cfg.vocab), name=names["logits"], eps=cfg.eps, energy=head_energy)
     nodes = [ids, embed, *blocks, head]
     edges = [Edge(source=ids, target=embed.slot("in"))]
     prev = embed

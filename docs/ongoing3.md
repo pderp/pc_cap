@@ -9,7 +9,7 @@ editing your own row in `manifests/tasks.json`. State at writing: 33 tasks done
 
 ## 1. Orchestrator lane (do not touch)
 
-In order: **HARN-C2** (C2/CR/C0 through `pccap run`: probe binding in `harness/stage_s0.py` →
+Progress 2026-09-10: HARN-C2, HARN-BATCH, DATA-03, DATA-08, S3-02, S2-06, S2-07 (D1 memo: `docs/D1_decision.md`) done; S3-04 partial (needs baselines, Lane F). Original order: **HARN-C2** (C2/CR/C0 through `pccap run`: probe binding in `harness/stage_s0.py` →
 a general `harness/runs.py`) → **DATA-03** (MODULAR-CONTROL fixture + PC-1; the orchestrator
 takes it because it needs the cap internals) → **DATA-08** (challenge sets) → **S3-01**
 (control suite, development matrix) → **S2-06** (throughput; cap arms first, baselines added when
@@ -76,10 +76,9 @@ under the same lane once GRAM-01 is verified; GPU training waits for the PA-2 cl
 2026-09-11 23:59 ET, unless T1 answers earlier). Owned: `src/pccap/fixtures/grammar_generator.py`,
 `manifests/grammar/`, `tests/fixtures/test_grammar_generator.py`.
 
-### Lane E — REG-00 (optional, large)
+### Lane E — withdrawn (2026-09-10)
 
-Spec: ongoing2.md / ongoing.md Lane E. Given updated_plan3.md §2 (BP-only month is the working
-assumption), this lane is lowest priority; only start it if F, D, H and G′ are all claimed.
+REG-00/01/02/03 are now on the orchestrator lane (DEC-014: PA-1 bound raised to 120 GPU-h). Do not claim.
 
 ## 3. Interfaces (all in the working tree; see interim_report1.md §6 for paths)
 

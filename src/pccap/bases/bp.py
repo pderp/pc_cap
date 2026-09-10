@@ -78,16 +78,18 @@ class BPBase:
 
     # -------------------------------------------------------------- contract
     def forward(self, ids, writes: Sequence[Write] = (), retain_sites: bool = False,
-                phase: str = "learning") -> ForwardResult:
+                phase: str = "learning", last_only: bool = False) -> ForwardResult:
+        """``last_only=True`` returns only the logits row at p (shape ``[V]``): identical arithmetic
+        on that row, no 25 MB host transfer of the full ``[T, V]`` array (used by decode/probe/loss paths)."""
         ids_d, n_d, W, n, p = self._prep(ids, writes)
         with self.ledger.call(phase, full_forwards=1, tokens=n) as rec:
-            logits, rows, full = g.forward_jit(self.params, ids_d, n_d, W, self.cfg, retain_sites)
+            logits, rows, full = g.forward_jit(self.params, ids_d, n_d, W, self.cfg, retain_sites, last_only)
             rec.outputs = (logits, rows, full)
-        hidden = {m: full[m][:n] for m in full} if retain_sites else {}
-        return ForwardResult(logits=logits[:n], sites=self._sites(rows, p), cost=rec, hidden=hidden)
+        hidden = {m: full[m] for m in full} if retain_sites else {}
+        return ForwardResult(logits=logits if last_only else logits[:n], sites=self._sites(rows, p), cost=rec, hidden=hidden)
 
     def forward_from(self, bank: int, hidden, ids, writes: Sequence[Write] = (),
-                     phase: str = "learning", retain_sites: bool = False) -> ForwardResult:
+                     phase: str = "learning", retain_sites: bool = False, last_only: bool = False) -> ForwardResult:
         ids_d, n_d, W, n, p = self._prep(ids, writes)
         T = int(ids_d.shape[0])
         hidden = jnp.asarray(hidden, dtype=jnp.float32)
@@ -95,10 +97,10 @@ class BPBase:
             hpad = jnp.zeros((T, self.d), dtype=jnp.float32).at[: hidden.shape[0]].set(hidden[:T])
             hidden = hpad
         with self.ledger.call(phase, partial_forwards=1, tokens=n) as rec:
-            logits, rows, full = g.forward_from_jit(self.params, hidden, n_d, W, self.cfg, bank, retain_sites)
+            logits, rows, full = g.forward_from_jit(self.params, hidden, n_d, W, self.cfg, bank, retain_sites, last_only)
             rec.outputs = (logits, rows, full)
-        hid = {m: full[m][:n] for m in full} if retain_sites else {}
-        return ForwardResult(logits=logits[:n], sites=self._sites(rows, p), cost=rec, hidden=hid)
+        hid = {m: full[m] for m in full} if retain_sites else {}
+        return ForwardResult(logits=logits if last_only else logits[:n], sites=self._sites(rows, p), cost=rec, hidden=hid)
 
     def adjoint(self, ids, target: int, writes: Sequence[Write] = (), phase: str = "learning",
                 return_loss: bool = False):
@@ -147,6 +149,24 @@ class BPBase:
             loss, grads = g.seq_adjoint_all_layers_jit(self.params, jnp.asarray(seqs), jnp.asarray(targets), jnp.asarray(mask), self.cfg)
             rec.outputs = (loss, grads)
         return np.asarray(loss), np.asarray(grads)
+
+    # -------------------------------------------------------------- batched cap-on path (HARN-BATCH)
+    def forward_batch(self, seqs: list[np.ndarray], writes: np.ndarray | None = None, phase: str = "query"):
+        """Batched cap-on kernel: returns (last logits [B,V], site rows [B,3,d], full residuals [B,3,T,d] device, n)."""
+        n = np.asarray([len(s) for s in seqs], np.int32)
+        T = g.bucket_len(int(n.max()))
+        ids = np.stack([g.pad_ids(np.asarray(s, np.int32), T) for s in seqs])
+        W = np.zeros((len(seqs), 3, self.d), np.float32) if writes is None else np.asarray(writes, np.float32)
+        with self.ledger.call(phase, full_forwards=len(seqs), tokens=int(n.sum())) as rec:
+            out = g.forward_batch_jit(self.params, jnp.asarray(ids), jnp.asarray(n), jnp.asarray(W), self.cfg)
+            rec.outputs = out
+        return out[0], out[1], out[2], n
+
+    def forward_from_batch(self, bank: int, hidden, n: np.ndarray, writes: np.ndarray, phase: str = "query"):
+        with self.ledger.call(phase, partial_forwards=int(len(n)), tokens=int(np.sum(n))) as rec:
+            out = g.forward_from_batch_jit(self.params, hidden, jnp.asarray(n), jnp.asarray(np.asarray(writes, np.float32)), self.cfg, bank)
+            rec.outputs = out
+        return out
 
     def checksum(self, recompute: bool = True) -> str:
         if not recompute:

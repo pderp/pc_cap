@@ -52,10 +52,10 @@ ARM_BANKS = {"C0": (3,), "C1": (1, 2, 3), "C2": (1, 2, 3), "CR": (1, 2, 3), "CO"
 class EditedPass:
     """Result of one edited forward: logits, per-bank keys, retrievals, writes, cost."""
 
-    logits: np.ndarray
+    logits: np.ndarray  # last-row logits [V] (the prediction position p) unless full=True was requested
     keys: dict[int, np.ndarray]
     sites: dict[int, np.ndarray]  # pre-write residual rows at p (edited pass)
-    hidden: dict[int, np.ndarray]  # pre-write full residual per site (for forward_from)
+    hidden: dict[int, object]  # pre-write full residual per site (device arrays; for forward_from)
     fired: dict[int, int]  # bank -> slot (-1 none)
     writes: dict[int, np.ndarray]  # bank -> applied vector (zeros when nothing fired)
     cost: CostRecord
@@ -106,7 +106,7 @@ class Cap:
         return [Write(SiteId(m, g.BANK_BLOCK[m], p), v) for m, v in wr.items() if np.any(v)]
 
     def edited_forward(self, ids, extra: dict[int, np.ndarray] | None = None, phase: str = "learning",
-                       frozen_retrieval: dict[int, int] | None = None) -> EditedPass:
+                       frozen_retrieval: dict[int, int] | None = None, full: bool = False) -> EditedPass:
         """Sequential live-retrieval forward. ``extra[m]`` is added at bank m on top of the
         retrieved value (probes / candidates). ``frozen_retrieval`` pins bank→slot choices
         (used inside a settling/adjoint call so gates do not switch)."""
@@ -115,7 +115,7 @@ class Cap:
         p = n - 1
         extra = extra or {}
         cost = CostRecord(phase=phase)
-        fr = self.base.forward(ids, (), retain_sites=True, phase=phase)
+        fr = self.base.forward(ids, (), retain_sites=True, phase=phase, last_only=not full)
         cost.add(fr.cost)
         writes: dict[int, np.ndarray] = {}
         keys: dict[int, np.ndarray] = {}
@@ -126,7 +126,7 @@ class Cap:
             sid = SiteId(m, g.BANK_BLOCK[m], p)
             site_row = np.asarray(fr.sites[sid], np.float32)
             sites[m] = site_row
-            hidden[m] = np.asarray(fr.hidden[m], np.float32)
+            hidden[m] = fr.hidden[m]  # stays on device
             q = self.key(site_row)
             keys[m] = q
             bank = self.banks[m].bank
@@ -141,20 +141,53 @@ class Cap:
             v = np.asarray(v, np.float32)
             writes[m] = v
             if np.any(v):  # downstream must see this write: partial forward from this site
-                fr = self.base.forward_from(m, hidden[m], ids, self._writes_list(p, writes), phase=phase, retain_sites=True)
+                fr = self.base.forward_from(m, hidden[m], ids, self._writes_list(p, writes), phase=phase, retain_sites=True,
+                                            last_only=not full)
                 cost.add(fr.cost)
         return EditedPass(logits=np.asarray(fr.logits), keys=keys, sites=sites, hidden=hidden, fired=fired,
                           writes=writes, cost=cost, n=n, p=p)
 
+    def edited_forward_batch(self, seqs: list[np.ndarray], phase: str = "query") -> tuple[np.ndarray, list[dict[int, int]]]:
+        """Batched read-only cap-on forward (HARN-BATCH): the same sequential live retrieval as
+        ``edited_forward`` (bank 1 reads, retrieves and writes; bank 2 reads the recomputed
+        residual; ...) applied to B sequences at once. Returns last-row logits ``[B, V]`` and the
+        firing slots per sequence. Parity with ``edited_forward`` is tested token-for-token."""
+        B = len(seqs)
+        logits, rows, full, n = self.base.forward_batch(seqs, None, phase=phase)
+        rows = np.array(rows)  # [B, 3, d] (host copy; updated after each downstream recompute)
+        W = np.zeros((B, 3, self.d), np.float32)
+        fired = [dict() for _ in range(B)]
+        cur_full = full  # device [B, 3, T, d], pre-write residuals at the three sites (with upstream writes applied)
+        for m in self.cfg.banks():
+            bank = self.banks[m].bank
+            hit = []
+            for b in range(B):
+                q = self.key(rows[b, m - 1])
+                value, r = bank.value_for(q)
+                fired[b][m] = int(r.slot)
+                if r.slot >= 0:
+                    W[b, m - 1] = value
+                    hit.append(b)
+            if hit:
+                # recompute downstream for the whole batch from bank m's site with the accumulated writes
+                logits, later_rows, later_full = self.base.forward_from_batch(m, cur_full[:, m - 1], n, W, phase=phase)
+                later_rows = np.asarray(later_rows)
+                for j, mm in enumerate([k for k in (1, 2, 3) if k > m]):
+                    rows[:, mm - 1] = later_rows[:, j]
+                if later_full.shape[1]:
+                    cur_full = cur_full.at[:, m:].set(later_full)
+        return np.asarray(logits), fired
+
     def loss_of(self, ep: EditedPass, target: int) -> float:
-        row = ep.logits[ep.p].astype(np.float64)
+        row = (ep.logits[ep.p] if np.ndim(ep.logits) == 2 else ep.logits).astype(np.float64)
         m = row.max()
         return float(m + np.log(np.exp(row - m).sum()) - row[int(target)])
 
     # ------------------------------------------------------------------ contract
-    def predict(self, ids) -> ForwardResult:
+    def predict(self, ids, full: bool = False) -> ForwardResult:
+        """Read-only prediction. ``logits`` is the last row ``[V]`` unless ``full=True`` (``[T, V]``)."""
         before = self.state_hash()
-        ep = self.edited_forward(ids, phase="query")
+        ep = self.edited_forward(ids, phase="query", full=full)
         if self.state_hash() != before:
             raise RuntimeError("predict mutated learner state (PC-8)")
         sites = {SiteId(m, g.BANK_BLOCK[m], ep.p): ep.sites[m] for m in ep.sites}

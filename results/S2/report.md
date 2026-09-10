@@ -1,11 +1,11 @@
 # S2 stage report (Appendix G) — development
 
-Rendered 2026-09-09 23:40 UTC by `pccap report --stage S2`.
+Rendered 2026-09-10 04:12 UTC by `pccap report --stage S2`.
 
 ## 1. Header
 
-- Stage: S2 calibration, baselines, throughput. Code commit: `babfad08477e1dfacbb5f1d3cfa699c3cf1d828d`. Development pools: `manifests/dev/{zsre,counterfact}_dev.json` (300 edits + ≥ 1,000 unrelated prompts each; DATA-01).
-- Cost: 0.09 local GPU-h = 0.09 A100-eq h of 12 (κ 1.0 provisional).
+- Stage: S2 calibration, baselines, throughput. Code commit: `b77f4b6a1dc73d316257f36c7af888e102de5fbc`. Development pools: `manifests/dev/{zsre,counterfact}_dev.json` (300 edits + ≥ 1,000 unrelated prompts each; DATA-01).
+- Cost: 0.48 local GPU-h = 0.48 A100-eq h of 12 (κ 1.0 provisional).
 
 ## 2. Status
 

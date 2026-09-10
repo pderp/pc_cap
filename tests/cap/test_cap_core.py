@@ -27,8 +27,10 @@ def test_cap_off_identity_exact(setup):
     for s in ["The capital of France is", "Once upon a time"]:
         ids = np.asarray(tok.encode(s).ids, np.int32)
         a = np.asarray(base.forward(ids).logits)
-        b = cap.predict(ids).logits
+        b = cap.predict(ids, full=True).logits
         assert np.array_equal(a, b)
+        last = cap.predict(ids).logits  # last-row path: same row within fp32 GEMM tolerance
+        assert last.shape == (base.vocab,) and np.abs(last - a[-1]).max() < 1e-3
 
 
 def test_predict_read_only_and_clone(setup):
@@ -42,7 +44,7 @@ def test_predict_read_only_and_clone(setup):
     c = cap.clone()
     assert c.state_hash() == cap.state_hash()
     assert np.array_equal(c.predict(ids).logits, cap.predict(ids).logits)
-    assert not np.array_equal(cap.predict(ids).logits, np.asarray(base.forward(ids).logits))  # the slot fires
+    assert not np.array_equal(cap.predict(ids).logits, np.asarray(base.forward(ids).logits[-1]))  # the slot fires
     blob = cap.serialize()
     c2 = cap.clone()
     c2.banks[2].bank.values[:] = 0

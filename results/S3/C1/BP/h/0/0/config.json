@@ -1,0 +1,28 @@
+{
+ "stage": "S3",
+ "arm": "C1",
+ "base": "BP",
+ "read": "h",
+ "realization": 0,
+ "perm": 0,
+ "manifest": "manifests/dev/s3_smoke.json",
+ "manifest_sha256": "07fc00e495759529717d08085ffa89d0407c1263026c2c4298b6105cf6a57345",
+ "mode": "dev",
+ "task": null,
+ "code_commit": "b77f4b6a1dc73d316257f36c7af888e102de5fbc",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ },
+ "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+ "status": "complete",
+ "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+}
