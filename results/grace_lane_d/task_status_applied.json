@@ -1,0 +1,118 @@
+{
+  "applied_utc": "2026-09-10T15:58:52+00:00",
+  "approval": "User explicitly approved the exact S2-05ab-status-edit-request.md update in this turn",
+  "changed_existing_files": [
+    "manifests/tasks.json",
+    "docs/tasks/STATUS.md"
+  ],
+  "checks": [
+    {
+      "task": "S2-05a",
+      "before": {
+        "id": "S2-05a",
+        "title": "GRACE reference environment and smoke (PA-6)",
+        "stage": "S2",
+        "role": "BASELINES",
+        "deps": [
+          "DATA-00"
+        ],
+        "gpu": "none",
+        "review": false,
+        "status": "partial",
+        "agent": "codex",
+        "worktree": null,
+        "started": "2026-09-10T09:00:00Z",
+        "finished": "2026-09-10T11:37:53+00:00",
+        "commit": null,
+        "evidence": [],
+        "gpu_seconds": 0.0,
+        "wall_seconds": 0.0,
+        "note": "setuptools pin approved and applied 2026-09-10; codex to resume controls/smoke/parity"
+      },
+      "after": {
+        "id": "S2-05a",
+        "title": "GRACE reference environment and smoke (PA-6)",
+        "stage": "S2",
+        "role": "BASELINES",
+        "deps": [
+          "DATA-00"
+        ],
+        "gpu": "none",
+        "review": false,
+        "status": "done",
+        "agent": "codex",
+        "worktree": null,
+        "started": "2026-09-10T09:00:00Z",
+        "finished": "2026-09-10T13:58:57+00:00",
+        "commit": null,
+        "evidence": [
+          "docs/tasks/S2-05a-completed.md",
+          "results/grace_lane_d/source_controls_resumed.txt",
+          "results/S2/grace_reference_smoke.txt"
+        ],
+        "gpu_seconds": 0.0,
+        "wall_seconds": 0.0,
+        "note": "Source imports and six controls pass; predetermined smoke 5/5; shared generation cost recorded under S2-05b"
+      },
+      "other_task_rows_preserved": true
+    },
+    {
+      "task": "S2-05b",
+      "before": {
+        "id": "S2-05b",
+        "title": "GRACE reference parity cases",
+        "stage": "S2",
+        "role": "BASELINES",
+        "deps": [
+          "S2-05a",
+          "S0-09"
+        ],
+        "gpu": "none",
+        "review": false,
+        "status": "partial",
+        "agent": "codex",
+        "worktree": null,
+        "started": null,
+        "finished": "2026-09-10T11:37:54+00:00",
+        "commit": null,
+        "evidence": [],
+        "gpu_seconds": 0.0,
+        "wall_seconds": 0.0,
+        "note": "20 parity cases selected (manifests/dev/grace_parity_selection.json); execution waits for S2-05a"
+      },
+      "after": {
+        "id": "S2-05b",
+        "title": "GRACE reference parity cases",
+        "stage": "S2",
+        "role": "BASELINES",
+        "deps": [
+          "S2-05a",
+          "S0-09"
+        ],
+        "gpu": "none",
+        "review": false,
+        "status": "done",
+        "agent": "codex",
+        "worktree": null,
+        "started": null,
+        "finished": "2026-09-10T13:58:57+00:00",
+        "commit": null,
+        "evidence": [
+          "docs/tasks/S2-05b-completed.md",
+          "manifests/dev/grace_parity_cases.json",
+          "results/grace_lane_d/reference_verification_resumed.txt"
+        ],
+        "gpu_seconds": 0.0,
+        "wall_seconds": 248.21051606698893,
+        "note": "Twenty isolated and sequential reference cases generated; 63 artifacts verified; JAX adapter and PC-10 remain pending"
+      },
+      "other_task_rows_preserved": true
+    }
+  ],
+  "manifest_schema": "valid",
+  "render_matches_manifest": true,
+  "task_manifest_sha256": "32be0f9750177e736ea0a664fc4040abf6ee3e848595c1d977fa2500f97186d8",
+  "status_markdown_sha256": "8f8c14cdb1b80df41c86d01fee8edfa2dc0ac43cccf9ae72f05553e03034d392",
+  "gpu_seconds_this_action": 0,
+  "committed": false
+}

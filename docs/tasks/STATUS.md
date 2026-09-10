@@ -1,15 +1,15 @@
 # Task status board
 
-Regenerated 2026-09-10 14:06 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 15:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 53 |
+| done | 55 |
 | in_progress | 1 |
-| partial | 10 |
-| ready | 4 |
-| pending | 20 |
+| partial | 8 |
+| ready | 5 |
+| pending | 19 |
 
 GPU seconds charged to tasks so far: 1080
 
@@ -96,9 +96,9 @@ GPU seconds charged to tasks so far: 1080
 | S2-02 | Aggregate step screening | **done** | MEMORY+METRICS | S2-01 | lease | yes | orchestrator |  |  |
 | S2-03 | LoRA baselines B1 (and B0) | **done** | BASELINES | S0-09, S0-04 | short | yes | codex |  |  |
 | S2-04 | Replay baseline B3 | **done** | BASELINES | S2-03, S0-08 | short | no | codex |  |  |
-| S2-05a | GRACE reference environment and smoke (PA-6) | **partial** | BASELINES | DATA-00 | none | no | codex |  | setuptools pin approved and applied 2026-09-10; codex to resume controls/smoke/parity |
-| S2-05b | GRACE reference parity cases | **partial** | BASELINES | S2-05a, S0-09 | none | no | codex |  | 20 parity cases selected (manifests/dev/grace_parity_selection.json); execution waits for S2-05a |
-| S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **pending** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
+| S2-05a | GRACE reference environment and smoke (PA-6) | **done** | BASELINES | DATA-00 | none | no | codex |  | Source imports and six controls pass; predetermined smoke 5/5; shared generation cost recorded under S2-05b |
+| S2-05b | GRACE reference parity cases | **done** | BASELINES | S2-05a, S0-09 | none | no | codex |  | Twenty isolated and sequential reference cases generated; 63 artifacts verified; JAX adapter and PC-10 remain pending |
+| S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **ready** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
 | HARN-BATCH | Batched cap-on evaluation with sequential-decoder parity (E.2 optimization) | **done** | INTEGRATOR | HARN-C2 | short | no | orchestrator |  |  |
 | S2-06 | Throughput profile | **done** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes | orchestrator |  |  |
 | S2-07 | Full cost projection and D1 memo | **done** | INTEGRATOR+METRICS | S2-06, S1-07, ENV-02 | none | yes | orchestrator |  |  |
