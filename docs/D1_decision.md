@@ -1,6 +1,6 @@
 # D1 decision memo — validity and feasibility (S2-07)
 
-Written 2026-09-10 04:11 UTC from `results/S2/throughput.json`, `results/S2/projection.json`, `results/S1/report.md`, `results/ENV/kappa.json`.
+Written 2026-09-10 11:18 UTC from `results/S2/throughput.json`, `results/S2/projection.json`, `results/S1/report.md`, `results/ENV/kappa.json`.
 
 ## 1. Eligibility (from S1-07)
 
@@ -27,10 +27,18 @@ Geometry alerts: none (P2 on one base only). ePC eight-step credit: label 'finit
 | C1 | counterfact | 0.132 | 0.178 | 0.83 | 1.00 | 0.0 | 0.0 | 1.00 |
 | C2 | zsre | 0.094 | 0.120 | 0.53 | 0.99 | 0.47 | 0.3 | 1.00 |
 | C2 | counterfact | 0.044 | 0.152 | 0.65 | 1.00 | 0.0 | 0.0 | 1.00 |
-| CR | zsre | 0.142 | 0.262 | 0.78 | 0.99 | 0.41 | 0.18 | 0.93 |
-| CR | counterfact | 0.083 | 0.181 | 0.75 | 0.98 | 0.0 | 0.0 | 1.00 |
+| CR | zsre | 0.087 | 0.411 | 0.80 | 1.00 | 0.56 | 0.38 | 1.00 |
+| CR | counterfact | 0.032 | 0.770 | 1.24 | 1.00 | 0.0 | 0.0 | 1.00 |
+| B0 | zsre | 0.000 | 0.093 | 0.10 | 0.00 | 0.0 | 0.0 | 1.00 |
+| B0 | counterfact | 0.000 | 0.564 | 0.59 | 0.00 | 0.0 | 0.0 | 1.00 |
+| B1 | zsre | 0.078 | 0.311 | 0.42 | 0.08 | 0.04 | 0.15 | 0.00 |
+| B1 | counterfact | 0.061 | 0.149 | 0.23 | 0.08 | 0.03 | 0.06 | 0.00 |
+| B3 | zsre | 0.094 | 0.150 | 0.27 | 0.10 | 0.07 | 0.13 | 0.00 |
+| B3 | counterfact | 0.062 | 0.090 | 0.17 | 0.07 | 0.04 | 0.07 | 0.00 |
+| CR_uniform | zsre | 0.142 | 0.262 | 0.78 | 0.99 | 0.41 | 0.18 | 0.93 |
+| CR_uniform | counterfact | 0.083 | 0.181 | 0.75 | 0.98 | 0.0 | 0.0 | 1.00 |
 
-Unavailable arms: {'B1': 'S2-03 pending', 'B3': 'S2-04 pending', 'B4': 'S2-05 pending', 'EPC_credit': 'REG-03 pending', 'grammar': 'GRAM-02 pending'}.
+Unavailable arms: {'B4': 'S2-05 pending', 'EPC_credit': 'REG-03 pending', 'grammar': 'GRAM-02 pending'}.
 
 ## 4. Scope selection (Section 9 algorithm; SD-5 headroom 0.75; accelerator seconds)
 
@@ -38,24 +46,24 @@ S4 ceiling 36 A100-h → budget after headroom 27.0 local h at κ = 1.0. Baselin
 
 | zsRE | CounterFact | grammar | local h | affordable |
 | ---: | ---: | ---: | ---: | --- |
-| 3000 | 1000 | 10000 | 72.2 | False |
-| 3000 | 300 | 10000 | 64.5 | False |
-| 1000 | 1000 | 10000 | 33.1 | False |
-| 1000 | 300 | 10000 | 25.4 | True |
-| 1000 | 300 | 1024 | 25.4 | True |
-| 1000 | 300 | 256 | 25.4 | True |
-| 300 | 1000 | 10000 | 19.7 | True |
-| 300 | 1000 | 1024 | 19.7 | True |
-| 300 | 1000 | 256 | 19.7 | True |
-| 300 | 300 | 10000 | 12.0 | True |
-| 300 | 300 | 1024 | 12.0 | True |
-| 300 | 300 | 256 | 12.0 | True |
+| 3000 | 1000 | 10000 | 71.9 | False |
+| 3000 | 300 | 10000 | 61.1 | False |
+| 1000 | 1000 | 10000 | 36.0 | False |
+| 1000 | 300 | 10000 | 25.1 | True |
+| 1000 | 300 | 1024 | 25.1 | True |
+| 1000 | 300 | 256 | 25.1 | True |
+| 300 | 1000 | 10000 | 23.7 | True |
+| 300 | 1000 | 1024 | 23.7 | True |
+| 300 | 1000 | 256 | 23.7 | True |
+| 300 | 300 | 10000 | 12.8 | True |
+| 300 | 300 | 1024 | 12.8 | True |
+| 300 | 300 | 256 | 12.8 | True |
 
-**Selected scope: zsRE 1000, CounterFact 300, grammar 10000** (25.4 local h of the 27.0 h budget). This is written into the frozen manifest at S4-02; the C0 initial scope is 300 with its extension optional.
+**Selected scope: zsRE 1000, CounterFact 300, grammar 10000** (25.1 local h of the 27.0 h budget). This is written into the frozen manifest at S4-02; the C0 initial scope is 300 with its extension optional.
 
 ## 5. Wall-clock feasibility (calendar, not the ceiling)
 
-Wall time per edit exceeds accelerator time by 1.7–3.3× (host dispatch and per-token decode loops of the E.2 protocol). At the selected scope the confirmatory editing core (5 arms × 15 runs per dataset + C0 initial 300) is ≈ 27 wall hours on this host serialized on the GPU lease.
+Wall time per edit exceeds accelerator time by 1.0–3.3× (host dispatch and per-token decode loops of the E.2 protocol). At the selected scope the confirmatory editing core (5 arms × 15 runs per dataset + C0 initial 300) is ≈ 23 wall hours on this host serialized on the GPU lease.
 
 HARN-BATCH (2026-09-10): batched cap-on evaluation with token-for-token parity to the sequential reference decoder (`results/S0/controls/harn_batch_parity.json`) and the last-row logits path — measured first pass (sequential evaluator) → batched:
 
@@ -67,10 +75,10 @@ HARN-BATCH (2026-09-10): batched cap-on evaluation with token-for-token parity t
 | C1/counterfact | 8.52 | 0.83 | 0.411 → 0.178 |
 | C2/zsre | 3.08 | 0.53 | 0.148 → 0.120 |
 | C2/counterfact | 8.20 | 0.65 | 0.385 → 0.152 |
-| CR/zsre | 3.71 | 0.78 | 0.186 → 0.262 |
-| CR/counterfact | 8.45 | 0.75 | 0.398 → 0.181 |
+| CR/zsre | 3.71 | 0.80 | 0.186 → 0.411 |
+| CR/counterfact | 8.45 | 1.24 | 0.398 → 0.770 |
 
-**Engineering already applied (no protocol change):** HARN-BATCH batches the cap-on evaluation (decode steps across prompts with per-sequence host retrieval; rescoring, LS and drift batched) and was reported only after token-for-token parity with the sequential reference decoder (E.2). Learning itself remains per item and sequential. **Fallback if HARN-BATCH does not land before S4-01:** scope zsRE 300 / CounterFact 300 / grammar 256 (12.0 accelerator h; ≈ 12 wall h), then the §10 drop order (HVP → R-e/R-g → S6 → ablations → C0 extension → T3); never the endpoint, margins, realizations or orders.
+**Engineering already applied (no protocol change):** HARN-BATCH batches the cap-on evaluation (decode steps across prompts with per-sequence host retrieval; rescoring, LS and drift batched) and was reported only after token-for-token parity with the sequential reference decoder (E.2). Learning itself remains per item and sequential. **Fallback if HARN-BATCH does not land before S4-01:** scope zsRE 300 / CounterFact 300 / grammar 256 (12.8 accelerator h; ≈ 11 wall h), then the §10 drop order (HVP → R-e/R-g → S6 → ablations → C0 extension → T3); never the endpoint, margins, realizations or orders.
 
 ## 6. Open items with owners
 

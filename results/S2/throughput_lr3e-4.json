@@ -1,0 +1,293 @@
+{
+ "n_per_run": 100,
+ "runs": {
+  "B1/zsre": {
+   "arm": "B1",
+   "dataset": "zsre",
+   "n_items": 100,
+   "A": 0.3,
+   "radii": {
+    "1": 0.2808128833770752,
+    "2": 0.4143741011619568,
+    "3": 0.18857809603214265
+   },
+   "b_m": {
+    "1": 70.70187377929688,
+    "2": 106.5766658782959,
+    "3": 425.5740661621094
+   },
+   "cr_label": null,
+   "lora_lr": 0.0003,
+   "warmup_seconds_wall": 6.016503777937032,
+   "eval_setup_query_seconds": 14.935905446182005,
+   "wall_seconds": 38.22944983490743,
+   "learning_accel_seconds": 7.798107716022059,
+   "query_accel_seconds": 28.340682671405375,
+   "learning_accel_seconds_per_edit": 0.0779810771602206,
+   "query_accel_seconds_per_edit": 0.28340682671405376,
+   "wall_seconds_per_edit": 0.38229449834907425,
+   "ops_learning": {
+    "full_forwards": 1000,
+    "partial_forwards": 0,
+    "reverses": 1000,
+    "router_probes": 0,
+    "search_candidates": 0,
+    "prefix_microsteps": 0
+   },
+   "ops_query": {
+    "full_forwards": 7505,
+    "partial_forwards": 0
+   },
+   "by_answer_length": {
+    "4": {
+     "n": 23,
+     "accel_seconds": 1.6547202138463035,
+     "full_forwards": 230,
+     "partial_forwards": 0,
+     "reverses": 230,
+     "rounds": 230,
+     "accel_seconds_per_edit": 0.07194435712375233
+    },
+    "5": {
+     "n": 13,
+     "accel_seconds": 2.384277545614168,
+     "full_forwards": 130,
+     "partial_forwards": 0,
+     "reverses": 130,
+     "rounds": 130,
+     "accel_seconds_per_edit": 0.18340596504724369
+    },
+    "2": {
+     "n": 27,
+     "accel_seconds": 1.566874064737931,
+     "full_forwards": 270,
+     "partial_forwards": 0,
+     "reverses": 270,
+     "rounds": 270,
+     "accel_seconds_per_edit": 0.058032372768071515
+    },
+    "3": {
+     "n": 22,
+     "accel_seconds": 1.2965411050245166,
+     "full_forwards": 220,
+     "partial_forwards": 0,
+     "reverses": 220,
+     "rounds": 220,
+     "accel_seconds_per_edit": 0.05893368659202348
+    },
+    "11": {
+     "n": 3,
+     "accel_seconds": 0.18355541944038123,
+     "full_forwards": 30,
+     "partial_forwards": 0,
+     "reverses": 30,
+     "rounds": 30,
+     "accel_seconds_per_edit": 0.06118513981346041
+    },
+    "6": {
+     "n": 5,
+     "accel_seconds": 0.29291673086117953,
+     "full_forwards": 50,
+     "partial_forwards": 0,
+     "reverses": 50,
+     "rounds": 50,
+     "accel_seconds_per_edit": 0.05858334617223591
+    },
+    "7": {
+     "n": 2,
+     "accel_seconds": 0.12043977808207273,
+     "full_forwards": 20,
+     "partial_forwards": 0,
+     "reverses": 20,
+     "rounds": 20,
+     "accel_seconds_per_edit": 0.06021988904103637
+    },
+    "10": {
+     "n": 2,
+     "accel_seconds": 0.11842425307258964,
+     "full_forwards": 20,
+     "partial_forwards": 0,
+     "reverses": 20,
+     "rounds": 20,
+     "accel_seconds_per_edit": 0.05921212653629482
+    },
+    "8": {
+     "n": 1,
+     "accel_seconds": 0.0576003931928426,
+     "full_forwards": 10,
+     "partial_forwards": 0,
+     "reverses": 10,
+     "rounds": 10,
+     "accel_seconds_per_edit": 0.0576003931928426
+    },
+    "9": {
+     "n": 1,
+     "accel_seconds": 0.0612304910318926,
+     "full_forwards": 10,
+     "partial_forwards": 0,
+     "reverses": 10,
+     "rounds": 10,
+     "accel_seconds_per_edit": 0.0612304910318926
+    },
+    "13": {
+     "n": 1,
+     "accel_seconds": 0.061527721118181944,
+     "full_forwards": 10,
+     "partial_forwards": 0,
+     "reverses": 10,
+     "rounds": 10,
+     "accel_seconds_per_edit": 0.061527721118181944
+    }
+   },
+   "peak_mib": 1448.594970703125,
+   "metrics": {
+    "es_immediate": 0.23,
+    "gs_immediate": 0.15,
+    "threshold_acquisition": 0.0,
+    "ret_es_end": 0.11,
+    "ret_gs_end": 0.08,
+    "survival_conditional_end": 0.4782608695652174,
+    "ls_complete_answer_end": 0.0,
+    "ls_first_token_end": 0.1,
+    "ls_kl_end": 4.741548221841312,
+    "lm_drift_loss_difference": 0.7645559750638573,
+    "lm_drift_perplexity_ratio": 2.1480403793797627,
+    "memory_occupied_bytes": 3549502.0
+   },
+   "memory_occupied_bytes": 3549502.0
+  },
+  "B1/counterfact": {
+   "arm": "B1",
+   "dataset": "counterfact",
+   "n_items": 100,
+   "A": 0.3,
+   "radii": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   },
+   "b_m": {
+    "1": 70.70187377929688,
+    "2": 106.5766658782959,
+    "3": 425.5740661621094
+   },
+   "cr_label": null,
+   "lora_lr": 0.0003,
+   "warmup_seconds_wall": 4.599554429994896,
+   "eval_setup_query_seconds": 29.10829357849434,
+   "wall_seconds": 19.384524989058264,
+   "learning_accel_seconds": 6.076630197931081,
+   "query_accel_seconds": 11.32584973773919,
+   "learning_accel_seconds_per_edit": 0.06076630197931081,
+   "query_accel_seconds_per_edit": 0.11325849737739191,
+   "wall_seconds_per_edit": 0.19384524989058263,
+   "ops_learning": {
+    "full_forwards": 1000,
+    "partial_forwards": 0,
+    "reverses": 1000,
+    "router_probes": 0,
+    "search_candidates": 0,
+    "prefix_microsteps": 0
+   },
+   "ops_query": {
+    "full_forwards": 9007,
+    "partial_forwards": 0
+   },
+   "by_answer_length": {
+    "2": {
+     "n": 100,
+     "accel_seconds": 6.076630197931081,
+     "full_forwards": 1000,
+     "partial_forwards": 0,
+     "reverses": 1000,
+     "rounds": 1000,
+     "accel_seconds_per_edit": 0.06076630197931081
+    }
+   },
+   "peak_mib": 1733.236328125,
+   "metrics": {
+    "es_immediate": 0.43,
+    "gs_immediate": 0.09,
+    "threshold_acquisition": 0.0,
+    "ret_es_end": 0.15,
+    "ret_gs_end": 0.095,
+    "survival_conditional_end": 0.27906976744186046,
+    "ls_complete_answer_end": 0.0,
+    "ls_first_token_end": 0.01,
+    "ls_kl_end": 4.277063182517102,
+    "lm_drift_loss_difference": 1.6727655984192986,
+    "lm_drift_perplexity_ratio": 5.326879453934548,
+    "memory_occupied_bytes": 3549502.0
+   },
+   "memory_occupied_bytes": 3549502.0
+  }
+ },
+ "unavailable": {
+  "B3": "S2-04 pending",
+  "B4": "S2-05 pending",
+  "EPC_credit": "REG-03 pending",
+  "grammar": "GRAM-02 pending"
+ },
+ "lease": {
+  "waited_seconds": 5.4836273193359375e-06,
+  "started": "2026-09-10T11:16:35Z",
+  "compute_apps_before": [
+   {
+    "pid": "8835",
+    "name": "/usr/bin/kwin_wayland",
+    "used_memory": "88 MiB"
+   },
+   {
+    "pid": "242885",
+    "name": "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=wayland --render-n",
+    "used_memory": "51 MiB"
+   },
+   {
+    "pid": "441918",
+    "name": "swipl",
+    "used_memory": "1526 MiB"
+   }
+  ],
+  "compute_apps_after": [
+   {
+    "pid": "8835",
+    "name": "/usr/bin/kwin_wayland",
+    "used_memory": "88 MiB"
+   },
+   {
+    "pid": "242885",
+    "name": "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=wayland --render-n",
+    "used_memory": "51 MiB"
+   },
+   {
+    "pid": "455155",
+    "name": "/home/derp/cap/venv/bin/python",
+    "used_memory": "4448 MiB"
+   },
+   {
+    "pid": "456818",
+    "name": "swipl",
+    "used_memory": "1526 MiB"
+   }
+  ],
+  "finished": "2026-09-10T11:18:30Z"
+ },
+ "other_cuda_processes_before": [
+  {
+   "pid": "8835",
+   "name": "/usr/bin/kwin_wayland",
+   "used_memory": "88 MiB"
+  },
+  {
+   "pid": "242885",
+   "name": "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=wayland --render-n",
+   "used_memory": "51 MiB"
+  },
+  {
+   "pid": "441918",
+   "name": "swipl",
+   "used_memory": "1526 MiB"
+  }
+ ],
+ "timestamp": "2026-09-10T11:18:30Z"
+}

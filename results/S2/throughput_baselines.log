@@ -1,0 +1,15 @@
+B0 zsre: learn 0.000 s/edit, query 0.093 s/edit, wall 0.10 s/edit, ES 0.00 RET-GS 0.0
+B0 counterfact: learn 0.000 s/edit, query 0.564 s/edit, wall 0.59 s/edit, ES 0.00 RET-GS 0.0
+B1 zsre: learn 0.078 s/edit, query 0.311 s/edit, wall 0.42 s/edit, ES 0.08 RET-GS 0.15
+B1 counterfact: learn 0.061 s/edit, query 0.149 s/edit, wall 0.23 s/edit, ES 0.08 RET-GS 0.055
+B3 zsre: learn 0.094 s/edit, query 0.150 s/edit, wall 0.27 s/edit, ES 0.10 RET-GS 0.13
+B3 counterfact: learn 0.062 s/edit, query 0.090 s/edit, wall 0.17 s/edit, ES 0.07 RET-GS 0.065
+Traceback (most recent call last):
+  File "/home/derp/cap/pc_cap/scripts/merge_throughput.py", line 14, in <module>
+    a.setdefault("merged", []).append({"from": str(extra.relative_to(ROOT)), "runs": sorted(b["runs"]), "timestamp": b.get("timestamp")})
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.12/pathlib.py", line 682, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: 'results/S2/throughput_baselines.json' is not in the subpath of '/home/derp/cap/pc_cap'
+selected {'zsre': 1000, 'counterfact': 300, 'grammar': 10000, 'seconds': 91460.59638136416} wall hours 26.9
+BASELINES_DONE

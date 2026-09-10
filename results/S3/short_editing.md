@@ -1,6 +1,6 @@
 # S3-04 short editing checks (100 development edits per arm and dataset)
 
-Source runs: `/home/derp/cap/pc_cap/results/S2/throughput`. Baselines B1/B3/B4 pending.
+Source runs: `/home/derp/cap/pc_cap/results/S2/throughput` + `['/home/derp/cap/pc_cap/results/S2/throughput_baselines']`. Arms: ['B0', 'B1', 'B3', 'C0', 'C1', 'C2', 'CR']. Pending: ['B4'].
 
 | arm | dataset | rounds/item | proposed routes (1/2/3) | accepted writes (1/2/3) | abstain | no-dir | allocs | updates | evict | conflicts | rejected | probes | thr | ES | GS | RET-ES | RET-GS | LS | LS-KL | drift ratio |
 | --- | --- | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -12,5 +12,11 @@ Source runs: `/home/derp/cap/pc_cap/results/S2/throughput`. Baselines B1/B3/B4 p
 | C2 | zsre | 3.9 | 5/5/381 | 5/5/376 | 0 | 0 | 376 | 10 | 0 | 0 | 5 | 1173 | 0.99 | 0.99 | 0.47 | 0.94 | 0.30 | 1.00 | 0.0000 | 1.0000 |
 | CR | counterfact | 4.3 | 155/137/134 | 100/137/134 | 0 | 0 | 306 | 65 | 0 | 0 | 55 | 0 | 0.95 | 0.98 | 0.00 | 0.98 | 0.00 | 1.00 | 0.0000 | 1.0000 |
 | CR | zsre | 6.6 | 233/230/194 | 209/230/194 | 0 | 0 | 529 | 104 | 0 | 0 | 24 | 0 | 0.96 | 0.99 | 0.41 | 0.53 | 0.18 | 0.93 | 0.0000 | 1.0000 |
+| B0 | counterfact | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
+| B0 | zsre | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
+| B1 | counterfact | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.08 | 0.03 | 0.11 | 0.06 | 0.00 | 2.9361 | 3.1676 |
+| B1 | zsre | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.08 | 0.04 | 0.13 | 0.15 | 0.00 | 1.1472 | 1.1442 |
+| B3 | counterfact | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.07 | 0.04 | 0.10 | 0.07 | 0.00 | 3.9225 | 3.9369 |
+| B3 | zsre | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.10 | 0.07 | 0.16 | 0.13 | 0.00 | 1.0961 | 1.2089 |
 
 Proposed routes, accepted writes and acquired complete answers are reported separately (PDF S3). CounterFact runs use exact keys (SD-17), so GS/RET-GS from retrieval are 0 by construction there (CR-4).

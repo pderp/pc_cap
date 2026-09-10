@@ -17,14 +17,12 @@ import numpy as np
 
 from pccap.bases.bp import BPBase
 from pccap.bases.checksum import assert_frozen
-from pccap.cap.cap import Cap, CapConfig
 from pccap.contracts import Budget
 from pccap.data.tokenize import GPT2Tokenizer
 from pccap.harness import runner
 from pccap.harness.ledger import Ledger
 from pccap.harness.runs import CHECKPOINTS, Evaluator, run_stream
 from pccap.harness.stage_s2 import calibration, load_dev_items
-from pccap.routers import make_router
 
 ROOT = Path(__file__).resolve().parents[3]
 S2 = ROOT / "results" / "S2"
@@ -62,8 +60,10 @@ def run_s3(ctx: dict, run_dir: Path) -> dict:
     b = man.get("budget", {})
     budget = Budget(A=b.get("A", chosen_A()), epsilon=b.get("epsilon", 0.01), R=b.get("R", 5), tau_edit=b.get("tau_edit", 0.1))
     items, unrelated = load_dev_items(ds, n, seed=int(man.get("order_seed", 100 + cfg["perm"])))
-    cap = Cap(base, CapConfig(arm=cfg["arm"], read=cfg["read"], radii=radii, bank_scales=b_m, seed=int(man.get("seed", 0)) + cfg["realization"]), ledger)
-    router = make_router(cfg["arm"])
+    from pccap.harness.arms import make_learner, router_for
+
+    cap = make_learner(cfg["arm"], base, ledger, radii=radii, bank_scales=b_m, read=cfg["read"], seed=int(man.get("seed", 0)) + cfg["realization"])
+    router = router_for(cfg["arm"])
     h_before = base.checksum()
     ev = Evaluator(base, tok, unrelated[: int(man.get("locality_prompts", 200))], drift_sample(int(man.get("drift_positions", 4096))))
     metrics = run_stream(cap, items, router, budget, ev, run_dir, ledger, checkpoints=tuple(man.get("checkpoints", CHECKPOINTS)),

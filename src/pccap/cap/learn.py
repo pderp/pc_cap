@@ -70,15 +70,50 @@ def _digest16(item: EditItem) -> bytes:
 
 
 def directions_at(cap, ids, target: int, writes: dict[int, np.ndarray], transport: Transport, phase: str = "learning"):
-    """One reverse pass at the current writes (retrieval frozen: the writes are fixed vectors)."""
+    """Credit signal at the three sites at the current writes (retrieval frozen: the writes are fixed
+    vectors), turned into unit directions by ``transport``.
+
+    * ``cap.cfg.credit == "adjoint"`` (SB, SE-A): one reverse pass; the transport's sign −1 descends
+      the gradient. Charged by the caller as 1 forward + 1 reverse.
+    * ``cap.cfg.credit == "error"`` (SE-E): the settled ePC error ``e_site`` after ``credit_iters``
+      iterations (``base.infer_errors``, PDF D.6/F.6; SD-6); the descent direction is ``+e`` (the
+      wrapper's ``descent_sign``), delivered through the same transport by passing
+      ``−descent_sign·e`` so the transport's −1 yields ``+e/‖e‖``. Charged from the inference's own
+      cost record (``iters+1`` forwards and reverses, ``settle_iters``), returned as ``extra``.
+    """
     p = len(ids) - 1
     wl = cap._writes_list(p, writes)
-    grads = cap.base.adjoint(ids, target, wl, phase=phase)
     out = {}
-    for m in cap.cfg.banks():
-        site = SiteId(m, g.BANK_BLOCK[m], p)
-        out[m] = transport.direction(np.asarray(grads[site], np.float32), site)
+    extra = None
+    if getattr(cap.cfg, "credit", "adjoint") == "error":
+        er = cap.base.infer_errors(ids, target, iters=int(cap.cfg.credit_iters), writes=wl, phase=phase)
+        sign = float(getattr(cap.base, "descent_sign", 1.0))
+        for m in cap.cfg.banks():
+            site = SiteId(m, g.BANK_BLOCK[m], p)
+            e = np.asarray(cap.base.error_at_site(er, m), np.float32)
+            out[m] = transport.direction(-sign * e, site)
+        extra = er.cost
+    else:
+        grads = cap.base.adjoint(ids, target, wl, phase=phase)
+        for m in cap.cfg.banks():
+            site = SiteId(m, g.BANK_BLOCK[m], p)
+            out[m] = transport.direction(np.asarray(grads[site], np.float32), site)
+    directions_at.last_extra_cost = extra
     return out
+
+
+def _charge_credit(cost: CostRecord) -> None:
+    """Round-level counters for one credit computation: adjoint = 1 forward + 1 reverse; error credit =
+    the inference's own record (iters+1 forwards/reverses and settle_iters)."""
+    extra = getattr(directions_at, "last_extra_cost", None)
+    if extra is None:
+        cost.reverses += 1
+        cost.full_forwards += 1
+    else:
+        cost.full_forwards += int(extra.full_forwards)
+        cost.reverses += int(extra.reverses)
+        cost.settle_iters += int(extra.settle_iters)
+        directions_at.last_extra_cost = None
 
 
 def round_update(cap, ids: np.ndarray, target: int, item: EditItem, router: Router, budget: Budget,
@@ -99,8 +134,7 @@ def round_update(cap, ids: np.ndarray, target: int, item: EditItem, router: Rout
     L = cap.loss_of(ep, target)
     # 2. directions
     dirs = directions_at(cap, ids, target, ep.writes, transport)
-    cost.reverses += 1
-    cost.full_forwards += 1
+    _charge_credit(cost)
     # 3./4. route
     ctx = RoundContext(prefix_ids=ids, loss=L, directions=dirs, bank_scales=dict(cap.cfg.bank_scales),
                        rng_material=(seed, digest, prefix_index, round_index), permitted_banks=permitted_banks, position=p)
@@ -128,8 +162,7 @@ def round_update(cap, ids: np.ndarray, target: int, item: EditItem, router: Rout
             cost.add(ep_cur.cost)
             L_cur = cap.loss_of(ep_cur, target)
             dirs_cur = directions_at(cap, ids, target, ep_cur.writes, transport)
-            cost.reverses += 1
-            cost.full_forwards += 1
+            _charge_credit(cost)
         d = dirs_cur[m]
         if d.status != "ok":
             codes.append(f"{OutcomeCode.no_direction.value}:{m}")

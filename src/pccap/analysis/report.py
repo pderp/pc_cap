@@ -166,9 +166,10 @@ def render_s1() -> str:
     p3 = json.loads((RESULTS / "S1" / "P3_bp.json").read_text()) if (RESULTS / "S1" / "P3_bp.json").exists() else None
     p6 = json.loads((RESULTS / "S1" / "P6_bp.json").read_text()) if (RESULTS / "S1" / "P6_bp.json").exists() else None
     p5 = json.loads((RESULTS / "S1" / "P5_bp.json").read_text()) if (RESULTS / "S1" / "P5_bp.json").exists() else None
-    L = ["# S1 stage report (Appendix G) — development, BP rows", "",
+    p1e = json.loads((RESULTS / "S1" / "P1_epc.json").read_text()) if (RESULTS / "S1" / "P1_epc.json").exists() else None
+    L = ["# S1 stage report (Appendix G) — development" + (", BP rows" if not p1e else ", BP and regenerated-ePC rows"), "",
          f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S1`.", "",
-         "## 1. Header", "", f"- Stage: S1 substrate report card. Code commit: `{_git()}`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: absent (REG pending).",
+         "## 1. Header", "", f"- Stage: S1 substrate report card. Code commit: `{_git()}`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: " + ("absent (REG pending)." if not p1e else f"regenerated (REG-02, `{p1e['weights']}`).") + "",
          "- Sets: `manifests/dev/lm_sets.json` (H 2×10⁶ train tokens seed 11; drift = validation 247,289 tokens; P2 4,096 positions; P3 1,000 × 128; POS UD-EWT).",
          f"- Cost: {s1['local_hours_total']:.2f} local GPU-h = {s1['a100_equivalent_hours']:.2f} A100-eq h of 12 (κ {b['kappa']['kappa']} {b['kappa']['status']}).", "",
          "## 2. Status", "", "Development. BP rows of P2, P3, P6 complete where files exist below; P1 (needs a second base), P4 (needs the grammar), P5 (needs S2-01, running) pending. No confirmatory access.", "",
@@ -207,10 +208,12 @@ def render_s1() -> str:
         L += ["", f"Deployed-gate behaviour on U (separate phenomenon, S2-02 A = 0.3 caps): false-fire {gated}. Improvement and collateral are reported separately; ratios per item carry undefined/right-unbounded statuses in `results/S1/P5_bp.json`. Retrieval-drift tracking: {p5['retrieval_drift']}.", ""]
     L += ["## 5b. Validity / eligibility table (D1 input)", "",
           "| claim type | status | basis |", "| --- | --- | --- |",
-          "| matched-fidelity substrate claim (SB vs SE-A/SE-E) | **unavailable, not failed** | no ePC checkpoint (S0-01; PA-1 clock, REG-00..03 pending); P1 cannot be computed for one base |",
+          ("| matched-fidelity substrate claim (SB vs SE-A/SE-E) | **unavailable, not failed** | no ePC checkpoint (S0-01; PA-1 clock, REG-00..03 pending); P1 cannot be computed for one base |" if not p1e else
+           f"| matched-fidelity substrate claim (SB vs SE-A/SE-E) | **{p1e['eligibility']['matched_fidelity_claims']}** | P1 on the regenerated checkpoint: mean KL {p1e['metrics']['kl_mean']['value']:.2e} (p95 {p1e['metrics']['kl_p95']['value']:.2e}, p99 {p1e['metrics']['kl_p99']['value']:.2e}, max {p1e['metrics']['kl_max_finite']['value']:.2e}) on {p1e['H']['tokens_used']:,} H tokens; argmax agreement {p1e['metrics']['argmax_agreement_H']['value']:.4f}; rule mean ≤ 1e-3 |"),
           "| synthetic-only substrate claim | pending | grammar replacement (GRAM-01/02, PA-2 clock) |",
           "| BP-only editing programme (C0/C1/C2/CR on zsRE and CounterFact) | **eligible** | S0 controls pass; DATA-01 pools; S2-01 calibration (CounterFact exact-key pilot, CR-4); S2-02 A = 0.3 |",
-          "| inherited claim: teacher KL ~3e-5 (ref [5]) | unavailable | needs the distilled checkpoint |",
+          ("| inherited claim: teacher KL ~3e-5 (ref [5]) | unavailable | needs the distilled checkpoint |" if not p1e else
+           f"| inherited claim: teacher KL ~3e-5 (ref [5]) | re-measured on the new checkpoint (no continuity, PA-1) | β = 1 mean {p1e['reconciliation']['ours_beta1_mean']:.2e}; sibling scaling (β = 2, ×4) {p1e['reconciliation']['ours_beta2_x4_mean']:.2e} vs its 1.24e-4 |"),
           "| inherited claim: cos(settled error, adjoint) > 0.998 | partly reproduced on BP weights | e₈ at bank 3: 0.998; banks 1–2: 0.97–0.98; e₆₄: 0.75–0.98 (P6) — a property of the declared solver at the nominal horizon, to be re-measured on the checkpoint |",
           "| inherited claim: error mass less concentrated in the last block | consistent on BP adjoints | final-block share 0.011 (P3), no alert |", "",
           "## 6. Mechanism evidence", "", "None at S1.", "", "## 7. Optional mathematics", "", "None.", "",

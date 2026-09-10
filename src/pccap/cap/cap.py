@@ -73,6 +73,8 @@ class CapConfig:
     overhead_bytes: int = 0
     d: int = 768
     key_dim: int | None = None
+    credit: str = "adjoint"  # "adjoint" (SB, SE-A) or "error" (SE-E: settled ePC error at the site, PDF S5 / D.6)
+    credit_iters: int = 8  # SE-E nominal horizon (SD-6)
 
     def banks(self) -> tuple[int, ...]:
         return ARM_BANKS[self.arm]

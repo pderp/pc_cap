@@ -1,0 +1,65 @@
+{
+ "written": "2026-09-10T11:02:35Z",
+ "rule": "accepted C2 deliveries per bank over development streams (SD-11); per-dataset distribution used in confirmatory CR; abstentions/rejections excluded from the normalizer",
+ "per_dataset": {
+  "counterfact": {
+   "distribution": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 1.0
+   },
+   "label": "cr_dev_c2_counterfact",
+   "accepted_per_bank": {
+    "1": 0,
+    "2": 0,
+    "3": 200
+   },
+   "accepted_total": 200,
+   "rounds": 200,
+   "abstain_rounds": 0,
+   "rejected_rounds": 0,
+   "source": "results/S2/throughput/C2/counterfact"
+  },
+  "zsre": {
+   "distribution": {
+    "1": 0.012953367875647668,
+    "2": 0.012953367875647668,
+    "3": 0.9740932642487047
+   },
+   "label": "cr_dev_c2_zsre",
+   "accepted_per_bank": {
+    "1": 5,
+    "2": 5,
+    "3": 376
+   },
+   "accepted_total": 386,
+   "rounds": 391,
+   "abstain_rounds": 0,
+   "rejected_rounds": 5,
+   "source": "results/S2/throughput/C2/zsre"
+  }
+ },
+ "pooled": {
+  "distribution": {
+   "1": 0.008532423208191127,
+   "2": 0.008532423208191127,
+   "3": 0.9829351535836177
+  },
+  "label": "cr_dev_c2_pooled",
+  "accepted_per_bank": {
+   "1": 5,
+   "2": 5,
+   "3": 576
+  },
+  "accepted_total": 586,
+  "rounds": 591,
+  "abstain_rounds": 0,
+  "rejected_rounds": 5
+ },
+ "profile_distribution": {
+  "1": 0.3333333333333333,
+  "2": 0.3333333333333333,
+  "3": 0.3333333333333333,
+  "label": "cr_profile_uniform"
+ }
+}

@@ -189,3 +189,22 @@ probe (`results/REG/timing_probe.json`) and the 100-step pilot (`results/REG/pil
 REG-01 evidence; REG-02 then runs in resumable chunks under the lease. The "BP-only month"
 framing of §7 and of `docs/updated_plan3.md` is superseded for the ePC rows: they are
 re-measured on the regenerated checkpoint when REG-03 passes.
+
+## Addendum 3 (2026-09-10, evening): REG-01/02 running, Lane F integrated, D2 and freeze draft
+
+- **REG-01 (done, DEC-015):** timing probe s/step at micro-batch 5: T = 1/2/4/8/16/32/64 → 0.72/0.95/1.36/2.27/4.00/7.60/14.66; projection 12.2 h ≪ 120 h; peak 7.6 GiB. The 100-step pilot reproduces the sibling's logged trajectory statistically (median per-step ratios 0.93–1.02; tracking residual 0.999). Along the way the real-model dissection found a float32 cancellation in the FabricPC-path weight phase (the residual stream is O(10–10³), so `stop(z_mu+e) − z_mu` loses a 1e-8 error); fixed by writing the sibling's exact form and keeping node errors equal to the free variable (REG-00 record; `docs/epc_energy.md`). After the fix the local gradient equals the reference in every block (cosine 1.0000).
+- **REG-02 (running):** `results/REG/epc-50m.log`, checkpoints under `assets/models/epc/epc-50m/checkpoints/`, chunks of ≤ 500 steps or 90 min under the lease with a pause file for interleaving other GPU work; milestones so far track the sibling's (prompt KL 2–5e-6, held-out ppl ≈ 93.3).
+- **Lane F reviewed and integrated (DEC-016):** `pccap.harness.arms` registry (`make_learner`, `router_for`, batched-evaluation adapters, parity-tested); `pccap run --arm B0|B1|B3` and the throughput profile drive baselines unchanged. Development rows: B1/B3 at the prescribed defaults acquire little (ES 0.08–0.10) and lose locality (LS 0.00; drift 1.1–3.9) — diagnosed in `docs/D2_decision.md` F2; the PDF's learning-rate screen ran (DEC-017: 1e-4 stands by the endpoint rule; the table is in the frozen draft).
+- **S3-05 (DEC-018):** CR distribution from development C2 routes (zsRE 0.013/0.013/0.974; CounterFact 0/0/1); re-profiled CR reaches zsRE RET-GS 0.38 in one order (uniform 0.18, C2 0.30) — the C2-vs-CR contrast is a real test.
+- **DATA-02:** three subject-disjoint realizations × five orders per dataset sealed under `manifests/confirm/` (SHA256SUMS + metadata sidecar); the loader is Lane H's.
+- **S3-06 D2 memo** (`docs/D2_decision.md`) and **S4-01 draft** (`manifests/frozen.draft.json`, schema-valid; pending only grammar dataset id and the ePC checkpoint, which S5 alone needs). The freeze itself (writing `manifests/frozen.json`) is the lead's CP-E act: `docs/lead_queue.md` T-CP-E.
+- **Projection with measured B1/B3 and the re-profiled CR:** scope zsRE 1000 / CounterFact 300 / grammar 10000 at 25.1 of 27.0 local h (≈ 23 wall h on this host).
+- Open for the other agent (ongoing3.md): Lane D GRACE (in progress: `assets/envs/grace` exists), Lane H DATA-02a, Lane G′ grammar.
+
+## Addendum 4 (2026-09-10, late): review response and S5/S4/S7 preparation while REG-02 runs
+
+- Review (`docs/derp_review1.md`) answered in `docs/derp_review1_response.md`: single current log `docs/ongoing4.md` (older logs archived), README and CONTRIBUTING written, spec-defect register triaged (16 of 18 committed), environment-setup script assigned to Lane R; the "energy efficiency" reading of `epc_energy.md` corrected.
+- Lane D unblocked: the lead approved the setuptools pin in the GRACE environment; applied and verified (`import wandb` works).
+- S5-01 prepared: SE-E error-credit rule in the cap (`CapConfig.credit`, inference cost charged), ePC radius calibration option, `manifests/dev/s5_arms.json`, `pccap run --stage S5`, CPU test of the credit rule; GPU checks and the ePC calibration + 20-item SB/SE-A/SE-E smoke are queued behind the post-REG-02 chain (`results/REG/chain_s5_prep.sh`).
+- S4-05 resource views (development dry run: only C0 is within 20% of C2's update cost), S4-06 wiring over ANA-01 with a synthetic 3 × 5 test, S7-03 order-variation analysis (JS part pending checkpoints), `docs/REPRODUCE.md` draft.
+- Tree: 296 CPU tests pass, lint clean. REG-02 at step ≈ 3,100 (T = 4), ETA ≈ 19:40 EDT.

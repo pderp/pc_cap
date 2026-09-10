@@ -22,41 +22,44 @@ from pathlib import Path
 import jax
 
 from pccap.bases.bp import BPBase
-from pccap.cap.cap import Cap, CapConfig
 from pccap.contracts import Budget
 from pccap.data.tokenize import GPT2Tokenizer
+from pccap.harness.arms import cr_distribution_for, make_learner, router_for
 from pccap.harness.ledger import Ledger
 from pccap.harness.runs import Evaluator, run_stream
 from pccap.harness.stage_s2 import calibration, load_dev_items
 from pccap.harness.stage_s3 import chosen_A, drift_sample
-from pccap.routers import make_router
 
 ROOT = Path(__file__).resolve().parents[3]
 S2 = ROOT / "results" / "S2"
 
 
 def profile_arm(arm: str, ds: str, n: int, tok: GPT2Tokenizer, out_dir: Path, drift_positions: int = 1024,
-                locality_prompts: int = 100) -> dict:
+                locality_prompts: int = 100, cr_dist: bool = False, lora_lr: float = 1e-4) -> dict:
     b_m, radii = calibration(ds)
     A = chosen_A()
+    cr_d, cr_label = cr_distribution_for(ds) if cr_dist else (None, "cr_profile_uniform")
+
+    def router():
+        return router_for(arm, cr_distribution=cr_d, cr_label=cr_label)
     items, unrelated = load_dev_items(ds, n + 2, seed=21)
     warm_items, items = items[:2], items[2 : n + 2]
     # warmup (compile) on a separate learner and ledger, reported separately
     wl = Ledger()
     wbase = BPBase(ledger=wl)
-    wcap = Cap(wbase, CapConfig(arm=arm, radii=radii, bank_scales=b_m, seed=0), wl)
+    wcap = make_learner(arm, wbase, wl, radii=radii, bank_scales=b_m, seed=0, lora_lr=lora_lr)
     t0 = time.perf_counter()
     wev = Evaluator(wbase, tok, unrelated[:5], None)
-    run_stream(wcap, warm_items, make_router(arm), Budget(A=A), wev, out_dir / "warmup", wl, checkpoints=(), arm=arm)
+    run_stream(wcap, warm_items, router(), Budget(A=A), wev, out_dir / "warmup", wl, checkpoints=(), arm=arm)
     warmup_seconds = time.perf_counter() - t0
     # timed run
     ledger = Ledger()
     base = BPBase(ledger=ledger)
-    cap = Cap(base, CapConfig(arm=arm, radii=radii, bank_scales=b_m, seed=0), ledger)
+    cap = make_learner(arm, base, ledger, radii=radii, bank_scales=b_m, seed=0, lora_lr=lora_lr)
     ev = Evaluator(base, tok, unrelated[:locality_prompts], drift_sample(drift_positions))
     eval_setup_seconds = ledger.totals()["query"]["accel_seconds"]
     t0 = time.perf_counter()
-    m = run_stream(cap, items, make_router(arm), Budget(A=A), ev, out_dir, ledger, checkpoints=(100,), arm=arm)
+    m = run_stream(cap, items, router(), Budget(A=A), ev, out_dir, ledger, checkpoints=(100,), arm=arm)
     wall = time.perf_counter() - t0
     tot = ledger.totals()
     items_rows = [json.loads(line) for line in (out_dir / "items.jsonl").read_text().splitlines()]
@@ -73,7 +76,7 @@ def profile_arm(arm: str, ds: str, n: int, tok: GPT2Tokenizer, out_dir: Path, dr
     learn_s = tot["learning"]["accel_seconds"]
     query_s = tot["query"]["accel_seconds"] - eval_setup_seconds
     stats = jax.devices()[0].memory_stats() or {}
-    return {"arm": arm, "dataset": ds, "n_items": len(items), "A": A, "radii": radii, "b_m": b_m,
+    return {"arm": arm, "dataset": ds, "n_items": len(items), "A": A, "radii": radii, "b_m": b_m, "cr_label": cr_label if arm == "CR" else None, "lora_lr": lora_lr if arm in ("B1", "B3") else None,
             "warmup_seconds_wall": warmup_seconds, "eval_setup_query_seconds": eval_setup_seconds,
             "wall_seconds": wall, "learning_accel_seconds": learn_s, "query_accel_seconds": query_s,
             "learning_accel_seconds_per_edit": learn_s / len(items), "query_accel_seconds_per_edit": query_s / len(items),
@@ -92,14 +95,19 @@ def main(argv=None) -> int:
     ap.add_argument("--datasets", nargs="*", default=["zsre", "counterfact"])
     ap.add_argument("--out", default=str(S2 / "throughput.json"))
     ap.add_argument("--tag", default="")
+    ap.add_argument("--cr-dist", action="store_true", help="CR uses manifests/cr_distribution.json (S3-05) instead of uniform")
+    ap.add_argument("--lora-lr", type=float, default=1e-4, help="B1/B3 Adam learning rate (development screen {3e-5, 1e-4, 3e-4})")
     args = ap.parse_args(argv)
     out_path = Path(args.out)
     tok = GPT2Tokenizer()
-    out = {"n_per_run": args.n, "runs": {}, "unavailable": {"B1": "S2-03 pending", "B3": "S2-04 pending", "B4": "S2-05 pending", "EPC_credit": "REG-03 pending", "grammar": "GRAM-02 pending"}}
+    unavailable = {"B1": "S2-03 pending", "B3": "S2-04 pending", "B4": "S2-05 pending", "EPC_credit": "REG-03 pending", "grammar": "GRAM-02 pending"}
+    for a in args.arms:
+        unavailable.pop(a, None)
+    out = {"n_per_run": args.n, "runs": {}, "unavailable": unavailable}
     with gpu_lease("S2-06", stage="S2", projected_seconds=3 * 3600, exclusive=True) as lease:
         for arm in args.arms:
             for ds in args.datasets:
-                r = profile_arm(arm, ds, args.n, tok, S2 / ("throughput" + (f"_{args.tag}" if args.tag else "")) / arm / ds)
+                r = profile_arm(arm, ds, args.n, tok, S2 / ("throughput" + (f"_{args.tag}" if args.tag else "")) / arm / ds, cr_dist=args.cr_dist, lora_lr=args.lora_lr)
                 out["runs"][f"{arm}/{ds}"] = r
                 print(f"{arm} {ds}: learn {r['learning_accel_seconds_per_edit']:.3f} s/edit, query {r['query_accel_seconds_per_edit']:.3f} s/edit, "
                       f"wall {r['wall_seconds_per_edit']:.2f} s/edit, ES {r['metrics']['es_immediate']:.2f} RET-GS {r['metrics']['ret_gs_end']}", flush=True)

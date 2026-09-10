@@ -1,0 +1,13 @@
+# REG-01 Cost pilot (100 steps) and regeneration decision
+status: done
+agent: orchestrator   started: 2026-09-10T06:20:00Z   finished: 2026-09-10T07:40:00Z
+commit: (uncommitted; lead commits)
+inputs used: REG-00 driver; DEC-014 (bound 120 local GPU-h); the sibling's production logs `results/distillation/50m-tokens/{metrics,layerwise,relaxation}.csv` (read-only reference) as the comparison target; OpenWebText shard (byte-exact); PDF PA-1
+outputs: results/REG/timing_probe.json (+ .log), results/REG/pilot-100/{metrics,relaxation,milestones,holds}.csv + summary.json, results/REG/pilot_compare.json, results/REG/pilot.json (decision), scripts/reg_timing_probe.py, scripts/reg_pilot_compare.py, assets/models/epc/pilot-100/checkpoints/ (step-50, step-100; pilot only)
+verify command: /home/derp/cap/venv/bin/python scripts/reg_timing_probe.py --micro 5 --timed 2 ; results/REG/run_probe_and_pilot.sh ; /home/derp/cap/venv/bin/python scripts/reg_pilot_compare.py --run pilot-100
+verify output: s/step at micro 5 (exclusive lease; desktop processes resident and recorded): T=1 0.72, T=2 0.95, T=4 1.36, T=8 2.27, T=16 4.00, T=32 7.60, T=64 14.66; compile 8–24 s per T; peak device memory 7.0 GiB (probe) / 7.6 GiB (pilot, incl. milestone evaluation). Projection over the protocol's stages (1396 + 6×1395 steps) = 44,030 s = **12.2 h** ≪ 120 h. Pilot: 100 steps of the protocol (stage T=1), 0.707 s/step, 78 GPU-s; step-0 held-out perplexity 93.3409 = the sibling's teacher/student value. Trajectory vs the sibling's logged steps 2–99 (same data, same protocol): median ratio ours/sibling bp_loss 0.95 (IQR 0.77–1.32), pc_loss 0.93 (0.78–1.35), pc_grad_norm 1.02 (0.77–1.45), tracking residual 0.999 (0.995–1.004); Pearson r 0.66–0.78; T identical.
+done-when check: s/step per relaxation horizon and a full-run projection under the bound: PASS (12.2 h ≤ 120 h) → REG-02 authorized (DEC-015). Per-step values statistically consistent with the sibling's production log: PASS (exact per-step equality is not attainable: both runs start from float round-off at step 0 where student = teacher, and the sibling's torch kernels are not bitwise reproducible either).
+cost: gpu_seconds=420 wall_seconds=4800 peak_mem_mib=7581
+deviations: the first pilot attempt shortened the schedule (a `--max-steps` flag redefined the total; removed — `--chunk-steps` now pauses without touching the schedule) and the second hit the float32 defect recorded in REG-00; the reported pilot is the third, on the fixed code. The timing probe ran before the fix; the operation set is identical (the pilot's T=1 timing agrees with the probe's within 2%).
+unresolved: none
+questions for lead: none

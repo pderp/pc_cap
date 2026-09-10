@@ -100,13 +100,18 @@ def calibrate_radii(edit_keys: dict, para_keys: dict, para_owner: np.ndarray, un
     return result
 
 
-def run(datasets=("zsre", "counterfact"), max_unrelated: int = 1000) -> dict:
+def run(datasets=("zsre", "counterfact"), max_unrelated: int = 1000, weights: str | None = None, label: str = "BP") -> dict:
+    """``weights`` (a ``gpt2_jax`` npz, e.g. the regenerated ePC checkpoint) calibrates a second base
+    with the same procedure (SD-17: per dataset; S5-01 "identical radii calibration per base/read");
+    outputs are suffixed ``_<label>`` when ``label != "BP"``."""
+    from pccap.bases import gpt2_jax as _g
     from pccap.harness.lease import gpu_lease
 
     OUT.mkdir(parents=True, exist_ok=True)
     tok = GPT2Tokenizer()
-    with gpu_lease("S2-01", stage="S2", projected_seconds=1800) as lease:
-        base = BPBase()
+    suffix = "" if label == "BP" else f"_{label}"
+    with gpu_lease("S2-01" if label == "BP" else "S5-01", stage="S2" if label == "BP" else "S5", projected_seconds=1800) as lease:
+        base = BPBase(params_np=(_g.load_params_npz(weights) if weights else None))
         scales = {}
         radii = {}
         for ds in datasets:
@@ -129,14 +134,20 @@ def run(datasets=("zsre", "counterfact"), max_unrelated: int = 1000) -> dict:
         pooled_b = {str(m): float(np.median([scales[ds]["b_m"][str(m)] for ds in datasets])) for m in (1, 2, 3)}
         pooled_r = {str(m): float(min(radii[ds][str(m)]["radius"] for ds in datasets)) for m in (1, 2, 3)}
         stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        (OUT / "residual_scales.json").write_text(json.dumps({"per_dataset": scales, "pooled_b_m": pooled_b, "base": "BP",
+        (OUT / f"residual_scales{suffix}.json").write_text(json.dumps({"per_dataset": scales, "pooled_b_m": pooled_b, "base": label, "weights": weights,
                                                               "read": "h", "timestamp": stamp, "lease": lease.report}, indent=1))
-        (OUT / "radius_calibration.json").write_text(json.dumps({"per_dataset": radii, "pooled_radii_min_over_datasets": pooled_r,
+        (OUT / f"radius_calibration{suffix}.json").write_text(json.dumps({"per_dataset": radii, "pooled_radii_min_over_datasets": pooled_r,
                                                                  "false_fire_max": FALSE_FIRE_MAX, "grid": f"{N_QUANTILES}-quantile",
-                                                                 "base": "BP", "read": "h", "timestamp": stamp,
+                                                                 "base": label, "weights": weights, "read": "h", "timestamp": stamp,
                                                                  "ledger": base.ledger.totals()}, indent=1))
     return {"b_m": pooled_b, "radii": pooled_r}
 
 
 if __name__ == "__main__":
-    print(json.dumps(run(), indent=1))
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--epc-weights", default=None)
+    ap.add_argument("--label", default=None)
+    a = ap.parse_args()
+    print(json.dumps(run(weights=a.epc_weights, label=a.label or ("EPC" if a.epc_weights else "BP")), indent=1))

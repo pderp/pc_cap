@@ -1,0 +1,24 @@
+$ /home/derp/cap/assets/envs/grace/bin/python -B -c import sys; sys.path.insert(0, '/home/derp/cap/assets/third_party/GRACE'); from grace.editors.grace import GRACE
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/derp/cap/assets/third_party/GRACE/grace/editors/__init__.py", line 1, in <module>
+    from .grace import GRACE
+  File "/home/derp/cap/assets/third_party/GRACE/grace/editors/grace.py", line 2, in <module>
+    from grace.utils import parent_module, brackets_to_periods
+  File "/home/derp/cap/assets/third_party/GRACE/grace/utils.py", line 9, in <module>
+    import wandb
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/wandb/__init__.py", line 26, in <module>
+    from wandb import sdk as wandb_sdk
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/wandb/sdk/__init__.py", line 7, in <module>
+    from .wandb_artifacts import Artifact  # noqa: F401
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/wandb/sdk/wandb_artifacts.py", line 29, in <module>
+    from wandb.apis import InternalApi, PublicApi
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/wandb/apis/__init__.py", line 31, in <module>
+    from .internal import Api as InternalApi  # noqa
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/wandb/apis/internal.py", line 1, in <module>
+    from wandb.sdk.internal.internal_api import Api as InternalApi
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/wandb/sdk/internal/internal_api.py", line 30, in <module>
+    from pkg_resources import parse_version
+ModuleNotFoundError: No module named 'pkg_resources'
+
+exit_code=1

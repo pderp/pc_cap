@@ -5,7 +5,7 @@ Written by the orchestrating session. Rules from [ongoing.md](ongoing.md) §1–
 merge or push by any agent; leave every change uncommitted; the lead commits.** Record each task
 in `docs/tasks/<ID>.md` (§4.3 format) and claim it by editing your own row in
 `manifests/tasks.json` (`python -m pccap.harness.status --set <ID> status=in_progress agent=<name>`).
-State at writing: 40 tasks done (`docs/tasks/STATUS.md`); `logs/interim_report1.md` summarizes
+State at last update (2026-09-10, evening): 48 tasks done (`docs/tasks/STATUS.md`); `logs/interim_report1.md` summarizes
 everything so far; the delta plan is [updated_plan3.md](updated_plan3.md); decisions DEC-000…014
 in [decisions.md](decisions.md); spec defects SD-1…18 in [spec_defects.md](spec_defects.md).
 
@@ -25,7 +25,7 @@ preflight → S1-01 and the ePC rows of S1. Between chunks: Lane F review and ar
 (B0/B1/B3 in `pccap.harness.runs` and the `pccap run` CLI), S2-06 baseline throughput rows,
 S3-04 completion, S3-05, DATA-02 (after Lane H), S3-06 D2 memo, S4-01 freeze.
 
-**Lane F (S2-03/S2-04) is implemented by codex and awaits orchestrator review** — do not modify
+**Lane F (S2-03/S2-04) is reviewed and integrated (DEC-016; `pccap.harness.arms`)** — do not modify
 `src/pccap/baselines/{lora,lora_forward,b0,replay}.py` or `tests/baselines/` further; questions
 to the orchestrator go into `docs/tasks/S2-04-completed.md` as an appended dated note only.
 
@@ -74,8 +74,9 @@ Plan §6.4, PDF Baselines B4, PA-6; spec in ongoing.md Lane D. Summary of what i
 
 Spec: ongoing2.md Lane H (restated): `src/pccap/data/confirm.py` with
 `load(manifest_path, frozen=ROOT/"manifests/frozen.json")` that raises unless `frozen.json` exists,
-validates as `manifest_frozen` (`pccap.harness.schema`) and its `dataset_ids[<dataset>]` equals the
-SHA-256 of the manifest file; manifest = JSON `{name, mode: "confirm", dataset, realization, seed,
+validates as `manifest_frozen` (`pccap.harness.schema`) and its `dataset_ids[<dataset>]` contains the
+SHA-256 of the manifest file (DATA-02 wrote one file per realization, so `dataset_ids[<dataset>]` is a
+mapping `{file_name: sha256}`; accept a match on any entry — see `manifests/frozen.draft.json`); manifest = JSON `{name, mode: "confirm", dataset, realization, seed,
 items: [EditItem-like dicts]}` listed in `manifests/confirm/SHA256SUMS`; `scripts/seal_confirm.py`
 writes the sums file and a metadata-only sidecar (`*.meta.json`: counts, answer-length strata,
 subject count; no prompts/answers); `tests/data/test_confirm_seal.py`; `manifests/confirm/README.md`.

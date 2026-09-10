@@ -1,17 +1,17 @@
 # Task status board
 
-Regenerated 2026-09-10 10:35 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 11:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 41 |
+| done | 48 |
 | in_progress | 1 |
-| partial | 2 |
-| ready | 6 |
-| pending | 37 |
+| partial | 10 |
+| ready | 4 |
+| pending | 24 |
 
-GPU seconds charged to tasks so far: 240
+GPU seconds charged to tasks so far: 1080
 
 ## ENV
 
@@ -29,7 +29,7 @@ GPU seconds charged to tasks so far: 240
 | DATA-00 | Fetch and hash public assets into assets/ | **done** | DATA | ENV-01 | none | no | orchestrator |  |  |
 | REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **done** | DATA | DATA-00 | none | no | codex |  | fixtures verified by orchestrator; parity tests pass |
 | DATA-01 | Editing pools | **done** | DATA | S0-09 | lease | yes | orchestrator |  |  |
-| DATA-02 | Realizations, orders, sealed confirmation manifests | **ready** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
+| DATA-02 | Realizations, orders, sealed confirmation manifests | **done** | DATA | DATA-01, DATA-08 | none | yes | orchestrator |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **done** | DATA+MEMORY | ENV-03, CAP-05 | none | yes | orchestrator |  |  |
 | DATA-04 | LM, probe and property sets with inventory | **done** | DATA+METRICS | DATA-00 | none | no | orchestrator |  |  |
 | DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
@@ -63,8 +63,8 @@ GPU seconds charged to tasks so far: 240
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | REG-00 | JAX distillation driver for ePC regeneration (PA-1 enabler) | **done** | BASE | DATA-00 | short | no | orchestrator |  |  |
-| REG-01 | Cost pilot (100 steps) | **in_progress** | BASE | ENV-04, S0-01, REG-00, S0-06 | lease | no | orchestrator |  |  |
-| REG-02 | Full regeneration (<= 10 GPU-h) | **pending** | BASE | REG-01 | lease | no |  |  |  |
+| REG-01 | Cost pilot (100 steps) | **done** | BASE | ENV-04, S0-01, REG-00, S0-06 | lease | no | orchestrator |  |  |
+| REG-02 | Full regeneration (<= 10 GPU-h) | **in_progress** | BASE | REG-01 | lease | no | orchestrator |  |  |
 | REG-03 | Load and preflight | **pending** | BASE | REG-02, S0-06 | short | yes |  |  |  |
 
 ## GRAM
@@ -93,10 +93,10 @@ GPU seconds charged to tasks so far: 240
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S2-01 | Residual scales and radius calibration | **done** | BASE+MEMORY | S0-10, DATA-01 | lease | yes | orchestrator |  |  |
 | S2-02 | Aggregate step screening | **done** | MEMORY+METRICS | S2-01 | lease | yes | orchestrator |  |  |
-| S2-03 | LoRA baselines B1 (and B0) | **ready** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
-| S2-04 | Replay baseline B3 | **pending** | BASELINES | S2-03, S0-08 | short | no |  |  |  |
-| S2-05a | GRACE reference environment and smoke (PA-6) | **ready** | BASELINES | DATA-00 | none | no |  |  |  |
-| S2-05b | GRACE reference parity cases | **pending** | BASELINES | S2-05a, S0-09 | none | no |  |  |  |
+| S2-03 | LoRA baselines B1 (and B0) | **done** | BASELINES | S0-09, S0-04 | short | yes | codex |  |  |
+| S2-04 | Replay baseline B3 | **done** | BASELINES | S2-03, S0-08 | short | no | codex |  |  |
+| S2-05a | GRACE reference environment and smoke (PA-6) | **partial** | BASELINES | DATA-00 | none | no | codex |  | setuptools pin approved and applied 2026-09-10; codex to resume controls/smoke/parity |
+| S2-05b | GRACE reference parity cases | **partial** | BASELINES | S2-05a, S0-09 | none | no | codex |  | 20 parity cases selected (manifests/dev/grace_parity_selection.json); execution waits for S2-05a |
 | S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **pending** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
 | HARN-BATCH | Batched cap-on evaluation with sequential-decoder parity (E.2 optimization) | **done** | INTEGRATOR | HARN-C2 | short | no | orchestrator |  |  |
 | S2-06 | Throughput profile | **done** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes | orchestrator |  |  |
@@ -112,27 +112,27 @@ GPU seconds charged to tasks so far: 240
 | S3-01 | Full control suite and development run matrix | **pending** | INTEGRATOR | S0-11, DATA-03, CAP-07, S2-05, DATA-06 | short | yes |  |  |  |
 | S3-02 | Constructed fixture runs | **done** | MEMORY+DATA | S3-01 | short | no | orchestrator |  |  |
 | S3-03 | Learned grammar runs and tracing | **pending** | DATA+METRICS | S3-01, DATA-07 | lease | no |  |  |  |
-| S3-04 | Short editing checks | **partial** | BASELINES+MEMORY | S3-01 | lease | no | orchestrator |  | cap arms done; baselines + second order pending |
-| S3-05 | CR distribution and re-profile | **pending** | METRICS+INTEGRATOR | S3-02, S3-03, S3-04 | lease | yes |  |  |  |
-| S3-06 | D2 memo | **pending** | INTEGRATOR | S3-05, S1-07 | none | yes |  |  |  |
+| S3-04 | Short editing checks | **done** | BASELINES+MEMORY | S3-01 | lease | no | orchestrator |  | cap arms done; baselines + second order pending |
+| S3-05 | CR distribution and re-profile | **done** | METRICS+INTEGRATOR | S3-02, S3-03, S3-04 | lease | yes | orchestrator |  |  |
+| S3-06 | D2 memo | **done** | INTEGRATOR | S3-05, S1-07 | none | yes | orchestrator |  |  |
 
 ## S4
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ANA-01 | Frozen paired analysis code on synthetic tables (D.11) | **done** | METRICS | ENV-03 | none | yes | codex | bc04bc5 | 19 analysis controls passed; task branch awaiting Claude review/merge. CPU-only. |
-| S4-01 | Frozen manifest | **pending** | INTEGRATOR | S3-06, DATA-02, DATA-08, S2-07, ANA-01 | none | yes |  |  |  |
+| S4-01 | Frozen manifest | **partial** | INTEGRATOR | S3-06, DATA-02, DATA-08, S2-07, ANA-01 | none | yes | orchestrator |  |  |
 | S4-02 | Scope selection | **pending** | INTEGRATOR | S4-01 | none | yes |  |  |  |
-| S4-03 | Confirmatory run schedule | **pending** | run owner | S4-02 | none | no |  |  |  |
+| S4-03 | Confirmatory run schedule | **partial** | run owner | S4-02 | none | no | orchestrator |  |  |
 | S4-04 | Confirmatory run execution | **pending** | run owner | S4-03 | lease | no |  |  |  |
-| S4-05 | Resource views | **pending** | METRICS | S4-04 | none | no |  |  |  |
-| S4-06 | Frozen paired analysis and D3 audit | **pending** | METRICS+INTEGRATOR | S4-05 | none | yes |  |  |  |
+| S4-05 | Resource views | **partial** | METRICS | S4-04 | none | no | orchestrator |  |  |
+| S4-06 | Frozen paired analysis and D3 audit | **partial** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  |  |
 
 ## S5
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S5-01 | Eligibility and arm definition | **pending** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no |  |  |  |
+| S5-01 | Eligibility and arm definition | **partial** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no | orchestrator |  |  |
 | S5-02 | Substrate execution | **pending** | run owner | S5-01 | lease | no |  |  |  |
 | S5-03 | Optional substrate repeats and read variants | **pending** | run owner | S5-02, CAP-08 | lease | no |  |  |  |
 | S5-04 | S5 report | **pending** | METRICS | S5-02 | none | no |  |  |  |
@@ -141,7 +141,7 @@ GPU seconds charged to tasks so far: 240
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S6-01 | Deficit statement and authorization | **pending** | BASE | S3-06 | none | yes |  |  |  |
+| S6-01 | Deficit statement and authorization | **ready** | BASE | S3-06 | none | yes |  |  |  |
 | S6-02 | Regularizer implementation | **pending** | BASE | S6-01 | short | no |  |  |  |
 | S6-03 | Differentiable error features (create_graph path) with FD test | **pending** | BASE | S6-02 | short | yes |  |  |  |
 | S6-04 | Matched continuation pair EPC-CONT / EPC-REG | **pending** | BASE | S6-03 | lease | no |  |  |  |
@@ -153,7 +153,7 @@ GPU seconds charged to tasks so far: 240
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S7-01 | Cloned-state reversals | **pending** | METRICS | S4-04 | lease | no |  |  |  |
 | S7-02 | Damage matrix | **pending** | METRICS | S7-01 | lease | no |  |  |  |
-| S7-03 | Order variation from permutations | **pending** | METRICS | S4-04 | none | no |  |  |  |
+| S7-03 | Order variation from permutations | **partial** | METRICS | S4-04 | none | no | orchestrator |  |  |
 | S7-04 | Optional HVP diagnostics | **pending** | METRICS | S7-03, S0-07b | lease | no |  |  |  |
 
 ## S8
@@ -163,5 +163,5 @@ GPU seconds charged to tasks so far: 240
 | S8-01 | Core completion and reproduction audit | **pending** | INTEGRATOR+METRICS | S4-06 | lease | yes |  |  |  |
 | S8-02 | Fixed exploratory ablations | **pending** | run owner | S8-01 | lease | no |  |  |  |
 | S8-03 | Integrated report | **pending** | INTEGRATOR | S8-01, S5-04, S7-03 | none | yes |  |  |  |
-| S8-04 | Handoff package and T4 | **pending** | INTEGRATOR | S8-03 | none | yes |  |  |  |
+| S8-04 | Handoff package and T4 | **partial** | INTEGRATOR | S8-03 | none | yes | orchestrator |  |  |
 

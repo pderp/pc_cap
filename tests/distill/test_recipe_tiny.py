@@ -8,8 +8,6 @@ is checked against a second implementation.
 
 from __future__ import annotations
 
-import math
-
 import jax
 import jax.numpy as jnp
 import numpy as np
@@ -157,8 +155,8 @@ def test_local_weight_energy_matches_reference_and_is_minus_JTe(setup):
     E1, g1 = jax.value_and_grad(ours)(student)
     E2, g2 = jax.value_and_grad(ref)(student)
     np.testing.assert_allclose(float(E1), float(E2), rtol=1e-5, atol=1e-6)
-    for (k1, a), (k2, b) in zip(g.flatten_named(g1), g.flatten_named(g2)):
-        assert k1 == k2
+    for (k1, a), (_k2, b) in zip(g.flatten_named(g1), g.flatten_named(g2)):
+        assert k1 == _k2
         np.testing.assert_allclose(np.asarray(a), np.asarray(b), rtol=2e-4, atol=5e-6, err_msg=k1)
     # block 1's gradient is −J₁ᵀ e₁ at its detached input (sibling delta trick)
     h0 = jax.vmap(lambda i: g.embed(student, i))(ids)
@@ -169,7 +167,7 @@ def test_local_weight_energy_matches_reference_and_is_minus_JTe(setup):
 
     _, vjp = jax.vjp(block1_out, student["blocks"][1])
     (minus_jte,) = vjp(-err_arr[:, 1])
-    for (k1, a), (k2, b) in zip(g.flatten_named({"wte": g1["wte"], "wpe": g1["wpe"], "ln_f": g1["ln_f"], "blocks": [g1["blocks"][1]]}),
+    for (k1, a), (_k2, b) in zip(g.flatten_named({"wte": g1["wte"], "wpe": g1["wpe"], "ln_f": g1["ln_f"], "blocks": [g1["blocks"][1]]}),
                                 g.flatten_named({"wte": g1["wte"], "wpe": g1["wpe"], "ln_f": g1["ln_f"], "blocks": [minus_jte]})):
         if k1.startswith("h.0."):
             np.testing.assert_allclose(np.asarray(a), np.asarray(b), rtol=2e-4, atol=5e-6, err_msg=k1)
@@ -260,12 +258,12 @@ def test_checkpoint_roundtrip_and_resume(setup, tmp_path):
     p2, st2, s2 = load_checkpoint(d, tr.opt)
     p2 = jax.tree_util.tree_map(jnp.asarray, p2)
     assert s2["global_step"] == 2 and s2["params_sha256"]
-    for (k1, a), (k2, b) in zip(g.flatten_named(p), g.flatten_named(p2)):
+    for (k1, a), (_k2, b) in zip(g.flatten_named(p), g.flatten_named(p2)):
         assert np.array_equal(np.asarray(a), np.asarray(b)), k1
     assert int(st2[0].count) == int(st[0].count)
     pa, sta, _ = fn(p, st, teacher, jnp.asarray(ids_batch(12)))
     pb, stb, _ = fn(p2, st2, teacher, jnp.asarray(ids_batch(12)))
-    for (k1, a), (k2, b) in zip(g.flatten_named(pa), g.flatten_named(pb)):
+    for (k1, a), (_k2, b) in zip(g.flatten_named(pa), g.flatten_named(pb)):
         assert np.array_equal(np.asarray(a), np.asarray(b)), k1
 
 

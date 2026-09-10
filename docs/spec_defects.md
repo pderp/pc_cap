@@ -4,20 +4,24 @@ Seeded at ENV-03 (2026-09-09) from updated_plan2.md §3 (PA-4). Each row is appl
 without discussion and frozen at S4-01. New defects found during development are appended with
 the next SD number, both readings, and the resolution that changes no threshold, endpoint or arm.
 
+**Triage (2026-09-10, review response R3):** 18 rows; 16 committed (status names the task whose
+verification closed it), 2 still open pending a task; none superseded. Every row is copied into
+`manifests/frozen.draft.json` → `spec_defect_resolutions` at S4-01 and is not edited after the freeze.
+
 | ID | Issue | Committed resolution | Status |
 | --- | --- | --- | --- |
-| SD-1 | S1 uses a 2×10⁶-token held-out set H for P1; D.8 uses a 10⁶-token WikiText-103 validation sample for LM drift. | Two distinct committed sets. H = 2×10⁶ tokens sampled by document from WikiText-103 train (document ids recorded; disjoint from validation by split). Drift = WikiText-103 validation (SD-3). | open (DATA-04) |
-| SD-2 | S2 names 300 development edits and ≥1,000 unrelated prompts; D.5 names 200 Q and 200 U. | Q and U are manifest-fixed subsets of the S2 development pool (`manifests/dev/p5_subsets.json`). | open (DATA-01) |
-| SD-3 | WikiText-103 validation has roughly 0.28M GPT-2 tokens, not 10⁶. | Drift set = entire validation split, tokenized once, unique tokens only. Shortfall logged (PA-5). Test split not added. Exact count recorded by DATA-00. | open (DATA-00) |
+| SD-1 | S1 uses a 2×10⁶-token held-out set H for P1; D.8 uses a 10⁶-token WikiText-103 validation sample for LM drift. | Two distinct committed sets. H = 2×10⁶ tokens sampled by document from WikiText-103 train (document ids recorded; disjoint from validation by split). Drift = WikiText-103 validation (SD-3). | committed (verified at DATA-04) |
+| SD-2 | S2 names 300 development edits and ≥1,000 unrelated prompts; D.5 names 200 Q and 200 U. | Q and U are manifest-fixed subsets of the S2 development pool (`manifests/dev/p5_subsets.json`). | committed (verified at DATA-01) |
+| SD-3 | WikiText-103 validation has roughly 0.28M GPT-2 tokens, not 10⁶. | Drift set = entire validation split, tokenized once, unique tokens only. Shortfall logged (PA-5). Test split not added. Exact count recorded by DATA-00. | committed (verified at DATA-00) |
 | SD-4 | Correction-track slot retirement reads the owner-edit digest; E.2 forbids routers from receiving fact identity. | Router API has no access to slot metadata. Retirement is a `Cap.update(..., revision=RevisionEvent)` path enabled only when the stream item carries a revision record, on the correction track only. A test asserts `RoundContext` carries no digest except as opaque RNG key material. | encoded in `contracts.RoundContext` |
 | SD-5 | "25% headroom" ambiguous. | Affordable when projected cost ≤ 0.75 × ceiling. | committed |
 | SD-6 | F.6 leaves the ePC solver, step size and stopping to S0; the production run used one relaxation step (and a T-schedule 1…64 across the run; see DEC-006). | Declared nominal procedure: simultaneous gradient descent on all error variables (the sibling's `relax_errors`), `error_lr = 0.1`, exactly 8 iterations, errors zero-initialized per call, γ = 1, energy `½Σ‖e‖² + CE(current target only, summed not averaged)`, fp32, retrieval frozen within a call, no stopping rule. 64 iterations is the reference horizon. Label "finite-iteration error credit" unless D.6's convergence test passes. | open (S0-06 documents in `docs/epc_energy.md`) |
-| SD-7 | Bank hook indices. | `l_m = round(m·12/3) = 4, 8, 12` → block outputs `h[3]`, `h[7]`, `h[11]`, the last before `ln_f`. Verified by test in S0-04. | open (S0-04) |
+| SD-7 | Bank hook indices. | `l_m = round(m·12/3) = 4, 8, 12` → block outputs `h[3]`, `h[7]`, `h[11]`, the last before `ln_f`. Verified by test in S0-04. | committed (verified at S0-04) |
 | SD-8 | GRACE reference has no byte budget. | Documented eviction adaptation (lowest use count, then oldest) bounded by the same byte accounting; disclosed in PC-10 and the report. Unadapted B4 also run once on development as parity reference. | open (S2-05) |
-| SD-9 | Aliases. | zsRE aliases = `answers` list deduplicated after normalization; CounterFact aliases = `[target_new.str]`. Scoring only. | open (DATA-01) |
-| SD-10 | PC-2 "match the base reference": bitwise or tolerance? | Cap-off path is the same wrapper code with zero writes, so exact equality (max |Δlogit| = 0) is expected and asserted. Nonzero → report with the kernel identified; ≤ 1e-6 relative tolerated only with that record. Note under DEC-001: writes are always applied as a `[3, d]` array that is all-zero when the cap is off (adding 0.0 is exact in IEEE fp32), so the identity holds by construction; S0-10 still measures it. | open (S0-10) |
-| SD-11 | CR distribution for S2 profiling. | Uniform (1/3 each) labelled `cr_profile_uniform`; S3-05 estimates from development C2 routes; if C2 never routes, uniform and logged. | open (S3-05) |
-| SD-12 | Use count with multiple prefixes and rounds. | Increment at most once per (slot, item digest); bounded per-item set cleared at item end. Inference never increments. Test in CAP-02. | open (CAP-02) |
+| SD-9 | Aliases. | zsRE aliases = `answers` list deduplicated after normalization; CounterFact aliases = `[target_new.str]`. Scoring only. | committed (verified at DATA-01) |
+| SD-10 | PC-2 "match the base reference": bitwise or tolerance? | Cap-off path is the same wrapper code with zero writes, so exact equality (max |Δlogit| = 0) is expected and asserted. Nonzero → report with the kernel identified; ≤ 1e-6 relative tolerated only with that record. Note under DEC-001: writes are always applied as a `[3, d]` array that is all-zero when the cap is off (adding 0.0 is exact in IEEE fp32), so the identity holds by construction; S0-10 still measures it. | committed (verified at S0-10) |
+| SD-11 | CR distribution for S2 profiling. | Uniform (1/3 each) labelled `cr_profile_uniform`; S3-05 estimates from development C2 routes; if C2 never routes, uniform and logged. | committed (verified at S3-05) |
+| SD-12 | Use count with multiple prefixes and rounds. | Increment at most once per (slot, item digest); bounded per-item set cleared at item end. Inference never increments. Test in CAP-02. | committed (verified at CAP-02) |
 
 ## Defects and deviations added during execution
 

@@ -1,10 +1,10 @@
 # S1 stage report (Appendix G) — development, BP rows
 
-Rendered 2026-09-09 23:49 UTC by `pccap report --stage S1`.
+Rendered 2026-09-10 11:28 UTC by `pccap report --stage S1`.
 
 ## 1. Header
 
-- Stage: S1 substrate report card. Code commit: `babfad08477e1dfacbb5f1d3cfa699c3cf1d828d`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: absent (REG pending).
+- Stage: S1 substrate report card. Code commit: `ee75a9e0cd515a682ae143eb558d22d9143f56b0`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: absent (REG pending).
 - Sets: `manifests/dev/lm_sets.json` (H 2×10⁶ train tokens seed 11; drift = validation 247,289 tokens; P2 4,096 positions; P3 1,000 × 128; POS UD-EWT).
 - Cost: 0.18 local GPU-h = 0.18 A100-eq h of 12 (κ 1.0 provisional).
 

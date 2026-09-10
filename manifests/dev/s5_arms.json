@@ -1,0 +1,19 @@
+{
+ "name": "s5-substrate-arms",
+ "mode": "dev",
+ "stage": "S5",
+ "seed": 0,
+ "source": "PDF S5 'Controlled substrate comparison' and the substrate table (SB / SE-A / SE-E); plan §6.11 S5-01",
+ "common": {"router": "C1", "read": "h", "write_policy": "identical (transactional candidate search, A = 0.3, byte ceiling B_cap)",
+            "streams": "matched: the frozen realizations/orders of S4 (zsRE / CounterFact at the frozen scope) or the synthetic grammar if natural-language eligibility fails (S1-01)",
+            "radii": "calibrated per base and read with the S2-01 procedure (python -m pccap.cap.calibrate --epc-weights <npz> --label EPC)"},
+ "arms": {
+  "SB":   {"base": "BP",  "credit": "adjoint", "contrast": "reference"},
+  "SE-A": {"base": "EPC", "credit": "adjoint", "contrast": "SE-A vs SB: conversion/representation under a common credit rule"},
+  "SE-E": {"base": "EPC", "credit": "error", "credit_iters": 8, "contrast": "SE-E vs SE-A: credit procedure on the same converted base (8 settled iterations nominal, SD-6)"}
+ },
+ "contrasts": [["SE-A", "SB"], ["SE-E", "SE-A"]],
+ "optional_s5_03": ["C2 substrate repeats", "R-h0", "R-e vs R-h with same-dimensional R-g on EPC", "BP R-g if a cross-base feature claim is made"],
+ "eligibility_rule": "S1-01: mean KL(teacher||EPC) on H <= 1e-3 -> natural-language comparison eligible; otherwise matched synthetic comparison, BP-only editing kept separate; the SE-A/SE-E pair stays interpretable either way but cannot establish matched-fidelity superiority over BP",
+ "checkpoint": "assets/models/epc/epc-50m/checkpoints/final-009766/params.npz (REG-02; recorded in manifests/assets.json by REG-03)"
+}

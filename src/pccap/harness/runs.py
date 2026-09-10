@@ -77,6 +77,8 @@ class Evaluator:
         falling back to sequential predict for learners without the batched method."""
         if hasattr(learner, "edited_forward_batch"):
             return learner.edited_forward_batch(seqs, phase="query")[0]
+        if hasattr(learner, "last_logits_batch"):  # baseline arms (harness.arms adapters) and the bare base
+            return np.asarray(learner.last_logits_batch(seqs, phase="query"))
         if hasattr(learner, "forward_batch"):
             return np.asarray(learner.forward_batch(seqs, None, phase="query")[0])
         return np.stack([_last_logits(learner.predict(x).logits) for x in seqs])
@@ -85,6 +87,10 @@ class Evaluator:
     def _decode_many(learner, prompts: list[np.ndarray], tok: GPT2Tokenizer):
         if hasattr(learner, "edited_forward_batch"):
             return greedy_decode_batch_cap(learner, prompts, tok)
+        if hasattr(learner, "last_logits_batch"):
+            from pccap.data.decode import greedy_decode_batch
+
+            return greedy_decode_batch(learner, prompts, tok)
         return [greedy_decode(lambda ids: learner.predict(ids).logits, p, tok) for p in prompts]
 
     @staticmethod
@@ -216,6 +222,7 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
             kw = {"on_decision": lambda r: append_jsonl(dec_path, r), "seed": seed, "correction_track": correction_track}
             if permitted is not None:
                 kw["permitted_banks"] = permitted(it)
+            # baseline learners charge the shared ledger inside their own ledger.call blocks (Lane F)
             out = update_item(learner, it, router, budget, Transport(), **kw) if hasattr(learner, "banks") else learner.update_item(it)
             guard.commit()
         completed = idx + 1

@@ -26,6 +26,7 @@ from pathlib import Path
 
 import numpy as np
 
+from pccap.bases import gpt2_jax as _g
 from pccap.bases import gpt2_jax as g
 from pccap.bases.bp import BPBase
 from pccap.contracts import SiteId, Write, metric
@@ -101,7 +102,7 @@ def ratio_metric(imp: float, coll: float) -> dict:
     return metric(imp / coll, units="nats/nats", numerator=imp, denominator=coll, n=1)
 
 
-def run(label: str = "bp") -> dict:
+def run(label: str = "bp", weights: str | None = None) -> dict:
     from pccap.harness.lease import gpu_lease
 
     S1.mkdir(parents=True, exist_ok=True)
@@ -111,7 +112,7 @@ def run(label: str = "bp") -> dict:
     tr = Transport()
     with gpu_lease("S1-05", stage="S1", projected_seconds=3600) as lease:
         ledger = Ledger()
-        base = BPBase(ledger=ledger)
+        base = BPBase(ledger=ledger, params_np=(_g.load_params_npz(weights) if weights else None))
         u_ids = [tok.encode(u["prompt"]) for u in subs["U"]]
         p0 = [softmax(np.asarray(base.forward(ids, phase="query").logits[len(ids) - 1])) for ids in u_ids]
         rows = []
@@ -161,10 +162,19 @@ def run(label: str = "bp") -> dict:
     (S1 / f"P5_{label}.json").write_text(json.dumps(out, indent=1, default=float))
     from pccap.analysis.s1_p6 import update_coverage
 
-    update_coverage({"P5": {"bp_adjoint": "complete", "epc_adjoint": "pending (REG-03)", "epc_error": "pending (REG-03)", "retrieval_drift": "pending (S3/S4 checkpoints)"}})
+    update_coverage({"P5": ({"bp_adjoint": "complete", "epc_adjoint": "pending (REG-03)", "epc_error": "pending (REG-03)", "retrieval_drift": "pending (S3/S4 checkpoints)"} if label != "epc" else {"epc": "complete (" + str(weights) + ")"})})
     return out
 
 
+def _cli():
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--epc-weights", default=None, help="regenerated ePC params.npz → writes the epc row (label 'epc')")
+    a = ap.parse_args()
+    return run("epc", a.epc_weights) if a.epc_weights else run()
+
+
 if __name__ == "__main__":
-    o = run()
+    o = _cli()
     print(json.dumps({k: v["value"] for k, v in o["metrics"].items()}, indent=1))

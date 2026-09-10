@@ -102,6 +102,8 @@ def main(args) -> int:
         return 0
     import pccap.harness.stage_s0  # noqa: F401  (registers "S0")
     import pccap.harness.stage_s3  # noqa: F401  (registers "S3")
+    import pccap.harness.stage_s4  # noqa: F401  (registers "S4")
+    import pccap.harness.stage_s5  # noqa: F401  (registers "S5")
 
     runner = RUNNERS.get(args.stage)
     if runner is None:

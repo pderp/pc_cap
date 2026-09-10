@@ -19,6 +19,7 @@ from pathlib import Path
 
 import numpy as np
 
+from pccap.bases import gpt2_jax as _g
 from pccap.bases.bp import BPBase
 from pccap.contracts import metric
 from pccap.harness.ledger import Ledger
@@ -81,13 +82,13 @@ def summarize(mass: np.ndarray, label: str) -> dict:
     }
 
 
-def run(label: str = "bp") -> dict:
+def run(label: str = "bp", weights: str | None = None) -> dict:
     from pccap.harness.lease import gpu_lease
 
     S1.mkdir(parents=True, exist_ok=True)
     with gpu_lease("S1-03", stage="S1", projected_seconds=1800) as lease:
         ledger = Ledger()
-        base = BPBase(ledger=ledger)
+        base = BPBase(ledger=ledger, params_np=(_g.load_params_npz(weights) if weights else None))
         P3 = _load("P3_sequences")
         mass, losses, scale = mass_fields(base, P3)
         raw = summarize(mass, "raw")
@@ -103,10 +104,19 @@ def run(label: str = "bp") -> dict:
     np.save(Path("/home/derp/cap/assets/runs/S1") / f"P3_mass_{label}.npy", mass.astype(np.float32)) if Path("/home/derp/cap/assets/runs/S1").mkdir(parents=True, exist_ok=True) is None else None
     from pccap.analysis.s1_p6 import update_coverage
 
-    update_coverage({"P3": {"bp_adjoint": "complete", "epc_adjoint": "pending (REG-03)", "epc_error": "pending (REG-03)", "grammar_strata": "pending (GRAM-02)"}})
+    update_coverage({"P3": ({"bp_adjoint": "complete", "epc_adjoint": "pending (REG-03)", "epc_error": "pending (REG-03)", "grammar_strata": "pending (GRAM-02)"} if label != "epc" else {"epc": "complete (" + str(weights) + ")"})})
     return out
 
 
+def _cli():
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--epc-weights", default=None, help="regenerated ePC params.npz → writes the epc row (label 'epc')")
+    a = ap.parse_args()
+    return run("epc", a.epc_weights) if a.epc_weights else run()
+
+
 if __name__ == "__main__":
-    o = run()
+    o = _cli()
     print({k: v["value"] for k, v in o["metrics"].items()})

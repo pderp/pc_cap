@@ -61,14 +61,14 @@ def update_coverage(rows: dict) -> None:
     p.write_text(json.dumps(cov, indent=1))
 
 
-def run(n: int = 64, weights_label: str = "bp_teacher") -> dict:
+def run(n: int = 64, weights_label: str = "bp_teacher", weights: str | None = None) -> dict:
     from pccap.harness.lease import gpu_lease
 
     S1.mkdir(parents=True, exist_ok=True)
     tok = GPT2Tokenizer()  # noqa: F841  (kept for prompt decoding in records)
     with gpu_lease("S1-06", stage="S1", projected_seconds=3600) as lease:
         ledger = Ledger()
-        base = EPCBase(ledger=ledger)
+        base = EPCBase.from_npz(weights, ledger=ledger) if weights else EPCBase(ledger=ledger)
         rows = []
         for ids, target, iid in prompts_from_dev(n):
             p = len(ids) - 1
@@ -137,16 +137,17 @@ def run(n: int = 64, weights_label: str = "bp_teacher") -> dict:
                                       "note": "measured on BP weights with the declared solver; ePC checkpoint rows pending REG-03"},
             "rows": rows, "lease": lease.report, "ledger": ledger.totals(), "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
-    (S1 / "P6_bp.json").write_text(json.dumps(out, indent=1, default=float))
-    update_coverage({"P6": {"bp_adjoint": "complete", "epc_adjoint": "pending (REG-03)", "epc_error": "pending (REG-03); procedure measured on BP weights: results/S1/P6_bp.json"}})
+    (S1 / ("P6_epc.json" if weights else "P6_bp.json")).write_text(json.dumps(out, indent=1, default=float))
+    update_coverage({"P6": ({"bp_adjoint": "complete", "epc_adjoint": "pending (REG-03)", "epc_error": "pending (REG-03); procedure measured on BP weights: results/S1/P6_bp.json"} if not weights else {"epc": "complete (" + str(weights) + ")"})})
     return out
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=64)
+    ap.add_argument("--epc-weights", default=None)
     args = ap.parse_args(argv)
-    out = run(args.n)
+    out = run(args.n, weights_label=("epc:" + args.epc_weights) if args.epc_weights else "bp_teacher", weights=args.epc_weights)
     print(json.dumps({k: v for k, v in out["metrics"].items() if k.startswith(("r_", "E0", "first", "seconds", "cos_bank3"))}, indent=1, default=float))
     print("label:", out["label"])
     return 0

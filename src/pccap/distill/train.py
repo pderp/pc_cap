@@ -30,10 +30,8 @@ from __future__ import annotations
 
 import argparse
 import csv
-import dataclasses
 import json
 import math
-import os
 import shutil
 import time
 from pathlib import Path
@@ -212,7 +210,9 @@ class Milestones:
             for j in range(0, n, 2):
                 chunk = jnp.asarray(ids[j: j + 2], jnp.int32)
                 kl, t_nll, s_nll = self._tail_stats(params, self.teacher, chunk)
-                kls.append(float(kl)); tn.append(float(t_nll)); sn.append(float(s_nll))
+                kls.append(float(kl))
+                tn.append(float(t_nll))
+                sn.append(float(s_nll))
             row.update({"tail_kl_beta1": float(np.mean(kls)), "tail_teacher_nll": float(np.mean(tn)),
                         "tail_student_nll": float(np.mean(sn)), "tail_windows": n})
         return row

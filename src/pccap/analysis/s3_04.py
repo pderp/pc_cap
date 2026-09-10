@@ -23,10 +23,11 @@ OUT = ROOT / "results" / "S3"
 
 
 def summarize_run(d: Path) -> dict | None:
-    if not (d / "metrics.json").exists() or not (d / "decisions.jsonl").exists():
+    if not (d / "metrics.json").exists():
         return None
     m = json.loads((d / "metrics.json").read_text())
-    decs = [json.loads(line) for line in (d / "decisions.jsonl").read_text().splitlines() if line.strip()]
+    # baseline arms (B0/B1/B3/B4) have no routing decisions: decisions.jsonl is empty or absent
+    decs = [json.loads(line) for line in (d / "decisions.jsonl").read_text().splitlines() if line.strip()] if (d / "decisions.jsonl").exists() else []
     items = [json.loads(line) for line in (d / "items.jsonl").read_text().splitlines() if line.strip()]
     proposed = Counter()
     accepted = Counter()
@@ -67,20 +68,25 @@ def summarize_run(d: Path) -> dict | None:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=str(ROOT / "results" / "S2" / "throughput"))
+    ap.add_argument("--extra-root", nargs="*", default=[str(ROOT / "results" / "S2" / "throughput_baselines")])
     args = ap.parse_args(argv)
     root = Path(args.root)
     rows = []
-    for arm_dir in sorted(root.iterdir()) if root.exists() else []:
-        for ds_dir in sorted(arm_dir.iterdir()):
-            if ds_dir.name == "warmup":
-                continue
-            r = summarize_run(ds_dir)
-            if r:
-                r["arm"] = r["arm"] or arm_dir.name
-                rows.append(r)
+    for rt in [root] + [Path(x) for x in args.extra_root]:
+        for arm_dir in sorted(rt.iterdir()) if rt.exists() else []:
+            for ds_dir in sorted(arm_dir.iterdir()):
+                if ds_dir.name == "warmup":
+                    continue
+                r = summarize_run(ds_dir)
+                if r:
+                    r["arm"] = r["arm"] or arm_dir.name
+                    rows.append(r)
+    have = sorted({r["arm"] for r in rows})
+    missing = [a for a in ("B1", "B3", "B4") if a not in have]
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "short_editing.json").write_text(json.dumps({"source": str(root), "runs": rows, "baselines": "B1/B3/B4 pending (Lane F/D)"}, indent=1, default=float))
-    L = ["# S3-04 short editing checks (100 development edits per arm and dataset)", "", f"Source runs: `{root}`. Baselines B1/B3/B4 pending.", "",
+    (OUT / "short_editing.json").write_text(json.dumps({"source": [str(root)] + args.extra_root, "runs": rows, "arms": have,
+                                                         "baselines_pending": missing}, indent=1, default=float))
+    L = ["# S3-04 short editing checks (100 development edits per arm and dataset)", "", f"Source runs: `{root}` + `{args.extra_root}`. Arms: {have}. Pending: {missing or 'none'}.", "",
          "| arm | dataset | rounds/item | proposed routes (1/2/3) | accepted writes (1/2/3) | abstain | no-dir | allocs | updates | evict | conflicts | rejected | probes | thr | ES | GS | RET-ES | RET-GS | LS | LS-KL | drift ratio |",
          "| --- | --- | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
     for r in rows:

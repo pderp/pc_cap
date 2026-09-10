@@ -6,7 +6,6 @@ import json
 
 import jax
 import jax.numpy as jnp
-import numpy as np
 
 import pccap  # noqa: F401
 from pccap.bases import gpt2_jax as g

@@ -23,6 +23,7 @@ import jax.numpy as jnp
 import numpy as np
 import optax
 
+from pccap.bases import gpt2_jax as _g
 from pccap.bases.bp import BPBase
 from pccap.contracts import metric
 from pccap.harness.ledger import Ledger
@@ -124,14 +125,14 @@ def linear_probe(x_tr: np.ndarray, y_tr: np.ndarray, x_ev: np.ndarray, y_ev: np.
             "n_train": int(len(y_tr)), "n_eval": int(len(y_ev)), "steps": steps, "lr": lr, "seed": seed}
 
 
-def run(label: str = "bp") -> dict:
+def run(label: str = "bp", weights: str | None = None) -> dict:
     from pccap.harness.lease import gpu_lease
 
     S1.mkdir(parents=True, exist_ok=True)
     inv = json.loads(LM_MANIFEST.read_text())
     with gpu_lease("S1-02", stage="S1", projected_seconds=1800) as lease:
         ledger = Ledger()
-        base = BPBase(ledger=ledger)
+        base = BPBase(ledger=ledger, params_np=(_g.load_params_npz(weights) if weights else None))
         P2 = _load("P2_sequences")
         pos = _load("P2_positions")
         feats = hidden_at_positions(base, P2, pos)  # [13, 4096, d]
@@ -159,10 +160,19 @@ def run(label: str = "bp") -> dict:
     (S1 / f"P2_{label}.json").write_text(json.dumps(out, indent=1, default=float))
     from pccap.analysis.s1_p6 import update_coverage
 
-    update_coverage({"P2": {"bp": "complete", "epc": "pending (REG-03)", "grammar": "pending (GRAM-02)"}})
+    update_coverage({"P2": ({"bp": "complete", "epc": "pending (REG-03)", "grammar": "pending (GRAM-02)"} if label != "epc" else {"epc": "complete (" + str(weights) + ")"})})
     return out
 
 
+def _cli():
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--epc-weights", default=None, help="regenerated ePC params.npz → writes the epc row (label 'epc')")
+    a = ap.parse_args()
+    return run("epc", a.epc_weights) if a.epc_weights else run()
+
+
 if __name__ == "__main__":
-    o = run()
+    o = _cli()
     print({k: round(v["value"], 2) if v["value"] is not None else None for k, v in o["metrics"].items()})

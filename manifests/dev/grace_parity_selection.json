@@ -1,0 +1,132 @@
+{
+  "status": "prepared_not_executed",
+  "tasks": [
+    "S2-05a",
+    "S2-05b"
+  ],
+  "source": {
+    "path": "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json",
+    "bytes": 321213,
+    "sha256": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870"
+  },
+  "excluded_source": {
+    "path": "/home/derp/cap/pc_cap/manifests/dev/s0_sample.json",
+    "bytes": 69805,
+    "sha256": "36dff70620182a96b12f7d7949bf42ba938ab8fd059d4dd04f9275effd11dd44"
+  },
+  "stratum_definition": "Answer tokens excluding the mandatory final newline; prompt/answer arrays are from the shared tokenizer manifest.",
+  "order": "First ten eligible single-token answers in manifest order, followed by first ten eligible multi-token answers.",
+  "smoke_ids": [
+    "zsre-eval-16447",
+    "zsre-eval-13752",
+    "zsre-eval-4270",
+    "zsre-eval-15919",
+    "zsre-eval-9734"
+  ],
+  "cases": [
+    {
+      "item_id": "zsre-eval-16447",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-13752",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-4270",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-15919",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-9734",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-2458",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-1418",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-1503",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-127",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-18634",
+      "stratum": "single",
+      "lexical_answer_tokens": 1
+    },
+    {
+      "item_id": "zsre-eval-17910",
+      "stratum": "multi",
+      "lexical_answer_tokens": 3
+    },
+    {
+      "item_id": "zsre-eval-8087",
+      "stratum": "multi",
+      "lexical_answer_tokens": 2
+    },
+    {
+      "item_id": "zsre-eval-14579",
+      "stratum": "multi",
+      "lexical_answer_tokens": 4
+    },
+    {
+      "item_id": "zsre-eval-1819",
+      "stratum": "multi",
+      "lexical_answer_tokens": 3
+    },
+    {
+      "item_id": "zsre-eval-14855",
+      "stratum": "multi",
+      "lexical_answer_tokens": 4
+    },
+    {
+      "item_id": "zsre-eval-14806",
+      "stratum": "multi",
+      "lexical_answer_tokens": 4
+    },
+    {
+      "item_id": "zsre-eval-1468",
+      "stratum": "multi",
+      "lexical_answer_tokens": 2
+    },
+    {
+      "item_id": "zsre-eval-4679",
+      "stratum": "multi",
+      "lexical_answer_tokens": 3
+    },
+    {
+      "item_id": "zsre-eval-12303",
+      "stratum": "multi",
+      "lexical_answer_tokens": 3
+    },
+    {
+      "item_id": "zsre-eval-2872",
+      "stratum": "multi",
+      "lexical_answer_tokens": 3
+    }
+  ],
+  "layer": "transformer.h[8].mlp.c_fc",
+  "layer_reason": "GPT-2 XL h[35]/48 mapped to GPT-2 small h[8]/12 by relative depth; clone has no GPT-2-small default.",
+  "clone_revision": "f674183f17a995d109e10ee6140d4c3e6d016115",
+  "model_revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+}

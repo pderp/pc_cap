@@ -1,0 +1,445 @@
+{
+ "name": "frozen-confirmatory-v1-draft",
+ "mode": "confirm",
+ "stage": "S4",
+ "seed": 0,
+ "frozen_at": null,
+ "draft": true,
+ "code_commit": {
+  "git_head": "ee75a9e0cd515a682ae143eb558d22d9143f56b0",
+  "dirty": true,
+  "src_tree_sha256": "12b253eb3fbae97d5a7d0ce7da9eff942a88d5c39cb634667e1fe0ffea706870",
+  "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"
+ },
+ "env_lock_sha": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+ "pdf_sha": "9a2b64680452394a57da6d07536f00b215320bdd2e7deef65e9f3bec3d359080",
+ "base_checkpoints": {
+  "bp": {
+   "snapshot": "gpt2",
+   "safetensors_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707"
+  },
+  "epc": null
+ },
+ "tokenizer_rev": {
+  "snapshot_revision": "607a30d7",
+  "tokenizer_json_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+ },
+ "bank_sites": {
+  "1": 3,
+  "2": 7,
+  "3": 11
+ },
+ "radii": {
+  "bank": {
+   "zsre": {
+    "1": 0.2808128833770752,
+    "2": 0.4143741011619568,
+    "3": 0.18857809603214265
+   },
+   "counterfact": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0
+   }
+  },
+  "read": "h",
+  "rule": "SD-17: per dataset, shared across arms; CounterFact exact keys (0.0)"
+ },
+ "b_m": {
+  "1": 70.70187377929688,
+  "2": 106.5766658782959,
+  "3": 425.5740661621094
+ },
+ "A": 0.3,
+ "epsilon": 0.01,
+ "R": 5,
+ "tau_edit": 0.1,
+ "byte_ceiling": 38535168,
+ "slot_bytes": 6272,
+ "slot_capacities": {
+  "C0": {
+   "3": 6144
+  },
+  "C1": {
+   "1": 2048,
+   "2": 2048,
+   "3": 2048
+  },
+  "C2": {
+   "1": 2048,
+   "2": 2048,
+   "3": 2048
+  },
+  "CR": {
+   "1": 2048,
+   "2": 2048,
+   "3": 2048
+  }
+ },
+ "cr_distribution": {
+  "zsre": {
+   "1": 0.012953367875647668,
+   "2": 0.012953367875647668,
+   "3": 0.9740932642487047
+  },
+  "counterfact": {
+   "1": 0.0,
+   "2": 0.0,
+   "3": 1.0
+  },
+  "grammar": null,
+  "labels": {
+   "counterfact": "cr_dev_c2_counterfact",
+   "zsre": "cr_dev_c2_zsre"
+  },
+  "rule": "accepted C2 deliveries per bank over development streams (SD-11); per-dataset distribution used in confirmatory CR; abstentions/rejections excluded from the normalizer"
+ },
+ "dataset_ids": {
+  "zsre": {
+   "zsre_r0.json": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+   "zsre_r1.json": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+   "zsre_r2.json": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d"
+  },
+  "counterfact": {
+   "counterfact_r0.json": "60637648bfe18eb14bcbf18849dc438499e423e7bcb28fc6ad0c9fb171de5a6b",
+   "counterfact_r1.json": "3a20a1704ed42dcaf12adb2a7619b79a2c3067871226118e086ba568013d652d",
+   "counterfact_r2.json": "ddf444b5e02dabd67634b2a1a73140f39fb7ece23a45275a79f5c6a8ee3d7fb4"
+  },
+  "grammar": null
+ },
+ "confirm_dir": "manifests/confirm",
+ "realizations": [
+  0,
+  1,
+  2
+ ],
+ "order_seeds": [
+  100,
+  101,
+  102,
+  103,
+  104
+ ],
+ "cap_seed": "1000*realization + 10*(order_seed-100)",
+ "router_seed": "1000*realization + 10*(order_seed-100) + 1",
+ "replay_seed": "1000*realization + 10*(order_seed-100) + 2",
+ "stream_lengths": {
+  "zsre": 1000,
+  "counterfact": 300,
+  "grammar_train_count": 10000,
+  "c0_initial": 300,
+  "source": "S2-07 projection (S4-02 confirms the scope before any confirmatory access)"
+ },
+ "arms": [
+  "C0",
+  "C1",
+  "C2",
+  "CR",
+  "B0",
+  "B1",
+  "B3",
+  "B4"
+ ],
+ "arm_availability": {
+  "B4": "unavailable until S2-05 (GRACE, PA-6)",
+  "grammar": "unavailable until GRAM-02 (PA-2)"
+ },
+ "contrasts": [
+  [
+   "C2",
+   "C1"
+  ],
+  [
+   "C2",
+   "CR"
+  ],
+  [
+   "C2",
+   "C0"
+  ],
+  [
+   "C2",
+   "B3"
+  ],
+  [
+   "C2",
+   "B4"
+  ]
+ ],
+ "required_contrasts": [
+  [
+   "C2",
+   "C1"
+  ],
+  [
+   "C2",
+   "CR"
+  ]
+ ],
+ "primary_endpoint": "RET-GS",
+ "margins": {
+  "ret_gs": 0.02,
+  "es": -0.02,
+  "ls": -0.01
+ },
+ "interval": {
+  "method": "paired-cluster-bootstrap",
+  "draws": 10000,
+  "level": 0.975
+ },
+ "checkpoints": [
+  100,
+  300,
+  1000,
+  3000
+ ],
+ "challenge_policy": {
+  "sets": [
+   "near_neighbour",
+   "composition",
+   "temporal_correction"
+  ],
+  "manifest": "manifests/dev/challenges.json",
+  "manifest_sha256": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+  "rule": "challenge sets are disjoint from development and confirmation streams and are evaluated and reported separately; they never enter the primary endpoint; the correction track alone enables RevisionEvent slot retirement (SD-4)"
+ },
+ "resource_rules": {
+  "headroom": 0.25,
+  "kappa": 1.0,
+  "kappa_band": [
+   0.5,
+   2.0
+  ],
+  "kappa_status": "provisional",
+  "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation"
+ },
+ "analysis_code_commit": {
+  "git_head": "ee75a9e0cd515a682ae143eb558d22d9143f56b0",
+  "analysis_tree_sha256": "25ac3c5258f45a3ec9fab720416f751635c8971e60820da45622b5e9428267e0"
+ },
+ "negative_case_interpretation": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
+ "classification_policy": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
+ "spec_defect_resolutions": [
+  {
+   "id": "SD-1",
+   "issue": "S1 uses a 2\u00d710\u2076-token held-out set H for P1; D.8 uses a 10\u2076-token WikiText-103 validation sample for LM drift.",
+   "resolution": "Two distinct committed sets. H = 2\u00d710\u2076 tokens sampled by document from WikiText-103 train (document ids recorded; disjoint from validation by split). Drift = WikiText-103 validation (SD-3).",
+   "status": "committed (verified at DATA-04)"
+  },
+  {
+   "id": "SD-2",
+   "issue": "S2 names 300 development edits and \u22651,000 unrelated prompts; D.5 names 200 Q and 200 U.",
+   "resolution": "Q and U are manifest-fixed subsets of the S2 development pool (`manifests/dev/p5_subsets.json`).",
+   "status": "committed (verified at DATA-01)"
+  },
+  {
+   "id": "SD-3",
+   "issue": "WikiText-103 validation has roughly 0.28M GPT-2 tokens, not 10\u2076.",
+   "resolution": "Drift set = entire validation split, tokenized once, unique tokens only. Shortfall logged (PA-5). Test split not added. Exact count recorded by DATA-00.",
+   "status": "committed (verified at DATA-00)"
+  },
+  {
+   "id": "SD-4",
+   "issue": "Correction-track slot retirement reads the owner-edit digest; E.2 forbids routers from receiving fact identity.",
+   "resolution": "Router API has no access to slot metadata. Retirement is a `Cap.update(..., revision=RevisionEvent)` path enabled only when the stream item carries a revision record, on the correction track only. A test asserts `RoundContext` carries no digest except as opaque RNG key material.",
+   "status": "encoded in `contracts.RoundContext`"
+  },
+  {
+   "id": "SD-5",
+   "issue": "\"25% headroom\" ambiguous.",
+   "resolution": "Affordable when projected cost \u2264 0.75 \u00d7 ceiling.",
+   "status": "committed"
+  },
+  {
+   "id": "SD-6",
+   "issue": "F.6 leaves the ePC solver, step size and stopping to S0; the production run used one relaxation step (and a T-schedule 1\u202664 across the run; see DEC-006).",
+   "resolution": "Declared nominal procedure: simultaneous gradient descent on all error variables (the sibling's `relax_errors`), `error_lr = 0.1`, exactly 8 iterations, errors zero-initialized per call, \u03b3 = 1, energy `\u00bd\u03a3\u2016e\u2016\u00b2 + CE(current target only, summed not averaged)`, fp32, retrieval frozen within a call, no stopping rule. 64 iterations is the reference horizon. Label \"finite-iteration error credit\" unless D.6's convergence test passes.",
+   "status": "open (S0-06 documents in `docs/epc_energy.md`)"
+  },
+  {
+   "id": "SD-7",
+   "issue": "Bank hook indices.",
+   "resolution": "`l_m = round(m\u00b712/3) = 4, 8, 12` \u2192 block outputs `h[3]`, `h[7]`, `h[11]`, the last before `ln_f`. Verified by test in S0-04.",
+   "status": "committed (verified at S0-04)"
+  },
+  {
+   "id": "SD-8",
+   "issue": "GRACE reference has no byte budget.",
+   "resolution": "Documented eviction adaptation (lowest use count, then oldest) bounded by the same byte accounting; disclosed in PC-10 and the report. Unadapted B4 also run once on development as parity reference.",
+   "status": "open (S2-05)"
+  },
+  {
+   "id": "SD-9",
+   "issue": "Aliases.",
+   "resolution": "zsRE aliases = `answers` list deduplicated after normalization; CounterFact aliases = `[target_new.str]`. Scoring only.",
+   "status": "committed (verified at DATA-01)"
+  },
+  {
+   "id": "SD-10",
+   "issue": "PC-2 \"match the base reference\": bitwise or tolerance?",
+   "resolution": "Cap-off path is the same wrapper code with zero writes, so exact equality (max |\u0394logit| = 0) is expected and asserted. Nonzero \u2192 report with the kernel identified; \u2264 1e-6 relative tolerated only with that record. Note under DEC-001: writes are always applied as a `[3, d]` array that is all-zero when the cap is off (adding 0.0 is exact in IEEE fp32), so the identity holds by construction; S0-10 still measures it.",
+   "status": "committed (verified at S0-10)"
+  },
+  {
+   "id": "SD-11",
+   "issue": "CR distribution for S2 profiling.",
+   "resolution": "Uniform (1/3 each) labelled `cr_profile_uniform`; S3-05 estimates from development C2 routes; if C2 never routes, uniform and logged.",
+   "status": "committed (verified at S3-05)"
+  },
+  {
+   "id": "SD-12",
+   "issue": "Use count with multiple prefixes and rounds.",
+   "resolution": "Increment at most once per (slot, item digest); bounded per-item set cleared at item end. Inference never increments. Test in CAP-02.",
+   "status": "committed (verified at CAP-02)"
+  },
+  {
+   "id": "SD-13",
+   "issue": "PDF App. B says \"PyTorch handles the cap and the harness; JAX is used through the base wrapper only if the checkpoint requires it.\" The lead's execution directive (DEC-001) says all GPU code is JAX and PC functionality is built on FabricPC.",
+   "resolution": "(a) follow the PDF's framework line; (b) follow the lead's directive.",
+   "status": "(b). The PDF's framework sentence is an implementation preference, not a threshold, endpoint or arm; the lead is the authority named in PDF Operating rule 5. The consequence the PDF warns about (\"cross-framework gradients must be explicitly implemented and tested\") is avoided entirely because there is now exactly one framework. Recorded here so the report's deviation table (App. G \u00a78) carries it. | committed (DEC-001)"
+  },
+  {
+   "id": "SD-14",
+   "issue": "The plan's \"equal to HF `GPT2LMHeadModel` logits exactly\" (S0-04a, S0-09 decode parity) assumes the reference runs in the same process. Under DEC-001 the reference (PyTorch) is not importable.",
+   "resolution": "(a) skip the HF comparison; (b) compare against stored reference outputs produced once by a CPU-only PyTorch environment kept outside the project env.",
+   "status": "(b) via REF-01 (`assets/reference/gpt2/`). Because fp32 GEMMs differ between XLA-on-Blackwell and PyTorch-CPU, exact bitwise equality against the oracle is not expected; the assertion is max |\u0394logit| \u2264 1e-3 absolute and argmax agreement at every position, and the measured maximum is recorded. Cap-off identity (SD-10) remains exact because it compares the wrapper with itself. | committed"
+  },
+  {
+   "id": "SD-15",
+   "issue": "The ePC checkpoint recipe (`hdpc-distill`) is PyTorch. PA-1 authorizes regeneration \"with the sibling's reproduction recipe\".",
+   "resolution": "(a) PA-1 cannot fire under DEC-001; (b) PA-1 fires with a JAX re-implementation of the same recipe (REG-00) that reproduces the sibling's math line by line.",
+   "status": "(b), with the same \u2264 10 GPU-h bound and the 100-step pilot (REG-01). The JAX run is a *new* checkpoint (as PA-1 already says); the recipe is additionally a re-implementation, which the checkpoint's provenance record states. The sibling's 50M run took 35.7 h on an A100 (its `summary.json`), so the projection may well exceed 10 h; REG-01 decides. | committed; bound raised to 120 GPU-h by DEC-014"
+  },
+  {
+   "id": "SD-16",
+   "issue": "F.3 step 3: \"Select the bank with the largest positive score, ties by depth.\" Depth could mean the shallowest (bank 1, farthest from the output) or the deepest bank.",
+   "resolution": "(a) smallest bank index first; (b) largest bank index first.",
+   "status": "(a): banks are processed \"in increasing depth order\" everywhere else in F.3, so the tie goes to the smallest index. Exact ties of float scores are rare; recorded so the choice is not silent. | committed (CAP-05)"
+  },
+  {
+   "id": "SD-17",
+   "issue": "F.1/S2: \"radius calibration is shared by arms using the same base and read variant\"; E.2: zsRE and CounterFact are separate experiments. Is the radius one number per (base, read) pooled over datasets, or one per (base, read, dataset)?",
+   "resolution": "(a) pooled (min over datasets); (b) per dataset, shared across arms.",
+   "status": "(b). The two streams are separate experiments with different unrelated-prompt structure (CounterFact's neighbourhood prompts share the relation and are *closer* in key space than paraphrases; zsRE's locality prompts are unrelated NQ questions). Per-dataset radii keep the 1% false-fire risk equal across arms within each experiment, which is the criterion's purpose. Both values are stored (`results/S2/radius_calibration.json`: `per_dataset` and `pooled_radii_min_over_datasets`). | committed (S2-01)"
+  },
+  {
+   "id": "SD-18",
+   "issue": "F.1: \"A zero radius matches only an exactly equal key.\" Keys are float32 functions of the residual; the same residual computed through differently fused kernels (single-sequence call vs a batched dispatch, `vmap` or `lax.map`) differs by ~1e-5 on unit-scale keys, so bit-exact equality is not a stable property of the computation.",
+   "resolution": "(a) bit-exact equality (batched evaluation impossible with exact keys; CounterFact runs exact-key); (b) equality within a float32 tolerance.",
+   "status": "(b): `KEY_TOL = 1e-4` added to every radius comparison (`dist \u2264 \u03c1 + 1e-4`), i.e. \"exactly equal\" = equal within the reproducibility tolerance for the same computation on different kernels (Op. rule 9 spirit). Positive radii shift by 1e-4, below the 20-quantile calibration grid's resolution (candidates differ by \u2265 0.03). Applied identically to learning and inference; the batched evaluator's parity with the sequential decoder is tested on both datasets. | committed (HARN-BATCH, 2026-09-10)"
+  }
+ ],
+ "lora": {
+  "rank": 8,
+  "steps": 10,
+  "lr": 0.0001,
+  "screen": {
+   "0.0001": {
+    "zsre": {
+     "es_immediate": 0.08,
+     "ret_gs_end": 0.15,
+     "ls_complete_answer_end": 0.0,
+     "lm_drift_perplexity_ratio": 1.144230377468232
+    },
+    "counterfact": {
+     "es_immediate": 0.08,
+     "ret_gs_end": 0.055,
+     "ls_complete_answer_end": 0.0,
+     "lm_drift_perplexity_ratio": 3.1675948141680577
+    }
+   },
+   "3e-05": {
+    "zsre": {
+     "es_immediate": 0.03,
+     "ret_gs_end": 0.07,
+     "ls_complete_answer_end": 0.4,
+     "lm_drift_perplexity_ratio": 1.0750298885949627
+    },
+    "counterfact": {
+     "es_immediate": 0.03,
+     "ret_gs_end": 0.01,
+     "ls_complete_answer_end": 0.0,
+     "lm_drift_perplexity_ratio": 1.3497165609663115
+    }
+   },
+   "0.0003": {
+    "zsre": {
+     "es_immediate": 0.23,
+     "ret_gs_end": 0.08,
+     "ls_complete_answer_end": 0.0,
+     "lm_drift_perplexity_ratio": 2.1480403793797627
+    },
+    "counterfact": {
+     "es_immediate": 0.43,
+     "ret_gs_end": 0.095,
+     "ls_complete_answer_end": 0.0,
+     "lm_drift_perplexity_ratio": 5.326879453934548
+    }
+   }
+  },
+  "rule": "DEC-017: highest mean development RET-GS (primary endpoint) over both datasets; ties -> the prescribed 1e-4; ES/LS/drift reported, not optimized"
+ },
+ "b3_policy": "growing_capacity_algorithm_r_not_uniform_all_history (DEC-016)",
+ "substrate_arms": {
+  "SB": {
+   "base": "BP",
+   "credit": "adjoint",
+   "contrast": "reference"
+  },
+  "SE-A": {
+   "base": "EPC",
+   "credit": "adjoint",
+   "contrast": "SE-A vs SB: conversion/representation under a common credit rule"
+  },
+  "SE-E": {
+   "base": "EPC",
+   "credit": "error",
+   "credit_iters": 8,
+   "contrast": "SE-E vs SE-A: credit procedure on the same converted base (8 settled iterations nominal, SD-6)"
+  }
+ },
+ "substrate_contrasts": [
+  [
+   "SE-A",
+   "SB"
+  ],
+  [
+   "SE-E",
+   "SE-A"
+  ]
+ ],
+ "exploratory_ablations": {
+  "list_frozen_at": "S4-01 (plan \u00a76.14 S8-02)",
+  "design": "3 realizations \u00d7 2 orders, labelled exploratory, dropped before any core pair",
+  "items": [
+   "R-h0 vs R-h",
+   "half B_cap",
+   "double B_cap",
+   "difficulty weight (CAP-09)",
+   "R-e vs R-g (only if CAP-08 is built)"
+  ]
+ },
+ "decisions": [
+  "DEC-000",
+  "DEC-001",
+  "DEC-002",
+  "DEC-003",
+  "DEC-004",
+  "DEC-005",
+  "DEC-006",
+  "DEC-007",
+  "DEC-008",
+  "DEC-009",
+  "DEC-010",
+  "DEC-011",
+  "DEC-012",
+  "DEC-013",
+  "DEC-014",
+  "DEC-015",
+  "DEC-016"
+ ],
+ "pending": [
+  "dataset_ids.grammar (GRAM-02 / DATA-06)",
+  "base_checkpoints.epc (REG-02/03; S5 only)"
+ ]
+}

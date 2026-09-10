@@ -5,7 +5,6 @@ noise-perturbed state (teacher + N(0, σ)). Prints JSON lines."""
 from __future__ import annotations
 
 import json
-import sys
 
 import jax
 import jax.numpy as jnp
@@ -42,7 +41,7 @@ def group_cos(a, b):
         return jnp.concatenate([jnp.ravel(v) for v in jax.tree_util.tree_leaves(sel(tree))])
     sels = {"embedding": lambda t: (t["wte"], t["wpe"]), "ln_f": lambda t: t["ln_f"]}
     for l in range(cfg.n_layer):
-        sels[f"block_{l:02d}"] = (lambda l: lambda t: t["blocks"][l])(l)
+        sels[f"block_{l:02d}"] = (lambda li: lambda t: t["blocks"][li])(l)  # noqa: B023
     out = {}
     for k, sel in sels.items():
         x, y = flat(a, sel), flat(b, sel)
