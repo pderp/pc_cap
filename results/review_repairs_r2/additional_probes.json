@@ -1,0 +1,53 @@
+{
+  "utc": "2026-09-10T13:54:44.885918+00:00",
+  "cost_counterexample": {
+    "input": "both arms update=1 second; C2 query=9 seconds; C1 query=0",
+    "per_run": [
+      {
+        "arm": "C2",
+        "mean_update_accel_s": 1.0,
+        "accel_seconds_total": 10.0
+      },
+      {
+        "arm": "C1",
+        "mean_update_accel_s": 1.0,
+        "accel_seconds_total": 1.0
+      }
+    ],
+    "comparable_compute": {
+      "zsre/0/0": {
+        "C2": {
+          "mean_update_accel_s": 10.0,
+          "ratio_to_C2": 1.0,
+          "within_20pct": true,
+          "support": "comparable-compute"
+        },
+        "C1": {
+          "mean_update_accel_s": 1.0,
+          "ratio_to_C2": 0.1,
+          "within_20pct": false,
+          "support": "resource-matched view required (time-matched table)"
+        }
+      }
+    }
+  },
+  "dry_run_invalid_config_exit_codes": {
+    "perm_minus_1": 0,
+    "S4_base_EPC": 0,
+    "S4_read_g": 0
+  },
+  "source_sha256": {
+    "src/pccap/__init__.py": "376424fe07837e0a30c32109587a702fba9b7949320b2818b8ac33b3a9f40c47",
+    "src/pccap/harness/runner.py": "798fa01e11de8c535574aaf81de981c518fde5ea164eba2d41eb7265f599b451",
+    "src/pccap/harness/stage_s4.py": "3af2332361bb6d741b21edc62994f89cc9e7c3e622927077f5e140687f508594",
+    "src/pccap/harness/stage_s5.py": "dac5dd245b764f7fb6a56a5dab8de0bbc9b88d06892b11113fd567deeccb837b",
+    "src/pccap/harness/runs.py": "f862c82cc37f355981b0b741e5e2e3f938a0635566578ce695a7ad02bf7f4e06",
+    "src/pccap/harness/ledger.py": "0d7b5a2be60739414122b6ff5af78c71a6e13605b01d3365a62f70a90c304ca3",
+    "src/pccap/harness/lease.py": "3bf728cd93a072780b52201f845cf87fa760a0efc28068aefcfa9d79cd6b2d82",
+    "src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "src/pccap/analysis/s4_05.py": "ea912c3fe10a4ed60d89d7e67d0148a0fc7cd488ac46b64223ecf9899b23e767",
+    "src/pccap/analysis/s4_06.py": "c77d580df2cae723a69ab97c1f593dd72b669b736dab810c3de19471bcf8823f",
+    "tests/harness/test_confirm_cli.py": "2fd213d5bd624ac74aa847fb6bb359240843cd55decf5887a0f44369eae86bf9",
+    "scripts/review_repairs_r2_study.py": "2e4341816f1057ba74ff89aec37445d6dedec2606ff4b60bad89b8ba98cc4e9d"
+  }
+}

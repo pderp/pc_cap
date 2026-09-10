@@ -1,0 +1,103 @@
+COMMAND: ['/home/derp/cap/venv/bin/python', '-B', 'scripts/review_repairs_r2_study.py']
+{
+  "path_probe": {
+    "jobs": 150,
+    "literal_old_call_paths": 75,
+    "current_api_paths": 150,
+    "note": "The path helper now takes dataset and experiment arguments."
+  },
+  "original_denial_probe": {
+    "exit": 2,
+    "payload_reads": 0
+  },
+  "real_s4_pipeline": {
+    "jobs": 150,
+    "successes": 150,
+    "stage": "actual run_s4; actual confirmation loader, selection, run_stream, snapshots and collectors",
+    "replacements": "CPU fake base, learner, evaluator, tokenizer, locality inputs and lease only",
+    "first_events": [
+      "backend_report_before_lease",
+      "lease_enter",
+      "backend_report_inside_lease",
+      "construct_BP",
+      "lease_exit"
+    ],
+    "first_stream_config": {
+      "allowance": 100.0,
+      "checkpoints": [
+        100,
+        300,
+        1000,
+        3000
+      ]
+    },
+    "paired": {
+      "zsre": {
+        "rows": 540,
+        "notes": [],
+        "classification": "negative",
+        "contrast_status": {
+          "C2-C1": "complete",
+          "C2-CR": "complete"
+        }
+      },
+      "counterfact": {
+        "rows": 420,
+        "notes": [],
+        "classification": "negative",
+        "contrast_status": {
+          "C2-C1": "complete",
+          "C2-CR": "complete"
+        }
+      }
+    }
+  },
+  "archive_probe": {
+    "refused_exit": 4,
+    "forced_exit": 0,
+    "collector_includes_archives": true,
+    "paired_error_after_force": "duplicate item row: ('C2', 0, 0, 'zsre-0-2')",
+    "asset_checkpoint_policy": "run_stream derives checkpoint directory from unarchived result identity; --force only moves results"
+  },
+  "s5_probe": {
+    "frozen_base": "EPC",
+    "constructed_base_events": [
+      "construct_BP"
+    ],
+    "calibration_calls": [
+      {
+        "base": "EPC",
+        "dataset": "zsre",
+        "source": "mutable development calibration function"
+      }
+    ],
+    "stream_arguments": {
+      "allowance": null,
+      "checkpoints": [
+        100,
+        300,
+        1000,
+        3000
+      ]
+    },
+    "frozen_allowance": 1.2,
+    "frozen_checkpoints": [
+      100,
+      300,
+      1000,
+      3000
+    ],
+    "items_completed": 8,
+    "ledger_total": 7.200003668130376,
+    "status": "complete"
+  },
+  "fixture_root": "/home/derp/cap/assets/tmp/review_repairs_r2_study_valid",
+  "production_freeze_or_payload_access": false,
+  "pending_inputs_in_synthetic_seed_only": [
+    "dataset_ids.grammar (GRAM-02 / DATA-06)",
+    "base_checkpoints.epc (REG-02/03; S5 only)"
+  ]
+}
+
+EXIT_CODE: 0
+WALL_SECONDS: 1.0002166009508073

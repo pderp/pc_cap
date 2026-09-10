@@ -1,0 +1,13 @@
+# GRAM-02 Train the six-layer base
+status: done (provisional replacement until the PA-2 clock)
+agent: orchestrator   started: 2026-09-10T15:05:00Z   finished: 2026-09-10T15:40:00Z
+commit: (uncommitted; lead commits)
+inputs used: GRAM-01 generator; plan §6.5 GRAM-02; PDF E.1; R2-09 interface requirements
+outputs: src/pccap/fixtures/grammar_model.py (six-block pre-norm transformer d = 128, 4 heads, vocab 64, length 64 on `gpt2_jax.block/embed/head`; sites at blocks 1/3/5 (`bank_blocks`); `GrammarBase` with the BPBase API — forward/forward_from/adjoint/loss/last_logits_batch/forward_batch/forward_from_batch/checksum; `train_base` AdamW trainer), assets/models/grammar/grammar_base.npz (sha256 23fbc42b127ce1b4…) + grammar_base.train.json, results/GRAM/competence.json (scripts/grammar_competence.py), manifests/assets.json `assets.grammar_replacement`, tests/fixtures/test_grammar_model.py
+verify command: JAX_PLATFORMS=cpu /home/derp/cap/venv/bin/python -m pccap.fixtures.grammar_model --steps 3000 --no-lease ; JAX_PLATFORMS=cpu /home/derp/cap/venv/bin/python scripts/grammar_competence.py ; JAX_PLATFORMS=cpu /home/derp/cap/venv/bin/python -m pytest -q tests/fixtures/test_grammar_model.py
+verify output: training stopped at step 100 (held-out designated-position accuracy 0.9863 ≥ 0.98) in 8.2 s on the CPU (no GPU, no lease). Competence: base grammar 0.981; frozen base on the eight tasks {'0': 0.274, '1': 0.24, '2': 0.3, '3': 0.28, '4': 0.314, '5': 0.294, '6': 0.258, '7': 0.298} (low by construction); joint-training reference from the same base at 1,024 items per task reaches 1.00 on every task after 25.6k examples. Model/cap controls: forward_from = full forward with writes, bank-1 write changes sites 2/3, bank-3 write changes only logits, adjoint shapes [3,128] and descent, the real Cap on the grammar base at d = 128 with sites 1/3/5 and B_cap(128).
+done-when check: weights with hash and training log: PASS (npz under assets, not `data/models/*.pt` — DEC-001/004); competence table: PASS; labelled "replacement fixture, no continuity with R8/R9": PASS. Promotion to `status: replacement` in manifests/assets.json waits for the PA-2 clock (2026-09-11 23:59 ET) unless T1 locates R8/R9.
+cost: gpu_seconds=0 wall_seconds=2100 peak_mem_mib=0
+deviations: trained on the CPU in seconds instead of the ≤ 30 GPU-minutes budget (the fixture is tiny); stopped at the first ≥ 0.98 check as specified — a stronger base is not sought so that task difficulty stays as designed.
+unresolved: S3-03 needs the S4 runner/evaluator generalized to the grammar (tokenizer-free single-token items; scheduler grammar branch) — plan 4 §3.
+questions for lead: none

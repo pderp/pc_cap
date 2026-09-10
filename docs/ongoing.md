@@ -90,7 +90,7 @@ without `frozen.json` raises; hash mismatch raises; sidecar has no prompt/answer
 holds — use `manifests/frozen.draft.json` copied to a temp dir as the fixture, never the real
 `frozen.json`). Cost 2 h, CPU only.
 
-### Lane G′ — grammar (GRAM-01 → GRAM-02 code → GRAM-02 training after PA-2 → DATA-06/07)
+### Lane G′ — grammar (GRAM-01 → GRAM-02 code → GRAM-02 training after PA-2 → DATA-06/07) — **done by the orchestrator on 2026-09-10 (GRAM-01, GRAM-02 on the CPU, DATA-06, DATA-07)**; the replacement base is provisional until the PA-2 clock; remaining grammar work is the S4 runner/evaluator generalization (orchestrator)
 
 PA-2 clock: 2026-09-11 23:59 America/New_York (T1 unanswered → the replacement grammar is
 authorized after that; the generator and model *code* may be written now).

@@ -1,15 +1,15 @@
 # Task status board
 
-Regenerated 2026-09-10 13:39 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 14:06 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 49 |
+| done | 53 |
 | in_progress | 1 |
 | partial | 10 |
 | ready | 4 |
-| pending | 24 |
+| pending | 20 |
 
 GPU seconds charged to tasks so far: 1080
 
@@ -32,7 +32,7 @@ GPU seconds charged to tasks so far: 1080
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **done** | DATA | DATA-01, DATA-08 | none | yes | orchestrator |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **done** | DATA+MEMORY | ENV-03, CAP-05 | none | yes | orchestrator |  |  |
 | DATA-04 | LM, probe and property sets with inventory | **done** | DATA+METRICS | DATA-00 | none | no | orchestrator |  |  |
-| DATA-06 | Grammar task streams | **pending** | DATA | GRAM-02 | none | no |  |  |  |
+| DATA-06 | Grammar task streams | **done** | DATA | GRAM-02 | none | no | orchestrator |  |  |
 | DATA-08 | Challenge sets | **done** | DATA+BASELINES | DATA-01 | short | no | orchestrator |  |  |
 
 ## S0
@@ -72,9 +72,9 @@ GPU seconds charged to tasks so far: 1080
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| GRAM-01 | Grammar generator per E.1 | **ready** | DATA | ENV-03 | none | yes |  |  |  |
-| GRAM-02 | Train the six-layer replacement grammar base | **pending** | DATA+BASE | GRAM-01 | lease | no |  |  |  |
-| DATA-07 | Causal tracing pairs on the grammar | **pending** | DATA+METRICS | GRAM-02 | short | no |  |  |  |
+| GRAM-01 | Grammar generator per E.1 | **done** | DATA | ENV-03 | none | yes | orchestrator |  | Lane G′ taken by the orchestrator while REG-02 holds the GPU (codex on Lanes D/V) |
+| GRAM-02 | Train the six-layer replacement grammar base | **done** | DATA+BASE | GRAM-01 | lease | no | orchestrator |  | CPU-trained provisional replacement; promote after PA-2 |
+| DATA-07 | Causal tracing pairs on the grammar | **done** | DATA+METRICS | GRAM-02 | short | no | orchestrator |  |  |
 
 ## S1
 
@@ -83,7 +83,7 @@ GPU seconds charged to tasks so far: 1080
 | S1-01 | P1 fidelity | **pending** | METRICS+BASE | REG-03, DATA-04, S0-11 | lease | yes |  |  |  |
 | S1-02 | P2 geometry | **done** | METRICS | S0-07, DATA-04, S0-04 | short | no | orchestrator |  |  |
 | S1-03 | P3 localization and coverage | **done** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no | orchestrator |  |  |
-| S1-04 | P4 separability | **pending** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
+| S1-04 | P4 separability | **ready** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
 | S1-05 | P5 write locality | **done** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no | orchestrator |  |  |
 | S1-06 | P6 finite settling and informativeness | **done** | BASE+METRICS | S0-06 | lease | no | orchestrator |  |  |
 | S1-07 | S1 report and D1 input | **partial** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes | orchestrator |  | BP rows done; P1/P4 pending REG-03/GRAM-02 |

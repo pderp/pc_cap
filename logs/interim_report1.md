@@ -208,3 +208,17 @@ re-measured on the regenerated checkpoint when REG-03 passes.
 - S5-01 prepared: SE-E error-credit rule in the cap (`CapConfig.credit`, inference cost charged), ePC radius calibration option, `manifests/dev/s5_arms.json`, `pccap run --stage S5`, CPU test of the credit rule; GPU checks and the ePC calibration + 20-item SB/SE-A/SE-E smoke are queued behind the post-REG-02 chain (`results/REG/chain_s5_prep.sh`).
 - S4-05 resource views (development dry run: only C0 is within 20% of C2's update cost), S4-06 wiring over ANA-01 with a synthetic 3 × 5 test, S7-03 order-variation analysis (JS part pending checkpoints), `docs/REPRODUCE.md` draft.
 - Tree: 296 CPU tests pass, lint clean. REG-02 at step ≈ 3,100 (T = 4), ETA ≈ 19:40 EDT.
+
+## Addendum 5 (2026-09-10, afternoon): Lane G′ done on the CPU while REG-02 runs
+
+GRAM-01 generator (eight observable contexts, two shared and one private mechanism per context with
+deterministic targets at a designated position; five balanced orders; byte-identical regeneration),
+GRAM-02 six-layer base (d = 128, sites at blocks 1/3/5, `GrammarBase` with the BP API; trained on the
+CPU to 0.986 held-out designated-position accuracy in 8 s; competence table: frozen base 0.24–0.31 on
+the eight tasks by construction, joint reference 1.00), DATA-06 task streams (three realizations ×
+five orders, 2,000 evaluation sequences per task, held-out combinations, joint reference; one
+sequence/target pair per item), DATA-07 tracing pairs (consistent single-latent counterfactuals through
+a generator override; 119 of 120 pairs strong; mechanisms localize as multi-site by cumulative
+residual, the copy mechanism computed between blocks 1 and 3 at the prediction position). The
+replacement base is recorded as provisional until the PA-2 clock. Remaining grammar work: the S4
+runner/evaluator generalization for grammar streams (tokenizer-free single-token items) and S3-03.
