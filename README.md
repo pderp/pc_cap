@@ -2,9 +2,8 @@
 
 A one-month, preregistered study of *caps*: small radius-gated activation memories written at three
 depths of a frozen GPT-2 small, with routers that decide which depth an edit goes to. The scientific
-contract is `docs/pc_cap_month_plan_readable.pdf`; the execution plans are `docs/updated_plan2.md` and
-`docs/updated_plan3.md`; every decision that changed course is in `docs/decisions.md` (DEC-nnn) and every
-specification defect in `docs/spec_defects.md` (SD-nn). The current work log is `docs/ongoing4.md`;
+contract is `docs/pc_cap_month_plan_readable.pdf`; the execution plans are `docs/updated_plan2.md` … `docs/updated_plan5.md` (each a delta over the previous); every decision that changed course is in `docs/decisions.md` (DEC-nnn) and every
+specification defect in `docs/spec_defects.md` (SD-nn). The current work log is `docs/ongoing.md`;
 the task board is `docs/tasks/STATUS.md`.
 
 **What is measured.** Editing streams (zsRE, CounterFact; later a synthetic grammar) under the cap arms
@@ -53,7 +52,7 @@ See `CONTRIBUTING.md` for the working protocol.
 | Question | Look at |
 | --- | --- |
 | What was decided and why | `docs/decisions.md`, `docs/spec_defects.md` |
-| What is done, what is running | `docs/tasks/STATUS.md`, `docs/tasks/<ID>.md`, `docs/ongoing4.md` |
+| What is done, what is running | `docs/tasks/STATUS.md`, `docs/tasks/<ID>.md`, `docs/ongoing.md` |
 | Development results | `results/S0/report.md`, `results/S1/report.md`, `results/S2/report.md`, `results/S3/report.md`, `docs/D1_decision.md`, `docs/D2_decision.md` |
 | ePC regeneration | `docs/tasks/REG-0{0,1,2,3}.md`, `results/REG/`, `docs/epc_energy.md` |
 | Narrative so far | `logs/interim_report1.md` |

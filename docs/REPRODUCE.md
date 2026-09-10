@@ -83,4 +83,4 @@ Licences: GPT-2 (modified MIT), zsRE/CounterFact (MIT via ROME), OpenWebText (CC
 (CC BY-SA), UD-EWT (CC BY-SA), FabricPC (MIT), GRACE clone (no licence file; reference use only),
 sibling repository (no licence; read-only reference).
 
-Remaining work in priority order: see `docs/ongoing4.md` §2–§3 and `docs/tasks/STATUS.md`.
+Remaining work in priority order: see `docs/ongoing.md` §2–§3 and `docs/tasks/STATUS.md`.

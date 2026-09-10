@@ -13,6 +13,8 @@ checkpoints, clones, caches, auxiliary environments) under `/home/derp/cap/asset
 repository `llm-by-neural-predictive-coding` and `FabricPC` are read-only references; re-implemented
 formulas cite `# reproduces hdpc/<file>:<lines>`.
 
+**Logs.** One current work log, `docs/ongoing.md`; when it is rewritten, the previous version goes to `docs/archive/` with a date (never a numbered sibling file next to it).
+
 **Git.** Agents never stage, commit, merge or push; the lead commits. Leave your changes in the
 working tree and list them in your task record.
 

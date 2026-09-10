@@ -7,7 +7,7 @@ This review follows up on derp_review1.md, checking whether the five recommendat
 
 ### 1. Consolidate ongoing logs -- NOT ADDRESSED, worsened
 Original: Three ongoing files made it hard to track current state.
-Current: A fourth ongoing file, ongoing4.md, now exists. No archival performed.
+Current: A fourth ongoing file, ongoing.md, now exists. No archival performed.
 Assessment: Not addressed. Recommend archive directory, keep only current ongoing.md.
 
 ### 2. Document venv setup -- ADDRESSED
@@ -35,14 +35,14 @@ README.md exists, 3773 bytes, dated 2026-09-10.
 1. Ongoing log proliferation: Four ongoing files, no archival policy. Most pressing doc issue.
 2. Frozen venv reproducibility gap: requirements.lock at venv root, not in repo. Consider symlinking into pc_cap/.
 3. Decision log growth without indexing: 18 decisions in decisions.md, no summary index.
-4. Multi-lane orchestration complexity: ongoing4.md references Lane A-F plus orchestrator.
+4. Multi-lane orchestration complexity: ongoing.md references Lane A-F plus orchestrator.
 5. ePC checkpoint regeneration risk: REG-02 is 9766 steps, up to 120 GPU-hours on RTX 5070. Verify resumability tested with forced interruption.
 6. D1/D2 scope fragility: DEC-013 has 1.6h margin, fallback significantly reduces scope.
 7. Test coverage visibility: No coverage report. Recommend pytest-cov with .coveragerc.
 8. Determinism config implicit: Flags applied by import pccap before JAX. Fragile. Add runtime assertion in pccap.__init__.
 
 ## Recommendations
-1. Archive old ongoing logs immediately. Move ongoing.md-ongoing3.md to docs/archive/, rename ongoing4.md to ongoing.md.
+1. Archive old ongoing logs immediately. Move ongoing.md-ongoing3.md to docs/archive/, rename ongoing.md to ongoing.md.
 2. Triage spec_defects.md with status tags.
 3. Add decisions summary categorizing by type.
 4. Test checkpoint resumability with forced interruption before full REG-02.

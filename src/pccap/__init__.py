@@ -29,11 +29,41 @@ os.environ.setdefault("TF_CUDNN_DETERMINISTIC", "1")
 os.environ.setdefault("XLA_PYTHON_CLIENT_PREALLOCATE", "false")
 os.environ.setdefault("HF_HOME", "/home/derp/cap/assets/hf_cache")
 
+import sys as _sys  # noqa: E402
+
+# Runtime guard (derp_review2 #8): the XLA flags above only take effect if no XLA backend exists yet.
+# ``jax`` may already be imported (the flags are read at backend initialization, not at import), but an
+# already-initialized backend cannot be reconfigured — refuse loudly instead of running non-deterministically.
+if "jax" in _sys.modules:
+    _jx = _sys.modules["jax"]
+    try:
+        _initialized = bool(getattr(_jx._src.xla_bridge, "_backends", {}))  # type: ignore[attr-defined]
+    except Exception:  # pragma: no cover - private API drift
+        _initialized = False
+    if _initialized:
+        raise RuntimeError("pccap must be imported before any JAX backend is initialized (determinism flags, DEC-007)")
+
 import jax  # noqa: E402
 
 jax.config.update("jax_default_matmul_precision", "highest")
 jax.config.update("jax_enable_x64", False)
 jax.config.update("jax_threefry_partitionable", False)
+
+
+def assert_determinism() -> dict:
+    """Verify at runtime that the determinism configuration is in force (call after the lease, before any
+    GPU work): XLA deterministic-ops flag present, matmul precision ``highest``, x64 off. Returns the
+    report; raises ``RuntimeError`` otherwise."""
+    problems = []
+    if "--xla_gpu_deterministic_ops=true" not in os.environ.get("XLA_FLAGS", ""):
+        problems.append("XLA_FLAGS lacks --xla_gpu_deterministic_ops=true")
+    if jax.config.jax_default_matmul_precision != "highest":
+        problems.append(f"jax_default_matmul_precision = {jax.config.jax_default_matmul_precision!r}")
+    if jax.config.jax_enable_x64:
+        problems.append("jax_enable_x64 is on")
+    if problems:
+        raise RuntimeError("determinism configuration not in force: " + "; ".join(problems))
+    return determinism_report()
 
 __version__ = "0.0.1"
 

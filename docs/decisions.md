@@ -3,6 +3,13 @@
 Append-only. Every pre-authorization (PA-n) is logged here when first exercised; every lead
 directive and every checkpoint (CP-x, D1…D3) gets a dated entry. D0 = 2026-09-09.
 
+## Index (by type; generated 2026-09-10 — regenerate when rows are added)
+
+- **environment/stack:** DEC-001 (All GPU code is JAX); DEC-002 (Predictive-coding functionality is built on FabricPC); DEC-003 (The sibling `llm-by-neural-predictive-coding` (commit `298fc719…`) and FabricPC are read-o); DEC-004 (Only code, logs and documentation go into `pc_cap/`; all other resources go under `/home/d)
+- **budget/clock:** DEC-010 (CP-A recorded; T1 filed; PA-1/PA-2 clocks started); DEC-011 (CP-C recorded (S0 complete)); DEC-014 (PA-1 bound raised to 120 local GPU-hours); DEC-015 (REG-02 authorized)
+- **protocol/analysis:** DEC-009 (Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01); DEC-012 (Shared aggregate step A = 0.3); DEC-016 (B3 replay reservoir interpretation accepted (Lane F review)); DEC-017 (B1/B3 learning rate fixed at the prescribed 1e-4 by the development screen rule "highest m); DEC-018 (S3-05: confirmatory CR uses the development-estimated per-dataset distribution); DEC-019 (Synthetic end-to-end execution is the acceptance gate before the freeze)
+- **scientific regime:** DEC-000 (D0 recorded); DEC-006 (Correction to plan §0/§2 on the sibling's training regime); DEC-008 (Zero-matrix effective rank encoding); DEC-013 (D1 outcome (S2-07))
+
 | ID | Date | Decision | Basis | Consequence |
 | --- | --- | --- | --- | --- |
 | DEC-000 | 2026-09-09 | **D0 recorded.** Execution of updated_plan2.md begins; working clone `/home/derp/cap/pc_cap`, branch `master`. | Plan §8. | Working-day windows in §8 count from today. Clocks for PA-1/PA-2 start at S0-01 (CP-A). |

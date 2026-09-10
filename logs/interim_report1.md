@@ -203,7 +203,7 @@ re-measured on the regenerated checkpoint when REG-03 passes.
 
 ## Addendum 4 (2026-09-10, late): review response and S5/S4/S7 preparation while REG-02 runs
 
-- Review (`docs/derp_review1.md`) answered in `docs/derp_review1_response.md`: single current log `docs/ongoing4.md` (older logs archived), README and CONTRIBUTING written, spec-defect register triaged (16 of 18 committed), environment-setup script assigned to Lane R; the "energy efficiency" reading of `epc_energy.md` corrected.
+- Review (`docs/derp_review1.md`) answered in `docs/derp_review1_response.md`: single current log `docs/ongoing.md` (older logs archived), README and CONTRIBUTING written, spec-defect register triaged (16 of 18 committed), environment-setup script assigned to Lane R; the "energy efficiency" reading of `epc_energy.md` corrected.
 - Lane D unblocked: the lead approved the setuptools pin in the GRACE environment; applied and verified (`import wandb` works).
 - S5-01 prepared: SE-E error-credit rule in the cap (`CapConfig.credit`, inference cost charged), ePC radius calibration option, `manifests/dev/s5_arms.json`, `pccap run --stage S5`, CPU test of the credit rule; GPU checks and the ePC calibration + 20-item SB/SE-A/SE-E smoke are queued behind the post-REG-02 chain (`results/REG/chain_s5_prep.sh`).
 - S4-05 resource views (development dry run: only C0 is within 20% of C2's update cost), S4-06 wiring over ANA-01 with a synthetic 3 × 5 test, S7-03 order-variation analysis (JS part pending checkpoints), `docs/REPRODUCE.md` draft.

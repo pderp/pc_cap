@@ -176,6 +176,8 @@ def main(args) -> int:
                                                                                  projected_seconds=float(getattr(args, "projected_seconds", 3600.0)))
     try:
         with lease_ctx:
+            cfg["determinism"] = pccap.assert_determinism()  # runtime check (derp_review2 #8), after the lease is held
+            (rd / "config.json").write_text(json.dumps(cfg, indent=1))
             result = runner({"config": cfg, "manifest": manifest, "frozen": frozen_obj, "run_dir": rd}, rd)
         cfg.update(result or {})
         cfg.setdefault("status", RunStatus.complete.value)
