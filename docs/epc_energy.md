@@ -79,6 +79,34 @@ The sibling's 50M-token distillation ran a homotopy of relaxation horizons
 `relaxation_steps = 1` is an unused default. The nominal 8-step credit is therefore a horizon
 the checkpoint saw during training, but not its terminal one; S1-06 measures, nothing assumes.
 
+## REG-00: the training recipe on the same graph (DEC-014)
+
+The regeneration driver (`pccap.distill.train`) reuses the graph and solver above with two
+additions, both FabricPC-shaped:
+
+* `pccap.pc.kd_energy.KDEnergy(beta)` — the head node's `EnergyFunctional` during distillation:
+  the clamp on `logits` holds the *teacher* logits and the per-sample energy is
+  `β²·mean_t KL(softmax(y/β) ‖ softmax(z/β))` (sibling `kd_kl_loss`, hdpc/energy.py:34-53, times
+  the micro-batch size so that `graph_energy`'s per-sample sum equals the sibling's scaled loss).
+  Relaxation is then exactly `relax_errors` with this energy: `Σ_l ½‖e_l‖² + KD`.
+* `pccap.pc.weight_phase.local_weight_energy` — the weight-phase objective: the same node
+  `forward`s with every error-bearing node's input detached and target `stop(z_mu + e)`, so the
+  Gaussian node energy `½‖z_latent − z_mu‖²` has gradient `−J_lᵀ e_l` in block `l`'s parameters
+  (sibling `local_prediction_pairs` / `local_weight_energy`, hdpc/wrap.py:166-186,
+  energy.py:130-162); the embedding is not detached (wte/wpe receive block 0's term) and the
+  head sees a detached input (KD reaches ln_f and the tied wte only).
+
+**Float32 note (REG-01 dissection).** GPT-2's residual stream is O(10–10³), so any form that adds a
+small error to an activation and subtracts the activation again loses the error
+(`(z_mu + e) − z_mu = 0` for |e| < ulp(z_mu) ≈ 1e-6 at z_mu ≈ 10). Two places are therefore written
+in the exact order: the free-node weight-phase energy is `½‖(z_mu − stop(z_mu)) − e‖²` (the
+sibling's `pred − pred.detach() − err`), and `derive_states` keeps the node error equal to the
+free variable `e` rather than recomputing `z_latent − z_mu`. The forward itself still uses
+`z_mu + e` (rounded exactly as the sibling's `pred + err`).
+
+Micro-batching is exact because both energies are per-sample sums; `tests/distill/` checks the
+FabricPC path against an independent plain-JAX implementation of the sibling's formulas.
+
 ## Dtypes, determinism, memory
 
 fp32 throughout; matmul precision `highest` (TF32 off, DEC-007); `--xla_gpu_deterministic_ops`.

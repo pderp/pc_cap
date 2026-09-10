@@ -1,16 +1,17 @@
 # Task status board
 
-Regenerated 2026-09-10 04:12 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 10:35 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 40 |
+| done | 41 |
+| in_progress | 1 |
 | partial | 2 |
-| ready | 7 |
-| pending | 38 |
+| ready | 6 |
+| pending | 37 |
 
-GPU seconds charged to tasks so far: 180
+GPU seconds charged to tasks so far: 240
 
 ## ENV
 
@@ -61,8 +62,8 @@ GPU seconds charged to tasks so far: 180
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| REG-00 | JAX distillation driver for ePC regeneration (PA-1 enabler) | **ready** | BASE | DATA-00 | short | no |  |  |  |
-| REG-01 | Cost pilot (100 steps) | **pending** | BASE | ENV-04, S0-01, REG-00, S0-06 | lease | no |  |  |  |
+| REG-00 | JAX distillation driver for ePC regeneration (PA-1 enabler) | **done** | BASE | DATA-00 | short | no | orchestrator |  |  |
+| REG-01 | Cost pilot (100 steps) | **in_progress** | BASE | ENV-04, S0-01, REG-00, S0-06 | lease | no | orchestrator |  |  |
 | REG-02 | Full regeneration (<= 10 GPU-h) | **pending** | BASE | REG-01 | lease | no |  |  |  |
 | REG-03 | Load and preflight | **pending** | BASE | REG-02, S0-06 | short | yes |  |  |  |
 

@@ -29,7 +29,7 @@ listed with its consequence for the remaining weeks.
 
 | Asset (PDF §3.1) | Status (S0-01, 2026-09-09) | Course |
 | --- | --- | --- |
-| ePC production checkpoint `4f0c23aa…` + resume state | absent everywhere reachable | T1 filed; PA-1 clock ends 2026-09-11 23:59 ET. Regeneration requires **REG-00** (JAX re-implementation of the sibling's homotopy distillation; DEC-006 corrects the regime: T ∈ {1,2,4,8,16,32,64}, not one step) → REG-01 pilot → REG-02 only if ≤ 10 GPU-h. The sibling's run took 35.7 A100-h, so the pilot will most likely project > 10 h; **plan for the BP-only month** with Thread 1's ePC rows marked `unavailable, not failed`, and treat any checkpoint as a bonus. |
+| ePC production checkpoint `4f0c23aa…` + resume state | absent everywhere reachable | T1 filed; PA-1 clock ends 2026-09-11 23:59 ET. Regeneration requires **REG-00** (JAX re-implementation of the sibling's homotopy distillation; DEC-006 corrects the regime: T ∈ {1,2,4,8,16,32,64}, not one step) → REG-01 pilot → REG-02 within the **120 local GPU-h bound of DEC-014** (2026-09-10 lead decision; superseding the ≤ 10 h line of this table's first version). The pilot's timing probe projects ≈ 11 h at micro-batch 5 on the RTX 5070 (results/REG/timing_probe.json); the regeneration runs on the orchestrator lane in resumable chunks and Thread 1's ePC rows are re-measured on the new checkpoint (S1-01, ePC rows of P3/P5/P6, S5). |
 | BP teacher GPT-2 small | verified | unchanged |
 | R8/R9 six-layer grammar | absent | PA-2 replacement (GRAM-01/02), labelled "replacement fixture, no continuity" |
 | causal-fibres v0.3, comcrit, RelaLeap | absent | optional; `unavailable`; S7-04 uses S0-07b's own small-matrix controls |
@@ -105,5 +105,5 @@ orders or contrasts.
 | --- | --- | --- |
 | CounterFact exact-key gate gives GS = 0 from retrieval | S2-01 | Report per CR-4; R-h0/R-g ablations (CAP-08) may be motivated as development diagnostics, never as confirmatory tuning |
 | Baselines lane unclaimed → D1 waits | board | orchestrator takes S2-03/04 after the C2 harness binding if still unclaimed |
-| REG-01 projection > 10 h | sibling 35.7 A100-h | BP-only month; S5 allocation reassigned by amendment |
+| REG-01 projection > 120 h (DEC-014 bound) | timing probe projects ≈ 11 h | BP-only month; S5 allocation reassigned by amendment. Not triggered. |
 | zsRE empty-baseline inflates immediate ES | DATA-01 | immediate ES reported with the baseline note; endpoints are RET-GS and locality |

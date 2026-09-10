@@ -93,7 +93,10 @@ def derive_states(params: GraphParams, structure, clamps: Dict[str, jnp.ndarray]
             z = z.at[:, p].add(writes[int(m) - 1][None])
         elif m:
             site_rows[int(m)] = z[:, p] if p is not None else None
-        ns = ns._replace(z_latent=z, error=z - ns.z_mu)
+        # The node's error is the free variable itself (exact), not the rounded ``z − z_mu``: with
+        # z_mu = O(10–10³) in GPT-2's residual stream, ``(z_mu + e) − z_mu`` loses e whenever
+        # |e| < ulp(z_mu), which would zero the prior term ½‖e‖² and its gradient (REG-01 dissection).
+        ns = ns._replace(z_latent=z, error=errors[name] if name in errors else z - ns.z_mu)
         if name not in clamps and info.out_degree == 0:
             # FabricPC evaluation-mode rule (NodeBase.forward_and_latent_grads): an unclamped
             # output node contributes no energy (the "unclamped" variant of D.1).

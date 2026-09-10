@@ -174,3 +174,18 @@ for other agents: S2-03/S2-04, DATA-03 → GRAM chain, DATA-02a, S2-05a/b, REG-0
 - **S2-07 / D1 (DEC-013):** scope zsRE 1000 / CounterFact 300 / grammar 10000 at 25.4 of 27.0 accelerator hours; ≈ 27 wall hours for the confirmatory core; fallback 300/300/256. BP-only programme eligible; substrate claims unavailable-not-failed.
 - **S3-04 (cap arms, one order):** zsRE RET-GS(100) C0 0.43, C1 0.31, C2 0.30, CR 0.18; C2 routes to bank 3 in 97% of rounds on zsRE and 100% on CounterFact; no abstentions; LS 0.93–1.00; LM drift ratio 1.0000.
 - Board: 40 tasks done, 2 partial (S1-07, S3-04). Nothing committed since the lead's instruction.
+
+## Addendum 2 (2026-09-10, after DEC-014): ePC regeneration is on
+
+The lead raised the PA-1 bound to 120 local GPU-hours (DEC-014). REG-00 is implemented:
+`pccap.distill` (recipe, data, schedule, train) on top of the FabricPC graph of S0-06 with two
+additions (`pccap.pc.kd_energy.KDEnergy`, `pccap.pc.weight_phase.local_weight_energy`; see
+`docs/epc_energy.md` "REG-00"). The OpenWebText shard was rebuilt byte-exactly (sha256
+`ae5b795a…` = the sibling's pinned value; `manifests/datasets.json`). Tiny-model tests check the
+FabricPC path against an independent implementation of the sibling's formulas, micro-batch
+exactness, Adam parity with torch's update rule, checkpoint/resume equivalence, and the stage
+boundaries (1396/2791/4186/5581/6976/8371, identical to the sibling's realized run). The timing
+probe (`results/REG/timing_probe.json`) and the 100-step pilot (`results/REG/pilot-100/`) are the
+REG-01 evidence; REG-02 then runs in resumable chunks under the lease. The "BP-only month"
+framing of §7 and of `docs/updated_plan3.md` is superseded for the ePC rows: they are
+re-measured on the regenerated checkpoint when REG-03 passes.
