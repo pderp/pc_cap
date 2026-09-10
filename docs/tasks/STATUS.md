@@ -1,14 +1,14 @@
 # Task status board
 
-Regenerated 2026-09-09 23:27 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 00:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 27 |
-| in_progress | 4 |
-| ready | 10 |
-| pending | 44 |
+| done | 33 |
+| partial | 1 |
+| ready | 8 |
+| pending | 43 |
 
 GPU seconds charged to tasks so far: 0
 
@@ -26,7 +26,7 @@ GPU seconds charged to tasks so far: 0
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | DATA-00 | Fetch and hash public assets into assets/ | **done** | DATA | ENV-01 | none | no | orchestrator |  |  |
-| REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **ready** | DATA | DATA-00 | none | no |  |  |  |
+| REF-01 | Reference oracle fixtures from HF PyTorch (CPU env under assets/) | **done** | DATA | DATA-00 | none | no | codex |  | fixtures verified by orchestrator; parity tests pass |
 | DATA-01 | Editing pools | **done** | DATA | S0-09 | lease | yes | orchestrator |  |  |
 | DATA-02 | Realizations, orders, sealed confirmation manifests | **pending** | DATA | DATA-01, DATA-08 | none | yes |  |  |  |
 | DATA-03 | MODULAR-CONTROL fixture | **ready** | DATA+MEMORY | ENV-03, CAP-05 | none | yes |  |  |  |
@@ -40,13 +40,13 @@ GPU seconds charged to tasks so far: 0
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S0-01 | Asset inventory and lead queue (T1) | **done** | INTEGRATOR+BASE | ENV-04, DATA-00 | none | no | orchestrator |  |  |
 | S0-03 | Schemas, outcome codes, CLI skeleton, ledger, records | **done** | INTEGRATOR | ENV-03 | none | yes | orchestrator |  |  |
-| S0-04 | BP base wrapper (GPT-2 small in JAX) | **done** | BASE | ENV-01, ENV-03, DATA-00 | short | yes | orchestrator |  | HF-oracle rows pending REF-01 |
+| S0-04 | BP base wrapper (GPT-2 small in JAX) | **done** | BASE | ENV-01, ENV-03, DATA-00 | short | yes | orchestrator |  |  |
 | S0-05 | Hidden-site adjoints and forced interventions | **done** | BASE | S0-04 | short | yes | orchestrator |  |  |
 | S0-06 | ePC base wrapper on FabricPC and declared energy (BP weights first) | **done** | BASE | S0-04, ENV-04 | short | yes | orchestrator |  |  |
 | S0-07 | Metric library with known-answer tests | **done** | METRICS | ENV-03 | none | yes | codex | a39be6b | Implementation verified (33 tests); awaiting Claude control review and merge. Do not overwrite owned paths. |
 | S0-07b | HVP small-matrix controls (optional) | **done** | METRICS | S0-07 | none | no | codex | 65ffe84 | 6 small-matrix controls plus all 33 metric controls pass. Based on task/S0-07. Awaiting Claude integration; no real HVP runs. |
 | S0-08 | Snapshot, clone, strict resume, resource-stop rollback | **done** | INTEGRATOR | S0-03, CAP-02 | none | yes | orchestrator |  |  |
-| S0-09 | Development reservation, tokenization helper, reference decoder | **done** | DATA | DATA-00, S0-03 | short | yes | orchestrator |  | HF decode parity pending REF-01 |
+| S0-09 | Development reservation, tokenization helper, reference decoder | **done** | DATA | DATA-00, S0-03 | short | yes | orchestrator |  |  |
 | CAP-01 | Key features and deterministic retrieval | **done** | MEMORY | ENV-03 | none | no | orchestrator |  |  |
 | CAP-02 | Slot metadata, use-count semantics, byte layout | **done** | MEMORY | CAP-01 | none | no | orchestrator |  |  |
 | CAP-03 | Byte ceiling and capacity | **done** | MEMORY | CAP-02 | none | no | orchestrator |  |  |
@@ -79,19 +79,19 @@ GPU seconds charged to tasks so far: 0
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S1-01 | P1 fidelity | **pending** | METRICS+BASE | REG-03, DATA-04, S0-11 | lease | yes |  |  |  |
-| S1-02 | P2 geometry | **in_progress** | METRICS | S0-07, DATA-04, S0-04 | short | no | orchestrator |  |  |
-| S1-03 | P3 localization and coverage | **in_progress** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no | orchestrator |  |  |
+| S1-02 | P2 geometry | **done** | METRICS | S0-07, DATA-04, S0-04 | short | no | orchestrator |  |  |
+| S1-03 | P3 localization and coverage | **done** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no | orchestrator |  |  |
 | S1-04 | P4 separability | **pending** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
-| S1-05 | P5 write locality | **ready** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no |  |  |  |
-| S1-06 | P6 finite settling and informativeness | **in_progress** | BASE+METRICS | S0-06 | lease | no | orchestrator |  |  |
-| S1-07 | S1 report and D1 input | **pending** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes |  |  |  |
+| S1-05 | P5 write locality | **done** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no | orchestrator |  |  |
+| S1-06 | P6 finite settling and informativeness | **done** | BASE+METRICS | S0-06 | lease | no | orchestrator |  |  |
+| S1-07 | S1 report and D1 input | **partial** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes | orchestrator |  | BP rows done; P1/P4 pending REG-03/GRAM-02 |
 
 ## S2
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S2-01 | Residual scales and radius calibration | **done** | BASE+MEMORY | S0-10, DATA-01 | lease | yes | orchestrator |  |  |
-| S2-02 | Aggregate step screening | **in_progress** | MEMORY+METRICS | S2-01 | lease | yes | orchestrator |  |  |
+| S2-02 | Aggregate step screening | **done** | MEMORY+METRICS | S2-01 | lease | yes | orchestrator |  |  |
 | S2-03 | LoRA baselines B1 (and B0) | **ready** | BASELINES | S0-09, S0-04 | short | yes |  |  |  |
 | S2-04 | Replay baseline B3 | **pending** | BASELINES | S2-03, S0-08 | short | no |  |  |  |
 | S2-05a | GRACE reference environment and smoke (PA-6) | **ready** | BASELINES | DATA-00 | none | no |  |  |  |

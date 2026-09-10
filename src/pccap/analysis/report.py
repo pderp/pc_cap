@@ -165,6 +165,7 @@ def render_s1() -> str:
     p2 = json.loads((RESULTS / "S1" / "P2_bp.json").read_text()) if (RESULTS / "S1" / "P2_bp.json").exists() else None
     p3 = json.loads((RESULTS / "S1" / "P3_bp.json").read_text()) if (RESULTS / "S1" / "P3_bp.json").exists() else None
     p6 = json.loads((RESULTS / "S1" / "P6_bp.json").read_text()) if (RESULTS / "S1" / "P6_bp.json").exists() else None
+    p5 = json.loads((RESULTS / "S1" / "P5_bp.json").read_text()) if (RESULTS / "S1" / "P5_bp.json").exists() else None
     L = ["# S1 stage report (Appendix G) — development, BP rows", "",
          f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S1`.", "",
          "## 1. Header", "", f"- Stage: S1 substrate report card. Code commit: `{_git()}`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: absent (REG pending).",
@@ -197,7 +198,22 @@ def render_s1() -> str:
               f"- Label: **{p6['label']}** ({p6['settled_criterion']}).",
               f"- cos(e₈, −adjoint) at banks 1/2/3: {_m(p6, 'cos_bank1_cos_e8_negadj', '{:.3f}')} / {_m(p6, 'cos_bank2_cos_e8_negadj', '{:.3f}')} / {_m(p6, 'cos_bank3_cos_e8_negadj', '{:.3f}')}; cos(e₆₄, −adjoint): {_m(p6, 'cos_bank1_cos_e64_negadj', '{:.3f}')} / {_m(p6, 'cos_bank2_cos_e64_negadj', '{:.3f}')} / {_m(p6, 'cos_bank3_cos_e64_negadj', '{:.3f}')} (inherited claim > 0.998 is for the distilled checkpoint; this row is the BP-weights procedure).",
               f"- Error–loss Spearman (bank 3, e₈): {_m(p6, 'spearman_bank3_e8', '{:.3f}')}; seconds per call: {_m(p6, 'seconds_per_call_8', '{:.3f}')} (8 it) / {_m(p6, 'seconds_per_call_64', '{:.3f}')} (64 it); reverses per 8-iteration call: {_m(p6, 'reverses_per_call_8', '{:.0f}')}.", ""]
-    L += ["## 6. Mechanism evidence", "", "None at S1.", "", "## 7. Optional mathematics", "", "None.", "",
+    if p5:
+        L += ["**P5 write locality (BP adjoint; Q = 200 edit prompts, U = 200 unrelated prompts, `manifests/dev/p5_subsets.json`; bounded geometric search for a 50% current-token loss reduction).**", "",
+              "| bank | reached 50% | unreachable | normalized write norm at target (median) | improvement (nats, mean) | unconditional collateral C_q (nats, mean) |", "| ---: | ---: | ---: | ---: | ---: | ---: |"]
+        for m in ("1", "2", "3"):
+            L.append(f"| {m} | {_m(p5, f'bank{m}_reached_50pct', '{:.2f}')} | {_m(p5, f'bank{m}_unreachable', '{:.0f}')} | {_m(p5, f'bank{m}_norm_at_target_median', '{:.3f}')} | {_m(p5, f'bank{m}_improvement_mean', '{:.2f}')} | {_m(p5, f'bank{m}_collateral_kl_mean', '{:.3f}')} |")
+        gated = ", ".join(f"{k}: {v['false_fire']['rate']:.4f}" for k, v in p5["gated_cap_on_U"].items())
+        L += ["", f"Deployed-gate behaviour on U (separate phenomenon, S2-02 A = 0.3 caps): false-fire {gated}. Improvement and collateral are reported separately; ratios per item carry undefined/right-unbounded statuses in `results/S1/P5_bp.json`. Retrieval-drift tracking: {p5['retrieval_drift']}.", ""]
+    L += ["## 5b. Validity / eligibility table (D1 input)", "",
+          "| claim type | status | basis |", "| --- | --- | --- |",
+          "| matched-fidelity substrate claim (SB vs SE-A/SE-E) | **unavailable, not failed** | no ePC checkpoint (S0-01; PA-1 clock, REG-00..03 pending); P1 cannot be computed for one base |",
+          "| synthetic-only substrate claim | pending | grammar replacement (GRAM-01/02, PA-2 clock) |",
+          "| BP-only editing programme (C0/C1/C2/CR on zsRE and CounterFact) | **eligible** | S0 controls pass; DATA-01 pools; S2-01 calibration (CounterFact exact-key pilot, CR-4); S2-02 A = 0.3 |",
+          "| inherited claim: teacher KL ~3e-5 (ref [5]) | unavailable | needs the distilled checkpoint |",
+          "| inherited claim: cos(settled error, adjoint) > 0.998 | partly reproduced on BP weights | e₈ at bank 3: 0.998; banks 1–2: 0.97–0.98; e₆₄: 0.75–0.98 (P6) — a property of the declared solver at the nominal horizon, to be re-measured on the checkpoint |",
+          "| inherited claim: error mass less concentrated in the last block | consistent on BP adjoints | final-block share 0.011 (P3), no alert |", "",
+          "## 6. Mechanism evidence", "", "None at S1.", "", "## 7. Optional mathematics", "", "None.", "",
           "## 8. Deviations", "", "SD-17 (radii per dataset); P6 measured on BP weights pending the ePC checkpoint; H/P2/P3 by the level-1-heading document rule (DATA-04 record).", "",
           "## 9. Interpretation", "", "Descriptive report card of one base; no eligibility decision for matched-fidelity claims can be made without a second base (D1 will record 'ePC unavailable, not failed').", "",
           "## 10. Reproduction", "", "```", "python -m pccap.data.lm_sets --build && python -m pccap.data.lm_sets --audit",

@@ -1,0 +1,9 @@
+$ /home/derp/cap/assets/envs/ref-torch-cpu/bin/python -B -m pytest -q -p no:cacheprovider tests/reference/test_reference_fixtures.py --basetemp=/home/derp/cap/assets/tmp/ref01/pytest-controls-approved
+........                                                                 [100%]
+8 passed in 3.76s
+
+exit_code=0
+$ /home/derp/cap/venv/bin/ruff check --no-cache scripts/make_reference_fixtures.py tests/reference/test_reference_fixtures.py
+All checks passed!
+
+exit_code=0

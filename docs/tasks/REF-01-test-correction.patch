@@ -1,0 +1,24 @@
+--- a/tests/reference/test_reference_fixtures.py
++++ b/tests/reference/test_reference_fixtures.py
+@@ -115,6 +115,8 @@
+ 
+     ids = torch.tensor([[2, 3, 4]])
+     logits, captured = ref.capture_forward(tiny_model, ids)
++    assert all(len(block._forward_hooks) == 0 for block in tiny_model.transformer.h)
++    assert not tiny_model.transformer.ln_f._forward_hooks
+     with torch.inference_mode():
+         independent = tiny_model(ids, use_cache=False, output_hidden_states=True)
+         normalized = tiny_model.transformer.ln_f(torch.from_numpy(captured[11])[None])
+@@ -124,7 +126,11 @@
+     np.testing.assert_array_equal(captured["ln_f"], independent.hidden_states[-1][0].numpy())
+     np.testing.assert_array_equal(normalized[0].numpy(), captured["ln_f"])
+     assert not np.allclose(captured[11], captured["ln_f"])
+-    assert all(len(block._forward_hooks) == 0 for block in tiny_model.transformer.h)
++    # Transformers installs its own persistent output-capture hooks above.
++    # Our writer must remove its handles and preserve those existing hooks.
++    existing_hooks = [dict(block._forward_hooks) for block in tiny_model.transformer.h]
++    ref.capture_forward(tiny_model, ids)
++    assert [dict(block._forward_hooks) for block in tiny_model.transformer.h] == existing_hooks
+     assert not tiny_model.transformer.ln_f._forward_hooks
+ 
+ 

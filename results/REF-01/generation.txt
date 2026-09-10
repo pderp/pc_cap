@@ -1,0 +1,49 @@
+started_utc=2026-09-10T00:55:34.623276+00:00
+$ /home/derp/cap/assets/envs/ref-torch-cpu/bin/python -B scripts/make_reference_fixtures.py --threads 4
+
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 148/148 [00:00<00:00, 39060.97it/s]
+{"phase": "forward", "completed": 16, "wall_seconds": 1.023645292967558}
+{"phase": "forward", "completed": 32, "wall_seconds": 1.395768582005985}
+{"phase": "forward", "completed": 48, "wall_seconds": 1.7985446780221537}
+{"phase": "forward", "completed": 64, "wall_seconds": 2.1766113149933517}
+{"phase": "forward", "completed": 80, "wall_seconds": 2.5665049359668046}
+{"phase": "forward", "completed": 96, "wall_seconds": 2.944396027014591}
+{"phase": "forward", "completed": 112, "wall_seconds": 3.3224488779669628}
+{"phase": "forward", "completed": 128, "wall_seconds": 3.8239215629873797}
+{"phase": "forward", "completed": 144, "wall_seconds": 4.212648135959171}
+{"phase": "forward", "completed": 160, "wall_seconds": 4.564562442013994}
+{"phase": "forward", "completed": 176, "wall_seconds": 4.942632626974955}
+{"phase": "forward", "completed": 192, "wall_seconds": 5.314775092992932}
+{"phase": "forward", "completed": 208, "wall_seconds": 5.69037472398486}
+{"phase": "forward", "completed": 224, "wall_seconds": 6.046402722015046}
+{"phase": "forward", "completed": 240, "wall_seconds": 6.4281380999600515}
+{"phase": "forward", "completed": 256, "wall_seconds": 6.817054366925731}
+{"phase": "greedy", "completed": 1, "cache_agrees": true}
+{"phase": "greedy", "completed": 2, "cache_agrees": true}
+{"phase": "greedy", "completed": 3, "cache_agrees": true}
+{"phase": "greedy", "completed": 4, "cache_agrees": true}
+{"phase": "greedy", "completed": 5, "cache_agrees": true}
+{"phase": "greedy", "completed": 6, "cache_agrees": true}
+{"phase": "greedy", "completed": 7, "cache_agrees": true}
+{"phase": "greedy", "completed": 8, "cache_agrees": true}
+{
+  "task": "REF-01",
+  "status": "verified",
+  "prompts": 256,
+  "lengths": [
+    1,
+    2,
+    3,
+    5,
+    8,
+    16,
+    64,
+    128
+  ],
+  "generation_cases": 8,
+  "cache_agreement_cases": 8,
+  "artifact_bytes": 643762838
+}
+exit_code=0
+finished_utc=2026-09-10T00:55:59.630297+00:00

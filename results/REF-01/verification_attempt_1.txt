@@ -1,0 +1,6 @@
+Command: PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES='' /home/derp/cap/assets/envs/ref-torch-cpu/bin/python -B -m pytest -q -p no:cacheprovider pc_cap/tests/reference/test_reference_fixtures.py --basetemp=/home/derp/cap/assets/tmp/ref01/pytest-controls
+Result: 1 failed, 7 passed in 4.48s; exit 1.
+Failure: test_hooks_capture_pre_final_normalization_and_leave_no_handles, line 127: assert all(len(block._forward_hooks) == 0 for block in tiny_model.transformer.h).
+All preceding logits and hidden-value comparisons passed. The subsequent read-only diagnostic in hook_diagnostic.json shows no hooks after our capture and one Transformers output-capturing hook per block after output_hidden_states=True. Proposed fix in docs/tasks/REF-01-test-correction.patch, not applied.
+Lint: ruff check --no-cache on the new script and new test file passed.
+Dependency install: sandbox DNS failed for download.pytorch.org and pypi.org. Authorized escalated reruns installed torch==2.11.0+cpu, transformers==5.13.1, numpy==2.5.3, pytest==9.1.1 in the newly created assets/envs/ref-torch-cpu only.
