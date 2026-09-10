@@ -104,6 +104,8 @@ def round_update(cap, ids: np.ndarray, target: int, item: EditItem, router: Rout
     # 3./4. route
     ctx = RoundContext(prefix_ids=ids, loss=L, directions=dirs, bank_scales=dict(cap.cfg.bank_scales),
                        rng_material=(seed, digest, prefix_index, round_index), permitted_banks=permitted_banks, position=p)
+    if hasattr(router, "bind_probe"):  # C2: loss oracle for temporary forced writes (probes charged by the base)
+        router.bind_probe(lambda m, v: cap.loss_of(cap.edited_forward(ids, extra={m: v}), target))
     dec = router.schedule(ctx)
     cost.add(dec.cost)
     codes += dec.codes

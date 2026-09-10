@@ -24,14 +24,22 @@ ProbeFn = Callable[[int, np.ndarray], float]  # (bank, write vector) -> probed l
 class Measured:
     name = "C2"
 
-    def __init__(self, probe_fn: ProbeFn, epsilon: float = 0.01, improvement_abs: float = 1e-8,
+    def __init__(self, probe_fn: ProbeFn | None = None, epsilon: float = 0.01, improvement_abs: float = 1e-8,
                  improvement_rel: float = 1e-6):
-        self.probe_fn = probe_fn
+        self.probe_fn = probe_fn  # bound per round by round_update via bind_probe (loss oracle with the training target)
         self.epsilon = float(epsilon)
         self.improvement_abs = improvement_abs
         self.improvement_rel = improvement_rel
 
+    def bind_probe(self, probe_fn: ProbeFn) -> None:
+        """Called by ``cap.learn.round_update`` before ``schedule``: the probe evaluates the training
+        loss of a temporary write through the cap's live retrieval. The target stays out of the
+        RoundContext (SD-4); labels legitimately enter credit computation during learning (F.3)."""
+        self.probe_fn = probe_fn
+
     def schedule(self, ctx: RoundContext) -> RouteDecision:
+        if self.probe_fn is None:
+            raise RuntimeError("Measured router has no probe bound (round_update binds it)")
         banks, codes = usable_banks(ctx, [1, 2, 3])
         L = float(ctx.loss)
         scores: dict[int, float] = {}

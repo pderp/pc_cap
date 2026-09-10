@@ -69,9 +69,7 @@ def run_s0(ctx: dict, run_dir: Path) -> dict:
     radii = {int(k): float(v) for k, v in manifest.get("radii", {"1": 0.0, "2": 0.0, "3": 0.0}).items()}
     scales = {int(k): float(v) for k, v in manifest.get("bank_scales", {"1": 1.0, "2": 1.0, "3": 1.0}).items()}
     cap = Cap(base, CapConfig(arm=cfg["arm"], read=cfg["read"], radii=radii, bank_scales=scales, seed=manifest.get("seed", 0)), ledger)
-    if cfg["arm"] == "C2":
-        raise NotImplementedError("C2 needs the probe binding (S2/S3 harness); S0 smoke uses C0/C1/CR")
-    router = make_router(cfg["arm"]) if cfg["arm"] != "C2" else None
+    router = make_router(cfg["arm"])
     items = load_items(manifest.get("items", ["s0_sample[0]"]), tok)
     h_before = base.checksum()
     (run_dir / "config.json").write_text(json.dumps({**cfg, "base_hash_before": h_before}, indent=1))

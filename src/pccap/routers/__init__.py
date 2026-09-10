@@ -12,4 +12,5 @@ __all__ = ["Full", "Last", "Measured", "Random", "Supplied", "make_router"]
 
 
 def make_router(arm: str, **kw):
+    """C2 is returned unbound; ``round_update`` binds its probe each round."""
     return {"C0": Last, "C1": Full, "C2": Measured, "CR": Random, "CO": Supplied}[arm](**kw)
