@@ -465,3 +465,59 @@ step 4100 T=4 bp=2.400e-04 pc=2.311e-04 resid=0.9629 gnorm=7.292e-02 1.37s
 milestone step 4102: prompt_kl=9.286e-06 student_ppl=93.2799 tail_kl=1.746e-05
 step 4125 T=4 bp=1.765e-05 pc=1.746e-05 resid=0.9895 gnorm=9.088e-03 1.37s
 step 4150 T=4 bp=2.353e-05 pc=2.294e-05 resid=0.9748 gnorm=1.062e-02 1.38s
+step 4175 T=4 bp=2.937e-05 pc=2.721e-05 resid=0.9266 gnorm=2.244e-02 1.38s
+stage -> T=8 at step 4186; next end 5581
+step 4200 T=8 bp=2.360e-05 pc=2.329e-05 resid=0.9869 gnorm=1.182e-02 2.25s
+step 4225 T=8 bp=4.332e-05 pc=4.179e-05 resid=0.9647 gnorm=2.824e-02 2.26s
+step 4250 T=8 bp=4.104e-05 pc=3.994e-05 resid=0.9733 gnorm=1.806e-02 2.25s
+step 4275 T=8 bp=3.096e-05 pc=2.985e-05 resid=0.9644 gnorm=2.194e-02 2.26s
+milestone step 4297: prompt_kl=6.647e-06 student_ppl=93.2989 tail_kl=1.395e-05
+step 4300 T=8 bp=1.855e-04 pc=1.644e-04 resid=0.8859 gnorm=4.601e-02 2.26s
+step 4325 T=8 bp=1.784e-05 pc=1.770e-05 resid=0.9923 gnorm=1.144e-02 2.26s
+step 4350 T=8 bp=3.098e-05 pc=3.056e-05 resid=0.9865 gnorm=4.181e-02 2.26s
+step 4375 T=8 bp=3.050e-05 pc=3.009e-05 resid=0.9867 gnorm=1.682e-02 2.28s
+step 4400 T=8 bp=6.529e-05 pc=5.295e-05 resid=0.8110 gnorm=3.423e-02 2.27s
+step 4425 T=8 bp=2.403e-05 pc=2.344e-05 resid=0.9754 gnorm=2.505e-02 2.27s
+step 4450 T=8 bp=2.686e-05 pc=2.500e-05 resid=0.9307 gnorm=1.696e-02 2.27s
+step 4475 T=8 bp=1.566e-05 pc=1.554e-05 resid=0.9923 gnorm=1.147e-02 2.26s
+milestone step 4493: prompt_kl=1.040e-05 student_ppl=93.4386 tail_kl=1.737e-05
+{
+ "run_name": "epc-50m",
+ "status": "paused_chunk",
+ "abort_reason": "",
+ "global_step": 4500,
+ "total_steps": 9766,
+ "tokens_seen": 23040000,
+ "stage_index": 3,
+ "schedule": [
+  1,
+  2,
+  4,
+  8,
+  16,
+  32,
+  64
+ ],
+ "elapsed_seconds": 5116.695119380951,
+ "gpu_seconds": 5052.720814466476,
+ "compile_seconds_by_T": {
+  "4": 9.400048017501831,
+  "8": 10.527437686920166
+ },
+ "mean_step_seconds_this_chunk": 1.9338600314764613,
+ "steps_this_chunk": 500,
+ "micro_batch_size": 5,
+ "peak_mem_mib": 7613.614013671875,
+ "protocol_hash": "8ec5feae4d5db48e",
+ "data_sha256": "ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+ "checkpoint_dir": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints",
+ "pilot": false
+}
+CHUNK_STATUS paused_chunk 4500
+2026-09-10T12:34:42Z chunk finished: status=paused_chunk
+resumed from /home/derp/cap/assets/models/epc/epc-50m/checkpoints at step 4500
+step 4500 T=8 bp=3.406e-05 pc=3.368e-05 resid=0.9887 gnorm=3.716e-02 10.53s
+step 4525 T=8 bp=2.697e-05 pc=2.680e-05 resid=0.9936 gnorm=2.055e-02 2.26s
+step 4550 T=8 bp=3.990e-05 pc=3.925e-05 resid=0.9836 gnorm=2.500e-02 2.27s
+step 4575 T=8 bp=6.554e-05 pc=6.379e-05 resid=0.9734 gnorm=3.171e-02 2.29s
+step 4600 T=8 bp=4.226e-05 pc=4.174e-05 resid=0.9878 gnorm=2.609e-02 2.27s
