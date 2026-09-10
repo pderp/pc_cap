@@ -1,11 +1,11 @@
 # Task status board
 
-Regenerated 2026-09-10 11:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-10 13:03 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 48 |
+| done | 49 |
 | in_progress | 1 |
 | partial | 10 |
 | ready | 4 |
@@ -57,6 +57,7 @@ GPU seconds charged to tasks so far: 1080
 | CAP-07 | Complete-edit learning loop | **done** | MEMORY+DATA | CAP-06, S0-09 | short | yes | orchestrator |  |  |
 | S0-10 | Minimal cap integration smoke and the four pre-run invariants | **done** | MEMORY | CAP-07, S0-08, S0-04 | short | yes | orchestrator |  |  |
 | S0-11 | S0 stage report and CP-C | **done** | INTEGRATOR | S0-10, S0-06, S0-07, S0-09 | none | yes | orchestrator |  |  |
+| DATA-02a | Sealed confirmation loader and seal test | **done** | DATA | DATA-02 | none | yes | codex |  | public loader connected; 90 tests + 5 API smokes (codex); mirrored by the orchestrator |
 
 ## REG
 

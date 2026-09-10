@@ -16,6 +16,7 @@ import hashlib
 import json
 import re
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -55,12 +56,24 @@ def load(p: Path, default=None):
 
 
 def spec_defects() -> list[dict]:
+    """Both table layouts (R2-08): 4 columns (ID | Issue | Committed resolution | Status) for SD-1..12 and
+    5 columns (ID | Issue | Both readings | Resolution | Status) for SD-13 onward."""
     rows = []
     for line in (ROOT / "docs" / "spec_defects.md").read_text().splitlines():
-        m = re.match(r"^\| (SD-\d+) \| (.*?) \| (.*?) \| (.*?) \|$", line)
-        if m:
-            rows.append({"id": m.group(1), "issue": m.group(2), "resolution": m.group(3), "status": m.group(4)})
+        if not line.startswith("| SD-"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split(" | ")]
+        if len(cells) == 4:
+            rows.append({"id": cells[0], "issue": cells[1], "resolution": cells[2], "status": cells[3]})
+        elif len(cells) == 5:
+            rows.append({"id": cells[0], "issue": cells[1], "readings": cells[2], "resolution": cells[3], "status": cells[4]})
+        else:
+            rows.append({"id": cells[0], "raw": line, "status": "unparsed"})
     return rows
+
+
+def decision_ids() -> list[str]:
+    return sorted({m.group(1) for m in re.finditer(r"^\| (DEC-\d+) \|", (ROOT / "docs" / "decisions.md").read_text(), flags=re.M)})
 
 
 def decision_text(dec_id: str) -> str:
@@ -144,6 +157,7 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
                              "manifest_sha256": sha(M / "dev" / "challenges.json") if (M / "dev" / "challenges.json").exists() else None,
                              "rule": "challenge sets are disjoint from development and confirmation streams and are evaluated and reported separately; they never enter the primary endpoint; the correction track alone enables RevisionEvent slot retirement (SD-4)"},
         "resource_rules": {"headroom": 0.25, "kappa": kappa["kappa"], "kappa_band": kappa["kappa_band"], "kappa_status": kappa["status"],
+                           "run_allowance_seconds": None, "run_allowance_note": "S4-02 sets the per-run accelerator allowance from the priced scope; None = no per-run stop (stage ceiling only)",
                            "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation"},
         "analysis_code_commit": {"git_head": git("rev-parse", "HEAD"), "analysis_tree_sha256": tree_sha(ROOT / "src" / "pccap" / "analysis")},
         "negative_case_interpretation": decision_text("DEC-009"),
@@ -155,7 +169,8 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
         "substrate_contrasts": [["SE-A", "SB"], ["SE-E", "SE-A"]],
         "exploratory_ablations": {"list_frozen_at": "S4-01 (plan §6.14 S8-02)", "design": "3 realizations × 2 orders, labelled exploratory, dropped before any core pair",
                                   "items": ["R-h0 vs R-h", "half B_cap", "double B_cap", "difficulty weight (CAP-09)", "R-e vs R-g (only if CAP-08 is built)"]},
-        "decisions": [f"DEC-{i:03d}" for i in range(0, 17)],
+        "decisions": decision_ids(),
+        "selection_rule": __import__("pccap.data.selection", fromlist=["RULE"]).RULE,
         "pending": pending,
     }
     return man, pending
@@ -177,17 +192,34 @@ def main(argv=None) -> int:
     ap.add_argument("--draft", action="store_true", default=True)
     ap.add_argument("--final", action="store_true")
     ap.add_argument("--i-am-the-lead", action="store_true")
+    ap.add_argument("--accept-unavailable", nargs="*", default=None,
+                    help="final only: pending inputs the lead explicitly accepts as unavailable (each must match a pending entry prefix)")
     args = ap.parse_args(argv)
     if args.final and not args.i_am_the_lead:
         raise SystemExit("writing manifests/frozen.json is the lead's CP-E act: pass --final --i-am-the-lead")
     man, pending = build(draft=not args.final)
     errors = sorted(jsonschema.Draft202012Validator(MANIFEST_FROZEN).iter_errors(man), key=lambda e: list(e.path))
     out = M / ("frozen.json" if args.final else "frozen.draft.json")
-    out.write_text(json.dumps(man, indent=1, default=float) + "\n")
+    if args.final:
+        accepted = list(args.accept_unavailable or [])
+        unaccepted = [p_ for p_ in pending if not any(p_.startswith(a) for a in accepted)]
+        if errors or unaccepted:  # R2-08: validate before writing; never publish with unresolved inputs
+            print("REFUSED to write frozen.json:", file=sys.stderr)
+            for e in errors:
+                print("  - schema:", "/".join(map(str, e.path)), e.message[:100], file=sys.stderr)
+            for p_ in unaccepted:
+                print("  - pending input not accepted:", p_, file=sys.stderr)
+            return 1
+        man["accepted_unavailable"] = accepted
+        tmp = out.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(man, indent=1, default=float) + "\n")
+        tmp.replace(out)  # atomic publish
+    else:
+        out.write_text(json.dumps(man, indent=1, default=float) + "\n")
     print("wrote", out)
     print("schema errors:", [f"{'/'.join(map(str, e.path))}: {e.message[:80]}" for e in errors] or "none")
     print("pending inputs:", pending or "none")
-    return 1 if (errors and args.final) else 0
+    return 1 if errors else 0
 
 
 if __name__ == "__main__":

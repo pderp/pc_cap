@@ -135,7 +135,7 @@ def main(argv=None) -> int:
                         "common_initially_incorrect_first_token_fraction": correct["both_incorrect"] / len(items),
                         "note": "first answer token at the prompt's last position (the stream is BP-selected: teacher-incorrect by construction, DATA-01 E.2)"}
         report = lease.report
-    eligible = st["mean"] <= 1e-3
+    eligible = st["mean"] <= 1e-3 and st["nonfinite"] == 0  # R2-08: any non-finite KL position blocks eligibility
     out = {"stage": "S1", "property": "P1", "base": "EPC (regenerated, REG-02) vs BP teacher", "weights": args.epc_weights, "H": {"tokens_used": st["windows"] * L, "source": "DATA-04 H_tokens (SD-1)"},
            "metrics": {"kl_mean": metric(st["mean"], units="nats", n=st["positions"]), "kl_p95": metric(st["p95"], units="nats", n=st["positions"]),
                        "kl_p99": metric(st["p99"], units="nats", n=st["positions"]), "kl_max_finite": metric(st["max_finite"], units="nats", n=st["positions"]),
@@ -149,7 +149,7 @@ def main(argv=None) -> int:
            "reconciliation": {"sibling_terminal_fidelity_kl": 1.24e-4, "sibling_scaling": "kd_kl_loss at temperature 2 times beta^2 = 4 (OWT-unseen, 409,600 positions)",
                               "pdf_inherited_figure": 3e-5, "ours_beta1_mean": st["mean"], "ours_beta2_x4_mean": st["kd_beta2_x4_mean"],
                               "note": "the regenerated checkpoint is a new run (PA-1); its OWT-tail figures are in results/REG/preflight.json"},
-           "eligibility": {"matched_fidelity_claims": "eligible" if eligible else "ineligible", "rule": "mean KL <= 1e-3 on H (both bases; the BP row is the teacher against itself = 0)"},
+           "eligibility": {"matched_fidelity_claims": "eligible" if eligible else "ineligible", "rule": "mean KL <= 1e-3 on H and zero non-finite positions (both bases; the BP row is the teacher against itself = 0)"},
            "lease": report, "seconds": time.time() - t0}
     (S1 / "P1_epc.json").write_text(json.dumps(out, indent=1, default=float))
     bp = {"stage": "S1", "property": "P1", "base": "BP teacher vs itself", "metrics": {"kl_mean": metric(0.0, units="nats", n=st["positions"])}, "eligibility": {"matched_fidelity_claims": "eligible"}}

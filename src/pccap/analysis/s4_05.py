@@ -50,8 +50,24 @@ def discover(roots: list[Path]) -> list[dict]:
     return runs
 
 
-def cumulative_accel(items: list[dict]) -> np.ndarray:
-    return np.cumsum([it["cost"]["accel_seconds"] for it in items])
+def item_seconds(it: dict, phase: str = "total") -> float:
+    """Accelerator seconds attributable to one item from the shared-ledger delta (update + immediate evaluation;
+    R2-06); falls back to the learner-internal cost record (learning only, incomplete for cap arms) with a flag."""
+    ld = it.get("ledger_delta")
+    if ld:
+        return float(ld["update"][phase] + ld["immediate_eval"][phase])
+    return float(it["cost"]["accel_seconds"])
+
+
+def cumulative_accel(items: list[dict], phase: str = "total") -> np.ndarray:
+    return np.cumsum([item_seconds(it, phase) for it in items])
+
+
+def checkpoint_seconds(c: dict, cum: np.ndarray) -> float:
+    led = c.get("ledger_accel_seconds_at_checkpoint")
+    if led:
+        return float(led["total"])  # includes evaluation setup, immediate evaluations and every rescoring pass so far
+    return float(cum[c["items"] - 1]) if c["items"] else 0.0
 
 
 def views(runs: list[dict]) -> dict:
@@ -66,20 +82,21 @@ def views(runs: list[dict]) -> dict:
         for b in BUDGETS_S:
             k = int(np.searchsorted(cum, b, side="right"))
             tm[str(b)] = {"items_within_budget": k, "es_running_mean": float(es_cum[k - 1]) if k else None}
-        rets = {c["tag"]: {"items": c["items"], "ret_es": c["ret_es"], "ret_gs": c["ret_gs"], "ls": c["locality"]["ls_complete_answer"], "accel_seconds_at": float(cum[c["items"] - 1]) if c["items"] else 0.0} for c in r["checkpoints"]}
-        learn = [it["cost"]["accel_seconds"] for it in r["items"]]
+        rets = {c["tag"]: {"items": c["items"], "ret_es": c["ret_es"], "ret_gs": c["ret_gs"], "ls": c["locality"]["ls_complete_answer"], "accel_seconds_at": checkpoint_seconds(c, cum)} for c in r["checkpoints"]}
+        learn = [it["ledger_delta"]["update"]["total"] if it.get("ledger_delta") else it["cost"]["accel_seconds"] for it in r["items"]]
+        complete = all(it.get("ledger_delta") for it in r["items"])
         out["per_run"].append({"dir": r["dir"], "arm": r["arm"], "dataset": r["dataset"], "realization": r["realization"], "perm": r["perm"], "status": r["status"],
                                "items_completed": len(r["items"]), "accel_seconds_total": float(cum[-1]) if len(cum) else 0.0,
-                               "mean_update_accel_s": float(np.mean(learn)) if learn else None, "retention_vs_items": rets, "es_vs_accel_budget": tm})
-    # exposure-matched: checkpoints every arm completed, per (dataset, realization, perm)
+                               "cost_source": "ledger deltas (update + immediate evaluation)" if complete else "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
+                               "mean_update_accel_s": float(np.mean(learn)) if learn else None, "retention_vs_items": rets, "es_vs_accel_budget": tm,
+                               "retained_vs_accel_budget": {c["tag"]: {"accel_seconds_at": checkpoint_seconds(c, cum), "ret_es": c["ret_es"], "ret_gs": c["ret_gs"]} for c in r["checkpoints"]}})
+    # exposure-matched per CONTRAST PAIR (R2-06): checkpoints both arms of the pair completed, never intersected over all arms
     for key, arms in by.items():
-        tags = None
-        for r in arms.values():
-            t = {c["items"] for c in r["checkpoints"]}
-            tags = t if tags is None else tags & t
         table = {}
-        for n in sorted(tags or []):
-            table[str(n)] = {arm: next(({"ret_es": c["ret_es"], "ret_gs": c["ret_gs"], "ls": c["locality"]["ls_complete_answer"]} for c in r["checkpoints"] if c["items"] == n), None) for arm, r in arms.items()}
+        for a, b in CONTRASTS:
+            if a in arms and b in arms:
+                common = {c["items"] for c in arms[a]["checkpoints"]} & {c["items"] for c in arms[b]["checkpoints"]}
+                table[f"{a}-{b}"] = {str(n): {arm: next(({"ret_es": c["ret_es"], "ret_gs": c["ret_gs"], "ls": c["locality"]["ls_complete_answer"]} for c in arms[arm]["checkpoints"] if c["items"] == n), None) for arm in (a, b)} for n in sorted(common)}
         out["exposure_matched"]["/".join(map(str, key))] = table
         # time-matched: ES running mean at accelerator budgets
         out["time_matched"]["/".join(map(str, key))] = {str(b): {arm: next(p for p in out["per_run"] if p["dir"] == r["dir"])["es_vs_accel_budget"][str(b)] for arm, r in arms.items()} for b in BUDGETS_S}
@@ -91,10 +108,10 @@ def views(runs: list[dict]) -> dict:
         out["longest_common_prefix"]["/".join(map(str, key))] = lcp
         # comparable compute vs C2
         if "C2" in arms:
-            ref = np.mean([it["cost"]["accel_seconds"] for it in arms["C2"]["items"]])
+            ref = np.mean([item_seconds(it) for it in arms["C2"]["items"]])
             cc = {}
             for arm, r in arms.items():
-                m = float(np.mean([it["cost"]["accel_seconds"] for it in r["items"]]))
+                m = float(np.mean([item_seconds(it) for it in r["items"]]))
                 cc[arm] = {"mean_update_accel_s": m, "ratio_to_C2": m / ref if ref else None, "within_20pct": bool(ref and abs(m - ref) / ref <= 0.2),
                            "support": "comparable-compute" if ref and abs(m - ref) / ref <= 0.2 else "resource-matched view required (time-matched table)"}
             out["comparable_compute"]["/".join(map(str, key))] = cc
@@ -108,11 +125,12 @@ def render(v: dict, label: str) -> str:
     for key, cc in v["comparable_compute"].items():
         for arm, c in cc.items():
             L.append(f"| {key} | {arm} | {c['mean_update_accel_s']:.3f} | {c['ratio_to_C2']:.2f} | {'yes' if c['within_20pct'] else 'no'} |")
-    L += ["", "## Exposure-matched retention (checkpoints every arm completed)", ""]
+    L += ["", "## Exposure-matched retention per contrast (checkpoints both arms completed)", ""]
     for key, table in v["exposure_matched"].items():
-        for n, row in table.items():
-            L.append(f"- {key} @ {n} items: " + "; ".join(f"{arm}: RET-ES {c['ret_es']:.2f} RET-GS {c['ret_gs'] if c['ret_gs'] is None else round(c['ret_gs'], 2)} LS {c['ls']:.2f}" for arm, c in row.items() if c))
-    L += ["", "## Time-matched (items completed and running ES within an accelerator budget)", ""]
+        for pair, per_n in table.items():
+            for n, row in per_n.items():
+                L.append(f"- {key} {pair} @ {n} items: " + "; ".join(f"{arm}: RET-ES {c['ret_es']:.2f} RET-GS {c['ret_gs'] if c['ret_gs'] is None else round(c['ret_gs'], 2)} LS {c['ls']:.2f}" for arm, c in row.items() if c))
+    L += ["", "## Time-matched (items completed and running immediate-ES acquisition curve within an accelerator budget; retained performance at checkpoints is `retained_vs_accel_budget` in the JSON)", ""]
     for key, tm in v["time_matched"].items():
         for b in ("30", "120", "600"):
             L.append(f"- {key} @ {b} s: " + "; ".join(f"{arm}: {c['items_within_budget']} items, ES {c['es_running_mean'] if c['es_running_mean'] is None else round(c['es_running_mean'], 2)}" for arm, c in tm[b].items()))

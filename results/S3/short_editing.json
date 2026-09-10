@@ -1,7 +1,8 @@
 {
  "source": [
   "/home/derp/cap/pc_cap/results/S2/throughput",
-  "/home/derp/cap/pc_cap/results/S2/throughput_baselines"
+  "/home/derp/cap/pc_cap/results/S2/throughput_baselines",
+  "/home/derp/cap/pc_cap/results/S2/throughput_crdist"
  ],
  "runs": [
   {
@@ -203,7 +204,7 @@
    "rounds_per_item": 3.91
   },
   {
-   "arm": "CR",
+   "arm": "CR(uniform)",
    "dataset": "counterfact",
    "items": 100,
    "rounds": 426,
@@ -238,7 +239,7 @@
    "rounds_per_item": 4.26
   },
   {
-   "arm": "CR",
+   "arm": "CR(uniform)",
    "dataset": "zsre",
    "items": 100,
    "rounds": 657,
@@ -433,6 +434,72 @@
    "lm_drift_perplexity_ratio": 1.2089156134977084,
    "memory_occupied_bytes": 3570506.0,
    "rounds_per_item": 0.0
+  },
+  {
+   "arm": "CR(learned)",
+   "dataset": "counterfact",
+   "items": 100,
+   "rounds": 200,
+   "proposed_routes": {
+    "3": 200
+   },
+   "accepted_writes": {
+    "3": 200
+   },
+   "abstain_rounds": 0,
+   "no_direction_events": 0,
+   "allocations": 200,
+   "value_updates_on_existing_slots": 0,
+   "evictions": 0,
+   "ambiguous_key_conflicts": 0,
+   "rejected_no_improvement": 0,
+   "router_probes": 0,
+   "search_candidates": 800,
+   "threshold_acquisition": 1.0,
+   "es_immediate": 1.0,
+   "gs_immediate": 0.0,
+   "ret_es_end": 1.0,
+   "ret_gs_end": 0.0,
+   "ls_complete_answer_end": 1.0,
+   "ls_kl_end": 0.0,
+   "lm_drift_perplexity_ratio": 1.0,
+   "memory_occupied_bytes": 1259200.0,
+   "rounds_per_item": 2.0
+  },
+  {
+   "arm": "CR(learned)",
+   "dataset": "zsre",
+   "items": 100,
+   "rounds": 381,
+   "proposed_routes": {
+    "3": 374,
+    "2": 3,
+    "1": 4
+   },
+   "accepted_writes": {
+    "3": 374,
+    "2": 3,
+    "1": 4
+   },
+   "abstain_rounds": 0,
+   "no_direction_events": 0,
+   "allocations": 376,
+   "value_updates_on_existing_slots": 5,
+   "evictions": 0,
+   "ambiguous_key_conflicts": 0,
+   "rejected_no_improvement": 0,
+   "router_probes": 0,
+   "search_candidates": 1524,
+   "threshold_acquisition": 1.0,
+   "es_immediate": 1.0,
+   "gs_immediate": 0.56,
+   "ret_es_end": 0.77,
+   "ret_gs_end": 0.38,
+   "ls_complete_answer_end": 1.0,
+   "ls_kl_end": 0.0,
+   "lm_drift_perplexity_ratio": 1.0,
+   "memory_occupied_bytes": 2367296.0,
+   "rounds_per_item": 3.81
   }
  ],
  "arms": [
@@ -442,7 +509,8 @@
   "C0",
   "C1",
   "C2",
-  "CR"
+  "CR(learned)",
+  "CR(uniform)"
  ],
  "baselines_pending": [
   "B4"

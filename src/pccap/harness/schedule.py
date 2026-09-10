@@ -40,7 +40,7 @@ def jobs_from_manifest(man: dict) -> list[dict]:
                     mpath = f"{man['confirm_dir']}/{ds}_r{r}.json" if ds != "grammar" else f"{man['confirm_dir']}/grammar.json"
                     jobs.append({"stage": "S4", "dataset": ds, "arm": arm, "base": "BP", "read": "h", "realization": r, "perm": perm,
                                  "order_seed": oseed, "n_items": n, "status": status, "manifest": mpath,
-                                 "cmd": f"pccap run --stage S4 --mode confirm --arm {arm} --base BP --read h --realization {r} --perm {perm} --manifest {mpath}"})
+                                 "cmd": f"pccap run --stage S4 --mode confirm --dataset {ds} --arm {arm} --base BP --read h --realization {r} --perm {perm} --manifest {mpath}"})
     return jobs
 
 

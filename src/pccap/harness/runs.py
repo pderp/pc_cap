@@ -194,8 +194,13 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
     completed = 0
     ckpt_records = []
 
+    def ledger_snapshot() -> dict:
+        t = ledger.totals()
+        return {k: float(t[k]["accel_seconds"]) for k in ("learning", "query", "total")}
+
     def rescore(tag: str):
         rows = []
+        led0 = ledger_snapshot()
         evs = evaluator.items(learner, items[:completed])
         for it, e in zip(items[:completed], evs):
             rows.append({"item_id": it.item_id, "ret_es": e["es"], "ret_gs": e["gs"]})
@@ -206,7 +211,9 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
         loc = evaluator.locality(learner)
         dr = evaluator.drift(learner)
         sha = save(learner.export_state(), ckpt_dir / f"learner_{tag}.ckpt")
+        led1 = ledger_snapshot()
         rec = {"tag": tag, "items": completed, "ret_es": float(np.mean(ret_es)) if ret_es else None,
+               "ledger_accel_seconds_at_checkpoint": led1, "rescoring_accel_seconds": {k: led1[k] - led0[k] for k in led1},
                "ret_gs": float(np.mean(ret_gs)) if ret_gs else None, "ret_gs_n": len(ret_gs),
                "survival_conditional_on_immediate": float(np.mean(cond)) if cond else None, "acquired_immediate": len(acq),
                "locality": loc, "drift": dr, "memory": learner.memory_bytes().__dict__, "checkpoint_sha256": sha,
@@ -218,6 +225,7 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
         if resource_stop_seconds is not None and ledger.totals()["total"]["accel_seconds"] > resource_stop_seconds:
             status = OutcomeCode.resource_stop.value
             break
+        led_before = ledger_snapshot()
         with ItemGuard(learner, ledger) as guard:
             kw = {"on_decision": lambda r: append_jsonl(dec_path, r), "seed": seed, "correction_track": correction_track}
             if permitted is not None:
@@ -226,16 +234,27 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
             out = update_item(learner, it, router, budget, Transport(), **kw) if hasattr(learner, "banks") else learner.update_item(it)
             guard.commit()
         completed = idx + 1
+        led_after_update = ledger_snapshot()
         e = evaluator.item(learner, it)
+        led_after_eval = ledger_snapshot()
+        # R2-06: the item's own cost record (learner-internal counters) plus the shared-ledger deltas, which include every
+        # base call the learner made (adjoints, probes, searches) and the immediate evaluation, so resource views can
+        # reconcile with the final ledger exactly.
         row = {"index": idx, "item_id": it.item_id, "dataset": it.dataset, "outcome": out.code, "rounds": out.rounds_used,
                "threshold": out.acquired_threshold_all_prefixes, **e, "answer_tokens": int(len(it.answer_ids)),
-               "cost": out.cost.as_dict()}
+               "cost": out.cost.as_dict(),
+               "ledger_delta": {"update": {k: led_after_update[k] - led_before[k] for k in led_before},
+                                "immediate_eval": {k: led_after_eval[k] - led_after_update[k] for k in led_before},
+                                "cumulative": led_after_eval}}
         history.append(row)
         append_jsonl(items_path, row)
         if e["es"] == 1.0:
             acquired_ids.append(it.item_id)
         if completed in checkpoints:
             rescore(f"ckpt{completed}")
+        if resource_stop_seconds is not None and ledger.totals()["total"]["accel_seconds"] > resource_stop_seconds:
+            status = OutcomeCode.resource_stop.value  # exceeded after a committed item: the completed prefix is exact
+            break
     final = rescore("end")
     n = completed
     es = [h["es"] for h in history]
@@ -262,6 +281,7 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
         },
         "strata": {"answer_length": {str(k): int(sum(1 for h in history if h["answer_tokens"] == k)) for k in sorted({h["answer_tokens"] for h in history})}},
         "base_hash_before": None, "base_hash_after": None, "wall_seconds": time.time() - t0,
+        "ledger_totals": ledger.totals(), "resource_stop_seconds": resource_stop_seconds,
     }
     (run_dir / "checkpoints.json").write_text(json.dumps(ckpt_records, indent=1, default=float))
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))

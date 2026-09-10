@@ -85,18 +85,19 @@ def directions_at(cap, ids, target: int, writes: dict[int, np.ndarray], transpor
     wl = cap._writes_list(p, writes)
     out = {}
     extra = None
+    blocks = getattr(cap.base, "bank_blocks", None) or g.BANK_BLOCK  # a base may declare its own sites (grammar: 1/3/5)
     if getattr(cap.cfg, "credit", "adjoint") == "error":
         er = cap.base.infer_errors(ids, target, iters=int(cap.cfg.credit_iters), writes=wl, phase=phase)
         sign = float(getattr(cap.base, "descent_sign", 1.0))
         for m in cap.cfg.banks():
-            site = SiteId(m, g.BANK_BLOCK[m], p)
+            site = SiteId(m, blocks[m], p)
             e = np.asarray(cap.base.error_at_site(er, m), np.float32)
             out[m] = transport.direction(-sign * e, site)
         extra = er.cost
     else:
         grads = cap.base.adjoint(ids, target, wl, phase=phase)
         for m in cap.cfg.banks():
-            site = SiteId(m, g.BANK_BLOCK[m], p)
+            site = SiteId(m, blocks[m], p)
             out[m] = transport.direction(np.asarray(grads[site], np.float32), site)
     directions_at.last_extra_cost = extra
     return out

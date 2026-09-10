@@ -18,16 +18,18 @@ def test_dev_manifest_dry_run(tmp_path):
     r = run("run", "--stage", "S0", "--arm", "C1", "--manifest", str(m), "--dry-run")
     assert r.returncode == 0, r.stderr
     cfg = json.loads(r.stdout)
-    assert cfg["manifest_sha256"] and cfg["determinism"]["jax_default_matmul_precision"] == "highest"
+    assert cfg["manifest_sha256"] and "deferred" in cfg["determinism"]  # the backend initializes only after the lease (R2-05)
 
 
-def test_confirm_mode_refuses_missing_frozen_fields(tmp_path):
-    m = tmp_path / "conf.json"
+def test_confirm_mode_refuses_without_frozen_manifest(tmp_path):
+    """§4.5 rule 4 (R2-02): in confirm mode the freeze is checked first and the --manifest file (a sealed
+    realization reference) is never opened by the CLI; the frozen-field validation applies to
+    manifests/frozen.json itself (exercised in tests/harness/test_confirm_cli.py)."""
+    m = tmp_path / "zsre_r0.json"
     m.write_text(json.dumps({"name": "t", "mode": "confirm", "stage": "S4", "seed": 1, "A": 0.1}))
-    r = run("run", "--stage", "S4", "--arm", "C2", "--manifest", str(m), "--mode", "confirm", "--dry-run")
+    r = run("run", "--stage", "S4", "--arm", "C2", "--dataset", "zsre", "--manifest", str(m), "--mode", "confirm", "--dry-run")
     assert r.returncode == 2
-    assert "missing frozen field: cr_distribution" in r.stderr
-    assert "missing frozen field: analysis_code_commit" in r.stderr
+    assert "requires manifests/frozen.json" in r.stderr
 
 
 def test_status_subcommand():

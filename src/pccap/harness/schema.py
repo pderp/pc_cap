@@ -270,7 +270,7 @@ def missing_frozen_fields(manifest: dict) -> list[str]:
 def infer_kind(path: Path) -> str:
     name = path.name
     parts = path.as_posix()
-    if name == "frozen.json":
+    if name in ("frozen.json", "frozen.draft.json"):
         return "manifest_frozen"
     if name == "assets.json":
         return "assets"

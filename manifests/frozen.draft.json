@@ -6,9 +6,9 @@
  "frozen_at": null,
  "draft": true,
  "code_commit": {
-  "git_head": "ee75a9e0cd515a682ae143eb558d22d9143f56b0",
+  "git_head": "81233aca21d4280853028156c060d64c4c20766e",
   "dirty": true,
-  "src_tree_sha256": "12b253eb3fbae97d5a7d0ce7da9eff942a88d5c39cb634667e1fe0ffea706870",
+  "src_tree_sha256": "2a963e02ffe683193b8c96df74573b3ba54d7d36041ff9329d79849e89be7d37",
   "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"
  },
  "env_lock_sha": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
@@ -211,11 +211,13 @@
    2.0
   ],
   "kappa_status": "provisional",
+  "run_allowance_seconds": null,
+  "run_allowance_note": "S4-02 sets the per-run accelerator allowance from the priced scope; None = no per-run stop (stage ceiling only)",
   "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation"
  },
  "analysis_code_commit": {
-  "git_head": "ee75a9e0cd515a682ae143eb558d22d9143f56b0",
-  "analysis_tree_sha256": "25ac3c5258f45a3ec9fab720416f751635c8971e60820da45622b5e9428267e0"
+  "git_head": "81233aca21d4280853028156c060d64c4c20766e",
+  "analysis_tree_sha256": "18d59d162463276ac43299feaf42482d939b735c8a9afdb79817ed8781524307"
  },
  "negative_case_interpretation": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
  "classification_policy": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
@@ -295,38 +297,44 @@
   {
    "id": "SD-13",
    "issue": "PDF App. B says \"PyTorch handles the cap and the harness; JAX is used through the base wrapper only if the checkpoint requires it.\" The lead's execution directive (DEC-001) says all GPU code is JAX and PC functionality is built on FabricPC.",
-   "resolution": "(a) follow the PDF's framework line; (b) follow the lead's directive.",
-   "status": "(b). The PDF's framework sentence is an implementation preference, not a threshold, endpoint or arm; the lead is the authority named in PDF Operating rule 5. The consequence the PDF warns about (\"cross-framework gradients must be explicitly implemented and tested\") is avoided entirely because there is now exactly one framework. Recorded here so the report's deviation table (App. G \u00a78) carries it. | committed (DEC-001)"
+   "readings": "(a) follow the PDF's framework line; (b) follow the lead's directive.",
+   "resolution": "(b). The PDF's framework sentence is an implementation preference, not a threshold, endpoint or arm; the lead is the authority named in PDF Operating rule 5. The consequence the PDF warns about (\"cross-framework gradients must be explicitly implemented and tested\") is avoided entirely because there is now exactly one framework. Recorded here so the report's deviation table (App. G \u00a78) carries it.",
+   "status": "committed (DEC-001)"
   },
   {
    "id": "SD-14",
    "issue": "The plan's \"equal to HF `GPT2LMHeadModel` logits exactly\" (S0-04a, S0-09 decode parity) assumes the reference runs in the same process. Under DEC-001 the reference (PyTorch) is not importable.",
-   "resolution": "(a) skip the HF comparison; (b) compare against stored reference outputs produced once by a CPU-only PyTorch environment kept outside the project env.",
-   "status": "(b) via REF-01 (`assets/reference/gpt2/`). Because fp32 GEMMs differ between XLA-on-Blackwell and PyTorch-CPU, exact bitwise equality against the oracle is not expected; the assertion is max |\u0394logit| \u2264 1e-3 absolute and argmax agreement at every position, and the measured maximum is recorded. Cap-off identity (SD-10) remains exact because it compares the wrapper with itself. | committed"
+   "readings": "(a) skip the HF comparison; (b) compare against stored reference outputs produced once by a CPU-only PyTorch environment kept outside the project env.",
+   "resolution": "(b) via REF-01 (`assets/reference/gpt2/`). Because fp32 GEMMs differ between XLA-on-Blackwell and PyTorch-CPU, exact bitwise equality against the oracle is not expected; the assertion is max |\u0394logit| \u2264 1e-3 absolute and argmax agreement at every position, and the measured maximum is recorded. Cap-off identity (SD-10) remains exact because it compares the wrapper with itself.",
+   "status": "committed"
   },
   {
    "id": "SD-15",
    "issue": "The ePC checkpoint recipe (`hdpc-distill`) is PyTorch. PA-1 authorizes regeneration \"with the sibling's reproduction recipe\".",
-   "resolution": "(a) PA-1 cannot fire under DEC-001; (b) PA-1 fires with a JAX re-implementation of the same recipe (REG-00) that reproduces the sibling's math line by line.",
-   "status": "(b), with the same \u2264 10 GPU-h bound and the 100-step pilot (REG-01). The JAX run is a *new* checkpoint (as PA-1 already says); the recipe is additionally a re-implementation, which the checkpoint's provenance record states. The sibling's 50M run took 35.7 h on an A100 (its `summary.json`), so the projection may well exceed 10 h; REG-01 decides. | committed; bound raised to 120 GPU-h by DEC-014"
+   "readings": "(a) PA-1 cannot fire under DEC-001; (b) PA-1 fires with a JAX re-implementation of the same recipe (REG-00) that reproduces the sibling's math line by line.",
+   "resolution": "(b), with the same \u2264 10 GPU-h bound and the 100-step pilot (REG-01). The JAX run is a *new* checkpoint (as PA-1 already says); the recipe is additionally a re-implementation, which the checkpoint's provenance record states. The sibling's 50M run took 35.7 h on an A100 (its `summary.json`), so the projection may well exceed 10 h; REG-01 decides.",
+   "status": "committed; bound raised to 120 GPU-h by DEC-014"
   },
   {
    "id": "SD-16",
    "issue": "F.3 step 3: \"Select the bank with the largest positive score, ties by depth.\" Depth could mean the shallowest (bank 1, farthest from the output) or the deepest bank.",
-   "resolution": "(a) smallest bank index first; (b) largest bank index first.",
-   "status": "(a): banks are processed \"in increasing depth order\" everywhere else in F.3, so the tie goes to the smallest index. Exact ties of float scores are rare; recorded so the choice is not silent. | committed (CAP-05)"
+   "readings": "(a) smallest bank index first; (b) largest bank index first.",
+   "resolution": "(a): banks are processed \"in increasing depth order\" everywhere else in F.3, so the tie goes to the smallest index. Exact ties of float scores are rare; recorded so the choice is not silent.",
+   "status": "committed (CAP-05)"
   },
   {
    "id": "SD-17",
    "issue": "F.1/S2: \"radius calibration is shared by arms using the same base and read variant\"; E.2: zsRE and CounterFact are separate experiments. Is the radius one number per (base, read) pooled over datasets, or one per (base, read, dataset)?",
-   "resolution": "(a) pooled (min over datasets); (b) per dataset, shared across arms.",
-   "status": "(b). The two streams are separate experiments with different unrelated-prompt structure (CounterFact's neighbourhood prompts share the relation and are *closer* in key space than paraphrases; zsRE's locality prompts are unrelated NQ questions). Per-dataset radii keep the 1% false-fire risk equal across arms within each experiment, which is the criterion's purpose. Both values are stored (`results/S2/radius_calibration.json`: `per_dataset` and `pooled_radii_min_over_datasets`). | committed (S2-01)"
+   "readings": "(a) pooled (min over datasets); (b) per dataset, shared across arms.",
+   "resolution": "(b). The two streams are separate experiments with different unrelated-prompt structure (CounterFact's neighbourhood prompts share the relation and are *closer* in key space than paraphrases; zsRE's locality prompts are unrelated NQ questions). Per-dataset radii keep the 1% false-fire risk equal across arms within each experiment, which is the criterion's purpose. Both values are stored (`results/S2/radius_calibration.json`: `per_dataset` and `pooled_radii_min_over_datasets`).",
+   "status": "committed (S2-01)"
   },
   {
    "id": "SD-18",
    "issue": "F.1: \"A zero radius matches only an exactly equal key.\" Keys are float32 functions of the residual; the same residual computed through differently fused kernels (single-sequence call vs a batched dispatch, `vmap` or `lax.map`) differs by ~1e-5 on unit-scale keys, so bit-exact equality is not a stable property of the computation.",
-   "resolution": "(a) bit-exact equality (batched evaluation impossible with exact keys; CounterFact runs exact-key); (b) equality within a float32 tolerance.",
-   "status": "(b): `KEY_TOL = 1e-4` added to every radius comparison (`dist \u2264 \u03c1 + 1e-4`), i.e. \"exactly equal\" = equal within the reproducibility tolerance for the same computation on different kernels (Op. rule 9 spirit). Positive radii shift by 1e-4, below the 20-quantile calibration grid's resolution (candidates differ by \u2265 0.03). Applied identically to learning and inference; the batched evaluator's parity with the sequential decoder is tested on both datasets. | committed (HARN-BATCH, 2026-09-10)"
+   "readings": "(a) bit-exact equality (batched evaluation impossible with exact keys; CounterFact runs exact-key); (b) equality within a float32 tolerance.",
+   "resolution": "(b): `KEY_TOL = 1e-4` added to every radius comparison (`dist \u2264 \u03c1 + 1e-4`), i.e. \"exactly equal\" = equal within the reproducibility tolerance for the same computation on different kernels (Op. rule 9 spirit). Positive radii shift by 1e-4, below the 20-quantile calibration grid's resolution (candidates differ by \u2265 0.03). Applied identically to learning and inference; the batched evaluator's parity with the sequential decoder is tested on both datasets.",
+   "status": "committed (HARN-BATCH, 2026-09-10)"
   }
  ],
  "lora": {
@@ -436,8 +444,11 @@
   "DEC-013",
   "DEC-014",
   "DEC-015",
-  "DEC-016"
+  "DEC-016",
+  "DEC-017",
+  "DEC-018"
  ],
+ "selection_rule": "subset = first n items of the realization's canonical item list; each committed order is filtered to that subset (relative order preserved); an arm with scope n_arm <= n edits the first n_arm items of the filtered order",
  "pending": [
   "dataset_ids.grammar (GRAM-02 / DATA-06)",
   "base_checkpoints.epc (REG-02/03; S5 only)"

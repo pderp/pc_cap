@@ -61,8 +61,9 @@ def expected_from_loader(dataset: str) -> dict | None:
     exp = {}
     for r in fz["realizations"]:
         man = load_confirm(Path(fz["confirm_dir"]) / f"{dataset}_r{r}.json", frozen=frozen)
-        n = fz["stream_lengths"][dataset]
-        exp[r] = [it["item_id"] for it in man["items"][:n]]
+        from pccap.data.selection import subset_ids
+
+        exp[r] = subset_ids(man, int(fz["stream_lengths"][dataset]))  # the same subset every order edits (selection rule)
     return exp
 
 

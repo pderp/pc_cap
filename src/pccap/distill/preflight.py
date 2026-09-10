@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -116,9 +117,18 @@ def main(argv=None) -> int:
            "prompt_kl_beta2": prompt_kl, "prompt_kl_sibling_terminal": 5.8076857385458425e-06,
            "tokenizer": {"snapshot": str(g.DEFAULT_SNAPSHOT), "equal_to_teacher": True, "note": "student and teacher share the pinned snapshot tokenizer"},
            "seconds": time.time() - t0, "ledger": ledger.totals()}
+    checks = {"params_finite": out["params_finite"], "config_equal_to_teacher": out["config_equal_to_teacher"],
+              "capoff_identity_ok": out["capoff_identity_ok"], "energy_descent_ok": out["energy_descent_8_iters"]["all_non_increasing"],
+              "prompt_kl_below_abort": out["prompt_kl_beta2"] <= 0.05, "dtype_float32": out["dtypes"] == ["float32"]}
+    out["validity"] = {"checks": checks, "valid": all(checks.values()),
+                       "identity_criterion": "graph derive vs functional forward, max |Δ logit| <= 1e-4 (the S0-06 test criterion; SD-10's exact equality applies to the same-code cap-off path, which these two paths are not)"}
     Path(args.out).write_text(json.dumps(out, indent=1, default=float))
+    print("validity:", out["validity"])
     print(json.dumps({k: out[k] for k in ("final", "params_finite", "config_equal_to_teacher", "capoff_identity_max_abs_logit_diff", "relative_param_shift", "prompt_kl_beta2")}, indent=1))
     print("unseen tail:", {k: v for k, v in out["unseen_tail"].items() if k != "sibling_reference"})
+    if not out["validity"]["valid"]:
+        print("PREFLIGHT FAILED: not promoting the checkpoint", file=sys.stderr)
+        return 1
     if args.update_assets and out["final"]:
         ap_ = ROOT / "manifests" / "assets.json"
         a = json.loads(ap_.read_text())

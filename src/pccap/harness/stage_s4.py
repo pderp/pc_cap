@@ -18,6 +18,7 @@ from pathlib import Path
 from pccap.bases.bp import BPBase
 from pccap.bases.checksum import assert_frozen
 from pccap.contracts import Budget, EditItem
+from pccap.data.selection import stream_items
 from pccap.data.tokenize import GPT2Tokenizer
 from pccap.harness.arms import make_learner, router_for
 from pccap.harness.ledger import Ledger
@@ -43,16 +44,17 @@ def run_s4(ctx: dict, run_dir: Path) -> dict:
     from pccap.data.confirm import load as load_confirm
 
     cfg = ctx["config"]
-    frozen = json.loads((ROOT / "manifests" / "frozen.json").read_text())
-    man = load_confirm(Path(cfg["manifest"]), frozen=ROOT / "manifests" / "frozen.json")
+    frozen = ctx.get("frozen") or json.loads((ROOT / "manifests" / "frozen.json").read_text())
+    man = load_confirm(Path(cfg["manifest"]), frozen=ROOT / "manifests" / "frozen.json")  # the only reader of sealed items
     ds, r, perm = man["dataset"], int(man["realization"]), int(cfg["perm"])
+    if ds != cfg.get("dataset") or r != int(cfg["realization"]):
+        raise ValueError(f"CLI identity (dataset {cfg.get('dataset')}, realization {cfg['realization']}) does not match the manifest ({ds}, {r})")
     oseed = frozen["order_seeds"][perm]
     seeds = man["named_seeds"][str(oseed)]
-    by_id = {it["item_id"]: it for it in man["items"]}
-    ordered = [by_id[i] for i in man["orders"][str(oseed)]]
     arm = cfg["arm"]
-    n = frozen["stream_lengths"]["c0_initial"] if arm == "C0" else frozen["stream_lengths"][ds]
-    items = _items_from(ordered[: int(n)])
+    n_ds = int(frozen["stream_lengths"][ds])
+    n_arm = int(frozen["stream_lengths"]["c0_initial"]) if arm == "C0" else n_ds
+    items = _items_from(stream_items(man, oseed, n_ds, n_arm))  # frozen selection rule (pccap.data.selection.RULE)
     ledger = Ledger()
     base = BPBase(ledger=ledger)
     tok = GPT2Tokenizer()
@@ -67,13 +69,16 @@ def run_s4(ctx: dict, run_dir: Path) -> dict:
     _, unrelated = load_dev_items(ds, 1, seed=int(seeds["seed_router"]))  # locality prompts come from the development unrelated pool (not confirmation items)
     h_before = base.checksum()
     ev = Evaluator(base, tok, unrelated[:200], drift_sample(4096))
+    allowance = (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
     metrics = run_stream(learner, items, router, budget, ev, run_dir, ledger, checkpoints=tuple(frozen["checkpoints"]),
-                         seed=int(seeds["seed_router"]), arm=arm)
+                         seed=int(seeds["seed_router"]), arm=arm, resource_stop_seconds=allowance)
     h_after = base.checksum()
     assert_frozen(h_before, h_after)
     metrics["base_hash_before"], metrics["base_hash_after"] = h_before, h_after
     metrics["config"] = {"dataset": ds, "realization": r, "perm": perm, "order_seed": oseed, "named_seeds": seeds, "n_items": len(items),
-                         "frozen_sha256": ctx["config"].get("manifest_sha256"), "A": budget.A, "radii": radii, "b_m": b_m, "lora": frozen["lora"]}
+                         "scope_n": n_ds, "arm_scope": n_arm, "selection_rule": frozen.get("selection_rule"),
+                         "frozen_sha256": ctx["config"].get("frozen_manifest_sha256"), "realization_sha256": ctx["config"].get("manifest_sha256"),
+                         "experiment_id": ctx["config"].get("experiment_id"), "A": budget.A, "radii": radii, "b_m": b_m, "lora": frozen["lora"]}
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
     return metrics
 

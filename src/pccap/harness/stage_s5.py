@@ -19,6 +19,7 @@ from pccap.bases.checksum import assert_frozen
 from pccap.bases.epc import EPCBase
 from pccap.cap.cap import Cap, CapConfig
 from pccap.contracts import Budget
+from pccap.data.selection import stream_items
 from pccap.data.tokenize import GPT2Tokenizer
 from pccap.harness.ledger import Ledger
 from pccap.harness.runner import RUNNERS
@@ -58,12 +59,16 @@ def run_s5(ctx: dict, run_dir: Path) -> dict:
     if cfg.get("mode") == "confirm":
         from pccap.data.confirm import load as load_confirm
 
-        frozen = json.loads((ROOT / "manifests" / "frozen.json").read_text())
+        frozen = ctx.get("frozen") or json.loads((ROOT / "manifests" / "frozen.json").read_text())
         man = load_confirm(Path(cfg["manifest"]), frozen=ROOT / "manifests" / "frozen.json")
         ds, oseed = man["dataset"], frozen["order_seeds"][int(cfg["perm"])]
+        if ds != cfg.get("dataset") or int(man["realization"]) != int(cfg["realization"]):
+            raise ValueError("CLI identity does not match the realization manifest")
         seeds = man["named_seeds"][str(oseed)]
-        by_id = {it["item_id"]: it for it in man["items"]}
-        items = _items_from([by_id[i] for i in man["orders"][str(oseed)]][: int(frozen["stream_lengths"][ds])])
+        items = _items_from(stream_items(man, oseed, int(frozen["stream_lengths"][ds])))
+        sub = frozen.get("substrate_arms") or {}
+        if arm in sub:
+            spec = sub[arm]  # frozen definitions, not the mutable development file (R2-08)
         budget = Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
         cap_seed, router_seed = int(seeds["seed_cap_init"]), int(seeds["seed_router"])
         n_loc, drift_n = 200, 4096

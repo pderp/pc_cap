@@ -1,80 +1,118 @@
 {
  "exposure_matched": {
   "counterfact/0/0": {
-   "100": {
-    "C0": {
-     "ret_es": 1.0,
-     "ret_gs": 0.0,
-     "ls": 1.0
-    },
-    "C1": {
-     "ret_es": 1.0,
-     "ret_gs": 0.0,
-     "ls": 1.0
-    },
-    "C2": {
-     "ret_es": 1.0,
-     "ret_gs": 0.0,
-     "ls": 1.0
-    },
-    "CR": {
-     "ret_es": 0.98,
-     "ret_gs": 0.0,
-     "ls": 1.0
-    },
-    "B0": {
-     "ret_es": 0.0,
-     "ret_gs": 0.0,
-     "ls": 1.0
-    },
-    "B1": {
-     "ret_es": 0.11,
-     "ret_gs": 0.055,
-     "ls": 0.0
-    },
-    "B3": {
-     "ret_es": 0.1,
-     "ret_gs": 0.065,
-     "ls": 0.0
+   "C2-C1": {
+    "100": {
+     "C2": {
+      "ret_es": 1.0,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     },
+     "C1": {
+      "ret_es": 1.0,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     }
+    }
+   },
+   "C2-CR": {
+    "100": {
+     "C2": {
+      "ret_es": 1.0,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     },
+     "CR": {
+      "ret_es": 0.98,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     }
+    }
+   },
+   "C2-C0": {
+    "100": {
+     "C2": {
+      "ret_es": 1.0,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     },
+     "C0": {
+      "ret_es": 1.0,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     }
+    }
+   },
+   "C2-B3": {
+    "100": {
+     "C2": {
+      "ret_es": 1.0,
+      "ret_gs": 0.0,
+      "ls": 1.0
+     },
+     "B3": {
+      "ret_es": 0.1,
+      "ret_gs": 0.065,
+      "ls": 0.0
+     }
     }
    }
   },
   "zsre/0/0": {
-   "100": {
-    "C0": {
-     "ret_es": 0.99,
-     "ret_gs": 0.43,
-     "ls": 1.0
-    },
-    "C1": {
-     "ret_es": 0.9,
-     "ret_gs": 0.31,
-     "ls": 1.0
-    },
-    "C2": {
-     "ret_es": 0.94,
-     "ret_gs": 0.3,
-     "ls": 1.0
-    },
-    "CR": {
-     "ret_es": 0.53,
-     "ret_gs": 0.18,
-     "ls": 0.93
-    },
-    "B0": {
-     "ret_es": 0.0,
-     "ret_gs": 0.0,
-     "ls": 1.0
-    },
-    "B1": {
-     "ret_es": 0.13,
-     "ret_gs": 0.15,
-     "ls": 0.0
-    },
-    "B3": {
-     "ret_es": 0.16,
-     "ret_gs": 0.13,
-     "ls": 0.0
+   "C2-C1": {
+    "100": {
+     "C2": {
+      "ret_es": 0.94,
+      "ret_gs": 0.3,
+      "ls": 1.0
+     },
+     "C1": {
+      "ret_es": 0.9,
+      "ret_gs": 0.31,
+      "ls": 1.0
+     }
+    }
+   },
+   "C2-CR": {
+    "100": {
+     "C2": {
+      "ret_es": 0.94,
+      "ret_gs": 0.3,
+      "ls": 1.0
+     },
+     "CR": {
+      "ret_es": 0.53,
+      "ret_gs": 0.18,
+      "ls": 0.93
+     }
+    }
+   },
+   "C2-C0": {
+    "100": {
+     "C2": {
+      "ret_es": 0.94,
+      "ret_gs": 0.3,
+      "ls": 1.0
+     },
+     "C0": {
+      "ret_es": 0.99,
+      "ret_gs": 0.43,
+      "ls": 1.0
+     }
+    }
+   },
+   "C2-B3": {
+    "100": {
+     "C2": {
+      "ret_es": 0.94,
+      "ret_gs": 0.3,
+      "ls": 1.0
+     },
+     "B3": {
+      "ret_es": 0.16,
+      "ret_gs": 0.13,
+      "ls": 0.0
+     }
     }
    }
   }
@@ -679,6 +717,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 2.5421234922250733,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.02542123492225073,
    "retention_vs_items": {
     "ckpt100": {
@@ -729,6 +768,18 @@
      "items_within_budget": 100,
      "es_running_mean": 1.0
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 2.5421234922250733,
+     "ret_es": 1.0,
+     "ret_gs": 0.0
+    },
+    "end": {
+     "accel_seconds_at": 2.5421234922250733,
+     "ret_es": 1.0,
+     "ret_gs": 0.0
+    }
    }
   },
   {
@@ -740,6 +791,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 5.4949859695043415,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.054949859695043415,
    "retention_vs_items": {
     "ckpt100": {
@@ -790,6 +842,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.99
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 5.4949859695043415,
+     "ret_es": 0.99,
+     "ret_gs": 0.43
+    },
+    "end": {
+     "accel_seconds_at": 5.4949859695043415,
+     "ret_es": 0.99,
+     "ret_gs": 0.43
+    }
    }
   },
   {
@@ -801,6 +865,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 11.086608621291816,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.11086608621291816,
    "retention_vs_items": {
     "ckpt100": {
@@ -851,6 +916,18 @@
      "items_within_budget": 100,
      "es_running_mean": 1.0
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 11.086608621291816,
+     "ret_es": 1.0,
+     "ret_gs": 0.0
+    },
+    "end": {
+     "accel_seconds_at": 11.086608621291816,
+     "ret_es": 1.0,
+     "ret_gs": 0.0
+    }
    }
   },
   {
@@ -862,6 +939,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 25.434561269008555,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.25434561269008554,
    "retention_vs_items": {
     "ckpt100": {
@@ -912,6 +990,18 @@
      "items_within_budget": 100,
      "es_running_mean": 1.0
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 25.434561269008555,
+     "ret_es": 0.9,
+     "ret_gs": 0.31
+    },
+    "end": {
+     "accel_seconds_at": 25.434561269008555,
+     "ret_es": 0.9,
+     "ret_gs": 0.31
+    }
    }
   },
   {
@@ -923,6 +1013,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 2.4533026105491444,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.024533026105491445,
    "retention_vs_items": {
     "ckpt100": {
@@ -973,6 +1064,18 @@
      "items_within_budget": 100,
      "es_running_mean": 1.0
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 2.4533026105491444,
+     "ret_es": 1.0,
+     "ret_gs": 0.0
+    },
+    "end": {
+     "accel_seconds_at": 2.4533026105491444,
+     "ret_es": 1.0,
+     "ret_gs": 0.0
+    }
    }
   },
   {
@@ -984,6 +1087,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 5.359220049344003,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.05359220049344003,
    "retention_vs_items": {
     "ckpt100": {
@@ -1034,6 +1138,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.99
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 5.359220049344003,
+     "ret_es": 0.94,
+     "ret_gs": 0.3
+    },
+    "end": {
+     "accel_seconds_at": 5.359220049344003,
+     "ret_es": 0.94,
+     "ret_gs": 0.3
+    }
    }
   },
   {
@@ -1045,6 +1161,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 6.799517902894877,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.06799517902894876,
    "retention_vs_items": {
     "ckpt100": {
@@ -1095,6 +1212,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.98
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 6.799517902894877,
+     "ret_es": 0.98,
+     "ret_gs": 0.0
+    },
+    "end": {
+     "accel_seconds_at": 6.799517902894877,
+     "ret_es": 0.98,
+     "ret_gs": 0.0
+    }
    }
   },
   {
@@ -1106,6 +1235,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 11.858487016754225,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.11858487016754225,
    "retention_vs_items": {
     "ckpt100": {
@@ -1156,6 +1286,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.99
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 11.858487016754225,
+     "ret_es": 0.53,
+     "ret_gs": 0.18
+    },
+    "end": {
+     "accel_seconds_at": 11.858487016754225,
+     "ret_es": 0.53,
+     "ret_gs": 0.18
+    }
    }
   },
   {
@@ -1167,6 +1309,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 0.0,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.0,
    "retention_vs_items": {
     "ckpt100": {
@@ -1216,6 +1359,18 @@
     "3600": {
      "items_within_budget": 100,
      "es_running_mean": 0.0
+    }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 0.0,
+     "ret_es": 0.0,
+     "ret_gs": 0.0
+    },
+    "end": {
+     "accel_seconds_at": 0.0,
+     "ret_es": 0.0,
+     "ret_gs": 0.0
     }
    }
   },
@@ -1228,6 +1383,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 0.0,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.0,
    "retention_vs_items": {
     "ckpt100": {
@@ -1278,6 +1434,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.0
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 0.0,
+     "ret_es": 0.0,
+     "ret_gs": 0.0
+    },
+    "end": {
+     "accel_seconds_at": 0.0,
+     "ret_es": 0.0,
+     "ret_gs": 0.0
+    }
    }
   },
   {
@@ -1289,6 +1457,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 6.107359803747386,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.06107359803747386,
    "retention_vs_items": {
     "ckpt100": {
@@ -1339,6 +1508,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.08
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 6.107359803747386,
+     "ret_es": 0.11,
+     "ret_gs": 0.055
+    },
+    "end": {
+     "accel_seconds_at": 6.107359803747386,
+     "ret_es": 0.11,
+     "ret_gs": 0.055
+    }
    }
   },
   {
@@ -1350,6 +1531,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 7.824596036341973,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.07824596036341973,
    "retention_vs_items": {
     "ckpt100": {
@@ -1400,6 +1582,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.08
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 7.824596036341973,
+     "ret_es": 0.13,
+     "ret_gs": 0.15
+    },
+    "end": {
+     "accel_seconds_at": 7.824596036341973,
+     "ret_es": 0.13,
+     "ret_gs": 0.15
+    }
    }
   },
   {
@@ -1411,6 +1605,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 6.193258265499026,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.061932582654990256,
    "retention_vs_items": {
     "ckpt100": {
@@ -1461,6 +1656,18 @@
      "items_within_budget": 100,
      "es_running_mean": 0.07
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 6.193258265499026,
+     "ret_es": 0.1,
+     "ret_gs": 0.065
+    },
+    "end": {
+     "accel_seconds_at": 6.193258265499026,
+     "ret_es": 0.1,
+     "ret_gs": 0.065
+    }
    }
   },
   {
@@ -1472,6 +1679,7 @@
    "status": "complete",
    "items_completed": 100,
    "accel_seconds_total": 9.368197847972624,
+   "cost_source": "learner cost record only (incomplete for cap arms; pre-R2-06 run)",
    "mean_update_accel_s": 0.09368197847972624,
    "retention_vs_items": {
     "ckpt100": {
@@ -1522,10 +1730,22 @@
      "items_within_budget": 100,
      "es_running_mean": 0.1
     }
+   },
+   "retained_vs_accel_budget": {
+    "ckpt100": {
+     "accel_seconds_at": 9.368197847972624,
+     "ret_es": 0.16,
+     "ret_gs": 0.13
+    },
+    "end": {
+     "accel_seconds_at": 9.368197847972624,
+     "ret_es": 0.16,
+     "ret_gs": 0.13
+    }
    }
   }
  ],
- "label": "development, one order",
+ "label": "development, one order (pre-R2-06 runs: learner cost only)",
  "roots": [
   "results/S2/throughput",
   "results/S2/throughput_baselines"

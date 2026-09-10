@@ -1,17 +1,20 @@
 # Reproducing pc_cap (S8-04 handoff draft; tested commands only)
 
-Every command below has been run on this host (Fedora 44, RTX 5070 12 GiB, `/home/derp/cap/venv`).
-Commands marked *lease* hold the GPU lease and take minutes to hours; commands marked *GPU short*
-need a free device but no lease. Paths are relative to `/home/derp/cap/pc_cap`; `P=/home/derp/cap/venv/bin/python`.
+Host: Fedora 44, RTX 5070 12 GiB, `/home/derp/cap/venv`; `P=/home/derp/cap/venv/bin/python`; working
+directory `/home/derp/cap/pc_cap` for every command. Resources live one level up under
+`/home/derp/cap/assets/` (written `assets/...` below for brevity). Each command is tagged
+**[verified]** (run as recorded in its task record), **[pending]** (not yet run on this host), or
+**[illustrative]** (the shape of a command the stage will use). *lease* = holds the GPU lease for
+minutes to hours; *GPU short* = needs a free device, no lease.
 
 ## 1. Environment and assets
 
 ```bash
-$P -c "import pccap; print(pccap.determinism_report())"      # determinism flags, versions
-$P scripts/fetch_assets.py --verify                              # datasets/model hashes vs manifests/datasets.json
-$P -m pccap.harness.schema validate manifests/frozen.draft.json  # schema check of the frozen draft
-make test-fast                                                   # 260+ CPU tests, ~1 min
-make test-gpu                                                    # 44 short GPU tests, ~2 min (device must be free)
+$P -c "import pccap; print(pccap.determinism_report())"      # [verified] determinism flags, versions
+$P scripts/fetch_assets.py --verify                              # [verified] datasets/model hashes vs manifests/datasets.json
+$P -m pccap.harness.schema validate manifests/frozen.draft.json --kind manifest_frozen   # [verified] frozen draft
+make test-fast                                                   # [verified] CPU tests, ~1 min
+make test-gpu                                                    # [verified] short GPU tests, ~2 min (device must be free)
 ```
 
 ## 2. Controls (S0) and substrate properties (S1)
@@ -20,7 +23,7 @@ make test-gpu                                                    # 44 short GPU 
 $P -m pytest -q tests/controls -m gpu            # PC-1…PC-9 on the real base (GPU short)
 $P -m pccap.cli report --stage S0                # results/S0/report.md
 $P -m pccap.analysis.s1_p2 ; $P -m pccap.analysis.s1_p3 ; $P -m pccap.analysis.s1_p5 ; $P -m pccap.analysis.s1_p6   # BP rows (lease)
-$P -m pccap.analysis.s1_p1 --epc-weights assets/models/epc/epc-50m/checkpoints/final-009766/params.npz   # P1 (lease)
+$P -m pccap.analysis.s1_p1 --epc-weights /home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz   # [pending] P1 (lease)
 $P -m pccap.analysis.s1_p3 --epc-weights <same npz>   # ePC rows likewise for p2/p5/p6
 $P -m pccap.cli report --stage S1
 ```
@@ -41,7 +44,7 @@ $P -m pccap.analysis.s3_05                                               # CR di
 $P -m pccap.distill.data --parquet assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet   # shard, byte-exact
 $P scripts/reg_timing_probe.py --micro 5 --timed 2                        # s/step per T (lease)
 results/REG/run_reg02_v2.sh 500 5400                                      # full run in resumable chunks (lease, ~12 h)
-$P -m pccap.distill.preflight --update-assets                             # REG-03 (GPU short)
+$P -m pccap.distill.preflight --update-assets                             # [pending] REG-03 (GPU short)
 $P scripts/reg_pilot_compare.py --run pilot-100                           # trajectory vs the sibling's log
 ```
 
@@ -59,10 +62,10 @@ $P -m pccap.cli run --stage S3 --arm C2 --manifest manifests/dev/s3_smoke.json  
 ```bash
 $P scripts/sample_confirm.py                      # DATA-02 sealed realizations/orders
 $P -m pccap.harness.freeze --draft                # manifests/frozen.draft.json
-$P -m pccap.harness.freeze --final --i-am-the-lead   # the lead's CP-E act → manifests/frozen.json
+$P -m pccap.harness.freeze --final --i-am-the-lead [--accept-unavailable <pending…>]   # [pending] the lead's CP-E act → manifests/frozen.json
 $P -m pccap.harness.schedule                      # results/S4/jobs.json (fixed order)
-$P -m pccap.cli run --stage S4 --mode confirm --arm C2 --realization 0 --perm 0 --manifest manifests/confirm/zsre_r0.json   # one job (lease)
-$P -m pccap.analysis.s4_05 ; $P -m pccap.analysis.s4_06 --dataset zsre ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2
+$P -m pccap.cli run --stage S4 --mode confirm --dataset zsre --arm C2 --realization 0 --perm 0 --manifest manifests/confirm/zsre_r0.json   # [illustrative until the freeze] one job (the runner takes the lease)
+$P -m pccap.analysis.s4_05 ; $P -m pccap.analysis.s4_06 --dataset zsre ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2   # [pending] after S4-04
 ```
 
 ## 7. Artifact index

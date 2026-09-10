@@ -109,6 +109,8 @@ SCOPES_GR = (10000, 1024, 256)
 CHECKPOINTS = (100, 300, 1000, 3000)
 EDIT_ARMS = ("C1", "C2", "CR", "B3", "B4")
 REALIZATIONS_X_ORDERS = 15
+GRAMMAR_TASKS = 8  # PDF E.1: eight tasks per stream; gr counts sequences per task
+GRAMMAR_JOINT_FACTOR = 1.0  # joint-training reference with the same total examples (priced once per run)
 S4_CEILING_A100_H = 36
 HEADROOM = 0.75  # SD-5
 
@@ -161,8 +163,12 @@ def project(th: dict, kappa_value: float, grammar_learn_s: float | None = None, 
             parts[f"C0/{ds}/initial300"] = c
             s += c
         if grammar_learn_s is not None:
-            c = 4 * REALIZATIONS_X_ORDERS * gr * grammar_learn_s
+            # gr = training sequences PER TASK (PDF E.1 / DATA-06: eight tasks); grammar_learn_s = accelerator seconds per
+            # sequence (learning + immediate evaluation). Per-task evaluation sets and the joint-training reference are
+            # priced separately (grammar_eval_s, grammar_joint_factor) — R2-07.
+            c = 4 * REALIZATIONS_X_ORDERS * GRAMMAR_TASKS * gr * grammar_learn_s * (1.0 + GRAMMAR_JOINT_FACTOR)
             parts["grammar"] = c
+            parts["grammar_units"] = "4 arms x 15 runs x 8 tasks x gr sequences x s/sequence x (1 + joint reference)"
             s += c
         else:
             parts["grammar"] = None
@@ -182,6 +188,8 @@ def project(th: dict, kappa_value: float, grammar_learn_s: float | None = None, 
     return {"kappa": kappa_value, "ceiling_seconds_local": ceiling_s, "budget_seconds_after_headroom": budget_s, "headroom": HEADROOM,
             "selected": selected, "assumed_arms": sorted(set(assumed)), "baseline_factor": baseline_factor,
             "grammar_included": grammar_learn_s is not None, "table": table,
+            "status": "provisional: grammar and B4 unpriced; query cost per edit is the blended profile figure (setup + immediate + rescoring at one checkpoint) — R2-07",
+            "kappa_scenarios": {str(k): (next(({"zsre": r["zsre"], "counterfact": r["counterfact"], "grammar": r["grammar"]} for r in table if r["seconds"] <= HEADROOM * S4_CEILING_A100_H * 3600.0 / k), None)) for k in (0.5, 1.0, 2.0)},
             "rule": "first affordable (zs, cf, gr) in the order 3000/1000/300 x 1000/300 x 10000/1024/256; scope selection uses pilot throughput only (PDF App. B)"}
 
 

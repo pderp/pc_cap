@@ -35,6 +35,13 @@ hours; freeze decision pending with the lead (`docs/lead_queue.md` T-CP-E).
    `lease`. `tests/test_package_layout.py` enforces the confirm-manifest firewall: only
    `pccap/data/confirm.py` may contain the string `manifests/confirm`.
 
+## 1b. Interim report 2 (Codex) — accepted; repairs applied (see `logs/review_interim_report2.md`)
+
+The integration findings R2-01…R2-08 are repaired in the orchestrator's paths and covered by
+`tests/harness/test_confirm_cli.py`; the freeze waits for the gate in `docs/updated_plan4.md` §2
+(DEC-019). Consequences for the lanes below: Lane D resumes now (permission done); Lane G′ must
+declare `bank_blocks`/`d` on its base (R2-09); Lane R covers the lock's editable line; new Lane V.
+
 ## 2. Orchestrator lane (do not touch)
 
 Running: **REG-02** (`results/REG/epc-50m.log`; checkpoints `assets/models/epc/epc-50m/checkpoints/`)
@@ -92,6 +99,11 @@ authorized after that; the generator and model *code* may be written now).
   agreement/dependency families with a grammaticality checker, labelled mechanism strata, held-out
   combinations; `manifests/grammar/generator.json` (parameters, seeds, counts, SHA-256 of a
   1,000-sentence sample). Tests: determinism, checker agreement, family coverage. 6 h.
+- **Interface (R2-09, required):** the grammar base declares `d = 128` and `bank_blocks = {1: 1, 2: 3, 3: 5}`
+  (the cap and the credit code read `base.bank_blocks` when present; `make_learner` passes `d = base.d`);
+  its `forward`/`forward_from`/`adjoint` return sites keyed by those blocks. Add a CPU control that runs
+  the real `Cap` (`make_learner("C1", grammar_base, ledger)`) on the grammar base: forward_from equals a
+  full forward with the same writes, adjoint shapes `[3, 128]`, byte accounting at d = 128.
 - **GRAM-02 code** (owned: `src/pccap/fixtures/grammar_model.py`, `tests/fixtures/test_grammar_model.py`):
   pre-norm transformer d = 128, 4 heads, 6 blocks, vocab 64, length 64, following
   `pccap.bases.gpt2_jax` conventions (functional params dict; `embed`/`block`/`head`; bank sites at
@@ -107,6 +119,14 @@ authorized after that; the generator and model *code* may be written now).
   `manifests/grammar/streams.json`): task streams (10,000 training items per the D1 scope) and
   causal-tracing pairs on the grammar. After GRAM-02.
 
+### Lane V — independent review of the repaired confirmatory path (CPU, ≈ 2 h)
+
+Re-run the two reproducers from `logs/interim_report2.md` §7 against the repaired tree (expect 150/150
+paths and zero payload reads on denied access), read `tests/harness/test_confirm_cli.py` and
+`pccap.data.selection`, and write `logs/review_repairs_r2.md` with any remaining gap (especially:
+resume semantics, the per-run allowance, the S5 confirm path, and whether the synthetic study should
+also drive a fake learner through `run_stream` from the CLI). New files only.
+
 ### Lane R — review response R2/R4 (environment setup; small, CPU only)
 
 From `docs/derp_review1.md`: add `scripts/setup_venv.sh` that recreates the project venv from
@@ -117,8 +137,10 @@ JAX plugin wheels are in the lock; print `pccap.determinism_report()` at the end
 `/home/derp/cap/venv`; verify with `python -m venv /home/derp/cap/assets/envs/venv-check` +
 `pip install --dry-run -r requirements.lock` (or a real install there if disk/time allow) and record
 the output in `docs/tasks/ENV-05.md` (new task id ENV-05; add your row with the status tool).
-Owned: `scripts/setup_venv.sh`, the new section of `docs/environment.md`, `docs/tasks/ENV-05.md`,
-`assets/envs/venv-check/`. 1 h.
+The lock contains a private editable line (`-e git+ssh://…pc_cap.git@e381c9e8…#egg=pccap`): the script
+must install the package from the local checkout (`pip install -e .` from the working tree) and skip
+that line, recording the revision it installed; never rewrite the lock. Owned: `scripts/setup_venv.sh`,
+the new section of `docs/environment.md`, `docs/tasks/ENV-05.md`, `assets/envs/venv-check/`. 1 h.
 
 ## 4. Interfaces
 

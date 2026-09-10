@@ -79,7 +79,8 @@ def make_learner(arm: str, base, ledger, *, radii=None, bank_scales=None, read: 
     if arm in CAP_ARMS:
         from pccap.cap.cap import Cap, CapConfig
 
-        return Cap(base, CapConfig(arm=arm, read=read, radii=radii, bank_scales=bank_scales, seed=seed), ledger)
+        d = int(getattr(base, "d", 768))  # model-specific width (R2-09); key_dim follows the read variant inside Cap
+        return Cap(base, CapConfig(arm=arm, read=read, radii=radii, bank_scales=bank_scales, seed=seed, d=d), ledger)
     if arm == "B0":
         from pccap.baselines.b0 import B0
 

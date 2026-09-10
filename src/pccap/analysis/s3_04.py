@@ -68,7 +68,7 @@ def summarize_run(d: Path) -> dict | None:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=str(ROOT / "results" / "S2" / "throughput"))
-    ap.add_argument("--extra-root", nargs="*", default=[str(ROOT / "results" / "S2" / "throughput_baselines")])
+    ap.add_argument("--extra-root", nargs="*", default=[str(ROOT / "results" / "S2" / "throughput_baselines"), str(ROOT / "results" / "S2" / "throughput_crdist")])
     args = ap.parse_args(argv)
     root = Path(args.root)
     rows = []
@@ -80,6 +80,8 @@ def main(argv=None) -> int:
                 r = summarize_run(ds_dir)
                 if r:
                     r["arm"] = r["arm"] or arm_dir.name
+                    if r["arm"] == "CR":  # two CR policies exist (SD-11 / DEC-018): name them, never mix them
+                        r["arm"] = "CR(learned)" if "crdist" in str(rt) else "CR(uniform)"
                     rows.append(r)
     have = sorted({r["arm"] for r in rows})
     missing = [a for a in ("B1", "B3", "B4") if a not in have]

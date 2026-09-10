@@ -1,6 +1,6 @@
-# Resource views (development, one order)
+# Resource views (development, one order (pre-R2-06 runs: learner cost only))
 
-Rendered 2026-09-10 11:40 UTC by `python -m pccap.analysis.s4_05`.
+Rendered 2026-09-10 12:55 UTC by `python -m pccap.analysis.s4_05`.
 
 ## Comparable-compute eligibility (mean update accelerator seconds per edit vs C2; within 20% → comparable)
 
@@ -21,12 +21,18 @@ Rendered 2026-09-10 11:40 UTC by `python -m pccap.analysis.s4_05`.
 | zsre/0/0 | B1 | 0.078 | 1.46 | no |
 | zsre/0/0 | B3 | 0.094 | 1.75 | no |
 
-## Exposure-matched retention (checkpoints every arm completed)
+## Exposure-matched retention per contrast (checkpoints both arms completed)
 
-- counterfact/0/0 @ 100 items: C0: RET-ES 1.00 RET-GS 0.0 LS 1.00; C1: RET-ES 1.00 RET-GS 0.0 LS 1.00; C2: RET-ES 1.00 RET-GS 0.0 LS 1.00; CR: RET-ES 0.98 RET-GS 0.0 LS 1.00; B0: RET-ES 0.00 RET-GS 0.0 LS 1.00; B1: RET-ES 0.11 RET-GS 0.06 LS 0.00; B3: RET-ES 0.10 RET-GS 0.07 LS 0.00
-- zsre/0/0 @ 100 items: C0: RET-ES 0.99 RET-GS 0.43 LS 1.00; C1: RET-ES 0.90 RET-GS 0.31 LS 1.00; C2: RET-ES 0.94 RET-GS 0.3 LS 1.00; CR: RET-ES 0.53 RET-GS 0.18 LS 0.93; B0: RET-ES 0.00 RET-GS 0.0 LS 1.00; B1: RET-ES 0.13 RET-GS 0.15 LS 0.00; B3: RET-ES 0.16 RET-GS 0.13 LS 0.00
+- counterfact/0/0 C2-C1 @ 100 items: C2: RET-ES 1.00 RET-GS 0.0 LS 1.00; C1: RET-ES 1.00 RET-GS 0.0 LS 1.00
+- counterfact/0/0 C2-CR @ 100 items: C2: RET-ES 1.00 RET-GS 0.0 LS 1.00; CR: RET-ES 0.98 RET-GS 0.0 LS 1.00
+- counterfact/0/0 C2-C0 @ 100 items: C2: RET-ES 1.00 RET-GS 0.0 LS 1.00; C0: RET-ES 1.00 RET-GS 0.0 LS 1.00
+- counterfact/0/0 C2-B3 @ 100 items: C2: RET-ES 1.00 RET-GS 0.0 LS 1.00; B3: RET-ES 0.10 RET-GS 0.07 LS 0.00
+- zsre/0/0 C2-C1 @ 100 items: C2: RET-ES 0.94 RET-GS 0.3 LS 1.00; C1: RET-ES 0.90 RET-GS 0.31 LS 1.00
+- zsre/0/0 C2-CR @ 100 items: C2: RET-ES 0.94 RET-GS 0.3 LS 1.00; CR: RET-ES 0.53 RET-GS 0.18 LS 0.93
+- zsre/0/0 C2-C0 @ 100 items: C2: RET-ES 0.94 RET-GS 0.3 LS 1.00; C0: RET-ES 0.99 RET-GS 0.43 LS 1.00
+- zsre/0/0 C2-B3 @ 100 items: C2: RET-ES 0.94 RET-GS 0.3 LS 1.00; B3: RET-ES 0.16 RET-GS 0.13 LS 0.00
 
-## Time-matched (items completed and running ES within an accelerator budget)
+## Time-matched (items completed and running immediate-ES acquisition curve within an accelerator budget; retained performance at checkpoints is `retained_vs_accel_budget` in the JSON)
 
 - counterfact/0/0 @ 30 s: C0: 100 items, ES 1.0; C1: 100 items, ES 1.0; C2: 100 items, ES 1.0; CR: 100 items, ES 0.98; B0: 100 items, ES 0.0; B1: 100 items, ES 0.08; B3: 100 items, ES 0.07
 - counterfact/0/0 @ 120 s: C0: 100 items, ES 1.0; C1: 100 items, ES 1.0; C2: 100 items, ES 1.0; CR: 100 items, ES 0.98; B0: 100 items, ES 0.0; B1: 100 items, ES 0.08; B3: 100 items, ES 0.07

@@ -87,6 +87,7 @@ class Cap:
         self.ledger = ledger if ledger is not None else getattr(base, "ledger", Ledger())
         self.d = int(cfg.d)
         self.dk = int(cfg.key_dim or cfg.d)
+        self.blocks = dict(getattr(base, "bank_blocks", None) or g.BANK_BLOCK)  # site block per bank (a base may declare its own; R2-09)
         self.rng = random.Random(cfg.seed)
         ceilings = mem.bank_ceilings(cfg.arm, self.d)
         self.layouts = {m: mem.BankLayout.plan(m, ceilings[m], self.dk, self.d, cfg.overhead_bytes) for m in cfg.banks()}
@@ -105,7 +106,7 @@ class Cap:
 
     # ------------------------------------------------------------------ edited forward
     def _writes_list(self, p: int, wr: dict[int, np.ndarray]) -> list[Write]:
-        return [Write(SiteId(m, g.BANK_BLOCK[m], p), v) for m, v in wr.items() if np.any(v)]
+        return [Write(SiteId(m, self.blocks[m], p), v) for m, v in wr.items() if np.any(v)]
 
     def edited_forward(self, ids, extra: dict[int, np.ndarray] | None = None, phase: str = "learning",
                        frozen_retrieval: dict[int, int] | None = None, full: bool = False) -> EditedPass:
@@ -125,7 +126,7 @@ class Cap:
         hidden: dict[int, np.ndarray] = {}
         fired: dict[int, int] = {}
         for m in self.cfg.banks():
-            sid = SiteId(m, g.BANK_BLOCK[m], p)
+            sid = SiteId(m, self.blocks[m], p)
             site_row = np.asarray(fr.sites[sid], np.float32)
             sites[m] = site_row
             hidden[m] = fr.hidden[m]  # stays on device
@@ -192,7 +193,7 @@ class Cap:
         ep = self.edited_forward(ids, phase="query", full=full)
         if self.state_hash() != before:
             raise RuntimeError("predict mutated learner state (PC-8)")
-        sites = {SiteId(m, g.BANK_BLOCK[m], ep.p): ep.sites[m] for m in ep.sites}
+        sites = {SiteId(m, self.blocks[m], ep.p): ep.sites[m] for m in ep.sites}
         return ForwardResult(logits=ep.logits, sites=sites, cost=ep.cost)
 
     def predict_logits(self, ids) -> np.ndarray:
