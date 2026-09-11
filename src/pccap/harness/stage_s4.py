@@ -21,6 +21,7 @@ from pccap.contracts import Budget, EditItem
 from pccap.data.selection import stream_items
 from pccap.data.tokenize import GPT2Tokenizer
 from pccap.harness.arms import make_learner, router_for
+from pccap.harness.identity import check_frozen_identity
 from pccap.harness.ledger import Ledger
 from pccap.harness.runner import RUNNERS
 from pccap.harness.runs import Evaluator, run_stream
@@ -40,11 +41,20 @@ def _items_from(records: list[dict]) -> list[EditItem]:
     return out
 
 
+def _allowance(cfg: dict, frozen: dict):
+    """The run's stop allowance: the runner's effective value (min of the frozen run allowance and the remaining stage
+    budget, V2-04) when present, else the frozen run allowance."""
+    if "effective_run_allowance_seconds" in cfg:
+        return cfg["effective_run_allowance_seconds"]
+    return (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
+
+
 def _run_s4_grammar(ctx: dict, run_dir: Path, frozen: dict) -> dict:
     """Confirmatory grammar stream: items are seed-addressed from the frozen ``manifests/grammar/streams.json``
     (bound in ``dataset_ids.grammar``); the order for ``--perm`` is the committed task order of the realization;
     per-task count = ``stream_lengths.grammar_train_count``."""
     from pccap.fixtures.grammar_eval import grammar_context
+    from pccap.fixtures.grammar_model import WEIGHTS as GRAMMAR_WEIGHTS
     from pccap.harness.arms import make_learner, router_for
 
     cfg = ctx["config"]
@@ -53,6 +63,7 @@ def _run_s4_grammar(ctx: dict, run_dir: Path, frozen: dict) -> dict:
     ledger = Ledger()
     gc = grammar_context(r, perm, n_per_task, ledger=ledger)
     base = gc["base"]
+    identity = check_frozen_identity(frozen, base_kind="GRAM", weights_path=getattr(base, "weights_path", None) or GRAMMAR_WEIGHTS)  # V2-01
     budget = Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
     cal = (frozen.get("calibration") or {}).get("GRAM")
     radii = {int(m): float(v) for m, v in cal["radii"]["grammar"].items()} if cal else gc["radii"]
@@ -63,7 +74,7 @@ def _run_s4_grammar(ctx: dict, run_dir: Path, frozen: dict) -> dict:
     router = router_for(arm, cr_distribution=cr, cr_label="cr_frozen_grammar" if cr else "cr_profile_uniform")
     h_before = base.checksum()
     ev = Evaluator(base, gc["tok"], gc["unrelated"], gc["drift"], drift_positions=len(gc["drift"]), drift_window=gc["drift_window"], max_new=1)
-    allowance = (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
+    allowance = _allowance(cfg, frozen)
     metrics = run_stream(learner, gc["items"], router, budget, ev, run_dir, ledger, checkpoints=tuple(frozen["checkpoints"]), seed=seed + 1, arm=arm,
                          resource_stop_seconds=allowance)
     h_after = base.checksum()
@@ -71,7 +82,8 @@ def _run_s4_grammar(ctx: dict, run_dir: Path, frozen: dict) -> dict:
     metrics["base_hash_before"], metrics["base_hash_after"] = h_before, h_after
     metrics["config"] = {"dataset": "grammar", "realization": r, "perm": perm, "n_items": len(gc["items"]), "n_per_task": n_per_task, "base": "GRAM",
                          "weights": base.weights_label, "A": budget.A, "radii": radii, "b_m": b_m, "frozen_sha256": cfg.get("frozen_manifest_sha256"),
-                         "realization_sha256": cfg.get("manifest_sha256"), "experiment_id": cfg.get("experiment_id"), "max_new": 1}
+                         "realization_sha256": cfg.get("manifest_sha256"), "experiment_id": cfg.get("experiment_id"), "max_new": 1,
+                         "run_allowance_seconds": allowance, "frozen_identity": identity}
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
     return metrics
 
@@ -96,6 +108,7 @@ def run_s4(ctx: dict, run_dir: Path) -> dict:
     ledger = Ledger()
     base = BPBase(ledger=ledger)
     tok = GPT2Tokenizer()
+    identity = check_frozen_identity(frozen, base=base, base_kind="BP", tokenizer=tok)  # V2-01: refuse before any edit
     radii = {int(k): float(v) for k, v in frozen["radii"]["bank"][ds].items()}
     b_m = {int(k): float(v) for k, v in frozen["b_m"].items()}
     budget = Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
@@ -107,7 +120,7 @@ def run_s4(ctx: dict, run_dir: Path) -> dict:
     _, unrelated = load_dev_items(ds, 1, seed=int(seeds["seed_router"]))  # locality prompts come from the development unrelated pool (not confirmation items)
     h_before = base.checksum()
     ev = Evaluator(base, tok, unrelated[:200], drift_sample(4096))
-    allowance = (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
+    allowance = _allowance(cfg, frozen)
     metrics = run_stream(learner, items, router, budget, ev, run_dir, ledger, checkpoints=tuple(frozen["checkpoints"]),
                          seed=int(seeds["seed_router"]), arm=arm, resource_stop_seconds=allowance)
     h_after = base.checksum()
@@ -116,7 +129,8 @@ def run_s4(ctx: dict, run_dir: Path) -> dict:
     metrics["config"] = {"dataset": ds, "realization": r, "perm": perm, "order_seed": oseed, "named_seeds": seeds, "n_items": len(items),
                          "scope_n": n_ds, "arm_scope": n_arm, "selection_rule": frozen.get("selection_rule"),
                          "frozen_sha256": ctx["config"].get("frozen_manifest_sha256"), "realization_sha256": ctx["config"].get("manifest_sha256"),
-                         "experiment_id": ctx["config"].get("experiment_id"), "A": budget.A, "radii": radii, "b_m": b_m, "lora": frozen["lora"]}
+                         "experiment_id": ctx["config"].get("experiment_id"), "A": budget.A, "radii": radii, "b_m": b_m, "lora": frozen["lora"],
+                         "run_allowance_seconds": allowance, "frozen_identity": identity}
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
     return metrics
 

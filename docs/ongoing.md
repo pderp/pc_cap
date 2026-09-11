@@ -13,8 +13,10 @@ Board: `docs/tasks/STATUS.md`.
 - **D-B decided: (b)** — DEC-020 / SD-21. B4's PC-10 is output-level parity plus loss-trajectory values
   plus a same-framework sensitivity control. **D-F done** (commit `80ad746`): Codex's patches applied,
   V2 study complete (`logs/review_repairs_r2b.md`), ENV-05 done (real scratch install, 150/150 pins).
-- **Five confirmatory-path defects measured by V2** (V2-01…05) — orchestrator repairs today (plan 7 §2);
-  the freeze request waits for Codex's re-check (Lane V3).
+- **V2-01…05 repaired and re-checked** (07:05 EDT; `logs/review_repairs_r2c.md`, `results/V2/v3/`): frozen-identity
+  check at stage entry with exit-2 refusals, exact experiment-id filters and no silent merges, S7-03 `--experiment-id`,
+  inconsistent allowance rules refused, archived spending counted. Codex's Lane V3 confirms independently; the freeze
+  request (D-A) follows.
 - Freeze draft complete otherwise; ePC substrate eligible; grammar provisional until tonight; P4 done;
   S7 harness and inventory fixed (CounterFact shared stratum short at 9).
 - **GPU idle**, lease free. Corrected B4 numbers: learned-value gaps 0.09–22.4 with 40/40 output/NLL
@@ -22,8 +24,7 @@ Board: `docs/tasks/STATUS.md`.
 
 ## 2. Orchestrator lane (do not touch)
 
-V2-01…05 repairs with the unchanged negative probes as tests (`src/pccap/harness/{runner,stage_s4,stage_s5}.py`,
-`src/pccap/analysis/{s4_05,s4_06,s7_03}.py`, `tests/harness/test_confirm_cli.py`) → B4 registration in
+(V2-01…05 repairs: done) → B4 registration in
 `harness.arms` + B4 profile + projection when Lane B4-S lands → GPU test subset → freeze support (D-A) →
 S4-03/04 execution as run owner → S4-05/06 · S5-02 · E.2 filter pass + S7-01/02 · S7-03 · S8. Owned paths as
 before (`src/pccap/{distill,pc,harness,cap,analysis,routers,transport,bases,fixtures,data}/`, `results/`

@@ -40,8 +40,9 @@ def discover(roots: list[Path], experiment_id: str | None = None) -> list[dict]:
             if d.name == "warmup" or not (d / "items.jsonl").exists():
                 continue
             m = json.loads(mp.read_text())
-            if experiment_id is not None and m.get("config", {}).get("experiment_id") not in (experiment_id, None):
-                continue
+            run_id = m.get("config", {}).get("experiment_id")
+            if experiment_id is not None and run_id != experiment_id:
+                continue  # V2-02: a specific filter requires the exact id; runs with no id are unknown provenance
             rel = d.relative_to(rt).parts
             arm = m.get("arm") or rel[0]
             ds = m.get("config", {}).get("dataset") or (rel[1] if len(rel) > 1 else "?")
@@ -50,8 +51,17 @@ def discover(roots: list[Path], experiment_id: str | None = None) -> list[dict]:
             items = [json.loads(line) for line in (d / "items.jsonl").read_text().splitlines() if line.strip()]
             ck = json.loads((d / "checkpoints.json").read_text()) if (d / "checkpoints.json").exists() else []
             runs.append({"dir": str(d), "arm": arm, "dataset": ds, "realization": real, "perm": perm, "items": items, "checkpoints": ck,
-                         "status": m.get("status"), "metrics": {k: v["value"] for k, v in m["metrics"].items()}})
+                         "status": m.get("status"), "metrics": {k: v["value"] for k, v in m["metrics"].items()}, "experiment_id": run_id})
     return runs
+
+
+def require_one_experiment(runs: list[dict]) -> str | None:
+    """V2-03: views over runs of several experiments (or of unknown provenance mixed with identified runs) are refused;
+    select one with ``discover(..., experiment_id=...)``."""
+    ids = {r.get("experiment_id") for r in runs}
+    if len(ids) > 1:
+        raise ValueError(f"runs belong to several experiments {sorted(map(str, ids))}; pass --experiment-id (V2-03)")
+    return next(iter(ids)) if ids else None
 
 
 def item_seconds(it: dict, phase: str = "total", part: str = "update+eval") -> float:
@@ -82,7 +92,7 @@ def checkpoint_seconds(c: dict, cum: np.ndarray) -> float:
 
 
 def views(runs: list[dict]) -> dict:
-    out = {"exposure_matched": {}, "time_matched": {}, "longest_common_prefix": {}, "comparable_compute": {}, "per_run": []}
+    out = {"experiment_id": require_one_experiment(runs), "exposure_matched": {}, "time_matched": {}, "longest_common_prefix": {}, "comparable_compute": {}, "per_run": []}
     by = {}
     for r in runs:
         key = (r["dataset"], r["realization"], r["perm"])

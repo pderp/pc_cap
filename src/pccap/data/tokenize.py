@@ -30,9 +30,16 @@ class GPT2Tokenizer:
     def __init__(self, snapshot: Path = DEFAULT_SNAPSHOT):
         from tokenizers import Tokenizer
 
-        self.tok = Tokenizer.from_file(str(Path(snapshot) / "tokenizer.json"))
+        self.path = Path(snapshot) / "tokenizer.json"
+        self.tok = Tokenizer.from_file(str(self.path))
         assert self.tok.encode("\n").ids == [NEWLINE_ID]
         assert self.tok.token_to_id("<|endoftext|>") == EOS_ID
+
+    def file_sha256(self) -> str:
+        """Identity of the tokenizer file (compared with the frozen ``tokenizer_rev`` at confirm-mode stage entry, V2-01)."""
+        import hashlib
+
+        return hashlib.sha256(self.path.read_bytes()).hexdigest()
 
     def encode(self, text: str) -> np.ndarray:
         return np.asarray(self.tok.encode(text, add_special_tokens=False).ids, dtype=np.int32)

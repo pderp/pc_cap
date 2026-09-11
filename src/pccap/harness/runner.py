@@ -55,12 +55,11 @@ def _src_tree_sha() -> str:
 
 
 def _stage_spent_seconds(stage: str, exp_id: str) -> float:
-    """Accelerator seconds already recorded by completed runs of this experiment and stage (metrics.json ledger totals),
-    excluding archived (``.superseded-``) attempts."""
+    """Accelerator seconds already recorded by every attempt of this experiment and stage (metrics.json ledger totals),
+    **including** archived (``.superseded-``) attempts: superseded results are excluded from analysis, never from the
+    spending total (V2-05)."""
     total = 0.0
     for mp in (RESULTS / stage / exp_id).rglob("metrics.json"):
-        if ".superseded-" in str(mp):
-            continue
         try:
             total += float(json.loads(mp.read_text()).get("ledger_totals", {}).get("total", {}).get("accel_seconds", 0.0))
         except Exception:
@@ -106,9 +105,11 @@ def run_dir_for(args, exp_id: str = "dev", dataset: str = "-") -> Path:
 
 def main(args) -> int:
     import pccap
+    from pccap.harness.identity import PreflightRefusal
 
     mpath = Path(args.manifest)
     frozen_obj, frozen_sha, manifest = None, None, None
+    effective_allow = None
     if args.mode == "confirm":
         # §4.5 rule 4 (R2-02): the freeze is checked BEFORE any payload is opened; the realization file is
         # never read here — only the sanctioned loader (pccap.data.confirm) opens it, inside the stage.
@@ -149,15 +150,21 @@ def main(args) -> int:
         if frozen_tree and tree != frozen_tree and not getattr(args, "allow_code_drift", False):
             print(f"REFUSED: src/pccap tree {tree[:12]} differs from the frozen {frozen_tree[:12]}; a post-freeze change needs a manifest version (S4-06); pass --allow-code-drift only for an approved fix", file=sys.stderr)
             return 2
-        # V-04: stage allowance (explicitly None = not enforced; recorded as such)
+        # V-04 / V2-04: stage allowance (explicitly None = not enforced; recorded as such). A finite stage allowance
+        # without a run allowance is an inconsistent rule — nothing would bound the run — and is refused (exit 2).
         rules = frozen_obj.get("resource_rules") or {}
         stage_allow = (rules.get("stage_allowance_seconds") or {}).get(args.stage)
         run_allow = rules.get("run_allowance_seconds")
+        effective_allow = run_allow
         if stage_allow is not None:
+            if run_allow is None:
+                print(f"REFUSED: resource_rules.stage_allowance_seconds.{args.stage} = {stage_allow} but run_allowance_seconds is None; a stage ceiling needs a per-run allowance (V2-04)", file=sys.stderr)
+                return 2
             spent = _stage_spent_seconds(args.stage, experiment_id(args, frozen_obj, frozen_sha))
-            if spent + float(run_allow or 0.0) > float(stage_allow):
-                print(f"REFUSED: stage {args.stage} allowance {stage_allow} s would be exceeded (spent {spent:.0f} s + run allowance {run_allow})", file=sys.stderr)
+            if spent + float(run_allow) > float(stage_allow):
+                print(f"REFUSED: stage {args.stage} allowance {stage_allow} s would be exceeded (spent {spent:.0f} s incl. archived attempts + run allowance {run_allow})", file=sys.stderr)
                 return 5
+            effective_allow = float(run_allow)  # admission guarantees stage_allow - spent ≥ run_allow, so the run allowance bounds the run
     else:
         if not mpath.exists():
             print(f"manifest not found: {mpath}", file=sys.stderr)
@@ -183,6 +190,7 @@ def main(args) -> int:
         "frozen_manifest_sha256": frozen_sha,
         "src_tree_sha256": _src_tree_sha() if args.mode == "confirm" else None,
         "run_allowance_seconds": ((frozen_obj.get("resource_rules") or {}).get("run_allowance_seconds") if frozen_obj else None),
+        "effective_run_allowance_seconds": effective_allow,  # V2-04: min(run allowance, remaining stage budget); the stages stop on this
         "stage_allowance_enforced": bool(frozen_obj and ((frozen_obj.get("resource_rules") or {}).get("stage_allowance_seconds") or {}).get(args.stage) is not None),
         "experiment_id": exp_id,
         "mode": args.mode,
@@ -199,17 +207,21 @@ def main(args) -> int:
         return 0
     if (rd / "config.json").exists():  # rerun protection (R2-03/R2-05): existing outputs are never overwritten silently
         prev = json.loads((rd / "config.json").read_text())
-        if not getattr(args, "force", False):
-            print(f"REFUSED: {rd} already holds a run with status {prev.get('status')}; pass --force to archive it and rerun", file=sys.stderr)
-            return 4
         import shutil
-        import time as _t
 
-        stamp = _t.strftime("%Y%m%dT%H%M%SZ", _t.gmtime())
-        shutil.move(str(rd), f"{rd}.superseded-{stamp}")
-        ck_old = ASSETS_RUNS / rd.relative_to(RESULTS)  # V-03: the external checkpoint directory is archived with the results
-        if ck_old.exists():
-            shutil.move(str(ck_old), f"{ck_old}.superseded-{stamp}")
+        if prev.get("status") == RunStatus.refused.value and not (rd / "metrics.json").exists():
+            shutil.rmtree(rd)  # a refused attempt left no results; it may be retried without --force
+        else:
+            if not getattr(args, "force", False):
+                print(f"REFUSED: {rd} already holds a run with status {prev.get('status')}; pass --force to archive it and rerun", file=sys.stderr)
+                return 4
+            import time as _t
+
+            stamp = _t.strftime("%Y%m%dT%H%M%SZ", _t.gmtime())
+            shutil.move(str(rd), f"{rd}.superseded-{stamp}")
+            ck_old = ASSETS_RUNS / rd.relative_to(RESULTS)  # V-03: the external checkpoint directory is archived with the results
+            if ck_old.exists():
+                shutil.move(str(ck_old), f"{ck_old}.superseded-{stamp}")
     cfg["determinism"] = "set inside the lease"  # V-01: no backend discovery before the lease is held
     import pccap.harness.stage_s0  # noqa: F401  (registers "S0")
     import pccap.harness.stage_s3  # noqa: F401  (registers "S3")
@@ -235,6 +247,12 @@ def main(args) -> int:
             result = runner({"config": cfg, "manifest": manifest, "frozen": frozen_obj, "run_dir": rd}, rd)
         cfg.update(result or {})
         cfg.setdefault("status", RunStatus.complete.value)
+    except PreflightRefusal as exc:  # V2-01/V2-04: a precondition failed before any model work — refusal, not a correctness failure
+        write_error_json(rd, exc, None, traceback.format_exc())
+        cfg["status"] = RunStatus.refused.value
+        (rd / "config.json").write_text(json.dumps(cfg, indent=1))
+        print(f"REFUSED: {exc}", file=sys.stderr)
+        return 2
     except Exception as exc:  # Op. rule 8: no silent fallback
         write_error_json(rd, exc, None, traceback.format_exc())
         cfg["status"] = RunStatus.correctness_failure.value

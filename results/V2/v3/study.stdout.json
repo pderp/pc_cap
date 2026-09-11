@@ -1,0 +1,173 @@
+{
+  "path_probe": {
+    "jobs": 210,
+    "literal_old_call_paths": 135,
+    "current_api_paths": 210,
+    "note": "The path helper now takes dataset and experiment arguments."
+  },
+  "original_denial_probe": {
+    "exit": 2,
+    "payload_reads": 0
+  },
+  "real_s4_pipeline": {
+    "jobs": 150,
+    "successes": 150,
+    "stage": "actual run_s4; actual confirmation loader, selection, run_stream, snapshots and collectors",
+    "replacements": "CPU fake base, learner, evaluator, tokenizer, locality inputs and lease only",
+    "first_events": [
+      "lease_enter",
+      "backend_report_inside_lease",
+      "construct_BP",
+      "lease_exit",
+      "lease_enter"
+    ],
+    "first_stream_config": {
+      "allowance": 100.0,
+      "checkpoints": [
+        100,
+        300,
+        1000,
+        3000
+      ]
+    },
+    "paired": {
+      "zsre": {
+        "rows": 540,
+        "notes": [],
+        "classification": "negative",
+        "contrast_status": {
+          "C2-C1": "complete",
+          "C2-CR": "complete"
+        }
+      },
+      "counterfact": {
+        "rows": 420,
+        "notes": [],
+        "classification": "negative",
+        "contrast_status": {
+          "C2-C1": "complete",
+          "C2-CR": "complete"
+        }
+      }
+    }
+  },
+  "archive_probe": {
+    "refused_exit": 4,
+    "forced_exit": 0,
+    "collector_includes_archives": false,
+    "paired_error_after_force": null,
+    "asset_checkpoint_policy": "Results and checkpoint directories now archive together; distinct-state byte check follows"
+  },
+  "negative_controls": {
+    "negative_order": 2,
+    "past_last_order": 2,
+    "wrong_realization": 2,
+    "wrong_base": 2,
+    "wrong_read": 2,
+    "unknown_arm": 2,
+    "changed_code": 2,
+    "approved_code_drift_flag": 0,
+    "bp_frozen_digest_mismatch": 2,
+    "tokenizer_frozen_hash_mismatch": 2
+  },
+  "s5_frozen_authority": {
+    "missing-arm": {
+      "exit": 2,
+      "events": []
+    },
+    "missing-calibration": {
+      "exit": 2,
+      "events": [
+        "lease_enter",
+        "backend_report_inside_lease",
+        "lease_exit"
+      ]
+    },
+    "bad-checkpoint": {
+      "exit": 2,
+      "events": [
+        "lease_enter",
+        "backend_report_inside_lease",
+        "lease_exit"
+      ]
+    },
+    "valid-frozen": {
+      "exit": 0,
+      "events": [
+        "lease_enter",
+        "backend_report_inside_lease",
+        "construct_EPC",
+        "lease_exit"
+      ],
+      "stream": {
+        "allowance": 1.2,
+        "checkpoints": [
+          100,
+          300,
+          1000,
+          3000
+        ]
+      },
+      "cap_config": {
+        "read": "h",
+        "radii": {
+          "1": 0.21,
+          "2": 0.22,
+          "3": 0.23
+        },
+        "b_m": {
+          "1": 7.0,
+          "2": 8.0,
+          "3": 9.0
+        }
+      }
+    }
+  },
+  "force_distinct_state": {
+    "old_state_hash": "bed61fbce7a740a0e60df7353021765581ded17342a568cdf14fdefafebdc3fe",
+    "new_state_hash": "e725be666645d431135d01ca413d3efa03aa288b96c4a051148f77e100ecd4c9",
+    "distinct": true,
+    "archived_checkpoints": 1,
+    "old_checkpoint_bytes_preserved": true,
+    "archived_result_dirs": 1
+  },
+  "two_experiments": {
+    "unfiltered_resource_runs": 2,
+    "filtered_resource_runs": 1,
+    "filtered_paired_rows": 8,
+    "unfiltered_paired_rows_error": "runs under /home/derp/cap/assets/tmp/review_repairs_r2b_20260911T105536449721Z/two_experiment_copies belong to several experiments ['v2-force-state-d3b26db7', 'v2-second-experiment-d3767cc1']; pass experiment_id (V2-03)",
+    "unfiltered_order_cells_error": "runs under /home/derp/cap/assets/tmp/review_repairs_r2b_20260911T105536449721Z/two_experiment_copies belong to several experiments ['v2-force-state-d3b26db7', 'v2-second-experiment-d3767cc1']; pass --experiment-id (V2-03)",
+    "filtered_order_cells": 1,
+    "unfiltered_resource_views_error": "runs belong to several experiments ['v2-force-state-d3b26db7', 'v2-second-experiment-d3767cc1']; pass --experiment-id (V2-03)",
+    "resource_view_cells_filtered": 1
+  },
+  "unknown_experiment_filter": {
+    "resource_runs": 1,
+    "paired_rows": 8,
+    "unknown_provenance_notes": [
+      "/home/derp/cap/assets/tmp/review_repairs_r2b_20260911T105536449721Z/two_experiment_copies/legacy/zsre/C2/BP/h/0/0: no experiment_id in its config (unknown provenance); excluded from experiment v2-force-state-d3b26db7"
+    ],
+    "expected_resource_runs": 1,
+    "expected_paired_rows": 8
+  },
+  "stage_allowance": {
+    "first_exit": 0,
+    "second_exit": 5
+  },
+  "stage_without_run_allowance": {
+    "exit": 2,
+    "run_dir_created": false,
+    "declared_enforced": null,
+    "stage_allowance": 0.01,
+    "recorded_spend": 0.0
+  },
+  "archived_spending": {
+    "experiment_id": "v2-force-state-d3b26db7",
+    "runner_counted_seconds": 14.400006666057743,
+    "attempts": 2
+  },
+  "source_tree_end": "98215f4aad9b57d96e7d30aad11cd54881c22c47258ea3677b2d7be61009912a",
+  "fixture_root": "/home/derp/cap/assets/tmp/review_repairs_r2b_20260911T105536449721Z",
+  "production_freeze_or_payload_access": false,
+  "pending_inputs_in_synthetic_seed_only": []
+}

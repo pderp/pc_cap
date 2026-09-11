@@ -30,23 +30,33 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def load_runs(root: Path, dataset: str, arm: str, experiment_id: str | None = None) -> dict[tuple[int, int], dict]:
+    """Endpoint tables per (realization, order). A specific ``experiment_id`` selects exactly that experiment; without
+    one, all runs must belong to a single experiment and every cell must be unique (V2-02/03)."""
     runs = {}
+    ids: set = set()
     for mp in sorted(root.rglob("metrics.json")):
         if ".superseded-" in str(mp):
             continue  # archived attempt (V-03): never collected
         d = mp.parent
         m = json.loads(mp.read_text())
-        if experiment_id is not None and m.get("config", {}).get("experiment_id") not in (experiment_id, None):
-            continue
         cfg = m.get("config", {})
+        run_id = cfg.get("experiment_id")
+        if experiment_id is not None and run_id != experiment_id:
+            continue  # V2-02: exact id required under a filter; runs with no id are unknown provenance
         if cfg.get("dataset") != dataset or m.get("arm") != arm:
             continue
+        ids.add(run_id)
+        if experiment_id is None and len(ids) > 1:
+            raise ValueError(f"runs under {root} belong to several experiments {sorted(map(str, ids))}; pass --experiment-id (V2-03)")
+        key = (int(cfg["realization"]), int(cfg["perm"]))
+        if key in runs:
+            raise ValueError(f"two runs for realization/order {key} of {dataset}/{arm} under {root} ({runs[key]['dir']} and {d}); never merged silently (V2-03)")
         items = {json.loads(line)["item_id"]: json.loads(line) for line in (d / "items.jsonl").read_text().splitlines() if line.strip()}
         ck = json.loads((d / "checkpoints.json").read_text()) if (d / "checkpoints.json").exists() else []
         end = next((c for c in ck if c["tag"] == "end"), None)
         if end is None:
             continue
-        runs[(int(cfg["realization"]), int(cfg["perm"]))] = {"items": items, "end": {r["item_id"]: r for r in end["rows"]}, "status": m.get("status")}
+        runs[key] = {"items": items, "end": {r["item_id"]: r for r in end["rows"]}, "status": m.get("status"), "dir": str(d), "experiment_id": run_id}
     return runs
 
 
@@ -89,9 +99,10 @@ def main(argv=None) -> int:
     ap.add_argument("--arm", required=True)
     ap.add_argument("--root", default=str(ROOT / "results" / "S4"))
     ap.add_argument("--out", default=None)
+    ap.add_argument("--experiment-id", default=None, help="analyse only runs of this frozen experiment id (V2-03)")
     args = ap.parse_args(argv)
-    runs = load_runs(Path(args.root), args.dataset, args.arm)
-    rep = analyze(runs) | {"dataset": args.dataset, "arm": args.arm, "written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "label": "PR-E descriptive"}
+    runs = load_runs(Path(args.root), args.dataset, args.arm, args.experiment_id)
+    rep = analyze(runs) | {"dataset": args.dataset, "arm": args.arm, "experiment_id": args.experiment_id or next((r["experiment_id"] for r in runs.values()), None), "written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "label": "PR-E descriptive"}
     out = Path(args.out) if args.out else ROOT / "results" / "S7" / f"order_variation_{args.dataset}_{args.arm}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(rep, indent=1, default=float))

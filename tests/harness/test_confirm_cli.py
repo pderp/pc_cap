@@ -25,6 +25,7 @@ import pccap.harness.stage_s0  # noqa: F401,E402  (register the real runners fir
 import pccap.harness.stage_s3  # noqa: F401,E402
 import pccap.harness.stage_s4  # noqa: F401,E402
 import pccap.harness.stage_s5  # noqa: F401,E402
+from pccap.analysis import s4_05, s4_06  # noqa: E402
 from pccap.contracts import CostRecord, EditItem, ItemOutcome, MemoryReport
 from pccap.data.selection import RULE, stream_ids, subset_ids
 from pccap.harness import runner
@@ -351,3 +352,140 @@ def test_v02_s5_frozen_authority(synthetic_root, tmp_path):
         bad["base_checkpoints"]["epc"]["sha256"] = "0" * 64
         with pytest.raises(ValueError):
             resolve_frozen_arm(bad, "SE-A")
+
+
+# ----------------------------------------------------------------------------- Lane V2 repairs (V2-01..V2-05)
+def test_v2_01_frozen_identity_check():
+    from pccap.harness.identity import PreflightRefusal, check_frozen_identity
+
+    frozen = {"base_checkpoints": {"bp": {"param_digest": "bp-digest"}}, "tokenizer_rev": {"tokenizer_json_sha256": "tok-hash"}}
+    base = SimpleNamespace(checksum=lambda: "bp-digest")
+    tok = SimpleNamespace(file_sha256=lambda: "tok-hash")
+    assert check_frozen_identity(frozen, base=base, base_kind="BP", tokenizer=tok) == {"bp_param_digest": "bp-digest", "tokenizer_json_sha256": "tok-hash"}
+    with pytest.raises(PreflightRefusal):
+        check_frozen_identity(frozen, base=SimpleNamespace(checksum=lambda: "other"), base_kind="BP", tokenizer=tok)
+    with pytest.raises(PreflightRefusal):
+        check_frozen_identity(frozen, base=base, base_kind="BP", tokenizer=SimpleNamespace(file_sha256=lambda: "other"))
+    with pytest.raises(PreflightRefusal):  # a tokenizer that cannot report its identity is refused, not waved through
+        check_frozen_identity(frozen, base=base, base_kind="BP", tokenizer=SimpleNamespace())
+    with pytest.raises(PreflightRefusal):  # an absent frozen identity is a refusal too
+        check_frozen_identity({"base_checkpoints": {"bp": {}}}, base=base, base_kind="BP")
+
+
+def test_v2_01_stage_refusal_maps_to_exit_2_and_is_retryable(synthetic_root):
+    from pccap.harness.identity import PreflightRefusal
+
+    root, man = synthetic_root
+    real = runner.RUNNERS.get("S4")
+    calls = []
+
+    def refusing(ctx, rd):
+        calls.append(rd)
+        if len(calls) == 1:
+            raise PreflightRefusal("loaded BP base digest differs from the frozen one")
+        return _writing_runner({})(ctx, rd)
+
+    runner.RUNNERS["S4"] = refusing
+    try:
+        job = {"arm": "C1", "realization": 0, "perm": 0, "manifest": "manifests/confirm/zsre_r0.json", "dataset": "zsre"}
+        assert runner.main(_args(job)) == 2
+        cfg = json.loads((calls[0] / "config.json").read_text())
+        assert cfg["status"] == "refused" and not (calls[0] / "metrics.json").exists() and (calls[0] / "error.json").exists()
+        assert runner.main(_args(job)) == 0  # a refused attempt left nothing behind: retry without --force
+        assert json.loads((calls[1] / "config.json").read_text())["status"] == "complete"
+    finally:
+        runner.RUNNERS["S4"] = real
+
+
+def _two_experiment_tree(root, exp_a="exp-a", exp_b="exp-b", legacy=False):
+    """Two identified experiments with the same cells (and optionally a run with no id) under results/S4."""
+    seen = {}
+    fake = _writing_runner(seen)
+    for exp, ids in ((exp_a, exp_a), (exp_b, exp_b), ("legacy", None)):
+        if exp == "legacy" and not legacy:
+            continue
+        for arm in ("C1", "C2"):
+            rd = root / "results" / "S4" / exp / "zsre" / arm / "BP" / "h" / "0" / "0"
+            rd.mkdir(parents=True)
+            fake({"config": {"stage": "S4", "arm": arm, "dataset": "zsre", "realization": 0, "perm": 0, "experiment_id": ids}}, rd)
+    return root / "results" / "S4"
+
+
+def test_v2_02_specific_filter_excludes_unknown_identity(synthetic_root):
+    root, _ = synthetic_root
+    tree = _two_experiment_tree(root, legacy=True)
+    runs = s4_05.discover([tree], "exp-a")
+    assert len(runs) == 2 and {r["experiment_id"] for r in runs} == {"exp-a"}
+    rows, notes = s4_06.collect_rows(tree, "zsre", "exp-a")
+    assert len(rows) == 6 and {r["arm"] for r in rows} == {"C1", "C2"}
+    assert any("unknown provenance" in n for n in notes)  # the legacy run is reported, never merged
+    from pccap.analysis import s7_03
+
+    assert set(s7_03.load_runs(tree, "zsre", "C2", "exp-a")) == {(0, 0)}
+
+
+def test_v2_03_unfiltered_mixed_experiments_are_refused(synthetic_root):
+    from pccap.analysis import s7_03
+
+    root, _ = synthetic_root
+    tree = _two_experiment_tree(root)
+    both = s4_05.discover([tree])
+    assert len(both) == 4 and {r["experiment_id"] for r in both} == {"exp-a", "exp-b"}
+    with pytest.raises(ValueError, match="several experiments"):
+        s4_05.views(both)
+    with pytest.raises(ValueError, match="several experiments"):
+        s4_06.collect_rows(tree, "zsre")
+    with pytest.raises(ValueError, match="several experiments|two runs"):
+        s7_03.load_runs(tree, "zsre", "C2")
+    one = s4_05.views(s4_05.discover([tree], "exp-b"))
+    assert one["experiment_id"] == "exp-b"
+    out = root / "s7.json"
+    assert s7_03.main(["--dataset", "zsre", "--arm", "C2", "--root", str(tree), "--out", str(out), "--experiment-id", "exp-a"]) == 0
+    assert json.loads(out.read_text())["experiment_id"] == "exp-a"
+
+
+def test_v2_04_stage_ceiling_without_run_allowance_is_refused(synthetic_root):
+    root, man = synthetic_root
+    seen = {}
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = _writing_runner(seen)
+    try:
+        m2 = json.loads(json.dumps(man, default=float))
+        m2["resource_rules"]["stage_allowance_seconds"] = {"S4": 0.01, "S5": None}
+        m2["resource_rules"]["run_allowance_seconds"] = None
+        (root / "manifests" / "frozen.json").write_text(json.dumps(m2))
+        job = {"arm": "C1", "realization": 0, "perm": 0, "manifest": "manifests/confirm/zsre_r0.json", "dataset": "zsre"}
+        assert runner.main(_args(job)) == 2 and not seen  # refused at admission: no run directory, nothing charged
+        m2["resource_rules"]["run_allowance_seconds"] = 20.0
+        m2["resource_rules"]["stage_allowance_seconds"] = {"S4": 60.0, "S5": None}
+        (root / "manifests" / "frozen.json").write_text(json.dumps(m2))
+        assert runner.main(_args(job)) == 0
+        cfg = next(iter(seen.values()))
+        assert cfg["effective_run_allowance_seconds"] == 20.0 and cfg["stage_allowance_enforced"] is True
+        assert runner.main(_args(dict(job, perm=1))) == 0  # spent 31 + 20 ≤ 60: admitted, and bounded by the 20 s run allowance
+        assert [c for c in seen.values() if c["perm"] == 1][0]["effective_run_allowance_seconds"] == 20.0
+        assert runner.main(_args(dict(job, perm=2))) == 5  # spent 62 + 20 > 60 (same freeze, same experiment id)
+    finally:
+        runner.RUNNERS["S4"] = real
+        (root / "manifests" / "frozen.json").write_text(json.dumps(man, default=float))
+
+
+def test_v2_05_archived_attempts_count_toward_stage_spending(synthetic_root):
+    root, man = synthetic_root
+    seen = {}
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = _writing_runner(seen)
+    try:
+        m2 = json.loads(json.dumps(man, default=float))
+        m2["resource_rules"]["stage_allowance_seconds"] = {"S4": 70.0, "S5": None}
+        m2["resource_rules"]["run_allowance_seconds"] = 20.0
+        (root / "manifests" / "frozen.json").write_text(json.dumps(m2))
+        job = {"arm": "C1", "realization": 0, "perm": 0, "manifest": "manifests/confirm/zsre_r0.json", "dataset": "zsre"}
+        assert runner.main(_args(job)) == 0
+        assert runner.main(_args(job, force=True)) == 0  # the first attempt is archived, its 31 s stay spent
+        exp = next(iter(seen.values()))["experiment_id"]
+        assert abs(runner._stage_spent_seconds("S4", exp) - 62.0) < 1e-9
+        assert runner.main(_args(dict(job, perm=1))) == 5  # 62 + 20 > 70: refused because archived spending counts
+    finally:
+        runner.RUNNERS["S4"] = real
+        (root / "manifests" / "frozen.json").write_text(json.dumps(man, default=float))

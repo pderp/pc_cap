@@ -44,6 +44,7 @@ class RunStatus(str, Enum):
     resource_stop = "resource_stop"
     correctness_failure = "correctness_failure"
     running = "running"
+    refused = "refused"  # a confirm-mode precondition failed before any model work (V2-01/04); no results exist
 
 
 ALL_CODES: tuple[str, ...] = tuple(c.value for c in OutcomeCode)

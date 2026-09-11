@@ -105,9 +105,6 @@ def main():
                   stream_lengths={"zsre": 8, "counterfact": 6, "c0_initial": 4, "grammar_train_count": None},
                   arm_availability={"B4": "unavailable (synthetic)"})
     frozen["resource_rules"] = {**frozen.get("resource_rules", {}), "run_allowance_seconds": 100.0}
-    # V3: the synthetic freeze binds the synthetic base/tokenizer identities; the V2-01 repair compares them at stage entry
-    frozen["base_checkpoints"]["bp"]["param_digest"] = "synthetic-weight-hash"
-    frozen["tokenizer_rev"]["tokenizer_json_sha256"] = "synthetic-tokenizer-hash"
     from pccap.harness.schema import validate
     validate("manifest_frozen", frozen)
     write_json(TMP / "manifests/frozen.json", frozen)
@@ -150,7 +147,7 @@ def main():
         mp.setattr(lease, "gpu_lease", fake_lease)
         for module in (stage_s4, stage_s5):
             mp.setattr(module, "BPBase", lambda *, ledger: base_factory("BP", ledger))
-            mp.setattr(module, "GPT2Tokenizer", lambda: SimpleNamespace(file_sha256=lambda: "synthetic-tokenizer-hash"))
+            mp.setattr(module, "GPT2Tokenizer", lambda: SimpleNamespace())
             mp.setattr(module, "load_dev_items", lambda *args, **kwargs: ([], []))
             mp.setattr(module, "drift_sample", lambda *args: None)
             mp.setattr(module, "Evaluator", FakeEvaluator)
@@ -227,8 +224,7 @@ def main():
         obj = variant("wrong-tokenizer-hash", lambda f: f["tokenizer_rev"].update(tokenizer_json_sha256="3"*64))
         negatives["tokenizer_frozen_hash_mismatch"] = invoke_job(obj)
         evidence["negative_controls"] = negatives
-        assert all(negatives[k] == 2 for k in ("negative_order", "past_last_order", "wrong_realization", "wrong_base", "wrong_read", "unknown_arm", "changed_code",
-                                                "bp_frozen_digest_mismatch", "tokenizer_frozen_hash_mismatch"))  # V3: V2-01 repaired
+        assert all(negatives[k] == 2 for k in ("negative_order", "past_last_order", "wrong_realization", "wrong_base", "wrong_read", "unknown_arm", "changed_code"))
         assert negatives["approved_code_drift_flag"] == 0
 
         # Missing S5 authority and checkpoint mismatch must refuse before construction.
@@ -272,7 +268,6 @@ def main():
                 s5_results[name]["cap_config"] = cap_configs[-1]
         evidence["s5_frozen_authority"] = s5_results
         assert s5_results["valid-frozen"]["exit"] == 0
-        assert all(s5_results[n]["exit"] == 2 for n in ("missing-arm", "missing-calibration", "bad-checkpoint"))  # V3: preflight refusals exit 2
         assert all(not any(e.startswith("construct_") for e in s5_results[n]["events"]) for n in ("missing-arm", "missing-calibration", "bad-checkpoint"))
 
         # Force the same cell to a distinct learned state; both result and external
@@ -323,24 +318,14 @@ def main():
         both = s4_05.discover([physical])
         filtered = s4_05.discover([physical], first_exp)
         pair_rows, _ = s4_06.collect_rows(physical, "zsre", first_exp)
-        def refused(fn):
-            try:
-                fn()
-                return None
-            except ValueError as exc:
-                return str(exc)
-        # V3 (V2-03 repaired): unfiltered analysis over two experiments is refused, never merged
-        unfiltered_rows_error = refused(lambda: s4_06.collect_rows(physical, "zsre"))
-        order_all_error = refused(lambda: s7_03.load_runs(physical, "zsre", "C2"))
-        views_error = refused(lambda: s4_05.views(both))
+        unfiltered_rows, _ = s4_06.collect_rows(physical, "zsre")
+        order_all = s7_03.load_runs(physical, "zsre", "C2")
         order_one = s7_03.load_runs(physical, "zsre", "C2", first_exp)
         evidence["two_experiments"] = {"unfiltered_resource_runs": len(both), "filtered_resource_runs": len(filtered),
-            "filtered_paired_rows": len(pair_rows), "unfiltered_paired_rows_error": unfiltered_rows_error,
-            "unfiltered_order_cells_error": order_all_error, "filtered_order_cells": len(order_one),
-            "unfiltered_resource_views_error": views_error,
-            "resource_view_cells_filtered": len(s4_05.views(filtered)["comparable_compute"])}
-        assert len(both)==2 and len(filtered)==1 and len(pair_rows)==8 and len(order_one)==1
-        assert unfiltered_rows_error and order_all_error and views_error
+            "filtered_paired_rows": len(pair_rows), "unfiltered_paired_rows": len(unfiltered_rows),
+            "unfiltered_order_cells": len(order_all), "filtered_order_cells": len(order_one),
+            "resource_view_cells": len(s4_05.views(both)["comparable_compute"])}
+        assert len(both)==2 and len(filtered)==1 and len(pair_rows)==8 and len(unfiltered_rows)==16
         # A legacy/unknown identity is not safe to include in a selected experiment.
         legacy_dir = physical / "legacy"
         shutil.copytree(TMP/"results/S4"/second_exp, legacy_dir)
@@ -348,12 +333,10 @@ def main():
             data = json.loads(path.read_text())
             data["config"].pop("experiment_id", None)
             path.write_text(json.dumps(data))
-        legacy_rows, legacy_notes = s4_06.collect_rows(physical, "zsre", first_exp)
         evidence["unknown_experiment_filter"] = {
             "resource_runs": len(s4_05.discover([physical], first_exp)),
-            "paired_rows": len(legacy_rows), "unknown_provenance_notes": [n for n in legacy_notes if "unknown provenance" in n],
+            "paired_rows": len(s4_06.collect_rows(physical, "zsre", first_exp)[0]),
             "expected_resource_runs": 1, "expected_paired_rows": 8}
-        assert evidence["unknown_experiment_filter"]["resource_runs"] == 1 and len(legacy_rows) == 8  # V3: V2-02 repaired
 
         # Stage allowance ordinary gate, None-run loophole, archive spend loss.
         obj = variant("stage-limited")
@@ -370,13 +353,8 @@ def main():
         stage_exp = runner.experiment_id(helpers._args(first), obj, fsha)
         rd = runner.run_dir_for(helpers._args(first), stage_exp, first["dataset"])
         cfg = json.loads((rd/"config.json").read_text()) if (rd/"config.json").exists() else {}
-        evidence["stage_without_run_allowance"] = {"exit": rc, "run_dir_created": (rd/"config.json").exists(), "declared_enforced": cfg.get("stage_allowance_enforced"),
+        evidence["stage_without_run_allowance"] = {"exit": rc, "declared_enforced": cfg.get("stage_allowance_enforced"),
             "stage_allowance": .01, "recorded_spend": runner._stage_spent_seconds("S4", stage_exp)}
-        assert rc == 2 and not (rd/"config.json").exists()  # V3: V2-04 repaired — refused at admission
-        # V3: V2-05 repaired — archived attempts count toward the stage spending (the force-state fixture above)
-        evidence["archived_spending"] = {"experiment_id": exp, "runner_counted_seconds": runner._stage_spent_seconds("S4", exp),
-            "attempts": len(list((TMP/"results/S4"/exp).rglob("metrics.json")))}
-        assert evidence["archived_spending"]["attempts"] == 2 and evidence["archived_spending"]["runner_counted_seconds"] > 14.0
         # Keep original freeze for expected-item collection provenance.
         set_freeze(frozen)
         evidence["source_tree_end"] = tree_sha(ROOT/"src/pccap")

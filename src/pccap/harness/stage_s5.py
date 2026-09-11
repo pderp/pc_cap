@@ -21,6 +21,7 @@ from pccap.cap.cap import Cap, CapConfig
 from pccap.contracts import Budget
 from pccap.data.selection import stream_items
 from pccap.data.tokenize import GPT2Tokenizer
+from pccap.harness.identity import PreflightRefusal, check_frozen_identity
 from pccap.harness.ledger import Ledger
 from pccap.harness.runner import RUNNERS
 from pccap.harness.runs import CHECKPOINTS, Evaluator, run_stream
@@ -56,22 +57,15 @@ def resolve_frozen_arm(frozen: dict, arm: str) -> tuple[dict, dict, dict, str | 
     definitions refuse before any model is constructed. Returns (spec, b_m, radii_by_dataset, epc_path)."""
     sub = frozen.get("substrate_arms") or {}
     if arm not in sub:
-        raise ValueError(f"substrate arm {arm} is not defined in the frozen manifest")
+        raise PreflightRefusal(f"substrate arm {arm} is not defined in the frozen manifest")
     spec = sub[arm]
     cal = (frozen.get("calibration") or {}).get(spec["base"])
     if not cal:
-        raise ValueError(f"frozen calibration for base {spec['base']} is missing")
+        raise PreflightRefusal(f"frozen calibration for base {spec['base']} is missing")
     epc_path = None
     if spec["base"] == "EPC":
-        ck = (frozen.get("base_checkpoints") or {}).get("epc")
-        if not ck or not ck.get("path") or not ck.get("sha256"):
-            raise ValueError("frozen ePC checkpoint identity is missing (base_checkpoints.epc)")
-        import hashlib
-
-        got = hashlib.sha256(Path(ck["path"]).read_bytes()).hexdigest()
-        if got != ck["sha256"]:
-            raise ValueError(f"ePC checkpoint at {ck['path']} has sha256 {got[:12]} but the freeze binds {ck['sha256'][:12]}")
-        epc_path = ck["path"]
+        check_frozen_identity(frozen, base_kind="EPC")  # file identity (V-02); refuses with exit 2 (V2 note)
+        epc_path = frozen["base_checkpoints"]["epc"]["path"]
     return spec, {int(k): float(v) for k, v in cal["b_m"].items()}, {ds: {int(m): float(r) for m, r in v.items()} for ds, v in cal["radii"].items()}, epc_path
 
 
@@ -88,7 +82,10 @@ def run_s5(ctx: dict, run_dir: Path) -> dict:
     base = BPBase(ledger=ledger) if spec["base"] == "BP" else EPCBase.from_npz(epc_path or epc_weights(), ledger=ledger)
     tok = GPT2Tokenizer()
     allowance = None
+    identity = None
     if confirm:
+        # V2-01: the loaded BP base and the tokenizer must carry the frozen identities (the ePC file was checked above)
+        identity = check_frozen_identity(frozen, base=base if spec["base"] == "BP" else None, base_kind="BP" if spec["base"] == "BP" else None, tokenizer=tok)
         from pccap.data.confirm import load as load_confirm
 
         man = load_confirm(Path(cfg["manifest"]), frozen=ROOT / "manifests" / "frozen.json")
@@ -97,7 +94,7 @@ def run_s5(ctx: dict, run_dir: Path) -> dict:
             raise ValueError("CLI identity does not match the realization manifest")
         seeds = man["named_seeds"][str(oseed)]
         items = _items_from(stream_items(man, oseed, int(frozen["stream_lengths"][ds])))
-        allowance = (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
+        allowance = cfg["effective_run_allowance_seconds"] if "effective_run_allowance_seconds" in cfg else (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
         budget = Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
         cap_seed, router_seed = int(seeds["seed_cap_init"]), int(seeds["seed_router"])
         n_loc, drift_n = 200, 4096
@@ -126,7 +123,7 @@ def run_s5(ctx: dict, run_dir: Path) -> dict:
                          "weights": getattr(base, "weights_label", "bp_teacher"), "credit": spec["credit"], "credit_iters": spec.get("credit_iters"),
                          "A": budget.A, "radii": radii, "b_m": b_m, "n_items": len(items), "run_allowance_seconds": allowance,
                          "frozen_sha256": cfg.get("frozen_manifest_sha256"), "realization_sha256": cfg.get("manifest_sha256"),
-                         "experiment_id": cfg.get("experiment_id"), "epc_checkpoint": epc_path}
+                         "experiment_id": cfg.get("experiment_id"), "epc_checkpoint": epc_path, "frozen_identity": identity}
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
     return metrics
 

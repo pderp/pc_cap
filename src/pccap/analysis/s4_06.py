@@ -25,17 +25,27 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def collect_rows(root: Path, dataset: str, experiment_id: str | None = None) -> tuple[list[dict], list[str]]:
+    """Endpoint rows of the runs of one dataset. With ``experiment_id`` only runs carrying exactly that id are
+    collected (a run with no id is unknown provenance: listed in the notes, never included — V2-02). Without a filter,
+    the discovered runs must all belong to one experiment; several ids are an error, never a silent merge (V2-03)."""
     rows, notes = [], []
+    seen_ids: set = set()
     for mp in sorted(root.rglob("metrics.json")):
         if ".superseded-" in str(mp):
             continue  # archived attempt (V-03): never collected
         d = mp.parent
         m = json.loads(mp.read_text())
-        if experiment_id is not None and m.get("config", {}).get("experiment_id") not in (experiment_id, None):
-            continue
         cfg = m.get("config", {})
         if cfg.get("dataset") != dataset:
             continue
+        run_id = cfg.get("experiment_id")
+        if experiment_id is not None and run_id != experiment_id:
+            if run_id is None:
+                notes.append(f"{d}: no experiment_id in its config (unknown provenance); excluded from experiment {experiment_id}")
+            continue
+        seen_ids.add(run_id)
+        if experiment_id is None and len(seen_ids) > 1:
+            raise ValueError(f"runs under {root} belong to several experiments {sorted(map(str, seen_ids))}; pass experiment_id (V2-03)")
         arm, r, o = m["arm"], int(cfg["realization"]), int(cfg["perm"])
         items = {json.loads(line)["item_id"]: json.loads(line) for line in (d / "items.jsonl").read_text().splitlines() if line.strip()}
         ck = json.loads((d / "checkpoints.json").read_text())
