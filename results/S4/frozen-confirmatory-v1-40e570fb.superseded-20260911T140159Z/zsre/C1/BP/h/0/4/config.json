@@ -1,0 +1,34 @@
+{
+ "stage": "S4",
+ "arm": "C1",
+ "base": "BP",
+ "read": "h",
+ "dataset": "zsre",
+ "realization": 0,
+ "perm": 4,
+ "manifest": "manifests/confirm/zsre_r0.json",
+ "manifest_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+ "frozen_manifest_sha256": "40e570fb5f63cccf45a7ef65cce2913e5a4464fd892ec25c60267a48f272b802",
+ "src_tree_sha256": "dfe7349320bda4354025f9e55af9d220763509693dd149aa434ad1ed2e3bf921",
+ "run_allowance_seconds": 2400.0,
+ "effective_run_allowance_seconds": 2400.0,
+ "stage_allowance_enforced": true,
+ "experiment_id": "frozen-confirmatory-v1-40e570fb",
+ "mode": "confirm",
+ "task": null,
+ "code_commit": "2814bafa0467fe6c896b03fd861e565ca1e15c3f",
+ "base_hash_before": "",
+ "status": "correctness_failure",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ }
+}

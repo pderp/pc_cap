@@ -1,0 +1,7 @@
+{
+ "status": "correctness_failure",
+ "exception": "ConfirmationIntegrityError",
+ "message": "frozen dataset binding has an invalid name or hash",
+ "item_id": null,
+ "traceback": "Traceback (most recent call last):\n  File \"/home/derp/cap/pc_cap/src/pccap/harness/runner.py\", line 247, in main\n    result = runner({\"config\": cfg, \"manifest\": manifest, \"frozen\": frozen_obj, \"run_dir\": rd}, rd)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/harness/stage_s4.py\", line 98, in run_s4\n    man = load_confirm(Path(cfg[\"manifest\"]), frozen=ROOT / \"manifests\" / \"frozen.json\")  # the only reader of sealed items\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/data/confirm.py\", line 18, in load\n    return load_frozen_manifest(manifest_path, frozen=frozen)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/data/confirmation_integrity.py\", line 153, in load_frozen_manifest\n    dataset, expected = _binding(frozen_data, path.name)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/data/confirmation_integrity.py\", line 116, in _binding\n    raise ConfirmationIntegrityError(\"frozen dataset binding has an invalid name or hash\")\npccap.data.confirmation_integrity.ConfirmationIntegrityError: frozen dataset binding has an invalid name or hash\n"
+}
