@@ -16,7 +16,7 @@ freeze command is posted in `docs/lead_queue.md` and waits only on the B4 deadli
 GPU test subset) comes after Lane B4-S lands and is announced in `docs/lead_queue.md`; short `-m gpu` tests by
 either agent need no lease.
 
-## 1. State (2026-09-11, 07:15 EDT)
+## 1. State (2026-09-11, 08:55 EDT)
 
 - **D-B decided: (b)** — DEC-020 / SD-21. B4's PC-10 is output-level parity plus loss-trajectory values
   plus a same-framework sensitivity control. **D-F done** (commit `80ad746`): Codex's patches applied,
@@ -32,7 +32,11 @@ either agent need no lease.
   grammar 256 per task** (26.3 of 27.0 h); the draft follows. **B4 is wired** into `harness.arms` (`GraceArm`,
   original-prompt key positions through the decoder and evaluator; GPU parity tests) — its availability in the freeze
   still waits on Lane B4-S (DEC-020). S4-02 allowance proposal and the freeze command are in `docs/lead_queue.md`.
-- ePC substrate eligible; grammar provisional until tonight; P4 done; S7 harness and inventory fixed.
+- **08:55 EDT — freeze pending the lead's command** (`docs/lead_queue.md`, "Freeze now"; B4 recorded unavailable under DEC-020, grammar
+  available). Execution machinery ready: `pccap queue` (S4-04), the S5 jobs scheduled behind the S4 jobs with SB reused
+  (S5-02, 12.8 of 18 h). `docs/updated_plan8.md` is the current plan delta. The orchestrator starts the S4 queue the moment
+  `manifests/frozen.json` exists; GPU otherwise idle.
+- ePC substrate eligible; grammar provisional until tonight; P4 done; S7 harness and inventory fixed (Lane X repairs in).
 - **GPU idle**, lease free. Corrected B4 numbers: learned-value gaps 0.09–22.4 with 40/40 output/NLL
   agreement and loss trajectories within 3e-3 relative.
 
