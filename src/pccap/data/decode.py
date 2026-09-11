@@ -95,9 +95,13 @@ def greedy_decode_batch(base, prompts: list[np.ndarray], tok: GPT2Tokenizer, max
     per-item reference decoder remains ``greedy_decode``."""
     results: list[DecodeResult | None] = [None] * len(prompts)
     order = sorted(range(len(prompts)), key=lambda i: len(prompts[i]))
+    # learners whose retrieval key lives at the ORIGINAL prompt's last position (GRACE, B4) receive that boundary at
+    # every decode step (``decode_key_positions``); every other learner keys on the current last position as before
+    boundary = bool(getattr(base, "decode_key_positions", False))
     for start in range(0, len(order), batch_size):
         idx = order[start : start + batch_size]
         cur = [np.asarray(prompts[i], np.int32).reshape(-1) for i in idx]
+        keypos = [len(c) - 1 for c in cur]
         new = [[] for _ in idx]
         done = [False] * len(idx)
         stopped = ["max"] * len(idx)
@@ -105,7 +109,10 @@ def greedy_decode_batch(base, prompts: list[np.ndarray], tok: GPT2Tokenizer, max
             live = [j for j in range(len(idx)) if not done[j]]
             if not live:
                 break
-            logits = base.last_logits_batch([cur[j] for j in live], phase=phase)
+            if boundary:
+                logits = base.last_logits_batch([cur[j] for j in live], phase=phase, key_positions=[keypos[j] for j in live])
+            else:
+                logits = base.last_logits_batch([cur[j] for j in live], phase=phase)
             nxt = np.argmax(logits.astype(np.float64), axis=-1)
             for j, t in zip(live, nxt):
                 t = int(t)

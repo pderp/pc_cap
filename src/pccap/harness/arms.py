@@ -22,7 +22,7 @@ import numpy as np
 from pccap.bases import gpt2_jax as g
 
 CAP_ARMS = ("C0", "C1", "C2", "CR", "CO")
-BASELINE_ARMS = ("B0", "B1", "B3")
+BASELINE_ARMS = ("B0", "B1", "B3", "B4")
 
 
 @functools.partial(jax.jit, static_argnames=("cfg",))
@@ -66,6 +66,16 @@ class LoRAArm(_Delegate):
         return np.asarray(out)
 
 
+class GraceArm(_Delegate):
+    """B4 adapter: GRACE keys its codebook lookup at the ORIGINAL prompt's last position, so the decoder and the
+    evaluator pass that boundary (``decode_key_positions``); the learner's own batched forward is used as is."""
+
+    decode_key_positions = True
+
+    def last_logits_batch(self, seqs: list[np.ndarray], phase: str = "query", key_positions=None) -> np.ndarray:
+        return np.asarray(self.learner.last_logits_batch(seqs, phase=phase, key_positions=key_positions))
+
+
 class FrozenArm(_Delegate):
     """B0 adapter: batched cap-off evaluation straight through the base."""
 
@@ -95,7 +105,13 @@ def make_learner(arm: str, base, ledger, *, radii=None, bank_scales=None, read: 
 
         return LoRAArm(ReplayLearner(LoRALearner(base, rank=lora_rank, lr=lora_lr, steps=lora_steps, seed=seed), seed=seed))
     if arm == "B4":
-        raise NotImplementedError("B4 (GRACE) is registered by S2-05")
+        from pccap.baselines.grace_jax import GraceLearner
+        from pccap.cap.memory import b_cap
+
+        # DEC-020 / SD-8: the reference GRACE hook (block 8, radius 1.0, 100 Adam steps at lr 1.0) with the byte ceiling
+        # B_cap and use-count-then-age eviction (parity runs use eviction "none"; the harness arm is the bounded variant)
+        return GraceArm(GraceLearner(base, block=8, radius=1.0, value_steps=100, value_lr=1.0, seed=seed,
+                                     ceiling_bytes=int(b_cap(int(getattr(base, "d", 768)))), eviction="use_count_then_age"))
     raise ValueError(f"unknown arm {arm!r}")
 
 

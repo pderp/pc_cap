@@ -76,12 +76,16 @@ class Evaluator:
             self.drift_base_nll = self._drift_nll(base)
 
     @staticmethod
-    def _batch_last(learner, seqs: list[np.ndarray]) -> np.ndarray:
+    def _batch_last(learner, seqs: list[np.ndarray], key_positions: list[int] | None = None) -> np.ndarray:
         """Last-row logits for many prefixes in one batched cap-on call (HARN-BATCH; parity-tested),
-        falling back to sequential predict for learners without the batched method."""
+        falling back to sequential predict for learners without the batched method. ``key_positions`` (the
+        original prompt's last position per prefix) is passed to learners that key their retrieval there
+        (``decode_key_positions``, B4/GRACE) and ignored by every other learner."""
         if hasattr(learner, "edited_forward_batch"):
             return learner.edited_forward_batch(seqs, phase="query")[0]
         if hasattr(learner, "last_logits_batch"):  # baseline arms (harness.arms adapters) and the bare base
+            if key_positions is not None and getattr(learner, "decode_key_positions", False):
+                return np.asarray(learner.last_logits_batch(seqs, phase="query", key_positions=list(key_positions)))
             return np.asarray(learner.last_logits_batch(seqs, phase="query"))
         if hasattr(learner, "forward_batch"):
             return np.asarray(learner.forward_batch(seqs, None, phase="query")[0])
@@ -126,17 +130,18 @@ class Evaluator:
                 prompts.append(np.asarray(self.tok.encode(p), np.int32))
                 owners.append((i, "gs"))
         decs = self._decode_many(learner, prompts, self.tok)
-        prefixes, targets, owner_nll = [], [], []
+        prefixes, targets, owner_nll, bounds = [], [], [], []
         for i, it in enumerate(items):
             ids = np.asarray(it.prompt_ids, np.int32)
             for y in np.asarray(it.answer_ids, np.int32):
                 prefixes.append(ids)
                 targets.append(int(y))
                 owner_nll.append(i)
+                bounds.append(len(it.prompt_ids) - 1)  # the original prompt boundary (B4 keys there)
                 ids = np.concatenate([ids, np.int32([y])])
         nll_rows = np.zeros(0)
         if prefixes:
-            logits = np.concatenate([self._batch_last(learner, prefixes[k : k + 64]) for k in range(0, len(prefixes), 64)])
+            logits = np.concatenate([self._batch_last(learner, prefixes[k : k + 64], bounds[k : k + 64]) for k in range(0, len(prefixes), 64)])
             nll_rows = self._nll_rows(logits, np.asarray(targets))
         out = [{"es": None, "gs": None, "gs_n": 0, "generated": "", "stopped_by": "", "nll": 0.0, "_gs": []} for _ in items]
         for (i, kind), dec in zip(owners, decs):

@@ -218,6 +218,37 @@ def choose_lr(screen: dict) -> float | None:
     return rows[0][0] if rows else 1e-4
 
 
+def apply_allowances(man: dict, run_allowance: float | None, stage_allowances: dict[str, float | None]) -> dict:
+    """S4-02: the lead's per-run and per-stage allowances written into ``resource_rules`` at freeze time. A finite stage
+    allowance without a run allowance is refused here for the same reason the runner refuses it (V2-04): nothing would
+    bound a run. ``None`` values are recorded as not enforced."""
+    rules = man.setdefault("resource_rules", {})
+    if run_allowance is not None:
+        if not (float(run_allowance) > 0):
+            raise ValueError("run_allowance_seconds must be positive")
+        rules["run_allowance_seconds"] = float(run_allowance)
+    sa = dict(rules.get("stage_allowance_seconds") or {})
+    for stage, secs in stage_allowances.items():
+        if stage not in ("S4", "S5"):
+            raise ValueError(f"stage allowance for unknown stage {stage!r} (S4 or S5)")
+        sa[stage] = None if secs is None else float(secs)
+    rules["stage_allowance_seconds"] = sa
+    if any(v is not None for v in sa.values()) and rules.get("run_allowance_seconds") is None:
+        raise ValueError("a finite stage allowance needs run_allowance_seconds (V2-04)")
+    rules["allowance_source"] = "S4-02: set by the lead on the freeze command line" if (run_allowance is not None or stage_allowances) else rules.get("allowance_source", "not set (not enforced)")
+    return man
+
+
+def _parse_stage_allowance(items: list[str] | None) -> dict[str, float | None]:
+    out: dict[str, float | None] = {}
+    for it in items or []:
+        if "=" not in it:
+            raise SystemExit(f"--stage-allowance expects STAGE=SECONDS, got {it!r}")
+        k, v = it.split("=", 1)
+        out[k.strip()] = None if v.strip().lower() in ("none", "null", "") else float(v)
+    return out
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--draft", action="store_true", default=True)
@@ -225,10 +256,19 @@ def main(argv=None) -> int:
     ap.add_argument("--i-am-the-lead", action="store_true")
     ap.add_argument("--accept-unavailable", nargs="*", default=None,
                     help="final only: pending inputs the lead explicitly accepts as unavailable (each must match a pending entry prefix)")
+    ap.add_argument("--run-allowance-seconds", type=float, default=None, help="S4-02: per confirmatory run (accelerator seconds)")
+    ap.add_argument("--stage-allowance", action="append", default=None, metavar="STAGE=SECONDS", help="S4-02: per stage (S4/S5); repeatable")
     args = ap.parse_args(argv)
     if args.final and not args.i_am_the_lead:
         raise SystemExit("writing manifests/frozen.json is the lead's CP-E act: pass --final --i-am-the-lead")
     man, pending = build(draft=not args.final)
+    try:
+        man = apply_allowances(man, args.run_allowance_seconds, _parse_stage_allowance(args.stage_allowance))
+    except ValueError as exc:
+        print("REFUSED:", exc, file=sys.stderr)
+        return 1
+    if not args.final and (args.run_allowance_seconds is not None or args.stage_allowance):
+        man["resource_rules"]["allowance_source"] = "proposed in the draft (S4-02); the lead sets the values on the --final command line"
     errors = sorted(jsonschema.Draft202012Validator(MANIFEST_FROZEN).iter_errors(man), key=lambda e: list(e.path))
     out = M / ("frozen.json" if args.final else "frozen.draft.json")
     if args.final:

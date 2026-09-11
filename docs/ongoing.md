@@ -23,15 +23,21 @@ either agent need no lease.
   check at stage entry with exit-2 refusals, exact experiment-id filters and no silent merges, S7-03 `--experiment-id`,
   inconsistent allowance rules refused, archived spending counted. Codex's Lane V3 confirms independently; the freeze
   request (D-A) follows.
-- Freeze draft complete otherwise; ePC substrate eligible; grammar provisional until tonight; P4 done;
-  S7 harness and inventory fixed (CounterFact shared stratum short at 9).
+- **07:20 EDT:** GPU window 2 done (46 GPU tests pass; the frozen-identity check verified on the real BP base,
+  tokenizer, grammar weights and ePC checkpoint, negatives refused — `results/GPUWIN2/`). S7's E.2 filter pass done
+  (`manifests/dev/s7_pairs_e2.json`: every stratum full except CounterFact shared at 9). Grammar cost measured on the
+  GPU (0.085 s/sequence, `results/S2/grammar_timing.json`) → the projection now selects **zsRE 1000 / CounterFact 300 /
+  grammar 256 per task** (26.3 of 27.0 h); the draft follows. **B4 is wired** into `harness.arms` (`GraceArm`,
+  original-prompt key positions through the decoder and evaluator; GPU parity tests) — its availability in the freeze
+  still waits on Lane B4-S (DEC-020). S4-02 allowance proposal and the freeze command are in `docs/lead_queue.md`.
+- ePC substrate eligible; grammar provisional until tonight; P4 done; S7 harness and inventory fixed.
 - **GPU idle**, lease free. Corrected B4 numbers: learned-value gaps 0.09–22.4 with 40/40 output/NLL
   agreement and loss trajectories within 3e-3 relative.
 
 ## 2. Orchestrator lane (do not touch)
 
-(V2-01…05 repairs: done) → B4 registration in
-`harness.arms` + B4 profile + projection when Lane B4-S lands → GPU test subset → freeze support (D-A) →
+(V2-01…05 repairs, B4 wiring, GPU window 2, E.2 pass, grammar pricing: done) → B4 profile (development, ledger deltas)
+when Lane B4-S lands → freeze support (D-A: the lead's command is posted) →
 S4-03/04 execution as run owner → S4-05/06 · S5-02 · E.2 filter pass + S7-01/02 · S7-03 · S8. Owned paths as
 before (`src/pccap/{distill,pc,harness,cap,analysis,routers,transport,bases,fixtures,data}/`, `results/`
 except lane-named subtrees, `manifests/`, `docs/decisions.md`, `docs/spec_defects.md`, `docs/lead_queue.md`,

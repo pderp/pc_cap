@@ -1,0 +1,189 @@
+{
+ "stage": "S2",
+ "arm": "C1",
+ "base": "GRAM",
+ "status": "complete",
+ "items_completed": 128,
+ "items_planned": 128,
+ "metrics": {
+  "es_immediate": {
+   "value": 0.703125,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.2265625,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 0.703125,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.2265625,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 90,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4032,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4032,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 685608.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "1": 128
+  }
+ },
+ "base_hash_before": null,
+ "base_hash_after": null,
+ "wall_seconds": 34.60319662094116,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 14576,
+   "partial_forwards": 3840,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 5.240179701126181,
+   "accel_seconds": 5.240179701126181,
+   "peak_mem_mib": 89.06396484375,
+   "tokens": 743212
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 10607,
+   "partial_forwards": 19494,
+   "reverses": 1095,
+   "settle_iters": 0,
+   "prefix_microsteps": 640,
+   "router_probes": 0,
+   "search_candidates": 7680,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 8.614655744284391,
+   "accel_seconds": 8.614655744284391,
+   "peak_mem_mib": 89.06396484375,
+   "tokens": 1693750
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 25183,
+   "partial_forwards": 23334,
+   "reverses": 1095,
+   "settle_iters": 0,
+   "prefix_microsteps": 640,
+   "router_probes": 0,
+   "search_candidates": 7680,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 13.854835445410572,
+   "accel_seconds": 13.854835445410572,
+   "peak_mem_mib": 89.06396484375,
+   "tokens": 2436962
+  },
+  "events": 32026,
+  "elapsed_wall_seconds": 36.767608642578125,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": null
+}

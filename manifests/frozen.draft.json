@@ -6,9 +6,9 @@
  "frozen_at": null,
  "draft": true,
  "code_commit": {
-  "git_head": "0f1f9d5d8c9421e4be177ea46db19f7819dbf04e",
+  "git_head": "f3da69e8f409af7919740c8f7df7f899c3f2ae81",
   "dirty": true,
-  "src_tree_sha256": "4b2ff4c090c912b643f53f9489eed0b3fe8b7e9fae92722bedbce78a5fca0f10",
+  "src_tree_sha256": "40218028898b94ac3cf53bcbf8e4de36cbcc05e5ffaa16833fff452a567a3c26",
   "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"
  },
  "env_lock_sha": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
@@ -202,7 +202,7 @@
  "stream_lengths": {
   "zsre": 1000,
   "counterfact": 300,
-  "grammar_train_count": 10000,
+  "grammar_train_count": 256,
   "c0_initial": 300,
   "source": "S2-07 projection (S4-02 confirms the scope before any confirmatory access)"
  },
@@ -287,18 +287,19 @@
    2.0
   ],
   "kappa_status": "provisional",
-  "run_allowance_seconds": null,
+  "run_allowance_seconds": 2400.0,
   "stage_allowance_seconds": {
-   "S4": null,
-   "S5": null
+   "S4": 97200.0,
+   "S5": 64800.0
   },
   "allowance_note": "S4-02 sets run_allowance_seconds and stage_allowance_seconds from the priced scope BEFORE the freeze is written; None means NOT ENFORCED at run time (recorded in every run's config as stage_allowance_enforced=false), not a stage ceiling",
   "stop_policy": "the per-run allowance is checked at item boundaries (before starting an item and after committing and evaluating it); an update in flight is never interrupted, so the overshoot is at most one item's update + immediate evaluation and is disclosed in the run's ledger; a mid-item exception restores the pre-item learner state (ItemGuard) and its cost stays charged; the endpoint rescoring is reserved: it always runs after a resource stop and is charged separately (checkpoints.json rescoring_accel_seconds); the completed prefix is exact",
-  "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation"
+  "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation",
+  "allowance_source": "proposed in the draft (S4-02); the lead sets the values on the --final command line"
  },
  "analysis_code_commit": {
-  "git_head": "0f1f9d5d8c9421e4be177ea46db19f7819dbf04e",
-  "analysis_tree_sha256": "df769c63d4ba6c59e572e4a310d590932f5488ebebbe0ddb98f0f9961c58ac9f"
+  "git_head": "f3da69e8f409af7919740c8f7df7f899c3f2ae81",
+  "analysis_tree_sha256": "1b62c6d56cf655969c994cee1f7a1a2fff94146bda78e05abbef83d96579f8e0"
  },
  "negative_case_interpretation": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
  "classification_policy": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
@@ -430,6 +431,13 @@
    "readings": "(a) treat the grammar as an ES/RET-ES-only stream; (b) define grammar paraphrases from the generator's latents.",
    "resolution": "(b): a paraphrase of a grammar item = another sequence of the same context with the same latent (class-3 value regenerated through `latent_override`) and the same mechanism kind at its designated position, hence the same forced target (`pccap.fixtures.grammar_eval.paraphrase_prefixes`; two per item); GS/RET-GS and the S2-01 calibration then apply unchanged. Outcome on the trained replacement base with R-h keys: no positive radius meets the 1% false-fire criterion (coverage \u2264 2% below it), so the grammar runs with exact keys like CounterFact (CR-4): retrieval generalization on the grammar is a floor, not a contrast; the routing contrasts read RET-ES and the held-out combinations.",
    "status": "committed (2026-09-10)"
+  },
+  {
+   "id": "SD-21",
+   "issue": "PC-10 / plan \u00a76.8 S2-05: \"codebook keys/values/radii match the reference NPZ within tolerance\". Cold init is exact and fixed-gradient Adam replay matches to 3e-7, but the first gradient differs by 1e-4 relative between PyTorch-CPU and XLA fp32 GEMMs (SD-14 class); Adam at lr 1.0 for 100 steps in GRACE's flat value valley turns that into learned-value gaps of 0.09\u201322.4 (max-abs, 20 isolated cases) while greedy outputs, NLL (40/40) and loss trajectories (\u2264 3e-3 relative) agree. Element-wise value parity is therefore a kernel property, not an algorithm property.",
+   "readings": "(a) B4 `unavailable`; (b) PC-10 in the form: outputs + NLL + keys/radii/labels exact within tolerance, values by loss trajectory, plus a same-framework sensitivity control that reproduces the divergence class.",
+   "resolution": "(b) by the lead (DEC-020), conditional on the sensitivity control; B4 labelled \"reference baseline, parity at the output level\" everywhere; the element-wise value comparison stays in the result file as a reported, non-gating quantity.",
+   "status": "committed (DEC-020); control pending"
   }
  ],
  "lora": {
@@ -542,7 +550,12 @@
   "DEC-016",
   "DEC-017",
   "DEC-018",
-  "DEC-019"
+  "DEC-019",
+  "DEC-020",
+  "DEC-021",
+  "DEC-022",
+  "DEC-023",
+  "DEC-024"
  ],
  "selection_rule": "subset = first n items of the realization's canonical item list; each committed order is filtered to that subset (relative order preserved); an arm with scope n_arm <= n edits the first n_arm items of the filtered order",
  "pending": []

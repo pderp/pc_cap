@@ -457,13 +457,84 @@ def run_pairs(make_learner, state, pairs: list[tuple[str, str, EditItem, EditIte
     return {"pairs": rows, "damage_matrix": damage_matrix(rows), "n": len(rows)}
 
 
+# ----------------------------------------------------------------------------- E.2 teacher filter (GPU, once)
+def e2_filter(man: dict, out: Path, batch: int = 64) -> dict:
+    """Apply the E.2 selection filter to the inventory once on the frozen BP base (the same base DATA-01 used): an edit
+    item is eligible only if the teacher's complete greedy answer is *outside* its aliases (and it tokenizes within the
+    answer limit). Selected pairs = the first ``targets_per_stratum`` pairs per dataset and stratum, in manifest order,
+    whose members all pass; strata that were already teacher-selected (DATA-01 development items) or need no filter
+    (grammar) are checked for tokenization only. Writes the selection with per-item evidence; never edits the inventory."""
+    import pccap  # noqa: F401
+    from pccap.bases.bp import BPBase
+    from pccap.data.decode import greedy_decode_batch, score_generation
+    from pccap.data.tokenize import GPT2Tokenizer, tokenize_pair
+
+    base, tok = BPBase(), GPT2Tokenizer()
+    evidence: dict[str, dict] = {}
+    for ds in ("zsre", "counterfact"):
+        recs = {}
+        for pr in man["pairs"][ds]:
+            for m in ("a", "b"):
+                recs.setdefault(pr[m]["item_id"], pr[m])
+        ids, prompts, info = [], [], {}
+        for iid, rec in recs.items():
+            te = tokenize_pair(tok, rec["prompt"], rec["answer"])
+            info[iid] = {"excluded": te.excluded, "reason": te.reason, "aliases": rec["aliases"], "source": rec.get("source", "")}
+            if not te.excluded:
+                ids.append(iid)
+                prompts.append(te.prompt_ids)
+        for k in range(0, len(prompts), batch):
+            decs = greedy_decode_batch(base, prompts[k: k + batch], tok)
+            for iid, dec in zip(ids[k: k + batch], decs):
+                sc = score_generation(dec, recs[iid]["aliases"])["value"]
+                info[iid].update(teacher_generation=dec.text, teacher_answers_already=bool(sc == 1.0))
+        for iid in ids:
+            info[iid]["passes"] = not info[iid]["excluded"] and not info[iid]["teacher_answers_already"]
+        for v in info.values():
+            v.setdefault("passes", False)
+        evidence[ds] = info
+    selection: dict[str, dict[str, list[str]]] = {}
+    counts = {}
+    for ds, pairs in man["pairs"].items():
+        selection[ds] = {}
+        for st in STRATA:
+            chosen = []
+            for pr in (p_ for p_ in pairs if p_["stratum"] == st):
+                if ds == "grammar":
+                    ok = True
+                elif NEEDS_FILTER[(ds, st)]:
+                    ok = all(evidence[ds][pr[m]["item_id"]]["passes"] for m in ("a", "b"))
+                else:  # DATA-01 development items: teacher-selected already; tokenization is re-checked
+                    ok = all(not evidence[ds][pr[m]["item_id"]]["excluded"] for m in ("a", "b"))
+                if ok:
+                    chosen.append(pr["pair_id"])
+                if len(chosen) >= TARGET[st]:
+                    break
+            selection[ds][st] = chosen
+            counts[f"{ds}/{st}"] = {"selected": len(chosen), "target": TARGET[st], "short": max(0, TARGET[st] - len(chosen))}
+    result = {"name": "s7_pairs_e2", "inventory_sha256_pairs": man["sha256_pairs"], "rule": man["rule"], "base": "BP teacher (frozen BP base)",
+              "written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "selection": selection, "counts": counts,
+              "candidates_checked": {ds: len(v) for ds, v in evidence.items()},
+              "teacher_already_answers": {ds: sum(1 for v in ev.values() if v.get("teacher_answers_already")) for ds, ev in evidence.items()},
+              "tokenization_excluded": {ds: sum(1 for v in ev.values() if v["excluded"]) for ds, ev in evidence.items()},
+              "evidence": evidence}
+    out.write_text(json.dumps(result, indent=1))
+    return result
+
+
 # ----------------------------------------------------------------------------- CLI
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--build", action="store_true", help="write manifests/dev/s7_pairs.json")
     ap.add_argument("--seed", type=int, default=SEED)
     ap.add_argument("--checkpoint", default=None, help="GPU run on a committed learner checkpoint (S7-01/02; needs the frozen manifest)")
+    ap.add_argument("--e2-filter", action="store_true", help="apply the E.2 teacher filter to the inventory once (GPU) → manifests/dev/s7_pairs_e2.json")
     args = ap.parse_args(argv)
+    if args.e2_filter:
+        man = json.loads(MANIFEST.read_text())
+        res = e2_filter(man, MANIFEST.with_name("s7_pairs_e2.json"))
+        print(json.dumps({k: res[k] for k in ("counts", "candidates_checked", "teacher_already_answers", "tokenization_excluded")}, indent=1))
+        return 0
     if args.build:
         man = build_inventory(args.seed)
         MANIFEST.parent.mkdir(parents=True, exist_ok=True)

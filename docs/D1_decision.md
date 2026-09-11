@@ -1,6 +1,6 @@
 # D1 decision memo — validity and feasibility (S2-07)
 
-Written 2026-09-10 23:59 UTC from `results/S2/throughput.json`, `results/S2/projection.json`, `results/S1/report.md`, `results/ENV/kappa.json`.
+Written 2026-09-11 11:16 UTC from `results/S2/throughput.json`, `results/S2/projection.json`, `results/S1/report.md`, `results/ENV/kappa.json`.
 
 ## 1. Eligibility (from S1-07)
 
@@ -42,24 +42,21 @@ Unavailable arms: {'B4': 'S2-05 pending', 'EPC_credit': 'REG-03 pending', 'gramm
 
 ## 4. Scope selection (Section 9 algorithm; SD-5 headroom 0.75; accelerator seconds)
 
-S4 ceiling 36 A100-h → budget after headroom 27.0 local h at κ = 1.0. Baseline arms B3/B4 are not measured yet: their cost is assumed = C1 × 1.0 (flagged `assumed_arms`). Grammar cost: not measurable yet (GRAM-02 pending); excluded from the sum and stated here.
+S4 ceiling 36 A100-h → budget after headroom 27.0 local h at κ = 1.0. Baseline arms B3/B4 are not measured yet: their cost is assumed = C1 × 1.0 (flagged `assumed_arms`). Grammar cost: included.
 
 | zsRE | CounterFact | grammar | local h | affordable |
 | ---: | ---: | ---: | ---: | --- |
-| 3000 | 1000 | 10000 | 56.9 | False |
-| 3000 | 300 | 10000 | 50.3 | False |
-| 1000 | 1000 | 10000 | 27.1 | False |
-| 1000 | 300 | 10000 | 20.5 | True |
-| 1000 | 300 | 1024 | 20.5 | True |
-| 1000 | 300 | 256 | 20.5 | True |
-| 300 | 1000 | 10000 | 16.9 | True |
-| 300 | 1000 | 1024 | 16.9 | True |
-| 300 | 1000 | 256 | 16.9 | True |
-| 300 | 300 | 10000 | 10.3 | True |
-| 300 | 300 | 1024 | 10.3 | True |
-| 300 | 300 | 256 | 10.3 | True |
+| 3000 | 1000 | 10000 | 282.5 | False |
+| 3000 | 300 | 10000 | 275.9 | False |
+| 1000 | 1000 | 10000 | 252.7 | False |
+| 1000 | 300 | 10000 | 246.1 | False |
+| 1000 | 300 | 256 | 26.3 | True |
+| 300 | 1000 | 10000 | 242.5 | False |
+| 300 | 1000 | 256 | 22.7 | True |
+| 300 | 300 | 10000 | 235.9 | False |
+| 300 | 300 | 256 | 16.1 | True |
 
-**Selected scope: zsRE 1000, CounterFact 300, grammar 10000** (20.5 local h of the 27.0 h budget). This is written into the frozen manifest at S4-02; the C0 initial scope is 300 with its extension optional.
+**Selected scope: zsRE 1000, CounterFact 300, grammar 256** (26.3 local h of the 27.0 h budget). This is written into the frozen manifest at S4-02; the C0 initial scope is 300 with its extension optional.
 
 ## 5. Wall-clock feasibility (calendar, not the ceiling)
 
@@ -78,7 +75,7 @@ HARN-BATCH (2026-09-10): batched cap-on evaluation with token-for-token parity t
 | CR/zsre | 3.71 | 0.47 | 0.186 → 0.111 |
 | CR/counterfact | 8.45 | 0.63 | 0.398 → 0.154 |
 
-**Engineering already applied (no protocol change):** HARN-BATCH batches the cap-on evaluation (decode steps across prompts with per-sequence host retrieval; rescoring, LS and drift batched) and was reported only after token-for-token parity with the sequential reference decoder (E.2). Learning itself remains per item and sequential. **Fallback if HARN-BATCH does not land before S4-01:** scope zsRE 300 / CounterFact 300 / grammar 256 (10.3 accelerator h; ≈ 10 wall h), then the §10 drop order (HVP → R-e/R-g → S6 → ablations → C0 extension → T3); never the endpoint, margins, realizations or orders.
+**Engineering already applied (no protocol change):** HARN-BATCH batches the cap-on evaluation (decode steps across prompts with per-sequence host retrieval; rescoring, LS and drift batched) and was reported only after token-for-token parity with the sequential reference decoder (E.2). Learning itself remains per item and sequential. **Fallback if HARN-BATCH does not land before S4-01:** scope zsRE 300 / CounterFact 300 / grammar 256 (16.1 accelerator h; ≈ 10 wall h), then the §10 drop order (HVP → R-e/R-g → S6 → ablations → C0 extension → T3); never the endpoint, margins, realizations or orders.
 
 ## 6. Open items with owners
 

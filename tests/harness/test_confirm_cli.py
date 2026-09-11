@@ -489,3 +489,18 @@ def test_v2_05_archived_attempts_count_toward_stage_spending(synthetic_root):
     finally:
         runner.RUNNERS["S4"] = real
         (root / "manifests" / "frozen.json").write_text(json.dumps(man, default=float))
+
+
+def test_s4_02_allowances_on_the_freeze_command(synthetic_root):
+    from pccap.harness.freeze import apply_allowances
+
+    _, man = synthetic_root
+    m = apply_allowances(json.loads(json.dumps(man, default=float)), 2400.0, {"S4": 97200.0, "S5": 64800.0})
+    assert m["resource_rules"]["run_allowance_seconds"] == 2400.0 and m["resource_rules"]["stage_allowance_seconds"] == {"S4": 97200.0, "S5": 64800.0}
+    assert "S4-02" in m["resource_rules"]["allowance_source"]
+    with pytest.raises(ValueError, match="V2-04"):  # a stage ceiling without a run allowance is refused at freeze time too
+        apply_allowances(json.loads(json.dumps(man, default=float)), None, {"S4": 97200.0})
+    with pytest.raises(ValueError):
+        apply_allowances(json.loads(json.dumps(man, default=float)), 2400.0, {"S9": 1.0})
+    m = apply_allowances(json.loads(json.dumps(man, default=float)), None, {})
+    assert m["resource_rules"]["stage_allowance_seconds"].get("S4") is None  # nothing set → not enforced, recorded

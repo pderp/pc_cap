@@ -1,0 +1,26 @@
+{
+ "positive": {
+  "bp_param_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+  "tokenizer_json_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+ },
+ "grammar": {
+  "grammar_weights_sha256": "23fbc42b127ce1b44b83ca368e0cbcb8e413f768b7c8d6d11aacfd217f4167d5"
+ },
+ "epc": {
+  "epc_checkpoint_sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51"
+ },
+ "negative_bp": "refused: loaded BP base digest c4ac3fb867da differs from the frozen base_checkpoints.bp.param_digest 111111111111",
+ "negative_tok": "refused: loaded tokenizer file sha256 8414cab924d8 differs from the frozen tokenizer_rev 333333333333",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ }
+}

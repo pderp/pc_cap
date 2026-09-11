@@ -1,6 +1,6 @@
 # Task status board
 
-Regenerated 2026-09-11 10:45 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-11 11:20 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
@@ -143,11 +143,11 @@ GPU seconds charged to tasks so far: 45075
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S6-01 | Deficit statement and authorization | **ready** | BASE | S3-06 | none | yes |  |  |  |
-| S6-02 | Regularizer implementation | **pending** | BASE | S6-01 | short | no |  |  |  |
-| S6-03 | Differentiable error features (create_graph path) with FD test | **pending** | BASE | S6-02 | short | yes |  |  |  |
-| S6-04 | Matched continuation pair EPC-CONT / EPC-REG | **pending** | BASE | S6-03 | lease | no |  |  |  |
-| S6-05 | P1-P6 on both arms | **pending** | METRICS | S6-04 | lease | no |  |  |  |
+| S6-01 | Deficit statement and authorization | **ready** | BASE | S3-06 | none | yes |  |  | optional: preregistered proposal from S5 evidence only (DEC-022); no S6 runs this month |
+| S6-02 | Regularizer implementation | **pending** | BASE | S6-01 | short | no |  |  | closed for the month (DEC-022): REG charged to S6's allocation; not scheduled |
+| S6-03 | Differentiable error features (create_graph path) with FD test | **pending** | BASE | S6-02 | short | yes |  |  | closed for the month (DEC-022): REG charged to S6's allocation; not scheduled |
+| S6-04 | Matched continuation pair EPC-CONT / EPC-REG | **pending** | BASE | S6-03 | lease | no |  |  | closed for the month (DEC-022): REG charged to S6's allocation; not scheduled |
+| S6-05 | P1-P6 on both arms | **pending** | METRICS | S6-04 | lease | no |  |  | closed for the month (DEC-022): REG charged to S6's allocation; not scheduled |
 
 ## S7
 
