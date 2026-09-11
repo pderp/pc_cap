@@ -74,11 +74,12 @@ JAX_PLATFORMS=cpu $P -m pccap.analysis.s3_03                             # [veri
 
 ```bash
 $P scripts/sample_confirm.py                      # DATA-02 sealed realizations/orders
-$P -m pccap.harness.freeze --draft                # manifests/frozen.draft.json
-$P -m pccap.harness.freeze --final --i-am-the-lead [--accept-unavailable <pending…>]   # [pending] the lead's CP-E act → manifests/frozen.json
-$P -m pccap.harness.schedule                      # results/S4/jobs.json (fixed order)
-$P -m pccap.cli run --stage S4 --mode confirm --dataset zsre --arm C2 --realization 0 --perm 0 --manifest manifests/confirm/zsre_r0.json   # [illustrative until the freeze] one job (the runner takes the lease)
-$P -m pccap.analysis.s4_05 ; $P -m pccap.analysis.s4_06 --dataset zsre ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2   # [pending] after S4-04
+$P -m pccap.harness.freeze --draft --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # manifests/frozen.draft.json (proposal)
+$P -m pccap.harness.freeze --final --i-am-the-lead --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # the lead's CP-E act → manifests/frozen.json (frozen-confirmatory-v2, DEC-027; v1 superseded by DEC-026)
+$P -m pccap.harness.schedule                      # results/S4/jobs.json (fixed order: 210 S4 jobs, then 60 S5; B4 unavailable, SB reused)
+$P -m pccap.cli queue [--stage S5] [--max-jobs N] [--dry-run]   # S4-04: runs the list in order, one subprocess per job under the lease; resumable; stops on refusals and systematic failures; stop file results/S4/queue.stop
+$P scripts/s4_progress.py                         # read-only progress and ETA
+$P -m pccap.analysis.s4_05 --experiment-id <id> ; $P -m pccap.analysis.s4_06 --dataset zsre --experiment-id <id> ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2 --experiment-id <id>   # as pairs complete (the id is the frozen name + hash prefix, e.g. frozen-confirmatory-v2-84126123)
 ```
 
 ## 7. Artifact index
