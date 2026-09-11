@@ -65,3 +65,42 @@ reference material (DEC-003). Recorded as `unsupported` in `results/ENV/sibling_
   assert jax.default_backend()=='gpu'; d=jax.devices()[0]; assert d.compute_capability=='12.0'; \
   x=jax.random.normal(jax.random.PRNGKey(0),(1024,1024)); print(float((x@x).sum()))"
 ```
+
+## Recreating the environment (ENV-05)
+
+From the `pc_cap` root, resolve the existing lock into a **new** scratch environment:
+
+```bash
+PCCAP_SETUP_PYTHON=/home/derp/cap/venv/bin/python scripts/setup_venv.sh \
+  --dry-run --venv /home/derp/cap/assets/envs/venv-check-next \
+  --out results/ENV05/venv-check-next
+```
+
+Both destination paths must be unused. The previously checked `venv-check` destination
+already exists and is deliberately refused. No activation is needed. Network access is
+required for dependency resolution; a restricted environment may require network approval.
+
+The helper requires Python 3.12, preserves `requirements.lock`, and filters only its one
+private editable `pccap` URL into a temporary lock under `assets/tmp/`. It records both
+lock hashes, the local checkout revision and dirty paths. Environments and pip caches stay
+under `assets/`; logs and the setup record stay under `pc_cap/results/ENV05/`.
+
+Without `--dry-run`, it installs the pinned dependencies, installs `pccap` from the local
+checkout with `--no-deps --no-build-isolation -e`, runs `pip check`, and prints
+`pccap.determinism_report()` with JAX forced to CPU. Installing an editable checkout can
+write package metadata in the repository; under a new-files-only work session, review
+those writes with the lead before running real installation. The active project venv
+is never a valid destination.
+
+Validation under the lead's D-F approval (2026-09-11): a real installation completed
+at `/home/derp/cap/assets/envs/venv-check-plan6-df`. All 150 retained pins match the
+installed versions exactly; local `pccap==0.0.1` is editable from this checkout;
+`pip check` passes; the CPU determinism report confirms JAX 0.11.1 with highest matmul
+precision and x64 off. The active environment's package inventory and the original
+lock remained unchanged. Use fresh destination paths for another installation.
+
+CUDA 13 packages are installed. The CPU environment variables affect only the setup
+verification processes; GPU execution in the new environment has not been tested.
+The source revision and dirty-tree status, package inventory, logs and checks are in
+`results/ENV05/plan6_df_install/`; see `docs/tasks/ENV-05.md` for the exact invocation.
+Earlier DNS-failed and resolution-only attempts remain preserved separately.

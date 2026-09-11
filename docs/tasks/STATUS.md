@@ -1,13 +1,13 @@
 # Task status board
 
-Regenerated 2026-09-11 10:17 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-11 10:39 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 61 |
+| done | 62 |
 | in_progress | 1 |
-| partial | 9 |
+| partial | 8 |
 | ready | 4 |
 | pending | 14 |
 
@@ -21,7 +21,7 @@ GPU seconds charged to tasks so far: 45075
 | ENV-02 | Shared-workload benchmark and kappa | **done** | INTEGRATOR | ENV-01, DATA-00 | lease | no | orchestrator |  |  |
 | ENV-03 | Package scaffold, contracts v0, Makefile, docs skeleton | **done** | INTEGRATOR | ENV-01 | none | yes | orchestrator | pending |  |
 | ENV-04 | Sibling reference recorder (read-only sibling, DEC-003) | **done** | INTEGRATOR | ENV-03 | none | no | orchestrator | pending |  |
-| ENV-05 | Environment recreation script | **partial** | ENV | ENV-01 | none | no | codex |  | lock resolves (150/150 pins) into a scratch env; real installation and determinism report not run (needs lead approval, updated_plan6.md §2.3) |
+| ENV-05 | Environment recreation script | **done** | ENV | ENV-01 | none | no | codex |  | D-F approved: real scratch install 150/150 pins; pip check and CPU determinism pass; active package inventory/lock unchanged; CUDA packages installed, GPU execution untested. |
 
 ## DATA
 

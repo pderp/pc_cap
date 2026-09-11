@@ -1,0 +1,60 @@
+{
+  "row": "ENV-05",
+  "before": {
+    "id": "ENV-05",
+    "title": "Environment recreation script",
+    "stage": "ENV",
+    "role": "ENV",
+    "deps": [
+      "ENV-01"
+    ],
+    "gpu": "none",
+    "review": false,
+    "status": "partial",
+    "agent": "codex",
+    "worktree": null,
+    "started": "2026-09-11T00:00:00+00:00",
+    "finished": null,
+    "commit": null,
+    "evidence": [
+      "docs/tasks/ENV-05.md",
+      "scripts/setup_venv.sh",
+      "results/ENV05/"
+    ],
+    "gpu_seconds": 0.0,
+    "wall_seconds": 3600.0,
+    "note": "lock resolves (150/150 pins) into a scratch env; real installation and determinism report not run (needs lead approval, updated_plan6.md \u00a72.3)"
+  },
+  "after": {
+    "id": "ENV-05",
+    "title": "Environment recreation script",
+    "stage": "ENV",
+    "role": "ENV",
+    "deps": [
+      "ENV-01"
+    ],
+    "gpu": "none",
+    "review": false,
+    "status": "done",
+    "agent": "codex",
+    "worktree": null,
+    "started": "2026-09-11T00:00:00+00:00",
+    "finished": "2026-09-11T10:39:53+00:00",
+    "commit": null,
+    "evidence": [
+      "docs/tasks/ENV-05.md",
+      "scripts/setup_venv.sh",
+      "results/ENV05/",
+      "results/ENV05/plan6_df_install/setup.json",
+      "results/ENV05/plan6_df_install/verification.json",
+      "docs/environment.md"
+    ],
+    "gpu_seconds": 0.0,
+    "wall_seconds": 3758.581630706787,
+    "note": "D-F approved: real scratch install 150/150 pins; pip check and CPU determinism pass; active package inventory/lock unchanged; CUDA packages installed, GPU execution untested."
+  },
+  "other_rows_unchanged": true,
+  "before_sha256": "c2e22b5396cc631516e58a813250e3bde7cb4d0f0e81ed6b3b6583f0da549648",
+  "after_sha256": "e5cac4e7b7c29bd100c3436d32c3d922914cc123ca1e58bf487d55bd373361d1",
+  "wall_time_note": "Preserved prior 3600-second work entry and added the measured 158.58-second real setup duration."
+}

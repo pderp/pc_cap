@@ -1,0 +1,32 @@
+[
+  {
+    "argv": [
+      "../venv/bin/ruff",
+      "check",
+      "--no-cache",
+      "scripts/grace_numerical_trace.py",
+      "scripts/review_repairs_r2b_study.py",
+      "scripts/setup_venv.py"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.004130172077566385,
+    "log": "results/PLAN6/DF/lint.txt"
+  },
+  {
+    "argv": [
+      "../venv/bin/python",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp=../assets/tmp/plan6_df_cpu_controls",
+      "tests/harness/test_confirm_cli.py",
+      "tests/baselines/test_grace_jax.py"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 7.570620505022816,
+    "log": "results/PLAN6/DF/cpu_controls.txt"
+  }
+]

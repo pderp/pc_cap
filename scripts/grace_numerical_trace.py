@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """B4 CPU numerical trace; original reference and JAX candidate remain unchanged."""
 from __future__ import annotations
+
 import argparse
 import hashlib
 import importlib.util
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 os.environ.update(CUDA_VISIBLE_DEVICES="", JAX_PLATFORMS="cpu", PYTHONDONTWRITEBYTECODE="1",
                   HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", WANDB_MODE="disabled")
@@ -32,6 +33,7 @@ def reference():
     import copy
     from types import SimpleNamespace
     from unittest.mock import patch
+
     import torch
     import yaml
     ref = oracle()
@@ -58,7 +60,7 @@ def reference():
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 self.index = 0
-            def step(self, closure=None):
+            def step(self, closure=None, *, arrays=arrays):
                 self.index += 1
                 trainable = [p for group in self.param_groups for p in group["params"] if p.grad is not None]
                 assert len(trainable) == 1
@@ -84,8 +86,12 @@ def reference():
 
 
 def candidate():
+    import pccap  # noqa: F401
+
+    # isort: split
     import jax
     import jax.numpy as jnp
+
     from pccap.baselines.grace_jax import cold_uniform, hook_prefix, hook_suffix, optimize_value
     from pccap.bases import gpt2_jax as g
     from pccap.bases.bp import BPBase
@@ -104,7 +110,7 @@ def candidate():
         mask[len(prompt)-1:len(ids)-1] = 1
         h, _, projected = hook_prefix(base.params, jnp.asarray(padded), base.cfg, 8)
         initial = cold_uniform(np.random.RandomState(index), 3072)
-        def loss(value):
+        def loss(value, h=h, projected=projected, prompt=prompt, targets=targets, mask=mask):
             hidden = hook_suffix(base.params, h, projected, value, len(prompt)-1, True, base.cfg, 8)
             logits = g.head(base.params, hidden, base.cfg)
             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]

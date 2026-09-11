@@ -194,6 +194,7 @@ def main():
 
         # Fresh synthetic variants of the freeze, never the production final manifest.
         import copy
+
         from pccap.analysis import s7_03
         from pccap.harness.freeze import tree_sha
         def set_freeze(obj):
@@ -239,7 +240,6 @@ def main():
             obj["calibration"]["EPC"] = copy.deepcopy(obj["calibration"]["BP"])
             obj["calibration"]["EPC"]["b_m"] = {"1": 7., "2": 8., "3": 9.}
             obj["calibration"]["EPC"]["radii"]["zsre"] = {"1": .21, "2": .22, "3": .23}
-            obj["checkpoints"] = [1, 2]
             obj["resource_rules"]["run_allowance_seconds"] = 1.2
             return obj
         mp.setattr(stage_s5, "EPCBase", SimpleNamespace(from_npz=lambda path, ledger: base_factory("EPC", ledger)))

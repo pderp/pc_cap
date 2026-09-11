@@ -1,0 +1,92 @@
+{
+  "created_utc": "2026-09-11T10:32:27.537538+00:00",
+  "python": "/home/derp/cap/venv/bin/python",
+  "python_version": "3.12.14 (main, Aug 13 2026, 00:00:00) [GCC 16.1.1 20260515 (Red Hat 16.1.1-2)]",
+  "target": "/home/derp/cap/assets/envs/venv-check-plan6-df",
+  "source_checkout": "/home/derp/cap/pc_cap",
+  "source_revision": "af98eab218ef55308be333615c9a228a0b0eb5ef",
+  "source_was_dirty": true,
+  "source_status": [
+    " M docs/environment.md",
+    " M scripts/grace_numerical_trace.py",
+    " M scripts/review_repairs_r2b_study.py",
+    "?? results/PLAN6/",
+    "?? results/V2/plan6_df/"
+  ],
+  "requirements_lock_sha256": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+  "filtered_requirements_sha256": "fec740c5e44b323136242f8805896c0cbd5f0c50355367dc6eb69f344fbd7da0",
+  "skipped_entry": "-e git+ssh://git@github.com/pderp/pc_cap.git@e381c9e8a82d15de37277ef9315e156c6d160adf#egg=pccap",
+  "dry_run": false,
+  "package_install": "pip install --no-deps --no-build-isolation -e <local checkout>",
+  "resources": "/home/derp/cap/assets/tmp/env05-20260911T103227534139Z",
+  "gpu_use": false,
+  "status": "environment_created_cpu_probe_passed",
+  "local_package_installed": true,
+  "commands": [
+    {
+      "name": "create_venv",
+      "argv": [
+        "/home/derp/cap/venv/bin/python",
+        "-B",
+        "-m",
+        "venv",
+        "/home/derp/cap/assets/envs/venv-check-plan6-df"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "install_lock",
+      "argv": [
+        "/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python",
+        "-B",
+        "-m",
+        "pip",
+        "install",
+        "--no-input",
+        "--no-compile",
+        "-r",
+        "/home/derp/cap/assets/tmp/env05-20260911T103227534139Z/requirements.filtered.lock"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "install_checkout",
+      "argv": [
+        "/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python",
+        "-B",
+        "-m",
+        "pip",
+        "install",
+        "--no-input",
+        "--no-compile",
+        "--no-deps",
+        "--no-build-isolation",
+        "-e",
+        "/home/derp/cap/pc_cap"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "pip_check",
+      "argv": [
+        "/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python",
+        "-B",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "determinism",
+      "argv": [
+        "/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python",
+        "-B",
+        "-c",
+        "import json,pccap; print(json.dumps(pccap.determinism_report(), indent=2))"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "lock_unchanged": true
+}

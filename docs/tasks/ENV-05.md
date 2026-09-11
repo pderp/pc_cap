@@ -1,47 +1,80 @@
 # ENV-05 — environment recreation
 
-Status: implementation and dependency-resolution validation complete; real installation
-and runtime validation unexecuted. Owner: Codex. CPU/network only; no GPU use.
+Status: **done**. Agent: Codex. Completed under the user's approval of
+`updated_plan6.md` section 5, **D-F only**, on 2026-09-11.
+CPU/network validation; GPU seconds: **0**.
 
-## Deliverables
+## Inputs and outputs
 
-- `scripts/setup_venv.sh`: executable wrapper accepting `PCCAP_SETUP_PYTHON`.
-- `scripts/setup_venv.py`: Python 3.12 helper; exclusive new environment/evidence paths;
-  unchanged lock; exactly one private editable entry removed from a scratch copy;
-  local checkout install in real mode; revision and dirty-path provenance; pip check
-  and CPU determinism report after real installation.
-- `docs/tasks/ENV-05-environment.patch`: proposed “Recreating the environment” section.
-  Prepared for review, **not applied** to the existing environment document.
+Inputs: unchanged `requirements.lock` (150 pinned packages plus the private editable
+pccap entry), Python 3.12.14, local checkout
+`af98eab218ef55308be333615c9a228a0b0eb5ef` with the approved D-F patches applied.
 
-## Validation and evidence
+Outputs: existing `scripts/setup_venv.{sh,py}` exercised in real-install mode;
+`docs/environment.md` recreation section applied and refreshed; a new environment
+at `/home/derp/cap/assets/envs/venv-check-plan6-df`; logs and verification records in
+`results/ENV05/plan6_df_install/`. Caches and temporary build resources stay under
+`assets/tmp/env05-20260911T103227534139Z/`.
 
-The first invocation created `../assets/envs/venv-check` but its pip dry run failed on
-sandbox DNS. `results/ENV05/venv-check/setup.json` correctly remains `status=failed`.
-A network-approved retry used that scratch Python and the original scratch filtered
-lock with `pip install --dry-run --no-input --no-compile --report ... -r ...`.
-`results/ENV05/network_check/resolve_lock.txt` records the successful resolution;
-`pip_report.json` contains package versions, origins and distribution hashes.
-`verification.json` independently compares all **150** resolved package names/versions
-with the retained lock pins and records refusal controls for the active and existing
-scratch environments. The private editable line is the only removed entry.
+## Verify command
 
-Three in-memory lock-filter controls, Ruff, and shell syntax validation passed.
-Neither dry run installed `pccap` or the resolved dependencies. The bare scratch venv
-is therefore not a usable recreation yet; full dependency installation, local editable
-installation, `pip check`, and CPU determinism output remain unexecuted. GPU validation
-is outside this lane. Python, resources and caches were placed under `assets/`; the
-active venv, lock, sibling repositories and source reference artifacts were untouched.
+The completed invocation was:
 
-The invocation recorded checkout `25c988b850371576975df6cd7d80267ca3476a23`
-and `source_was_dirty=true`; this is not a clean-revision reproducibility claim.
+```bash
+PCCAP_SETUP_PYTHON=/home/derp/cap/venv/bin/python \
+  PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+  GIT_OPTIONAL_LOCKS=0 scripts/setup_venv.sh \
+  --venv /home/derp/cap/assets/envs/venv-check-plan6-df \
+  --out results/ENV05/plan6_df_install
+```
 
-## Reproduction and next checkpoint
+Those destinations now exist and intentionally cannot be reused. A reproduction
+must select new environment and evidence paths. Network access was approved for
+this install. The helper runs pip against a scratch copy of the lock with only the
+private editable line removed, then installs `pccap` from the local checkout with
+`--no-deps --no-build-isolation -e`.
 
-See the proposed section for a fresh-destination command. The default scratch target
-already exists and is intentionally not reusable. Every attempt gets a new result path.
-Do not remove or overwrite a previous attempt to get a passing status.
+## Verify output and done-when check
 
-The lead may apply the proposed documentation patch and mirror this completion record
-into the task board. No existing file was edited and no commit was made for this lane.
-A real editable install may rewrite repository packaging metadata, so it needs review
-under the user's new-files-only rule before execution in this shared checkout.
+| Check | Result | Evidence under `results/ENV05/plan6_df_install/` |
+| --- | --- | --- |
+| Create fresh environment | exit 0 | `create_venv.txt` |
+| Install locked dependencies | exit 0 | `install_lock.txt` |
+| Install local editable pccap | exit 0; pccap 0.0.1 | `install_checkout.txt` |
+| Dependency consistency | No broken requirements found; exit 0 | `pip_check.txt` |
+| CPU determinism report | JAX 0.11.1, CPU, highest matmul precision, x64 off, partitionable Threefry off | `determinism.txt` |
+| Compare installed versions to lock | **150/150 exact matches** | `installed_packages.json`, `verification.json` |
+| Editable provenance | `file:///home/derp/cap/pc_cap`, editable true | `installed_packages.json` |
+| Preserve active package inventory and lock | unchanged | `verification.json` |
+| Document recreation | section applied and updated | `docs/environment.md` |
+
+All required ENV-05 completion checks pass. The two additional distributions beyond
+the retained pins are local `pccap==0.0.1` and bootstrap `pip==26.0.1`; pip is not
+pinned by this freeze output. Package identity is verified at the version level;
+this is not a claim of bit-identical rebuilt wheels. The setup record identifies
+the dirty checkout used at installation, rather than claiming a clean-revision build.
+
+The helper did not modify the active venv or the lock. The authorized local editable
+installation can update ignored `src/pccap.egg-info` metadata in the shared checkout.
+The package is editable, so future source changes remain visible to this scratch env.
+No files in FabricPC or the other reference repository were changed.
+
+## Cost, CUDA and previous evidence
+
+The real setup took approximately **158.58 seconds**, measured from the setup record's
+start timestamp to its completion file timestamp. This is additional to the previously
+recorded development work; GPU use was zero. CUDA 13 JAX plugins and libraries are
+installed from the lock. `CUDA_VISIBLE_DEVICES=''` and `JAX_PLATFORMS=cpu` apply only
+to the verification processes. GPU execution in this scratch environment has not
+been validated and is not required by D-F's CPU check.
+
+The earlier resolution-only evidence is preserved: the sandbox-DNS failure in
+`results/ENV05/venv-check/`, followed by the successful approved network dry run in
+`results/ENV05/network_check/`. Those historical records remain accurate for their
+respective attempts. `docs/tasks/ENV-05-environment.patch` is the original approved
+proposal; the live environment document now includes the real-install result.
+
+The approved review scripts/helper pass Ruff, and 14 related CPU controls pass;
+see `results/PLAN6/DF/validation.json`. No threshold, baseline parity rule, production
+freeze, GPU allowance, S6 decision or grammar-promotion decision was changed.
+Unresolved ENV-05 tasks: none within the approved scope.

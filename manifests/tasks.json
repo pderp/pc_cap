@@ -1982,20 +1982,23 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "partial",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": "2026-09-11T00:00:00+00:00",
-   "finished": null,
+   "finished": "2026-09-11T10:39:53+00:00",
    "commit": null,
    "evidence": [
     "docs/tasks/ENV-05.md",
     "scripts/setup_venv.sh",
-    "results/ENV05/"
+    "results/ENV05/",
+    "results/ENV05/plan6_df_install/setup.json",
+    "results/ENV05/plan6_df_install/verification.json",
+    "docs/environment.md"
    ],
    "gpu_seconds": 0.0,
-   "wall_seconds": 3600.0,
-   "note": "lock resolves (150/150 pins) into a scratch env; real installation and determinism report not run (needs lead approval, updated_plan6.md \u00a72.3)"
+   "wall_seconds": 3758.581630706787,
+   "note": "D-F approved: real scratch install 150/150 pins; pip check and CPU determinism pass; active package inventory/lock unchanged; CUDA packages installed, GPU execution untested."
   }
  ]
 }
