@@ -1,0 +1,953 @@
+{
+ "stage": "S1",
+ "property": "P4",
+ "base": "GRAM (replacement grammar, BP weights)",
+ "weights": "9e4a9750fb688dc5726d336adc840c4274a34585f6de5500cd44493d07074a72",
+ "solver": {
+  "errors": "declared ePC solver on BP weights: SGD on error variables, lr 0.1, 8 iterations, CE on the designated target",
+  "label": "errors of the declared solver on BP weights (no ePC-trained grammar)"
+ },
+ "n_per_set": 2048,
+ "r_target": 16,
+ "layers": 6,
+ "metrics": {
+  "error_overlap_private_shared1_mean": {
+   "value": 0.2835154774982835,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 2048,
+   "strata": {},
+   "exclusions": []
+  },
+  "error_overlap_private_shared2_mean": {
+   "value": 0.3514639888493381,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 2048,
+   "strata": {},
+   "exclusions": []
+  },
+  "error_overlap_shared1_shared2_mean": {
+   "value": 0.26857077314529626,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 2048,
+   "strata": {},
+   "exclusions": []
+  },
+  "error_resampling_stability_min": {
+   "value": 0.8649538318398304,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 2048,
+   "strata": {},
+   "exclusions": []
+  },
+  "error_captured_variance_r16_mean": {
+   "value": 0.9860921818758878,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 2048,
+   "strata": {},
+   "exclusions": []
+  },
+  "insufficient_rank_cases": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "count",
+   "numerator": null,
+   "denominator": null,
+   "n": 18,
+   "strata": {},
+   "exclusions": []
+  },
+  "private_private_overlap_mean": {
+   "value": 0.9329953526531437,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 168,
+   "strata": {},
+   "exclusions": []
+  },
+  "shared_retention_overlap_mean": {
+   "value": 0.9419499140726054,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 6,
+   "strata": {},
+   "exclusions": []
+  },
+  "heldout_transfer_private_mean": {
+   "value": 0.9596948699688655,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 6,
+   "strata": {},
+   "exclusions": []
+  },
+  "heldout_transfer_shared_mean": {
+   "value": 0.9935840884320372,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 6,
+   "strata": {},
+   "exclusions": []
+  },
+  "residual_overlap_private_shared1_mean": {
+   "value": 0.2942488588661319,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 2048,
+   "strata": {},
+   "exclusions": []
+  },
+  "cross_capture_shared_basis_on_private_only_flip_mean": {
+   "value": 0.20411252480029052,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 6,
+   "strata": {},
+   "exclusions": []
+  },
+  "cross_capture_private_basis_on_shared_only_flip_mean": {
+   "value": 0.21230087789023058,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 6,
+   "strata": {},
+   "exclusions": []
+  },
+  "chance_overlap_random_r_subspaces": {
+   "value": 0.125,
+   "status": "ok",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 0,
+   "strata": {},
+   "exclusions": []
+  },
+  "natural_language_domain_pca": {
+   "value": null,
+   "status": "unsupported",
+   "units": "overlap",
+   "numerator": null,
+   "denominator": null,
+   "n": 0,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "per_layer": {
+  "0": {
+   "error": {
+    "overlap": {
+     "private": {
+      "private": 0.9999999999999999,
+      "shared_1": 0.3537027850056884,
+      "shared_2": 0.46006592196926765
+     },
+     "shared_1": {
+      "private": 0.3537027850056884,
+      "shared_1": 0.9999999999999993,
+      "shared_2": 0.3783760113006391
+     },
+     "shared_2": {
+      "private": 0.4600659219692672,
+      "shared_1": 0.37837601130063914,
+      "shared_2": 1.0
+     }
+    },
+    "captured_variance": {
+     "private": 0.9685875075711015,
+     "shared_1": 0.9881931155062001,
+     "shared_2": 0.9660363692458536
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.022120838666228722,
+      0.010582710785492416,
+      0.006506629485125273,
+      0.009070354223437022
+     ],
+     "shared_1": [
+      0.018283519474481348,
+      0.00738784043316805,
+      0.0005283296208573318,
+      0.009791868025806762
+     ],
+     "shared_2": [
+      0.012712002902709636,
+      0.005764418678800162,
+      0.004568742766297814,
+      0.005770291967641245
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9424837634594837,
+     "shared_1": 0.898292688952975,
+     "shared_2": 0.9150268195386914
+    }
+   },
+   "residual": {
+    "overlap": {
+     "private": {
+      "private": 0.9999999999999996,
+      "shared_1": 0.35975455401253675,
+      "shared_2": 0.3551891816993722
+     },
+     "shared_1": {
+      "private": 0.35975455401253686,
+      "shared_1": 0.9999999999999998,
+      "shared_2": 0.30979392499697306
+     },
+     "shared_2": {
+      "private": 0.3551891816993723,
+      "shared_1": 0.3097939249969731,
+      "shared_2": 1.0
+     }
+    },
+    "captured_variance": {
+     "private": 0.9547777321456286,
+     "shared_1": 0.9807865106782571,
+     "shared_2": 0.8978296145205263
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.0015335898189871595,
+      0.0019838642410473766,
+      0.0013124575357338492,
+      0.00024791526993875497
+     ],
+     "shared_1": [
+      0.00304662826966081,
+      0.0014393901766961842,
+      0.002974512420314622,
+      0.002112155961677551
+     ],
+     "shared_2": [
+      0.01429906155416451,
+      0.0007545122855811366,
+      0.00037185994628869453,
+      0.000664336322450412
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9479007496016487,
+     "shared_1": 0.9536209345284454,
+     "shared_2": 0.9508677678897508
+    }
+   },
+   "fixture": {
+    "private_private_overlap_mean": 0.8895806891449248,
+    "private_private_overlap_max": 0.922147685287602,
+    "shared_retention_overlap_ctxA_vs_ctxB": 0.9549546409963909,
+    "heldout_transfer_private_basis_captures_private_only_flip": 0.9099642410167418,
+    "heldout_transfer_shared_basis_captures_shared_only_flip": 0.9853557402446224,
+    "cross_capture_shared_basis_on_private_only_flip": 0.3332737246019668,
+    "cross_capture_private_basis_on_shared_only_flip": 0.3408082363505242,
+    "private_basis_captured_variance_own": 0.9685875075711015
+   }
+  },
+  "1": {
+   "error": {
+    "overlap": {
+     "private": {
+      "private": 0.9999999999999989,
+      "shared_1": 0.27660063724889505,
+      "shared_2": 0.37060927603964894
+     },
+     "shared_1": {
+      "private": 0.27660063724889494,
+      "shared_1": 1.0,
+      "shared_2": 0.2670026111514058
+     },
+     "shared_2": {
+      "private": 0.37060927603964894,
+      "shared_1": 0.2670026111514058,
+      "shared_2": 0.9999999999999987
+     }
+    },
+    "captured_variance": {
+     "private": 0.980783303396316,
+     "shared_1": 0.9926576863783253,
+     "shared_2": 0.9801408259384741
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.008962247972761635,
+      0.006624449203519081,
+      0.004300021796300246,
+      0.005117122320580841
+     ],
+     "shared_1": [
+      0.0036821729327058197,
+      0.0015310974647729965,
+      0.0017121367126891798,
+      0.004057759053113825
+     ],
+     "shared_2": [
+      0.0035796847654419525,
+      0.0026213918122435613,
+      0.0033068534571798237,
+      0.0014663339958909047
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9447397688613492,
+     "shared_1": 0.9086216412676598,
+     "shared_2": 0.9452358977841872
+    }
+   },
+   "residual": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.1403491597578258,
+      "shared_2": 0.2917450573780844
+     },
+     "shared_1": {
+      "private": 0.14034915975782578,
+      "shared_1": 0.9999999999999987,
+      "shared_2": 0.20112271084691635
+     },
+     "shared_2": {
+      "private": 0.2917450573780843,
+      "shared_1": 0.20112271084691635,
+      "shared_2": 0.9999999999999997
+     }
+    },
+    "captured_variance": {
+     "private": 0.9427469123873186,
+     "shared_1": 0.9917215398563483,
+     "shared_2": 0.9158341659580712
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.0034313182907972535,
+      0.002814434722923004,
+      0.0023719743735071287,
+      0.0007979710826445507
+     ],
+     "shared_1": [
+      0.004392759864347701,
+      0.006795625720568729,
+      0.011164750175091664,
+      0.005820892852173139
+     ],
+     "shared_2": [
+      0.007543131974903276,
+      0.002060142187404343,
+      0.001047287968216468,
+      0.0023906506720826146
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9965623187895499,
+     "shared_1": 0.9648735393320933,
+     "shared_2": 0.9874217937799917
+    }
+   },
+   "fixture": {
+    "private_private_overlap_mean": 0.9160841632753121,
+    "private_private_overlap_max": 0.9479936847184398,
+    "shared_retention_overlap_ctxA_vs_ctxB": 0.9305414894479509,
+    "heldout_transfer_private_basis_captures_private_only_flip": 0.9509356729598282,
+    "heldout_transfer_shared_basis_captures_shared_only_flip": 0.9915233263536237,
+    "cross_capture_shared_basis_on_private_only_flip": 0.17500868128508906,
+    "cross_capture_private_basis_on_shared_only_flip": 0.19779836612762378,
+    "private_basis_captured_variance_own": 0.980783303396316
+   }
+  },
+  "2": {
+   "error": {
+    "overlap": {
+     "private": {
+      "private": 0.9999999999999996,
+      "shared_1": 0.2531461970910074,
+      "shared_2": 0.28690140106018686
+     },
+     "shared_1": {
+      "private": 0.25314619709100744,
+      "shared_1": 1.0,
+      "shared_2": 0.23939113900808662
+     },
+     "shared_2": {
+      "private": 0.28690140106018686,
+      "shared_1": 0.23939113900808667,
+      "shared_2": 0.9999999999999993
+     }
+    },
+    "captured_variance": {
+     "private": 0.9864652011810308,
+     "shared_1": 0.9961722904432386,
+     "shared_2": 0.9879881226164192
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.004418366824723654,
+      0.003910914323078139,
+      0.001958045624636034,
+      0.0023292710273048294
+     ],
+     "shared_1": [
+      0.0013626744849659245,
+      0.001278362935160331,
+      0.0013468264612950896,
+      0.0014874403054436127
+     ],
+     "shared_2": [
+      0.0015802454242833108,
+      0.0006323220575350022,
+      0.003320491539301418,
+      0.0006314512105765734
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9065589822245329,
+     "shared_1": 0.8649538318398304,
+     "shared_2": 0.9004974974898646
+    }
+   },
+   "residual": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.2344932201180376,
+      "shared_2": 0.3231657369660914
+     },
+     "shared_1": {
+      "private": 0.23449322011803758,
+      "shared_1": 1.0,
+      "shared_2": 0.31829107538881574
+     },
+     "shared_2": {
+      "private": 0.3231657369660916,
+      "shared_1": 0.3182910753888157,
+      "shared_2": 0.9999999999999998
+     }
+    },
+    "captured_variance": {
+     "private": 0.9626682266235699,
+     "shared_1": 0.9934419675557854,
+     "shared_2": 0.9417074283088992
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.01536596303249195,
+      0.0043404195914225965,
+      0.0039560131216502745,
+      0.012624856795278139
+     ],
+     "shared_1": [
+      0.00459742039186381,
+      0.019381619063384647,
+      0.020298056236288456,
+      0.005777105620550074
+     ],
+     "shared_2": [
+      0.0051122313039741255,
+      0.002826197352326646,
+      0.005086411061183894,
+      0.002314715488013413
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.994317037566804,
+     "shared_1": 0.9219868384267841,
+     "shared_2": 0.9471965298043685
+    }
+   },
+   "fixture": {
+    "private_private_overlap_mean": 0.9002054542383752,
+    "private_private_overlap_max": 0.9338555971327934,
+    "shared_retention_overlap_ctxA_vs_ctxB": 0.9166071803839249,
+    "heldout_transfer_private_basis_captures_private_only_flip": 0.9749349868415201,
+    "heldout_transfer_shared_basis_captures_shared_only_flip": 0.9955626404153654,
+    "cross_capture_shared_basis_on_private_only_flip": 0.16630280026804115,
+    "cross_capture_private_basis_on_shared_only_flip": 0.14912704227106918,
+    "private_basis_captured_variance_own": 0.9864652011810308
+   }
+  },
+  "3": {
+   "error": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.30598217386273785,
+      "shared_2": 0.344600774540509
+     },
+     "shared_1": {
+      "private": 0.3059821738627379,
+      "shared_1": 0.9999999999999999,
+      "shared_2": 0.24222319345974486
+     },
+     "shared_2": {
+      "private": 0.344600774540509,
+      "shared_1": 0.24222319345974488,
+      "shared_2": 0.9999999999999997
+     }
+    },
+    "captured_variance": {
+     "private": 0.9874679926790554,
+     "shared_1": 0.9968957706575742,
+     "shared_2": 0.9883470150526634
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.002712782805131219,
+      0.0024439543188428487,
+      0.0010085080903749375,
+      0.0009145788662884621
+     ],
+     "shared_1": [
+      0.0014069266071268377,
+      0.00043969930465553517,
+      0.0008969807881262764,
+      0.001058163338637824
+     ],
+     "shared_2": [
+      0.0015670120361178184,
+      0.0010144242310860824,
+      0.001155900344540441,
+      0.0008285231195774203
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9817187279854453,
+     "shared_1": 0.881475697045471,
+     "shared_2": 0.9151560509738949
+    }
+   },
+   "residual": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.29157851273759994,
+      "shared_2": 0.407660435419923
+     },
+     "shared_1": {
+      "private": 0.29157851273760005,
+      "shared_1": 1.0,
+      "shared_2": 0.43783029621963754
+     },
+     "shared_2": {
+      "private": 0.40766043541992303,
+      "shared_1": 0.4378302962196375,
+      "shared_2": 0.9999999999999991
+     }
+    },
+    "captured_variance": {
+     "private": 0.9717619152437442,
+     "shared_1": 0.9942115520576356,
+     "shared_2": 0.9583325435861854
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.028685221461592567,
+      0.00829040943247486,
+      0.014503920025788236,
+      0.016223993293786543
+     ],
+     "shared_1": [
+      0.00728502794703445,
+      0.03194825840598026,
+      0.01845391428784801,
+      0.012847859764142627
+     ],
+     "shared_2": [
+      0.010720503320149788,
+      0.005003034011774293,
+      0.004982088228814616,
+      0.0030595429849507028
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9870518208344154,
+     "shared_1": 0.9333726734428056,
+     "shared_2": 0.9200703153019845
+    }
+   },
+   "fixture": {
+    "private_private_overlap_mean": 0.936694740830322,
+    "private_private_overlap_max": 0.953689142586938,
+    "shared_retention_overlap_ctxA_vs_ctxB": 0.9149002386730776,
+    "heldout_transfer_private_basis_captures_private_only_flip": 0.9767118997637648,
+    "heldout_transfer_shared_basis_captures_shared_only_flip": 0.9965011970384137,
+    "cross_capture_shared_basis_on_private_only_flip": 0.18652933967682347,
+    "cross_capture_private_basis_on_shared_only_flip": 0.24164335148962865,
+    "private_basis_captured_variance_own": 0.9874679926790554
+   }
+  },
+  "4": {
+   "error": {
+    "overlap": {
+     "private": {
+      "private": 0.9999999999999998,
+      "shared_1": 0.2723535131812581,
+      "shared_2": 0.34833270789037296
+     },
+     "shared_1": {
+      "private": 0.2723535131812581,
+      "shared_1": 0.9999999999999997,
+      "shared_2": 0.25463566761277173
+     },
+     "shared_2": {
+      "private": 0.34833270789037296,
+      "shared_1": 0.2546356676127717,
+      "shared_2": 1.0
+     }
+    },
+    "captured_variance": {
+     "private": 0.98553786398306,
+     "shared_1": 0.9968649343806293,
+     "shared_2": 0.9869243608800493
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.0019245486573078478,
+      0.0015724653997723206,
+      0.00041990580631391834,
+      0.0004047840137779311
+     ],
+     "shared_1": [
+      0.000798094127820591,
+      0.00047888893019162274,
+      0.000477810955232626,
+      0.0009394189771393074
+     ],
+     "shared_2": [
+      0.000569856135445977,
+      0.0012641585043421518,
+      0.0001316639887451532,
+      0.0005311364353867299
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9910360887214349,
+     "shared_1": 0.8836045757165504,
+     "shared_2": 0.9820406331727171
+    }
+   },
+   "residual": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.34403016079697624,
+      "shared_2": 0.5182998670530328
+     },
+     "shared_1": {
+      "private": 0.34403016079697635,
+      "shared_1": 1.0,
+      "shared_2": 0.497138093859662
+     },
+     "shared_2": {
+      "private": 0.5182998670530328,
+      "shared_1": 0.49713809385966196,
+      "shared_2": 1.0
+     }
+    },
+    "captured_variance": {
+     "private": 0.9791923638232432,
+     "shared_1": 0.9948189028049507,
+     "shared_2": 0.9732001437002531
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.02018152506427784,
+      0.018267574257498836,
+      0.025318497372970095,
+      0.025270094707210616
+     ],
+     "shared_1": [
+      0.03392329861060439,
+      0.02302044264186398,
+      0.013007760228811116,
+      0.029076365092676804
+     ],
+     "shared_2": [
+      0.030375523410717115,
+      0.008290240793138587,
+      0.007402297670338384,
+      0.009701628786012523
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9716924759654003,
+     "shared_1": 0.9423080782484925,
+     "shared_2": 0.9631071457121891
+    }
+   },
+   "fixture": {
+    "private_private_overlap_mean": 0.9760617616301243,
+    "private_private_overlap_max": 0.9842288711834567,
+    "shared_retention_overlap_ctxA_vs_ctxB": 0.9707455154829546,
+    "heldout_transfer_private_basis_captures_private_only_flip": 0.9759669686919931,
+    "heldout_transfer_shared_basis_captures_shared_only_flip": 0.9964613827160723,
+    "cross_capture_shared_basis_on_private_only_flip": 0.186962680984694,
+    "cross_capture_private_basis_on_shared_only_flip": 0.19152052855186016,
+    "private_basis_captured_variance_own": 0.98553786398306
+   }
+  },
+  "5": {
+   "error": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.23930755860011396,
+      "shared_2": 0.29827385159604286
+     },
+     "shared_1": {
+      "private": 0.23930755860011385,
+      "shared_1": 1.0,
+      "shared_2": 0.22979601633912952
+     },
+     "shared_2": {
+      "private": 0.2982738515960429,
+      "shared_1": 0.22979601633912947,
+      "shared_2": 1.0
+     }
+    },
+    "captured_variance": {
+     "private": 0.9822472235371665,
+     "shared_1": 0.9965937483709503,
+     "shared_2": 0.9817559419478711
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.001027563861473871,
+      0.0013278509835337148,
+      0.00020497462797872297,
+      0.0003411619357777183
+     ],
+     "shared_1": [
+      0.0005212609186298761,
+      0.0004831778419673305,
+      0.00046490961742152743,
+      0.0007211811096243686
+     ],
+     "shared_2": [
+      0.0005671711489566829,
+      0.00047212389166808146,
+      0.00010590047298562888,
+      0.0003942089687796143
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9943938049499863,
+     "shared_1": 0.91897492225818,
+     "shared_2": 0.9856399285515898
+    }
+   },
+   "residual": {
+    "overlap": {
+     "private": {
+      "private": 1.0,
+      "shared_1": 0.39528754577381525,
+      "shared_2": 0.6036394778462391
+     },
+     "shared_1": {
+      "private": 0.3952875457738155,
+      "shared_1": 1.0,
+      "shared_2": 0.5054702843464324
+     },
+     "shared_2": {
+      "private": 0.6036394778462391,
+      "shared_1": 0.5054702843464324,
+      "shared_2": 1.0
+     }
+    },
+    "captured_variance": {
+     "private": 0.9834345558197773,
+     "shared_1": 0.9950045643029681,
+     "shared_2": 0.9820049009868818
+    },
+    "r": {
+     "private": 16,
+     "shared_1": 16,
+     "shared_2": 16
+    },
+    "insufficient_rank": {
+     "private": false,
+     "shared_1": false,
+     "shared_2": false
+    },
+    "eigen_gaps": {
+     "private": [
+      0.04293261009573429,
+      0.010914463243942851,
+      0.022258073580742832,
+      0.05115639850433987
+     ],
+     "shared_1": [
+      0.03232234785099569,
+      0.060235823902989316,
+      0.021944200370584643,
+      0.03403596187739927
+     ],
+     "shared_2": [
+      0.04375281200097983,
+      0.01771335326410592,
+      0.00968089697539809,
+      0.013601781555736214
+     ]
+    },
+    "resampling_stability": {
+     "private": 0.9825844022416013,
+     "shared_1": 0.9089891879038503,
+     "shared_2": 0.9627637675313039
+    }
+   },
+   "fixture": {
+    "private_private_overlap_mean": 0.9793453067998048,
+    "private_private_overlap_max": 0.9861614452444188,
+    "shared_retention_overlap_ctxA_vs_ctxB": 0.963950419451334,
+    "heldout_transfer_private_basis_captures_private_only_flip": 0.9696554505393449,
+    "heldout_transfer_shared_basis_captures_shared_only_flip": 0.9961002438241253,
+    "cross_capture_shared_basis_on_private_only_flip": 0.1765979219851286,
+    "cross_capture_private_basis_on_shared_only_flip": 0.15290774255067757,
+    "private_basis_captured_variance_own": 0.9822472235371665
+   }
+  }
+ },
+ "notes": [
+  "D.4 error-space P4 on the grammar; residual PCA is a descriptive companion (not P4)",
+  "natural-language domain PCA unsupported (DATA-04)",
+  "any claim of private/shared structure requires the S3 intervention and transfer checks (D.4)"
+ ],
+ "seconds": 265.587571144104
+}

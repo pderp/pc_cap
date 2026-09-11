@@ -1,0 +1,17 @@
+--- a/src/pccap/baselines/grace_batch.py
++++ b/src/pccap/baselines/grace_batch.py
+@@ -1,4 +1,4 @@
+-"""Opt-in vmapped GRACE queries; source integration waits for the lead's edit approval.
++"""Vmapped GRACE queries shared by the canonical learner and development controls.
+ 
+ The query kernel reuses the unchanged GRACE lookup and suffix. Updating, eviction,
+ snapshots, RNG state and memory accounting remain inherited from GraceLearner.
+@@ -59,7 +59,7 @@
+ 
+ 
+ class BatchedGraceLearner(GraceLearner):
+-    """Development opt-in; production GraceLearner remains unchanged pending approval."""
++    """Explicit batched subclass for development comparisons and compatibility."""
+ 
+     def last_logits_batch(self, seqs, phase="query", key_positions=None):
+         return last_logits_batch(self, seqs, phase, key_positions)

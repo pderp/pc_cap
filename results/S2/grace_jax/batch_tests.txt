@@ -1,0 +1,31 @@
+..FF.....                                                                [100%]
+=================================== FAILURES ===================================
+_____________ test_batch_charges_every_sequence_to_requested_phase _____________
+
+    def test_batch_charges_every_sequence_to_requested_phase():
+        learner = BatchedGraceLearner(tiny(), block=0, value_steps=1)
+        seqs = [np.array([1, 2, 3]), np.array([1, 2, 3, 4])]
+>       before = learner.ledger.report()
+                 ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Ledger' object has no attribute 'report'
+
+tests/baselines/test_grace_batch.py:36: AttributeError
+__ test_invalid_boundaries_refuse_before_any_work_and_empty_batch_is_defined ___
+
+    def test_invalid_boundaries_refuse_before_any_work_and_empty_batch_is_defined():
+        learner = BatchedGraceLearner(tiny(), block=0, value_steps=1)
+        seqs = [np.array([1, 2, 3])]
+        before = learner.state_hash()
+        for positions in ([], [3], [-1], [1.5], [True]):
+            with pytest.raises(ValueError):
+                learner.last_logits_batch(seqs, key_positions=positions)
+        assert learner.state_hash() == before
+>       assert learner.ledger.report()["total"]["full_forwards"] == 0
+               ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Ledger' object has no attribute 'report'
+
+tests/baselines/test_grace_batch.py:52: AttributeError
+=========================== short test summary info ============================
+FAILED tests/baselines/test_grace_batch.py::test_batch_charges_every_sequence_to_requested_phase
+FAILED tests/baselines/test_grace_batch.py::test_invalid_boundaries_refuse_before_any_work_and_empty_batch_is_defined
+2 failed, 7 passed in 1.40s

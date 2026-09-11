@@ -1,0 +1,44 @@
+{
+  "created_utc": "2026-09-11T11:10:58.713892+00:00",
+  "task": "B4-S",
+  "decision": "DEC-020 / SD-21",
+  "case_manifest_sha256": "05e640c00671449f8d739fc5dbd00431494b7f9e9568001f40776640fac6338a",
+  "source_sha256": "57101850d3a18c46e07da1ebf95470d72514357b50823d3d9fe0e830e80e65a4",
+  "design": {
+    "cases": 20,
+    "seed": "existing isolated_seed per case",
+    "steps": [
+      1,
+      10,
+      100
+    ],
+    "variants": [
+      "cold initial value + fp32(1e-7), otherwise unchanged optimizer",
+      "unchanged initial value; hook block output reassociated from (residual + projection) + bias to residual + (projection + bias), with optimization barriers to preserve that grouping"
+    ],
+    "hyperparameters": {
+      "block": 8,
+      "lr": 1.0,
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-08,
+      "steps": 100
+    },
+    "note": "The initial-value perturbation is a conditioning probe, not an algebraic identity. Only addition association changes in the second variant; no reassociation across GELU, attention, or normalization."
+  },
+  "equality": {
+    "greedy_ids": "exact at step 100 in every case; steps 1/10 reported without requiring early-generation equality",
+    "answer_nll": {
+      "atol": 0.001,
+      "rtol": 0.0001
+    },
+    "trajectory": "Multiply mean training loss by answer-token count (including newline), then apply the unchanged summed-answer-NLL tolerances at steps 1/10/100. No new loss tolerance is fitted to observed reference differences."
+  },
+  "verdict": {
+    "divergence_class_reproduced": "The algebraically equal association variant passes all trajectory and final-output/NLL equality checks, and its maximum step-100 value gap is at least 0.1 times the previously recorded cross-framework maximum (22.43913459777832). Compare per-case ratios and medians as descriptive evidence; do not infer that a coexisting implementation difference is excluded.",
+    "insensitive": "Both variants have maximum step-100 value gap <= 0.001; keep diagnosing and do not register B4.",
+    "otherwise": "Inconclusive or output/trajectory mismatch; keep B4 unregistered pending diagnosis. No tolerance widening."
+  },
+  "artifact_policy": "All run evidence is new; existing source oracle artifacts and pc10.json remain untouched.",
+  "gpu_used": false
+}

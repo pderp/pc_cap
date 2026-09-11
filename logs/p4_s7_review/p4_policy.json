@@ -1,0 +1,18 @@
+{
+  "n": 2048,
+  "batch": 64,
+  "seed_offset": 10000000,
+  "gpu": false,
+  "comparison": "Report every metric delta against the existing 8192 run. Estimate a descriptive sampling scale for the three error-overlap means from disjoint 1024-row halves of the fresh sample. This is not a confidence interval or an acceptance threshold.",
+  "fixed_auxiliary_counts": {
+    "private_per_context": 2048,
+    "shared_per_context_group": 4096,
+    "heldout_per_switch": 2048
+  },
+  "no_scientific_changes": "Unchanged ErrorSampler, solver, weights, ranks and metrics. Only all generator seeds are offset. Redirect the output directory and suppress the shared coverage write.",
+  "before": {
+    "results/S1/P4_gram.json": "06c51adb24a8a326746b46dd1b83af3efd20d5911ffb079624914804f81044d0",
+    "src/pccap/analysis/s1_p4.py": "97c363396769a9bd34ca233c82aa6022f3e8a06dd1e8647421668db3704c5c38",
+    "src/pccap/analysis/s1_p6.py": "4995e61bc53f2f2eb722abf426cca989d5689ebe3a82e5d54b64be5109c6002b"
+  }
+}

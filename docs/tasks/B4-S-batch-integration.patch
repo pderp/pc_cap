@@ -1,0 +1,34 @@
+--- a/src/pccap/baselines/grace_jax.py
++++ b/src/pccap/baselines/grace_jax.py
+@@ -1,6 +1,6 @@
+ """JAX GRACE implementation; source-reference parity and optional SD-8 eviction.
+ 
+-The canonical grace_adapter placeholder is unchanged pending edit permission.
++Canonical imports are exposed by grace_adapter; DEC-020 eligibility is a separate gate.
+ Algorithm: read-only GRACE f674183f, grace/editors/grace.py:57-204.
+ Frozen base parameters are never optimized. Query evaluation never mutates state.
+ """
+@@ -155,12 +155,9 @@
+         return np.asarray(out if last_only else out[:n])
+ 
+     def last_logits_batch(self, seqs, phase="query", key_positions=None):
+-        # Sequential fallback retains identical per-sequence arithmetic. The
+-        # caller must supply original prompt positions during autoregressive decode.
+-        if key_positions is not None and len(key_positions) != len(seqs):
+-            raise ValueError("key position batch size differs")
+-        return np.stack([self.predict(ids, key_position=None if key_positions is None else int(key_positions[i]),
+-                                      phase=phase, last_only=True) for i, ids in enumerate(seqs)])
++        from pccap.baselines.grace_batch import last_logits_batch
++
++        return last_logits_batch(self, seqs, phase, key_positions)
+ 
+     def _admit(self, query, label, new_value):
+         nearest, distance = None, None
+--- a/src/pccap/baselines/grace_adapter.py
++++ b/src/pccap/baselines/grace_adapter.py
+@@ -1 +1,4 @@
+-"""pccap.baselines.grace_adapter -- placeholder created by ENV-03; implemented by the owning task."""
++"""Canonical JAX GRACE surface; eligibility remains conditional on DEC-020's gate."""
++from pccap.baselines.grace_jax import GraceLearner
++
++__all__ = ["GraceLearner"]

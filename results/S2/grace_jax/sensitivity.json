@@ -1,0 +1,4700 @@
+{
+  "task": "B4-S",
+  "backend": "cpu",
+  "policy": {
+    "created_utc": "2026-09-11T11:10:58.713892+00:00",
+    "task": "B4-S",
+    "decision": "DEC-020 / SD-21",
+    "case_manifest_sha256": "05e640c00671449f8d739fc5dbd00431494b7f9e9568001f40776640fac6338a",
+    "source_sha256": "57101850d3a18c46e07da1ebf95470d72514357b50823d3d9fe0e830e80e65a4",
+    "design": {
+      "cases": 20,
+      "seed": "existing isolated_seed per case",
+      "steps": [
+        1,
+        10,
+        100
+      ],
+      "variants": [
+        "cold initial value + fp32(1e-7), otherwise unchanged optimizer",
+        "unchanged initial value; hook block output reassociated from (residual + projection) + bias to residual + (projection + bias), with optimization barriers to preserve that grouping"
+      ],
+      "hyperparameters": {
+        "block": 8,
+        "lr": 1.0,
+        "beta1": 0.9,
+        "beta2": 0.999,
+        "epsilon": 1e-08,
+        "steps": 100
+      },
+      "note": "The initial-value perturbation is a conditioning probe, not an algebraic identity. Only addition association changes in the second variant; no reassociation across GELU, attention, or normalization."
+    },
+    "equality": {
+      "greedy_ids": "exact at step 100 in every case; steps 1/10 reported without requiring early-generation equality",
+      "answer_nll": {
+        "atol": 0.001,
+        "rtol": 0.0001
+      },
+      "trajectory": "Multiply mean training loss by answer-token count (including newline), then apply the unchanged summed-answer-NLL tolerances at steps 1/10/100. No new loss tolerance is fitted to observed reference differences."
+    },
+    "verdict": {
+      "divergence_class_reproduced": "The algebraically equal association variant passes all trajectory and final-output/NLL equality checks, and its maximum step-100 value gap is at least 0.1 times the previously recorded cross-framework maximum (22.43913459777832). Compare per-case ratios and medians as descriptive evidence; do not infer that a coexisting implementation difference is excluded.",
+      "insensitive": "Both variants have maximum step-100 value gap <= 0.001; keep diagnosing and do not register B4.",
+      "otherwise": "Inconclusive or output/trajectory mismatch; keep B4 unregistered pending diagnosis. No tolerance widening."
+    },
+    "artifact_policy": "All run evidence is new; existing source oracle artifacts and pc10.json remain untouched.",
+    "gpu_used": false
+  },
+  "policy_sha256": "116fc1bb9ed4265a4f59a4c3201303dd78215767ca260623d1881c132e528345",
+  "source_script_sha256": "1073bb25d332937f555b65903d589f8b7c47e4d8c870cd0e0f2e39138ea69681",
+  "verdict": "inconclusive_or_equality_failure",
+  "association_gap_threshold": 2.2439134597778323,
+  "summary": {
+    "initial_perturbation": {
+      "max_step100_value_gap": 0.07391643524169922,
+      "median_step100_value_gap": 0.011214613914489746,
+      "median_case_ratio_to_cross_framework": 0.008547474414830454,
+      "trajectory_comparisons": 60,
+      "trajectory_passes": 60,
+      "final_greedy_passes": 20,
+      "final_nll_passes": 20,
+      "maximum_loss_absolute_difference": 1.1444091796875e-05,
+      "maximum_loss_relative_difference": 0.0006235977329864359
+    },
+    "associated_additions": {
+      "max_step100_value_gap": 0.15251731872558594,
+      "median_step100_value_gap": 0.0076677799224853516,
+      "median_case_ratio_to_cross_framework": 0.011528995925021343,
+      "trajectory_comparisons": 60,
+      "trajectory_passes": 60,
+      "final_greedy_passes": 20,
+      "final_nll_passes": 20,
+      "maximum_loss_absolute_difference": 1.1444091796875e-05,
+      "maximum_loss_relative_difference": 0.0006235977329864359
+    }
+  },
+  "cases": [
+    {
+      "index": 0,
+      "item_id": "zsre-eval-16447",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.3534255027770996,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 7.462078094482422,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 6.830692291259766e-05,
+              "value_gap_ratio_to_cross_framework_final": 0.00019327106384758503,
+              "loss_before_step_variant": 7.4620819091796875,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.112111153655236e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.692480070569218e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.619410476285438
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.619417168765509
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 1.049041748046875e-05,
+              "value_gap_ratio_to_cross_framework_final": 2.968211800800608e-05,
+              "loss_before_step_variant": 7.462078094482422,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 7.529483667667591e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.619410476285438
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.619409723337071
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.01378631591796875,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0042858123779296875,
+              "value_gap_ratio_to_cross_framework_final": 0.012126494393452664,
+              "loss_before_step_variant": 0.01378631591796875,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.7520215439835738e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01600829427989936
+                },
+                "variant": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01600826675968392
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0025186538696289062,
+              "value_gap_ratio_to_cross_framework_final": 0.0071264066962858225,
+              "loss_before_step_variant": 0.01378631591796875,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.5797532998694805e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01600829427989936
+                },
+                "variant": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01600832007743236
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.000492095947265625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.011851072311401367,
+              "value_gap_ratio_to_cross_framework_final": 0.033532023632362684,
+              "loss_before_step_variant": 0.000492095947265625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.666270404461102e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.000967556861240837
+                },
+                "variant": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0009675301985367923
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.006896257400512695,
+              "value_gap_ratio_to_cross_framework_final": 0.01951261962230854,
+              "loss_before_step_variant": 0.000492095947265625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.04385393848861e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.000967556861240837
+                },
+                "variant": {
+                  "new_ids": [
+                    31953,
+                    198
+                  ],
+                  "text": " 1910",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0009674764227014521
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "item_id": "zsre-eval-13752",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 22.43913459777832,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 5.174430847167969,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 7.367134094238281e-05,
+              "value_gap_ratio_to_cross_framework_final": 3.2831631996038275e-06,
+              "loss_before_step_variant": 5.174430847167969,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.409681783888118e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.881654544189885
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.881656953871669
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 6.902217864990234e-05,
+              "value_gap_ratio_to_cross_framework_final": 3.075973288949217e-06,
+              "loss_before_step_variant": 5.174442291259766,
+              "loss_abs_difference": 1.1444091796875e-05,
+              "loss_relative_difference": 2.211661945997113e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.2351174518698826e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.881654544189885
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.8816533090724334
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.009096145629882812,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.002873659133911133,
+              "value_gap_ratio_to_cross_framework_final": 0.0001280646150317959,
+              "loss_before_step_variant": 0.009096145629882812,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.7873671487886895e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.017382362755697045
+                },
+                "variant": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.017382741492411924
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0028731822967529297,
+              "value_gap_ratio_to_cross_framework_final": 0.00012804336478454927,
+              "loss_before_step_variant": 0.009096145629882812,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.639613126438235e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.017382362755697045
+                },
+                "variant": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01738272671700969
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0008296966552734375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.010578155517578125,
+              "value_gap_ratio_to_cross_framework_final": 0.00047141548491916703,
+              "loss_before_step_variant": 0.0008296966552734375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.303102312836927e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00163816077672152
+                },
+                "variant": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0016381077456983917
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.007720947265625,
+              "value_gap_ratio_to_cross_framework_final": 0.00034408400341737975,
+              "loss_before_step_variant": 0.0008296966552734375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.3866336341125134e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00163816077672152
+                },
+                "variant": {
+                  "new_ids": [
+                    9162,
+                    198
+                  ],
+                  "text": " 1994",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.001638116910385179
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "item_id": "zsre-eval-4270",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.537479043006897,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 11.15091323852539,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 1.9073486328125e-06,
+              "value_gap_ratio_to_cross_framework_final": 3.5486939586368666e-06,
+              "loss_before_step_variant": 11.15091323852539,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 7.806976441315783e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 8.191945593622364
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 8.191953400598806
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 2.0265579223632812e-06,
+              "value_gap_ratio_to_cross_framework_final": 3.770487331051671e-06,
+              "loss_before_step_variant": 11.150917053222656,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 3.4209729589192464e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.560461722595392e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 8.191945593622364
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 8.191954154084087
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.02678394317626953,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0011682510375976562,
+              "value_gap_ratio_to_cross_framework_final": 0.0021735750496650807,
+              "loss_before_step_variant": 0.02678394317626953,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.158427664435749e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03641885173947301
+                },
+                "variant": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03641843589670657
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.00029027462005615234,
+              "value_gap_ratio_to_cross_framework_final": 0.0005400668618300482,
+              "loss_before_step_variant": 0.02678394317626953,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.739245203997598e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03641885173947301
+                },
+                "variant": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03641857781495261
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0008225440979003906,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.005959987640380859,
+              "value_gap_ratio_to_cross_framework_final": 0.01108878144725055,
+              "loss_before_step_variant": 0.0008225440979003906,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.3809142718201883e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0016328441825201878
+                },
+                "variant": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.001632857991662906
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0011315345764160156,
+              "value_gap_ratio_to_cross_framework_final": 0.0021052626909613213,
+              "loss_before_step_variant": 0.0008225440979003906,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.770836780134459e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0016328441825201878
+                },
+                "variant": {
+                  "new_ids": [
+                    26318,
+                    198
+                  ],
+                  "text": " goalkeeper",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.001632850953356968
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "item_id": "zsre-eval-15919",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 1.0215601921081543,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 7.0295257568359375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 7.808208465576172e-06,
+              "value_gap_ratio_to_cross_framework_final": 7.643414970450908e-06,
+              "loss_before_step_variant": 7.0295257568359375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.502941469146208e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.835261759881632
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.8352702628231015
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 6.794929504394531e-06,
+              "value_gap_ratio_to_cross_framework_final": 6.651521424667202e-06,
+              "loss_before_step_variant": 7.029518127441406,
+              "loss_abs_difference": 7.62939453125e-06,
+              "loss_relative_difference": 1.0853355966198307e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.372394390221416e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.835261759881632
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.8352701322760225
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.0517425537109375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.026125073432922363,
+              "value_gap_ratio_to_cross_framework_final": 0.025573699557545463,
+              "loss_before_step_variant": 0.05174064636230469,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 3.686228251253318e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.796507557917721e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.08244420993935364
+                },
+                "variant": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.08244333028859785
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.04061722755432129,
+              "value_gap_ratio_to_cross_framework_final": 0.039759994436060674,
+              "loss_before_step_variant": 0.05174064636230469,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 3.686228251253318e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.15779799361826e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.08244420993935364
+                },
+                "variant": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.08244399415955428
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.001918792724609375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.006701946258544922,
+              "value_gap_ratio_to_cross_framework_final": 0.006560500605171756,
+              "loss_before_step_variant": 0.001918792724609375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.708233802830364e-10,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.003794073384822738
+                },
+                "variant": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.003794072913999358
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.011623859405517578,
+              "value_gap_ratio_to_cross_framework_final": 0.01137853598379736,
+              "loss_before_step_variant": 0.001918792724609375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.686430716243194e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.003794073384822738
+                },
+                "variant": {
+                  "new_ids": [
+                    25859,
+                    198
+                  ],
+                  "text": " 1918",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.003794069698392022
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "item_id": "zsre-eval-9734",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.1376628875732422,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 8.53213882446289,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 6.735324859619141e-06,
+              "value_gap_ratio_to_cross_framework_final": 4.892622099064773e-05,
+              "loss_before_step_variant": 8.532140731811523,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 2.2354871059339218e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.835208203412549e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3340,
+                    30,
+                    198
+                  ],
+                  "text": " Canada?",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.41224499358745
+                },
+                "variant": {
+                  "new_ids": [
+                    3340,
+                    30,
+                    198
+                  ],
+                  "text": " Canada?",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.41224597710827
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 3.993511199951172e-06,
+              "value_gap_ratio_to_cross_framework_final": 2.9009352268791133e-05,
+              "loss_before_step_variant": 8.532135009765625,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 4.4709742118678436e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.287574924433102e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3340,
+                    30,
+                    198
+                  ],
+                  "text": " Canada?",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.41224499358745
+                },
+                "variant": {
+                  "new_ids": [
+                    3340,
+                    30,
+                    198
+                  ],
+                  "text": " Canada?",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.412249281162374
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.03242683410644531,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00031191110610961914,
+              "value_gap_ratio_to_cross_framework_final": 0.0022657603048146864,
+              "loss_before_step_variant": 0.03242683410644531,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.538863140306603e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.05703721700833597
+                },
+                "variant": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.05703686312202194
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0006465315818786621,
+              "value_gap_ratio_to_cross_framework_final": 0.0046964842396951855,
+              "loss_before_step_variant": 0.03242683410644531,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.4166921857849957e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.05703721700833597
+                },
+                "variant": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.05703735867755455
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.000637054443359375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0016422271728515625,
+              "value_gap_ratio_to_cross_framework_final": 0.011929338413578109,
+              "loss_before_step_variant": 0.000637054443359375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.848733384387742e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0012703511423666214
+                },
+                "variant": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0012703609911000058
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0032815933227539062,
+              "value_gap_ratio_to_cross_framework_final": 0.023837894007620368,
+              "loss_before_step_variant": 0.000637054443359375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.5767881222927826e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0012703511423666214
+                },
+                "variant": {
+                  "new_ids": [
+                    3340,
+                    198
+                  ],
+                  "text": " Canada",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0012703353744853985
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "item_id": "zsre-eval-2458",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.15149879455566406,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.7347564697265625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 4.744529724121094e-05,
+              "value_gap_ratio_to_cross_framework_final": 0.0003131727706505181,
+              "loss_before_step_variant": 6.734760284423828,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.664194812050687e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.5626012839220493e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.71694321386461
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.716943057604482
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 4.029273986816406e-05,
+              "value_gap_ratio_to_cross_framework_final": 0.0002659607951755656,
+              "loss_before_step_variant": 6.7347564697265625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.047035888443133e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.71694321386461
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 4.716952260900499
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.012847900390625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00019259750843048096,
+              "value_gap_ratio_to_cross_framework_final": 0.0012712807979453349,
+              "loss_before_step_variant": 0.012847900390625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.6000075220290455e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.027783460167967178
+                },
+                "variant": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.027783300167214975
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0003142356872558594,
+              "value_gap_ratio_to_cross_framework_final": 0.002074179455866245,
+              "loss_before_step_variant": 0.012847900390625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.8356699627020134e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.027783460167967178
+                },
+                "variant": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.027783276600970908
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.001178741455078125,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0020599365234375,
+              "value_gap_ratio_to_cross_framework_final": 0.013597048936786312,
+              "loss_before_step_variant": 0.001178741455078125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.891998000606691e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0023313080593609925
+                },
+                "variant": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.002331302167362992
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.001769423484802246,
+              "value_gap_ratio_to_cross_framework_final": 0.011679455866245326,
+              "loss_before_step_variant": 0.001178741455078125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.010153110632018e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0023313080593609925
+                },
+                "variant": {
+                  "new_ids": [
+                    11761,
+                    198
+                  ],
+                  "text": " Liverpool",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.002331287957829886
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "item_id": "zsre-eval-1418",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 2.1841344833374023,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.588043212890625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0018253922462463379,
+              "value_gap_ratio_to_cross_framework_final": 0.0008357508478402397,
+              "loss_before_step_variant": 6.588047027587891,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.790334310741765e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.308089801152164e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 3.6197637083903373
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 3.619754400300536
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0010544657707214355,
+              "value_gap_ratio_to_cross_framework_final": 0.00048278426935972836,
+              "loss_before_step_variant": 6.588047027587891,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.790334310741765e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.7755962049886875e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 3.6197637083903373
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 3.6197569327941324
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.04908275604248047,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00839853286743164,
+              "value_gap_ratio_to_cross_framework_final": 0.003845245304949588,
+              "loss_before_step_variant": 0.049083709716796875,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 1.9429925971982047e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.532105689098898e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.07870925415861407
+                },
+                "variant": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.07870870094804516
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.004699230194091797,
+              "value_gap_ratio_to_cross_framework_final": 0.00215152969285631,
+              "loss_before_step_variant": 0.049083709716796875,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 1.9429925971982047e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.5577644769423387e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.07870925415861407
+                },
+                "variant": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.07870970993506177
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.00048065185546875,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.020422935485839844,
+              "value_gap_ratio_to_cross_framework_final": 0.009350585159313625,
+              "loss_before_step_variant": 0.00048065185546875,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.4155434036620136e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0009548763262650084
+                },
+                "variant": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0009548421708309718
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.011371612548828125,
+              "value_gap_ratio_to_cross_framework_final": 0.005206461706264565,
+              "loss_before_step_variant": 0.00048065185546875,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.407741727163739e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0009548763262650084
+                },
+                "variant": {
+                  "new_ids": [
+                    7897,
+                    198
+                  ],
+                  "text": " Spanish",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0009548807340067356
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "item_id": "zsre-eval-1503",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.22388648986816406,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.877536773681641,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 5.364418029785156e-07,
+              "value_gap_ratio_to_cross_framework_final": 2.3960436527206276e-06,
+              "loss_before_step_variant": 6.877525329589844,
+              "loss_abs_difference": 1.1444091796875e-05,
+              "loss_relative_difference": 1.6639811859193913e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.6153977564245e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.341509007039583
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.341504391641827
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 1.9073486328125e-06,
+              "value_gap_ratio_to_cross_framework_final": 8.519266320784454e-06,
+              "loss_before_step_variant": 6.877540588378906,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.546603953064637e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.6480389908888355e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.341509007039583
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.3415053590005925
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.014085769653320312,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0004527568817138672,
+              "value_gap_ratio_to_cross_framework_final": 0.00202226084289621,
+              "loss_before_step_variant": 0.014084815979003906,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 6.770480704129993e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.950823834169114e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01615982559017226
+                },
+                "variant": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.016159530507788844
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.00033038854598999023,
+              "value_gap_ratio_to_cross_framework_final": 0.001475696663003382,
+              "loss_before_step_variant": 0.014085769653320312,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.4771141460842045e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.01615982559017226
+                },
+                "variant": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0161597808190308
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0004215240478515625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0011506080627441406,
+              "value_gap_ratio_to_cross_framework_final": 0.005139247408013222,
+              "loss_before_step_variant": 0.0004215240478515625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.2944404659265274e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0008290136358723998
+                },
+                "variant": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0008290006914677406
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.002097606658935547,
+              "value_gap_ratio_to_cross_framework_final": 0.009369063136282703,
+              "loss_before_step_variant": 0.0004215240478515625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.6161514793111564e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0008290136358723998
+                },
+                "variant": {
+                  "new_ids": [
+                    21525,
+                    198
+                  ],
+                  "text": " Louisville",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0008289974743576067
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "item_id": "zsre-eval-127",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.08941936492919922,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.39263916015625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 6.9141387939453125e-06,
+              "value_gap_ratio_to_cross_framework_final": 7.732261126457131e-05,
+              "loss_before_step_variant": 6.392642974853516,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.967327687445697e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.019064015395088e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.16027087197584322
+                },
+                "variant": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.16026985291182783
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 2.2649765014648438e-06,
+              "value_gap_ratio_to_cross_framework_final": 2.5329820931497498e-05,
+              "loss_before_step_variant": 6.392642974853516,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.967327687445697e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 7.534035475487144e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.16027087197584322
+                },
+                "variant": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.16027011857229567
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.001361846923828125,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0009034723043441772,
+              "value_gap_ratio_to_cross_framework_final": 0.010103765611168585,
+              "loss_before_step_variant": 0.001361846923828125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.0638915404779254e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.003497934732948238
+                },
+                "variant": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0034979653718636428
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0005405843257904053,
+              "value_gap_ratio_to_cross_framework_final": 0.0060454950246899095,
+              "loss_before_step_variant": 0.001361846923828125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.064186648136456e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.003497934732948238
+                },
+                "variant": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0034968705463001015
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0002193450927734375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00115966796875,
+              "value_gap_ratio_to_cross_framework_final": 0.012968868316926719,
+              "loss_before_step_variant": 0.0002193450927734375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.544098596350523e-10,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00043578945281552706
+                },
+                "variant": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0004357887984056674
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0015087127685546875,
+              "value_gap_ratio_to_cross_framework_final": 0.016872327037317492,
+              "loss_before_step_variant": 0.0002193450927734375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.58554848642234e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00043578945281552706
+                },
+                "variant": {
+                  "new_ids": [
+                    18804,
+                    198
+                  ],
+                  "text": " HBO",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00043576359733066283
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "item_id": "zsre-eval-18634",
+      "answer_tokens": 2,
+      "cross_framework_step100_max_abs": 0.1703777313232422,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 7.264003753662109,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 4.887580871582031e-06,
+              "value_gap_ratio_to_cross_framework_final": 2.8686735253618727e-05,
+              "loss_before_step_variant": 7.264003753662109,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.989025500090065e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 1.5798750930065921
+                },
+                "variant": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 1.5798760919091421
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 4.220008850097656e-05,
+              "value_gap_ratio_to_cross_framework_final": 0.00024768547023856167,
+              "loss_before_step_variant": 7.264003753662109,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.1259143327133643e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 1.5798750930065921
+                },
+                "variant": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 1.5798782189209248
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.0048370361328125,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.000644683837890625,
+              "value_gap_ratio_to_cross_framework_final": 0.00378385034759927,
+              "loss_before_step_variant": 0.0048370361328125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.3734080539506976e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009806018791479687
+                },
+                "variant": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009806017418071633
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0005290508270263672,
+              "value_gap_ratio_to_cross_framework_final": 0.003105164172086827,
+              "loss_before_step_variant": 0.0048370361328125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.189446738995684e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009806018791479687
+                },
+                "variant": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009806537736153587
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0005207061767578125,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0012035369873046875,
+              "value_gap_ratio_to_cross_framework_final": 0.007063933637086212,
+              "loss_before_step_variant": 0.0005207061767578125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.7144742514574318e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0010246494901693382
+                },
+                "variant": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0010246323454268236
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0020160675048828125,
+              "value_gap_ratio_to_cross_framework_final": 0.011832928453882924,
+              "loss_before_step_variant": 0.0005207061767578125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.8991572637314675e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0010246494901693382
+                },
+                "variant": {
+                  "new_ids": [
+                    13316,
+                    198
+                  ],
+                  "text": " Philippines",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0010246884817419755
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "item_id": "zsre-eval-17910",
+      "answer_tokens": 4,
+      "cross_framework_step100_max_abs": 8.56428337097168,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 5.079259872436523,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00859767198562622,
+              "value_gap_ratio_to_cross_framework_final": 0.0010038985882657398,
+              "loss_before_step_variant": 5.079256057739258,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 7.510340800489675e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.660639847197672e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.555572169993454
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.555562509353607
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.007653713226318359,
+              "value_gap_ratio_to_cross_framework_final": 0.0008936781858783813,
+              "loss_before_step_variant": 5.079257965087891,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 3.755170400244837e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 7.165306058709575e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.555572169993454
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.555565004687395
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.08825302124023438,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.02948164939880371,
+              "value_gap_ratio_to_cross_framework_final": 0.0034423953671045807,
+              "loss_before_step_variant": 0.0882568359375,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 4.3224551545277716e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.4133604594235294e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.28559150828728264
+                },
+                "variant": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.28560564189187687
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.026238679885864258,
+              "value_gap_ratio_to_cross_framework_final": 0.0030637332686584483,
+              "loss_before_step_variant": 0.08825874328613281,
+              "loss_abs_difference": 5.7220458984375e-06,
+              "loss_relative_difference": 6.483682731791658e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.0762363501726213e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.28559150828728264
+                },
+                "variant": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.28560227065078436
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.002261638641357422,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.036492347717285156,
+              "value_gap_ratio_to_cross_framework_final": 0.0042609925590475686,
+              "loss_before_step_variant": 0.002261638641357422,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.363496515693896e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.008954110298994067
+                },
+                "variant": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.008953973949342497
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.03263378143310547,
+              "value_gap_ratio_to_cross_framework_final": 0.0038104509180203515,
+              "loss_before_step_variant": 0.002261638641357422,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.093652788445979e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.008954110298994067
+                },
+                "variant": {
+                  "new_ids": [
+                    1542,
+                    2805,
+                    25325,
+                    198
+                  ],
+                  "text": " 30 March 1955",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.008954059362466182
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "item_id": "zsre-eval-8087",
+      "answer_tokens": 3,
+      "cross_framework_step100_max_abs": 2.4733176231384277,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 4.536722660064697,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.17204254865646362,
+              "value_gap_ratio_to_cross_framework_final": 0.06955942376626759,
+              "loss_before_step_variant": 4.536733150482178,
+              "loss_abs_difference": 1.049041748046875e-05,
+              "loss_relative_difference": 2.312333873263293e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 0.0002780168858116383,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.491177692533935
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.490899675648123
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.19854098558425903,
+              "value_gap_ratio_to_cross_framework_final": 0.08027314556240761,
+              "loss_before_step_variant": 4.536722660064697,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 0.0004165454884237363,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.491177692533935
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 5.491594238022358
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.00815582275390625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.09778976440429688,
+              "value_gap_ratio_to_cross_framework_final": 0.03953789173272863,
+              "loss_before_step_variant": 0.008160908706486225,
+              "loss_abs_difference": 5.085952579975128e-06,
+              "loss_relative_difference": 0.0006235977329864359,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.1298249944502459e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.023513490893776634
+                },
+                "variant": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.023524789143721136
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.10647439956665039,
+              "value_gap_ratio_to_cross_framework_final": 0.04304922205322886,
+              "loss_before_step_variant": 0.008150736801326275,
+              "loss_abs_difference": 5.085952579975128e-06,
+              "loss_relative_difference": 0.0006235977329864359,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.3958177206063738e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.023513490893776634
+                },
+                "variant": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.02349953271657057
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.00142669677734375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.07391643524169922,
+              "value_gap_ratio_to_cross_framework_final": 0.029885541003789724,
+              "loss_before_step_variant": 0.00142669677734375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.040190167917899e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00422520787395797
+                },
+                "variant": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004225411892974762
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.15251731872558594,
+              "value_gap_ratio_to_cross_framework_final": 0.061665075806986144,
+              "loss_before_step_variant": 0.00142669677734375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.076005512525626e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00422520787395797
+                },
+                "variant": {
+                  "new_ids": [
+                    8857,
+                    30652,
+                    198
+                  ],
+                  "text": " Philadelphia Flyers",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004224900273406718
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "item_id": "zsre-eval-14579",
+      "answer_tokens": 5,
+      "cross_framework_step100_max_abs": 14.618990898132324,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 5.737368106842041,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00011324882507324219,
+              "value_gap_ratio_to_cross_framework_final": 7.746692358069017e-06,
+              "loss_before_step_variant": 5.737367153167725,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 1.6622156686599127e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.1380568665231294e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.375260894523755
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.375262032580622
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 8.058547973632812e-05,
+              "value_gap_ratio_to_cross_framework_final": 5.512383193741743e-06,
+              "loss_before_step_variant": 5.737364292144775,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 6.648862674639651e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.3929314281190273e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.375260894523755
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.375258501592327
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.007923888973891735,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.02140641212463379,
+              "value_gap_ratio_to_cross_framework_final": 0.001464287943935214,
+              "loss_before_step_variant": 0.00792541541159153,
+              "loss_abs_difference": 1.5264376997947693e-06,
+              "loss_relative_difference": 0.00019263744164313743,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.886539429094228e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.041983496583725355
+                },
+                "variant": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.04198838312315445
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.003270387649536133,
+              "value_gap_ratio_to_cross_framework_final": 0.0002237081664750162,
+              "loss_before_step_variant": 0.00792541541159153,
+              "loss_abs_difference": 1.5264376997947693e-06,
+              "loss_relative_difference": 0.00019263744164313743,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.2281454928597668e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.041983496583725355
+                },
+                "variant": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.041984724729218215
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0013267516624182463,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.050455570220947266,
+              "value_gap_ratio_to_cross_framework_final": 0.0034513716146709764,
+              "loss_before_step_variant": 0.0013267516624182463,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.095025094689845e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.006570004647500127
+                },
+                "variant": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.006570085597751074
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.007614612579345703,
+              "value_gap_ratio_to_cross_framework_final": 0.0005208712853305437,
+              "loss_before_step_variant": 0.0013267516624182463,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.826261808446361e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.006570004647500127
+                },
+                "variant": {
+                  "new_ids": [
+                    3274,
+                    13270,
+                    286,
+                    10933,
+                    198
+                  ],
+                  "text": " First Commissioner of Works",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.006570006473761936
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "item_id": "zsre-eval-1819",
+      "answer_tokens": 4,
+      "cross_framework_step100_max_abs": 0.17334997653961182,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 5.264991760253906,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 5.125999450683594e-06,
+              "value_gap_ratio_to_cross_framework_final": 2.957023446445211e-05,
+              "loss_before_step_variant": 5.264991760253906,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.414066684901627e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.012009916322654
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.012024056989503
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 1.728534698486328e-05,
+              "value_gap_ratio_to_cross_framework_final": 9.971358133361757e-05,
+              "loss_before_step_variant": 5.264993667602539,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 3.622700128823217e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.513965202093459e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.012009916322654
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 12.012010067719174
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.032047271728515625,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0004595518112182617,
+              "value_gap_ratio_to_cross_framework_final": 0.0026510059037316946,
+              "loss_before_step_variant": 0.03204631805419922,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 2.975836209975003e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.8085347619489767e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.13703112531602102
+                },
+                "variant": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.1370313061694972
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0012116432189941406,
+              "value_gap_ratio_to_cross_framework_final": 0.006989578211550959,
+              "loss_before_step_variant": 0.032047271728515625,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.968310906543593e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.13703112531602102
+                },
+                "variant": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.13703152214711167
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0013895034790039062,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0017217397689819336,
+              "value_gap_ratio_to_cross_framework_final": 0.009932160380699577,
+              "loss_before_step_variant": 0.0013895034790039062,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.9101840937073575e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005492458517281307
+                },
+                "variant": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0054924614274654004
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0020818710327148438,
+              "value_gap_ratio_to_cross_framework_final": 0.012009641271795154,
+              "loss_before_step_variant": 0.0013895034790039062,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.722874949602556e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005492458517281307
+                },
+                "variant": {
+                  "new_ids": [
+                    1439,
+                    2011,
+                    8990,
+                    198
+                  ],
+                  "text": " All My Children",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005492448794406357
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "item_id": "zsre-eval-14855",
+      "answer_tokens": 5,
+      "cross_framework_step100_max_abs": 2.104705572128296,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 3.6989707946777344,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00020384788513183594,
+              "value_gap_ratio_to_cross_framework_final": 9.685339737363038e-05,
+              "loss_before_step_variant": 3.698967695236206,
+              "loss_abs_difference": 3.0994415283203125e-06,
+              "loss_relative_difference": 8.379199783842427e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.831137563447555e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 11.815684304198427
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 11.815683421084671
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.00010371208190917969,
+              "value_gap_ratio_to_cross_framework_final": 4.927628989184704e-05,
+              "loss_before_step_variant": 3.6989693641662598,
+              "loss_abs_difference": 1.430511474609375e-06,
+              "loss_relative_difference": 3.8673229771580435e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.740593455376256e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 11.815684304198427
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 11.815674563604972
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.315189927816391,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0008101463317871094,
+              "value_gap_ratio_to_cross_framework_final": 0.0003849214552930948,
+              "loss_before_step_variant": 0.3151904046535492,
+              "loss_abs_difference": 4.76837158203125e-07,
+              "loss_relative_difference": 1.512856586206965e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.178748094358809e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 1.3449369581175792
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 1.3449317793694848
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.000637054443359375,
+              "value_gap_ratio_to_cross_framework_final": 0.0003026810266460122,
+              "loss_before_step_variant": 0.31519192457199097,
+              "loss_abs_difference": 1.996755599975586e-06,
+              "loss_relative_difference": 6.335086954741666e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.1399152912705546e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 1.3449369581175792
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 1.3449255589646665
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0019694329239428043,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.01629960536956787,
+              "value_gap_ratio_to_cross_framework_final": 0.007744363670347284,
+              "loss_before_step_variant": 0.0019694329239428043,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.149377794808288e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    383,
+                    1395,
+                    12,
+                    25876,
+                    198
+                  ],
+                  "text": " The X-Files",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009742738681477014
+                },
+                "variant": {
+                  "new_ids": [
+                    383,
+                    1395,
+                    12,
+                    25876,
+                    198
+                  ],
+                  "text": " The X-Files",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009742820175254963
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.02592945098876953,
+              "value_gap_ratio_to_cross_framework_final": 0.012319752145925785,
+              "loss_before_step_variant": 0.0019694329239428043,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.614537463723309e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    383,
+                    1395,
+                    12,
+                    25876,
+                    198
+                  ],
+                  "text": " The X-Files",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009742738681477014
+                },
+                "variant": {
+                  "new_ids": [
+                    383,
+                    1395,
+                    12,
+                    25876,
+                    198
+                  ],
+                  "text": " The X-Files",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.009742900135223387
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "item_id": "zsre-eval-14806",
+      "answer_tokens": 5,
+      "cross_framework_step100_max_abs": 0.540320873260498,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 5.042598724365234,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00016999244689941406,
+              "value_gap_ratio_to_cross_framework_final": 0.0003146138809585795,
+              "loss_before_step_variant": 5.042599678039551,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 1.8912357864174472e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.71629344542157e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.3735837234203565
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.373580007126911
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.00018656253814697266,
+              "value_gap_ratio_to_cross_framework_final": 0.0003452810124124663,
+              "loss_before_step_variant": 5.042597770690918,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 1.8912357864174472e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.645462892862497e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.3735837234203565
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 7.373577077957464
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.01386260986328125,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.00045561790466308594,
+              "value_gap_ratio_to_cross_framework_final": 0.0008432358015593905,
+              "loss_before_step_variant": 0.01386260986328125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.49498836935436e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.055173157226199976
+                },
+                "variant": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.05517380672503691
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0007164478302001953,
+              "value_gap_ratio_to_cross_framework_final": 0.0013259673384018675,
+              "loss_before_step_variant": 0.01386260986328125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.560232108654418e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.055173157226199976
+                },
+                "variant": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.05517381324941084
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0009567260858602822,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0013727247714996338,
+              "value_gap_ratio_to_cross_framework_final": 0.0025405732767940273,
+              "loss_before_step_variant": 0.0009567260858602822,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.0467360311849916e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004735759938647277
+                },
+                "variant": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004735770406007589
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0016026496887207031,
+              "value_gap_ratio_to_cross_framework_final": 0.00296610730407233,
+              "loss_before_step_variant": 0.0009567260858602822,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.1923015342272265e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004735759938647277
+                },
+                "variant": {
+                  "new_ids": [
+                    7431,
+                    3972,
+                    31372,
+                    12647,
+                    198
+                  ],
+                  "text": " Ramya Krishnan",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004735791861662619
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "item_id": "zsre-eval-1468",
+      "answer_tokens": 3,
+      "cross_framework_step100_max_abs": 0.2492685317993164,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.691999912261963,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.026218295097351074,
+              "value_gap_ratio_to_cross_framework_final": 0.10518092640132835,
+              "loss_before_step_variant": 6.691997528076172,
+              "loss_abs_difference": 2.384185791015625e-06,
+              "loss_relative_difference": 3.5627403201948733e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 7.476571116171726e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 9.266461188704234
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 9.266535954415396
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.017015159130096436,
+              "value_gap_ratio_to_cross_framework_final": 0.06826035764432219,
+              "loss_before_step_variant": 6.6920037269592285,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 5.700384512311797e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.8342005112212973e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 9.266461188704234
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 9.266499530709346
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.01267878245562315,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.02994394302368164,
+              "value_gap_ratio_to_cross_framework_final": 0.12012724914586975,
+              "loss_before_step_variant": 0.0126800537109375,
+              "loss_abs_difference": 1.2712553143501282e-06,
+              "loss_relative_difference": 0.00010026635592176403,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.9192072587043185e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03802835948540917
+                },
+                "variant": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03803527869266787
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.019433021545410156,
+              "value_gap_ratio_to_cross_framework_final": 0.07796018777474682,
+              "loss_before_step_variant": 0.01267878245562315,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.769092171841294e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03802835948540917
+                },
+                "variant": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03803312857758101
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0007387797231785953,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.03391456604003906,
+              "value_gap_ratio_to_cross_framework_final": 0.13605634772761185,
+              "loss_before_step_variant": 0.0007387797231785953,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.8025726445976034e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0021973503422429985
+                },
+                "variant": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0021972923165165525
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.021981239318847656,
+              "value_gap_ratio_to_cross_framework_final": 0.08818296942730233,
+              "loss_before_step_variant": 0.0007387797231785953,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.274007091633393e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0021973503422429985
+                },
+                "variant": {
+                  "new_ids": [
+                    3478,
+                    273,
+                    198
+                  ],
+                  "text": " tenor",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.002197413082313915
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "item_id": "zsre-eval-4679",
+      "answer_tokens": 4,
+      "cross_framework_step100_max_abs": 7.808497905731201,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 4.510175704956055,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.005165696144104004,
+              "value_gap_ratio_to_cross_framework_final": 0.0006615479963582419,
+              "loss_before_step_variant": 4.510164260864258,
+              "loss_abs_difference": 1.1444091796875e-05,
+              "loss_relative_difference": 2.5373937836389695e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.6609023475666618e-05,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 10.59348759144082
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 10.593470982417344
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.009210824966430664,
+              "value_gap_ratio_to_cross_framework_final": 0.0011795898619208437,
+              "loss_before_step_variant": 4.510168075561523,
+              "loss_abs_difference": 7.62939453125e-06,
+              "loss_relative_difference": 1.6915958557593129e-06,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.4719712829200944e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 10.59348759144082
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 10.593484119469537
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.011464953422546387,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.016479551792144775,
+              "value_gap_ratio_to_cross_framework_final": 0.002110463752580286,
+              "loss_before_step_variant": 0.01146399974822998,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 8.318170002599429e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.087623315385258e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03668326886586559
+                },
+                "variant": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03668367762819713
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.029339909553527832,
+              "value_gap_ratio_to_cross_framework_final": 0.0037574332359099727,
+              "loss_before_step_variant": 0.011465072631835938,
+              "loss_abs_difference": 1.1920928955078125e-07,
+              "loss_relative_difference": 1.0397712503249286e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.486165850030147e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.03668326886586559
+                },
+                "variant": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.036684117482450596
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.001332998275756836,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.04790901392698288,
+              "value_gap_ratio_to_cross_framework_final": 0.006135496801736876,
+              "loss_before_step_variant": 0.001332998275756836,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.809059994670406e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005285751635430103
+                },
+                "variant": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005285799726030049
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.08531439304351807,
+              "value_gap_ratio_to_cross_framework_final": 0.010925839268126061,
+              "loss_before_step_variant": 0.001332998275756836,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.2301675056392014e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005285751635430103
+                },
+                "variant": {
+                  "new_ids": [
+                    642,
+                    3269,
+                    11104,
+                    198
+                  ],
+                  "text": " 5 January 1989",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0052858746521806665
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "item_id": "zsre-eval-12303",
+      "answer_tokens": 4,
+      "cross_framework_step100_max_abs": 1.0744649171829224,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.698667526245117,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 4.172325134277344e-06,
+              "value_gap_ratio_to_cross_framework_final": 3.883165534354088e-06,
+              "loss_before_step_variant": 6.698665618896484,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 2.847355276761509e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.044710405386013e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.826204837419972
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.826196792709567
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 5.364418029785156e-06,
+              "value_gap_ratio_to_cross_framework_final": 4.992641401312399e-06,
+              "loss_before_step_variant": 6.698662757873535,
+              "loss_abs_difference": 4.76837158203125e-06,
+              "loss_relative_difference": 7.118388191903773e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 2.1949673723042906e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.826204837419972
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 13.8262026424526
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.033782958984375,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0017711669206619263,
+              "value_gap_ratio_to_cross_framework_final": 0.0016484176377816475,
+              "loss_before_step_variant": 0.033782958984375,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.963060374369888e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.09587091257023417
+                },
+                "variant": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.09587031626419673
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0015599876642227173,
+              "value_gap_ratio_to_cross_framework_final": 0.0014518739879499827,
+              "loss_before_step_variant": 0.03378105163574219,
+              "loss_abs_difference": 1.9073486328125e-06,
+              "loss_relative_difference": 5.6458897922312554e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.621906542633951e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.09587091257023417
+                },
+                "variant": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0958699503795799
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0011224746704101562,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.02027645707130432,
+              "value_gap_ratio_to_cross_framework_final": 0.01887121370557728,
+              "loss_before_step_variant": 0.0011224746704101562,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 6.40990549527487e-09,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004441275715365123
+                },
+                "variant": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.0044412693054596275
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.017803102731704712,
+              "value_gap_ratio_to_cross_framework_final": 0.016569273176812175,
+              "loss_before_step_variant": 0.0011224746704101562,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 5.296541871757654e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.004441275715365123
+                },
+                "variant": {
+                  "new_ids": [
+                    6219,
+                    347,
+                    4450,
+                    198
+                  ],
+                  "text": " Richard Bona",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.00444132868078384
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "item_id": "zsre-eval-2872",
+      "answer_tokens": 4,
+      "cross_framework_step100_max_abs": 3.7299585342407227,
+      "steps": [
+        {
+          "step": 1,
+          "loss_before_step_baseline": 6.791799545288086,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 4.088878631591797e-05,
+              "value_gap_ratio_to_cross_framework_final": 1.0962262969028251e-05,
+              "loss_before_step_variant": 6.7917985916137695,
+              "loss_abs_difference": 9.5367431640625e-07,
+              "loss_relative_difference": 1.4041555703272722e-07,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 4.3635604356495605e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 15.842542247662337
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 15.842546611222772
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 4.4465065002441406e-05,
+              "value_gap_ratio_to_cross_framework_final": 1.1921061479438885e-05,
+              "loss_before_step_variant": 6.791799545288086,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.711891890465722e-07,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 15.842542247662337
+                },
+                "variant": {
+                  "new_ids": [
+                    198
+                  ],
+                  "text": "",
+                  "stopped": true,
+                  "target_match": false,
+                  "answer_nll": 15.842542418851526
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 10,
+          "loss_before_step_baseline": 0.1544208526611328,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.0004267394542694092,
+              "value_gap_ratio_to_cross_framework_final": 0.00011440863225474893,
+              "loss_before_step_variant": 0.1544170379638672,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 2.4703252183149912e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 3.6583249425348185e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.3193678601443253
+                },
+                "variant": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.31936420181938274
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.0005328655242919922,
+              "value_gap_ratio_to_cross_framework_final": 0.0001428609780511845,
+              "loss_before_step_variant": 0.1544170379638672,
+              "loss_abs_difference": 3.814697265625e-06,
+              "loss_relative_difference": 2.4703252183149912e-05,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 1.6604589063717867e-06,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.3193678601443253
+                },
+                "variant": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.31936952060323165
+                }
+              }
+            }
+          }
+        },
+        {
+          "step": 100,
+          "loss_before_step_baseline": 0.0013599395751953125,
+          "variants": {
+            "initial_perturbation": {
+              "value_max_abs": 0.01504797674715519,
+              "value_gap_ratio_to_cross_framework_final": 0.00403435496910112,
+              "loss_before_step_variant": 0.0013599395751953125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 9.674883472143847e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005391265754170149
+                },
+                "variant": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005391362503004871
+                }
+              }
+            },
+            "associated_additions": {
+              "value_max_abs": 0.014042438939213753,
+              "value_gap_ratio_to_cross_framework_final": 0.0037647707904271,
+              "loss_before_step_variant": 0.0013599395751953125,
+              "loss_abs_difference": 0.0,
+              "loss_relative_difference": 0.0,
+              "summed_answer_loss_pass": true,
+              "evaluation": {
+                "greedy_ids_equal": true,
+                "nll_abs_difference": 8.465568157589587e-08,
+                "nll_pass": true,
+                "baseline": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005391265754170149
+                },
+                "variant": {
+                  "new_ids": [
+                    1717,
+                    88,
+                    6484,
+                    198
+                  ],
+                  "text": " Edy Williams",
+                  "stopped": true,
+                  "target_match": true,
+                  "answer_nll": 0.005391350409851725
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "base_unchanged": true,
+  "wall_seconds": 98.32775265700184,
+  "ledger": {
+    "query": {
+      "phase": "query",
+      "full_forwards": 606,
+      "partial_forwards": 0,
+      "reverses": 0,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 9.60482056462206,
+      "accel_seconds": 9.60482056462206,
+      "peak_mem_mib": 0.0,
+      "tokens": 7962
+    },
+    "learning": {
+      "phase": "learning",
+      "full_forwards": 0,
+      "partial_forwards": 6680,
+      "reverses": 6660,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 83.46841365541331,
+      "accel_seconds": 83.46841365541331,
+      "peak_mem_mib": 0.0,
+      "tokens": 95858
+    },
+    "total": {
+      "phase": "total",
+      "full_forwards": 606,
+      "partial_forwards": 6680,
+      "reverses": 6660,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 93.07323422003537,
+      "accel_seconds": 93.07323422003537,
+      "peak_mem_mib": 0.0,
+      "tokens": 103820
+    },
+    "events": 806,
+    "elapsed_wall_seconds": 98.59131145477295,
+    "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  },
+  "gpu_seconds": 0,
+  "interpretation": "Conditioning evidence only. Does not exclude a coexisting adapter defect; no oracle/tolerance changes."
+}

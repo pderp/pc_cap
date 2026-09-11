@@ -1,0 +1,45 @@
+{
+  "scope": "fixed source codebook, JAX scalar vs vmapped teacher-forced query paths; no training or free-generation parity claim",
+  "prefixes": 61,
+  "source_codebook_sha256": "a839ce57b10b9512d57910abc6bca515858cdbeb075ffc63f8a82bfa1d8e32f7",
+  "base_unchanged": true,
+  "learner_unchanged": true,
+  "tolerances": {
+    "logits": {
+      "atol": 0.0002,
+      "rtol": 2e-05
+    },
+    "answer_nll": {
+      "atol": 0.001,
+      "rtol": 0.0001
+    }
+  },
+  "wall_seconds": 3.3623585930326954,
+  "gpu_seconds": 0,
+  "pass": true
+}
+{
+  "scope": "in-memory validation of unapplied source/test edits; not a claim that checked-in tests passed",
+  "passed": [
+    "numeric/state/ragged trained=False",
+    "numeric/state/ragged trained=True",
+    "ledger charges",
+    "validation and empty batch"
+  ],
+  "full_size_smoke": "results/S2/grace_jax/batch_smoke_candidate.json",
+  "source_before": {
+    "src/pccap/baselines/grace_jax.py": "57101850d3a18c46e07da1ebf95470d72514357b50823d3d9fe0e830e80e65a4",
+    "src/pccap/baselines/grace_adapter.py": "afd0e08385574f0a959075ef43970a67c4c6aa36b632915bdbaf30bc7c6d2ec5",
+    "tests/baselines/test_grace_batch.py": "a814bd42c89a734dcf98ec98c81f53ccd8b432ef2112490bd12a1e2786bd3f72",
+    "scripts/grace_batch_smoke.py": "e9cdee43867b611ede49c020bbe731ae90d660ff8ff2d223a604e31633d2e919",
+    "src/pccap/baselines/grace_batch.py": "bfb62d1023fe305e1bd47975f2798541bfc1479699879a34fd6ee83ac39138de"
+  },
+  "source_after": {
+    "src/pccap/baselines/grace_jax.py": "57101850d3a18c46e07da1ebf95470d72514357b50823d3d9fe0e830e80e65a4",
+    "src/pccap/baselines/grace_adapter.py": "afd0e08385574f0a959075ef43970a67c4c6aa36b632915bdbaf30bc7c6d2ec5",
+    "tests/baselines/test_grace_batch.py": "a814bd42c89a734dcf98ec98c81f53ccd8b432ef2112490bd12a1e2786bd3f72",
+    "scripts/grace_batch_smoke.py": "e9cdee43867b611ede49c020bbe731ae90d660ff8ff2d223a604e31633d2e919",
+    "src/pccap/baselines/grace_batch.py": "bfb62d1023fe305e1bd47975f2798541bfc1479699879a34fd6ee83ac39138de"
+  },
+  "files_unchanged": true
+}

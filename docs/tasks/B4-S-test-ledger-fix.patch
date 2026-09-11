@@ -1,0 +1,21 @@
+--- a/tests/baselines/test_grace_batch.py
++++ b/tests/baselines/test_grace_batch.py
+@@ -33,9 +33,9 @@
+ def test_batch_charges_every_sequence_to_requested_phase():
+     learner = BatchedGraceLearner(tiny(), block=0, value_steps=1)
+     seqs = [np.array([1, 2, 3]), np.array([1, 2, 3, 4])]
+-    before = learner.ledger.report()
++    before = learner.ledger.totals()
+     learner.last_logits_batch(seqs, phase="learning", key_positions=[2, 2])
+-    after = learner.ledger.report()
++    after = learner.ledger.totals()
+     assert after["learning"]["full_forwards"]-before["learning"]["full_forwards"] == 2
+     assert after["learning"]["tokens"]-before["learning"]["tokens"] == 7
+     assert after["query"]["full_forwards"] == before["query"]["full_forwards"]
+@@ -49,5 +49,5 @@
+         with pytest.raises(ValueError):
+             learner.last_logits_batch(seqs, key_positions=positions)
+     assert learner.state_hash() == before
+-    assert learner.ledger.report()["total"]["full_forwards"] == 0
++    assert learner.ledger.totals()["total"]["full_forwards"] == 0
+     assert learner.last_logits_batch([]).shape == (0, 32)

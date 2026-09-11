@@ -1,0 +1,22 @@
+--- a/tests/baselines/test_grace_batch.py
++++ b/tests/baselines/test_grace_batch.py
+@@ -17,7 +17,7 @@
+     batch.import_state(scalar.export_state())
+     seqs = [np.array([1, 2, 3, 4, 5], np.int32), np.array([1, 2, 3], np.int32), np.arange(1, 14, dtype=np.int32), np.array([1, 2, 3, 4], np.int32)]
+     positions = [2, 2, 4, 2]
+-    expected = scalar.last_logits_batch(seqs, key_positions=positions)
++    expected = np.stack([scalar.predict(ids, key_position=pos, last_only=True) for ids, pos in zip(seqs, positions)])
+     before, base_before = batch.state_hash(), batch.base_checksum()
+     out = batch.last_logits_batch(seqs, key_positions=positions)
+     np.testing.assert_allclose(out, expected, rtol=2e-5, atol=2e-5)
+--- a/scripts/grace_batch_smoke.py
++++ b/scripts/grace_batch_smoke.py
+@@ -60,7 +60,7 @@
+         spans.append((case["item_id"], start, len(seqs)))
+         targets.extend(item.answer_ids)
+     before = batch.state_hash()
+-    expected = scalar.last_logits_batch(seqs, key_positions=boundaries)
++    expected = np.stack([scalar.predict(ids, key_position=pos, last_only=True) for ids, pos in zip(seqs, boundaries)])
+     actual = batch.last_logits_batch(seqs, key_positions=boundaries)
+     rows = []
+     for iid, start, stop in spans:

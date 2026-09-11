@@ -1,0 +1,54 @@
+{
+  "fixture_root": "/home/derp/cap/assets/tmp/review_repairs_r2b_20260911T111901819959Z/conflicting_outcomes",
+  "experiment_ids": [
+    "v2-force-state-968888b9",
+    "v2-second-experiment-15ae192f"
+  ],
+  "filtered": {
+    "v2-force-state-968888b9": {
+      "runs": 1,
+      "paired_rows": 8,
+      "order_cells": 1,
+      "retained_es": 1.0,
+      "retained_gs": 1.0,
+      "lost_items": 0,
+      "cli_exit": 0,
+      "cli_stdout": "zsre C2 runs 1 ACC RET-GS std (all runs) None -> /home/derp/cap/pc_cap/results/V2/codex_v3/s7_order_1.json\n",
+      "notes": []
+    },
+    "v2-second-experiment-15ae192f": {
+      "runs": 1,
+      "paired_rows": 8,
+      "order_cells": 1,
+      "retained_es": 0.0,
+      "retained_gs": 0.0,
+      "lost_items": 8,
+      "cli_exit": 0,
+      "cli_stdout": "zsre C2 runs 1 ACC RET-GS std (all runs) None -> /home/derp/cap/pc_cap/results/V2/codex_v3/s7_order_0.json\n",
+      "notes": []
+    }
+  },
+  "unfiltered_refusals": {
+    "paired": "runs under /home/derp/cap/assets/tmp/review_repairs_r2b_20260911T111901819959Z/conflicting_outcomes belong to several experiments ['v2-force-state-968888b9', 'v2-second-experiment-15ae192f']; pass experiment_id (V2-03)",
+    "order": "runs under /home/derp/cap/assets/tmp/review_repairs_r2b_20260911T111901819959Z/conflicting_outcomes belong to several experiments ['v2-force-state-968888b9', 'v2-second-experiment-15ae192f']; pass --experiment-id (V2-03)",
+    "resource": "runs belong to several experiments ['v2-force-state-968888b9', 'v2-second-experiment-15ae192f']; pass --experiment-id (V2-03)"
+  },
+  "source_before": {
+    "src/pccap/analysis/s4_05.py": "2087f4c24884b2736efb1df8308f3a53ff3b476cebddc3b708ff5588bc6c67f7",
+    "src/pccap/analysis/s4_06.py": "f697eb12b74082e17e0e234b680857514b62a37045fa560dd25bbeba30c281b3",
+    "src/pccap/analysis/s7_03.py": "7e8f6ef3ac06dbb5883196598ce99f17ae9c598859970172f3d0698f39682448"
+  },
+  "additional_same_experiment_duplicate_root": {
+    "runs": 2,
+    "refusal": null,
+    "per_run_rows": 2,
+    "cell_tables": 1,
+    "interpretation": "Report this separately; the required cross-experiment control must pass regardless."
+  },
+  "source_after": {
+    "src/pccap/analysis/s4_05.py": "2087f4c24884b2736efb1df8308f3a53ff3b476cebddc3b708ff5588bc6c67f7",
+    "src/pccap/analysis/s4_06.py": "f697eb12b74082e17e0e234b680857514b62a37045fa560dd25bbeba30c281b3",
+    "src/pccap/analysis/s7_03.py": "7e8f6ef3ac06dbb5883196598ce99f17ae9c598859970172f3d0698f39682448"
+  },
+  "required_controls_pass": true
+}
