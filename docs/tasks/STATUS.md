@@ -1,6 +1,6 @@
 # Task status board
 
-Regenerated 2026-09-11 13:58 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-11 14:08 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
@@ -123,10 +123,10 @@ GPU seconds charged to tasks so far: 45075
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ANA-01 | Frozen paired analysis code on synthetic tables (D.11) | **done** | METRICS | ENV-03 | none | yes | codex | bc04bc5 | 19 analysis controls passed; task branch awaiting Claude review/merge. CPU-only. |
-| S4-01 | Frozen manifest | **done** | INTEGRATOR | S3-06, DATA-02, DATA-08, S2-07, ANA-01 | none | yes | orchestrator |  |  | frozen.json written by the lead (DEC-025) |
-| S4-02 | Scope selection | **done** | INTEGRATOR | S4-01 | none | yes | lead |  |  | frozen.json written by the lead (DEC-025) |
+| S4-01 | Frozen manifest | **done** | INTEGRATOR | S3-06, DATA-02, DATA-08, S2-07, ANA-01 | none | yes | orchestrator |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
+| S4-02 | Scope selection | **done** | INTEGRATOR | S4-01 | none | yes | lead |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
 | S4-03 | Confirmatory run schedule | **done** | run owner | S4-02 | none | no | orchestrator |  |  | frozen.json written by the lead (DEC-025) |
-| S4-04 | Confirmatory run execution | **in_progress** | run owner | S4-03 | lease | no | orchestrator |  | queue running from 2026-09-11 09:05 EDT (results/S4/queue.jsonl) |
+| S4-04 | Confirmatory run execution | **in_progress** | run owner | S4-03 | lease | no | orchestrator |  | v1 queue stopped after 50 no-item loader failures (DEC-026; nothing edited, tree archived); restarts automatically when the lead writes frozen-confirmatory-v2 |
 | S4-05 | Resource views | **partial** | METRICS | S4-04 | none | no | orchestrator |  |  |
 | S4-06 | Frozen paired analysis and D3 audit | **partial** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  |  |
 
