@@ -152,3 +152,5 @@ cd /home/derp/cap/pc_cap && /home/derp/cap/venv/bin/python -m pccap.harness.free
 ```
 
 The orchestrator regenerates the job list and restarts the queue automatically when the new `manifests/frozen.json` appears.
+
+- 2026-09-11 10:20 EDT (orchestrator): **frozen-confirmatory-v2 written** (sha `84126123f48c`, DEC-027); job list regenerated; the first job runs as a one-job session for verification, then the full queue.
