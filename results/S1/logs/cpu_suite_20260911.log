@@ -1,0 +1,72 @@
+........................................................................ [ 20%]
+.............F.......................................................... [ 41%]
+........................................................................ [ 62%]
+..........................................ss.....sss.................... [ 83%]
+.........................................................                [100%]
+=================================== FAILURES ===================================
+________________ test_pc10_twenty_isolated_and_sequential_cases ________________
+
+    @pytest.mark.slow
+    def test_pc10_twenty_isolated_and_sequential_cases():
+        report = run()
+>       assert report["status"] == "pass", (
+            "PC-10 parity failure; inspect individual codebook and evaluation differences. "
+            "Do not widen tolerances or register B4 on output agreement alone."
+        )
+E       AssertionError: PC-10 parity failure; inspect individual codebook and evaluation differences. Do not widen tolerances or register B4 on output agreement alone.
+E       assert 'parity_failure' == 'pass'
+E         
+E         - pass
+E         + parity_failure
+
+tests/controls/test_pc10_parity.py:10: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"phase": "isolated", "completed": 1, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.853547047403481e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 2, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 5.0368342527917775e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 3, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 4.860021611818865e-07, "nll_pass": true}}
+{"phase": "isolated", "completed": 4, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.2393327342152816e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 5, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 5.017707380261527e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 6, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 2.401445094335486e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 7, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 3.337066861064386e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 8, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.530617943501511e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 9, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 3.0292482477989324e-07, "nll_pass": true}}
+{"phase": "isolated", "completed": 10, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 5.25952749796943e-07, "nll_pass": true}}
+{"phase": "isolated", "completed": 11, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.2423168179509503e-05, "nll_pass": true}}
+{"phase": "isolated", "completed": 12, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 7.130406459054939e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 13, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.746518640288741e-05, "nll_pass": true}}
+{"phase": "isolated", "completed": 14, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 2.2990381438603436e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 15, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 2.044483456309365e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 16, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.6779594169236134e-05, "nll_pass": true}}
+{"phase": "isolated", "completed": 17, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 1.291137238013107e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 18, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 2.201795786405114e-05, "nll_pass": true}}
+{"phase": "isolated", "completed": 19, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 4.466169045258539e-06, "nll_pass": true}}
+{"phase": "isolated", "completed": 20, "book_pass": false, "evaluation": {"greedy_ids_equal": true, "canonical_text_equal": true, "nll_abs_difference": 2.9691006474763526e-05, "nll_pass": true}}
+{"phase": "sequence", "completed": 1, "book_pass": false}
+{"phase": "sequence", "completed": 2, "book_pass": false}
+{"phase": "sequence", "completed": 3, "book_pass": false}
+{"phase": "sequence", "completed": 4, "book_pass": false}
+{"phase": "sequence", "completed": 5, "book_pass": false}
+{"phase": "sequence", "completed": 6, "book_pass": false}
+{"phase": "sequence", "completed": 7, "book_pass": false}
+{"phase": "sequence", "completed": 8, "book_pass": false}
+{"phase": "sequence", "completed": 9, "book_pass": false}
+{"phase": "sequence", "completed": 10, "book_pass": false}
+{"phase": "sequence", "completed": 11, "book_pass": false}
+{"phase": "sequence", "completed": 12, "book_pass": false}
+{"phase": "sequence", "completed": 13, "book_pass": false}
+{"phase": "sequence", "completed": 14, "book_pass": false}
+{"phase": "sequence", "completed": 15, "book_pass": false}
+{"phase": "sequence", "completed": 16, "book_pass": false}
+{"phase": "sequence", "completed": 17, "book_pass": false}
+{"phase": "sequence", "completed": 18, "book_pass": false}
+{"phase": "sequence", "completed": 19, "book_pass": false}
+{"phase": "sequence", "completed": 20, "book_pass": false}
+=============================== warnings summary ===============================
+tests/harness/test_lease.py::test_lease_serializes_holders
+  /usr/lib64/python3.12/multiprocessing/popen_fork.py:66: RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/controls/test_pc10_parity.py::test_pc10_twenty_isolated_and_sequential_cases
+1 failed, 339 passed, 5 skipped, 46 deselected, 1 warning in 232.96s (0:03:52)

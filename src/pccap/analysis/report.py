@@ -168,12 +168,13 @@ def render_s1() -> str:
     p5 = json.loads((RESULTS / "S1" / "P5_bp.json").read_text()) if (RESULTS / "S1" / "P5_bp.json").exists() else None
     p1e = json.loads((RESULTS / "S1" / "P1_epc.json").read_text()) if (RESULTS / "S1" / "P1_epc.json").exists() else None
     epc_rows = {k: json.loads((RESULTS / "S1" / f"{k}_epc.json").read_text()) for k in ("P2", "P3", "P5", "P6") if (RESULTS / "S1" / f"{k}_epc.json").exists()}
+    p4 = json.loads((RESULTS / "S1" / "P4_gram.json").read_text()) if (RESULTS / "S1" / "P4_gram.json").exists() else None
     L = ["# S1 stage report (Appendix G) — development" + (", BP rows" if not p1e else ", BP and regenerated-ePC rows"), "",
          f"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())} by `pccap report --stage S1`.", "",
          "## 1. Header", "", f"- Stage: S1 substrate report card. Code commit: `{_git()}`; base: GPT-2 small BP teacher (`607a30d7…`); ePC checkpoint: " + ("absent (REG pending)." if not p1e else f"regenerated (REG-02, `{p1e['weights']}`).") + "",
          "- Sets: `manifests/dev/lm_sets.json` (H 2×10⁶ train tokens seed 11; drift = validation 247,289 tokens; P2 4,096 positions; P3 1,000 × 128; POS UD-EWT).",
          f"- Cost: {s1['local_hours_total']:.2f} local GPU-h = {s1['a100_equivalent_hours']:.2f} A100-eq h of 12 (κ {b['kappa']['kappa']} {b['kappa']['status']}).", "",
-         "## 2. Status", "", "Development. BP rows of P2, P3, P6 complete where files exist below; P1 (needs a second base), P4 (needs the grammar), P5 (needs S2-01, running) pending. No confirmatory access.", "",
+         "## 2. Status", "", "Development. BP rows of P2, P3, P5, P6 complete where files exist below; P1 and the ePC rows follow the regenerated checkpoint (REG-02) where present; P4 is measured on the replacement grammar (S1-04) and `unsupported` in the natural-language domain (DATA-04). No confirmatory access.", "",
          "## 3. Controls", "", "S0 controls unchanged (`results/S0/report.md`). Alerts below are alerts, not exclusions (PDF §5).", "",
          "## 4. Coverage", "", "| property | signal | status |", "| --- | --- | --- |"]
     for prop, rows in sorted(cov.items()):
@@ -194,6 +195,18 @@ def render_s1() -> str:
             L.append(f"| {name} | {_m(p3, f'{k}_raw')} | {_m(p3, f'{k}_layer_normalized')} |")
         fs = p3["metrics"]["final_block_share_mean_raw"]
         L += ["", f"Final-block share alert (> 0.4): **{fs.get('strata', {}).get('alert_above_0.4')}** (raw). Dataset layer shares: `distributions` in `results/S1/P3_bp.json`.", ""]
+    if p4:
+        L += ["**P4 separability and useful sharing (replacement grammar; D.4 error space).** 8,192 settled error vectors of the declared solver on the grammar's BP weights per mechanism kind (private / shared_1 / shared_2, task-switched sequences), per block output; centred top-16 bases (captured variance and eigen gaps in the file). "
+              f"Chance overlap of two random 16-dimensional subspaces in d = 128 is {_m(p4, 'chance_overlap_random_r_subspaces', '{:.3f}')}.", "",
+              "| quantity (mean over the 6 block outputs) | error space |", "| --- | ---: |",
+              f"| overlap private / shared_1 | {_m(p4, 'error_overlap_private_shared1_mean', '{:.3f}')} |", f"| overlap private / shared_2 | {_m(p4, 'error_overlap_private_shared2_mean', '{:.3f}')} |",
+              f"| overlap shared_1 / shared_2 | {_m(p4, 'error_overlap_shared1_shared2_mean', '{:.3f}')} |", f"| resampling stability (min over kinds and layers) | {_m(p4, 'error_resampling_stability_min', '{:.3f}')} |",
+              f"| captured variance at r = 16 | {_m(p4, 'error_captured_variance_r16_mean', '{:.3f}')} |", f"| insufficient-rank cases | {_m(p4, 'insufficient_rank_cases', '{:.0f}')} |",
+              f"| private/private overlap across contexts | {_m(p4, 'private_private_overlap_mean', '{:.3f}')} |", f"| shared retention (shared_1 basis, contexts 0–3 vs 4–7) | {_m(p4, 'shared_retention_overlap_mean', '{:.3f}')} |",
+              f"| held-out private-only flip captured by the private basis / by the shared_1 basis | {_m(p4, 'heldout_transfer_private_mean', '{:.3f}')} / {_m(p4, 'cross_capture_shared_basis_on_private_only_flip_mean', '{:.3f}')} |",
+              f"| held-out shared-only flip captured by the shared_1 basis / by the private basis | {_m(p4, 'heldout_transfer_shared_mean', '{:.3f}')} / {_m(p4, 'cross_capture_private_basis_on_shared_only_flip_mean', '{:.3f}')} |",
+              f"| residual-vector PCA companion (descriptive, not P4): overlap private / shared_1 | {_m(p4, 'residual_overlap_private_shared1_mean', '{:.3f}')} |",
+              "", "Reading (D.4): mechanism *kinds* occupy distinct but overlapping error subspaces (overlaps above chance and well below the within-kind stability); the private mechanisms of different contexts share one error subspace, so error-space separability distinguishes kinds, not contexts, on this fixture. Any claim of private/shared structure still requires the S3 intervention and transfer checks; the natural-language domain PCA is `unsupported` (DATA-04).", ""]
     if p6:
         L += ["**P6 finite settling (ePC procedure on BP weights; declared solver in `docs/epc_energy.md`).**", "",
               f"- r₈ mean {_m(p6, 'r_8_mean')}, r₆₄ mean {_m(p6, 'r_64_mean')} (max {_m(p6, 'r_64_max')}); E₀ − E₆₄ mean {_m(p6, 'E0_minus_E64_mean')} nats; first iteration reaching 95% of the 64-step reduction: median {_m(p6, 'first_iter_95pct_median', '{:.0f}')}.",

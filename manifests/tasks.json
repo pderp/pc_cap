@@ -930,16 +930,20 @@
    ],
    "gpu": "short",
    "review": false,
-   "status": "pending",
-   "agent": null,
+   "status": "done",
+   "agent": "orchestrator",
    "worktree": null,
-   "started": null,
-   "finished": null,
+   "started": "2026-09-11T04:20:00Z",
+   "finished": "2026-09-11T08:28:38+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "results/S1/P4_gram.json",
+    "docs/tasks/S1-04.md",
+    "tests/analysis/test_s1_p4.py"
+   ],
    "gpu_seconds": 0.0,
-   "wall_seconds": 0.0,
-   "note": ""
+   "wall_seconds": 7200.0,
+   "note": "P4 measured in the D.4 error space on the replacement grammar (settled errors of the declared solver on BP weights); natural-language domain unsupported (DATA-04)"
   },
   {
    "id": "S1-05",
@@ -1009,7 +1013,7 @@
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "BP rows done; P1/P4 pending REG-03/GRAM-02"
+   "note": "BP and regenerated-ePC rows done; P4 grammar row done (S1-04); report re-rendered; D1 input stands"
   },
   {
    "id": "S2-01",
@@ -1160,16 +1164,20 @@
    ],
    "gpu": "short",
    "review": true,
-   "status": "pending",
-   "agent": null,
+   "status": "in_progress",
+   "agent": "codex",
    "worktree": null,
-   "started": null,
+   "started": "2026-09-11T00:00:00+00:00",
    "finished": null,
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/S2-05.md",
+    "docs/baselines/grace_adapter.md",
+    "results/S2/grace_jax/"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": ""
+   "note": "blocked: PC-10 learned-value parity fails (outputs, NLL, keys, radii, labels match at 40/40); SD-21 proposed in updated_plan6.md \u00a72.1; not registrable"
   },
   {
    "id": "HARN-BATCH",
@@ -1775,16 +1783,21 @@
    ],
    "gpu": "lease",
    "review": false,
-   "status": "pending",
-   "agent": null,
+   "status": "partial",
+   "agent": "orchestrator",
    "worktree": null,
-   "started": null,
+   "started": "2026-09-11T04:20:00Z",
    "finished": null,
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "manifests/dev/s7_pairs.json",
+    "src/pccap/analysis/s7_01.py",
+    "tests/analysis/test_s7_01.py",
+    "docs/tasks/S7-01.md"
+   ],
    "gpu_seconds": 0.0,
-   "wall_seconds": 0.0,
-   "note": ""
+   "wall_seconds": 5400.0,
+   "note": "S7-prep done: inventory fixed (CounterFact shared stratum short: 9 pairs), reversal/damage harness with 6 CPU controls; E.2 filter pass and the checkpoint runs wait on S4-04"
   },
   {
    "id": "S7-02",
@@ -1958,6 +1971,31 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "public loader connected; 90 tests + 5 API smokes (codex); mirrored by the orchestrator"
+  },
+  {
+   "id": "ENV-05",
+   "title": "Environment recreation script",
+   "stage": "ENV",
+   "role": "ENV",
+   "deps": [
+    "ENV-01"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "partial",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-11T00:00:00+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [
+    "docs/tasks/ENV-05.md",
+    "scripts/setup_venv.sh",
+    "results/ENV05/"
+   ],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 3600.0,
+   "note": "lock resolves (150/150 pins) into a scratch env; real installation and determinism report not run (needs lead approval, updated_plan6.md \u00a72.3)"
   }
  ]
 }

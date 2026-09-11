@@ -1,14 +1,15 @@
 # Task status board
 
-Regenerated 2026-09-11 00:21 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-11 10:17 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 60 |
-| partial | 7 |
-| ready | 6 |
-| pending | 15 |
+| done | 61 |
+| in_progress | 1 |
+| partial | 9 |
+| ready | 4 |
+| pending | 14 |
 
 GPU seconds charged to tasks so far: 45075
 
@@ -20,6 +21,7 @@ GPU seconds charged to tasks so far: 45075
 | ENV-02 | Shared-workload benchmark and kappa | **done** | INTEGRATOR | ENV-01, DATA-00 | lease | no | orchestrator |  |  |
 | ENV-03 | Package scaffold, contracts v0, Makefile, docs skeleton | **done** | INTEGRATOR | ENV-01 | none | yes | orchestrator | pending |  |
 | ENV-04 | Sibling reference recorder (read-only sibling, DEC-003) | **done** | INTEGRATOR | ENV-03 | none | no | orchestrator | pending |  |
+| ENV-05 | Environment recreation script | **partial** | ENV | ENV-01 | none | no | codex |  | lock resolves (150/150 pins) into a scratch env; real installation and determinism report not run (needs lead approval, updated_plan6.md §2.3) |
 
 ## DATA
 
@@ -82,10 +84,10 @@ GPU seconds charged to tasks so far: 45075
 | S1-01 | P1 fidelity | **done** | METRICS+BASE | REG-03, DATA-04, S0-11 | lease | yes | orchestrator |  |  |
 | S1-02 | P2 geometry | **done** | METRICS | S0-07, DATA-04, S0-04 | short | no | orchestrator |  |  |
 | S1-03 | P3 localization and coverage | **done** | METRICS+BASE | S0-05, S0-06, DATA-04 | short | no | orchestrator |  |  |
-| S1-04 | P4 separability | **ready** | METRICS | DATA-04, GRAM-02 | short | no |  |  |  |
+| S1-04 | P4 separability | **done** | METRICS | DATA-04, GRAM-02 | short | no | orchestrator |  | P4 measured in the D.4 error space on the replacement grammar (settled errors of the declared solver on BP weights); natural-language domain unsupported (DATA-04) |
 | S1-05 | P5 write locality | **done** | BASE+METRICS | S0-10, S2-01, DATA-01 | lease | no | orchestrator |  |  |
 | S1-06 | P6 finite settling and informativeness | **done** | BASE+METRICS | S0-06 | lease | no | orchestrator |  |  |
-| S1-07 | S1 report and D1 input | **partial** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes | orchestrator |  | BP rows done; P1/P4 pending REG-03/GRAM-02 |
+| S1-07 | S1 report and D1 input | **partial** | INTEGRATOR+METRICS | S1-01, S1-02, S1-03, S1-04, S1-05, S1-06 | none | yes | orchestrator |  | BP and regenerated-ePC rows done; P4 grammar row done (S1-04); report re-rendered; D1 input stands |
 
 ## S2
 
@@ -97,7 +99,7 @@ GPU seconds charged to tasks so far: 45075
 | S2-04 | Replay baseline B3 | **done** | BASELINES | S2-03, S0-08 | short | no | codex |  |  |
 | S2-05a | GRACE reference environment and smoke (PA-6) | **done** | BASELINES | DATA-00 | none | no | codex |  | GRACE CPU reference env + oracle; 6 controls; 5/5 smoke (mirrored by the orchestrator) |
 | S2-05b | GRACE reference parity cases | **done** | BASELINES | S2-05a, S0-09 | none | no | codex |  | 20 parity cases isolated+sequential, 63 hashed artifacts (mirrored) |
-| S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **ready** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
+| S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **in_progress** | BASELINES | S2-05b, S0-04 | short | yes | codex |  | blocked: PC-10 learned-value parity fails (outputs, NLL, keys, radii, labels match at 40/40); SD-21 proposed in updated_plan6.md §2.1; not registrable |
 | HARN-BATCH | Batched cap-on evaluation with sequential-decoder parity (E.2 optimization) | **done** | INTEGRATOR | HARN-C2 | short | no | orchestrator |  |  |
 | S2-06 | Throughput profile | **done** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes | orchestrator |  |  |
 | S2-07 | Full cost projection and D1 memo | **done** | INTEGRATOR+METRICS | S2-06, S1-07, ENV-02 | none | yes | orchestrator |  |  |
@@ -151,7 +153,7 @@ GPU seconds charged to tasks so far: 45075
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S7-01 | Cloned-state reversals | **pending** | METRICS | S4-04 | lease | no |  |  |  |
+| S7-01 | Cloned-state reversals | **partial** | METRICS | S4-04 | lease | no | orchestrator |  | S7-prep done: inventory fixed (CounterFact shared stratum short: 9 pairs), reversal/damage harness with 6 CPU controls; E.2 filter pass and the checkpoint runs wait on S4-04 |
 | S7-02 | Damage matrix | **pending** | METRICS | S7-01 | lease | no |  |  |  |
 | S7-03 | Order variation from permutations | **partial** | METRICS | S4-04 | none | no | orchestrator |  |  |
 | S7-04 | Optional HVP diagnostics | **pending** | METRICS | S7-03, S0-07b | lease | no |  |  |  |

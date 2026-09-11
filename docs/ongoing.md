@@ -1,124 +1,106 @@
 # Ongoing work (the single current log; previous versions are dated under `docs/archive/`)
 
-Rewritten 2026-09-10 ≈ 19:45 EDT by the orchestrating session, after REG-02 completed and the S5
-preparation ran. Rules §1 are unchanged from the archived version (`docs/archive/ongoing-2026-09-10-1400.md`)
-and are restated in `CONTRIBUTING.md`: JAX only, sibling/FabricPC read-only, resources under `assets/`,
-**no commits by agents**, task records in `docs/tasks/<ID>.md`, claim rows with the status tool, lease
-for any GPU use > 60 s, placeholder modules are the lane's to replace, other existing files need an
-edit request. Board: `docs/tasks/STATUS.md`.
+Rewritten 2026-09-11 06:30 EDT by the orchestrating session during the counter-review pause
+(`docs/updated_plan6.md`). Previous version: `docs/archive/ongoing-2026-09-11-0620.md`. Rules §1 are
+unchanged and restated in `CONTRIBUTING.md`: JAX only, sibling/FabricPC read-only, resources under
+`assets/`, **no commits by agents** (the lead commits; the orchestrator commits only when the lead asks),
+task records in `docs/tasks/<ID>.md`, claim rows with the status tool or a claim JSON, lease for any GPU
+use > 60 s, placeholder modules are the lane's to replace, other existing files need an edit request.
+Board: `docs/tasks/STATUS.md`.
 
-## 1. State (2026-09-10 evening)
+**Codex is paused.** Nothing in §3 starts until the counter-reviews conclude and the lead writes the
+decisions of `updated_plan6.md` §5. Until then the only permitted activity is reviewing (a
+`docs/<reviewer>_review<N>.md` or a `logs/` report) — no code, no results.
 
-- **REG-02 done** (12.2 GPU-h, 9,766 steps); **REG-03 preflight valid**, checkpoint promoted; **S1-01: eligible**
-  for matched-fidelity claims (mean KL 2.9e-5 on H); ePC rows of P2/P3/P5/P6 equal the BP rows to three
-  decimals; **S5-01 done** (ePC calibration = BP calibration; SB/SE-A/SE-E smoke through the CLI).
-  Narrative: `logs/reg02_report.md`.
-- **Lane D done** (S2-05a/b, codex): GRACE CPU reference environment, oracle, 20 parity cases with 63
-  hashed artifacts under `assets/reference/grace/`, `manifests/dev/grace_parity_cases.json`.
-- **Lane V done** (codex): `logs/review_repairs_r2.md` — the R2 repairs hold on the main S4 path (150/150
-  synthetic jobs through the real CLI, loader, stream and collectors); six further findings V-01…V-06
-  (lease ordering, S5 frozen authority/allowance, archived-run discovery and checkpoint preservation,
-  stage-ceiling enforcement, update-vs-total cost naming, provenance negative controls) — **repaired with tests**
-  (`logs/review_repairs_r2_response.md`); Lane V2 re-checks them.
-- **Lane G′ done** (orchestrator): grammar generator, CPU-trained replacement base (provisional until PA-2),
-  streams, tracing pairs; the grammar now runs through the shared harness (S3-03 development matrix running on
-  the CPU; SD-20: latent paraphrases, exact keys).
-- **GPU:** the S5-prep + window-1 chain is finishing (re-profile with reconcilable costs, ≈ 30 min);
-  after it the device is free. Short `-m gpu` tests need no lease.
+## 1. State (2026-09-11 morning)
+
+- **Freeze draft complete** (no pending inputs, schema-valid); the freeze and the S4-02 allowances are
+  the lead's (D-A). Projection: 20.5 of 27.0 local GPU-h for zsRE 1000 / CounterFact 300 / grammar 10,000.
+- **REG-02/03, S1-01, S5-01 done**: the regenerated ePC substrate is eligible; SB/SE-A/SE-E arms ready.
+- **Grammar** (GRAM-01/02, DATA-06/07, S3-03 dev matrix, SD-20) provisional until PA-2 passes tonight.
+- **P4 (S1-04) done** in the D.4 error space; **S7-prep partial** (harness + fixed inventory; CounterFact
+  shared stratum short at 9 pairs; E.2 filter pass and checkpoint runs after S4-04). Orchestrator.
+- **B4 (S2-05, Codex): PC-10 value parity fails** while outputs, NLL, keys, radii and labels match;
+  diagnosis in `docs/baselines/grace_adapter.md`; SD-21 proposed (plan 6 §2.1); lead decision D-B.
+- **Lane R (ENV-05, Codex) partial**: resolution verified, real install waits on D-F.
+- **Lane V2 (Codex) in progress**: 150/150 synthetic S4 jobs and the nine CLI controls pass on the
+  repaired tree; the expanded study waits on the review-tools v2 patch (D-F); three observations
+  (V2-01…03) become orchestrator repairs.
+- **GPU idle**; no chains armed; `results/.gpu_lease` free. Last commit `0f1f9d5` plus the
+  orchestrator's own-work commit made during this pause.
 
 ## 2. Orchestrator lane (do not touch)
 
-V-01…V-06 repairs with tests (CPU) → rerun Lane V's study driver → freeze gate (`updated_plan4.md` §2)
-→ CP-E request to the lead → S4-02 allowance → S4-03/04. In parallel: S4 runner/evaluator generalization
-for grammar streams (S3-03), P1 complete-answer initially-correct check (GPU short), arm registration of
-B4 when Lane B4 delivers, S5-02 after the freeze. Owned paths as before (`src/pccap/{distill,pc,harness,
-cap,analysis,routers,transport,bases,fixtures,data}/`, `results/`, `manifests/`, `docs/decisions.md`,
+After the reviews: V2-01…03 repairs with synthetic negative controls (CPU) → E.2 filter pass over the S7
+candidates (GPU, minutes, after the freeze) → freeze support and S4-02 → S4-03/04 execution as run owner
+(lease queue, realization-major) → S4-05/06 as pairs complete → S5-02 → S7-01/02 on committed
+checkpoints → S7-03 JS part → S8. Owned paths as before (`src/pccap/{distill,pc,harness,cap,analysis,
+routers,transport,bases,fixtures,data}/`, `results/`, `manifests/`, `docs/decisions.md`,
 `docs/spec_defects.md`, `docs/lead_queue.md`, `logs/`).
 
-## 3. Lanes for the other agent (independent of §2 and of each other; none needs the GPU chain)
+## 3. Lanes for Codex — proposed; pick one after the lead confirms direction
 
-### Lane B4 — S2-05: the JAX GRACE adapter with PC-10 parity (highest value; CPU, one GPU-short test)
+Ordered by value. Each is independent of §2 and of the others; none needs the GPU lease.
 
-Owned: `src/pccap/baselines/grace_adapter.py` (placeholder — yours), `tests/controls/test_pc10_parity.py`,
-`docs/tasks/S2-05.md`, `docs/baselines/grace_adapter.md`. Spec: plan §6.8 S2-05; PDF Op. rule 11, PC-10,
-SD-8, PA-6; your own reference (`docs/baselines/grace_reference.md`, `assets/reference/grace/`).
-- `GraceLearner(base: BPBase, block=8, radius=1.0, value_steps=100, value_lr=1.0, seed=0, ceiling_bytes=None,
-  eviction="none")` with the Lane F interface: `update_item(EditItem) -> ItemOutcome` (code `accepted`;
-  `cost` = value-optimization forwards/reverses and tokens, charged through `base.ledger` in
-  `ledger.call("learning", ...)` blocks), `predict(ids) -> logits [T, V]` (query phase, codebook lookup
-  active), `export_state/import_state` (`LearnerState`: keys, values, radii, labels, use counts, RNG),
-  `state_hash`, `memory_bytes` (`MemoryReport`; `ceiling_bytes = B_cap`), `base_checksum`. Optional but
-  welcome: `last_logits_batch(seqs, phase)` (vmapped forward with the codebook lookup) — otherwise the
-  orchestrator's adapter in `harness.arms` wraps `predict`.
-- Forward: a functional copy of the GPT-2 block loop (use `pccap.bases.gpt2_jax.block/embed/head`; do not
-  modify `gpt2_jax.py`) with the GRACE hook at the input of block 8's MLP (`h[8].mlp.c_fc`, your
-  binding): the codebook key is the residual at the hook for the last position, Euclidean distance,
-  radius-gated replacement of the activation by the stored value, radius expansion/split per the source
-  (`coverage`), cold-init values, Adam at lr 1.0 for 100 steps on the answer NLL (the shared newline
-  terminator convention of your reference).
-- SD-8 adaptation: `eviction="use_count_then_age"` bounded by `ceiling_bytes` (lowest use count, then
-  oldest); disabled (`"none"`) for parity; every intentional difference from the source listed in the doc.
-- PC-10: `tests/controls/test_pc10_parity.py` (GPU short, no lease): on the 20 cases, edited greedy
-  outputs and teacher-forced NLL equal the reference within fp32 tolerance (state the tolerance), and the
-  codebook keys/values/radii match the reference NPZ within tolerance after the isolated edits and after
-  the 20-edit sequence. If any case cannot match, report it as a parity failure with the cause — never
-  tune to the reference. Cost 6 h; GPU 20 min (run after the chain in §1 finishes; the device is then free).
+### Lane B4-S — the PC-10 sensitivity control (CPU, ≈ 2 h; decides SD-21)
 
-### Lane P4 — S1-04 P4 separability on the grammar base (CPU)
+Owned: `scripts/grace_sensitivity.py` (new), `results/S2/grace_jax/sensitivity.json`, a section in
+`docs/baselines/grace_adapter.md` (yours), an addendum to `docs/tasks/S2-05.md`.
+- Run the JAX adapter's value optimization against itself under a mathematically equal but numerically
+  different computation on the same 20 cases: (i) initial value perturbed by 1e-7 (fp32 ulp scale);
+  (ii) a different matmul association in the hook suffix (e.g. `(h @ W1) @ W2` vs `h @ (W1 @ W2)` where
+  the source does one of them) or the batched vs unbatched path; keep Adam, lr, steps, seeds identical.
+- Report per case and step (1, 10, 100): max |Δvalue|, loss-before-step difference, greedy/NLL agreement —
+  the same columns as `trace_comparison.json`, so the two tables read side by side.
+- Verdict rule, stated before running: if the same-framework perturbations produce value differences of
+  the same order as the cross-framework ones (O(0.1)) with equal losses and outputs, the gap is a
+  conditioning property of GRACE's optimization (flat valley, lr 1.0) and SD-21 option (b) is supported;
+  if they stay ≤ 1e-3, the adapter differs and the diagnosis continues. No tolerance is widened; nothing
+  is tuned to the reference.
 
-Owned: `src/pccap/analysis/s1_p4.py`, `tests/analysis/test_s1_p4.py`, `docs/tasks/S1-04.md`; output
-`results/S1/P4_gram.json` and a row in `results/S1/coverage.json` via `pccap.analysis.s1_p6.update_coverage`.
-Spec: plan §6.7 S1-04, PDF D.4. Inputs: `pccap.fixtures.grammar_model.GrammarBase(weights=WEIGHTS)` (CPU:
-`JAX_PLATFORMS=cpu`), `pccap.fixtures.grammar_generator` (kinds private/shared_1/shared_2, eight contexts,
-held-out switch combinations via `pccap.data.grammar_streams.{eval_items,heldout_items}`), residuals at
-the six block outputs via `base.forward(ids, retain_sites=True)` (sites 1/3/5) — for the other layers add a
-small functional helper in your module reusing `grammar_model.run_blocks`.
-- Per mechanism (the three kinds; and per context for the private mechanism) and per layer: 8,192 centred
-  residual vectors at the designated positions; top-r basis with r = 16 only if the spectrum supports it
-  (report the captured variance and eigen gaps; otherwise the insufficient-rank case or a common lower
-  rank, labelled); overlap matrix between mechanisms (`pccap.metrics.overlap.subspace_overlap`), resampling
-  stability (two disjoint halves, overlap of their bases); private/private overlap across contexts, shared
-  retention (the shared subspace measured in a task-flipped stream vs the base grammar), held-out
-  compositional transfer (does the private/shared basis from base-grammar data capture the held-out
-  combinations' variance). Natural-language domain PCA: `unsupported` (DATA-04, recorded as such).
-- Tests on synthetic Gaussian data with planted subspaces (known overlaps). Cost 3 h.
+### Lane V2 — finish the independent study (CPU; after D-F applies your patch)
 
-### Lane S7-prep — reversal pairs and the S7-01/02 harness (CPU; GPU later on committed checkpoints)
+Rerun `scripts/review_repairs_r2b_study.py` from a fresh fixture root; complete the remaining controls
+you listed (valid and invalid frozen S5 authority, forced rerun with different learned state and preserved
+external checkpoint bytes, two-experiment and unknown-experiment filtering, stage limits incl. missing
+per-run allowance, source/evidence provenance); write `logs/review_repairs_r2b.md`. Record V2-01…03 as
+findings with your evidence; the orchestrator repairs them (plan 6 §2.2) and you re-check.
 
-Owned: `src/pccap/analysis/s7_01.py`, `manifests/dev/s7_pairs.json`, `tests/analysis/test_s7_01.py`,
-`docs/tasks/S7-01.md` (partial: design + CPU controls). Spec: plan §6.13 S7-01/02, PDF S7.
-- Pair inventory: 100 fixed pairs from development data, stratified *shared* (two zsRE items with the
-  same subject and different relations, or CounterFact items sharing a subject), *private* (unrelated
-  items), *near-neighbour* (`manifests/dev/challenges.json` near-neighbour pairs); ids, strata and seeds
-  in the manifest, fixed before any result.
-- Protocol functions: `reversal(learner_factory, state, item_i, item_j, Q)` clones the complete state
-  (`export_state`/`import_state`), runs `U_j(U_i(s))` and `U_i(U_j(s))` with item-keyed randomness
-  (the router's `rng_material` already keys on the item digest), returns `D_ij` = mean JS
-  (`pccap.metrics.divergence.js`) over the fixed evaluation set Q, per-item accuracy changes, update
-  counts, allocations, evictions; `damage_matrix(...)` = `I_ij` in both orders with strata.
-- CPU controls with the mock base (`tests/cap/mock_base.py`) and a fake learner: cloning leaves the
-  original untouched; commuting updates give D = 0; a planted non-commuting pair gives D > 0; strata
-  bookkeeping. The GPU run on the S4 300-edit checkpoints is the orchestrator's later. Cost 4 h.
+### Lane R — ENV-05 real installation (CPU/network; after D-F)
 
-### Lane R — ENV-05 environment recreation script (CPU/network; unchanged spec)
+Run the non-dry install into a fresh scratch destination, `pip check`, the CPU determinism report;
+complete `docs/tasks/ENV-05.md`; the documentation patch is applied by the lead or by the orchestrator on
+the lead's word.
 
-`scripts/setup_venv.sh` from `requirements.lock` into a scratch venv under `assets/envs/venv-check/`
-(skip the private editable line; install the package from the local checkout; record the revision),
-a "Recreating the environment" section for `docs/environment.md` (as a proposed patch if you prefer not
-to edit), `docs/tasks/ENV-05.md`. 1 h.
+### Lane X — counter-review of the orchestrator's pause work (read-only + new files)
 
-### Lane V2 — **ready now**: the V-01…V-06 repairs landed (2026-09-10 ≈ 20:20 EDT; `logs/review_repairs_r2_response.md`)
+Independent check of `src/pccap/analysis/s1_p4.py` and `s7_01.py` against PDF D.4 and D.9:
+(i) recompute P4 on a fresh seed block (`--n 2048` on the CPU) and compare the overlap matrix and the
+held-out/cross-capture contrast with `results/S1/P4_gram.json` (values within resampling noise, no
+new insufficient-rank case); (ii) verify the S7 inventory's independence claims *without opening sealed
+payloads*: every zsRE pair subject is absent from the two development pools, the S0 sample and the
+sealed pools' subject lists (`assets/data/prepared/editing/*_eligible.jsonl` — subject field only), and
+every CounterFact member is a development item or a reserved-subject sibling; (iii) note whether the
+strata definitions match D.9's "shared-mechanism / independent-private / near-neighbour" reading.
+Output `logs/review_p4_s7.md` only.
 
-Rerun your study driver against the repaired tree from a fresh fixture root, extend it with the negative
-controls you listed (changed code/checkpoint/tokenizer, missing substrate definitions, invalid order
-index, conflicting CLI base/read, two experiment ids, a forced rerun with different state hashes), and
-write `logs/review_repairs_r2b.md`. New files only.
+### Lane S3-01 — the full control-suite table (CPU, documentation; after D-B)
+
+`docs/controls.md` completion: PC-1…PC-10 with test paths, last run, status (PC-10 per the D-B
+outcome), the development run matrix references, and the "full before S7" items; `docs/tasks/S3-01.md`.
+The orchestrator reviews and mirrors.
+
+### Optional, only if S8-02's ablation list names them (not before the freeze)
+
+CAP-09 difficulty weight (CPU); CAP-08 read variants R-h0/R-g/R-e (GPU short). Do not start on your own.
 
 ## 4. Interfaces and coordination
 
-As in the archived version §4–§5: `pccap.contracts`, `pccap.bases.gpt2_jax`, `pccap.bases.bp.BPBase`,
+As in the archived version §4: `pccap.contracts`, `pccap.bases.gpt2_jax`, `pccap.bases.bp.BPBase`,
 `pccap.harness.arms.make_learner/router_for`, `pccap.harness.runs`, `pccap.harness.stage_s2.load_dev_items`,
 `pccap.data.tokenize`, `pccap.data.decode`, `pccap.harness.ledger.Ledger`, `pccap.harness.lease.gpu_lease`,
-`pccap.fixtures.grammar_generator/grammar_model`, `pccap.data.grammar_streams`. Questions for the
-orchestrator: a dated line under "## Agent questions" in `docs/lead_queue.md`; board rows: your own only
-(the orchestrator mirrors completion records it finds, as done for S2-05a/b and DATA-02a).
+`pccap.fixtures.grammar_generator/grammar_model`, `pccap.data.grammar_streams`, and now
+`pccap.analysis.s7_01` (`materialize`, `evaluation_set`, `reversal`, `damage_matrix`) and
+`pccap.analysis.s1_p4` (`ErrorSampler`, `basis`, `overlap`). Questions for the orchestrator: a dated line
+under "## Agent questions" in `docs/lead_queue.md`; board rows: your own only (the orchestrator mirrors
+completion records it finds — S2-05 and ENV-05 were mirrored in this pause).
