@@ -1,0 +1,267 @@
+{
+  "status": "coverage_gap_reproduced",
+  "timestamp_utc": "2026-09-11T18:03:41.535948+00:00",
+  "approved_corpus": {
+    "tokens": 247289,
+    "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+    "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "sd3": "| SD-3 | WikiText-103 validation has roughly 0.28M GPT-2 tokens, not 10\u2076. | Drift set = entire validation split, tokenized once, unique tokens only. Shortfall logged (PA-5). Test split not added. Exact count recorded by DATA-00. | committed (verified at DATA-00) |"
+  },
+  "scenarios": {
+    "current_stage_sample": {
+      "supplied_tokens": 4224,
+      "explicit_count_argument": false,
+      "requested_count": 4096,
+      "window": 128,
+      "windows": 32,
+      "tokens_in_windows": 4096,
+      "scored_prediction_positions": 4064,
+      "window_start_tokens_not_scored": 32,
+      "trailing_tokens_outside_windows": 128,
+      "first_span": [
+        0,
+        127
+      ],
+      "last_span": [
+        3968,
+        4095
+      ],
+      "nll_is_stubbed": true
+    },
+    "whole_array_with_default_evaluator": {
+      "supplied_tokens": 247289,
+      "explicit_count_argument": false,
+      "requested_count": 4096,
+      "window": 128,
+      "windows": 32,
+      "tokens_in_windows": 4096,
+      "scored_prediction_positions": 4064,
+      "window_start_tokens_not_scored": 32,
+      "trailing_tokens_outside_windows": 243193,
+      "first_span": [
+        0,
+        127
+      ],
+      "last_span": [
+        3968,
+        4095
+      ],
+      "nll_is_stubbed": true
+    },
+    "whole_array_with_explicit_evaluator_count": {
+      "supplied_tokens": 247289,
+      "explicit_count_argument": true,
+      "requested_count": 247289,
+      "window": 128,
+      "windows": 1931,
+      "tokens_in_windows": 247168,
+      "scored_prediction_positions": 245237,
+      "window_start_tokens_not_scored": 1931,
+      "trailing_tokens_outside_windows": 121,
+      "first_span": [
+        0,
+        127
+      ],
+      "last_span": [
+        247040,
+        247167
+      ],
+      "nll_is_stubbed": true
+    },
+    "small_exact_window_control": {
+      "supplied_tokens": 16,
+      "explicit_count_argument": true,
+      "requested_count": 16,
+      "window": 8,
+      "windows": 2,
+      "tokens_in_windows": 16,
+      "scored_prediction_positions": 14,
+      "window_start_tokens_not_scored": 2,
+      "trailing_tokens_outside_windows": 0,
+      "first_span": [
+        0,
+        7
+      ],
+      "last_span": [
+        8,
+        15
+      ],
+      "nll_is_stubbed": true
+    },
+    "small_tail_control": {
+      "supplied_tokens": 19,
+      "explicit_count_argument": true,
+      "requested_count": 19,
+      "window": 8,
+      "windows": 2,
+      "tokens_in_windows": 16,
+      "scored_prediction_positions": 14,
+      "window_start_tokens_not_scored": 2,
+      "trailing_tokens_outside_windows": 3,
+      "first_span": [
+        0,
+        7
+      ],
+      "last_span": [
+        8,
+        15
+      ],
+      "nll_is_stubbed": true
+    }
+  },
+  "stage_expressions": [
+    {
+      "path": "src/pccap/harness/stage_s3.py",
+      "line": 70,
+      "expression": "Evaluator(base, tok, unrelated[: int(man.get(\"locality_prompts\", 200))], drift_sample(int(man.get(\"drift_positions\", 4096))))"
+    },
+    {
+      "path": "src/pccap/harness/stage_s3.py",
+      "line": 97,
+      "expression": "Evaluator(base, gc[\"tok\"], gc[\"unrelated\"], gc[\"drift\"], drift_positions=len(gc[\"drift\"]), drift_window=gc[\"drift_window\"], max_new=gc[\"max_new\"])"
+    },
+    {
+      "path": "src/pccap/harness/stage_s3.py",
+      "line": 70,
+      "expression": "drift_sample(int(man.get(\"drift_positions\", 4096)))"
+    },
+    {
+      "path": "src/pccap/harness/stage_s4.py",
+      "line": 76,
+      "expression": "Evaluator(base, gc[\"tok\"], gc[\"unrelated\"], gc[\"drift\"], drift_positions=len(gc[\"drift\"]), drift_window=gc[\"drift_window\"], max_new=1)"
+    },
+    {
+      "path": "src/pccap/harness/stage_s4.py",
+      "line": 122,
+      "expression": "Evaluator(base, tok, unrelated[:200], drift_sample(4096))"
+    },
+    {
+      "path": "src/pccap/harness/stage_s4.py",
+      "line": 122,
+      "expression": "drift_sample(4096)"
+    },
+    {
+      "path": "src/pccap/harness/stage_s5.py",
+      "line": 116,
+      "expression": "Evaluator(base, tok, unrelated[:n_loc], drift_sample(drift_n))"
+    },
+    {
+      "path": "src/pccap/harness/stage_s5.py",
+      "line": 116,
+      "expression": "drift_sample(drift_n)"
+    }
+  ],
+  "completed_runs": [
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C0/BP/h/0/0",
+      "dataset": "zsre",
+      "arm": "C0",
+      "realization": 0,
+      "perm": 0,
+      "drift_positions": 4064,
+      "metrics_sha256": "67cfeb40e27844dbe5880293510769b6ca5ce948d33079777da769f4c168ea12"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C0/BP/h/0/1",
+      "dataset": "zsre",
+      "arm": "C0",
+      "realization": 0,
+      "perm": 1,
+      "drift_positions": 4064,
+      "metrics_sha256": "d87a52df87b55c4c5656e72b1480ddc61efc95d7a33df0835f046acd005840a1"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C0/BP/h/0/2",
+      "dataset": "zsre",
+      "arm": "C0",
+      "realization": 0,
+      "perm": 2,
+      "drift_positions": 4064,
+      "metrics_sha256": "76a3fabb29e96eca13f083d1bcb179d96bea6b26780ebdcf160cb13b04ad893d"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C0/BP/h/0/3",
+      "dataset": "zsre",
+      "arm": "C0",
+      "realization": 0,
+      "perm": 3,
+      "drift_positions": 4064,
+      "metrics_sha256": "1ee77aefa030d278f443d78ecebb908b85a05a4672b3e687ae51b89c40ffa7ed"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C0/BP/h/0/4",
+      "dataset": "zsre",
+      "arm": "C0",
+      "realization": 0,
+      "perm": 4,
+      "drift_positions": 4064,
+      "metrics_sha256": "cd66e49ec55d5fa5f53a4d6bd92b0b0e70617c45a16cb5c8b137c1e607301031"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/0",
+      "dataset": "zsre",
+      "arm": "C1",
+      "realization": 0,
+      "perm": 0,
+      "drift_positions": 4064,
+      "metrics_sha256": "9a2c8e8e4a2fe3d905d125421e9d17b570525558b97191ed17160c67fbcf4403"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/1",
+      "dataset": "zsre",
+      "arm": "C1",
+      "realization": 0,
+      "perm": 1,
+      "drift_positions": 4064,
+      "metrics_sha256": "1e8716caa78a165f9ee78f7394921b262853e9b4550a46bdee0fa7c87920fdbe"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/2",
+      "dataset": "zsre",
+      "arm": "C1",
+      "realization": 0,
+      "perm": 2,
+      "drift_positions": 4064,
+      "metrics_sha256": "4bbd8b645be5d13a2e3e526ff15c3029a97c9d5bd4869a7921f5cb2d1fdb88c6"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/3",
+      "dataset": "zsre",
+      "arm": "C1",
+      "realization": 0,
+      "perm": 3,
+      "drift_positions": 4064,
+      "metrics_sha256": "53516a3872accd7a3dcb46ee757e017f0ce8db698b9c2b8a452df9b03d2b3104"
+    },
+    {
+      "path": "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/4",
+      "dataset": "zsre",
+      "arm": "C1",
+      "realization": 0,
+      "perm": 4,
+      "drift_positions": 4064,
+      "metrics_sha256": "6a8a60d2c1d3637b224834d161f876d71843cc2eca851747c2ea405c02d88a21"
+    }
+  ],
+  "noncomplete_runs_skipped": [
+    "results/S4/frozen-confirmatory-v2-84126123/zsre/C2/BP/h/0/0"
+  ],
+  "sources": {
+    "src/pccap/harness/runs.py": "2a07832e2b6dcb0f79ba8bf87ecc898980986d246a8d93421dcc55bea9341c93",
+    "src/pccap/harness/stage_s3.py": "12c466c72b5ae5be574ff3d02a3c46b0faf743eb538f76ba2bfd454f0004f18c",
+    "src/pccap/harness/stage_s4.py": "a263cc82975f6d62582cc281e546d85f0362a7b95ccc2dbbe1d5a45387ed04d0",
+    "src/pccap/harness/stage_s5.py": "38d0e22f2987eed91c561c4721b1301d074561852dec1b9dd8f6c00d4997edb2",
+    "docs/spec_defects.md": "b50466253866dd63399d0efe8ddc8a78d5b0976e82e8988cf7744c2769b38cdf",
+    "manifests/dev/lm_sets.json": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e",
+    "manifests/frozen.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+  },
+  "gpu_seconds": 0,
+  "model_weights_loaded": false,
+  "interpretation": [
+    "SD-3 authorizes the entire available validation split, not a one-million-token expansion.",
+    "Passing a longer array alone still leaves the evaluator's 4096 default active.",
+    "Passing the explicit full count admits 1931 full windows, but omits 121 trailing tokens and the first token of each window.",
+    "Any remedy must declare input-token and scored-position denominators, tail/context policy, checkpoint coverage, identity and cost.",
+    "No learner accuracy or NLL is measured by the stub, and no production code is changed."
+  ]
+}

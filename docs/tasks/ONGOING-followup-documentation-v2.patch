@@ -1,0 +1,93 @@
+--- a/docs/REPRODUCE.md
++++ b/docs/REPRODUCE.md
+@@ -6,6 +6,21 @@
+ **[verified]** (run as recorded in its task record), **[pending]** (not yet run on this host), or
+ **[illustrative]** (the shape of a command the stage will use). *lease* = holds the GPU lease for
+ minutes to hours; *GPU short* = needs a free device, no lease.
++
++Set the shell variables explicitly before using the commands:
++
++```bash
++P=/home/derp/cap/venv/bin/python
++ASSETS_DIR=/home/derp/cap/assets
++export PCCAP_HDPC_PATH=/home/derp/cap/llm-by-neural-predictive-coding
++```
++
++Commands that regenerate reports, manifests, data or learner state write their named destinations.
++Use a fresh isolated copy for a reproduction audit. The CPU audits at
++`logs/reproduce_preaudit.md` and `logs/ongoing_followup_20260911/review_v2.md` record that distinction.
++The final freeze is the lead's action; the active confirmatory queue belongs to the run owner.
++A complete development run refuses a repeated invocation (exit 4); an intentional `--force` rerun
++archives the previous attempt and needs authorization for that existing output.
+ 
+ ## 1. Environment and assets
+ 
+@@ -20,13 +35,20 @@
+ ## 2. Controls (S0) and substrate properties (S1)
+ 
+ ```bash
+-$P -m pytest -q tests/controls -m gpu            # PC-1…PC-9 on the real base (GPU short)
++$P -m pytest -q tests/controls -m gpu            # PC-2/3/8/9 on the real base; CPU controls are separate (GPU short)
+ $P -m pccap.cli report --stage S0                # results/S0/report.md
+ $P -m pccap.analysis.s1_p2 ; $P -m pccap.analysis.s1_p3 ; $P -m pccap.analysis.s1_p5 ; $P -m pccap.analysis.s1_p6   # BP rows (lease)
+-$P -m pccap.analysis.s1_p1 --epc-weights /home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz   # [pending] P1 (lease)
++$P -m pccap.analysis.s1_p1 --epc-weights /home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz   # P1 GPU rerun; full H audit is preserved at git 25c988b (lease)
+ $P -m pccap.analysis.s1_p3 --epc-weights <same npz>   # ePC rows likewise for p2/p5/p6
+ $P -m pccap.cli report --stage S1
+ ```
++
++The combined control coverage is indexed by `docs/controls.md`: `make test-fast` excludes slow
++PC-1/PC-3 and PC-10, while the GPU selector covers only the GPU-marked subset. A successful
++subset is not an all-controls pass. B4's PC-10 remains unqualified.
++
++The full P1 record at `git show 25c988b:results/S1/P1_epc.json` has 1,999,872 positions.
++The smaller follow-up at the current filename has 199,680; preserve both denominators when citing them.
+ 
+ ## 3. Data, calibration, screening (DATA-01, S2-01, S2-02, S3-05)
+ 
+@@ -41,7 +63,7 @@
+ ## 4. ePC checkpoint regeneration (REG-00…03)
+ 
+ ```bash
+-$P -m pccap.distill.data --parquet assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet   # shard, byte-exact
++$P -m pccap.distill.data --parquet "$ASSETS_DIR/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet"   # shard, byte-exact
+ $P scripts/reg_timing_probe.py --micro 5 --timed 2                        # s/step per T (lease)
+ results/REG/run_reg02_v2.sh 500 5400                                      # full run in resumable chunks (lease, ~12 h)
+ $P -m pccap.distill.preflight --update-assets                             # [pending] REG-03 (GPU short)
+@@ -77,10 +99,24 @@
+ $P -m pccap.harness.freeze --draft --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # manifests/frozen.draft.json (proposal)
+ $P -m pccap.harness.freeze --final --i-am-the-lead --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # the lead's CP-E act → manifests/frozen.json (frozen-confirmatory-v2, DEC-027; v1 superseded by DEC-026)
+ $P -m pccap.harness.schedule                      # results/S4/jobs.json (fixed order: 210 S4 jobs, then 60 S5; B4 unavailable, SB reused)
+-$P -m pccap.cli queue [--stage S5] [--max-jobs N] [--dry-run]   # S4-04: runs the list in order, one subprocess per job under the lease; resumable; stops on refusals and systematic failures; stop file results/S4/queue.stop
++$P -m pccap.cli queue --dry-run                  # CPU preview; writes queue_summary_dryrun.json, executes no jobs
++$P -m pccap.cli queue                            # S4 run owner: execute/resume the frozen queue under the lease
++$P -m pccap.cli queue --stage S5                 # S5 run owner: after its prerequisites; --max-jobs N bounds a session
+ $P scripts/s4_progress.py                         # read-only progress and ETA
+ $P -m pccap.analysis.s4_05 --experiment-id <id> ; $P -m pccap.analysis.s4_06 --dataset zsre --experiment-id <id> ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2 --experiment-id <id>   # as pairs complete (the id is the frozen name + hash prefix, e.g. frozen-confirmatory-v2-84126123)
+ ```
++
++`<id>` and `N` above denote values to supply, not literal shell arguments. S4-05, S4-06 and
++S7-03 accept `--out` for a new result location; empty paired inputs are reported as incomplete.
++`queue --dry-run` also writes an output and should be run in an isolated copy during an audit.
++The Lane P follow-up verified draft allowances, frozen schedule generation, both stage dry-runs,
++explicit-id empty analyses, progress, and five affected CPU regressions. It did not re-freeze or
++execute the active queue.
++
++Known evaluation limitation: SD-3 authorizes all 247,289 validation tokens, but the frozen S4/S5
++path selects 4,096 tokens and scores 4,064 positions. The CPU counterexample and required repair
++criteria are in `logs/ongoing_followup_20260911/drift_remediation.md`. This remains a lead/run-owner
++decision requiring versioned handling; these reproduction notes do not authorize a source edit.
+ 
+ ## 7. Artifact index
+ 
+--- a/logs/grace_gradient_localization.md
++++ b/logs/grace_gradient_localization.md
+@@ -27,7 +27,7 @@
+ 1e-5; JAX reports highest matmul precision. The original edit learning rate,
+ initialization and replacement convention are preserved.
+ 
+-Forward hooks save values and incoming cotangents at 28 boundaries per case:
++Forward hooks save values and incoming cotangents at 27 boundaries per case:
+ the hook GELU/projection, residual add, blocks 9–11 and their layer norms,
+ attention and MLP operations, final layer norm, tied output head and loss.
+ Each component's VJP is then evaluated using **the same reference input and
