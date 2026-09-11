@@ -16,6 +16,14 @@ freeze command is posted in `docs/lead_queue.md` and waits only on the B4 deadli
 GPU test subset) comes after Lane B4-S lands and is announced in `docs/lead_queue.md`; short `-m gpu` tests by
 either agent need no lease.
 
+**Post-freeze rule for every agent (from the moment `manifests/frozen.json` exists).** The freeze binds the hash of the
+whole installed `src/pccap` tree; every confirm-mode job compares the tree at start and refuses on any difference (exit 2,
+the queue stops). Therefore: no edits under `src/pccap/` after the freeze — not even in your own lane's files
+(`src/pccap/baselines/grace_*.py` included). Put B4-D diagnostics and fixes in new files under `scripts/`, `logs/`,
+`results/` or `docs/`, or as a proposed patch under `docs/tasks/`; a fix that must land in `src/pccap` is applied only with
+a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
+outside `src/pccap` are unaffected.
+
 ## 1. State (2026-09-11, 08:55 EDT)
 
 - **D-B decided: (b)** — DEC-020 / SD-21. B4's PC-10 is output-level parity plus loss-trajectory values
