@@ -1,9 +1,16 @@
 # GRACE JAX adapter candidate (B4 / S2-05)
 
-**PC-10 status: parity failure. Do not register B4 for confirmation.** The implementation
-is in `pccap.baselines.grace_jax`; `grace_adapter.py` remains the existing placeholder.
-The complete comparison is `results/S2/grace_jax/pc10.json`. Agreement on answers is
-insufficient because the required learned-value arrays do not match.
+**B4 eligibility: blocked on the unmet DEC-020 sensitivity prerequisite. Do not
+register B4 for confirmation.** Canonical imports are available from
+`pccap.baselines.grace_adapter`; the implementation and vmapped batch helper are in
+`grace_jax.py` and `grace_batch.py`. Batch integration and its verified test corrections
+were committed in `9bfd9a7`.
+
+DEC-020 conditionally approves the label **“reference baseline, parity at the output
+level”**. That label has not been earned: the same-framework sensitivity experiment
+preserved outputs and losses but did not reproduce the required value-divergence scale.
+The existing `results/S2/grace_jax/pc10.json` preserves the earlier elementwise parity
+failure; it is not a completed form-(b) assessment.
 
 ## Source and binding
 
@@ -25,7 +32,7 @@ excludes the key-position token, exactly as the original source slice does.
 ## Interface and algorithm
 
 ```python
-from pccap.baselines.grace_jax import GraceLearner
+from pccap.baselines.grace_adapter import GraceLearner
 
 learner = GraceLearner(base, block=8, radius=1.0, value_steps=100,
                        value_lr=1.0, seed=0,
@@ -66,14 +73,33 @@ logits = learner.predict(growing_prefix,
                          last_only=True)
 ```
 
-The reference oracle fixes that boundary throughout decoding and teacher-forced NLL.
-The candidate parity evaluator does the same. The generic harness decoder currently
-does not pass this boundary; relying on the default last position after generated
-tokens have been appended changes GRACE behavior. Therefore merely re-exporting this
-class from the placeholder or registering it in `harness.arms` is insufficient.
-A future integration must provide the boundary without changing query state. The
-optional `last_logits_batch(seqs, phase, key_positions=...)` is a sequential fallback,
-not a vmapped implementation, and needs those same original positions.
+The reference oracle and candidate parity evaluator fix that boundary throughout
+decoding and teacher-forced NLL. Claude's `GraceArm` declares
+`decode_key_positions=True`, and the shared decoder and `harness.runs.Evaluator` now
+pass original prompt positions through to the learner. The separate S7 scoring
+findings and repairs belong to Claude's lane; see [the S7 review](../../logs/review_p4_s7.md).
+
+The canonical `last_logits_batch(seqs, phase, key_positions=...)` now vmaps the
+unchanged lookup and suffix. It groups inputs by the scalar path's padding width,
+restores input row order, and charges every sequence and token to the requested
+ledger phase. It does not mutate codebook metadata, RNG or learner-persistent caches.
+An empty batch returns shape `(0, vocab)`; invalid boundaries are rejected before
+model work. Each continuation retains its own original prompt boundary:
+
+```python
+last_rows = learner.last_logits_batch(
+    [growing_prefix], phase="query",
+    key_positions=[len(original_prompt) - 1],
+)
+```
+
+The [applied integration record](../tasks/B4-S-batch-applied.md) reports 11 passing
+GRACE/boundary controls. The canonical adapter also passed a CPU comparison on the
+fixed final source codebook: 20 cases and 61 teacher-forced answer prefixes, with
+unchanged base and learner state. Maximum summed-answer NLL difference was
+1.902733e-7 and teacher-forced argmax agreed throughout. This verifies the batch query
+path; it does not establish training parity, free-generation parity, or DEC-020
+eligibility.
 
 ## State, costs, and SD-8 adaptation
 
@@ -101,10 +127,10 @@ or update exception restores the prior learner state; incurred ledger cost remai
 The bounded variant was checked with synthetic controls, not a GRACE source parity
 claim or a long editing benchmark.
 
-## PC-10 evidence
+## Historical elementwise PC-10 evidence
 
-The gate validates reference artifact hashes before running all 20 isolated edits and
-the 20-edit sequential run, then compares every isolated and sequential codebook and
+The existing legacy gate validates reference artifact hashes before running all 20
+isolated edits and the 20-edit sequential run, then compares every codebook and
 all isolated/final-sequence evaluations. Tolerances were fixed before seeing real-case
 results and were not widened:
 
@@ -125,20 +151,52 @@ The largest isolated value discrepancy is **22.4391**, far beyond tolerance.
 The maximum NLL difference across all 40 evaluations is **4.2486e-5**.
 The base checksum was unchanged. The CPU parity measurement took 57.7293 seconds;
 its ledger counts 4,040 partial learning forwards and 4,000 reverses for 40 updates.
-Five synthetic adapter controls passed, including identity/read-only queries,
+Five synthetic adapter controls passed in that run, including identity/read-only queries,
 source conflict/radius behavior, restored future updates, snapshot rejection, and
-bounded eviction. The full PC-10 test intentionally fails on this candidate.
+bounded eviction. The unchanged elementwise PC-10 test still fails on this candidate.
+Its retained failure is separate from the outstanding form-(b) implementation and
+acceptance checks.
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES='' JAX_PLATFORMS=cpu \
   OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 ../venv/bin/python -B -m pytest \
-  -p no:cacheprovider tests/baselines/test_grace_jax.py
+  -p no:cacheprovider --basetemp=../assets/tmp/b4_adapter_controls \
+  tests/baselines/test_grace_jax.py tests/baselines/test_grace_batch.py \
+  tests/harness/test_b4_wiring.py
 
-# Expected to fail until a reviewed numerical repair passes the unchanged gate:
+# Historical elementwise gate; expected to fail on the current candidate:
 PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES='' JAX_PLATFORMS=cpu \
   OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 ../venv/bin/python -B -m pytest \
   -p no:cacheprovider tests/controls/test_pc10_parity.py
 ```
+
+## DEC-020 sensitivity and conditional form-(b) gate
+
+The [policy](../tasks/B4-S-sensitivity-policy.json) was written before execution.
+The [full result](../../results/S2/grace_jax/sensitivity.json) records all 20 isolated
+cases at steps 1, 10 and 100; the [interpretation](../../logs/grace_sensitivity_round3.md)
+retains the negative result. Original seeds, initial-value RNG and Adam settings were
+held fixed.
+
+| Same-framework control | Maximum step-100 value gap | Loss-trajectory checks | Final greedy / NLL checks |
+| --- | ---: | ---: | ---: |
+| Initial value + float32(1e-7) | 0.073916 | 60/60 | 20/20 each |
+| Algebraically equal hook addition reassociation | 0.152517 | 60/60 | 20/20 each |
+
+The declared reproduction threshold was 2.243913, one tenth of the previously observed
+cross-framework maximum 22.439135. The algebraic control did not reach it. Both
+controls exceed 0.001, so the recorded verdict is `inconclusive_or_equality_failure`:
+the cause is insufficient divergence magnitude, with no output/loss equality failure.
+The experiment took 98.33 seconds on CPU and left the base unchanged.
+
+At each selected step, mean training loss was multiplied by answer-token count
+(including newline) and checked using the unchanged summed-answer NLL tolerance:
+absolute 0.001, relative 0.0001. No loss tolerance was fitted or widened. A completed
+form-(b) assessment must retain keys/radii/labels and greedy/NLL checks, compare loss
+trajectories at steps 1/10/100 for both isolated and sequential updates, report
+elementwise value gaps as descriptive quantities, and record a qualifying sensitivity
+verdict. Those conditions are not yet met; neither B4 availability nor S3-01 completion
+follows from the implemented batch interface.
 
 ## Failure diagnosis and next checkpoint
 
@@ -161,13 +219,16 @@ This localizes the initial divergence to the gradient/compiled-model arithmetic,
 rather than random initialization or an obvious first-step Adam coefficient error.
 The separately compiled gradient probe and the fused optimization loop also have
 slightly different fp32 losses. The exact responsible primitive and later optimizer
-arithmetic have **not** been isolated; cross-framework rounding sensitivity is an
-explanation supported by these measurements, not proof that all later differences
-are harmless. Matching saturated outputs cannot satisfy state parity.
+arithmetic have **not** been isolated. The subsequent same-framework control
+demonstrates some sensitivity but does not explain the 22.4 cross-framework gap or
+exclude an adapter defect. Matching saturated outputs does not satisfy DEC-020's
+additional prerequisite.
 
 Next work should compare the frozen suffix's intermediate activations and value
 adjoints against the source, checking normalization, GELU, softmax/cross-entropy and
 fusion boundaries without adjusting hyperparameters, seeds, fixtures or tolerances.
-Only an independently justified numerical repair followed by the unchanged complete
-gate can unblock B4. Any change to existing candidate or harness files requires the
-lead's permission under the current new-files-only rule.
+Preserve the existing references and predeclared tolerances. A future conditioning
+control needs its verdict rule stated before execution; do not search perturbations
+until the desired label becomes available. The next acceptance checkpoint requires
+the complete isolated/sequential comparison and a justified sensitivity verdict under
+DEC-020. Batch implementation is complete; the numerical diagnosis remains open.
