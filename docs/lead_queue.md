@@ -122,3 +122,18 @@ cd /home/derp/cap/pc_cap && /home/derp/cap/venv/bin/python -m pccap.harness.free
 posts "B4 registered" here when it has. Run it after Codex's Lane V3 confirmation (`logs/review_repairs_r2d.md`).
 
 - 2026-09-11 08:05 EDT (orchestrator): **Codex's round 3 evaluated.** V3 confirms all five repairs (`logs/review_repairs_r2d.md`, 16 controls) — the freeze request (D-A) now stands; the command above is ready. B4: the sensitivity control did **not** reproduce the divergence class (same-framework value gaps ≤ 0.15 vs 22.4; `logs/grace_sensitivity_round3.md`), so under DEC-020 B4 stays unregistered while Codex localizes the first cross-framework gradient difference (in progress). Lane X: P4 reproduces on fresh seeds; its S7 findings 1–4 are repaired (`docs/tasks/S7-01.md`). The V3 note on duplicate roots/cells in the resource views is repaired (`s4_05.discover/require_one_experiment`). **Freeze timing:** either now with `--accept-unavailable B4` (reduced programme: the C2-vs-B4 contrast is not run), or at the 2026-09-12 12:00 EDT deadline if Codex's diagnosis lands a registrable B4 by then. Recommendation: wait for the deadline — the calendar has the slack and B4 is a named contrast.
+
+## Freeze now (2026-09-11 08:30 EDT) — the lead said not to wait for B4
+
+The draft records B4 `unavailable at freeze` with the DEC-020 reason and the grammar `available`; no pending inputs, so no
+`--accept-unavailable` is needed. The command (yours):
+
+```bash
+cd /home/derp/cap/pc_cap && /home/derp/cap/venv/bin/python -m pccap.harness.freeze --final --i-am-the-lead \
+  --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800
+```
+
+Then tell the orchestrator (or commit `manifests/frozen.json`); the queue starts immediately:
+`python -m pccap.harness.schedule && python -m pccap.cli queue` (210 scheduled jobs, realization-major; B4's 30 listed
+unavailable and never run). If Codex's B4 diagnosis later yields a registrable B4, adding it needs a versioned manifest
+(plan 4 §2), not an edit of the frozen one.

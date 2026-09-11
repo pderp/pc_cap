@@ -84,6 +84,20 @@ def decision_text(dec_id: str) -> str:
     return ""
 
 
+def _arm_availability(dataset_ids: dict) -> dict:
+    """B4 is available only when the PC-10 result file records a pass in the DEC-020 form (b); otherwise the manifest
+    records why it is unavailable at freeze time. The grammar entry follows the grammar dataset id (GRAM-02)."""
+    pc10 = load(R / "S2" / "grace_jax" / "pc10.json", {})
+    if pc10.get("status") == "pass" and pc10.get("form") == "b":
+        b4 = "available: PC-10 form (b) passed (DEC-020; output-level parity, loss-trajectory values, sensitivity control reproduced)"
+    else:
+        b4 = ("unavailable at freeze: PC-10 gate unmet (DEC-020/SD-21) — outputs, NLL, keys, radii and labels match the reference at 40/40, "
+              f"element-wise values do not (status {pc10.get('status', 'absent')!r}); the sensitivity control did not reproduce the divergence class "
+              "(logs/grace_sensitivity_round3.md); the C2-vs-B4 contrast is not run this month (reduced programme, plan 4 §2 rule)")
+    gram = "available: replacement grammar bound (GRAM-01/02, DATA-06/07; provisional under PA-2 until 2026-09-11 23:59 ET)" if dataset_ids.get("grammar") else "unavailable until GRAM-02 (PA-2)"
+    return {"B4": b4, "grammar": gram}
+
+
 def build(draft: bool = True) -> tuple[dict, list[str]]:
     pending: list[str] = []
     snap = ROOT / ".." / "assets" / "models" / "gpt2"
@@ -176,7 +190,7 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
         "stream_lengths": {"zsre": sel.get("zsre"), "counterfact": sel.get("counterfact"), "grammar_train_count": sel.get("grammar"),
                            "c0_initial": 300, "source": "S2-07 projection (S4-02 confirms the scope before any confirmatory access)"},
         "arms": ["C0", "C1", "C2", "CR", "B0", "B1", "B3", "B4"],
-        "arm_availability": {"B4": "unavailable until S2-05 (GRACE, PA-6)", "grammar": "unavailable until GRAM-02 (PA-2)"},
+        "arm_availability": _arm_availability(dataset_ids),
         "contrasts": [["C2", "C1"], ["C2", "CR"], ["C2", "C0"], ["C2", "B3"], ["C2", "B4"]],
         "required_contrasts": [["C2", "C1"], ["C2", "CR"]],
         "primary_endpoint": "RET-GS", "margins": {"ret_gs": 0.02, "es": -0.02, "ls": -0.01},

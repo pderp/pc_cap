@@ -34,6 +34,11 @@ def build_parser() -> argparse.ArgumentParser:
     rep.add_argument("--stage", default=None)
     rep.add_argument("--final", action="store_true")
     sub.add_parser("status", help="regenerate docs/tasks/STATUS.md")
+    q = sub.add_parser("queue", help="S4-04: run the frozen confirmatory job list in order (resumable; stops on refusals)")
+    q.add_argument("--jobs", default=None)
+    q.add_argument("--stage", default="S4")
+    q.add_argument("--max-jobs", type=int, default=None)
+    q.add_argument("--dry-run", action="store_true")
     return ap
 
 
@@ -43,6 +48,11 @@ def main(argv: list[str] | None = None) -> int:
         from pccap.harness import status
 
         return status.main([])
+    if args.cmd == "queue":
+        from pccap.harness import execute
+
+        qargs = ["--stage", args.stage] + (["--jobs", args.jobs] if args.jobs else []) + (["--max-jobs", str(args.max_jobs)] if args.max_jobs is not None else []) + (["--dry-run"] if args.dry_run else [])
+        return execute.main(qargs)
     if args.cmd == "run":
         from pccap.harness import runner
 

@@ -515,3 +515,47 @@ def test_v3_note_duplicate_roots_and_duplicate_cells_are_not_merged(synthetic_ro
     dup = once + [dict(once[0], dir=once[0]["dir"] + "-copy")]  # two directories for one cell of one experiment
     with pytest.raises(ValueError, match="two run directories"):
         s4_05.views(dup)
+
+
+# ----------------------------------------------------------------------------- S4-04 queue executor
+def test_queue_executor_resumes_continues_on_failure_and_stops_on_refusal(synthetic_root, tmp_path):
+    from pccap.harness import execute
+
+    root, man = synthetic_root
+    fsha = hashlib.sha256((root / "manifests" / "frozen.json").read_bytes()).hexdigest()
+    jobs = [j for j in jobs_from_manifest(man) if j["dataset"] == "zsre" and j["realization"] == 0 and j["arm"] in ("C1", "C2")][:6]
+    assert len(jobs) == 6 and all(j["status"] == "scheduled" for j in jobs)
+    seen = {}
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = _writing_runner(seen)
+    codes = {}
+
+    def invoke(job):
+        key = (job["arm"], job["perm"])
+        if key in codes:
+            return codes[key]
+        return runner.main(_args(job, no_lease=True))
+
+    try:
+        # first session: two jobs, then the max-jobs bound
+        s1 = execute.run_queue(jobs, man, fsha, invoke, max_jobs=2, queue_log=tmp_path / "q.jsonl")
+        assert s1["ran"] == 2 and s1["ok"] == 2 and s1["stopped"].startswith("max_jobs")
+        # second session: the two completed jobs are skipped; a correctness failure (exit 1) is recorded and the queue continues;
+        # a refusal (exit 2) stops the queue
+        codes[("C1", 3)] = 1
+        codes[("C2", 0)] = 2
+        s2 = execute.run_queue(jobs, man, fsha, invoke, queue_log=tmp_path / "q.jsonl")
+        assert s2["skipped_done"] == 2 and s2["correctness_failure"] == 1 and s2["stopped"].startswith("exit 2")
+        assert [a["job"]["perm"] for a in s2["attempts"]] == [2, 3, 4, 0]  # C1 perms 2,3,4 then C2 perm 0 refused
+        lines = [json.loads(line) for line in (tmp_path / "q.jsonl").read_text().splitlines()]
+        assert len(lines) == 2 + 4 and lines[-1]["exit"] == 2
+        # stop file pauses at the next boundary; dry run touches nothing
+        (tmp_path / "stop").write_text("")
+        s3 = execute.run_queue(jobs, man, fsha, invoke, stop_file=tmp_path / "stop")
+        assert s3["ran"] == 0 and s3["stopped"].startswith("stop file")
+        s4 = execute.run_queue(jobs, man, fsha, invoke, dry_run=True)
+        assert s4["ran"] == 0 and all(a["exit"] is None for a in s4["attempts"]) and len(s4["attempts"]) == 2  # only the two unfinished jobs
+        cmd = execute.command_for(jobs[0])
+        assert cmd[1:3] == ["-m", "pccap.cli"] and "--mode" in cmd and "confirm" in cmd
+    finally:
+        runner.RUNNERS["S4"] = real
