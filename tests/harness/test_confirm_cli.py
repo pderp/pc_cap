@@ -209,3 +209,145 @@ def test_run_stream_resource_stop_and_ledger_reconciliation(tmp_path, monkeypatc
     accounted = sum(r["ledger_delta"]["update"]["total"] + r["ledger_delta"]["immediate_eval"]["total"] for r in rows) + sum(c["rescoring_accel_seconds"]["total"] for c in ck)
     assert abs(accounted - ledger.totals()["total"]["accel_seconds"]) < 1e-9
     assert rows[-1]["ledger_delta"]["cumulative"]["total"] <= ck[-1]["ledger_accel_seconds_at_checkpoint"]["total"]
+
+
+# ----------------------------------------------------------------------------- Lane V repairs (V-01..V-06)
+def _writing_runner(seen):
+    """Fake stage runner that writes the files the collectors read (metrics/items/checkpoints) without any model."""
+
+    def fake(ctx, rd):
+        cfg = ctx["config"]
+        seen[str(rd)] = cfg
+        items = [{"index": i, "item_id": f"{cfg['dataset']}-{cfg['realization']}-{i}", "es": 1.0, "gs": None, "answer_tokens": 2, "cost": {"accel_seconds": 0.1},
+                  "ledger_delta": {"update": {"total": 1.0, "learning": 1.0, "query": 0.0}, "immediate_eval": {"total": 9.0 if cfg["arm"] == "C2" else 0.0, "learning": 0.0, "query": 9.0 if cfg["arm"] == "C2" else 0.0},
+                                   "cumulative": {"total": 10.0 * (i + 1), "learning": 1.0 * (i + 1), "query": 9.0 * (i + 1)}}} for i in range(3)]
+        (rd / "items.jsonl").write_text("\n".join(json.dumps(x) for x in items) + "\n")
+        (rd / "checkpoints.json").write_text(json.dumps([{"tag": "end", "items": 3, "ret_es": 1.0, "ret_gs": 0.5, "ret_gs_n": 3, "locality": {"ls_complete_answer": 1.0},
+                                                          "rows": [{"item_id": x["item_id"], "ret_es": 1.0, "ret_gs": 0.5} for x in items],
+                                                          "ledger_accel_seconds_at_checkpoint": {"total": 31.0, "learning": 3.0, "query": 28.0}, "rescoring_accel_seconds": {"total": 1.0, "learning": 0.0, "query": 1.0}}]))
+        (rd / "metrics.json").write_text(json.dumps({"stage": "S4", "arm": cfg["arm"], "status": "complete", "config": {"dataset": cfg["dataset"], "realization": cfg["realization"], "perm": cfg["perm"], "experiment_id": cfg["experiment_id"]},
+                                                     "metrics": {"es_immediate": {"value": 1.0}}, "ledger_totals": {"total": {"accel_seconds": 31.0}}}))
+        return {"status": "complete"}
+
+    return fake
+
+
+def test_v01_no_backend_discovery_before_lease(synthetic_root, monkeypatch):
+    root, man = synthetic_root
+    order = []
+    import contextlib
+
+    @contextlib.contextmanager
+    def fake_lease(*a, **k):
+        order.append("lease_enter")
+        yield SimpleNamespace(report={})
+        order.append("lease_exit")
+
+    import pccap
+    import pccap.harness.lease as lease_mod
+
+    monkeypatch.setattr(lease_mod, "gpu_lease", fake_lease)
+    monkeypatch.setattr(pccap, "determinism_report", lambda: order.append("determinism_report") or {"x": 1})
+    monkeypatch.setattr(pccap, "assert_determinism", lambda: order.append("assert_determinism") or {"x": 1})
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = lambda ctx, rd: order.append("runner") or {"status": "complete"}
+    try:
+        job = {"arm": "C2", "realization": 0, "perm": 0, "manifest": "manifests/confirm/zsre_r0.json", "dataset": "zsre"}
+        assert runner.main(_args(job, no_lease=False)) == 0
+    finally:
+        runner.RUNNERS["S4"] = real
+    assert order.index("lease_enter") < order.index("assert_determinism") < order.index("runner") < order.index("lease_exit")
+    assert "determinism_report" not in order[: order.index("lease_enter") + 1]
+
+
+def test_v06_schedule_and_config_validation(synthetic_root):
+    root, man = synthetic_root
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = lambda ctx, rd: {"status": "complete"}
+    try:
+        job = {"arm": "C2", "realization": 0, "perm": 0, "manifest": "manifests/confirm/zsre_r0.json", "dataset": "zsre"}
+        assert runner.main(_args(job, perm=-1)) == 2
+        assert runner.main(_args(job, perm=5)) == 2
+        assert runner.main(_args(job, realization=3)) == 2
+        assert runner.main(_args(job, base="EPC")) == 2
+        assert runner.main(_args(job, read="g")) == 2
+        assert runner.main(_args(job, arm="ZZ")) == 2
+        # code drift: the frozen tree hash differs from the working tree → refused unless explicitly allowed
+        m2 = dict(man)
+        m2["code_commit"] = dict(man["code_commit"], src_tree_sha256="0" * 64)
+        (root / "manifests" / "frozen.json").write_text(json.dumps(m2, default=float))
+        assert runner.main(_args(job)) == 2
+        assert runner.main(_args(job, allow_code_drift=True)) == 0
+        (root / "manifests" / "frozen.json").write_text(json.dumps(man, default=float))
+    finally:
+        runner.RUNNERS["S4"] = real
+
+
+def test_v03_archived_attempts_are_not_collected_and_v05_update_time(synthetic_root):
+    from pccap.analysis.s4_05 import discover, views
+    from pccap.analysis.s4_06 import collect_rows
+
+    root, man = synthetic_root
+    seen = {}
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = _writing_runner(seen)
+    try:
+        for arm in ("C1", "C2", "CR"):
+            for r in range(3):
+                for o in range(5):
+                    assert runner.main(_args({"arm": arm, "realization": r, "perm": o, "manifest": f"manifests/confirm/zsre_r{r}.json", "dataset": "zsre"})) == 0
+        job = {"arm": "C2", "realization": 0, "perm": 0, "manifest": "manifests/confirm/zsre_r0.json", "dataset": "zsre"}
+        assert runner.main(_args(job, force=True)) == 0  # one forced rerun → an archived attempt exists
+    finally:
+        runner.RUNNERS["S4"] = real
+    exp = next(iter(seen.values()))["experiment_id"]
+    rows, notes = collect_rows(root / "results" / "S4", "zsre", exp)
+    keys = [(r["arm"], r["realization"], r["order"], r["item_id"]) for r in rows]
+    assert len(keys) == len(set(keys)) == 3 * 15 * 3  # no duplicate rows from the archived attempt
+    runs = discover([root / "results" / "S4"], exp)
+    assert len(runs) == 45
+    v = views(runs)
+    cc = v["comparable_compute"]["zsre/0/0"]
+    # V-05: C2 has 9 s of immediate evaluation per item, C1 none; update time is 1 s in both → comparable on update time
+    assert cc["C1"]["within_20pct_update"] and abs(cc["C1"]["ratio_to_C2_update"] - 1.0) < 1e-9
+    assert cc["C1"]["ratio_to_C2_update_plus_eval"] < 0.2
+    per = next(p for p in v["per_run"] if p["arm"] == "C2" and p["realization"] == 0 and p["perm"] == 0)
+    assert per["accel_seconds_total"] == 30.0  # from the cumulative ledger snapshot, not summed deltas
+
+
+def test_v04_stage_allowance_refuses_when_exceeded(synthetic_root):
+    root, man = synthetic_root
+    seen = {}
+    real = runner.RUNNERS.get("S4")
+    runner.RUNNERS["S4"] = _writing_runner(seen)
+    try:
+        m2 = json.loads(json.dumps(man, default=float))
+        m2["resource_rules"]["stage_allowance_seconds"] = {"S4": 40.0, "S5": None}
+        m2["resource_rules"]["run_allowance_seconds"] = 20.0
+        (root / "manifests" / "frozen.json").write_text(json.dumps(m2))
+        job = {"arm": "C1", "realization": 0, "perm": 0, "manifest": "manifests/confirm/counterfact_r0.json", "dataset": "counterfact"}
+        assert runner.main(_args(job)) == 0  # spent 0 + 20 ≤ 40
+        assert runner.main(_args(dict(job, perm=1))) == 5  # spent 31 + 20 > 40 → refused
+        cfg = json.loads((root / "results" / "S4" / next(iter(seen.values()))["experiment_id"] / "counterfact" / "C1" / "BP" / "h" / "0" / "0" / "config.json").read_text())
+        assert cfg["stage_allowance_enforced"] is True and cfg["run_allowance_seconds"] == 20.0
+        (root / "manifests" / "frozen.json").write_text(json.dumps(man, default=float))
+    finally:
+        runner.RUNNERS["S4"] = real
+
+
+def test_v02_s5_frozen_authority(synthetic_root, tmp_path):
+    from pccap.harness.stage_s5 import resolve_frozen_arm
+
+    root, man = synthetic_root
+    fz = json.loads(json.dumps(man, default=float))
+    with pytest.raises(ValueError):
+        resolve_frozen_arm({**fz, "substrate_arms": {}}, "SE-A")
+    with pytest.raises(ValueError):
+        resolve_frozen_arm({**fz, "calibration": {}}, "SB")
+    spec, b_m, radii, path = resolve_frozen_arm(fz, "SB")
+    assert spec["base"] == "BP" and set(b_m) == {1, 2, 3} and "zsre" in radii and path is None
+    if fz.get("base_checkpoints", {}).get("epc"):
+        bad = json.loads(json.dumps(fz))
+        bad["base_checkpoints"]["epc"]["sha256"] = "0" * 64
+        with pytest.raises(ValueError):
+            resolve_frozen_arm(bad, "SE-A")

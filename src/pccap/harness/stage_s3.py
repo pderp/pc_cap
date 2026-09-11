@@ -50,6 +50,8 @@ def run_s3(ctx: dict, run_dir: Path) -> dict:
     ds = man["dataset"]
     n = int(man.get("n_items", 100))
     ledger = Ledger()
+    if ds == "grammar":
+        return _run_s3_grammar(ctx, run_dir, ledger)
     base = BPBase(ledger=ledger)
     tok = GPT2Tokenizer()
     b_m, radii = calibration(ds)
@@ -74,3 +76,32 @@ def run_s3(ctx: dict, run_dir: Path) -> dict:
     metrics["config"] = {"A": budget.A, "radii": radii, "b_m": b_m, "dataset": ds, "n_items": n, "order_seed": int(man.get("order_seed", 100 + cfg["perm"]))}
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
     return {"base_hash_before": h_before, "base_hash_after": h_after, "status": metrics["status"]}
+
+
+def _run_s3_grammar(ctx: dict, run_dir: Path, ledger: Ledger) -> dict:
+    """Development grammar stream (S3-03): the trained replacement base, the task order of ``--perm`` for the
+    realization, single-token items with latent paraphrases (SD-20), locality prefixes and drift windows from the
+    base grammar, grammar calibration; the same run_stream and metrics as the editing streams."""
+    from pccap.fixtures.grammar_eval import grammar_context
+    from pccap.harness.arms import make_learner, router_for
+
+    cfg, man = ctx["config"], ctx["manifest"]
+    n_per_task = int(man.get("n_per_task", 16))
+    gc = grammar_context(int(cfg["realization"]), int(cfg["perm"]), n_per_task, locality=int(man.get("locality_prompts", 200)),
+                         drift_windows=int(man.get("drift_windows", 64)), ledger=ledger)
+    base = gc["base"]
+    b = man.get("budget", {})
+    budget = Budget(A=b.get("A", chosen_A()), epsilon=b.get("epsilon", 0.01), R=b.get("R", 5), tau_edit=b.get("tau_edit", 0.1))
+    learner = make_learner(cfg["arm"], base, ledger, radii=gc["radii"], bank_scales=gc["b_m"], read=cfg["read"], seed=int(man.get("seed", 0)) + cfg["realization"])
+    h_before = base.checksum()
+    ev = Evaluator(base, gc["tok"], gc["unrelated"], gc["drift"], drift_positions=len(gc["drift"]), drift_window=gc["drift_window"], max_new=gc["max_new"])
+    metrics = run_stream(learner, gc["items"], router_for(cfg["arm"]), budget, ev, run_dir, ledger, checkpoints=tuple(man.get("checkpoints", CHECKPOINTS)),
+                         seed=int(man.get("seed", 0)), arm=cfg["arm"])
+    h_after = base.checksum()
+    assert_frozen(h_before, h_after)
+    metrics["base_hash_before"], metrics["base_hash_after"] = h_before, h_after
+    metrics["config"] = {"A": budget.A, "radii": gc["radii"], "b_m": gc["b_m"], "dataset": "grammar", "n_items": len(gc["items"]), "n_per_task": n_per_task,
+                         "realization": cfg["realization"], "perm": cfg["perm"], "base": "GRAM", "weights": base.weights_label, "max_new": 1,
+                         "task_order": [int(it.strata["task"]) for it in gc["items"][::n_per_task]], "lm_drift_note": "drift on base-grammar sequences (the WikiText metric is unsupported for the grammar, E.2)"}
+    (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
+    return metrics

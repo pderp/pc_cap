@@ -29,11 +29,15 @@ from pccap.contracts import metric
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def load_runs(root: Path, dataset: str, arm: str) -> dict[tuple[int, int], dict]:
+def load_runs(root: Path, dataset: str, arm: str, experiment_id: str | None = None) -> dict[tuple[int, int], dict]:
     runs = {}
     for mp in sorted(root.rglob("metrics.json")):
+        if ".superseded-" in str(mp):
+            continue  # archived attempt (V-03): never collected
         d = mp.parent
         m = json.loads(mp.read_text())
+        if experiment_id is not None and m.get("config", {}).get("experiment_id") not in (experiment_id, None):
+            continue
         cfg = m.get("config", {})
         if cfg.get("dataset") != dataset or m.get("arm") != arm:
             continue

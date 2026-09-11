@@ -1,14 +1,14 @@
 # Task status board
 
-Regenerated 2026-09-10 23:37 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-11 00:21 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 59 |
+| done | 60 |
 | partial | 7 |
 | ready | 6 |
-| pending | 16 |
+| pending | 15 |
 
 GPU seconds charged to tasks so far: 45075
 
@@ -95,8 +95,8 @@ GPU seconds charged to tasks so far: 45075
 | S2-02 | Aggregate step screening | **done** | MEMORY+METRICS | S2-01 | lease | yes | orchestrator |  |  |
 | S2-03 | LoRA baselines B1 (and B0) | **done** | BASELINES | S0-09, S0-04 | short | yes | codex |  |  |
 | S2-04 | Replay baseline B3 | **done** | BASELINES | S2-03, S0-08 | short | no | codex |  |  |
-| S2-05a | GRACE reference environment and smoke (PA-6) | **done** | BASELINES | DATA-00 | none | no | codex |  | Source imports and six controls pass; predetermined smoke 5/5; shared generation cost recorded under S2-05b |
-| S2-05b | GRACE reference parity cases | **done** | BASELINES | S2-05a, S0-09 | none | no | codex |  | Twenty isolated and sequential reference cases generated; 63 artifacts verified; JAX adapter and PC-10 remain pending |
+| S2-05a | GRACE reference environment and smoke (PA-6) | **done** | BASELINES | DATA-00 | none | no | codex |  | GRACE CPU reference env + oracle; 6 controls; 5/5 smoke (mirrored by the orchestrator) |
+| S2-05b | GRACE reference parity cases | **done** | BASELINES | S2-05a, S0-09 | none | no | codex |  | 20 parity cases isolated+sequential, 63 hashed artifacts (mirrored) |
 | S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **ready** | BASELINES | S2-05b, S0-04 | short | yes |  |  |  |
 | HARN-BATCH | Batched cap-on evaluation with sequential-decoder parity (E.2 optimization) | **done** | INTEGRATOR | HARN-C2 | short | no | orchestrator |  |  |
 | S2-06 | Throughput profile | **done** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes | orchestrator |  |  |
@@ -111,7 +111,7 @@ GPU seconds charged to tasks so far: 45075
 | HARN-C2 | C2 probe binding and general stream runner (pccap run --stage S3, all cap arms) | **done** | INTEGRATOR | S0-10, S2-02 | short | no | orchestrator |  |  |
 | S3-01 | Full control suite and development run matrix | **pending** | INTEGRATOR | S0-11, DATA-03, CAP-07, S2-05, DATA-06 | short | yes |  |  |  |
 | S3-02 | Constructed fixture runs | **done** | MEMORY+DATA | S3-01 | short | no | orchestrator |  |  |
-| S3-03 | Learned grammar runs and tracing | **pending** | DATA+METRICS | S3-01, DATA-07 | lease | no |  |  |  |
+| S3-03 | Learned grammar runs and tracing | **done** | DATA+METRICS | S3-01, DATA-07 | lease | no | orchestrator |  |  |
 | S3-04 | Short editing checks | **done** | BASELINES+MEMORY | S3-01 | lease | no | orchestrator |  | cap arms done; baselines + second order pending |
 | S3-05 | CR distribution and re-profile | **done** | METRICS+INTEGRATOR | S3-02, S3-03, S3-04 | lease | yes | orchestrator |  |  |
 | S3-06 | D2 memo | **done** | INTEGRATOR | S3-05, S1-07 | none | yes | orchestrator |  |  |

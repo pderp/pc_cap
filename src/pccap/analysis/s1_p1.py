@@ -108,7 +108,15 @@ def main(argv=None) -> int:
             er = base.infer_errors(ids, None, iters=8)  # unclamped head: zero energy → errors stay zero
             gf = np.asarray(base.graph_forward(ids).logits)
             cons = max(cons, float(np.max(np.abs(ff - gf))), float(np.max(np.abs(np.asarray(er.energies)))))
-        # development edit-prompt pool: argmax agreement at the last prompt position and initially-correct fractions
+        # development edit-prompt pool: argmax agreement at the last prompt position and initially-correct fractions —
+        # first token (cheap) AND the complete greedy answer under the common decoder (E.2; R2-10)
+        from pccap.bases.bp import BPBase
+        from pccap.data.decode import greedy_decode_batch, score_generation
+        from pccap.data.tokenize import GPT2Tokenizer
+
+        tok_c = GPT2Tokenizer()
+        bp_base = BPBase(ledger=Ledger(), params_np=teacher_np)
+        ep_base = BPBase(ledger=Ledger(), params_np=student_np)
         fn = jax.jit(lambda p, i, n: g.last_logits_batch_jit(p, i, n, cfg))
         zs, _ = load_dev_items("zsre", args.dev_items, seed=0)
         cf, _ = load_dev_items("counterfact", args.dev_items, seed=0)
@@ -130,10 +138,19 @@ def main(argv=None) -> int:
                     correct["bp"] += cb
                     correct["epc"] += ce
                     correct["both_incorrect"] += (not cb and not ce)
+            prompts = [np.asarray(it.prompt_ids, np.int32) for it in items]
+            dec_bp = greedy_decode_batch(bp_base, prompts, tok_c)
+            dec_ep = greedy_decode_batch(ep_base, prompts, tok_c)
+            ok_bp = [score_generation(d, it.aliases)["value"] == 1.0 for d, it in zip(dec_bp, items)]
+            ok_ep = [score_generation(d, it.aliases)["value"] == 1.0 for d, it in zip(dec_ep, items)]
+            same_text = float(np.mean([a.text == b.text for a, b in zip(dec_bp, dec_ep)]))
             rows[ds] = {"n": len(items), "last_position_argmax_agreement": agree / len(items),
                         "initially_correct_first_token_fraction": {k: v / len(items) for k, v in correct.items() if k != "both_incorrect"},
                         "common_initially_incorrect_first_token_fraction": correct["both_incorrect"] / len(items),
-                        "note": "first answer token at the prompt's last position (the stream is BP-selected: teacher-incorrect by construction, DATA-01 E.2)"}
+                        "initially_correct_complete_answer_fraction": {"bp": float(np.mean(ok_bp)), "epc": float(np.mean(ok_ep))},
+                        "common_initially_incorrect_complete_answer_fraction": float(np.mean([not a and not b for a, b in zip(ok_bp, ok_ep)])),
+                        "complete_answer_text_agreement": same_text,
+                        "note": "complete greedy answer under the common decoder (32 tokens, newline/EOS stop, alias scoring) and, separately, the first answer token; the stream is BP-selected teacher-incorrect by construction (DATA-01 E.2)"}
         report = lease.report
     eligible = st["mean"] <= 1e-3 and st["nonfinite"] == 0  # R2-08: any non-finite KL position blocks eligibility
     out = {"stage": "S1", "property": "P1", "base": "EPC (regenerated, REG-02) vs BP teacher", "weights": args.epc_weights, "H": {"tokens_used": st["windows"] * L, "source": "DATA-04 H_tokens (SD-1)"},

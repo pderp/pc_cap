@@ -138,7 +138,9 @@ class Grammar:
         class-3 latent) while every other random draw stays identical — the counterfactual used by tracing
         (DATA-07): all rule-determined consequences of the latent change consistently."""
         rng = np.random.default_rng(seed)
-        override3 = (latent_override or {}).get("class3")
+        ov = (latent_override or {}).get("class3")
+        override3 = list(ov) if isinstance(ov, (list, tuple)) else ([int(ov)] if ov is not None else None)  # one value per copy chain (lag 6: one; lag 12: two)
+        n_fallback = 0
         toks = np.zeros(LENGTH, np.int64)
         content_hist: list[int] = []  # content tokens in order
         fired: list[tuple[int, str]] = []  # (position, kind) where a deterministic rule produced the token
@@ -151,7 +153,11 @@ class Grammar:
             if prev is None:
                 k = start_class
                 draw = int(rng.integers(CLASS_SIZE))
-                tok = class_tokens(k)[draw] if not (k == 3 and override3 is not None) else int(override3)
+                if k == 3 and override3 is not None:
+                    tok = int(override3[0])
+                    n_fallback += 1
+                else:
+                    tok = class_tokens(k)[draw]
                 kind_here = None
             else:
                 pk = class_of(prev)
@@ -168,7 +174,8 @@ class Grammar:
                         kind_here = "shared_2"
                     else:
                         draw = int(rng.integers(CLASS_SIZE))  # no antecedent yet: random, not a mechanism firing
-                        tok = class_tokens(3)[draw] if override3 is None else int(override3)
+                        tok = class_tokens(3)[draw] if override3 is None else int(override3[min(n_fallback, len(override3) - 1)])
+                        n_fallback += 1
                         kind_here = None
                 elif pk == 3:  # private: context-specific permutation on class 4
                     idx = self.perm_p[context][sw.private[context]][prev - CONTENT_BASE - 3 * CLASS_SIZE]

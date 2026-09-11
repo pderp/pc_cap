@@ -37,10 +37,11 @@ def jobs_from_manifest(man: dict) -> list[dict]:
                     status = "scheduled"
                     if arm in avail and "unavailable" in avail[arm]:
                         status = "unavailable"
-                    mpath = f"{man['confirm_dir']}/{ds}_r{r}.json" if ds != "grammar" else f"{man['confirm_dir']}/grammar.json"
-                    jobs.append({"stage": "S4", "dataset": ds, "arm": arm, "base": "BP", "read": "h", "realization": r, "perm": perm,
+                    mpath = f"{man['confirm_dir']}/{ds}_r{r}.json" if ds != "grammar" else "manifests/grammar/streams.json"
+                    base = "GRAM" if ds == "grammar" else "BP"
+                    jobs.append({"stage": "S4", "dataset": ds, "arm": arm, "base": base, "read": "h", "realization": r, "perm": perm,
                                  "order_seed": oseed, "n_items": n, "status": status, "manifest": mpath,
-                                 "cmd": f"pccap run --stage S4 --mode confirm --dataset {ds} --arm {arm} --base BP --read h --realization {r} --perm {perm} --manifest {mpath}"})
+                                 "cmd": f"pccap run --stage S4 --mode confirm --dataset {ds} --arm {arm} --base {base} --read h --realization {r} --perm {perm} --manifest {mpath}"})
     return jobs
 
 

@@ -1,0 +1,7 @@
+{
+ "status": "correctness_failure",
+ "exception": "FileNotFoundError",
+ "message": "grammar calibration missing: run pccap.fixtures.grammar_eval.calibrate_grammar()",
+ "item_id": null,
+ "traceback": "Traceback (most recent call last):\n  File \"/home/derp/cap/pc_cap/src/pccap/harness/runner.py\", line 235, in main\n    result = runner({\"config\": cfg, \"manifest\": manifest, \"frozen\": frozen_obj, \"run_dir\": rd}, rd)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/harness/stage_s3.py\", line 54, in run_s3\n    return _run_s3_grammar(ctx, run_dir, ledger)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/harness/stage_s3.py\", line 90, in _run_s3_grammar\n    gc = grammar_context(int(cfg[\"realization\"]), int(cfg[\"perm\"]), n_per_task, locality=int(man.get(\"locality_prompts\", 200)),\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/src/pccap/fixtures/grammar_eval.py\", line 148, in grammar_context\n    raise FileNotFoundError(\"grammar calibration missing: run pccap.fixtures.grammar_eval.calibrate_grammar()\")\nFileNotFoundError: grammar calibration missing: run pccap.fixtures.grammar_eval.calibrate_grammar()\n"
+}

@@ -22,6 +22,7 @@ from pathlib import Path
 
 import jsonschema
 
+from pccap import ASSETS_ROOT
 from pccap.cap.memory import b_cap, bank_ceilings, capacity, slot_bytes
 from pccap.harness.schema import MANIFEST_FROZEN
 
@@ -100,6 +101,15 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
             dataset_ids[name.split("_")[0]][name] = h
     else:
         pending.append("dataset_ids (DATA-02 SHA256SUMS missing)")
+    gram = {}
+    for f in (M / "grammar" / "generator.json", M / "grammar" / "streams.json", M / "grammar" / "tracing.json"):
+        if f.exists():
+            gram[f.name] = sha(f)
+    gw = Path(ASSETS_ROOT) / "models" / "grammar" / "grammar_base.npz"
+    if gw.exists():
+        gram["grammar_base.npz"] = sha(gw)
+    if "streams.json" in gram and "grammar_base.npz" in gram:
+        dataset_ids["grammar"] = gram
     if dataset_ids["grammar"] is None:
         pending.append("dataset_ids.grammar (GRAM-02 / DATA-06)")
     if cr is None:
@@ -126,6 +136,24 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
     if chosen_lr is None:
         pending.append("lora.lr (development screen {3e-5, 1e-4, 3e-4} incomplete)")
     sel = proj.get("selected") or {}
+    calibration = {}
+    for label, suffix in (("BP", ""), ("EPC", "_EPC"), ("GRAM", "_GRAM")):
+        rc, rs = R / "S2" / f"radius_calibration{suffix}.json", R / "S2" / f"residual_scales{suffix}.json"
+        if rc.exists() and rs.exists():
+            rcj, rsj = load(rc), load(rs)
+            calibration[label] = {"radii": {ds: {m: rcj["per_dataset"][ds][m]["radius"] for m in ("1", "2", "3")} for ds in rcj["per_dataset"]},
+                                  "b_m": rsj["pooled_b_m"], "sources": {rc.name: sha(rc), rs.name: sha(rs)}}
+    if "EPC" not in calibration:
+        pending.append("calibration.EPC (S5-01 ePC calibration)")
+    if "GRAM" not in calibration:
+        pending.append("calibration.GRAM (grammar calibration, SD-20)")
+    bp_digest = None
+    try:
+        from pccap.bases.bp import BPBase
+
+        bp_digest = BPBase().checksum(recompute=False)  # digest of the loaded parameter arrays (what S4 compares)
+    except Exception as e:  # pragma: no cover
+        pending.append(f"base_checkpoints.bp.param_digest ({e})")
     man = {
         "name": "frozen-confirmatory-v1" + ("-draft" if draft else ""), "mode": "confirm", "stage": "S4", "seed": 0,
         "frozen_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()) if not draft else None, "draft": draft,
@@ -133,7 +161,8 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
                         "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"},
         "env_lock_sha": sha(ROOT / "requirements.lock") if (ROOT / "requirements.lock").exists() else None,
         "pdf_sha": sha(ROOT / "docs" / "pc_cap_month_plan_readable.pdf"),
-        "base_checkpoints": {"bp": {"snapshot": snap.name, "safetensors_sha256": datasets.get("gpt2", {}).get("files", {}).get("models/gpt2/model.safetensors")}, "epc": epc_ck},
+        "base_checkpoints": {"bp": {"snapshot": snap.name, "safetensors_sha256": datasets.get("gpt2", {}).get("files", {}).get("models/gpt2/model.safetensors"), "param_digest": bp_digest}, "epc": epc_ck},
+        "calibration": calibration,
         "tokenizer_rev": {"snapshot_revision": "607a30d7", "tokenizer_json_sha256": datasets.get("gpt2", {}).get("files", {}).get("models/gpt2/tokenizer.json")},
         "bank_sites": {"1": 3, "2": 7, "3": 11},
         "radii": {"bank": screening.get("radii_per_dataset"), "read": "h", "rule": "SD-17: per dataset, shared across arms; CounterFact exact keys (0.0)"},
@@ -157,7 +186,9 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
                              "manifest_sha256": sha(M / "dev" / "challenges.json") if (M / "dev" / "challenges.json").exists() else None,
                              "rule": "challenge sets are disjoint from development and confirmation streams and are evaluated and reported separately; they never enter the primary endpoint; the correction track alone enables RevisionEvent slot retirement (SD-4)"},
         "resource_rules": {"headroom": 0.25, "kappa": kappa["kappa"], "kappa_band": kappa["kappa_band"], "kappa_status": kappa["status"],
-                           "run_allowance_seconds": None, "run_allowance_note": "S4-02 sets the per-run accelerator allowance from the priced scope; None = no per-run stop (stage ceiling only)",
+                           "run_allowance_seconds": None, "stage_allowance_seconds": {"S4": None, "S5": None},
+                           "allowance_note": "S4-02 sets run_allowance_seconds and stage_allowance_seconds from the priced scope BEFORE the freeze is written; None means NOT ENFORCED at run time (recorded in every run's config as stage_allowance_enforced=false), not a stage ceiling",
+                           "stop_policy": "the per-run allowance is checked at item boundaries (before starting an item and after committing and evaluating it); an update in flight is never interrupted, so the overshoot is at most one item's update + immediate evaluation and is disclosed in the run's ledger; a mid-item exception restores the pre-item learner state (ItemGuard) and its cost stays charged; the endpoint rescoring is reserved: it always runs after a resource stop and is charged separately (checkpoints.json rescoring_accel_seconds); the completed prefix is exact",
                            "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation"},
         "analysis_code_commit": {"git_head": git("rev-parse", "HEAD"), "analysis_tree_sha256": tree_sha(ROOT / "src" / "pccap" / "analysis")},
         "negative_case_interpretation": decision_text("DEC-009"),

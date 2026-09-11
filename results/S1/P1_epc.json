@@ -4,47 +4,47 @@
  "base": "EPC (regenerated, REG-02) vs BP teacher",
  "weights": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
  "H": {
-  "tokens_used": 1999872,
+  "tokens_used": 199680,
   "source": "DATA-04 H_tokens (SD-1)"
  },
  "metrics": {
   "kl_mean": {
-   "value": 2.9230592777653206e-05,
+   "value": 2.8745781319197495e-05,
    "status": "ok",
    "units": "nats",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "kl_p95": {
-   "value": 9.306735591962928e-05,
+   "value": 9.158861939795315e-05,
    "status": "ok",
    "units": "nats",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "kl_p99": {
-   "value": 0.0002444585532066413,
+   "value": 0.00023728611995466032,
    "status": "ok",
    "units": "nats",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "kl_max_finite": {
-   "value": 0.1161019504070282,
+   "value": 0.021534064784646034,
    "status": "ok",
    "units": "nats",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
@@ -59,62 +59,62 @@
    "exclusions": []
   },
   "teacher_argmax_accuracy_H": {
-   "value": 0.35985478505629476,
+   "value": 0.3582240513392857,
    "status": "ok",
    "units": "fraction",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "student_argmax_accuracy_H": {
-   "value": 0.36005169683981575,
+   "value": 0.3583984375,
    "status": "ok",
    "units": "fraction",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "argmax_agreement_H": {
-   "value": 0.9964915717758445,
+   "value": 0.9963926977040817,
    "status": "ok",
    "units": "fraction",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "teacher_nll_H": {
-   "value": 3.5702249383975198,
+   "value": 3.5836520413963164,
    "status": "ok",
    "units": "nats",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "student_nll_H": {
-   "value": 3.5697239523900324,
+   "value": 3.583148484327355,
    "status": "ok",
    "units": "nats",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   },
   "kd_beta2_x4_mean_H": {
-   "value": 5.549240603136171e-05,
+   "value": 4.9637131751853526e-05,
    "status": "ok",
    "units": "nats(beta=2, x4)",
    "numerator": null,
    "denominator": null,
-   "n": 1999872,
+   "n": 199680,
    "strata": {},
    "exclusions": []
   }
@@ -128,7 +128,13 @@
     "epc": 0.0
    },
    "common_initially_incorrect_first_token_fraction": 1.0,
-   "note": "first answer token at the prompt's last position (the stream is BP-selected: teacher-incorrect by construction, DATA-01 E.2)"
+   "initially_correct_complete_answer_fraction": {
+    "bp": 0.0,
+    "epc": 0.0
+   },
+   "common_initially_incorrect_complete_answer_fraction": 1.0,
+   "complete_answer_text_agreement": 1.0,
+   "note": "complete greedy answer under the common decoder (32 tokens, newline/EOS stop, alias scoring) and, separately, the first answer token; the stream is BP-selected teacher-incorrect by construction (DATA-01 E.2)"
   },
   "counterfact": {
    "n": 262,
@@ -138,7 +144,13 @@
     "epc": 0.003816793893129771
    },
    "common_initially_incorrect_first_token_fraction": 0.9961832061068703,
-   "note": "first answer token at the prompt's last position (the stream is BP-selected: teacher-incorrect by construction, DATA-01 E.2)"
+   "initially_correct_complete_answer_fraction": {
+    "bp": 0.0,
+    "epc": 0.0
+   },
+   "common_initially_incorrect_complete_answer_fraction": 1.0,
+   "complete_answer_text_agreement": 0.9770992366412213,
+   "note": "complete greedy answer under the common decoder (32 tokens, newline/EOS stop, alias scoring) and, separately, the first answer token; the stream is BP-selected teacher-incorrect by construction (DATA-01 E.2)"
   }
  },
  "nonfinite_positions": 0,
@@ -146,8 +158,8 @@
   "sibling_terminal_fidelity_kl": 0.000124,
   "sibling_scaling": "kd_kl_loss at temperature 2 times beta^2 = 4 (OWT-unseen, 409,600 positions)",
   "pdf_inherited_figure": 3e-05,
-  "ours_beta1_mean": 2.9230592777653206e-05,
-  "ours_beta2_x4_mean": 5.549240603136171e-05,
+  "ours_beta1_mean": 2.8745781319197495e-05,
+  "ours_beta2_x4_mean": 4.9637131751853526e-05,
   "note": "the regenerated checkpoint is a new run (PA-1); its OWT-tail figures are in results/REG/preflight.json"
  },
  "eligibility": {
@@ -155,9 +167,9 @@
   "rule": "mean KL <= 1e-3 on H and zero non-finite positions (both bases; the BP row is the teacher against itself = 0)"
  },
  "lease": {
-  "waited_seconds": 5.4836273193359375e-06,
-  "started": "2026-09-10T23:24:40Z",
-  "finished": "2026-09-10T23:26:14Z"
+  "waited_seconds": 5.0067901611328125e-06,
+  "started": "2026-09-11T00:07:47Z",
+  "finished": "2026-09-11T00:09:06Z"
  },
- "seconds": 94.1838731765747
+ "seconds": 78.67427730560303
 }

@@ -57,6 +57,19 @@ $P scripts/merge_throughput.py results/S2/throughput_baselines.json ; $P -m pcca
 $P -m pccap.cli run --stage S3 --arm C2 --manifest manifests/dev/s3_smoke.json        # one development stream
 ```
 
+## 5b. Replacement grammar (GRAM-01/02, DATA-06/07, S3-03) — CPU
+
+```bash
+JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_generator                # [verified] manifests/grammar/generator.json (rule tables, sample hash)
+JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_model --steps 3000 --no-lease   # [verified] trains the base (~10 s), assets/models/grammar/grammar_base.npz
+JAX_PLATFORMS=cpu $P scripts/grammar_competence.py                       # [verified] results/GRAM/competence.json
+JAX_PLATFORMS=cpu $P -m pccap.data.grammar_streams                       # [verified] manifests/grammar/streams.json
+JAX_PLATFORMS=cpu $P -m pccap.fixtures.tracing                           # [verified] manifests/grammar/tracing.json, results/GRAM/tracing.json
+JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_eval                      # [verified] grammar calibration (SD-20: exact keys)
+JAX_PLATFORMS=cpu $P -m pccap.cli run --stage S3 --arm C2 --dataset grammar --manifest manifests/dev/s3_grammar_dev.json --no-lease   # [verified] one development run
+JAX_PLATFORMS=cpu $P -m pccap.analysis.s3_03                             # [verified] results/S3/grammar_dev_matrix.md (matrix + routing vs tracing)
+```
+
 ## 6. Freeze and confirmatory runs (S4)
 
 ```bash

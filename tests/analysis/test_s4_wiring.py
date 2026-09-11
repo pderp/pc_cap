@@ -75,7 +75,7 @@ def test_resource_views(synthetic_tree):
     v = views(runs)
     key = "zsre/0/0"
     assert "C2-C1" in v["longest_common_prefix"][key] and v["longest_common_prefix"][key]["C2-C1"] == 100
-    assert v["comparable_compute"][key]["C2"]["within_20pct"]
+    assert v["comparable_compute"][key]["C2"]["within_20pct_update"]
     shutil.rmtree(synthetic_tree, ignore_errors=True)
 
 

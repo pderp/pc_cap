@@ -1,0 +1,221 @@
+{
+ "stage": "S3",
+ "arm": "C0",
+ "base": "GRAM",
+ "status": "complete",
+ "items_completed": 128,
+ "items_planned": 128,
+ "metrics": {
+  "es_immediate": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.234375,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.234375,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4032,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4032,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 150528.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "1": 128
+  }
+ },
+ "base_hash_before": "9e4a9750fb688dc5726d336adc840c4274a34585f6de5500cd44493d07074a72",
+ "base_hash_after": "9e4a9750fb688dc5726d336adc840c4274a34585f6de5500cd44493d07074a72",
+ "wall_seconds": 22.797876596450806,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 24080,
+   "partial_forwards": 1920,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 7.040066524641588,
+   "accel_seconds": 7.040066524641588,
+   "peak_mem_mib": 0.0,
+   "tokens": 973410
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 4512,
+   "partial_forwards": 3616,
+   "reverses": 640,
+   "settle_iters": 0,
+   "prefix_microsteps": 640,
+   "router_probes": 0,
+   "search_candidates": 2560,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 5.107891356921755,
+   "accel_seconds": 5.107891356921755,
+   "peak_mem_mib": 0.0,
+   "tokens": 457233
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 28592,
+   "partial_forwards": 5536,
+   "reverses": 640,
+   "settle_iters": 0,
+   "prefix_microsteps": 640,
+   "router_probes": 0,
+   "search_candidates": 2560,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 12.147957881563343,
+   "accel_seconds": 12.147957881563343,
+   "peak_mem_mib": 0.0,
+   "tokens": 1430643
+  },
+  "events": 9681,
+  "elapsed_wall_seconds": 24.586458921432495,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": null,
+ "config": {
+  "A": 0.3,
+  "radii": {
+   "1": 0.0,
+   "2": 0.0,
+   "3": 0.0
+  },
+  "b_m": {
+   "1": 0.8106860518455505,
+   "2": 1.0737923979759216,
+   "3": 1.7046843767166138
+  },
+  "dataset": "grammar",
+  "n_items": 128,
+  "n_per_task": 16,
+  "realization": 0,
+  "perm": 1,
+  "base": "GRAM",
+  "weights": "/home/derp/cap/assets/models/grammar/grammar_base.npz",
+  "max_new": 1,
+  "task_order": [
+   4,
+   0,
+   6,
+   5,
+   7,
+   3,
+   2,
+   1
+  ],
+  "lm_drift_note": "drift on base-grammar sequences (the WikiText metric is unsupported for the grammar, E.2)"
+ }
+}

@@ -6,9 +6,9 @@
  "frozen_at": null,
  "draft": true,
  "code_commit": {
-  "git_head": "7e1afefbc0a2b4c3d4c6063329345453492db503",
+  "git_head": "25c988b850371576975df6cd7d80267ca3476a23",
   "dirty": true,
-  "src_tree_sha256": "ebef9553a62ce7d25198f311a1ae4401be82ad8f38b58cf3915eb5a2bd63b890",
+  "src_tree_sha256": "7b1ef9e267735ba9617d82ce061fcbbdcdf5043bc31339a7e213eac1a0245794",
   "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"
  },
  "env_lock_sha": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
@@ -16,12 +16,79 @@
  "base_checkpoints": {
   "bp": {
    "snapshot": "gpt2",
-   "safetensors_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707"
+   "safetensors_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+   "param_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
   },
   "epc": {
    "path": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
    "sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51",
    "provenance": "REG-02 (JAX re-implementation, DEC-014/015; REG-00 float32 fix)"
+  }
+ },
+ "calibration": {
+  "BP": {
+   "radii": {
+    "zsre": {
+     "1": 0.2808128833770752,
+     "2": 0.4143741011619568,
+     "3": 0.18857809603214265
+    },
+    "counterfact": {
+     "1": 0.0,
+     "2": 0.0,
+     "3": 0.0
+    }
+   },
+   "b_m": {
+    "1": 70.70187377929688,
+    "2": 106.5766658782959,
+    "3": 425.5740661621094
+   },
+   "sources": {
+    "radius_calibration.json": "5be5f371cb47990256331991a46e8639a2db4c675893688ac7d671dd19d88551",
+    "residual_scales.json": "b901d4c02a076b00f4fa036dac2356e6015192cebf2dcfed6a483a64ddcd735c"
+   }
+  },
+  "EPC": {
+   "radii": {
+    "zsre": {
+     "1": 0.2807123899459839,
+     "2": 0.414623761177063,
+     "3": 0.18841182291507722
+    },
+    "counterfact": {
+     "1": 0.0,
+     "2": 0.0,
+     "3": 0.0
+    }
+   },
+   "b_m": {
+    "1": 70.72388458251953,
+    "2": 106.60531616210938,
+    "3": 425.7003860473633
+   },
+   "sources": {
+    "radius_calibration_EPC.json": "431b499b46f83171bba6faeeed433e1743d22ca7d8369dea54bba5b5b5080334",
+    "residual_scales_EPC.json": "71d57762738d76fe2a9b9252edcc21282480fae0367bf7520a48df764be99d41"
+   }
+  },
+  "GRAM": {
+   "radii": {
+    "grammar": {
+     "1": 0.0,
+     "2": 0.0,
+     "3": 0.0
+    }
+   },
+   "b_m": {
+    "1": 0.8106860518455505,
+    "2": 1.0737923979759216,
+    "3": 1.7046843767166138
+   },
+   "sources": {
+    "radius_calibration_GRAM.json": "7a7716d67e245b8c73f347f9a821c47eaeddcfda31582de8a5999b824169300e",
+    "residual_scales_GRAM.json": "f6ec7e1aa30b84331a6c898ca66ad96d149cd7c17cd1e0b7daf0eec5ac4c951c"
+   }
   }
  },
  "tokenizer_rev": {
@@ -109,7 +176,12 @@
    "counterfact_r1.json": "3a20a1704ed42dcaf12adb2a7619b79a2c3067871226118e086ba568013d652d",
    "counterfact_r2.json": "ddf444b5e02dabd67634b2a1a73140f39fb7ece23a45275a79f5c6a8ee3d7fb4"
   },
-  "grammar": null
+  "grammar": {
+   "generator.json": "2b6d1cbdf9da094ea62213d5a94e497031bf3550584ae4724fb37ea1ea0daed2",
+   "streams.json": "9c6957928444401b05496c737f405936c7e03914717bb4a4c1b03ac98673ef51",
+   "tracing.json": "a588059ead5c0fccab594193323100e65bc1fe0bf926c582214fa313817623ef",
+   "grammar_base.npz": "23fbc42b127ce1b44b83ca368e0cbcb8e413f768b7c8d6d11aacfd217f4167d5"
+  }
  },
  "confirm_dir": "manifests/confirm",
  "realizations": [
@@ -216,12 +288,17 @@
   ],
   "kappa_status": "provisional",
   "run_allowance_seconds": null,
-  "run_allowance_note": "S4-02 sets the per-run accelerator allowance from the priced scope; None = no per-run stop (stage ceiling only)",
+  "stage_allowance_seconds": {
+   "S4": null,
+   "S5": null
+  },
+  "allowance_note": "S4-02 sets run_allowance_seconds and stage_allowance_seconds from the priced scope BEFORE the freeze is written; None means NOT ENFORCED at run time (recorded in every run's config as stage_allowance_enforced=false), not a stage ceiling",
+  "stop_policy": "the per-run allowance is checked at item boundaries (before starting an item and after committing and evaluating it); an update in flight is never interrupted, so the overshoot is at most one item's update + immediate evaluation and is disclosed in the run's ledger; a mid-item exception restores the pre-item learner state (ItemGuard) and its cost stays charged; the endpoint rescoring is reserved: it always runs after a resource stop and is charged separately (checkpoints.json rescoring_accel_seconds); the completed prefix is exact",
   "stop_boundary": "a run stops at an item boundary when its ledger exceeds the allowance; the incomplete item is rolled back (ItemGuard) and its cost kept; status resource_stop with the exact completed prefix; no imputation"
  },
  "analysis_code_commit": {
-  "git_head": "7e1afefbc0a2b4c3d4c6063329345453492db503",
-  "analysis_tree_sha256": "cd2a5f3b0a34af7a0dcff60e76566bee5de1692387dbb4c2cda00d6dbc9c8332"
+  "git_head": "25c988b850371576975df6cd7d80267ca3476a23",
+  "analysis_tree_sha256": "d381f20164cc56d6da0f623d063a707cdbecb3cf0a33f2844f7076c82463a8b0"
  },
  "negative_case_interpretation": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
  "classification_policy": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
@@ -346,6 +423,13 @@
    "readings": "(a) re-seal per-scope manifests; (b) keep the sealed payloads and define the selected subset once per realization, filtering every committed order to it.",
    "resolution": "(b): `pccap.data.selection` \u2014 subset = first n of the realization's canonical list; each order = the committed permutation filtered to that subset; an arm with a smaller scope (C0 at 300) edits the first n_arm items of the same filtered order, so it pairs with the other arms' 300-item checkpoint. The rule text is in the frozen manifest (`selection_rule`); execution (S4/S5), the expected inventory (S4-06) and S7 call the same helper.",
    "status": "committed (2026-09-10)"
+  },
+  {
+   "id": "SD-20",
+   "issue": "The grammar has no paraphrases (one designated position per sequence), yet the primary endpoint is RET-GS and the radius calibration needs paraphrase keys.",
+   "readings": "(a) treat the grammar as an ES/RET-ES-only stream; (b) define grammar paraphrases from the generator's latents.",
+   "resolution": "(b): a paraphrase of a grammar item = another sequence of the same context with the same latent (class-3 value regenerated through `latent_override`) and the same mechanism kind at its designated position, hence the same forced target (`pccap.fixtures.grammar_eval.paraphrase_prefixes`; two per item); GS/RET-GS and the S2-01 calibration then apply unchanged. Outcome on the trained replacement base with R-h keys: no positive radius meets the 1% false-fire criterion (coverage \u2264 2% below it), so the grammar runs with exact keys like CounterFact (CR-4): retrieval generalization on the grammar is a floor, not a contrast; the routing contrasts read RET-ES and the held-out combinations.",
+   "status": "committed (2026-09-10)"
   }
  ],
  "lora": {
@@ -461,7 +545,5 @@
   "DEC-019"
  ],
  "selection_rule": "subset = first n items of the realization's canonical item list; each committed order is filtered to that subset (relative order preserved); an arm with scope n_arm <= n edits the first n_arm items of the filtered order",
- "pending": [
-  "dataset_ids.grammar (GRAM-02 / DATA-06)"
- ]
+ "pending": []
 }

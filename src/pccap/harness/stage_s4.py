@@ -40,11 +40,49 @@ def _items_from(records: list[dict]) -> list[EditItem]:
     return out
 
 
+def _run_s4_grammar(ctx: dict, run_dir: Path, frozen: dict) -> dict:
+    """Confirmatory grammar stream: items are seed-addressed from the frozen ``manifests/grammar/streams.json``
+    (bound in ``dataset_ids.grammar``); the order for ``--perm`` is the committed task order of the realization;
+    per-task count = ``stream_lengths.grammar_train_count``."""
+    from pccap.fixtures.grammar_eval import grammar_context
+    from pccap.harness.arms import make_learner, router_for
+
+    cfg = ctx["config"]
+    r, perm, arm = int(cfg["realization"]), int(cfg["perm"]), cfg["arm"]
+    n_per_task = int(frozen["stream_lengths"]["grammar_train_count"])
+    ledger = Ledger()
+    gc = grammar_context(r, perm, n_per_task, ledger=ledger)
+    base = gc["base"]
+    budget = Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
+    cal = (frozen.get("calibration") or {}).get("GRAM")
+    radii = {int(m): float(v) for m, v in cal["radii"]["grammar"].items()} if cal else gc["radii"]
+    b_m = {int(m): float(v) for m, v in cal["b_m"].items()} if cal else gc["b_m"]
+    seed = 1000 * r + 10 * perm
+    learner = make_learner(arm, base, ledger, radii=radii, bank_scales=b_m, read=frozen["radii"]["read"], seed=seed)
+    cr = (frozen.get("cr_distribution") or {}).get("grammar")
+    router = router_for(arm, cr_distribution=cr, cr_label="cr_frozen_grammar" if cr else "cr_profile_uniform")
+    h_before = base.checksum()
+    ev = Evaluator(base, gc["tok"], gc["unrelated"], gc["drift"], drift_positions=len(gc["drift"]), drift_window=gc["drift_window"], max_new=1)
+    allowance = (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
+    metrics = run_stream(learner, gc["items"], router, budget, ev, run_dir, ledger, checkpoints=tuple(frozen["checkpoints"]), seed=seed + 1, arm=arm,
+                         resource_stop_seconds=allowance)
+    h_after = base.checksum()
+    assert_frozen(h_before, h_after)
+    metrics["base_hash_before"], metrics["base_hash_after"] = h_before, h_after
+    metrics["config"] = {"dataset": "grammar", "realization": r, "perm": perm, "n_items": len(gc["items"]), "n_per_task": n_per_task, "base": "GRAM",
+                         "weights": base.weights_label, "A": budget.A, "radii": radii, "b_m": b_m, "frozen_sha256": cfg.get("frozen_manifest_sha256"),
+                         "realization_sha256": cfg.get("manifest_sha256"), "experiment_id": cfg.get("experiment_id"), "max_new": 1}
+    (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
+    return metrics
+
+
 def run_s4(ctx: dict, run_dir: Path) -> dict:
     from pccap.data.confirm import load as load_confirm
 
     cfg = ctx["config"]
     frozen = ctx.get("frozen") or json.loads((ROOT / "manifests" / "frozen.json").read_text())
+    if cfg.get("dataset") == "grammar":
+        return _run_s4_grammar(ctx, run_dir, frozen)
     man = load_confirm(Path(cfg["manifest"]), frozen=ROOT / "manifests" / "frozen.json")  # the only reader of sealed items
     ds, r, perm = man["dataset"], int(man["realization"]), int(cfg["perm"])
     if ds != cfg.get("dataset") or r != int(cfg["realization"]):

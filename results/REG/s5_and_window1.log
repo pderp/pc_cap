@@ -38,3 +38,35 @@ complete: /home/derp/cap/pc_cap/results/S5/dev/zsre/SB/BP/h/0/0
 2026-09-10T23:37:17Z STEP smoke-SE-A
 complete: /home/derp/cap/pc_cap/results/S5/dev/zsre/SE-A/BP/h/0/0
 2026-09-10T23:38:22Z STEP smoke-SE-E
+complete: /home/derp/cap/pc_cap/results/S5/dev/zsre/SE-E/BP/h/0/0
+2026-09-10T23:39:50Z S5_PREP_DONE
+2026-09-10T23:39:50Z STEP gpu-tests
+2026-09-10T23:42:17Z STEP reprofile-caps
+C0 zsre: learn 0.080 s/edit, query 0.324 s/edit, wall 0.76 s/edit, ES 0.99 RET-GS 0.43
+C0 counterfact: learn 0.033 s/edit, query 0.787 s/edit, wall 1.39 s/edit, ES 1.00 RET-GS 0.0
+C1 zsre: learn 0.305 s/edit, query 0.351 s/edit, wall 1.15 s/edit, ES 1.00 RET-GS 0.31
+C1 counterfact: learn 0.135 s/edit, query 0.180 s/edit, wall 0.84 s/edit, ES 1.00 RET-GS 0.0
+C2 zsre: learn 0.095 s/edit, query 0.122 s/edit, wall 0.54 s/edit, ES 0.99 RET-GS 0.3
+C2 counterfact: learn 0.045 s/edit, query 0.153 s/edit, wall 0.65 s/edit, ES 1.00 RET-GS 0.0
+CR zsre: learn 0.067 s/edit, query 0.111 s/edit, wall 0.47 s/edit, ES 1.00 RET-GS 0.38
+CR counterfact: learn 0.033 s/edit, query 0.154 s/edit, wall 0.63 s/edit, ES 1.00 RET-GS 0.0
+2026-09-10T23:54:26Z STEP reprofile-baselines
+B0 zsre: learn 0.000 s/edit, query 0.090 s/edit, wall 0.10 s/edit, ES 0.00 RET-GS 0.0
+B0 counterfact: learn 0.000 s/edit, query 0.566 s/edit, wall 0.58 s/edit, ES 0.00 RET-GS 0.0
+B1 zsre: learn 0.102 s/edit, query 0.563 s/edit, wall 0.72 s/edit, ES 0.08 RET-GS 0.15
+B1 counterfact: learn 0.061 s/edit, query 0.148 s/edit, wall 0.23 s/edit, ES 0.08 RET-GS 0.055
+B3 zsre: learn 0.092 s/edit, query 0.150 s/edit, wall 0.27 s/edit, ES 0.10 RET-GS 0.13
+B3 counterfact: learn 0.065 s/edit, query 0.089 s/edit, wall 0.17 s/edit, ES 0.07 RET-GS 0.065
+2026-09-10T23:59:11Z STEP merge
+merged ['C0/counterfact', 'C0/zsre', 'C1/counterfact', 'C1/zsre', 'C2/counterfact', 'C2/zsre', 'CR/counterfact', 'CR/zsre'] unavailable now {'B4': 'S2-05 pending', 'EPC_credit': 'REG-03 pending', 'grammar': 'GRAM-02 pending'}
+merged ['B0/counterfact', 'B0/zsre', 'B1/counterfact', 'B1/zsre', 'B3/counterfact', 'B3/zsre'] unavailable now {'B4': 'S2-05 pending', 'EPC_credit': 'REG-03 pending', 'grammar': 'GRAM-02 pending'}
+2026-09-10T23:59:11Z STEP refresh
+selected {'zsre': 1000, 'counterfact': 300, 'grammar': 10000, 'seconds': 73916.4412607043} wall hours 21.5
+22 runs summarized -> /home/derp/cap/pc_cap/results/S3/short_editing.md
+wrote /home/derp/cap/pc_cap/docs/D2_decision.md
+wrote /home/derp/cap/pc_cap/manifests/frozen.draft.json
+schema errors: none
+pending inputs: ['dataset_ids.grammar (GRAM-02 / DATA-06)']
+2026-09-10T23:59:13Z STEP views
+14 runs -> results/S3/resource_views_dev_v2.json
+2026-09-10T23:59:13Z WINDOW1_DONE

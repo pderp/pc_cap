@@ -29,5 +29,5 @@ Applicability: PC-8 label isolation for R-g/R-e keys applies only once CAP-08 ex
 - Realization: development pools (`manifests/dev/{zsre,counterfact}_dev.json`, seed 13), one realization.
 - Orders: two (order seeds 100 and 101 via `--perm 0/1`), 100 items per dataset per arm (S3-04), all four routing arms C0/C1/C2/CR; CR uniform (SD-11, `cr_profile_uniform`) for this first pass.
 - Fixture: MODULAR-CONTROL variants useful-sharing / no-sharing / wrong-router, 60 items per kind, arms C0/C1/C2/CR/CO (S3-02).
-- Grammar: pending GRAM-02/DATA-06 (S3-03).
+- Grammar: development matrix done (S3-03, `results/S3/grammar_dev_matrix.md`); confirmatory grammar jobs after the freeze.
 - Numerics: A = 0.3 (DEC-012), radii per dataset (SD-17), b_m from S2-01, ε = 0.01, R = 5, τ = 0.1.

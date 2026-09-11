@@ -30,14 +30,18 @@ CONTRASTS = (("C2", "C1"), ("C2", "CR"), ("C2", "C0"), ("C2", "B3"), ("C2", "B4"
 BUDGETS_S = (10, 30, 60, 120, 300, 600, 1800, 3600)
 
 
-def discover(roots: list[Path]) -> list[dict]:
+def discover(roots: list[Path], experiment_id: str | None = None) -> list[dict]:
     runs = []
     for rt in roots:
         for mp in sorted(rt.rglob("metrics.json")):
+            if ".superseded-" in str(mp):
+                continue  # archived attempt (V-03)
             d = mp.parent
             if d.name == "warmup" or not (d / "items.jsonl").exists():
                 continue
             m = json.loads(mp.read_text())
+            if experiment_id is not None and m.get("config", {}).get("experiment_id") not in (experiment_id, None):
+                continue
             rel = d.relative_to(rt).parts
             arm = m.get("arm") or rel[0]
             ds = m.get("config", {}).get("dataset") or (rel[1] if len(rel) > 1 else "?")
@@ -50,16 +54,23 @@ def discover(roots: list[Path]) -> list[dict]:
     return runs
 
 
-def item_seconds(it: dict, phase: str = "total") -> float:
-    """Accelerator seconds attributable to one item from the shared-ledger delta (update + immediate evaluation;
-    R2-06); falls back to the learner-internal cost record (learning only, incomplete for cap arms) with a flag."""
+def item_seconds(it: dict, phase: str = "total", part: str = "update+eval") -> float:
+    """Accelerator seconds attributable to one item from the shared-ledger delta (R2-06). ``part`` selects
+    ``"update"`` (the learner's update only — the PDF App. B comparable-compute quantity), ``"eval"`` (the
+    immediate evaluation) or ``"update+eval"``; ``phase`` selects the ledger column (total/learning/query).
+    Falls back to the learner-internal cost record (learning only, incomplete for cap arms) with a flag."""
     ld = it.get("ledger_delta")
     if ld:
-        return float(ld["update"][phase] + ld["immediate_eval"][phase])
+        u, e = float(ld["update"][phase]), float(ld["immediate_eval"][phase])
+        return u if part == "update" else e if part == "eval" else u + e
     return float(it["cost"]["accel_seconds"])
 
 
 def cumulative_accel(items: list[dict], phase: str = "total") -> np.ndarray:
+    """Cumulative accelerator seconds after each item from the recorded ledger snapshots (setup, immediate
+    evaluations and intermediate rescoring included — V-05); falls back to summed item deltas."""
+    if items and all(it.get("ledger_delta") for it in items):
+        return np.array([float(it["ledger_delta"]["cumulative"][phase]) for it in items])
     return np.cumsum([item_seconds(it, phase) for it in items])
 
 
@@ -108,12 +119,15 @@ def views(runs: list[dict]) -> dict:
         out["longest_common_prefix"]["/".join(map(str, key))] = lcp
         # comparable compute vs C2
         if "C2" in arms:
-            ref = np.mean([item_seconds(it) for it in arms["C2"]["items"]])
+            ref = np.mean([item_seconds(it, part="update") for it in arms["C2"]["items"]])  # update time only (PDF App. B)
+            ref_total = np.mean([item_seconds(it) for it in arms["C2"]["items"]])
             cc = {}
             for arm, r in arms.items():
-                m = float(np.mean([item_seconds(it) for it in r["items"]]))
-                cc[arm] = {"mean_update_accel_s": m, "ratio_to_C2": m / ref if ref else None, "within_20pct": bool(ref and abs(m - ref) / ref <= 0.2),
-                           "support": "comparable-compute" if ref and abs(m - ref) / ref <= 0.2 else "resource-matched view required (time-matched table)"}
+                m = float(np.mean([item_seconds(it, part="update") for it in r["items"]]))
+                mt = float(np.mean([item_seconds(it) for it in r["items"]]))
+                cc[arm] = {"mean_update_accel_s": m, "ratio_to_C2_update": m / ref if ref else None, "within_20pct_update": bool(ref and abs(m - ref) / ref <= 0.2),
+                           "mean_update_plus_eval_accel_s": mt, "ratio_to_C2_update_plus_eval": mt / ref_total if ref_total else None,
+                           "support": "comparable-compute (update time within 20%)" if ref and abs(m - ref) / ref <= 0.2 else "resource-matched view required (time-matched table)"}
             out["comparable_compute"]["/".join(map(str, key))] = cc
     return out
 
@@ -124,7 +138,7 @@ def render(v: dict, label: str) -> str:
          "| stream | arm | mean update s | ratio to C2 | eligible |", "| --- | --- | ---: | ---: | --- |"]
     for key, cc in v["comparable_compute"].items():
         for arm, c in cc.items():
-            L.append(f"| {key} | {arm} | {c['mean_update_accel_s']:.3f} | {c['ratio_to_C2']:.2f} | {'yes' if c['within_20pct'] else 'no'} |")
+            L.append(f"| {key} | {arm} | {c['mean_update_accel_s']:.3f} | {c['ratio_to_C2_update']:.2f} | {'yes' if c['within_20pct_update'] else 'no'} |")
     L += ["", "## Exposure-matched retention per contrast (checkpoints both arms completed)", ""]
     for key, table in v["exposure_matched"].items():
         for pair, per_n in table.items():
@@ -145,9 +159,10 @@ def main(argv=None) -> int:
     ap.add_argument("--root", action="append", default=None)
     ap.add_argument("--out", default=str(ROOT / "results" / "S4" / "resource_views.json"))
     ap.add_argument("--label", default="confirmatory")
+    ap.add_argument("--experiment-id", default=None)
     args = ap.parse_args(argv)
     roots = [Path(r) for r in (args.root or [str(ROOT / "results" / "S4")])]
-    runs = discover(roots)
+    runs = discover(roots, args.experiment_id)
     v = views(runs) | {"label": args.label, "roots": [str(r) for r in roots], "n_runs": len(runs)}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(v, indent=1, default=float))

@@ -39,7 +39,8 @@ N_QUANTILES = 20
 def _site_rows(base: BPBase, ids: np.ndarray) -> dict[int, np.ndarray]:
     fr = base.forward(ids, phase="query")
     p = len(ids) - 1
-    return {m: np.asarray(fr.sites[SiteId(m, g.BANK_BLOCK[m], p)], np.float32) for m in (1, 2, 3)}
+    blocks = getattr(base, "bank_blocks", None) or g.BANK_BLOCK  # a base may declare its own sites (grammar: 1/3/5)
+    return {m: np.asarray(fr.sites[SiteId(m, blocks[m], p)], np.float32) for m in (1, 2, 3)}
 
 
 def residual_scales(base: BPBase, items: list[dict], max_items: int | None = None) -> dict:

@@ -222,3 +222,40 @@ a generator override; 119 of 120 pairs strong; mechanisms localize as multi-site
 residual, the copy mechanism computed between blocks 1 and 3 at the prediction position). The
 replacement base is recorded as provisional until the PA-2 clock. Remaining grammar work: the S4
 runner/evaluator generalization for grammar streams (tokenizer-free single-token items) and S3-03.
+
+## Addendum 6 (2026-09-10, 20:00 EDT): REG-02 complete; GPU window 1 done
+
+REG-02 completed at 19:24 EDT (12.2 GPU-h; `logs/reg02_report.md`); REG-03 preflight valid; S1-01 P1
+eligible (mean KL 2.9e-5 on H); ePC P2/P3/P5/P6 equal the BP rows to three decimals; S5-01 done (ePC
+calibration = BP calibration; SB/SE-A/SE-E smoke through the CLI: ES 1.00 each, RET-GS 0.35/0.30/0.45).
+GPU window 1: 45 short GPU tests pass; development streams re-profiled with reconcilable per-item ledger
+costs (C0/C1/C2/CR(learned) and B0/B1/B3; metrics unchanged: zsRE RET-GS C0 0.43, C1 0.31, C2 0.30,
+CR(learned) 0.38); projection refreshed — selected scope unchanged (zsRE 1000 / CounterFact 300 /
+grammar 10000) at 20.5 of 27.0 local h; resource views now built from ledger deltas. Lane V's six
+findings (V-01…V-06) are the next repairs before the freeze gate; Lanes B4, P4, S7-prep, R, V2 are open
+for the other agent (`docs/ongoing.md`).
+
+## Addendum 7 (2026-09-10, 21:00 EDT): Lane V repairs, grammar through the harness, freeze draft complete
+
+Lane V's six findings are repaired with tests (`logs/review_repairs_r2_response.md`): no backend discovery
+before the lease; S5 resolves its arm, calibration and checkpoint identity from the frozen manifest before
+any model is built; archived attempts are never collected and `--force` archives the checkpoint directory
+too; a stage allowance is enforced when set and recorded as not enforced when None, with the stop policy
+written into the freeze; comparable-compute uses update time; confirm mode validates the schedule, the
+base/read and the installed code tree against the freeze. P1's complete-answer initially-correct check ran
+(0.0 for both bases by construction; identical texts on 100 % / 97.7 % of prompts). The grammar now runs
+through the shared harness (`pccap.fixtures.grammar_eval`; S3/S4 grammar branches; 60 grammar jobs in the
+schedule) with latent paraphrases (SD-20); its calibration admits no positive radius, so it runs with exact
+keys like CounterFact. The freeze draft reports no pending inputs; the lead's S4-02 allowances are the
+remaining freeze input. The S3-03 development matrix (C0/C1/C2/CR × two orders on the grammar) is running
+on the CPU.
+
+## Addendum 8 (2026-09-10, 21:25 EDT): grammar development matrix
+
+C0/C1/C2/CR × two committed orders on the replacement grammar (CPU, `results/S3/grammar_dev_matrix.md`):
+C0 and C2 acquire and retain every item, CR(uniform) 0.91, C1 0.70; retrieval generalization sits at the
+frozen base's floor (exact keys, SD-20); locality and drift untouched; results identical across the two
+orders (item-keyed decisions, no evictions). C2 routes early on the grammar (bank 1 for the input-token
+mechanisms) and, for the copy mechanism that tracing localizes at bank 2, delivers at bank 2 in only 2 % of
+rounds — recorded in the D2 memo (F4) as a measured limitation of measured routing on this fixture. S3-03
+is done for development; the confirmatory grammar jobs follow the freeze.

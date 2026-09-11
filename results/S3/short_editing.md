@@ -1,6 +1,6 @@
 # S3-04 short editing checks (100 development edits per arm and dataset)
 
-Source runs: `/home/derp/cap/pc_cap/results/S2/throughput` + `['/home/derp/cap/pc_cap/results/S2/throughput_baselines', '/home/derp/cap/pc_cap/results/S2/throughput_crdist']`. Arms: ['B0', 'B1', 'B3', 'C0', 'C1', 'C2', 'CR(learned)', 'CR(uniform)']. Pending: ['B4'].
+Source runs: `/home/derp/cap/pc_cap/results/S2/throughput` + `['results/S2/throughput_v2_baselines', 'results/S2/throughput_v2']`. Arms: ['B0', 'B1', 'B3', 'C0', 'C1', 'C2', 'CR(uniform)']. Pending: ['B4'].
 
 | arm | dataset | rounds/item | proposed routes (1/2/3) | accepted writes (1/2/3) | abstain | no-dir | allocs | updates | evict | conflicts | rejected | probes | thr | ES | GS | RET-ES | RET-GS | LS | LS-KL | drift ratio |
 | --- | --- | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -18,7 +18,13 @@ Source runs: `/home/derp/cap/pc_cap/results/S2/throughput` + `['/home/derp/cap/p
 | B1 | zsre | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.08 | 0.04 | 0.13 | 0.15 | 0.00 | 1.1472 | 1.1442 |
 | B3 | counterfact | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.07 | 0.04 | 0.10 | 0.07 | 0.00 | 3.9225 | 3.9369 |
 | B3 | zsre | 0.0 | 0/0/0 | 0/0/0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0.00 | 0.10 | 0.07 | 0.16 | 0.13 | 0.00 | 1.0961 | 1.2089 |
-| CR(learned) | counterfact | 2.0 | 0/0/200 | 0/0/200 | 0 | 0 | 200 | 0 | 0 | 0 | 0 | 0 | 1.00 | 1.00 | 0.00 | 1.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
-| CR(learned) | zsre | 3.8 | 4/3/374 | 4/3/374 | 0 | 0 | 376 | 5 | 0 | 0 | 0 | 0 | 1.00 | 1.00 | 0.56 | 0.77 | 0.38 | 1.00 | 0.0000 | 1.0000 |
+| C0 | counterfact | 2.0 | 0/0/200 | 0/0/200 | 0 | 0 | 200 | 0 | 0 | 0 | 0 | 0 | 1.00 | 1.00 | 0.00 | 1.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
+| C0 | zsre | 3.8 | 0/0/383 | 0/0/378 | 0 | 0 | 367 | 11 | 0 | 0 | 5 | 0 | 0.99 | 0.99 | 0.62 | 0.99 | 0.43 | 1.00 | 0.0000 | 1.0000 |
+| C1 | counterfact | 2.1 | 208/208/208 | 200/200/208 | 0 | 0 | 600 | 8 | 0 | 0 | 16 | 0 | 1.00 | 1.00 | 0.00 | 1.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
+| C1 | zsre | 4.3 | 432/432/432 | 424/416/430 | 0 | 0 | 1095 | 175 | 0 | 0 | 26 | 0 | 1.00 | 1.00 | 0.43 | 0.90 | 0.31 | 1.00 | 0.0000 | 1.0000 |
+| C2 | counterfact | 2.0 | 0/0/200 | 0/0/200 | 0 | 0 | 200 | 0 | 0 | 0 | 0 | 600 | 1.00 | 1.00 | 0.00 | 1.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
+| C2 | zsre | 3.9 | 5/5/381 | 5/5/376 | 0 | 0 | 376 | 10 | 0 | 0 | 5 | 1173 | 0.99 | 0.99 | 0.47 | 0.94 | 0.30 | 1.00 | 0.0000 | 1.0000 |
+| CR(uniform) | counterfact | 2.0 | 0/0/200 | 0/0/200 | 0 | 0 | 200 | 0 | 0 | 0 | 0 | 0 | 1.00 | 1.00 | 0.00 | 1.00 | 0.00 | 1.00 | 0.0000 | 1.0000 |
+| CR(uniform) | zsre | 3.8 | 4/3/374 | 4/3/374 | 0 | 0 | 376 | 5 | 0 | 0 | 0 | 0 | 1.00 | 1.00 | 0.56 | 0.77 | 0.38 | 1.00 | 0.0000 | 1.0000 |
 
 Proposed routes, accepted writes and acquired complete answers are reported separately (PDF S3). CounterFact runs use exact keys (SD-17), so GS/RET-GS from retrieval are 0 by construction there (CR-4).

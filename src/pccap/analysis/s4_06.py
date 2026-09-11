@@ -24,11 +24,15 @@ from pccap.analysis.paired import analyze_paired
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def collect_rows(root: Path, dataset: str) -> tuple[list[dict], list[str]]:
+def collect_rows(root: Path, dataset: str, experiment_id: str | None = None) -> tuple[list[dict], list[str]]:
     rows, notes = [], []
     for mp in sorted(root.rglob("metrics.json")):
+        if ".superseded-" in str(mp):
+            continue  # archived attempt (V-03): never collected
         d = mp.parent
         m = json.loads(mp.read_text())
+        if experiment_id is not None and m.get("config", {}).get("experiment_id") not in (experiment_id, None):
+            continue
         cfg = m.get("config", {})
         if cfg.get("dataset") != dataset:
             continue
@@ -83,8 +87,9 @@ def main(argv=None) -> int:
     ap.add_argument("--root", default=str(ROOT / "results" / "S4"))
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--experiment-id", default=None, help="collect only runs of this frozen experiment id (V-03)")
     args = ap.parse_args(argv)
-    rows, notes = collect_rows(Path(args.root), args.dataset)
+    rows, notes = collect_rows(Path(args.root), args.dataset, args.experiment_id)
     exp = expected_from_loader(args.dataset)
     rep = analyze_paired(rows, seed=args.seed, stream_id=args.dataset, expected_items=exp)
     out = Path(args.out) if args.out else ROOT / "results" / "S4" / f"paired_{args.dataset}.json"

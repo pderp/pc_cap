@@ -1,0 +1,247 @@
+{
+ "stage": "S3",
+ "arm": "C2",
+ "base": "GRAM",
+ "read": "h",
+ "dataset": "grammar",
+ "realization": 0,
+ "perm": 1,
+ "manifest": "manifests/dev/s3_grammar_dev.json",
+ "manifest_sha256": "ecfae637a9ad51dd996b985006e770e46f4267b6297fd2993d4600f9d7b69036",
+ "frozen_manifest_sha256": null,
+ "src_tree_sha256": null,
+ "run_allowance_seconds": null,
+ "stage_allowance_enforced": false,
+ "experiment_id": "dev",
+ "mode": "dev",
+ "task": null,
+ "code_commit": "25c988b850371576975df6cd7d80267ca3476a23",
+ "base_hash_before": "9e4a9750fb688dc5726d336adc840c4274a34585f6de5500cd44493d07074a72",
+ "status": "complete",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "cpu",
+  "devices": [
+   "cpu:0"
+  ]
+ },
+ "items_completed": 128,
+ "items_planned": 128,
+ "metrics": {
+  "es_immediate": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.25390625,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.25390625,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 128,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4032,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4032,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 272832.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "1": 128
+  }
+ },
+ "base_hash_after": "9e4a9750fb688dc5726d336adc840c4274a34585f6de5500cd44493d07074a72",
+ "wall_seconds": 32.13713788986206,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 24076,
+   "partial_forwards": 4696,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 9.258155702496879,
+   "accel_seconds": 9.258155702496879,
+   "peak_mem_mib": 0.0,
+   "tokens": 1127836
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 6417,
+   "partial_forwards": 7755,
+   "reverses": 640,
+   "settle_iters": 0,
+   "prefix_microsteps": 640,
+   "router_probes": 1920,
+   "search_candidates": 2524,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 9.658230670262128,
+   "accel_seconds": 9.658230670262128,
+   "peak_mem_mib": 0.0,
+   "tokens": 797669
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 30493,
+   "partial_forwards": 12451,
+   "reverses": 640,
+   "settle_iters": 0,
+   "prefix_microsteps": 640,
+   "router_probes": 1920,
+   "search_candidates": 2524,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 18.916386372759007,
+   "accel_seconds": 18.916386372759007,
+   "peak_mem_mib": 0.0,
+   "tokens": 1925505
+  },
+  "events": 15972,
+  "elapsed_wall_seconds": 33.926127672195435,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": null,
+ "config": {
+  "A": 0.3,
+  "radii": {
+   "1": 0.0,
+   "2": 0.0,
+   "3": 0.0
+  },
+  "b_m": {
+   "1": 0.8106860518455505,
+   "2": 1.0737923979759216,
+   "3": 1.7046843767166138
+  },
+  "dataset": "grammar",
+  "n_items": 128,
+  "n_per_task": 16,
+  "realization": 0,
+  "perm": 1,
+  "base": "GRAM",
+  "weights": "/home/derp/cap/assets/models/grammar/grammar_base.npz",
+  "max_new": 1,
+  "task_order": [
+   4,
+   0,
+   6,
+   5,
+   7,
+   3,
+   2,
+   1
+  ],
+  "lm_drift_note": "drift on base-grammar sequences (the WikiText metric is unsupported for the grammar, E.2)"
+ }
+}

@@ -27,6 +27,7 @@ import numpy as np
 from pccap import ASSETS_ROOT
 from pccap.contracts import Budget, EditItem, metric
 from pccap.data.decode import (
+    MAX_ANSWER_TOKENS,
     _last_logits,
     greedy_decode,
     greedy_decode_batch_cap,
@@ -52,15 +53,18 @@ def _softmax(row: np.ndarray) -> np.ndarray:
 class Evaluator:
     """Read-only evaluation against the cap-disabled base (LS references cached once)."""
 
-    def __init__(self, base, tok: GPT2Tokenizer, locality_prompts: list[str], drift_tokens: np.ndarray | None,
-                 drift_positions: int = 4096, drift_window: int = 128):
-        self.base, self.tok = base, tok
-        self.loc_ids = [tok.encode(s) for s in locality_prompts]
+    def __init__(self, base, tok: GPT2Tokenizer, locality_prompts: list, drift_tokens: np.ndarray | None,
+                 drift_positions: int = 4096, drift_window: int = 128, max_new: int = MAX_ANSWER_TOKENS):
+        """``tok`` is any object with ``encode(str) -> ids`` and ``decode(ids) -> str`` (GPT-2, or the grammar's
+        token shim); ``locality_prompts`` are strings (encoded) or token arrays; ``max_new`` is the common
+        decoder's generation limit (32 for the editing streams, 1 for single-token grammar items)."""
+        self.base, self.tok, self.max_new = base, tok, int(max_new)
+        self.loc_ids = [np.asarray(s, np.int32) if not isinstance(s, str) else np.asarray(tok.encode(s), np.int32) for s in locality_prompts]
         self.loc_ref = []
         if self.loc_ids:
             from pccap.data.decode import greedy_decode_batch
 
-            decs = greedy_decode_batch(base, self.loc_ids, tok)
+            decs = greedy_decode_batch(base, self.loc_ids, tok, max_new=self.max_new)
             rows = np.concatenate([np.asarray(base.forward_batch(self.loc_ids[k : k + 64], None, phase="query")[0]) for k in range(0, len(self.loc_ids), 64)])
             for dec, row in zip(decs, rows):
                 self.loc_ref.append((dec.text, int(dec.new_ids[0]) if len(dec.new_ids) else -1, _softmax(row)))
@@ -83,15 +87,14 @@ class Evaluator:
             return np.asarray(learner.forward_batch(seqs, None, phase="query")[0])
         return np.stack([_last_logits(learner.predict(x).logits) for x in seqs])
 
-    @staticmethod
-    def _decode_many(learner, prompts: list[np.ndarray], tok: GPT2Tokenizer):
+    def _decode_many(self, learner, prompts: list[np.ndarray], tok: GPT2Tokenizer):
         if hasattr(learner, "edited_forward_batch"):
-            return greedy_decode_batch_cap(learner, prompts, tok)
+            return greedy_decode_batch_cap(learner, prompts, tok, max_new=self.max_new)
         if hasattr(learner, "last_logits_batch"):
             from pccap.data.decode import greedy_decode_batch
 
-            return greedy_decode_batch(learner, prompts, tok)
-        return [greedy_decode(lambda ids: learner.predict(ids).logits, p, tok) for p in prompts]
+            return greedy_decode_batch(learner, prompts, tok, max_new=self.max_new)
+        return [greedy_decode(lambda ids: learner.predict(ids).logits, p, tok, max_new=self.max_new) for p in prompts]
 
     @staticmethod
     def _nll_rows(logits: np.ndarray, targets: np.ndarray) -> np.ndarray:
@@ -120,7 +123,7 @@ class Evaluator:
             prompts.append(it.prompt_ids)
             owners.append((i, "es"))
             for p in it.paraphrases:
-                prompts.append(self.tok.encode(p))
+                prompts.append(np.asarray(self.tok.encode(p), np.int32))
                 owners.append((i, "gs"))
         decs = self._decode_many(learner, prompts, self.tok)
         prefixes, targets, owner_nll = [], [], []

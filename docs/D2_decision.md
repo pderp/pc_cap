@@ -1,6 +1,6 @@
 # D2 decision memo — development results, diagnoses, S6 recommendation, freeze readiness (S3-06)
 
-Written 2026-09-10 12:54 UTC from `results/S3/short_editing.json`, `results/S3/fixture/summary.json`, `manifests/cr_distribution.json`, `results/S2/{throughput,projection}.json`, `results/REG/`.
+Written 2026-09-11 00:21 UTC from `results/S3/short_editing.json`, `results/S3/fixture/summary.json`, `manifests/cr_distribution.json`, `results/S2/{throughput,projection}.json`, `results/REG/`.
 
 ## 1. Development results (100-edit streams per arm and dataset; one order; descriptive)
 
@@ -9,8 +9,8 @@ Written 2026-09-10 12:54 UTC from `results/S3/short_editing.json`, `results/S3/f
 | C0 | 0.99 | 0.43 | 1.00 | 1.0000 | 1.00 | 1.00 | 1.00 | 1.0000 |
 | C1 | 1.00 | 0.31 | 1.00 | 1.0000 | 1.00 | 1.00 | 1.00 | 1.0000 |
 | C2 | 0.99 | 0.30 | 1.00 | 1.0000 | 1.00 | 1.00 | 1.00 | 1.0000 |
-| CR(uniform) | 0.99 | 0.18 | 0.93 | 1.0000 | 0.98 | 0.98 | 1.00 | 1.0000 |
-| CR(learned) | 1.00 | 0.38 | 1.00 | 1.0000 | 1.00 | 1.00 | 1.00 | 1.0000 |
+| CR(uniform) | 1.00 | 0.38 | 1.00 | 1.0000 | 1.00 | 1.00 | 1.00 | 1.0000 |
+| CR(learned) | — | — | — | — | — | — | — | — |
 | B0 | 0.00 | 0.00 | 1.00 | 1.0000 | 0.00 | 0.00 | 1.00 | 1.0000 |
 | B1 | 0.08 | 0.15 | 0.00 | 1.1442 | 0.08 | 0.11 | 0.00 | 3.1676 |
 | B3 | 0.10 | 0.13 | 0.00 | 1.2089 | 0.07 | 0.10 | 0.00 | 3.9369 |
@@ -31,11 +31,13 @@ Decision: not a defect; C2 vs C1 and C2 vs CR remain the required contrasts; C0 
 3. Science (loss): mean-over-answer-tokens CE including the newline dilutes the target tokens for short answers. Test: stratify ES by answer length in `items.jsonl` (available; descriptive).
 Decision: B1/B3 are practical references, not validity gates (PDF: "Beating LoRA is not a validity gate; it is a result"); the frozen manifest fixes the learning rate by DEC-017 (highest mean development RET-GS, the primary endpoint: 1e-4 → 0.10, 3e-4 → 0.09, 3e-5 → 0.04; so the prescribed 1e-4 stands) and records the full screen (ES/LS/drift), including that an LS-constrained rule would have picked 3e-5 with ES 0.03.
 
-**F3. ePC substrate rows unavailable at D1.** Regeneration is running (REG-02: step 5000 of 9766, status paused_chunk; pilot projection 12.2 h). Not a defect; S1-01 and the ePC rows follow REG-03.
+**F3. ePC substrate rows unavailable at D1.** Regeneration is running (REG-02: step 9766 of 9766, status completed; pilot projection 12.2 h). Not a defect; S1-01 and the ePC rows follow REG-03.
+
+**F4. Grammar (replacement fixture, development matrix, `results/S3/grammar_dev_matrix.md`).** C0 and C2 acquire and retain every item (1.00), CR(uniform) 0.91, C1 0.70 (the A/3 split under-delivers on this base); retrieval generalization equals the frozen base's floor because no positive radius is admissible (SD-20). C2's routing on the grammar is *early* (shared_1 89 %, private 65 % to bank 1), and for the one mechanism with a depth signature in tracing (the copy rule, localized at bank 2) C2 delivers at bank 2 in 2 % of rounds — measured routing does not follow the tracing depth there. Hypotheses: the probe rewards the earliest site that already fixes the loss (input-token mechanisms are readable at every depth); the copy rule's information is present at bank 1 partially (38 % restoration) and fully at bank 2, and the probe's immediate-loss criterion cannot distinguish them at A = 0.3. Cheapest test: the same matrix with the C2 probe restricted to banks 2–3 (development only) and the tracing-vs-routing table per kind. Not a defect; a limitation to report (PR-C on the learned model is a diagnostic, D.10).
 
 ## 3. Core feasibility
 
-Projection with measured B1/B3 rows (D1 refresh): selected scope {'zsre': 1000, 'counterfact': 300, 'grammar': 10000, 'seconds': 90504.85192767635}, 25.1 local h of 27.0 h budget; assumed arms ['B4/counterfact', 'B4/zsre']. B4 (GRACE) waits on Lane D; grammar cost waits on GRAM-02. The BP-only confirmatory core (zsRE 1000 / CounterFact 300, C1/C2/CR/B3 × 15 + C0 initial 300) is feasible on this host inside the S4 ceiling.
+Projection with measured B1/B3 rows (D1 refresh): selected scope {'zsre': 1000, 'counterfact': 300, 'grammar': 10000, 'seconds': 73916.4412607043}, 20.5 local h of 27.0 h budget; assumed arms ['B4/counterfact', 'B4/zsre']. B4 (GRACE) waits on Lane D; grammar cost waits on GRAM-02. The BP-only confirmatory core (zsRE 1000 / CounterFact 300, C1/C2/CR/B3 × 15 + C0 initial 300) is feasible on this host inside the S4 ceiling.
 
 ## 4. S6 deficit recommendation
 
@@ -48,12 +50,12 @@ Projection with measured B1/B3 rows (D1 refresh): selected scope {'zsre': 1000, 
 | S2-01 radii / b_m, S2-02 A = 0.3 | ready |
 | S3-05 CR distribution (`manifests/cr_distribution.json`) | ready; re-profile with the development distribution: done |
 | DATA-02 sealed realizations/orders (the DATA-02 SHA256SUMS) | ready |
-| DATA-02a sealed loader (Lane H) | not on board |
+| DATA-02a sealed loader (Lane H) | done |
 | B4 GRACE adapter (S2-05, Lane D → orchestrator) | pending |
-| Grammar base + streams (GRAM-02, DATA-06/07) | pending — PA-2 clock 2026-09-11 23:59 ET |
+| Grammar base + streams (GRAM-02, DATA-06/07) | done — PA-2 clock 2026-09-11 23:59 ET |
 | B1 learning-rate screen | done |
 | ANA-01 frozen analysis code | done |
-| REG-03 ePC checkpoint preflight (S5 only; not required for the BP freeze) | pending |
+| REG-03 ePC checkpoint preflight (S5 only; not required for the BP freeze) | done |
 | Draft manifest (`manifests/frozen.draft.json`, schema-validated) | see `python -m pccap.harness.freeze --draft` |
 
 Freeze rule: `manifests/frozen.json` is written only by the lead's decision at CP-E after this checklist is all-ready except the items explicitly deferred (B4, grammar) — those arms are then recorded `unavailable` in the manifest rather than delaying the BP core.

@@ -49,26 +49,55 @@ def epc_weights() -> str:
     return a["path"]
 
 
+def resolve_frozen_arm(frozen: dict, arm: str) -> tuple[dict, dict, dict, str | None]:
+    """V-02: in confirm mode every S5 choice comes from the frozen manifest — the arm definition
+    (``substrate_arms``), the calibration of that base (``calibration[base]`` with the hashes of the files it
+    was read from) and the ePC checkpoint identity (``base_checkpoints.epc.sha256``). Missing or unavailable
+    definitions refuse before any model is constructed. Returns (spec, b_m, radii_by_dataset, epc_path)."""
+    sub = frozen.get("substrate_arms") or {}
+    if arm not in sub:
+        raise ValueError(f"substrate arm {arm} is not defined in the frozen manifest")
+    spec = sub[arm]
+    cal = (frozen.get("calibration") or {}).get(spec["base"])
+    if not cal:
+        raise ValueError(f"frozen calibration for base {spec['base']} is missing")
+    epc_path = None
+    if spec["base"] == "EPC":
+        ck = (frozen.get("base_checkpoints") or {}).get("epc")
+        if not ck or not ck.get("path") or not ck.get("sha256"):
+            raise ValueError("frozen ePC checkpoint identity is missing (base_checkpoints.epc)")
+        import hashlib
+
+        got = hashlib.sha256(Path(ck["path"]).read_bytes()).hexdigest()
+        if got != ck["sha256"]:
+            raise ValueError(f"ePC checkpoint at {ck['path']} has sha256 {got[:12]} but the freeze binds {ck['sha256'][:12]}")
+        epc_path = ck["path"]
+    return spec, {int(k): float(v) for k, v in cal["b_m"].items()}, {ds: {int(m): float(r) for m, r in v.items()} for ds, v in cal["radii"].items()}, epc_path
+
+
 def run_s5(ctx: dict, run_dir: Path) -> dict:
     cfg, man = ctx["config"], ctx["manifest"]
     arm = cfg["arm"]
-    spec = ARMS[arm]
+    confirm = cfg.get("mode") == "confirm"
+    frozen = (ctx.get("frozen") or json.loads((ROOT / "manifests" / "frozen.json").read_text())) if confirm else None
+    if confirm:
+        spec, frozen_b_m, frozen_radii, epc_path = resolve_frozen_arm(frozen, arm)
+    else:
+        spec, frozen_b_m, frozen_radii, epc_path = ARMS[arm], None, None, None
     ledger = Ledger()
-    base = BPBase(ledger=ledger) if spec["base"] == "BP" else EPCBase.from_npz(epc_weights(), ledger=ledger)
+    base = BPBase(ledger=ledger) if spec["base"] == "BP" else EPCBase.from_npz(epc_path or epc_weights(), ledger=ledger)
     tok = GPT2Tokenizer()
-    if cfg.get("mode") == "confirm":
+    allowance = None
+    if confirm:
         from pccap.data.confirm import load as load_confirm
 
-        frozen = ctx.get("frozen") or json.loads((ROOT / "manifests" / "frozen.json").read_text())
         man = load_confirm(Path(cfg["manifest"]), frozen=ROOT / "manifests" / "frozen.json")
         ds, oseed = man["dataset"], frozen["order_seeds"][int(cfg["perm"])]
         if ds != cfg.get("dataset") or int(man["realization"]) != int(cfg["realization"]):
             raise ValueError("CLI identity does not match the realization manifest")
         seeds = man["named_seeds"][str(oseed)]
         items = _items_from(stream_items(man, oseed, int(frozen["stream_lengths"][ds])))
-        sub = frozen.get("substrate_arms") or {}
-        if arm in sub:
-            spec = sub[arm]  # frozen definitions, not the mutable development file (R2-08)
+        allowance = (frozen.get("resource_rules") or {}).get("run_allowance_seconds")
         budget = Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
         cap_seed, router_seed = int(seeds["seed_cap_init"]), int(seeds["seed_router"])
         n_loc, drift_n = 200, 4096
@@ -79,19 +108,25 @@ def run_s5(ctx: dict, run_dir: Path) -> dict:
         budget = Budget(A=b.get("A", chosen_A()), epsilon=b.get("epsilon", 0.01), R=b.get("R", 5), tau_edit=b.get("tau_edit", 0.1))
         cap_seed = router_seed = int(man.get("seed", 0)) + cfg["realization"]
         n_loc, drift_n = int(man.get("locality_prompts", 200)), int(man.get("drift_positions", 4096))
-    b_m, radii = calibration_for(spec["base"], ds)
+    if confirm:
+        b_m, radii = frozen_b_m, frozen_radii[ds]  # frozen values, not the mutable results files
+    else:
+        b_m, radii = calibration_for(spec["base"], ds)
     cap = Cap(base, CapConfig(arm="C1", read="h", radii=radii, bank_scales=b_m, seed=cap_seed, credit=spec["credit"],
                               credit_iters=int(spec.get("credit_iters", 8))), ledger)
     _, unrelated = load_dev_items(ds, 1, seed=router_seed)
     h_before = base.checksum()
     ev = Evaluator(base, tok, unrelated[:n_loc], drift_sample(drift_n))
-    metrics = run_stream(cap, items, make_router("C1"), budget, ev, run_dir, ledger, checkpoints=tuple(CHECKPOINTS), seed=router_seed, arm=arm)
+    metrics = run_stream(cap, items, make_router("C1"), budget, ev, run_dir, ledger, checkpoints=tuple(CHECKPOINTS), seed=router_seed, arm=arm,
+                         resource_stop_seconds=allowance)
     h_after = base.checksum()
     assert_frozen(h_before, h_after)
     metrics["base_hash_before"], metrics["base_hash_after"] = h_before, h_after
     metrics["config"] = {"dataset": ds, "realization": cfg["realization"], "perm": cfg["perm"], "substrate_arm": arm, "base": spec["base"],
                          "weights": getattr(base, "weights_label", "bp_teacher"), "credit": spec["credit"], "credit_iters": spec.get("credit_iters"),
-                         "A": budget.A, "radii": radii, "b_m": b_m, "n_items": len(items)}
+                         "A": budget.A, "radii": radii, "b_m": b_m, "n_items": len(items), "run_allowance_seconds": allowance,
+                         "frozen_sha256": cfg.get("frozen_manifest_sha256"), "realization_sha256": cfg.get("manifest_sha256"),
+                         "experiment_id": cfg.get("experiment_id"), "epc_checkpoint": epc_path}
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=1, default=float))
     return metrics
 

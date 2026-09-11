@@ -29,6 +29,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--force", action="store_true", help="archive an existing run directory and rerun")
     run.add_argument("--no-lease", action="store_true", help="do not take the GPU lease (CPU/fake runners only)")
     run.add_argument("--projected-seconds", type=float, default=3600.0)
+    run.add_argument("--allow-code-drift", action="store_true", help="confirm mode: run although src/pccap differs from the frozen tree (approved fix only)")
     rep = sub.add_parser("report", help="render a stage report")
     rep.add_argument("--stage", default=None)
     rep.add_argument("--final", action="store_true")
