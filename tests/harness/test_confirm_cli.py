@@ -115,7 +115,7 @@ def test_schedule_paths_unique_and_hashes_recorded(synthetic_root):
     real = runner.RUNNERS.get("S4")
     runner.RUNNERS["S4"] = fake_runner
     try:
-        jobs = [j for j in jobs_from_manifest(man) if j["status"] == "scheduled"]
+        jobs = [j for j in jobs_from_manifest(man) if j["status"] == "scheduled" and j["stage"] == "S4"]  # the S5 jobs follow (own test)
         assert len(jobs) == 150
         for j in jobs:
             assert runner.main(_args(j)) == 0
@@ -559,3 +559,19 @@ def test_queue_executor_resumes_continues_on_failure_and_stops_on_refusal(synthe
         assert cmd[1:3] == ["-m", "pccap.cli"] and "--mode" in cmd and "confirm" in cmd
     finally:
         runner.RUNNERS["S4"] = real
+
+
+def test_s5_jobs_follow_the_s4_jobs_and_reuse_sb(synthetic_root):
+    _, man = synthetic_root
+    jobs = jobs_from_manifest(man)
+    s4 = [j for j in jobs if j["stage"] == "S4"]
+    s5 = [j for j in jobs if j["stage"] == "S5"]
+    assert jobs[: len(s4)] == s4  # S4 first, in its fixed order
+    if man.get("substrate_arms") and man.get("base_checkpoints", {}).get("epc"):
+        assert {j["arm"] for j in s5} == set(man["substrate_arms"]) and len(s5) == len(man["substrate_arms"]) * 2 * 15
+        sb = [j for j in s5 if j["arm"] == "SB"]
+        assert all(j["status"] == "reused" and j["reuses"].startswith("S4/") for j in sb)
+        assert all(j["status"] == "scheduled" and j["base"] == "EPC" for j in s5 if j["arm"] != "SB")
+        assert all("--stage S5" in j["cmd"] and "--mode confirm" in j["cmd"] for j in s5)
+    else:
+        assert s5 == []

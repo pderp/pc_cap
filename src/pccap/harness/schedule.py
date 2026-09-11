@@ -42,6 +42,31 @@ def jobs_from_manifest(man: dict) -> list[dict]:
                     jobs.append({"stage": "S4", "dataset": ds, "arm": arm, "base": base, "read": "h", "realization": r, "perm": perm,
                                  "order_seed": oseed, "n_items": n, "status": status, "manifest": mpath,
                                  "cmd": f"pccap run --stage S4 --mode confirm --dataset {ds} --arm {arm} --base {base} --read h --realization {r} --perm {perm} --manifest {mpath}"})
+    jobs += s5_jobs_from_manifest(man)
+    return jobs
+
+
+def s5_jobs_from_manifest(man: dict) -> list[dict]:
+    """S5-02 (plan §6.11): the substrate arms on the matched frozen streams (zsRE / CounterFact at the frozen scope, the
+    same realizations and committed orders as S4). ``SB`` (C1 on the BP base with the adjoint credit) is the S4 C1 run
+    itself when every frozen field matches — it is listed with status ``reused`` and never run twice (charged once);
+    ``SE-A`` / ``SE-E`` run on the ePC base. Listed after the S4 jobs; the queue runs them with ``--stage S5``."""
+    sub = man.get("substrate_arms") or {}
+    if not sub or not man.get("base_checkpoints", {}).get("epc"):
+        return []
+    jobs = []
+    for r in man["realizations"]:
+        for ds in ("zsre", "counterfact"):
+            n = man["stream_lengths"][ds]
+            mpath = f"{man['confirm_dir']}/{ds}_r{r}.json"
+            for arm, spec in sub.items():
+                base = spec["base"]
+                for perm, oseed in enumerate(man["order_seeds"]):
+                    reused = arm == "SB" and base == "BP" and spec.get("credit", "adjoint") == "adjoint"
+                    jobs.append({"stage": "S5", "dataset": ds, "arm": arm, "base": base, "read": "h", "realization": r, "perm": perm,
+                                 "order_seed": oseed, "n_items": n, "status": "reused" if reused else "scheduled", "manifest": mpath,
+                                 "reuses": f"S4/{ds}/C1/BP/h/{r}/{perm}" if reused else None,
+                                 "cmd": f"pccap run --stage S5 --mode confirm --dataset {ds} --arm {arm} --base {base} --read h --realization {r} --perm {perm} --manifest {mpath}"})
     return jobs
 
 
@@ -59,7 +84,9 @@ def main(argv=None) -> int:
     out = {"written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "manifest": str(mp.relative_to(ROOT)),
            "manifest_sha256": hashlib.sha256(mp.read_bytes()).hexdigest(), "draft": bool(man.get("draft")),
            "order_rule": "realization-major, dataset, arm-minor, then the five committed orders; fixed before any result",
-           "counts": {"scheduled": sum(j["status"] == "scheduled" for j in jobs), "unavailable": sum(j["status"] == "unavailable" for j in jobs)},
+           "counts": {"scheduled": sum(j["status"] == "scheduled" for j in jobs), "unavailable": sum(j["status"] == "unavailable" for j in jobs),
+                      "reused": sum(j["status"] == "reused" for j in jobs),
+                      "by_stage": {st: sum(j["status"] == "scheduled" and j["stage"] == st for j in jobs) for st in ("S4", "S5")}},
            "jobs": jobs}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(out, indent=1))
