@@ -1,0 +1,24 @@
+{
+  "scope": "Diagnostic only; no new eligibility tolerance or tuned sensitivity variant",
+  "cases": [
+    0,
+    1
+  ],
+  "inputs": "Exact first-step original GRACE observations, matched against the existing first_steps_20260911 trace",
+  "components": [
+    "hook GELU",
+    "hook projection",
+    "residual add",
+    "blocks 9-11 and their LN/attention/MLP components",
+    "ln_f",
+    "head",
+    "shifted masked mean cross entropy"
+  ],
+  "comparisons": [
+    "common input and incoming cotangent VJP",
+    "unaltered native suffix with candidate/reference prefix",
+    "native padded and diagnostic true length"
+  ],
+  "gpu_seconds": 0,
+  "existing_sources_modified": false
+}

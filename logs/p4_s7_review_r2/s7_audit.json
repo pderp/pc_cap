@@ -1,0 +1,162 @@
+{
+  "inventory_sha256_pairs": "9cedd861e37341d2ce5b38122b3c2f3aabefecb6957577f40784a15c2abfd823",
+  "pool_subject_projection": {
+    "zsre": {
+      "rows": 10420,
+      "unique_subjects": 10420,
+      "source_sha256": "e06a8cdbb6ac4e10329edff3759a2c131c105920e7ce79e6cdd58003859ddca5",
+      "subject_set_sha256": "696e30e278e98a2860d44cb3d69f5c62b768b4d13ee0578da9c5343e83efc318"
+    },
+    "counterfact": {
+      "rows": 20091,
+      "unique_subjects": 20091,
+      "source_sha256": "7da6be1dd09ded12a0cd98171645ca9f97c5279f773ada82de3dd04b128edd33",
+      "subject_set_sha256": "63608f8a06142a48e202d352f2660087151c3496401bf177d0641797a23bb411"
+    }
+  },
+  "sealed_realization_files_opened": 0,
+  "datasets": {
+    "zsre": {
+      "pairs": 300,
+      "members": 600,
+      "unique_item_ids": 600,
+      "unique_subjects": 496,
+      "overlap_with_sealed_source_subjects": 0,
+      "overlap_with_all_reserved_subjects": 0,
+      "outside_counterfact_development_subjects": null,
+      "syntactic_stratum_violations": [],
+      "minimum_paraphrases": 1,
+      "minimum_locality_controls": 1
+    },
+    "counterfact": {
+      "pairs": 75,
+      "members": 150,
+      "unique_item_ids": 150,
+      "unique_subjects": 141,
+      "overlap_with_sealed_source_subjects": 0,
+      "overlap_with_all_reserved_subjects": 141,
+      "outside_counterfact_development_subjects": 0,
+      "syntactic_stratum_violations": [],
+      "minimum_paraphrases": 2,
+      "minimum_locality_controls": 10
+    }
+  },
+  "source_before": {
+    "manifests/dev/s7_pairs.json": "1984a5767d3cd30331f8cf4be51e3a93250152a1606e11a3034ee6fef523294f",
+    "manifests/dev/s7_pairs_e2.json": "ddf05677626bb2cafdcac9d395ebc56db172bf2844464fd03a59a0b480fd94da",
+    "src/pccap/analysis/s7_01.py": "089adbf5677692b8a4d778b15334661e6b0ace8cb2da6a9eed36e19eb3016702",
+    "docs/pc_cap_month_plan_readable.pdf": "9a2b64680452394a57da6d07536f00b215320bdd2e7deef65e9f3bec3d359080"
+  },
+  "selection_checks": {
+    "zsre/shared": {
+      "selected": 34,
+      "target": 34,
+      "first_eligible_order_matches": true
+    },
+    "zsre/private": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "zsre/near_neighbour": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "counterfact/shared": {
+      "selected": 9,
+      "target": 34,
+      "first_eligible_order_matches": true
+    },
+    "counterfact/private": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "counterfact/near_neighbour": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "grammar/shared": {
+      "selected": 34,
+      "target": 34,
+      "first_eligible_order_matches": true
+    },
+    "grammar/private": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "grammar/near_neighbour": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    }
+  },
+  "grammar": {
+    "members": 200,
+    "min_seed": 5000000,
+    "max_seed": 5150007,
+    "disjoint_from_DATA06_train_eval_heldout": true,
+    "syntactic_stratum_violations": [],
+    "exact_schedule_overlap_with_published_P4": []
+  },
+  "damage_counterexample": {
+    "reported_I_ij": 2.0,
+    "mean_over_declared_Q_i": 2.0,
+    "per_prefix_loss_after_i": [
+      0.6931471805599453,
+      0.01814992791780945
+    ],
+    "per_prefix_loss_after_ij": [
+      0.6931471805599453,
+      4.0181499279178094
+    ],
+    "n_Q": {
+      "Q_i": 2,
+      "Q_j": 1,
+      "controls": 1
+    },
+    "D_ij": 0.1507631031984423,
+    "demonstrated_mismatch": false
+  },
+  "grace_boundary_control": {
+    "calls": [
+      {
+        "lengths": [
+          2,
+          3
+        ],
+        "key_positions": [
+          1,
+          1
+        ]
+      },
+      {
+        "lengths": [
+          2
+        ],
+        "key_positions": [
+          1
+        ]
+      },
+      {
+        "lengths": [
+          3
+        ],
+        "key_positions": [
+          1
+        ]
+      }
+    ],
+    "expected_original_prompt_key_position": 1,
+    "all_calls_omit_boundaries": false
+  },
+  "source_after": {
+    "manifests/dev/s7_pairs.json": "1984a5767d3cd30331f8cf4be51e3a93250152a1606e11a3034ee6fef523294f",
+    "manifests/dev/s7_pairs_e2.json": "ddf05677626bb2cafdcac9d395ebc56db172bf2844464fd03a59a0b480fd94da",
+    "src/pccap/analysis/s7_01.py": "089adbf5677692b8a4d778b15334661e6b0ace8cb2da6a9eed36e19eb3016702",
+    "docs/pc_cap_month_plan_readable.pdf": "9a2b64680452394a57da6d07536f00b215320bdd2e7deef65e9f3bec3d359080"
+  }
+}

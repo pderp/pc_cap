@@ -1,0 +1,14 @@
+/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python -m pytest -q -m "not gpu and not slow"
+........................................................................ [ 19%]
+........................................................................ [ 39%]
+........................................................................ [ 59%]
+..........................................................ss.....sss.... [ 79%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+=============================== warnings summary ===============================
+tests/harness/test_lease.py::test_lease_serializes_holders
+  /usr/lib64/python3.12/multiprocessing/popen_fork.py:66: RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+356 passed, 5 skipped, 52 deselected, 1 warning in 66.40s (0:01:06)

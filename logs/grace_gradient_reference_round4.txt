@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/home/derp/cap/pc_cap/scripts/grace_gradient_localize.py", line 272, in <module>
+    (reference if args.mode == "reference" else candidate)()
+  File "/home/derp/cap/pc_cap/scripts/grace_gradient_localize.py", line 115, in reference
+    editor.edit(config, tokens, [])
+  File "/home/derp/cap/assets/third_party/GRACE/grace/editors/grace.py", line 73, in edit
+    outputs = self.model(**tokens)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 1048, in forward
+    transformer_outputs = self.transformer(
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 891, in forward
+    outputs = block(
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 428, in forward
+    feed_forward_hidden_states = self.mlp(hidden_states)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/transformers/models/gpt2/modeling_gpt2.py", line 356, in forward
+    hidden_states = self.act(hidden_states)
+  File "/home/derp/cap/assets/envs/grace/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1547, in _call_impl
+    hook_result = hook(self, args, result)
+  File "/home/derp/cap/pc_cap/scripts/grace_gradient_localize.py", line 90, in hook
+    tensor.retain_grad()
+RuntimeError: can't retain_grad on Tensor that has requires_grad=False

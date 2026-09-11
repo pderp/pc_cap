@@ -1,0 +1,223 @@
+{
+  "commands": [
+    {
+      "name": "01_environment",
+      "command": "$P -c \"import pccap; print(pccap.__file__); print(pccap.determinism_report())\"",
+      "exit_code": 0,
+      "wall_seconds": 1.054265821003355,
+      "log": "logs/reproduce_round4/01_environment.txt"
+    },
+    {
+      "name": "02_assets",
+      "command": "$P scripts/fetch_assets.py --verify",
+      "exit_code": 0,
+      "wall_seconds": 0.6037112099584192,
+      "log": "logs/reproduce_round4/02_assets.txt"
+    },
+    {
+      "name": "03_schema",
+      "command": "$P -m pccap.harness.schema validate manifests/frozen.draft.json --kind manifest_frozen",
+      "exit_code": 0,
+      "wall_seconds": 0.8924073859816417,
+      "log": "logs/reproduce_round4/03_schema.txt"
+    },
+    {
+      "name": "04_test_fast",
+      "command": "make PY=\"$P\" test-fast",
+      "exit_code": 2,
+      "wall_seconds": 58.358533103019,
+      "log": "logs/reproduce_round4/04_test_fast.txt"
+    },
+    {
+      "name": "05_report_s0",
+      "command": "$P -m pccap.cli report --stage S0",
+      "exit_code": 0,
+      "wall_seconds": 0.8708148570731282,
+      "log": "logs/reproduce_round4/05_report_s0.txt"
+    },
+    {
+      "name": "06_report_s1",
+      "command": "$P -m pccap.cli report --stage S1",
+      "exit_code": 0,
+      "wall_seconds": 0.8825219960417598,
+      "log": "logs/reproduce_round4/06_report_s1.txt"
+    },
+    {
+      "name": "07_splits_audit",
+      "command": "$P -m pccap.data.splits --audit",
+      "exit_code": 0,
+      "wall_seconds": 0.8569157909369096,
+      "log": "logs/reproduce_round4/07_splits_audit.txt"
+    },
+    {
+      "name": "08_cr_distribution",
+      "command": "$P -m pccap.analysis.s3_05",
+      "exit_code": 0,
+      "wall_seconds": 0.8645267959218472,
+      "log": "logs/reproduce_round4/08_cr_distribution.txt"
+    },
+    {
+      "name": "09_distill_data",
+      "command": "$P -m pccap.distill.data --parquet assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet",
+      "exit_code": 1,
+      "wall_seconds": 0.9902088129892945,
+      "log": "logs/reproduce_round4/09_distill_data.txt"
+    },
+    {
+      "name": "10_pilot_compare",
+      "command": "$P scripts/reg_pilot_compare.py --run pilot-100",
+      "exit_code": 0,
+      "wall_seconds": 0.1501995079452172,
+      "log": "logs/reproduce_round4/10_pilot_compare.txt"
+    },
+    {
+      "name": "11_merge_throughput",
+      "command": "$P scripts/merge_throughput.py results/S2/throughput_baselines.json",
+      "exit_code": 0,
+      "wall_seconds": 0.01599619199987501,
+      "log": "logs/reproduce_round4/11_merge_throughput.txt"
+    },
+    {
+      "name": "12_d1",
+      "command": "$P -m pccap.analysis.d1",
+      "exit_code": 0,
+      "wall_seconds": 0.852482371032238,
+      "log": "logs/reproduce_round4/12_d1.txt"
+    },
+    {
+      "name": "13_short_editing",
+      "command": "$P -m pccap.analysis.s3_04",
+      "exit_code": 0,
+      "wall_seconds": 0.9143399560125545,
+      "log": "logs/reproduce_round4/13_short_editing.txt"
+    },
+    {
+      "name": "14_d2",
+      "command": "$P -m pccap.analysis.s3_06",
+      "exit_code": 0,
+      "wall_seconds": 0.8494805130176246,
+      "log": "logs/reproduce_round4/14_d2.txt"
+    },
+    {
+      "name": "15_grammar_generator",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_generator",
+      "exit_code": 0,
+      "wall_seconds": 0.9206846369197592,
+      "log": "logs/reproduce_round4/15_grammar_generator.txt"
+    },
+    {
+      "name": "16_grammar_training",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_model --steps 3000 --no-lease",
+      "exit_code": 0,
+      "wall_seconds": 9.40748099598568,
+      "log": "logs/reproduce_round4/16_grammar_training.txt"
+    },
+    {
+      "name": "17_grammar_competence",
+      "command": "JAX_PLATFORMS=cpu $P scripts/grammar_competence.py",
+      "exit_code": 0,
+      "wall_seconds": 35.41924348694738,
+      "log": "logs/reproduce_round4/17_grammar_competence.txt"
+    },
+    {
+      "name": "18_grammar_streams",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.data.grammar_streams",
+      "exit_code": 0,
+      "wall_seconds": 0.8834979960229248,
+      "log": "logs/reproduce_round4/18_grammar_streams.txt"
+    },
+    {
+      "name": "19_grammar_tracing",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.tracing",
+      "exit_code": 0,
+      "wall_seconds": 2.3666487160371616,
+      "log": "logs/reproduce_round4/19_grammar_tracing.txt"
+    },
+    {
+      "name": "20_grammar_calibration",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_eval",
+      "exit_code": 0,
+      "wall_seconds": 3.3343849279917777,
+      "log": "logs/reproduce_round4/20_grammar_calibration.txt"
+    },
+    {
+      "name": "21_grammar_run",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.cli run --stage S3 --arm C2 --dataset grammar --manifest manifests/dev/s3_grammar_dev.json --no-lease",
+      "exit_code": 4,
+      "wall_seconds": 0.9299304019659758,
+      "log": "logs/reproduce_round4/21_grammar_run.txt"
+    },
+    {
+      "name": "22_grammar_analysis",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.analysis.s3_03",
+      "exit_code": 0,
+      "wall_seconds": 0.9764422309817746,
+      "log": "logs/reproduce_round4/22_grammar_analysis.txt"
+    },
+    {
+      "name": "23_draft",
+      "command": "$P -m pccap.harness.freeze --draft",
+      "exit_code": 0,
+      "wall_seconds": 1.76958216202911,
+      "log": "logs/reproduce_round4/23_draft.txt"
+    },
+    {
+      "name": "24_schedule",
+      "command": "$P -m pccap.harness.schedule",
+      "exit_code": 0,
+      "wall_seconds": 0.8598675539251417,
+      "log": "logs/reproduce_round4/24_schedule.txt"
+    },
+    {
+      "name": "25_resource_analysis",
+      "command": "$P -m pccap.analysis.s4_05",
+      "exit_code": 0,
+      "wall_seconds": 0.8520764240529388,
+      "log": "logs/reproduce_round4/25_resource_analysis.txt"
+    },
+    {
+      "name": "26_paired_analysis",
+      "command": "$P -m pccap.analysis.s4_06 --dataset zsre",
+      "exit_code": 0,
+      "wall_seconds": 0.909369237953797,
+      "log": "logs/reproduce_round4/26_paired_analysis.txt"
+    },
+    {
+      "name": "27_order_analysis",
+      "command": "$P -m pccap.analysis.s7_03 --dataset zsre --arm C2",
+      "exit_code": 0,
+      "wall_seconds": 0.8615194469457492,
+      "log": "logs/reproduce_round4/27_order_analysis.txt"
+    }
+  ],
+  "gpu_seconds": 0,
+  "wall_seconds": 127.8948131740326,
+  "changed_snapshot_files": {
+    "docs/D1_decision.md": "09abc9103ebbfe39c870d0552e34ec820c15f3f968f637d0e62b32d13563bb19",
+    "docs/D2_decision.md": "f187a2b348722ac26bf5ff3b015385cc4a4db6e89c862449b986f3ccfddee2bd",
+    "manifests/cr_distribution.json": "416ab33f06913a44e4753aa2c295e3c0b11d36b741734342cfd895a88a61024f",
+    "manifests/frozen.draft.json": "271c8eff8c42c20ab46b30522d84d294562256bc5f32e92458c2beeea769f241",
+    "docs/tasks/STATUS.md": "d7d323cf1f800b5f30cd1041854c87c8a5538a268e05a9c9bc65deb71b6b0c30",
+    "results/GRAM/competence.json": "214a80143377d63a3c4e575e2e45c544ff8fd180f772ee832e106df76b7217ee",
+    "results/GRAM/tracing.json": "a81423090d6eafaceaa81ac931c59843f35bc8fe23b95855ba46630af9a2656f",
+    "results/S0/report.md": "510dedf41446b5d43952958ba4a7989577e385956ddea4f0eb1fccb1badbc7c7",
+    "results/S1/report.md": "66e3d52edebe588e5ea995b1317f1bec389f8fe3c941871171f9dd50771177c4",
+    "results/S2/projection.json": "3229e212d9b3a5d7c85745e4eb248bea25b2c115d863338628d863f8f68d659c",
+    "results/S2/radius_calibration_GRAM.json": "6078bc210a02264ce992712c4f3b5edba418a1dd558534c60b08973ef3824653",
+    "results/S2/residual_scales_GRAM.json": "e09783f70c660bfff5f584157c2d4abe3bf64cda482f1f9453d96bbc8521287e",
+    "results/S2/throughput.json": "0a91e56e28ab2127c13da6c6228e82b8f04ef26cf7da68f5a43e83fb06d7eb92",
+    "results/S3/grammar_dev_matrix.json": "fb0f71d3ac13603b53258a1363048ea42dc3783af22861661251b772d0f23c4a",
+    "results/S3/grammar_dev_matrix.md": "d67cc4302ab0c6788326df584cd621bf225a776b0690685c65d0da5e092172cb",
+    "results/S3/short_editing.json": "a9e4d72c6ba0694cf9214eb03c51c0d595c5b098f533cc34d658876bec4c8c33",
+    "results/S3/short_editing.md": "47a6027e094c6881e6cfaf6ea3b1f8ea5e607f3600848564ef8d37d56dfd0a26",
+    "results/S4/jobs.json": "c242a0e6a7f8269067d5bc7c09afc239530722ed39f9834e9171336f04aa4ba3",
+    "results/S4/resource_views.json": "720237d3eefe1d55d828031d948ef39ca5b1a398b54061cfe5e735b47c18141e",
+    "results/S4/resource_views.md": "0c6fadf4dda34a6065cb64b7e9f844e260a293c6bfbc4a29a102f7f313174bc2",
+    "results/S4/paired_zsre.json": "155ee1dba831a0833b318c6bf2f99906a666ea162647034b1789fd656102f5a0",
+    "results/S4/paired_zsre.md": "e6772f8d01115470598ccd8fe5cb10a83ece5c302295150c05de79d83125bc49",
+    "results/S7/order_variation_zsre_C2.json": "e41ef3ea9e7ab1b57537135871634a1d8385528fe4de739d0df2d6c5973589d1"
+  },
+  "production_source_changes_during_run": [
+    "docs/ongoing.md"
+  ]
+}

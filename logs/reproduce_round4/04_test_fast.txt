@@ -1,0 +1,166 @@
+/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python -m pytest -q -m "not gpu and not slow"
+........................................................................ [ 19%]
+........................................................................ [ 39%]
+........................................................................ [ 59%]
+..........................................................ss.....sss.... [ 79%]
+...........................................................FFFFFF....... [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+_________________________ test_pinned_commit_recorded __________________________
+
+    def test_pinned_commit_recorded():
+>       info = vendor_hdpc.inspect()
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_vendor_hdpc.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = None
+
+    def inspect(path: Path | None = None) -> dict:
+        p = path or sibling_path()
+        if not (p / ".git").exists():
+>           raise SiblingUnavailable("repo", p, "not a git checkout")
+E           pccap.vendor_hdpc.SiblingUnavailable: sibling reference 'repo' unavailable at /home/derp/cap/pc_cap/.worktrees/llm-by-neural-predictive-coding: not a git checkout
+
+src/pccap/vendor_hdpc.py:60: SiblingUnavailable
+_______________________ test_reference_files_exist[wrap] _______________________
+
+name = 'wrap'
+
+    @pytest.mark.parametrize("name", ["wrap", "energy", "relax", "checkpoint", "train_distill"])
+    def test_reference_files_exist(name):
+>       assert vendor_hdpc.reference(name).exists()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_vendor_hdpc.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'wrap'
+
+    def reference(name: str) -> Path:
+        p = sibling_path()
+        rel = REFERENCE_FILES.get(name)
+        if rel is None:
+            raise SiblingUnavailable(name, p, "no such reference key")
+        f = p / rel
+        if not f.exists():
+>           raise SiblingUnavailable(name, f, "file missing")
+E           pccap.vendor_hdpc.SiblingUnavailable: sibling reference 'wrap' unavailable at /home/derp/cap/pc_cap/.worktrees/llm-by-neural-predictive-coding/src/hdpc/wrap.py: file missing
+
+src/pccap/vendor_hdpc.py:107: SiblingUnavailable
+______________________ test_reference_files_exist[energy] ______________________
+
+name = 'energy'
+
+    @pytest.mark.parametrize("name", ["wrap", "energy", "relax", "checkpoint", "train_distill"])
+    def test_reference_files_exist(name):
+>       assert vendor_hdpc.reference(name).exists()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_vendor_hdpc.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'energy'
+
+    def reference(name: str) -> Path:
+        p = sibling_path()
+        rel = REFERENCE_FILES.get(name)
+        if rel is None:
+            raise SiblingUnavailable(name, p, "no such reference key")
+        f = p / rel
+        if not f.exists():
+>           raise SiblingUnavailable(name, f, "file missing")
+E           pccap.vendor_hdpc.SiblingUnavailable: sibling reference 'energy' unavailable at /home/derp/cap/pc_cap/.worktrees/llm-by-neural-predictive-coding/src/hdpc/energy.py: file missing
+
+src/pccap/vendor_hdpc.py:107: SiblingUnavailable
+______________________ test_reference_files_exist[relax] _______________________
+
+name = 'relax'
+
+    @pytest.mark.parametrize("name", ["wrap", "energy", "relax", "checkpoint", "train_distill"])
+    def test_reference_files_exist(name):
+>       assert vendor_hdpc.reference(name).exists()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_vendor_hdpc.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'relax'
+
+    def reference(name: str) -> Path:
+        p = sibling_path()
+        rel = REFERENCE_FILES.get(name)
+        if rel is None:
+            raise SiblingUnavailable(name, p, "no such reference key")
+        f = p / rel
+        if not f.exists():
+>           raise SiblingUnavailable(name, f, "file missing")
+E           pccap.vendor_hdpc.SiblingUnavailable: sibling reference 'relax' unavailable at /home/derp/cap/pc_cap/.worktrees/llm-by-neural-predictive-coding/src/hdpc/relax.py: file missing
+
+src/pccap/vendor_hdpc.py:107: SiblingUnavailable
+____________________ test_reference_files_exist[checkpoint] ____________________
+
+name = 'checkpoint'
+
+    @pytest.mark.parametrize("name", ["wrap", "energy", "relax", "checkpoint", "train_distill"])
+    def test_reference_files_exist(name):
+>       assert vendor_hdpc.reference(name).exists()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_vendor_hdpc.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'checkpoint'
+
+    def reference(name: str) -> Path:
+        p = sibling_path()
+        rel = REFERENCE_FILES.get(name)
+        if rel is None:
+            raise SiblingUnavailable(name, p, "no such reference key")
+        f = p / rel
+        if not f.exists():
+>           raise SiblingUnavailable(name, f, "file missing")
+E           pccap.vendor_hdpc.SiblingUnavailable: sibling reference 'checkpoint' unavailable at /home/derp/cap/pc_cap/.worktrees/llm-by-neural-predictive-coding/src/hdpc/checkpoint.py: file missing
+
+src/pccap/vendor_hdpc.py:107: SiblingUnavailable
+__________________ test_reference_files_exist[train_distill] ___________________
+
+name = 'train_distill'
+
+    @pytest.mark.parametrize("name", ["wrap", "energy", "relax", "checkpoint", "train_distill"])
+    def test_reference_files_exist(name):
+>       assert vendor_hdpc.reference(name).exists()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_vendor_hdpc.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'train_distill'
+
+    def reference(name: str) -> Path:
+        p = sibling_path()
+        rel = REFERENCE_FILES.get(name)
+        if rel is None:
+            raise SiblingUnavailable(name, p, "no such reference key")
+        f = p / rel
+        if not f.exists():
+>           raise SiblingUnavailable(name, f, "file missing")
+E           pccap.vendor_hdpc.SiblingUnavailable: sibling reference 'train_distill' unavailable at /home/derp/cap/pc_cap/.worktrees/llm-by-neural-predictive-coding/src/hdpc/train_distill.py: file missing
+
+src/pccap/vendor_hdpc.py:107: SiblingUnavailable
+=============================== warnings summary ===============================
+tests/harness/test_lease.py::test_lease_serializes_holders
+  /usr/lib64/python3.12/multiprocessing/popen_fork.py:66: RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.
+    self.pid = os.fork()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_vendor_hdpc.py::test_pinned_commit_recorded - pccap.vendor_...
+FAILED tests/test_vendor_hdpc.py::test_reference_files_exist[wrap] - pccap.ve...
+FAILED tests/test_vendor_hdpc.py::test_reference_files_exist[energy] - pccap....
+FAILED tests/test_vendor_hdpc.py::test_reference_files_exist[relax] - pccap.v...
+FAILED tests/test_vendor_hdpc.py::test_reference_files_exist[checkpoint] - pc...
+FAILED tests/test_vendor_hdpc.py::test_reference_files_exist[train_distill]
+6 failed, 350 passed, 5 skipped, 52 deselected, 1 warning in 57.38s
+make: *** [Makefile:10: test-fast] Error 1

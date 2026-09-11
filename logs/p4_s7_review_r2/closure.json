@@ -1,0 +1,118 @@
+{
+  "closed_findings": [
+    1,
+    2,
+    3
+  ],
+  "damage_expected_and_observed": {
+    "reported_I_ij": 2.0,
+    "mean_over_declared_Q_i": 2.0,
+    "per_prefix_loss_after_i": [
+      0.6931471805599453,
+      0.01814992791780945
+    ],
+    "per_prefix_loss_after_ij": [
+      0.6931471805599453,
+      4.0181499279178094
+    ],
+    "n_Q": {
+      "Q_i": 2,
+      "Q_j": 1,
+      "controls": 1
+    },
+    "D_ij": 0.1507631031984423,
+    "demonstrated_mismatch": false
+  },
+  "boundary_checks": {
+    "calls": [
+      {
+        "lengths": [
+          2,
+          3
+        ],
+        "key_positions": [
+          1,
+          1
+        ]
+      },
+      {
+        "lengths": [
+          2
+        ],
+        "key_positions": [
+          1
+        ]
+      },
+      {
+        "lengths": [
+          3
+        ],
+        "key_positions": [
+          1
+        ]
+      }
+    ],
+    "expected_original_prompt_key_position": 1,
+    "all_calls_omit_boundaries": false
+  },
+  "strata_qualification": "The natural-language strata are OPERATIONAL PROXIES for D.9's shared-mechanism / independent-private / near-neighbour pairs: they establish neither a shared mechanism, nor independent supports, nor key-space proximity, and zsRE template inequality does not guarantee distinct relations. Mechanistic claims rest on the grammar strata, which have generator support (shared_1 across contexts; independent private mechanisms; same-context private near-neighbours). The fixed pairs are reviewed for semantic contradictions before any outcome is reported (Lane X finding 4).",
+  "grammar": {
+    "members": 200,
+    "min_seed": 5000000,
+    "max_seed": 5150007,
+    "disjoint_from_DATA06_train_eval_heldout": true,
+    "syntactic_stratum_violations": [],
+    "exact_schedule_overlap_with_published_P4": []
+  },
+  "inventory_sha256_pairs": "9cedd861e37341d2ce5b38122b3c2f3aabefecb6957577f40784a15c2abfd823",
+  "e2_selection_checks": {
+    "zsre/shared": {
+      "selected": 34,
+      "target": 34,
+      "first_eligible_order_matches": true
+    },
+    "zsre/private": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "zsre/near_neighbour": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "counterfact/shared": {
+      "selected": 9,
+      "target": 34,
+      "first_eligible_order_matches": true
+    },
+    "counterfact/private": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "counterfact/near_neighbour": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "grammar/shared": {
+      "selected": 34,
+      "target": 34,
+      "first_eligible_order_matches": true
+    },
+    "grammar/private": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    },
+    "grammar/near_neighbour": {
+      "selected": 33,
+      "target": 33,
+      "first_eligible_order_matches": true
+    }
+  },
+  "audit_driver_sha256": "b384332e9a52242823340a4cfb788d79cdca5b84701cb97e9267890352b4b3fc",
+  "sealed_realization_files_opened": 0,
+  "gpu_seconds": 0
+}

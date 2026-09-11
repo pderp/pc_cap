@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/.worktrees/reproduce_round4/src/pccap/distill/data.py", line 194, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/derp/cap/pc_cap/.worktrees/reproduce_round4/src/pccap/distill/data.py", line 174, in main
+    info = prepare_shard(args.parquet)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/.worktrees/reproduce_round4/src/pccap/distill/data.py", line 91, in prepare_shard
+    for text in iter_documents(parquet_path):
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/.worktrees/reproduce_round4/src/pccap/distill/data.py", line 55, in iter_documents
+    pf = pq.ParquetFile(parquet_path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/assets/envs/venv-check-plan6-df/lib64/python3.12/site-packages/pyarrow/parquet/core.py", line 327, in __init__
+    source = filesystem.open_input_file(source)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_fs.pyx", line 815, in pyarrow._fs.FileSystem.open_input_file
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+FileNotFoundError: [Errno 2] Failed to open local file 'assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet'. Detail: [errno 2] No such file or directory

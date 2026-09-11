@@ -1,0 +1,62 @@
+{
+  "supplemental_commands": [
+    {
+      "command": "PCCAP_HDPC_PATH=/home/derp/cap/llm-by-neural-predictive-coding make PY=/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python test-fast",
+      "exit_code": 0,
+      "result": "356 passed, 5 skipped, 52 deselected, 1 warning in 66.40s",
+      "log": "04b_test_fast_explicit_sibling.txt"
+    },
+    {
+      "command": "$P -m pccap.cli run --stage S3 --arm C2 --dataset grammar --manifest manifests/dev/s3_grammar_dev.json --no-lease --force",
+      "exit_code": 0,
+      "qualification": "Only the isolated copied run was archived. No production output or checkpoint was changed.",
+      "log": "21b_grammar_run_isolated_force.txt"
+    },
+    {
+      "command": "$P -m pccap.distill.data --parquet /home/derp/cap/assets/tmp/reproduce_round4/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet",
+      "exit_code": 0,
+      "qualification": "RAYON_NUM_THREADS=2; 52,500,000-token shard rebuilt in the isolated resource tree; exact pinned hash ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+      "log": "09b_distill_data_absolute_path.txt"
+    }
+  ],
+  "generated_evidence": {
+    "grammar_train.json": {
+      "source": "../assets/tmp/reproduce_round4/models/grammar/grammar_base.train.json",
+      "sha256": "9db8baf15b8ca32afcb82c48413121508f728a614edef2674ba1ca0da29d9cc9"
+    },
+    "grammar_competence.json": {
+      "source": ".worktrees/reproduce_round4/results/GRAM/competence.json",
+      "sha256": "214a80143377d63a3c4e575e2e45c544ff8fd180f772ee832e106df76b7217ee"
+    },
+    "grammar_run_metrics.json": {
+      "source": ".worktrees/reproduce_round4/results/S3/dev/grammar/C2/BP/h/0/0/metrics.json",
+      "sha256": "25dd2dacb75c3121eb7217bc944beec4bd6f4e20c9cf4ce87d3b4d520c9531ad"
+    },
+    "grammar_run_cost.json": {
+      "source": ".worktrees/reproduce_round4/results/S3/dev/grammar/C2/BP/h/0/0/cost.json",
+      "sha256": "0bc6cce48eba0e2dbb0184b6217b20a9ea3d48f6ba01fb837224133cb681cb29"
+    },
+    "draft_manifest.json": {
+      "source": ".worktrees/reproduce_round4/manifests/frozen.draft.json",
+      "sha256": "271c8eff8c42c20ab46b30522d84d294562256bc5f32e92458c2beeea769f241"
+    },
+    "paired_empty.json": {
+      "source": ".worktrees/reproduce_round4/results/S4/paired_zsre.json",
+      "sha256": "155ee1dba831a0833b318c6bf2f99906a666ea162647034b1789fd656102f5a0"
+    },
+    "order_empty.json": {
+      "source": ".worktrees/reproduce_round4/results/S7/order_variation_zsre_C2.json",
+      "sha256": "e41ef3ea9e7ab1b57537135871634a1d8385528fe4de739d0df2d6c5973589d1"
+    },
+    "resource_empty.json": {
+      "source": ".worktrees/reproduce_round4/results/S4/resource_views.json",
+      "sha256": "720237d3eefe1d55d828031d948ef39ca5b1a398b54061cfe5e735b47c18141e"
+    }
+  },
+  "gpu_seconds": 0,
+  "notes": [
+    "All commands inherit the CPU/isolated source and resource settings from setup.json.",
+    "The original 27-command run is preserved unchanged in summary.json.",
+    "The production freeze appeared during this work; it was neither copied into the audit nor executed here."
+  ]
+}
