@@ -24,7 +24,15 @@ the queue stops). Therefore: no edits under `src/pccap/` after the freeze — no
 a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
 outside `src/pccap` are unaffected.
 
-## 1. State (2026-09-11, 08:55 EDT)
+## 1. State (2026-09-11, 12:25 EDT)
+
+- **CP-E done twice.** v1 (DEC-025) was superseded before any result: the sanctioned loader refused every editing
+  realization because the grammar's `.npz` resource binding failed its realization-name rule (DEC-026; repaired with a
+  regression; the queue now stops on systematic failures). The lead wrote **`frozen-confirmatory-v2`** (DEC-027); the job
+  list is regenerated (210 S4 + 60 S5 scheduled) and the **S4 queue is running** — first job verified (zsRE C0 r0 p0,
+  300 edits), then the full queue (`results/S4/queue.jsonl`, `queue_logs/`, stop file `results/S4/queue.stop`).
+- The post-freeze rule above is in force: the frozen tree is `0f20e120067b…`.
+
 
 - **D-B decided: (b)** — DEC-020 / SD-21. B4's PC-10 is output-level parity plus loss-trajectory values
   plus a same-framework sensitivity control. **D-F done** (commit `80ad746`): Codex's patches applied,
