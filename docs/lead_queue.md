@@ -81,3 +81,9 @@ The freeze draft has **no pending inputs** now (`python -m pccap.harness.freeze 
 ## Consolidated decisions (2026-09-11 06:30 EDT) — see `docs/updated_plan6.md` §5
 
 D-A freeze + S4-02 allowances · D-B SD-21 (B4 parity form, after the sensitivity control) · D-C coverage tooling · D-D S6 closed · D-E PA-2 promotion · D-F Codex's review-tools v2 patch, ENV-05 documentation patch and real install · D-G S7 CounterFact shared stratum short · D-H S1 report accepted. The items above in this file are superseded by that table where they overlap.
+
+## Round 3 (2026-09-11 06:55 EDT) — see `docs/updated_plan7.md`
+
+- **D-B answered: (b)** (DEC-020, SD-21). **D-F done** (commit `80ad746`). Open: D-A (requested after Lane V3), D-C, D-D, D-G, D-H; D-E passes tonight.
+- Orchestrator today: V2-01…05 repairs; a dated "repairs landed" line will appear here for Codex's Lane V3.
+- Codex: Lane B4-S (deadline 2026-09-12 12:00 EDT for inclusion in the freeze), Lane X, then S3-01.

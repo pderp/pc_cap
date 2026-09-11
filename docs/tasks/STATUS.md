@@ -1,6 +1,6 @@
 # Task status board
 
-Regenerated 2026-09-11 10:39 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-11 10:45 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
@@ -99,7 +99,7 @@ GPU seconds charged to tasks so far: 45075
 | S2-04 | Replay baseline B3 | **done** | BASELINES | S2-03, S0-08 | short | no | codex |  |  |
 | S2-05a | GRACE reference environment and smoke (PA-6) | **done** | BASELINES | DATA-00 | none | no | codex |  | GRACE CPU reference env + oracle; 6 controls; 5/5 smoke (mirrored by the orchestrator) |
 | S2-05b | GRACE reference parity cases | **done** | BASELINES | S2-05a, S0-09 | none | no | codex |  | 20 parity cases isolated+sequential, 63 hashed artifacts (mirrored) |
-| S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **in_progress** | BASELINES | S2-05b, S0-04 | short | yes | codex |  | blocked: PC-10 learned-value parity fails (outputs, NLL, keys, radii, labels match at 40/40); SD-21 proposed in updated_plan6.md §2.1; not registrable |
+| S2-05 | GRACE baseline B4 adapter with parity (PC-10) | **in_progress** | BASELINES | S2-05b, S0-04 | short | yes | codex |  | DEC-020: PC-10 in form (b) — Codex: sensitivity control + test rewrite + adapter surface (Lane B4-S, deadline 2026-09-12 12:00 EDT); orchestrator: registration + profile. Element-wise value gaps 0.09–22.4 with 40/40 output/NLL agreement (SD-21) |
 | HARN-BATCH | Batched cap-on evaluation with sequential-decoder parity (E.2 optimization) | **done** | INTEGRATOR | HARN-C2 | short | no | orchestrator |  |  |
 | S2-06 | Throughput profile | **done** | INTEGRATOR | S2-01, S2-02, S2-03, S2-04, S2-05 | lease | yes | orchestrator |  |  |
 | S2-07 | Full cost projection and D1 memo | **done** | INTEGRATOR+METRICS | S2-06, S1-07, ENV-02 | none | yes | orchestrator |  |  |
