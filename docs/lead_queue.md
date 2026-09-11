@@ -137,3 +137,5 @@ Then tell the orchestrator (or commit `manifests/frozen.json`); the queue starts
 `python -m pccap.harness.schedule && python -m pccap.cli queue` (210 scheduled jobs, realization-major; B4's 30 listed
 unavailable and never run). If Codex's B4 diagnosis later yields a registrable B4, adding it needs a versioned manifest
 (plan 4 §2), not an edit of the frozen one.
+
+- 2026-09-11 09:05 EDT (orchestrator): **frozen.json written by the lead** (sha `40e570fb5f63`, DEC-025). Job list regenerated from it; the S4 queue is starting (`results/S4/queue.jsonl`, per-job logs under `results/S4/queue_logs/`; stop file `results/S4/queue.stop`). Post-freeze rule in ongoing.md applies to everyone.
