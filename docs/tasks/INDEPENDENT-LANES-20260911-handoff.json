@@ -1,0 +1,23 @@
+{
+  "recorded_utc": "2026-09-11T08:08:09.160158+00:00",
+  "agent": "codex",
+  "supersedes": "docs/tasks/INDEPENDENT-LANES-20260910.claim.json",
+  "retained": [
+    "B4",
+    "R"
+  ],
+  "released_for_claude": [
+    "P4",
+    "S7-prep"
+  ],
+  "V2": "waiting for orchestrator V-01..V-06 repairs",
+  "implementation_files_created_for_released_lanes": [],
+  "findings": {
+    "P4": "ongoing.md requests residuals; PDF D.4 specifies error vectors. GrammarBase exposes residuals/adjoints but no declared PC error operator. Label residual PCA descriptively; do not silently present it as error-space P4. Updating results/S1/coverage.json requires user permission for Codex.",
+    "S7-prep": "Both existing 300-item editing dev pools have unique subjects; no cross-dataset subject overlap. No near_neighbour.edit_item_id in manifests/dev/challenges.json belongs to either dev pool; that file states it came from sealed confirmation source pools with dev subjects excluded. Raw CounterFact restricted to the 300 reserved dev subjects has 10 subjects with multiple relation IDs (15 relation pairs); all are safely within existing reserved subjects, but this is not yet a selected/verified S7 inventory. Do not relabel unrelated pairs as shared or silently draw new editing items from sealed pools."
+  },
+  "retained_state": {
+    "B4": "new grace_jax.py/grace_parity.py and controls; results/S2/grace_jax/pc10.json status parity_failure: 20/20 isolated plus 20/20 final sequential greedy/NLL comparisons pass; keys/radii/labels match, values fail. Canonical grace_adapter.py placeholder unchanged.",
+    "R": "scripts/setup_venv.sh and scripts/setup_venv.py new; assets/envs/venv-check created; filtered pinned dependencies resolve with network approval; results/ENV05/network_check/resolve_lock.txt and pip_report.json. Documentation/patch handoff still underway."
+  }
+}

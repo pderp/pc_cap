@@ -1,0 +1,30 @@
+{
+  "recorded_utc": "2026-09-11T08:21:45.911368+00:00",
+  "status": "partial_fixture_failure_edit_pending",
+  "fixture_root": "/home/derp/cap/assets/tmp/review_repairs_r2b_20260911T081700678817Z",
+  "baseline_active_s4_runs": 150,
+  "baseline_complete": 150,
+  "persisted_probes": {
+    "v2-wrong-tokenizer-hash-6a647c36": {
+      "status": "complete",
+      "recorded_base_hash": "synthetic-weight-hash",
+      "allow_code_drift_flag_in_config": null
+    },
+    "v2-wrong-bp-hash-db6e7a91": {
+      "status": "complete",
+      "recorded_base_hash": "synthetic-weight-hash",
+      "allow_code_drift_flag_in_config": null
+    },
+    "v2-changed-code-a397355c": {
+      "status": "complete",
+      "recorded_base_hash": "synthetic-weight-hash",
+      "allow_code_drift_flag_in_config": null
+    }
+  },
+  "existing_controls": "9 passed in 6.76s",
+  "fixture_failure": "Synthetic checkpoint override [1,2] violates schema enum [100,300,1000,3000]; the valid-frozen S5 probe never reached its stage, so cap_configs[-1] raised IndexError.",
+  "expanded_study_complete": false,
+  "pending_patch": "docs/tasks/CODEX-20260911-review-tools-v2.patch",
+  "production_confirmation_payloads_opened": false,
+  "gpu_used": false
+}

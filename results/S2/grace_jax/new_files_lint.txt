@@ -1,0 +1,171 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> scripts/grace_numerical_trace.py:3:1
+   |
+ 1 |   #!/usr/bin/env python3
+ 2 |   """B4 CPU numerical trace; original reference and JAX candidate remain unchanged."""
+ 3 | / from __future__ import annotations
+ 4 | | import argparse
+ 5 | | import hashlib
+ 6 | | import importlib.util
+ 7 | | import json
+ 8 | | import os
+ 9 | | from pathlib import Path
+10 | | import sys
+   | |__________^
+11 |
+12 |   os.environ.update(CUDA_VISIBLE_DEVICES="", JAX_PLATFORMS="cpu", PYTHONDONTWRITEBYTECODE="1",
+   |
+help: Organize imports
+   |
+3  | from __future__ import annotations
+4  +
+5  | import argparse
+--------------------------------------------------------------------------------
+9  | import os
+   - from pathlib import Path
+10 | import sys
+11 + from pathlib import Path
+12 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> scripts/grace_numerical_trace.py:32:5
+   |
+31 |   def reference():
+32 | /     import copy
+33 | |     from types import SimpleNamespace
+34 | |     from unittest.mock import patch
+35 | |     import torch
+36 | |     import yaml
+   | |_______________^
+37 |       ref = oracle()
+38 |       assert not TRACE.exists()
+   |
+help: Organize imports
+   |
+34 |     from unittest.mock import patch
+35 +
+36 |     import torch
+   |
+
+B023 Function definition does not bind loop variable `arrays`
+  --> scripts/grace_numerical_trace.py:67:21
+   |
+65 |                 value = trainable[0]
+66 |                 if self.index in STEPS:
+67 |                     arrays[f"before_{self.index}"] = value.detach().numpy().copy().reshape(-1)
+   |                     ^^^^^^
+68 |                     arrays[f"gradient_{self.index}"] = value.grad.detach().numpy().copy().reshape(-1)
+69 |                 result = super().step(closure)
+   |
+
+B023 Function definition does not bind loop variable `arrays`
+  --> scripts/grace_numerical_trace.py:68:21
+   |
+66 |                 if self.index in STEPS:
+67 |                     arrays[f"before_{self.index}"] = value.detach().numpy().copy().reshape(-1)
+68 |                     arrays[f"gradient_{self.index}"] = value.grad.detach().numpy().copy().reshape(-1)
+   |                     ^^^^^^
+69 |                 result = super().step(closure)
+70 |                 if self.index in STEPS:
+   |
+
+B023 Function definition does not bind loop variable `arrays`
+  --> scripts/grace_numerical_trace.py:71:21
+   |
+69 |                 result = super().step(closure)
+70 |                 if self.index in STEPS:
+71 |                     arrays[f"after_{self.index}"] = value.detach().numpy().copy().reshape(-1)
+   |                     ^^^^^^
+72 |                 return result
+73 |         with patch.object(torch.optim, "Adam", TraceAdam):
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> scripts/grace_numerical_trace.py:87:5
+   |
+86 |   def candidate():
+87 | /     import jax
+88 | |     import jax.numpy as jnp
+89 | |     from pccap.baselines.grace_jax import cold_uniform, hook_prefix, hook_suffix, optimize_value
+90 | |     from pccap.bases import gpt2_jax as g
+91 | |     from pccap.bases.bp import BPBase
+   | |_____________________________________^
+92 |       ref = oracle()
+93 |       cases = ref.selected_cases(ROOT / "manifests/dev/zsre_dev.json", ROOT / "manifests/dev/s0_sample.json")
+   |
+help: Organize imports
+   |
+88 |     import jax.numpy as jnp
+89 +
+90 |     from pccap.baselines.grace_jax import cold_uniform, hook_prefix, hook_suffix, optimize_value
+   |
+
+B023 Function definition does not bind loop variable `h`
+   --> scripts/grace_numerical_trace.py:108:47
+    |
+106 |         initial = cold_uniform(np.random.RandomState(index), 3072)
+107 |         def loss(value):
+108 |             hidden = hook_suffix(base.params, h, projected, value, len(prompt)-1, True, base.cfg, 8)
+    |                                               ^
+109 |             logits = g.head(base.params, hidden, base.cfg)
+110 |             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]
+    |
+
+B023 Function definition does not bind loop variable `projected`
+   --> scripts/grace_numerical_trace.py:108:50
+    |
+106 |         initial = cold_uniform(np.random.RandomState(index), 3072)
+107 |         def loss(value):
+108 |             hidden = hook_suffix(base.params, h, projected, value, len(prompt)-1, True, base.cfg, 8)
+    |                                                  ^^^^^^^^^
+109 |             logits = g.head(base.params, hidden, base.cfg)
+110 |             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]
+    |
+
+B023 Function definition does not bind loop variable `prompt`
+   --> scripts/grace_numerical_trace.py:108:72
+    |
+106 |         initial = cold_uniform(np.random.RandomState(index), 3072)
+107 |         def loss(value):
+108 |             hidden = hook_suffix(base.params, h, projected, value, len(prompt)-1, True, base.cfg, 8)
+    |                                                                        ^^^^^^
+109 |             logits = g.head(base.params, hidden, base.cfg)
+110 |             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]
+    |
+
+B023 Function definition does not bind loop variable `targets`
+   --> scripts/grace_numerical_trace.py:110:96
+    |
+108 |             hidden = hook_suffix(base.params, h, projected, value, len(prompt)-1, True, base.cfg, 8)
+109 |             logits = g.head(base.params, hidden, base.cfg)
+110 |             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]
+    |                                                                                                ^^^^^^^
+111 |             return jnp.sum(losses*jnp.asarray(mask))/jnp.sum(mask)
+112 |         first_loss, gradient = jax.jit(jax.value_and_grad(loss))(jnp.asarray(initial))
+    |
+
+B023 Function definition does not bind loop variable `mask`
+   --> scripts/grace_numerical_trace.py:111:47
+    |
+109 |             logits = g.head(base.params, hidden, base.cfg)
+110 |             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]
+111 |             return jnp.sum(losses*jnp.asarray(mask))/jnp.sum(mask)
+    |                                               ^^^^
+112 |         first_loss, gradient = jax.jit(jax.value_and_grad(loss))(jnp.asarray(initial))
+113 |         with np.load(TRACE / f"{index:02d}.npz", allow_pickle=False) as trace:
+    |
+
+B023 Function definition does not bind loop variable `mask`
+   --> scripts/grace_numerical_trace.py:111:62
+    |
+109 |             logits = g.head(base.params, hidden, base.cfg)
+110 |             losses = jax.nn.logsumexp(logits, axis=-1)-jnp.take_along_axis(logits, jnp.asarray(targets)[:, None], axis=-1)[:, 0]
+111 |             return jnp.sum(losses*jnp.asarray(mask))/jnp.sum(mask)
+    |                                                              ^^^^
+112 |         first_loss, gradient = jax.jit(jax.value_and_grad(loss))(jnp.asarray(initial))
+113 |         with np.load(TRACE / f"{index:02d}.npz", allow_pickle=False) as trace:
+    |
+
+Found 12 errors.
+[*] 3 fixable with the `--fix` option.
