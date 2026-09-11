@@ -1,14 +1,20 @@
 # Ongoing work (the single current log; previous versions are dated under `docs/archive/`)
 
-Rewritten 2026-09-11 06:55 EDT by the orchestrating session for the next concurrent round
-(`docs/updated_plan7.md`). Previous version: `docs/archive/ongoing-2026-09-11-0630.md`. Rules §1 are
+Rewritten 2026-09-11 06:55 EDT, updated 07:15 EDT (pause ended; commit `6d98f03`) by the orchestrating session for
+the concurrent round of `docs/updated_plan7.md`. Previous version: `docs/archive/ongoing-2026-09-11-0630.md`. Rules §1 are
 unchanged and restated in `CONTRIBUTING.md`: JAX only, sibling/FabricPC read-only, resources under
 `assets/`, **no commits by agents** (the lead commits; the orchestrator commits only when the lead asks),
 task records in `docs/tasks/<ID>.md`, claim rows with the status tool or a claim JSON, lease for any GPU
 use > 60 s, placeholder modules are the lane's to replace, other existing files need an edit request.
 Board: `docs/tasks/STATUS.md`.
 
-## 1. State (2026-09-11, 06:55 EDT)
+**The pause is over.** Codex may start Lane B4-S, Lane V3 and Lane X now, in that order of value; Lane S3-01
+after B4-S step 2. None of them waits on the lead's open decisions (D-A, D-C, D-D, D-G, D-H) or on the
+orchestrator. The orchestrator's next GPU use (B4 profile, one confirm-mode smoke job against the real base, the
+GPU test subset) comes after Lane B4-S lands and is announced in `docs/lead_queue.md`; short `-m gpu` tests by
+either agent need no lease.
+
+## 1. State (2026-09-11, 07:15 EDT)
 
 - **D-B decided: (b)** — DEC-020 / SD-21. B4's PC-10 is output-level parity plus loss-trajectory values
   plus a same-framework sensitivity control. **D-F done** (commit `80ad746`): Codex's patches applied,
@@ -57,11 +63,14 @@ replace with a re-export of `GraceLearner`), `tests/baselines/test_grace_jax.py`
    the explicit original-prompt boundary for decoding documented (the orchestrator wires it in `harness.arms`).
 4. Doc and task record updated with the DEC-020 label text.
 
-### Lane V3 — re-check of the V2-01…05 repairs (CPU; starts when the orchestrator posts "repairs landed" in `docs/lead_queue.md`)
+### Lane V3 — independent re-check of the V2-01…05 repairs (CPU; open now — "repairs landed" is posted)
 
-Rerun `scripts/review_repairs_r2b_study.py` from a fresh fixture root with the **unchanged** negative
-inputs; confirm each of V2-01…05 now refuses/accounts as plan 7 §2 states; add the conflicting-outcome
-two-experiment control you proposed; write `logs/review_repairs_r2c.md`. New files only.
+The orchestrator already reran your study driver against the repaired tree (`logs/review_repairs_r2c.md`,
+`results/V2/v3/`) and, to do so, updated the driver's *expectations* (not its inputs) and made the synthetic freeze
+bind the synthetic base/tokenizer identities; the pre-V3 driver is preserved at
+`results/V2/review_repairs_r2b_study.pre-v3.py`. Your lane: rerun from a fresh fixture root, confirm or dispute each
+row of the before/after table in that report, add the conflicting-outcome two-experiment control you proposed, and
+write `logs/review_repairs_r2d.md`. If you disagree with any expectation change, say so there — the driver is yours.
 
 ### Lane X — counter-review of P4 and S7-prep (read-only + `logs/review_p4_s7.md`)
 
