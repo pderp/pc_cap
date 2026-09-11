@@ -504,3 +504,14 @@ def test_s4_02_allowances_on_the_freeze_command(synthetic_root):
         apply_allowances(json.loads(json.dumps(man, default=float)), 2400.0, {"S9": 1.0})
     m = apply_allowances(json.loads(json.dumps(man, default=float)), None, {})
     assert m["resource_rules"]["stage_allowance_seconds"].get("S4") is None  # nothing set → not enforced, recorded
+
+
+def test_v3_note_duplicate_roots_and_duplicate_cells_are_not_merged(synthetic_root):
+    root, _ = synthetic_root
+    tree = _two_experiment_tree(root)
+    once = s4_05.discover([tree], "exp-a")
+    twice = s4_05.discover([tree, tree, tree / "exp-a"], "exp-a")  # the same tree passed twice, plus a subtree of it
+    assert len(twice) == len(once) == 2
+    dup = once + [dict(once[0], dir=once[0]["dir"] + "-copy")]  # two directories for one cell of one experiment
+    with pytest.raises(ValueError, match="two run directories"):
+        s4_05.views(dup)

@@ -50,7 +50,7 @@ NEEDS_FILTER = {("zsre", "shared"): True, ("zsre", "private"): True, ("zsre", "n
                 ("counterfact", "shared"): True, ("counterfact", "private"): False, ("counterfact", "near_neighbour"): False,
                 ("grammar", "shared"): False, ("grammar", "private"): False, ("grammar", "near_neighbour"): False}
 SEED = 71
-GRAMMAR_SEED_BASE = 900_000  # disjoint from DATA-06 train/eval/held-out seed blocks
+GRAMMAR_SEED_BASE = 5_000_000  # disjoint from DATA-06 (< 0.8M) and from every development diagnostic (P4 used 1.0M-4.1M; Lane X finding 3)
 GRAMMAR_STRIDE = 20_000
 
 
@@ -279,6 +279,11 @@ def build_inventory(seed: int = SEED) -> dict:
         "strata": {"shared": "two edits about the same subject with different relations (mechanism plausibly shared through the subject's key region)",
                    "private": "unrelated edits: different subject, relation and answer",
                    "near_neighbour": "same relation (zsRE question template / CounterFact relation id), different subject"},
+        "strata_qualification": ("The natural-language strata are OPERATIONAL PROXIES for D.9's shared-mechanism / independent-private / near-neighbour "
+                                 "pairs: they establish neither a shared mechanism, nor independent supports, nor key-space proximity, and zsRE template "
+                                 "inequality does not guarantee distinct relations. Mechanistic claims rest on the grammar strata, which have generator "
+                                 "support (shared_1 across contexts; independent private mechanisms; same-context private near-neighbours). The fixed pairs "
+                                 "are reviewed for semantic contradictions before any outcome is reported (Lane X finding 4)."),
         "independence": {"zsre": "MEND train split; subjects in no development, S0 or sealed pool",
                          "counterfact": "development pool items plus raw records sharing a reserved development subject; no sealed-pool item",
                          "grammar": f"seed block {GRAMMAR_SEED_BASE}+ (disjoint from DATA-06 train/eval/held-out blocks)"},
@@ -326,11 +331,16 @@ def evaluation_set(item_i: EditItem, item_j: EditItem, tok=None, controls: list[
     return {"Q_i": own(item_i), "Q_j": own(item_j), "controls": ctrl}
 
 
-def _last_logits(learner, seqs: list[np.ndarray]) -> np.ndarray:
+def _last_logits(learner, seqs: list[np.ndarray], key_positions: list[int] | None = None) -> np.ndarray:
+    """Last-row logits for many prefixes. ``key_positions`` (the ORIGINAL prompt's last position per prefix) is handed to
+    learners that key their retrieval there (``decode_key_positions``, B4/GRACE) and ignored by every other learner
+    (Lane X finding 2; the same convention as the harness evaluator)."""
     base = getattr(learner, "base", None)
     if hasattr(learner, "edited_forward_batch") and hasattr(base, "forward_batch"):
         return np.asarray(learner.edited_forward_batch(seqs, phase="query")[0])
     if hasattr(learner, "last_logits_batch"):
+        if key_positions is not None and getattr(learner, "decode_key_positions", False):
+            return np.asarray(learner.last_logits_batch(seqs, phase="query", key_positions=list(key_positions)))
         return np.asarray(learner.last_logits_batch(seqs, phase="query"))
     rows = []
     for x in seqs:
@@ -355,24 +365,43 @@ def distributions(learner, Q: list[np.ndarray]) -> np.ndarray:
     return out
 
 
-def item_loss(learner, it: EditItem) -> float:
-    """Teacher-forced NLL of the item's answer (sum over answer tokens) — L_x with x = the item's prompt."""
-    ids = np.asarray(it.prompt_ids, np.int32)
-    prefixes, targets = [], []
-    for y in np.asarray(it.answer_ids, np.int32):
-        prefixes.append(ids)
-        targets.append(int(y))
-        ids = np.concatenate([ids, np.int32([y])])
-    L = _last_logits(learner, prefixes).astype(np.float64)
-    m = L.max(-1)
-    return float((m + np.log(np.exp(L - m[:, None]).sum(-1)) - L[np.arange(len(targets)), targets]).sum())
+def prefix_losses(learner, prefixes: list[np.ndarray], answer_ids: np.ndarray) -> list[float]:
+    """Complete-answer teacher-forced NLL (sum over answer tokens) of ``answer_ids`` after each prefix x — L_x — with each
+    prefix's own original boundary (len(x) − 1) carried through the answer tokens."""
+    seqs, targets, bounds, owner = [], [], [], []
+    for k, x in enumerate(prefixes):
+        ids = np.asarray(x, np.int32)
+        b = len(ids) - 1
+        for y in np.asarray(answer_ids, np.int32):
+            seqs.append(ids)
+            targets.append(int(y))
+            bounds.append(b)
+            owner.append(k)
+            ids = np.concatenate([ids, np.int32([y])])
+    out = [0.0] * len(prefixes)
+    for s0 in range(0, len(seqs), 64):
+        L = _last_logits(learner, seqs[s0: s0 + 64], bounds[s0: s0 + 64]).astype(np.float64)
+        m = L.max(-1)
+        nll = m + np.log(np.exp(L - m[:, None]).sum(-1)) - L[np.arange(L.shape[0]), targets[s0: s0 + 64]]
+        for k, v in zip(owner[s0: s0 + 64], nll):
+            out[k] += float(v)
+    return out
 
 
-def item_exact(learner, it: EditItem) -> float:
-    """Greedy answer (max_new = |answer_ids|) equals the answer tokens exactly — 1.0 / 0.0."""
-    ids = np.asarray(it.prompt_ids, np.int32)
+def item_loss(learner, it: EditItem, prefixes: list[np.ndarray] | None = None) -> float:
+    """L_i averaged over Q_i (the item's prompt and its paraphrases, D.9); ``prefixes=None`` → the prompt only (the
+    prompt-only value is kept as a separately named diagnostic in the reversal record)."""
+    Q = prefixes if prefixes is not None else [np.asarray(it.prompt_ids, np.int32)]
+    return float(np.mean(prefix_losses(learner, Q, it.answer_ids)))
+
+
+def item_exact(learner, it: EditItem, prefix: np.ndarray | None = None) -> float:
+    """Greedy answer (max_new = |answer_ids|) after ``prefix`` (default: the prompt) equals the answer tokens exactly —
+    1.0 / 0.0; the original prompt boundary is kept fixed while the answer grows."""
+    ids = np.asarray(prefix if prefix is not None else it.prompt_ids, np.int32)
+    bound = len(ids) - 1
     for y in np.asarray(it.answer_ids, np.int32):
-        nxt = int(np.argmax(_last_logits(learner, [ids])[0]))
+        nxt = int(np.argmax(_last_logits(learner, [ids], [bound])[0]))
         if nxt != int(y):
             return 0.0
         ids = np.concatenate([ids, np.int32([nxt])])
@@ -399,29 +428,40 @@ def reversal(make_learner, state, item_i: EditItem, item_j: EditItem, Q: dict[st
     """Clone ``state`` twice, run i→j and j→i, return D_ij with its operands, per-item accuracy/loss changes in both
     orders, update counts, allocations, evictions, and the damage entries I_ij (learn i, then j: change in L_i) and I_ji."""
     Q_all = Q["Q_i"] + Q["Q_j"] + Q["controls"]
+    Qi, Qj = Q["Q_i"], Q["Q_j"]
+
+    def losses(learner):  # per prefix of Q_i / Q_j (complete-answer NLL), plus the prompt-only diagnostic
+        li, lj = prefix_losses(learner, Qi, item_i.answer_ids), prefix_losses(learner, Qj, item_j.answer_ids)
+        return {"i": float(np.mean(li)), "j": float(np.mean(lj)), "i_per_prefix": li, "j_per_prefix": lj,
+                "i_prompt_only": li[0], "j_prompt_only": lj[0]}
+
     orders = {}
     for tag, first, second in (("ij", item_i, item_j), ("ji", item_j, item_i)):
         learner = make_learner()
         learner.import_state(state.clone())
-        loss0 = {"i": item_loss(learner, item_i), "j": item_loss(learner, item_j)}
+        loss0 = losses(learner)
         acc0 = {"i": item_exact(learner, item_i), "j": item_exact(learner, item_j)}
         u1 = _apply(learner, first, router, budget, seed)
-        loss_mid = {"i": item_loss(learner, item_i), "j": item_loss(learner, item_j)}
+        loss_mid = losses(learner)
         u2 = _apply(learner, second, router, budget, seed)
-        loss1 = {"i": item_loss(learner, item_i), "j": item_loss(learner, item_j)}
+        loss1 = losses(learner)
         acc1 = {"i": item_exact(learner, item_i), "j": item_exact(learner, item_j)}
         orders[tag] = {"dist": distributions(learner, Q_all), "loss_start": loss0, "loss_after_first": loss_mid, "loss_end": loss1,
                        "acc_start": acc0, "acc_end": acc1, "updates": {"first": u1, "second": u2}, "state_hash": learner.state_hash()}
     d = js(orders["ij"]["dist"], orders["ji"]["dist"]) if Q_all else metric(None, units="nats", n=0, status="undefined")
     per_pos = d["strata"]["per_position"] if Q_all else []
-    ni, nj = len(Q["Q_i"]), len(Q["Q_j"])
+    ni, nj = len(Qi), len(Qj)
     return {
         "D_ij": d, "D_parts": {"Q_i": float(np.mean(per_pos[:ni])) if ni else None, "Q_j": float(np.mean(per_pos[ni:ni + nj])) if nj else None,
                                "controls": float(np.mean(per_pos[ni + nj:])) if len(per_pos) > ni + nj else None},
-        "I_ij": orders["ij"]["loss_end"]["i"] - orders["ij"]["loss_after_first"]["i"],  # learn i, then j: harm to i
-        "I_ji": orders["ji"]["loss_end"]["j"] - orders["ji"]["loss_after_first"]["j"],  # learn j, then i: harm to j
+        "I_ij": orders["ij"]["loss_end"]["i"] - orders["ij"]["loss_after_first"]["i"],  # learn i, then j: harm to i, mean over Q_i (D.9)
+        "I_ji": orders["ji"]["loss_end"]["j"] - orders["ji"]["loss_after_first"]["j"],  # learn j, then i: harm to j, mean over Q_j
+        "I_operands": {"ij": {"after_i": orders["ij"]["loss_after_first"]["i_per_prefix"], "after_ij": orders["ij"]["loss_end"]["i_per_prefix"], "n": ni},
+                       "ji": {"after_j": orders["ji"]["loss_after_first"]["j_per_prefix"], "after_ji": orders["ji"]["loss_end"]["j_per_prefix"], "n": nj}},
+        "I_prompt_only": {"ij": orders["ij"]["loss_end"]["i_prompt_only"] - orders["ij"]["loss_after_first"]["i_prompt_only"],
+                          "ji": orders["ji"]["loss_end"]["j_prompt_only"] - orders["ji"]["loss_after_first"]["j_prompt_only"]},  # diagnostic, not D.9
         "accuracy": {t: {"i": (o["acc_start"]["i"], o["acc_end"]["i"]), "j": (o["acc_start"]["j"], o["acc_end"]["j"])} for t, o in orders.items()},
-        "loss": {t: {"start": o["loss_start"], "after_first": o["loss_after_first"], "end": o["loss_end"]} for t, o in orders.items()},
+        "loss": {t: {k: {kk: o[k][kk] for kk in ("i", "j", "i_prompt_only", "j_prompt_only")} for k in ("loss_start", "loss_after_first", "loss_end")} for t, o in orders.items()},
         "updates": {t: o["updates"] for t, o in orders.items()},
         "state_hash": {t: o["state_hash"] for t, o in orders.items()}, "same_endpoint": orders["ij"]["state_hash"] == orders["ji"]["state_hash"],
         "n_Q": {"Q_i": ni, "Q_j": nj, "controls": len(Q["controls"])},

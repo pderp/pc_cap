@@ -31,8 +31,14 @@ BUDGETS_S = (10, 30, 60, 120, 300, 600, 1800, 3600)
 
 
 def discover(roots: list[Path], experiment_id: str | None = None) -> list[dict]:
+    """Runs under ``roots`` (canonicalized and de-duplicated: the same root passed twice is read once — V3 note)."""
     runs = []
+    seen_roots: list[Path] = []
     for rt in roots:
+        rt = Path(rt).resolve()
+        if rt in seen_roots or any(rt.is_relative_to(x) for x in seen_roots):
+            continue  # the same tree (or a subtree of one already read) would count every run twice
+        seen_roots.append(rt)
         for mp in sorted(rt.rglob("metrics.json")):
             if ".superseded-" in str(mp):
                 continue  # archived attempt (V-03)
@@ -61,6 +67,12 @@ def require_one_experiment(runs: list[dict]) -> str | None:
     ids = {r.get("experiment_id") for r in runs}
     if len(ids) > 1:
         raise ValueError(f"runs belong to several experiments {sorted(map(str, ids))}; pass --experiment-id (V2-03)")
+    cells: dict[tuple, str] = {}
+    for r in runs:  # two result directories for one cell of one experiment are never merged silently (V3 note)
+        key = (r["dataset"], r["arm"], r["realization"], r["perm"])
+        if key in cells and cells[key] != r["dir"]:
+            raise ValueError(f"two run directories for cell {key} ({cells[key]} and {r['dir']}); archive one with --force semantics or pass one root")
+        cells[key] = r["dir"]
     return next(iter(ids)) if ids else None
 
 
