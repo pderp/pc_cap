@@ -108,12 +108,14 @@ def _binding(frozen_data: dict[str, Any], filename: str) -> tuple[str, str]:
         if not isinstance(files, dict):
             raise ConfirmationIntegrityError("frozen dataset binding must be a file-hash mapping")
         for name, digest in files.items():
-            if (
-                not _filename(name)
-                or not isinstance(digest, str)
-                or not _SHA256.fullmatch(digest)
-            ):
+            if not isinstance(digest, str) or not _SHA256.fullmatch(digest):
                 raise ConfirmationIntegrityError("frozen dataset binding has an invalid name or hash")
+            if not _filename(name):
+                # A resource binding (e.g. the grammar's ``grammar_base.npz``, checked by the stage that loads it), never a
+                # realization file: it cannot match a realization name and must not block the editing datasets (CP-E v1 defect).
+                if name.endswith(".json"):
+                    raise ConfirmationIntegrityError("frozen dataset binding has an invalid name or hash")
+                continue
             if name == filename:
                 matches.append((dataset, digest))
     if len(matches) != 1:

@@ -25,6 +25,10 @@ def test_confirm_mode_refuses_without_frozen_manifest(tmp_path):
     """§4.5 rule 4 (R2-02): in confirm mode the freeze is checked first and the --manifest file (a sealed
     realization reference) is never opened by the CLI; the frozen-field validation applies to
     manifests/frozen.json itself (exercised in tests/harness/test_confirm_cli.py)."""
+    import pytest
+
+    if (ROOT / "manifests" / "frozen.json").exists():
+        pytest.skip("manifests/frozen.json exists (confirmation is live); the refusal without it is exercised on synthetic roots in test_confirm_cli.py")
     m = tmp_path / "zsre_r0.json"
     m.write_text(json.dumps({"name": "t", "mode": "confirm", "stage": "S4", "seed": 1, "A": 0.1}))
     r = run("run", "--stage", "S4", "--arm", "C2", "--dataset", "zsre", "--manifest", str(m), "--mode", "confirm", "--dry-run")

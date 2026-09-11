@@ -1,14 +1,14 @@
 {
- "name": "frozen-confirmatory-v1-draft",
+ "name": "frozen-confirmatory-v2-draft",
  "mode": "confirm",
  "stage": "S4",
  "seed": 0,
  "frozen_at": null,
  "draft": true,
  "code_commit": {
-  "git_head": "25318f075cc03a16874911a6533b33dce6d37dc9",
+  "git_head": "2814bafa0467fe6c896b03fd861e565ca1e15c3f",
   "dirty": true,
-  "src_tree_sha256": "0522da1fd2eaaf451e4cafd3636d4b6e5be554dd5943394e8e6a34ba008234f7",
+  "src_tree_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
   "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"
  },
  "env_lock_sha": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
@@ -298,7 +298,7 @@
   "allowance_source": "proposed in the draft (S4-02); the lead sets the values on the --final command line"
  },
  "analysis_code_commit": {
-  "git_head": "25318f075cc03a16874911a6533b33dce6d37dc9",
+  "git_head": "2814bafa0467fe6c896b03fd861e565ca1e15c3f",
   "analysis_tree_sha256": "8995d48228e742530db4cbc1cd5dfff1d4c60538b1cf14bd60f05f4162e0f6ba"
  },
  "negative_case_interpretation": "**Confirmatory classification policy (ANA-01) to be frozen verbatim at S4-01.** D.11 names positive / qualified / inconclusive; plan \u00a76.10 S4-06 adds `negative`. ANA-01 operationalizes: `positive` = all constraints met for both C2\u2212C1 and C2\u2212CR; `negative` = RET-GS upper bound < 0.02, or an ES/LS upper bound below its negative margin (evaluated before `qualified`); `qualified` = point RET-GS \u2265 0.02 with unresolved noninferiority and point ES \u2265 \u22120.02, LS \u2265 \u22120.01; else `inconclusive`; missing pairs \u2192 `incomplete` (never imputed). A true zero effect is `negative` for the practical claim.",
@@ -555,7 +555,9 @@
   "DEC-021",
   "DEC-022",
   "DEC-023",
-  "DEC-024"
+  "DEC-024",
+  "DEC-025",
+  "DEC-026"
  ],
  "selection_rule": "subset = first n items of the realization's canonical item list; each committed order is filtered to that subset (relative order preserved); an arm with scope n_arm <= n edits the first n_arm items of the filtered order",
  "pending": []

@@ -139,3 +139,16 @@ unavailable and never run). If Codex's B4 diagnosis later yields a registrable B
 (plan 4 §2), not an edit of the frozen one.
 
 - 2026-09-11 09:05 EDT (orchestrator): **frozen.json written by the lead** (sha `40e570fb5f63`, DEC-025). Job list regenerated from it; the S4 queue is starting (`results/S4/queue.jsonl`, per-job logs under `results/S4/queue_logs/`; stop file `results/S4/queue.stop`). Post-freeze rule in ongoing.md applies to everyone.
+
+## Re-freeze needed (2026-09-11 10:05 EDT) — DEC-026
+
+The first job under v1 hit a loader defect (the grammar's `.npz` binding made the realization loader refuse every editing
+job; no item was edited; v1's attempt tree is archived). The loader is repaired with a regression, the queue stops on
+systematic failures, and the draft is now `frozen-confirmatory-v2`. Please run **the same command again**:
+
+```bash
+cd /home/derp/cap/pc_cap && /home/derp/cap/venv/bin/python -m pccap.harness.freeze --final --i-am-the-lead \
+  --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800
+```
+
+The orchestrator regenerates the job list and restarts the queue automatically when the new `manifests/frozen.json` appears.

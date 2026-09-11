@@ -575,3 +575,66 @@ def test_s5_jobs_follow_the_s4_jobs_and_reuse_sb(synthetic_root):
         assert all("--stage S5" in j["cmd"] and "--mode confirm" in j["cmd"] for j in s5)
     else:
         assert s5 == []
+
+
+# ----------------------------------------------------------------------------- CP-E v1 defect (2026-09-11): loader vs resource bindings
+def test_loader_accepts_resource_bindings_of_other_datasets(tmp_path):
+    """The frozen ``dataset_ids.grammar`` binds fixture files (``grammar_base.npz``, ``streams.json`` …) next to the
+    editing realizations; the loader must validate the realization it is asked for, not refuse every editing job because
+    a resource binding is not a realization file name (the v1 freeze failed all 50 editing jobs this way)."""
+    from pccap.data.confirmation_integrity import ConfirmationIntegrityError, load_frozen_manifest
+
+    confirm = tmp_path / "manifests" / "confirm"
+    confirm.mkdir(parents=True)
+    man = synthetic_manifest("zsre", 0)
+    (confirm / "zsre_r0.json").write_text(json.dumps(man))
+    digest = hashlib.sha256((confirm / "zsre_r0.json").read_bytes()).hexdigest()
+    (confirm / "SHA256SUMS").write_text(f"{digest}  zsre_r0.json\n")
+    base, _ = build(draft=False)
+    frozen = {**base, "draft": False, "name": "synthetic", "dataset_ids": {"zsre": {"zsre_r0.json": digest}, "counterfact": {"counterfact_r0.json": "0" * 64},
+                                                                        "grammar": {"generator.json": "1" * 64, "streams.json": "2" * 64, "grammar_base.npz": "3" * 64}},
+              "confirm_dir": "manifests/confirm", "stream_lengths": {"zsre": 8, "counterfact": 6, "grammar_train_count": 256, "c0_initial": 4}}
+    fp = tmp_path / "manifests" / "frozen.json"
+    fp.write_text(json.dumps(frozen, default=float))
+    loaded = load_frozen_manifest(confirm / "zsre_r0.json", frozen=fp)
+    assert loaded["dataset"] == "zsre" and loaded["realization"] == 0
+    bad = json.loads(json.dumps(frozen, default=float))
+    bad["dataset_ids"]["zsre"]["not a realization"] = "4" * 64  # a malformed .json-less realization name in an EDITING dataset still refuses
+    fp.write_text(json.dumps(bad))
+    bad["dataset_ids"]["zsre"] = {"zsre_r0.json": "zz"}  # and so does a malformed hash
+    with pytest.raises(ConfirmationIntegrityError):
+        fp.write_text(json.dumps(bad))
+        load_frozen_manifest(confirm / "zsre_r0.json", frozen=fp)
+
+
+def test_queue_stops_on_systematic_failures_and_archives_stale_attempts(synthetic_root, tmp_path):
+    from pccap.harness import execute
+
+    root, man = synthetic_root
+    fsha = hashlib.sha256((root / "manifests" / "frozen.json").read_bytes()).hexdigest()
+    jobs = [j for j in jobs_from_manifest(man) if j["dataset"] == "zsre" and j["realization"] == 0 and j["arm"] == "C1"]
+    seen = {}
+    real = runner.RUNNERS.get("S4")
+    forced = []
+
+    def failing(ctx, rd):
+        raise RuntimeError("systematic: no item ever completes")
+
+    runner.RUNNERS["S4"] = failing
+    try:
+        s = execute.run_queue(jobs, man, fsha, lambda j, force=False: runner.main(_args(j, force=force)), queue_log=tmp_path / "q.jsonl")
+        assert s["correctness_failure"] == 3 and "systematic" in s["stopped"] and s["ran"] == 3
+        # the three failed directories hold error records but no results: the next session reruns them with --force (archived, not deleted)
+        runner.RUNNERS["S4"] = _writing_runner(seen)
+
+        def invoke(j, force=False):
+            forced.append(force)
+            return runner.main(_args(j, force=force))
+
+        s2 = execute.run_queue(jobs, man, fsha, invoke, queue_log=tmp_path / "q.jsonl")
+        assert s2["ok"] == 5 and forced[:3] == [True, True, True] and forced[3:] == [False, False]
+        assert [a["archived_previous_attempt"] for a in s2["attempts"]][:3] == ["correctness_failure"] * 3
+        exp = next(iter(seen.values()))["experiment_id"]
+        assert any(p.name.startswith("0.superseded-") for p in (root / "results" / "S4" / exp / "zsre" / "C1" / "BP" / "h" / "0").iterdir())
+    finally:
+        runner.RUNNERS["S4"] = real

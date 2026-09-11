@@ -39,6 +39,19 @@ def run_dir_of(job: dict, frozen: dict, frozen_sha: str) -> Path:
     return run_dir_for(args, experiment_id(args, frozen, frozen_sha), job["dataset"])
 
 
+def stale_attempt(rd: Path) -> str | None:
+    """A previous attempt that produced no results (``refused``, ``running`` from an interrupted session, or a
+    ``correctness_failure`` before any item): its status, so the queue reruns it with ``--force`` (the directory and its
+    error record are archived by the runner, never deleted)."""
+    cfg = rd / "config.json"
+    if not cfg.exists() or (rd / "metrics.json").exists():
+        return None
+    try:
+        return json.loads(cfg.read_text()).get("status")
+    except Exception:
+        return "unreadable"
+
+
 def done_status(rd: Path) -> str | None:
     cfg = rd / "config.json"
     if not cfg.exists():
@@ -50,29 +63,32 @@ def done_status(rd: Path) -> str | None:
     return st if st in ("complete", "resource_stop") and (rd / "metrics.json").exists() else None
 
 
-def command_for(job: dict) -> list[str]:
+def command_for(job: dict, force: bool = False) -> list[str]:
     """The exact CLI invocation for one job (the schedule's ``cmd`` string with the interpreter prefix)."""
     parts = shlex.split(job["cmd"])
     assert parts[:2] == ["pccap", "run"], job["cmd"]
-    return [sys.executable, "-m", "pccap.cli"] + parts[1:]
+    return [sys.executable, "-m", "pccap.cli"] + parts[1:] + (["--force"] if force else [])
 
 
-def subprocess_invoke(job: dict, log_dir: Path) -> int:
+def subprocess_invoke(job: dict, log_dir: Path, force: bool = False) -> int:
     log_dir.mkdir(parents=True, exist_ok=True)
     tag = f"{job['dataset']}_{job['arm']}_r{job['realization']}_p{job['perm']}"
     with open(log_dir / f"{tag}.log", "a") as log:
-        log.write(f"\n=== {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} {' '.join(command_for(job))}\n")
+        log.write(f"\n=== {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} {' '.join(command_for(job, force))}\n")
         log.flush()
         env = dict(os.environ)
         env.setdefault("PYTHONUNBUFFERED", "1")
-        return subprocess.call(command_for(job), cwd=str(ROOT), stdout=log, stderr=subprocess.STDOUT, env=env)
+        return subprocess.call(command_for(job, force), cwd=str(ROOT), stdout=log, stderr=subprocess.STDOUT, env=env)
 
 
 def run_queue(jobs: list[dict], frozen: dict, frozen_sha: str, invoke=None, *, max_jobs: int | None = None, stop_file: Path | None = None,
-              queue_log: Path | None = None, log_dir: Path | None = None, dry_run: bool = False, stage: str = "S4") -> dict:
-    """Execute the scheduled jobs of ``stage`` in order. ``invoke(job) -> exit code`` defaults to the subprocess runner;
-    tests inject an in-process fake. Returns the queue summary."""
-    invoke = invoke or (lambda j: subprocess_invoke(j, log_dir or (RESULTS / stage / "queue_logs")))
+              queue_log: Path | None = None, log_dir: Path | None = None, dry_run: bool = False, stage: str = "S4",
+              max_consecutive_failures: int = 3) -> dict:
+    """Execute the scheduled jobs of ``stage`` in order. ``invoke(job, force=False) -> exit code`` defaults to the subprocess
+    runner; tests inject an in-process fake. ``max_consecutive_failures`` correctness failures in a row that completed no
+    item stop the queue (a systematic failure, not a run result). Returns the queue summary."""
+    invoke = invoke or (lambda j, force=False: subprocess_invoke(j, log_dir or (RESULTS / stage / "queue_logs"), force))
+    consecutive_empty_failures = 0
     summary = {"stage": stage, "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "scheduled": 0, "skipped_done": 0, "ran": 0,
                "ok": 0, "correctness_failure": 0, "stopped": None, "unavailable": 0, "attempts": []}
     n = 0
@@ -93,16 +109,19 @@ def run_queue(jobs: list[dict], frozen: dict, frozen_sha: str, invoke=None, *, m
         if max_jobs is not None and n >= max_jobs:
             summary["stopped"] = f"max_jobs {max_jobs} reached"
             break
-        rec = {"job": {k: job[k] for k in ("dataset", "arm", "realization", "perm", "n_items")}, "cmd": " ".join(command_for(job)), "run_dir": str(rd),
-               "start": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+        stale = stale_attempt(rd)
+        rec = {"job": {k: job[k] for k in ("dataset", "arm", "realization", "perm", "n_items")}, "cmd": " ".join(command_for(job, bool(stale))), "run_dir": str(rd),
+               "start": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "archived_previous_attempt": stale}
         if dry_run:
             rec["exit"] = None
             summary["attempts"].append(rec)
             n += 1
             continue
         t0 = time.time()
-        code = int(invoke(job))
-        rec.update(exit=code, end=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), wall_seconds=time.time() - t0, status=done_status(rd))
+        code = int(invoke(job, bool(stale)) if stale else invoke(job))
+        items = rd / "items.jsonl"
+        n_items = sum(1 for line in items.read_text().splitlines() if line.strip()) if items.exists() else 0
+        rec.update(exit=code, end=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), wall_seconds=time.time() - t0, status=done_status(rd), items_completed=n_items)
         summary["attempts"].append(rec)
         if queue_log is not None:
             queue_log.parent.mkdir(parents=True, exist_ok=True)
@@ -112,8 +131,13 @@ def run_queue(jobs: list[dict], frozen: dict, frozen_sha: str, invoke=None, *, m
         summary["ran"] += 1
         if code == 0:
             summary["ok"] += 1
+            consecutive_empty_failures = 0
         elif code == 1:
-            summary["correctness_failure"] += 1  # a result (error.json in the run directory); the queue continues
+            summary["correctness_failure"] += 1  # a result (error.json in the run directory); the queue continues …
+            consecutive_empty_failures = consecutive_empty_failures + 1 if n_items == 0 else 0
+            if consecutive_empty_failures >= max_consecutive_failures:  # … unless failures are systematic (no item ever completed)
+                summary["stopped"] = f"{consecutive_empty_failures} consecutive correctness failures with no item completed (systematic): last {rec['job']}"
+                break
         else:
             summary["stopped"] = f"exit {code} ({STOP_CODES.get(code, 'unexpected')}) on {rec['job']}: fix the cause before resuming"
             break
