@@ -1,0 +1,229 @@
+{
+ "stage": "S5",
+ "arm": "SE-A",
+ "base": "EPC",
+ "status": "complete",
+ "items_completed": 1000,
+ "items_planned": 1000,
+ "metrics": {
+  "es_immediate": {
+   "value": 0.998,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.353,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.998,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 0.535,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.162,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 0.5360721442885772,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 998,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.001885432828940381,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0018872113750172,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 38682624.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 335,
+   "3": 193,
+   "4": 222,
+   "5": 111,
+   "6": 54,
+   "7": 41,
+   "8": 23,
+   "9": 11,
+   "10": 4,
+   "11": 5,
+   "13": 1
+  }
+ },
+ "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "wall_seconds": 909.7667057514191,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 65856,
+   "partial_forwards": 100398,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 231.0463226241991,
+   "accel_seconds": 231.0463226241991,
+   "peak_mem_mib": 1220.447021484375,
+   "tokens": 3343598
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 73723,
+   "partial_forwards": 132916,
+   "reverses": 10908,
+   "settle_iters": 0,
+   "prefix_microsteps": 3709,
+   "router_probes": 0,
+   "search_candidates": 44508,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 258.7571514073061,
+   "accel_seconds": 258.7571514073061,
+   "peak_mem_mib": 1220.447021484375,
+   "tokens": 2592717
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 139579,
+   "partial_forwards": 233314,
+   "reverses": 10908,
+   "settle_iters": 0,
+   "prefix_microsteps": 3709,
+   "router_probes": 0,
+   "search_candidates": 44508,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 489.8034740315052,
+   "accel_seconds": 489.8034740315052,
+   "peak_mem_mib": 1220.447021484375,
+   "tokens": 5936315
+  },
+  "events": 235773,
+  "elapsed_wall_seconds": 937.5303435325623,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": 2400.0,
+ "config": {
+  "dataset": "zsre",
+  "realization": 1,
+  "perm": 4,
+  "substrate_arm": "SE-A",
+  "base": "EPC",
+  "weights": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "credit": "adjoint",
+  "credit_iters": null,
+  "A": 0.3,
+  "radii": {
+   "1": 0.2807123899459839,
+   "2": 0.414623761177063,
+   "3": 0.18841182291507722
+  },
+  "b_m": {
+   "1": 70.72388458251953,
+   "2": 106.60531616210938,
+   "3": 425.7003860473633
+  },
+  "n_items": 1000,
+  "run_allowance_seconds": 2400.0,
+  "frozen_sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+  "realization_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+  "experiment_id": "frozen-confirmatory-v2-84126123",
+  "epc_checkpoint": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "frozen_identity": {
+   "tokenizer_json_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+  }
+ }
+}
