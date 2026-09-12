@@ -1,0 +1,273 @@
+{
+ "stage": "S4",
+ "arm": "C2",
+ "base": "BP",
+ "status": "complete",
+ "items_completed": 300,
+ "items_planned": 300,
+ "metrics": {
+  "es_immediate": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 3777600.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 300
+  }
+ },
+ "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+ "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+ "wall_seconds": 310.13125443458557,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 75250,
+   "partial_forwards": 6488,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 199.47781094326638,
+   "accel_seconds": 199.47781094326638,
+   "peak_mem_mib": 701.82177734375,
+   "tokens": 2651129
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 6600,
+   "partial_forwards": 4800,
+   "reverses": 600,
+   "settle_iters": 0,
+   "prefix_microsteps": 600,
+   "router_probes": 1800,
+   "search_candidates": 2400,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 16.855672772042453,
+   "accel_seconds": 16.855672772042453,
+   "peak_mem_mib": 701.82177734375,
+   "tokens": 97508
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 81850,
+   "partial_forwards": 11288,
+   "reverses": 600,
+   "settle_iters": 0,
+   "prefix_microsteps": 600,
+   "router_probes": 1800,
+   "search_candidates": 2400,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 216.33348371530883,
+   "accel_seconds": 216.33348371530883,
+   "peak_mem_mib": 701.82177734375,
+   "tokens": 2748637
+  },
+  "events": 22615,
+  "elapsed_wall_seconds": 357.07057762145996,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": 2400.0,
+ "config": {
+  "dataset": "counterfact",
+  "realization": 1,
+  "perm": 2,
+  "order_seed": 102,
+  "named_seeds": {
+   "seed_cap_init": 1020,
+   "seed_router": 1021,
+   "seed_replay": 1022
+  },
+  "n_items": 300,
+  "scope_n": 300,
+  "arm_scope": 300,
+  "selection_rule": "subset = first n items of the realization's canonical item list; each committed order is filtered to that subset (relative order preserved); an arm with scope n_arm <= n edits the first n_arm items of the filtered order",
+  "frozen_sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+  "realization_sha256": "3a20a1704ed42dcaf12adb2a7619b79a2c3067871226118e086ba568013d652d",
+  "experiment_id": "frozen-confirmatory-v2-84126123",
+  "A": 0.3,
+  "radii": {
+   "1": 0.0,
+   "2": 0.0,
+   "3": 0.0
+  },
+  "b_m": {
+   "1": 70.70187377929688,
+   "2": 106.5766658782959,
+   "3": 425.5740661621094
+  },
+  "lora": {
+   "rank": 8,
+   "steps": 10,
+   "lr": 0.0001,
+   "screen": {
+    "0.0001": {
+     "zsre": {
+      "es_immediate": 0.08,
+      "ret_gs_end": 0.15,
+      "ls_complete_answer_end": 0.0,
+      "lm_drift_perplexity_ratio": 1.144230377468232
+     },
+     "counterfact": {
+      "es_immediate": 0.08,
+      "ret_gs_end": 0.055,
+      "ls_complete_answer_end": 0.0,
+      "lm_drift_perplexity_ratio": 3.1675948141680577
+     }
+    },
+    "3e-05": {
+     "zsre": {
+      "es_immediate": 0.03,
+      "ret_gs_end": 0.07,
+      "ls_complete_answer_end": 0.4,
+      "lm_drift_perplexity_ratio": 1.0750298885949627
+     },
+     "counterfact": {
+      "es_immediate": 0.03,
+      "ret_gs_end": 0.01,
+      "ls_complete_answer_end": 0.0,
+      "lm_drift_perplexity_ratio": 1.3497165609663115
+     }
+    },
+    "0.0003": {
+     "zsre": {
+      "es_immediate": 0.23,
+      "ret_gs_end": 0.08,
+      "ls_complete_answer_end": 0.0,
+      "lm_drift_perplexity_ratio": 2.1480403793797627
+     },
+     "counterfact": {
+      "es_immediate": 0.43,
+      "ret_gs_end": 0.095,
+      "ls_complete_answer_end": 0.0,
+      "lm_drift_perplexity_ratio": 5.326879453934548
+     }
+    }
+   },
+   "rule": "DEC-017: highest mean development RET-GS (primary endpoint) over both datasets; ties -> the prescribed 1e-4; ES/LS/drift reported, not optimized"
+  },
+  "run_allowance_seconds": 2400.0,
+  "frozen_identity": {
+   "bp_param_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+   "tokenizer_json_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+  }
+ }
+}
