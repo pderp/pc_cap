@@ -24,7 +24,12 @@ the queue stops). Therefore: no edits under `src/pccap/` after the freeze — no
 a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
 outside `src/pccap` are unaffected.
 
-## 1. State (2026-09-11, 12:25 EDT)
+## 1. State (2026-09-12, 11:55 EDT)
+
+- **S4 complete** (210/210, 11.49 accelerator h; zsRE and CounterFact classified negative on the required contrasts;
+  grammar analysis pending the post-queue analysis fix). **S5 queue running** (60 jobs, ≈ 12 h). Post-freeze rule still
+  in force until S5 finishes; then a recorded analysis-tree version lands the grammar collector fix and the D3 audit runs.
+
 
 - **CP-E done twice.** v1 (DEC-025) was superseded before any result: the sanctioned loader refused every editing
   realization because the grammar's `.npz` resource binding failed its realization-name rule (DEC-026; repaired with a

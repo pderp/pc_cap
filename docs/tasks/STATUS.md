@@ -1,17 +1,17 @@
 # Task status board
 
-Regenerated 2026-09-11 16:25 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-12 15:52 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 65 |
+| done | 66 |
 | in_progress | 2 |
 | partial | 6 |
-| ready | 4 |
+| ready | 3 |
 | pending | 12 |
 
-GPU seconds charged to tasks so far: 45075
+GPU seconds charged to tasks so far: 86439
 
 ## ENV
 
@@ -126,8 +126,8 @@ GPU seconds charged to tasks so far: 45075
 | S4-01 | Frozen manifest | **done** | INTEGRATOR | S3-06, DATA-02, DATA-08, S2-07, ANA-01 | none | yes | orchestrator |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
 | S4-02 | Scope selection | **done** | INTEGRATOR | S4-01 | none | yes | lead |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
 | S4-03 | Confirmatory run schedule | **done** | run owner | S4-02 | none | no | orchestrator |  |  | frozen.json written by the lead (DEC-025) |
-| S4-04 | Confirmatory run execution | **in_progress** | run owner | S4-03 | lease | no | orchestrator |  | v1 queue stopped after 50 no-item loader failures (DEC-026; nothing edited, tree archived); restarts automatically when the lead writes frozen-confirmatory-v2 |
-| S4-05 | Resource views | **partial** | METRICS | S4-04 | none | no | orchestrator |  |  |
+| S4-04 | Confirmatory run execution | **done** | run owner | S4-03 | lease | no | orchestrator |  | 210/210 confirmatory runs complete under frozen-confirmatory-v2 (11.49 accelerator h of 27.0; no failures after the v1 loader defect); results committed per arm |
+| S4-05 | Resource views | **partial** | METRICS | S4-04 | none | no | orchestrator |  | resource views over the 210 runs written (results/S4/resource_views.json); D3 audit input |
 | S4-06 | Frozen paired analysis and D3 audit | **partial** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  |  |
 
 ## S5
@@ -135,7 +135,7 @@ GPU seconds charged to tasks so far: 45075
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S5-01 | Eligibility and arm definition | **done** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no | orchestrator |  |  |
-| S5-02 | Substrate execution | **ready** | run owner | S5-01 | lease | no |  |  |  |
+| S5-02 | Substrate execution | **in_progress** | run owner | S5-01 | lease | no |  |  | S5 queue running (60 SE-A/SE-E jobs; SB reused from S4 C1) from 2026-09-12 11:51 EDT |
 | S5-03 | Optional substrate repeats and read variants | **pending** | run owner | S5-02, CAP-08 | lease | no |  |  |  |
 | S5-04 | S5 report | **pending** | METRICS | S5-02 | none | no |  |  |  |
 
@@ -155,7 +155,7 @@ GPU seconds charged to tasks so far: 45075
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S7-01 | Cloned-state reversals | **partial** | METRICS | S4-04 | lease | no | orchestrator |  | S7-prep done: inventory fixed (CounterFact shared stratum short: 9 pairs), reversal/damage harness with 6 CPU controls; E.2 filter pass and the checkpoint runs wait on S4-04 |
 | S7-02 | Damage matrix | **pending** | METRICS | S7-01 | lease | no |  |  |  |
-| S7-03 | Order variation from permutations | **partial** | METRICS | S4-04 | none | no | orchestrator |  |  |
+| S7-03 | Order variation from permutations | **partial** | METRICS | S4-04 | none | no | orchestrator |  | order variation computed for every arm on zsRE, CounterFact (B3 only nonzero) and the grammar; JS-at-identical-prefixes part pending checkpoints |
 | S7-04 | Optional HVP diagnostics | **pending** | METRICS | S7-03, S0-07b | lease | no |  |  |  |
 
 ## S8
