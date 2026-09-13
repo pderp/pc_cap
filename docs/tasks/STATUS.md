@@ -1,17 +1,17 @@
 # Task status board
 
-Regenerated 2026-09-13 06:55 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 06:57 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 71 |
+| done | 73 |
 | in_progress | 1 |
-| partial | 5 |
+| partial | 4 |
 | ready | 3 |
-| pending | 9 |
+| pending | 8 |
 
-GPU seconds charged to tasks so far: 118443
+GPU seconds charged to tasks so far: 118743
 
 ## ENV
 
@@ -153,8 +153,8 @@ GPU seconds charged to tasks so far: 118443
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S7-01 | Cloned-state reversals | **partial** | METRICS | S4-04 | lease | no | orchestrator |  | S7-prep done: inventory fixed (CounterFact shared stratum short: 9 pairs), reversal/damage harness with 6 CPU controls; E.2 filter pass and the checkpoint runs wait on S4-04 |
-| S7-02 | Damage matrix | **pending** | METRICS | S7-01 | lease | no |  |  |  |
+| S7-01 | Cloned-state reversals | **done** | METRICS | S4-04 | lease | no | orchestrator |  | reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs |
+| S7-02 | Damage matrix | **done** | METRICS | S7-01 | lease | no | orchestrator |  | reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs |
 | S7-03 | Order variation from permutations | **partial** | METRICS | S4-04 | none | no | orchestrator |  | order variation computed for every arm on zsRE, CounterFact (B3 only nonzero) and the grammar; JS-at-identical-prefixes part pending checkpoints |
 | S7-04 | Optional HVP diagnostics | **pending** | METRICS | S7-03, S0-07b | lease | no |  |  |  |
 

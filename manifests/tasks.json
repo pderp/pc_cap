@@ -1800,21 +1800,20 @@
    ],
    "gpu": "lease",
    "review": false,
-   "status": "partial",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-11T04:20:00Z",
-   "finished": null,
+   "finished": "2026-09-13T06:57:22+00:00",
    "commit": null,
    "evidence": [
-    "manifests/dev/s7_pairs.json",
-    "src/pccap/analysis/s7_01.py",
-    "tests/analysis/test_s7_01.py",
-    "docs/tasks/S7-01.md"
+    "results/S7/summary.md",
+    "results/S7/summary.json",
+    "results/S7/frozen-confirmatory-v2-84126123/"
    ],
-   "gpu_seconds": 0.0,
+   "gpu_seconds": 150.17401727614924,
    "wall_seconds": 5400.0,
-   "note": "S7-prep done: inventory fixed (CounterFact shared stratum short: 9 pairs), reversal/damage harness with 6 CPU controls; E.2 filter pass and the checkpoint runs wait on S4-04"
+   "note": "reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs"
   },
   {
    "id": "S7-02",
@@ -1826,16 +1825,20 @@
    ],
    "gpu": "lease",
    "review": false,
-   "status": "pending",
-   "agent": null,
+   "status": "done",
+   "agent": "orchestrator",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-13T06:57:22+00:00",
    "commit": null,
-   "evidence": [],
-   "gpu_seconds": 0.0,
+   "evidence": [
+    "results/S7/summary.md",
+    "results/S7/summary.json",
+    "results/S7/frozen-confirmatory-v2-84126123/"
+   ],
+   "gpu_seconds": 150.17401727614924,
    "wall_seconds": 0.0,
-   "note": ""
+   "note": "reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs"
   },
   {
    "id": "S7-03",
