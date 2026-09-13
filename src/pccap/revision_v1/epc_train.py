@@ -69,9 +69,9 @@ class EPCWriteGradients:
         if role in ANSWER_ROLES:
             er = base.infer_errors(ids_unpadded, int(target), iters=self.iters, writes=wl, phase="learning")
             grad = np.stack([-self.sign * np.asarray(base.error_at_site(er, m), np.float32) for m in (1, 2, 3)])
-            row = np.asarray(er.logits[p], np.float64)
+            row = np.asarray(er.logits[p], np.float64)  # settled logits: a diagnostic, not the feedforward CE
             loss = float(np.log(np.exp(row - row.max()).sum()) + row.max() - row[int(target)])
-            return grad, loss, {"energies": er.energies[0], "energy_k": er.energies[-1], "r_k": er.r_k}
+            return grad, loss, {"energies": er.energies[0], "energy_k": er.energies[-1], "r_k": er.r_k, "settled_ce": True}
         # preserve: KL(write-free || corrected) through a KD head; teacher = write-free logits over all T positions
         from pccap.pc import epc_inference as epc
         ids_d, n_d, W_d, _, _ = base._prep(ids_unpadded, wl)
@@ -86,10 +86,15 @@ class EPCWriteGradients:
             rec.outputs = (state, errors, energies, gnorms)
         errs = {int(structure.nodes[name].node_info.node_config["layer"]): errors[name][0, :n] for name in errors}
         grad = np.stack([-self.sign * np.asarray(errs[blocks[m]][p], np.float32) for m in (1, 2, 3)])
-        st_logits = np.asarray(state.nodes[base.names["logits"]].z_mu[0, p], np.float64)
+        # logged value: the FEEDFORWARD KL under the current writes (comparable with the reference's L3); the settled
+        # state's KL is near zero by construction and is not a loss value
+        with base.ledger.call("learning", full_forwards=1, tokens=n) as rec:
+            ff, _, _ = g.forward_jit(base.params, ids_d, n_d, W_d, base.cfg, False, True)
+            rec.outputs = ff
+        ff = np.asarray(ff, np.float64)
         te = np.asarray(teacher[p], np.float64)
         p_t = np.exp(te - te.max()) / np.exp(te - te.max()).sum()
-        ls = st_logits - st_logits.max() - np.log(np.exp(st_logits - st_logits.max()).sum())
+        ls = ff - ff.max() - np.log(np.exp(ff - ff.max()).sum())
         kl = float(np.sum(p_t * (np.log(p_t + 1e-30) - ls)))
         en = np.asarray(energies, np.float64)
         return grad, kl, {"energies": float(en[0]), "energy_k": float(en[-1]), "r_k": float(gnorms[-1] / max(1.0, gnorms[0]))}
