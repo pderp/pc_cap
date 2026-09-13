@@ -1893,16 +1893,21 @@
    ],
    "gpu": "lease",
    "review": true,
-   "status": "partial",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-13T06:55:35+00:00",
-   "finished": null,
+   "finished": "2026-09-13T16:24:27+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/S8-01.md",
+    "logs/reproduce_final.md",
+    "logs/reproduce_final_20260913/",
+    "docs/tasks/P2.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "core-completion table written; final-tree reproduction audit pending (Lane P ran the CPU pre-audit)"
+   "note": "core-completion table + Codex's final-tree CPU reproduction audit (38 invocations; 360 tests pass in the recreated env; grammar retraining bit-identical parameters; confirm dry-run refuses on drift as designed); one harness defect (S5 dry-run summary directory) queued for the post-queue source version"
   },
   {
    "id": "S8-02",

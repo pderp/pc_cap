@@ -20,5 +20,40 @@
    "run_affecting": false,
    "note": "no module under harness/, cap/, bases/, pc/, data/, fixtures/ changed after the freeze; the src tree hash differs from v1 only through analysis/ (DEC-028)"
   }
+ ],
+ "source_versions": [
+  {
+   "commit": "b530baf",
+   "date": "2026-09-13",
+   "files": [
+    "src/pccap/cap/cap.py",
+    "src/pccap/cap/memory.py",
+    "src/pccap/cap/calibrate.py"
+   ],
+   "change": "S8-02 ablation knobs: CapConfig.ceiling_factor (default 1.0) and calibrate_radii(false_fire_max=0.01 default); defaults unchanged (tests/cap/test_s8_02_knobs.py); run-affecting only when the knobs are set \u2014 never in confirm mode",
+   "full_tree_after": "9b1d9984c3d4\u2026",
+   "note": "DEC-028 said 'no run-affecting module changed'; this later commit added default-preserving knobs and is recorded here (X2-06)"
+  },
+  {
+   "commit": "b48dff1",
+   "date": "2026-09-13",
+   "files": [
+    "src/pccap/fixtures/grammar_eval.py",
+    "src/pccap/harness/freeze.py",
+    "src/pccap/harness/execute.py",
+    "src/pccap/cli.py"
+   ],
+   "change": "SD-22: deterministic paraphrase seed; manifest v3 name; queue --dataset filter",
+   "bound_by": "manifests/frozen.json v3 (frozen-confirmatory-v3-163d04e2), tree 67787f49ec16\u2026"
+  },
+  {
+   "commit": "36ede02",
+   "date": "2026-09-13",
+   "files": [
+    "src/pccap/analysis/s4_06.py"
+   ],
+   "change": "analysis-tree v3: grammar expected RET-GS inventory excludes generator-determined paraphrase-less items (reported as grammar_expected_exclusions)",
+   "status": "committed; temporarily reverted in the working tree while the v3 grammar queue runs (the v3 freeze binds the whole package tree); re-applied after the queue"
+  }
  ]
 }
