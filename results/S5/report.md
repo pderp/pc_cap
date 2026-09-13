@@ -19,7 +19,7 @@ radius calibration by the S2-01 procedure is identical to BP's to the calibratio
 | SE-A | regenerated ePC | adjoint | base only |
 | SE-E | regenerated ePC | settled error, 8 iterations (SD-6, "finite-iteration error credit", P6) | credit rule only |
 
-Common: router C1 (one bank), read R-h, per-base radii and scales from the frozen calibration, A = 0.3, byte ceiling B_cap,
+Common: router C1 (the fixed three-site schedule: writes at all three banks every round; the results overview's documentation correction), read R-h, per-base radii and scales from the frozen calibration, A = 0.3, byte ceiling B_cap,
 the same 3 × 5 streams at the frozen scope (zsRE 1000, CounterFact 300).
 
 ## 3. Paired outcomes (Δ = first arm − second; 97.5% paired-cluster bootstrap over realizations, orders kept together)

@@ -10,8 +10,8 @@ P2's final-tree CPU reproduction audit and X2's counter-review are in `logs/repr
 
 ## 1. Summary
 
-The month asked one confirmatory question: does the three-bank radius-gated cap with learned routing (C2) retain paraphrase
-generalization (RET-GS) at least 0.02 better than the single-bank cap (C1) and than random routing (CR), on sealed editing
+The month asked one confirmatory question: does the radius-gated cap with probe-and-choose routing (C2: one bank per round, chosen by the best positive probe) retain paraphrase
+generalization (RET-GS) at least 0.02 better than the fixed three-site schedule (C1: writes at all three banks every round, the aggregate bound divided among them) and than random bank choice (CR), on sealed editing
 streams, without losing acquisition or locality? **The primary claim is not supported by the completed contrasts; grammar remains incomplete.** On zsRE, C2 retains about three points *less* than C1 in
 every realization (Δ = −0.030, 97.5% interval [−0.041, −0.019]) and its difference from random routing has an interval spanning zero (+0.000
 [−0.013, +0.018]); equivalence is not established. On CounterFact and on the replacement grammar the primary endpoint sits at a floor for every cap arm
