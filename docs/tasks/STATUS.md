@@ -5,10 +5,10 @@ Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 69 |
+| done | 70 |
 | in_progress | 1 |
 | partial | 4 |
-| ready | 5 |
+| ready | 4 |
 | pending | 10 |
 
 GPU seconds charged to tasks so far: 118443
@@ -137,7 +137,7 @@ GPU seconds charged to tasks so far: 118443
 | S5-01 | Eligibility and arm definition | **done** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no | orchestrator |  |  |
 | S5-02 | Substrate execution | **done** | run owner | S5-01 | lease | no |  |  | 60/60 SE-A/SE-E runs complete (8.89 accelerator h of 18.0); SB reused from S4 C1; zsRE contrasts: SE-A≈SB (RET-GS −0.002), SE-E +0.019 RET-GS but −0.34 ES vs SE-A; CounterFact at the exact-key floor |
 | S5-03 | Optional substrate repeats and read variants | **pending** | run owner | S5-02, CAP-08 | lease | no |  |  |  |
-| S5-04 | S5 report | **ready** | METRICS | S5-02 | none | no |  |  |  |
+| S5-04 | S5 report | **done** | METRICS | S5-02 | none | no | orchestrator |  | S5 report written (matched fidelity: SE-A ≈ SB; SE-E retention/acquisition trade-off; CounterFact floor) |
 
 ## S6
 
