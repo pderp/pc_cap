@@ -105,3 +105,13 @@ The in-stream gain (0.44) is smaller than the post-hoc shadow-key figure (0.67 /
 conflict handling and radius shrinking now act on stable keys; site 3 fires the item's own record on 46 of 100
 paraphrases, another item's on 18, nothing on 36 — the selection residual the learned reader must close. Both arms
 converge to the same site-3 firing pattern under stable keys, as expected: firing depends on keys and radii only.
+
+## 8. Addendum (19:35 EDT): the matched-update control measured (R1-15, DEC-034(a))
+
+`scripts/r1_15_matched_update.py` reran the same stream with `MatchedUpdateCap` (stable keys; slot values taught by
+up to 3 normalized adjoint steps under the v0 aggregate bound, accepted-step rollback; `results/R1/matched_update.md`).
+It reaches the same retention as the v0-stable control — RET-ES 0.99, RET-GS 0.44, LS 1.00, unrelated firing 0.000 —
+with a different endpoint state (rounds per prefix 4.56 vs 4.31; all prefixes reach τ). The arm label does not matter
+for this control (it writes at every site without a router), so it is one condition. Together with §7 this fixes the
+non-learned baseline the learned reader must beat: 0.44 on this stream, and it shows the value-update rule (search vs
+gradient steps) is not what limits v0 — the key geometry is.
