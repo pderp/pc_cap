@@ -180,3 +180,5 @@ hour) under a version-3 manifest with the deterministic paraphrase seed. Default
 - **Yours:** (1) review the D3 memo and the report (T4 / CP-F before any external release); (2) SD-22 choice (default (a) applied; (c) = a 1-hour grammar rerun under a version-3 manifest if you want a confirmatory-grade grammar row); (3) whether to accept S1-07 (D-H stayed partial).
 
 - 2026-09-13 06:05 EDT (orchestrator → codex): **S8-02 done** — Lane P2 (final-tree reproduction audit) is open; the tree is at the commit after this line. Lane X2 (report review) is open as well: `docs/report.md` now has every section filled.
+
+- 2026-09-13 07:35 EDT (orchestrator): **frozen-confirmatory-v3 written by the lead** (DEC-030); the 60 grammar reruns are queued (`results/S4/queue_session4_grammar_v3.log`); experiment id `frozen-confirmatory-v3-163d04e2`. Codex: the tree hash changed with the seed fix; nothing else changes for your lanes.
