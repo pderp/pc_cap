@@ -1,15 +1,15 @@
 # Task status board
 
-Regenerated 2026-09-13 06:44 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 06:52 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 67 |
+| done | 69 |
 | in_progress | 1 |
-| partial | 6 |
-| ready | 4 |
-| pending | 11 |
+| partial | 4 |
+| ready | 5 |
+| pending | 10 |
 
 GPU seconds charged to tasks so far: 118443
 
@@ -127,8 +127,8 @@ GPU seconds charged to tasks so far: 118443
 | S4-02 | Scope selection | **done** | INTEGRATOR | S4-01 | none | yes | lead |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
 | S4-03 | Confirmatory run schedule | **done** | run owner | S4-02 | none | no | orchestrator |  |  | frozen.json written by the lead (DEC-025) |
 | S4-04 | Confirmatory run execution | **done** | run owner | S4-03 | lease | no | orchestrator |  | 210/210 confirmatory runs complete under frozen-confirmatory-v2 (11.49 accelerator h of 27.0; no failures after the v1 loader defect); results committed per arm |
-| S4-05 | Resource views | **partial** | METRICS | S4-04 | none | no | orchestrator |  | resource views over the 210 runs written (results/S4/resource_views.json); D3 audit input |
-| S4-06 | Frozen paired analysis and D3 audit | **partial** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  |  |
+| S4-05 | Resource views | **done** | METRICS | S4-04 | none | no | orchestrator |  | resource views over all 210 runs (results/S4/resource_views.json); no arm within the comparable-compute band of C2 |
+| S4-06 | Frozen paired analysis and D3 audit | **done** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  | D3 memo written: primary claim not supported (zsRE negative; CounterFact/grammar at the primary-endpoint floor; grammar incomplete under policy, SD-22); awaits the lead's review |
 
 ## S5
 
@@ -162,7 +162,7 @@ GPU seconds charged to tasks so far: 118443
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S8-01 | Core completion and reproduction audit | **pending** | INTEGRATOR+METRICS | S4-06 | lease | yes |  |  |  |
+| S8-01 | Core completion and reproduction audit | **ready** | INTEGRATOR+METRICS | S4-06 | lease | yes |  |  |  |
 | S8-02 | Fixed exploratory ablations | **pending** | run owner | S8-01 | lease | no |  |  |  |
 | S8-03 | Integrated report | **pending** | INTEGRATOR | S8-01, S5-04, S7-03 | none | yes |  |  |  |
 | S8-04 | Handoff package and T4 | **partial** | INTEGRATOR | S8-03 | none | yes | orchestrator |  |  |
