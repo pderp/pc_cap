@@ -1,0 +1,10 @@
+--- a/src/pccap/harness/execute.py
++++ b/src/pccap/harness/execute.py
+@@ -166,6 +166,7 @@
+         print(f"REFUSED: {args.jobs} was not generated from the current manifests/frozen.json (regenerate with python -m pccap.harness.schedule)", file=sys.stderr)
+         return 2
+     out_dir = RESULTS / args.stage
++    out_dir.mkdir(parents=True, exist_ok=True)
+     summary = run_queue(jobs_doc["jobs"], frozen_obj, frozen_sha, max_jobs=args.max_jobs, stop_file=out_dir / "queue.stop", queue_log=out_dir / "queue.jsonl",
+                         log_dir=out_dir / "queue_logs", dry_run=args.dry_run, stage=args.stage, dataset=args.dataset)
+     (out_dir / ("queue_summary_dryrun.json" if args.dry_run else "queue_summary.json")).write_text(json.dumps(summary, indent=1))

@@ -1,0 +1,328 @@
+{
+  "source_head": "170fad3ac538ea0df90d0993aa44e2af71628ec0",
+  "commands": [
+    {
+      "name": "01_environment",
+      "command": "$P -c \"import pccap; print(pccap.__file__); print(pccap.determinism_report())\"",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 1.616000791080296,
+      "log": "01_environment.txt"
+    },
+    {
+      "name": "02_assets",
+      "command": "$P scripts/fetch_assets.py --verify",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.6647810300346464,
+      "log": "02_assets.txt"
+    },
+    {
+      "name": "03_schema",
+      "command": "$P -m pccap.harness.schema validate manifests/frozen.draft.json --kind manifest_frozen",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.9150478569790721,
+      "log": "03_schema.txt"
+    },
+    {
+      "name": "04_test_fast",
+      "command": "make PY=\"$P\" test-fast",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 59.97560359095223,
+      "log": "04_test_fast.txt"
+    },
+    {
+      "name": "05_report_s0",
+      "command": "$P -m pccap.cli report --stage S0",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.8649843640159816,
+      "log": "05_report_s0.txt"
+    },
+    {
+      "name": "06_report_s1",
+      "command": "$P -m pccap.cli report --stage S1",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.9150009909644723,
+      "log": "06_report_s1.txt"
+    },
+    {
+      "name": "07_splits_audit",
+      "command": "$P -m pccap.data.splits --audit",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.8650517429923639,
+      "log": "07_splits_audit.txt"
+    },
+    {
+      "name": "08_cr_distribution",
+      "command": "$P -m pccap.analysis.s3_05",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.8648924980079755,
+      "log": "08_cr_distribution.txt"
+    },
+    {
+      "name": "09_distill_data",
+      "command": "$P -m pccap.distill.data --parquet ../assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 23.75235020101536,
+      "log": "09_distill_data.txt"
+    },
+    {
+      "name": "10_pilot_compare",
+      "command": "$P scripts/reg_pilot_compare.py --run pilot-100",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.16386668907944113,
+      "log": "10_pilot_compare.txt"
+    },
+    {
+      "name": "11_merge_throughput",
+      "command": "$P scripts/merge_throughput.py results/S2/throughput_baselines.json",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.015554044977761805,
+      "log": "11_merge_throughput.txt"
+    },
+    {
+      "name": "12_d1",
+      "command": "$P -m pccap.analysis.d1",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.8648354689357802,
+      "log": "12_d1.txt"
+    },
+    {
+      "name": "13_short_editing",
+      "command": "$P -m pccap.analysis.s3_04",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.9151645740494132,
+      "log": "13_short_editing.txt"
+    },
+    {
+      "name": "14_d2",
+      "command": "$P -m pccap.analysis.s3_06",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.8649748959578574,
+      "log": "14_d2.txt"
+    },
+    {
+      "name": "15_grammar_generator",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_generator",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.9651784150628373,
+      "log": "15_grammar_generator.txt"
+    },
+    {
+      "name": "16_grammar_training",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_model --steps 3000 --no-lease",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 9.395205333014019,
+      "log": "16_grammar_training.txt"
+    },
+    {
+      "name": "17_grammar_competence",
+      "command": "JAX_PLATFORMS=cpu $P scripts/grammar_competence.py",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 35.32773748203181,
+      "log": "17_grammar_competence.txt"
+    },
+    {
+      "name": "18_grammar_streams",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.data.grammar_streams",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 1.1154588860226795,
+      "log": "18_grammar_streams.txt"
+    },
+    {
+      "name": "19_grammar_tracing",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.tracing",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 2.3671898569446057,
+      "log": "19_grammar_tracing.txt"
+    },
+    {
+      "name": "20_grammar_calibration",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.fixtures.grammar_eval",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 3.2193599309539422,
+      "log": "20_grammar_calibration.txt"
+    },
+    {
+      "name": "21_grammar_run",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.cli run --stage S3 --arm C2 --dataset grammar --manifest manifests/dev/s3_grammar_dev.json --no-lease",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 34.57353812910151,
+      "log": "21_grammar_run.txt"
+    },
+    {
+      "name": "22_grammar_analysis",
+      "command": "JAX_PLATFORMS=cpu $P -m pccap.analysis.s3_03",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 1.0151227930327877,
+      "log": "22_grammar_analysis.txt"
+    },
+    {
+      "name": "23_draft",
+      "command": "$P -m pccap.harness.freeze --draft --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 1.7663430600659922,
+      "log": "23_draft.txt"
+    },
+    {
+      "name": "24_schedule",
+      "command": "$P -m pccap.harness.schedule",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.8650056350743398,
+      "log": "24_schedule.txt"
+    },
+    {
+      "name": "25_resource_analysis",
+      "command": "$P -m pccap.analysis.s4_05 --experiment-id frozen-confirmatory-v2-84126123 --out /home/derp/cap/pc_cap/logs/reproduce_final_20260913/generated/resource_views.json",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 3.7697272070217878,
+      "log": "25_resource_analysis.txt"
+    },
+    {
+      "name": "26_paired_analysis",
+      "command": "$P -m pccap.analysis.s4_06 --dataset zsre --experiment-id frozen-confirmatory-v2-84126123 --out /home/derp/cap/pc_cap/logs/reproduce_final_20260913/generated/paired_zsre.json",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 2.116861264919862,
+      "log": "26_paired_analysis.txt"
+    },
+    {
+      "name": "27_order_analysis",
+      "command": "$P -m pccap.analysis.s7_03 --dataset zsre --arm C2 --experiment-id frozen-confirmatory-v2-84126123 --out /home/derp/cap/pc_cap/logs/reproduce_final_20260913/generated/order_zsre_C2.json",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 1.1655398049624637,
+      "log": "27_order_analysis.txt"
+    },
+    {
+      "name": "28_progress_s4",
+      "command": "$P scripts/s4_progress.py --json",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.0637427729088813,
+      "log": "28_progress_s4.txt"
+    },
+    {
+      "name": "29_progress_s5",
+      "command": "$P scripts/s4_progress.py --stage S5 --json",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.03168199898209423,
+      "log": "29_progress_s5.txt"
+    },
+    {
+      "name": "30_queue_S4",
+      "command": "$P -m pccap.cli queue --dry-run --stage S4",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 2,
+      "expected_exit": 0,
+      "wall_seconds": 0.8648682119091973,
+      "log": "30_queue_S4.txt"
+    },
+    {
+      "name": "30_queue_S5",
+      "command": "$P -m pccap.cli queue --dry-run --stage S5",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 2,
+      "expected_exit": 0,
+      "wall_seconds": 0.8649196800542995,
+      "log": "30_queue_S5.txt"
+    },
+    {
+      "name": "31_final_tree_confirm_dryrun",
+      "command": "$P -m pccap.cli run --stage S4 --mode confirm --dataset zsre --arm C2 --realization 0 --perm 0 --manifest /home/derp/cap/pc_cap/manifests/confirm/zsre_r0.json --dry-run",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 2,
+      "expected_exit": 2,
+      "wall_seconds": 0.9649379340698943,
+      "log": "31_final_tree_confirm_dryrun.txt"
+    },
+    {
+      "name": "32_frozen_tree_confirm_dryrun",
+      "command": "$P -m pccap.cli run --stage S4 --mode confirm --dataset zsre --arm C2 --realization 0 --perm 0 --manifest /home/derp/cap/pc_cap/manifests/confirm/zsre_r0.json --dry-run",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/frozen_source",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.9148500320734456,
+      "log": "32_frozen_tree_confirm_dryrun.txt"
+    },
+    {
+      "name": "33_s7_summary",
+      "command": "$P scripts/s7_summary.py",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/reproduce_final_20260913/pc_cap",
+      "exit_code": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.03151564998552203,
+      "log": "33_s7_summary.txt"
+    }
+  ],
+  "gpu_seconds": 0,
+  "wall_seconds": 194.9378501640167,
+  "live_copied_inputs_changed": [],
+  "generated_sha256": {
+    "generated/resource_views.json": "b5ec5e89456a558158eae69cc20ec7cf392d87b704f53062fb83a52c14ba56aa",
+    "generated/resource_views.md": "ac67f343bef5434592634b6356dde069d8dd07b27a4f3033e9d312b2422df617",
+    "generated/paired_zsre.json": "7df95e2f46e8d829989b19f11d321745d3050da223a529a496898dc04274a25d",
+    "generated/paired_zsre.md": "bedab3a099f8356a0f33dd9c793a0ef159f77acc86490ee95597355f98e2b2d4",
+    "generated/order_zsre_C2.json": "26fcdd15841e8088bc8c0ff3a1354912440a3ac85f903a4ca3db49392e86548e",
+    "generated/isolated/manifests/frozen.draft.json": "f75fa9a59ab5c4a8acbc5113d31a05967b4cf6c6dcd2b611557c71e3bd0a2cbf",
+    "generated/isolated/results/S7/summary.json": "71b8a683ee05b4b35af7452e05e2aea650713e3bb951c25d65cd7e9474558146",
+    "generated/isolated/results/S7/summary.md": "46ad6ee75c32551649e1aaf0f34749d341db3721f7aa04fb30b180408158a7c8",
+    "generated/isolated/results/S3/grammar_dev_matrix.json": "152aa54fb9dd21fa8a5141929fce65c55c94184a53e4f314cb34d6fdc3389fce",
+    "generated/isolated/results/GRAM/competence.json": "9c0aca70bd7bb2bc5fa3843c8c2969fce3bbad744caaaf85a8e4e94d1b697c2b",
+    "generated/isolated/results/S4/jobs.json": "e9822ab9f405dc5d2c374068438c1d4001f7ad1218298cf8d0ce995142ce1d9d",
+    "generated/isolated/results/S3/dev/grammar/C2/BP/h/0/0/metrics.json": "fb0f3725944179beeb7eeca8d6b9ae6f7c538a8b8a6092bb2f13c64e39118a46"
+  }
+}

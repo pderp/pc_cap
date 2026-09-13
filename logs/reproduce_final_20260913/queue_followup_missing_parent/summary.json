@@ -1,0 +1,6 @@
+{
+  "command": "$P -m pccap.cli queue --jobs results/S4/jobs_from_frozen.json --stage S5 --dry-run",
+  "exit_code": 0,
+  "wall_seconds": 0.9149858929449692,
+  "workaround": "Created the missing results/S5 directory in the isolated copy. execute.main creates its output directory only outside dry-run, so the new-checkout S5 dry-run otherwise raises FileNotFoundError. No source edited."
+}

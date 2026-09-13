@@ -1,0 +1,31 @@
+{
+  "head": "2b350797786e28de668a82dc9a1cee462a5ff2a7",
+  "frozen_name": "frozen-confirmatory-v3",
+  "frozen_sha256": "163d04e2a1e0ba83e18fa2ee0b51b7a5560ed12086b5f4df1e6b0f6d20d4cbe8",
+  "src_tree_sha256": "67787f49ec16f1bbc7b0a51fa8f019597ed238a7b80a630c16facc6bc7dc5069",
+  "commands": [
+    {
+      "name": "01_v3_affected_tests",
+      "command": "$P -m pytest -q tests/fixtures/test_grammar_paraphrase_seed.py tests/cap/test_s8_02_knobs.py tests/harness/test_confirm_cli.py -p no:cacheprovider --basetemp=/home/derp/cap/assets/tmp/p2_v3_transition_20260913/pytest",
+      "cwd": "/home/derp/cap/pc_cap",
+      "exit_code": 0,
+      "wall_seconds": 17.24243939400185
+    },
+    {
+      "name": "02_v3_grammar_queue",
+      "command": "$P -m pccap.cli queue --dataset grammar --dry-run",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/p2_v3_transition_20260913",
+      "exit_code": 0,
+      "wall_seconds": 0.4143203099956736
+    },
+    {
+      "name": "03_v3_confirm_dryrun",
+      "command": "$P -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C0 --base GRAM --realization 0 --perm 0 --manifest /home/derp/cap/pc_cap/manifests/grammar/streams.json --dry-run",
+      "cwd": "/home/derp/cap/pc_cap/.worktrees/p2_v3_transition_20260913",
+      "exit_code": 0,
+      "wall_seconds": 0.41432372701819986
+    }
+  ],
+  "gpu_seconds": 0,
+  "note": "Delta checks after concurrent DEC-029/030. The earlier full audit remains an immutable v2 snapshot; the v3 grammar queue is owned by the orchestrator. Test logs and empty-copy previews only."
+}

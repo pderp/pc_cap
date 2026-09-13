@@ -1,0 +1,24 @@
+{
+  "cause": "The initial regeneration copy intentionally had no final frozen.json; queue dry-runs correctly refused. Copied the existing lead-authored freeze into the new location, regenerated a hash-bound schedule and retried. No final freeze or live queue was executed.",
+  "commands": [
+    {
+      "name": "01_frozen_schedule",
+      "command": "$P -m pccap.harness.schedule --out results/S4/jobs_from_frozen.json",
+      "exit_code": 0,
+      "wall_seconds": 0.9150209189392626
+    },
+    {
+      "name": "02_s4_dry_queue",
+      "command": "$P -m pccap.cli queue --jobs results/S4/jobs_from_frozen.json --stage S4 --dry-run",
+      "exit_code": 0,
+      "wall_seconds": 0.9152318129781634
+    },
+    {
+      "name": "03_s5_dry_queue",
+      "command": "$P -m pccap.cli queue --jobs results/S4/jobs_from_frozen.json --stage S5 --dry-run",
+      "exit_code": 1,
+      "wall_seconds": 0.9150861429516226
+    }
+  ],
+  "gpu_seconds": 0
+}
