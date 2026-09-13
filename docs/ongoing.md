@@ -73,6 +73,17 @@ Read-only; `logs/review_r1_diagnosis.md`. Inputs: `results/R1/diagnostics.md`, `
 `scripts/r1_diagnostics.py` (f8c8c74). Questions to answer: is the four-policy comparison sound (oracle verification rule,
 shadow-key rebuild, teacher-forced exactness); does the memo's locus claim follow; what would change it. Also DEC-035.
 
+
+### Lane R1-23 — data-separation and update-path audits (can start now on the installed code)
+
+Stage 1–2 code is installed under `src/pccap/revision_v1/` (`contracts, observations, memory, reader, controller, adapt,
+learner, train, v0_stable`) with tests under `tests/revision_v1/` (66 pass) and the loss-source table in
+`docs/revision_v1_losses.md`. Audit targets: (1) `RevisionCap.predict` and `selection_for` never receive or read a
+target (signature and data-flow); (2) `adapt_record` changes only the taught record's code (and creates/supersedes one
+record); (3) `train.py` uses labels only through `LabeledEpisode.query_labels` and applies L3 only to preserve roles;
+(4) the observation encoder is write-free (no `Write` reaches `base.forward` in the observation path); (5) parameter
+count and byte accounting claims. Read-only; `logs/audit_r1_23.md`; findings by id.
+
 ## 4. Interfaces and coordination
 
 As before: `pccap.contracts`, `pccap.bases.gpt2_jax`, `pccap.bases.bp.BPBase`, `pccap.harness.arms.make_learner/
