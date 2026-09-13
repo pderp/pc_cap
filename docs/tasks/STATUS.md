@@ -1,15 +1,15 @@
 # Task status board
 
-Regenerated 2026-09-13 06:57 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 07:40 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
 | done | 73 |
-| in_progress | 1 |
-| partial | 4 |
+| in_progress | 2 |
+| partial | 5 |
 | ready | 3 |
-| pending | 8 |
+| pending | 6 |
 
 GPU seconds charged to tasks so far: 118743
 
@@ -163,7 +163,7 @@ GPU seconds charged to tasks so far: 118743
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S8-01 | Core completion and reproduction audit | **partial** | INTEGRATOR+METRICS | S4-06 | lease | yes | orchestrator |  | core-completion table written; final-tree reproduction audit pending (Lane P ran the CPU pre-audit) |
-| S8-02 | Fixed exploratory ablations | **pending** | run owner | S8-01 | lease | no |  |  |  |
-| S8-03 | Integrated report | **pending** | INTEGRATOR | S8-01, S5-04, S7-03 | none | yes |  |  |  |
+| S8-02 | Fixed exploratory ablations | **in_progress** | run owner | S8-01 | lease | no | orchestrator |  | ablations running (b: byte ceiling ×0.5/×2 on zsRE C1/C2; c: grammar 5% radius); (a) not run (CAP-08) |
+| S8-03 | Integrated report | **partial** | INTEGRATOR | S8-01, S5-04, S7-03 | none | yes | orchestrator |  | draft 1 of docs/report.md written; §8 (ablations) and the final reproduction audit pending |
 | S8-04 | Handoff package and T4 | **partial** | INTEGRATOR | S8-03 | none | yes | orchestrator |  |  |
 
