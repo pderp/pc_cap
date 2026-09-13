@@ -24,7 +24,11 @@ the queue stops). Therefore: no edits under `src/pccap/` after the freeze — no
 a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
 outside `src/pccap` are unaffected.
 
-## 1. State (2026-09-13, 05:45 EDT)
+## 1. State (2026-09-13, 06:10 EDT)
+
+- **S8-02 done**; `docs/report.md` complete as draft 1 (every section filled); `docs/HANDOFF.md` written. Open: Codex Lanes
+  P2 (final-tree reproduction audit → S8-01) and X2 (report review); the lead's T4 review and SD-22 choice. GPU idle.
+
 
 - **Everything confirmatory is done and analysed**: S4 (210 runs) and S5 (60 runs); frozen paired analyses (zsRE negative,
   CounterFact floor, grammar incomplete under SD-22 + labelled supplement); D3 memo (`docs/D3_decision.md`); S5 report;
