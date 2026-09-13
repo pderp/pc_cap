@@ -28,6 +28,7 @@ def main() -> int:
     ap.add_argument("--max-tokens", type=int, default=None, help="truncate the split (smoke only)")
     ap.add_argument("--out", default=str(ROOT / "results" / "S4" / "drift_supplement.json"))
     ap.add_argument("--no-lease", action="store_true", help="share the GPU with a running queue (lead's choice; wall times of both are then perturbed)")
+    ap.add_argument("--windows-per-chunk", type=int, default=64, help="windows scored per batch (memory: 64 windows ≈ 0.3 GB instead of 8.5 GB for the whole split)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -54,9 +55,26 @@ def main() -> int:
     with (nullcontext() if args.no_lease else gpu_lease("S4:drift_supplement", stage="S4", projected_seconds=3 * 3600.0)):
         ledger = Ledger()
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
-        ev = Evaluator(base, tok, [], tokens, drift_positions=n_pos, drift_window=128)  # base NLL over the full split, once
-        out["tokens_scored"] = sum(len(w) - 1 for w in ev.drift_windows)
-        out["base_nll"] = ev.drift_base_nll
+        # the split is scored in chunks of windows (memory: the evaluator batches every window of an Evaluator per step)
+        chunk_tokens = args.windows_per_chunk * 128
+        evs = [Evaluator(base, tok, [], tokens[k: k + chunk_tokens + 128], drift_positions=min(chunk_tokens, len(tokens) - 128 - k), drift_window=128)
+               for k in range(0, n_pos, chunk_tokens)]
+        evs = [e for e in evs if e.drift_windows]
+        pos = [sum(len(w) - 1 for w in e.drift_windows) for e in evs]
+        out["tokens_scored"] = int(sum(pos))
+        out["base_nll"] = float(sum(e.drift_base_nll * n for e, n in zip(evs, pos)) / sum(pos))
+        out["chunks"] = len(evs)
+
+        class _Full:
+            """Position-weighted aggregate of the chunk evaluators' drift() results."""
+
+            def drift(self, learner):
+                parts = [e.drift(learner) for e in evs]
+                nll = sum(d["nll"] * n for d, n in zip(parts, pos)) / sum(pos)
+                base_nll = sum(d["base_nll"] * n for d, n in zip(parts, pos)) / sum(pos)
+                return {"nll": nll, "base_nll": base_nll, "loss_difference": nll - base_nll, "perplexity_ratio": float(np.exp(nll - base_nll)), "positions": int(sum(pos))}
+
+        ev = _Full()
         radii = {int(k): float(v) for k, v in frozen["radii"]["bank"][args.dataset].items()}
         b_m = {int(k): float(v) for k, v in frozen["b_m"].items()}
         from pccap.data.confirm import load as load_confirm
