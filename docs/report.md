@@ -117,8 +117,9 @@ all — C2 retains 0.55 of its edits against C1's 0.85 with a third of C1's occu
 retrievals within the three banks, not eviction. A binding-ceiling ablation would need factors ≤ 0.25 or a larger
 development pool; it was not added post hoc.
 
-**(c) Grammar with paraphrase keys at a 5% false-fire radius (C1, C2, CR).** *pending the run.* The 5% calibration itself
-already answers the question: no positive radius exists at 5% either. On the grammar the paraphrase-to-edit and
+**(c) Grammar with paraphrase keys at a 5% false-fire radius (C1, C2, CR; 128 sequences per run).** The 5% calibration
+finds no positive radius either, so the "5% radius" runs reproduce the exact-key runs to the third decimal (C1 ES 0.719 /
+RET-GS 0.294; C2 1.000 / 0.294; CR 0.906 / 0.294; LS 1.000 throughout). On the grammar the paraphrase-to-edit and
 unrelated-to-edit key distances overlap almost completely (bank 1: paraphrase quantiles 0.09 / 0.20 / 1.05 vs unrelated
 0.06 / 0.30 / 0.71), and the smallest grid radius fires on 5.4% of unrelated prefixes while covering 4.4% of paraphrases.
 The grammar's RET-GS floor is therefore a property of the R-h key on this base — "same latent, different filler" is not a

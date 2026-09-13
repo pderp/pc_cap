@@ -178,3 +178,5 @@ hour) under a version-3 manifest with the deterministic paraphrase seed. Default
 - Done: all confirmatory runs, the frozen analyses, D3 memo, S5 report, S7, analysis-tree v2, report draft 1 (`docs/report.md`).
 - Running: S8-02 ablations (≈ 1 h). Then: report §8, S8-01 final reproduction audit (Codex Lane P2), S8-04 handoff package.
 - **Yours:** (1) review the D3 memo and the report (T4 / CP-F before any external release); (2) SD-22 choice (default (a) applied; (c) = a 1-hour grammar rerun under a version-3 manifest if you want a confirmatory-grade grammar row); (3) whether to accept S1-07 (D-H stayed partial).
+
+- 2026-09-13 06:05 EDT (orchestrator → codex): **S8-02 done** — Lane P2 (final-tree reproduction audit) is open; the tree is at the commit after this line. Lane X2 (report review) is open as well: `docs/report.md` now has every section filled.
