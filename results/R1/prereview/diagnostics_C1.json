@@ -1,0 +1,102 @@
+{
+ "arm": "C1",
+ "n_items": 100,
+ "stream_metrics": {
+  "es_immediate": 1.0,
+  "ret_es_end": 0.92,
+  "ret_gs_end": 0.24,
+  "ls_complete_answer_end": 1.0
+ },
+ "occupancy": {
+  "1": 362,
+  "2": 361,
+  "3": 362
+ },
+ "state_hash": "eff06358dbf2371ae50f2dca8c455f43b2a0d1b5e3dcda2bc731d71968b3b5a5",
+ "D0": {
+  "1": {
+   "prompt_own": 96,
+   "prompt_none": 1,
+   "prompt_other": 3,
+   "para_own": 26,
+   "para_none": 30,
+   "para_other": 44,
+   "para_n": 100,
+   "unrel_fire": 0,
+   "para_recall": 0.26,
+   "prompt_recall": 0.96,
+   "unrelated_firing_rate": 0.0
+  },
+  "2": {
+   "prompt_own": 88,
+   "prompt_none": 9,
+   "prompt_other": 3,
+   "para_own": 19,
+   "para_none": 54,
+   "para_other": 27,
+   "para_n": 100,
+   "unrel_fire": 0,
+   "para_recall": 0.19,
+   "prompt_recall": 0.88,
+   "unrelated_firing_rate": 0.0
+  },
+  "3": {
+   "prompt_own": 92,
+   "prompt_none": 5,
+   "prompt_other": 3,
+   "para_own": 23,
+   "para_none": 72,
+   "para_other": 5,
+   "para_n": 100,
+   "unrel_fire": 0,
+   "para_recall": 0.23,
+   "prompt_recall": 0.92,
+   "unrelated_firing_rate": 0.0
+  }
+ },
+ "D1": {
+  "prompt": {
+   "n": 100,
+   "live_exact_rate": 0.92,
+   "oracle_exact_rate": 0.8,
+   "live_first_nll_mean": 0.49588624865266545,
+   "oracle_first_nll_mean": 0.014278164761346517
+  },
+  "paraphrase": {
+   "n": 100,
+   "live_exact_rate": 0.24,
+   "oracle_exact_rate": 0.8,
+   "live_first_nll_mean": 7.021095569068585,
+   "oracle_first_nll_mean": 0.037838240342304846
+  }
+ },
+ "D2": {
+  "1": {
+   "n": 200,
+   "key_l2_mean": 0.0,
+   "key_l2_max": 0.0,
+   "key_cos_min": 1.0,
+   "retrieval_differs_rate": 0.0
+  },
+  "2": {
+   "n": 200,
+   "key_l2_mean": 0.21819585971534253,
+   "key_l2_max": 0.5247682929039001,
+   "key_cos_min": 0.8623090386390686,
+   "retrieval_differs_rate": 0.41
+  },
+  "3": {
+   "n": 200,
+   "key_l2_mean": 0.17899702174589038,
+   "key_l2_max": 0.3788384199142456,
+   "key_cos_min": 0.9282408356666565,
+   "retrieval_differs_rate": 0.49
+  }
+ },
+ "extra_capoff_pass_accel_seconds": 0.3087071697227657,
+ "wall_seconds": 146.04576206207275,
+ "labels": {
+  "D1": "upper-bound diagnostic with unavailable deployment information (edit identity), never an efficacy score",
+  "D2": "stable keys = cap-off pass; live keys = the sequential edited read the arm actually uses"
+ }
+}

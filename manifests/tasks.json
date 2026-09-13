@@ -2058,16 +2058,16 @@
    ],
    "gpu": "short",
    "review": false,
-   "status": "in_progress",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-13T22:01:52+00:00",
-   "finished": null,
+   "finished": "2026-09-13T22:16:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "pre-review pass running; script revised per X0-14 before the memo"
+   "note": "results/R1/diagnostics.md; traces persisted; unrelated firing 0.000"
   },
   {
    "id": "R1-02",
@@ -2079,16 +2079,16 @@
    ],
    "gpu": "short",
    "review": false,
-   "status": "in_progress",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-13T22:01:52+00:00",
-   "finished": null,
+   "finished": "2026-09-13T22:16:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "with R1-01"
+   "note": "verified oracle: paraphrase exact 0.94 both arms"
   },
   {
    "id": "R1-03",
@@ -2100,16 +2100,16 @@
    ],
    "gpu": "short",
    "review": false,
-   "status": "in_progress",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-13T22:01:52+00:00",
-   "finished": null,
+   "finished": "2026-09-13T22:16:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "with R1-01; stable-read outcome assay added per X0-14"
+   "note": "stable_rebuilt: paraphrase exact 0.67 (C1) / 0.49 (C2); costs reconciled"
   },
   {
    "id": "R1-04",
@@ -2123,16 +2123,16 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "pending",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
-   "started": null,
-   "finished": null,
+   "started": "2026-09-13T22:16:20+00:00",
+   "finished": "2026-09-13T22:16:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "docs/R1_diagnosis.md; Codex counter-review"
+   "note": "docs/R1_diagnosis.md; locus = observation instability, then selection; awaiting Codex R1-X1"
   },
   {
    "id": "R1-10",
@@ -2144,16 +2144,16 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "pending",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
-   "started": null,
-   "finished": null,
+   "started": "2026-09-13T22:16:20+00:00",
+   "finished": "2026-09-13T22:16:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "design: docs/revision_v1_design.md"
+   "note": "contracts/observations/memory installed; 60 tests"
   },
   {
    "id": "R1-11",
@@ -2489,6 +2489,27 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "14 findings; response in docs/tasks/R1-X0-response.md; DEC-034"
+  },
+  {
+   "id": "R1-14",
+   "title": "v0-stable control (cap-off keys at write and read)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-10"
+   ],
+   "gpu": "short",
+   "review": false,
+   "status": "pending",
+   "agent": "orchestrator",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "DEC-035; non-learned control"
   }
  ]
 }

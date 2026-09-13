@@ -1,0 +1,399 @@
+{
+ "arm": "C2",
+ "n_items": 100,
+ "stream_metrics": {
+  "es_immediate": 1.0,
+  "ret_es_end": 0.79,
+  "ret_gs_end": 0.29,
+  "ls_complete_answer_end": 1.0
+ },
+ "occupancy": {
+  "1": 6,
+  "2": 4,
+  "3": 364
+ },
+ "state_hash": "ed29f6a67d414cc6a5c9961e51cae4135faf5dfb4fb046094f8b86d7a61b83a7",
+ "D0": {
+  "1": {
+   "prompt_own": 4,
+   "prompt_none": 55,
+   "prompt_other": 41,
+   "para_own": 1,
+   "para_none": 58,
+   "para_other": 41,
+   "para_n": 100,
+   "unrel_fire": 0,
+   "para_recall": 0.01,
+   "prompt_recall": 0.04,
+   "unrelated_firing_rate": 0.0
+  },
+  "2": {
+   "prompt_own": 2,
+   "prompt_none": 79,
+   "prompt_other": 19,
+   "para_own": 1,
+   "para_none": 73,
+   "para_other": 26,
+   "para_n": 100,
+   "unrel_fire": 0,
+   "para_recall": 0.01,
+   "prompt_recall": 0.02,
+   "unrelated_firing_rate": 0.0
+  },
+  "3": {
+   "prompt_own": 77,
+   "prompt_none": 18,
+   "prompt_other": 5,
+   "para_own": 32,
+   "para_none": 58,
+   "para_other": 10,
+   "para_n": 100,
+   "unrel_fire": 0,
+   "para_recall": 0.32,
+   "prompt_recall": 0.77,
+   "unrelated_firing_rate": 0.0
+  }
+ },
+ "D1": {
+  "prompt": {
+   "live": {
+    "n": 100,
+    "exact_rate": 0.79,
+    "tf_nll_sum_mean": 2.3532418941085633,
+    "tf_nll_token_mean": 0.7438466335690975,
+    "first_nll_mean": 2.34345546917739,
+    "unavailable_positions_total": 0
+   },
+   "oracle": {
+    "n": 100,
+    "exact_rate": 0.92,
+    "tf_nll_sum_mean": 0.5782225788479949,
+    "tf_nll_token_mean": 0.15725755481614592,
+    "first_nll_mean": 0.18598794217085454,
+    "unavailable_positions_total": 832
+   },
+   "stable": {
+    "n": 100,
+    "exact_rate": 0.62,
+    "tf_nll_sum_mean": 4.370280088089464,
+    "tf_nll_token_mean": 1.252862600247818,
+    "first_nll_mean": 3.898952587833289,
+    "unavailable_positions_total": 0
+   },
+   "stable_rebuilt": {
+    "n": 100,
+    "exact_rate": 0.98,
+    "tf_nll_sum_mean": 0.5384814910047038,
+    "tf_nll_token_mean": 0.0882196506629944,
+    "first_nll_mean": 0.16202082381192726,
+    "unavailable_positions_total": 0
+   }
+  },
+  "paraphrase": {
+   "live": {
+    "n": 100,
+    "exact_rate": 0.29,
+    "tf_nll_sum_mean": 8.122063799381596,
+    "tf_nll_token_mean": 2.398839744539307,
+    "first_nll_mean": 7.1332062246358126,
+    "unavailable_positions_total": 0
+   },
+   "oracle": {
+    "n": 100,
+    "exact_rate": 0.94,
+    "tf_nll_sum_mean": 0.548792553223932,
+    "tf_nll_token_mean": 0.1484385174370875,
+    "first_nll_mean": 0.18930772528529835,
+    "unavailable_positions_total": 832
+   },
+   "stable": {
+    "n": 100,
+    "exact_rate": 0.29,
+    "tf_nll_sum_mean": 9.34686558502454,
+    "tf_nll_token_mean": 2.801948825482423,
+    "first_nll_mean": 8.302176515148112,
+    "unavailable_positions_total": 0
+   },
+   "stable_rebuilt": {
+    "n": 100,
+    "exact_rate": 0.49,
+    "tf_nll_sum_mean": 8.328127218228266,
+    "tf_nll_token_mean": 2.4838750381544776,
+    "first_nll_mean": 7.344117853475441,
+    "unavailable_positions_total": 0
+   }
+  }
+ },
+ "D1_oracle_verification": {
+  "claimed": 374,
+  "verified": 374,
+  "reused_or_inactive": 0,
+  "target_mismatch": 0,
+  "missing_prefix": 832
+ },
+ "D2": {
+  "1": {
+   "n": 200,
+   "key_l2_mean": 0.0,
+   "key_l2_max": 0.0,
+   "key_cos_min": 1.0,
+   "retrieval_differs_rate": 0.0,
+   "retrieval_differs_rebuilt_rate": 0.0
+  },
+  "2": {
+   "n": 200,
+   "key_l2_mean": 0.1754536958783865,
+   "key_l2_max": 0.5438315272331238,
+   "key_cos_min": 0.8521235585212708,
+   "retrieval_differs_rate": 0.18,
+   "retrieval_differs_rebuilt_rate": 0.18
+  },
+  "3": {
+   "n": 200,
+   "key_l2_mean": 0.1296130210533738,
+   "key_l2_max": 0.360910028219223,
+   "key_cos_min": 0.934872031211853,
+   "retrieval_differs_rate": 0.465,
+   "retrieval_differs_rebuilt_rate": 0.35
+  }
+ },
+ "D2_key_rebuild": {
+  "1": {
+   "rebuilt": 6,
+   "kept_stored": 0,
+   "l2_mean": 0.0,
+   "l2_max": 0.0,
+   "radius": 0.2808128833770752
+  },
+  "2": {
+   "rebuilt": 4,
+   "kept_stored": 0,
+   "l2_mean": 0.0,
+   "l2_max": 0.0,
+   "radius": 0.4143741011619568
+  },
+  "3": {
+   "rebuilt": 364,
+   "kept_stored": 0,
+   "l2_mean": 0.02624044245989113,
+   "l2_max": 0.360910028219223,
+   "radius": 0.18857809603214265
+  }
+ },
+ "ledger": {
+  "before_stream": {
+   "query": {
+    "phase": "query",
+    "full_forwards": 8452,
+    "partial_forwards": 14537,
+    "reverses": 0,
+    "settle_iters": 0,
+    "prefix_microsteps": 0,
+    "router_probes": 0,
+    "search_candidates": 0,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 74.5575516843237,
+    "accel_seconds": 74.5575516843237,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 305150
+   },
+   "learning": {
+    "phase": "learning",
+    "full_forwards": 8541,
+    "partial_forwards": 14457,
+    "reverses": 1281,
+    "settle_iters": 0,
+    "prefix_microsteps": 429,
+    "router_probes": 0,
+    "search_candidates": 5148,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 33.612491779611446,
+    "accel_seconds": 33.612491779611446,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 293101
+   },
+   "total": {
+    "phase": "total",
+    "full_forwards": 16993,
+    "partial_forwards": 28994,
+    "reverses": 1281,
+    "settle_iters": 0,
+    "prefix_microsteps": 429,
+    "router_probes": 0,
+    "search_candidates": 5148,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 108.17004346393514,
+    "accel_seconds": 108.17004346393514,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 598251
+   },
+   "events": 39868,
+   "elapsed_wall_seconds": 163.43178343772888,
+   "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  },
+  "after_stream": {
+   "query": {
+    "phase": "query",
+    "full_forwards": 10945,
+    "partial_forwards": 18209,
+    "reverses": 0,
+    "settle_iters": 0,
+    "prefix_microsteps": 0,
+    "router_probes": 0,
+    "search_candidates": 0,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 85.51599440653808,
+    "accel_seconds": 85.51599440653808,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 389400
+   },
+   "learning": {
+    "phase": "learning",
+    "full_forwards": 12753,
+    "partial_forwards": 18130,
+    "reverses": 1662,
+    "settle_iters": 0,
+    "prefix_microsteps": 810,
+    "router_probes": 1143,
+    "search_candidates": 6672,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 42.81541751383338,
+    "accel_seconds": 42.81541751383338,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 395922
+   },
+   "total": {
+    "phase": "total",
+    "full_forwards": 23698,
+    "partial_forwards": 36339,
+    "reverses": 1662,
+    "settle_iters": 0,
+    "prefix_microsteps": 810,
+    "router_probes": 1143,
+    "search_candidates": 6672,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 128.33141192037147,
+    "accel_seconds": 128.33141192037147,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 785322
+   },
+   "events": 49575,
+   "elapsed_wall_seconds": 208.09255862236023,
+   "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  },
+  "after_diagnostics": {
+   "query": {
+    "phase": "query",
+    "full_forwards": 16734,
+    "partial_forwards": 21772,
+    "reverses": 0,
+    "settle_iters": 0,
+    "prefix_microsteps": 0,
+    "router_probes": 0,
+    "search_candidates": 0,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 95.28130149829667,
+    "accel_seconds": 95.28130149829667,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 511505
+   },
+   "learning": {
+    "phase": "learning",
+    "full_forwards": 12753,
+    "partial_forwards": 18130,
+    "reverses": 1662,
+    "settle_iters": 0,
+    "prefix_microsteps": 810,
+    "router_probes": 1143,
+    "search_candidates": 6672,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 42.81541751383338,
+    "accel_seconds": 42.81541751383338,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 395922
+   },
+   "total": {
+    "phase": "total",
+    "full_forwards": 29487,
+    "partial_forwards": 39902,
+    "reverses": 1662,
+    "settle_iters": 0,
+    "prefix_microsteps": 810,
+    "router_probes": 1143,
+    "search_candidates": 6672,
+    "memory_search_seconds": 0.0,
+    "wall_seconds": 138.09671901213005,
+    "accel_seconds": 138.09671901213005,
+    "peak_mem_mib": 696.64697265625,
+    "tokens": 907427
+   },
+   "events": 58927,
+   "elapsed_wall_seconds": 229.02803564071655,
+   "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  },
+  "stream_delta": {
+   "query": {
+    "accel_seconds": 10.958442722214386,
+    "wall_seconds": 10.958442722214386,
+    "full_forwards": 2493,
+    "partial_forwards": 3672,
+    "tokens": 84250
+   },
+   "learning": {
+    "accel_seconds": 9.202925734221935,
+    "wall_seconds": 9.202925734221935,
+    "full_forwards": 4212,
+    "partial_forwards": 3673,
+    "tokens": 102821
+   },
+   "total": {
+    "accel_seconds": 20.16136845643632,
+    "wall_seconds": 20.16136845643632,
+    "full_forwards": 6705,
+    "partial_forwards": 7345,
+    "tokens": 187071
+   }
+  },
+  "diagnostics_delta": {
+   "query": {
+    "accel_seconds": 9.765307091758586,
+    "wall_seconds": 9.765307091758586,
+    "full_forwards": 5789,
+    "partial_forwards": 3563,
+    "tokens": 122105
+   },
+   "learning": {
+    "accel_seconds": 0.0,
+    "wall_seconds": 0.0,
+    "full_forwards": 0,
+    "partial_forwards": 0,
+    "tokens": 0
+   },
+   "total": {
+    "accel_seconds": 9.765307091758586,
+    "wall_seconds": 9.765307091758586,
+    "full_forwards": 5789,
+    "partial_forwards": 3563,
+    "tokens": 122105
+   }
+  },
+  "diagnostics_by_purpose_accel_seconds": {
+   "live": 1.5708928108215332,
+   "oracle": 1.4006122024729848,
+   "stable_read": 1.43582496966701,
+   "stable_rebuilt_read": 1.4554664524039254,
+   "stable_keys": 2.627478505251929,
+   "rebuild_keys": 0.5202469165669754,
+   "d0_probe": 0.4599290193291381,
+   "unrelated": 0.2948562152450904
+  },
+  "diagnostics_by_purpose_sum": 9.765307091758586
+ },
+ "wall_seconds": 65.6920051574707,
+ "labels": {
+  "D1": "upper-bound diagnostic with unavailable deployment information (edit identity), never an efficacy score; oracle slots verified against the current bank; unavailable entries force none",
+  "D1_first_nll": "first answer token only; tf_nll_* are teacher-forced over the complete answer",
+  "D2": "stable = cap-off query keys against the STORED (edited-read) bank keys; stable_rebuilt = cap-off query keys against bank keys re-derived from cap-off passes on each slot's write prefix (shadow keys; cap untouched); values applied as usual; extra passes charged (stable_keys, rebuild_keys)",
+  "prereview_pass": "results/R1/prereview/ holds the earlier pass (oracle prefix-0 fallback, historical ownership, first-token only)"
+ }
+}
