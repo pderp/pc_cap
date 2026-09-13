@@ -107,11 +107,24 @@ near-neighbour +2.41 (harmful in 33% of pairs), shared +0.69 (16%), private +0.1
 CounterFact C2 endpoint and grammar C2 at ≈ task 4 and task 8: zero damage and zero divergence in every stratum — with exact
 keys, updates of distinct items commute. Natural-language strata are operational proxies (`manifests/dev/s7_pairs.json`).
 
-## 8. Exploratory ablations (S8-02) — *pending*
+## 8. Exploratory ablations (S8-02; `results/S8/ablations.json`; development data, 3 realizations × 2 orders; not confirmatory)
 
-Fixed list (D3 §6.4), development data, three realizations × two orders, labelled exploratory: (b) byte ceiling at 0.5× and
-2× for C1 and C2 on zsRE; (c) the grammar with paraphrase keys at a 5% false-fire radius; (a) stable keys not run (needs
-CAP-08). Results: `results/S8/ablations.json` (filled when the run completes).
+**(b) Byte ceiling at 0.5×, 1× and 2× (zsRE, 300 development edits, C1 and C2).** Every metric is identical across the three
+factors (C1: ES 0.999, RET-ES 0.849, RET-GS 0.257, LS 0.983, 17.3 MB occupied; C2: 0.999 / 0.548 / 0.191 / 0.983, 6.1 MB):
+at 300 edits the ceiling (38.5 MB; 19 MB at half) never binds, so this ablation cannot attribute the confirmatory C1 > C2
+retention gap at 1,000 edits to capacity. What it does show is that the gap is already present with no ceiling pressure at
+all — C2 retains 0.55 of its edits against C1's 0.85 with a third of C1's occupancy — so the loss is interference among
+retrievals within the three banks, not eviction. A binding-ceiling ablation would need factors ≤ 0.25 or a larger
+development pool; it was not added post hoc.
+
+**(c) Grammar with paraphrase keys at a 5% false-fire radius (C1, C2, CR).** *pending the run.* The 5% calibration itself
+already answers the question: no positive radius exists at 5% either. On the grammar the paraphrase-to-edit and
+unrelated-to-edit key distances overlap almost completely (bank 1: paraphrase quantiles 0.09 / 0.20 / 1.05 vs unrelated
+0.06 / 0.30 / 0.71), and the smallest grid radius fires on 5.4% of unrelated prefixes while covering 4.4% of paraphrases.
+The grammar's RET-GS floor is therefore a property of the R-h key on this base — "same latent, different filler" is not a
+neighbourhood in key space — not of the 1% criterion. The runs at "5% radius" are consequently identical to exact keys.
+
+**(a) Stable keys versus edited keys:** not run (needs the optional read variant R-h0, CAP-08).
 
 ## 9. Deviations, unscheduled and failed work (Appendix G §8)
 
