@@ -15,7 +15,7 @@ import jax
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "results" / "R1" / "pilot"
+OUT_ROOT = ROOT / "results" / "R1" / "pilot"
 
 
 def main() -> int:
@@ -26,6 +26,9 @@ def main() -> int:
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--estimator", choices=("bp", "epc"), default="bp", help="bp = differentiable reference; epc = alternating ePC surrogate (matched schedule)")
+    ap.add_argument("--iters", type=int, default=8, help="ePC settling iterations")
+    ap.add_argument("--tag", default=None, help="output subfolder (default: the estimator name)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -42,11 +45,16 @@ def main() -> int:
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     rc, cc = ReaderConfig(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+    OUT = OUT_ROOT / (args.tag or args.estimator)
     OUT.mkdir(parents=True, exist_ok=True)
     t_start = time.time()
     with gpu_lease("R1:pilot", stage="R1", projected_seconds=3 * 3600.0):
         ledger = Ledger()
-        base = BPBase(ledger=ledger)
+        if args.estimator == "epc":
+            from pccap.bases.epc import EPCBase
+            base = EPCBase(ledger=ledger)
+        else:
+            base = BPBase(ledger=ledger)
         enc = ObservationEncoder(base, taps=rc.taps)
         t0 = time.time()
         train_eps = [synthetic_episode(1000 + i, "train") for i in range(args.train)]
@@ -56,7 +64,11 @@ def main() -> int:
         feat_s = time.time() - t0
         k1, k2 = jax.random.split(jax.random.PRNGKey(args.seed))
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
-        tr = Trainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr)
+        if args.estimator == "epc":
+            from pccap.revision_v1.epc_train import EPCTrainer, EPCWriteGradients
+            tr = EPCTrainer(rc, cc, EPCWriteGradients(base, iters=args.iters), LossConfig(), lr=args.lr)
+        else:
+            tr = Trainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr)
         st = tr.init(theta)
 
         def evaluate(th):
@@ -107,7 +119,7 @@ def main() -> int:
                 roles.setdefault(lab.role, []).append(int(ok))
                 null_rates.setdefault(lab.role, []).append(cap.selection_for(np.asarray(q.prompt_ids, np.int32)).null_mass)
         behav = {r: {"exact_or_preserved": float(np.mean(v)), "n": len(v), "null_mass_mean": float(np.mean(null_rates[r]))} for r, v in roles.items()}
-        summary = {"args": vars(args), "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta),
+        summary = {"args": vars(args), "estimator": args.estimator, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta),
                    "featurize_wall_s": feat_s, "train_wall_s": train_s, "dev_before": before, "dev_after": after, "behavioural_dev": behav,
                    "answer_roles": list(ANSWER_ROLES), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))
