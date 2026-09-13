@@ -72,3 +72,17 @@ def prompt_mask(prompt_len: int, total_len: int) -> np.ndarray:
     m = np.zeros(total_len, bool)
     m[:prompt_len] = True
     return m
+
+
+def observation_from_pass(fr, ids, mask, base_hash: str, encoder_version: int = ENCODER_VERSION, taps: tuple[int, ...] = TAPS) -> Observation:
+    """Build an Observation from an already-run write-free base pass (``retain_sites=True``) so the read path can reuse
+    the same pass for the corrected partial forward (one full + one partial pass per position, as in v0)."""
+    ids = np.asarray(ids, np.int32).reshape(-1)
+    T = int(ids.shape[0])
+    mask = np.ones(T, bool) if mask is None else np.asarray(mask, bool).reshape(-1)
+    last, span = {}, {}
+    for m in taps:
+        h = np.asarray(fr.hidden[m], np.float32)[:T]
+        last[m] = np.ascontiguousarray(h[T - 1])
+        span[m] = np.ascontiguousarray(h[mask].mean(axis=0, dtype=np.float32))
+    return Observation(ids=ids, mask=mask, last=last, span=span, base_hash=base_hash, encoder_version=encoder_version)
