@@ -61,6 +61,12 @@ notes and unresolved mentions in paraphrase/locality text. No sealing, no E.2 pa
 
 ### Lane R1-20b — CounterFact episode set for Stage 2 and the generator partition manifest (X0-10)
 
+Note (orchestrator, later that evening): `natural_episode(..., dataset="counterfact")` + your `tokenize_natural_episode` already
+feed a CounterFact training pilot (`scripts/r1_21_pilot.py --domain counterfact`); preservation needs no teacher targets in
+the installed loss (L3 is a KL to the write-free logits computed on the fly). What remains in this lane: the partition
+manifest, the ≥ 2-paraphrase rule per emitted item, and a statement of which CounterFact dev subjects the episodes expose
+(they feed the exclusion register, R1-D1).
+
 Finish the natural-data path for CounterFact (zsRE is an evaluation stream only, DEC-034(b)); the partition manifest for the
 extended grammar generator (reserved latent scopes / entities / surface families; ≥ 2 unseen paraphrases per emitted item or
 the episode is rejected whole; final-generation version and seed reservation). The teacher preservation targets you need

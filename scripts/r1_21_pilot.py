@@ -29,6 +29,8 @@ def main() -> int:
     ap.add_argument("--estimator", choices=("bp", "epc"), default="bp", help="bp = differentiable reference; epc = alternating ePC surrogate (matched schedule)")
     ap.add_argument("--iters", type=int, default=8, help="ePC settling iterations")
     ap.add_argument("--tag", default=None, help="output subfolder (default: the estimator name)")
+    ap.add_argument("--domain", choices=("synthetic", "counterfact"), default="synthetic", help="episode source: synthetic generator or CounterFact natural episodes (tokenized by Codex's adapter)")
+    ap.add_argument("--history", type=int, default=4)
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -57,8 +59,34 @@ def main() -> int:
             base = BPBase(ledger=ledger)
         enc = ObservationEncoder(base, taps=rc.taps)
         t0 = time.time()
-        train_eps = [synthetic_episode(1000 + i, "train") for i in range(args.train)]
-        dev_eps = [synthetic_episode(5000 + i, "dev") for i in range(args.dev)]
+        if args.domain == "synthetic":
+            train_eps = [synthetic_episode(1000 + i, "train", history_size=args.history) for i in range(args.train)]
+            dev_eps = [synthetic_episode(5000 + i, "dev", history_size=args.history) for i in range(args.dev)]
+        else:
+            import sys
+            sys.path.insert(0, str(ROOT / "scripts"))
+            from pccap.data.tokenize import GPT2Tokenizer
+            from pccap.revision_v1.episodes import load_development, natural_episode
+            from r1_20_text_adapter import (
+                tokenize_natural_episode,  # Codex R1-20: project tokenization convention
+            )
+            rows, _ = load_development(ROOT)
+            tok = GPT2Tokenizer()
+
+            def natural(seeds, split, want):
+                out, skipped = [], 0
+                for sd in seeds:
+                    try:
+                        out.append(tokenize_natural_episode(natural_episode(rows, sd, split, history_size=args.history, dataset="counterfact"), tok))
+                    except ValueError:
+                        skipped += 1
+                    if len(out) == want:
+                        break
+                print(json.dumps({"split": split, "episodes": len(out), "skipped": skipped}), flush=True)
+                return out
+
+            train_eps = natural(range(1000, 1000 + 4 * args.train), "train", args.train)
+            dev_eps = natural(range(5000, 5000 + 4 * args.dev), "dev", args.dev)
         train_f = [featurize(base, enc, e, rc) for e in train_eps]
         dev_f = [featurize(base, enc, e, rc) for e in dev_eps]
         feat_s = time.time() - t0
@@ -130,7 +158,7 @@ def main() -> int:
                 null_rates.setdefault(lab.role, []).append(cap.selection_for(np.asarray(q.prompt_ids, np.int32)).null_mass)
         behav = {r: {"label_exact": float(np.mean(v)), "n": len(v), "null_mass_mean": float(np.mean(null_rates[r])),
                      "unchanged_from_capoff": (float(np.mean(preserved[r])) if r in preserved else None)} for r, v in roles.items()}
-        summary = {"args": vars(args), "estimator": args.estimator, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
+        summary = {"args": vars(args), "estimator": args.estimator, "domain": args.domain, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
                    "featurize_wall_s": feat_s, "train_wall_s": train_s, "dev_before": before, "dev_after": after, "behavioural_dev": behav,
                    "answer_roles": list(ANSWER_ROLES), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))
