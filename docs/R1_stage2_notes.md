@@ -26,3 +26,14 @@ Next: (1) the matched ePC run (same seeds, episodes, schedule; only the estimato
 history-balanced sampler if old-fact retention stays low; (3) CounterFact natural episodes once Codex's R1-20b lands;
 (4) the behavioural gate 7 on the real edit stream (`RevisionCap` on the 100-edit zsRE dev stream with trained weights,
 against the v0-stable / matched-update 0.44 baseline).
+
+## Gate 7 on the real stream with synthetic-trained weights (`results/R1/stream_eval.md`)
+
+`RevisionCap` with the bp_500 weights on the 100-edit zsRE development stream: ES 0.00, RET-ES 0.00, RET-GS 0.00,
+LS 0.96, whether the fast rule is off or runs 5 steps at lr 0.1 or 1.0 (all steps accepted; per-item teacher-forced NLL
+23.1 → 22.9 nats — no acquisition). The null mass sits at 0.35 on zsRE prompts and paraphrases and 0.49 on unrelated
+prompts (45 % hard null), i.e. the synthetic-trained reader treats every zsRE prompt as "some record applies" but the
+controller's writes carry no answer for this domain. Expected (plan 9 D-R2: the synthetic domain is for mechanics; the
+natural domain trains the reader that is evaluated) and cheap to establish: the whole stream plus evaluation takes 28 s.
+Consequence: CounterFact natural episodes (Codex lane R1-20b) are on the critical path for Stage 2; the orchestrator
+checks whether the installed `natural_episode` already yields usable CounterFact training episodes.
