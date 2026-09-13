@@ -24,7 +24,14 @@ the queue stops). Therefore: no edits under `src/pccap/` after the freeze — no
 a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
 outside `src/pccap` are unaffected.
 
-## 1. State (2026-09-12, 11:55 EDT)
+## 1. State (2026-09-13, 02:45 EDT)
+
+- **S4 and S5 complete** (270 runs, 20.4 accelerator h, no failures). Confirmatory execution is over; the post-freeze
+  source rule now applies only to `src/pccap/harness`, `cap`, `bases`, `pc`, `data` (nothing may change how a run would
+  have executed); the analysis tree (`src/pccap/analysis`) gets a recorded version 2 (DEC-028) for the grammar collector
+  fix and the S7 checkpoint runner. Codex: its round-4 lanes stand; do not edit `src/pccap` outside `analysis/` and
+  only with an edit request there.
+
 
 - **S4 complete** (210/210, 11.49 accelerator h; zsRE and CounterFact classified negative on the required contrasts;
   grammar analysis pending the post-queue analysis fix). **S5 queue running** (60 jobs, ≈ 12 h). Post-freeze rule still

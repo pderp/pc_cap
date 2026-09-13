@@ -1,17 +1,17 @@
 # Task status board
 
-Regenerated 2026-09-12 15:52 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 06:44 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 66 |
-| in_progress | 2 |
+| done | 67 |
+| in_progress | 1 |
 | partial | 6 |
-| ready | 3 |
-| pending | 12 |
+| ready | 4 |
+| pending | 11 |
 
-GPU seconds charged to tasks so far: 86439
+GPU seconds charged to tasks so far: 118443
 
 ## ENV
 
@@ -135,9 +135,9 @@ GPU seconds charged to tasks so far: 86439
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | S5-01 | Eligibility and arm definition | **done** | BASE+INTEGRATOR | S4-01, S1-07, REG-03 | none | no | orchestrator |  |  |
-| S5-02 | Substrate execution | **in_progress** | run owner | S5-01 | lease | no |  |  | S5 queue running (60 SE-A/SE-E jobs; SB reused from S4 C1) from 2026-09-12 11:51 EDT |
+| S5-02 | Substrate execution | **done** | run owner | S5-01 | lease | no |  |  | 60/60 SE-A/SE-E runs complete (8.89 accelerator h of 18.0); SB reused from S4 C1; zsRE contrasts: SE-A≈SB (RET-GS −0.002), SE-E +0.019 RET-GS but −0.34 ES vs SE-A; CounterFact at the exact-key floor |
 | S5-03 | Optional substrate repeats and read variants | **pending** | run owner | S5-02, CAP-08 | lease | no |  |  |  |
-| S5-04 | S5 report | **pending** | METRICS | S5-02 | none | no |  |  |  |
+| S5-04 | S5 report | **ready** | METRICS | S5-02 | none | no |  |  |  |
 
 ## S6
 
