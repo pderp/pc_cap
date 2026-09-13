@@ -188,3 +188,5 @@ hour) under a version-3 manifest with the deterministic paraphrase seed. Default
 - 2026-09-13 (lead → orchestrator): v3 grammar inventory rule **accepted** (DEC-032). Open: the drift-assay supplement (X2-05) — unanswered, default: not run, disclosed as a limitation.
 
 - 2026-09-13 14:05 EDT (orchestrator): **drift supplement done** (lead-requested, run concurrently): cap arms ≤ 1.0036 perplexity ratio on the full validation split; B3 1.884. `results/S4/drift_supplement.md`; report §5 and D3 §7 updated.
+
+- 2026-09-13 17:25 EDT (lead → orchestrator): **plan 9 approved with all defaults** (DEC-033); the orchestrator continues autonomously through the v0 close-out and into Stage 0 of revision v1, committing as it goes.
