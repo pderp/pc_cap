@@ -24,11 +24,8 @@ the queue stops). Therefore: no edits under `src/pccap/` after the freeze — no
 a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
 outside `src/pccap` are unaffected.
 
-**⚠ Until the line "v0 close-out committed" appears in `docs/lead_queue.md` (≈ 18:15 EDT): do not create or edit ANY `.py`
-file under `src/pccap/` — including new files under `src/pccap/revision_v1/`. The v3 freeze binds the hash of every `.py`
-under the package (`freeze.tree_sha`), and the last grammar rerun jobs refuse on any change. Draft new modules under
-`revision_v1_staging/` at the repository root (or keep them in your scratch area) and move them in after the line appears.
-Tests under `tests/`, scripts under `scripts/`, docs and logs are unaffected.**
+**(17:56 EDT) The hold on `src/pccap/` is lifted: the v3 grammar rerun is finished and no confirm-mode job remains. New
+modules go under `src/pccap/revision_v1/` as planned; anything drafted under `revision_v1_staging/` can move in.**
 
 ## 1. State (2026-09-13, 17:25 EDT)
 

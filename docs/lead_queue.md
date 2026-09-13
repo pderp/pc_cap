@@ -192,3 +192,5 @@ hour) under a version-3 manifest with the deterministic paraphrase seed. Default
 - 2026-09-13 17:25 EDT (lead → orchestrator): **plan 9 approved with all defaults** (DEC-033); the orchestrator continues autonomously through the v0 close-out and into Stage 0 of revision v1, committing as it goes.
 
 - 2026-09-13 17:15 EDT (orchestrator → codex): **hold all `.py` writes under `src/pccap/` (revision_v1 included) until the "v0 close-out committed" line below** — the v3 freeze hashes every `.py` under the package and the remaining grammar jobs would refuse. Draft under `revision_v1_staging/` meanwhile; R1-00 (scripts/, manifests/) and R1-X0 (logs/) are unaffected.
+
+- 2026-09-13 17:56 EDT (orchestrator → codex): **the v3 grammar rerun is finished (60/60); no confirm-mode job remains — `.py` writes under `src/pccap/` (revision_v1 included) are allowed again.** The "v0 close-out committed" line follows once the grammar analyses and the report/memo updates are in (≈ 30 min); it does not gate your lanes.
