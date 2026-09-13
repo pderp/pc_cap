@@ -12,12 +12,12 @@ P2's final-tree CPU reproduction audit and X2's counter-review are in `logs/repr
 
 The month asked one confirmatory question: does the radius-gated cap with probe-and-choose routing (C2: one bank per round, chosen by the best positive probe) retain paraphrase
 generalization (RET-GS) at least 0.02 better than the fixed three-site schedule (C1: writes at all three banks every round, the aggregate bound divided among them) and than random bank choice (CR), on sealed editing
-streams, without losing acquisition or locality? **The primary claim is not supported by the completed contrasts; grammar remains incomplete.** On zsRE, C2 retains about three points *less* than C1 in
+streams, without losing acquisition or locality? **The primary claim is not supported on any dataset.** On zsRE, C2 retains about three points *less* than C1 in
 every realization (Δ = −0.030, 97.5% interval [−0.041, −0.019]) and its difference from random routing has an interval spanning zero (+0.000
 [−0.013, +0.018]); equivalence is not established. On CounterFact and on the replacement grammar the primary endpoint sits at a floor for every cap arm
 because those streams run with exact keys (SD-18, SD-20), so they cannot discriminate; the grammar's frozen classification is
-additionally `incomplete` because of an evaluation-seed defect (SD-22), with a labelled supplement that agrees with the floor
-reading. Under adjoint credit, SE-A's RET-GS is 0.002 below SB, but locality non-inferiority is not established; this is not a general equivalence result. Settled-error credit reduces acquisition by 0.336 for a RET-GS point gain of 0.0189, whose interval spans the 0.02 margin; the contrast is negative because acquisition fails. On the tested S7 checkpoints, zsRE near-neighbour update directions cause 2.4 nats mean damage; CounterFact and grammar show zero damage on the evaluated prefixes, while all complete endpoint states differ between orders. The B4 (GRACE) contrast was not run: element-wise value
+reported from the version-3 rerun after the evaluation-seed defect (SD-22) was fixed: complete, negative, with the same floor; the v2
+grammar row (`incomplete`, with its labelled supplement) is archived for the record. Under adjoint credit, SE-A's RET-GS is 0.002 below SB, but locality non-inferiority is not established; this is not a general equivalence result. Settled-error credit reduces acquisition by 0.336 for a RET-GS point gain of 0.0189, whose interval spans the 0.02 margin; the contrast is negative because acquisition fails. On the tested S7 checkpoints, zsRE near-neighbour update directions cause 2.4 nats mean damage; CounterFact and grammar show zero damage on the evaluated prefixes, while all complete endpoint states differ between orders. The B4 (GRACE) contrast was not run: element-wise value
 parity across frameworks failed and the pre-registered sensitivity control did not qualify the output-level form (DEC-020/
 SD-21). The saved confirmatory configurations retain the frozen thresholds, endpoints, arms, contrasts and allowances. Post-confirmatory ablations and source changes are disclosed separately in §8–§9.
 
@@ -64,7 +64,7 @@ confirmatory path had been reviewed four times before it ran (R2, V, V2/V3, V4) 
 | --- | --- | --- | --- | --- | --- |
 | zsRE | −0.030 [−0.041, −0.019] | +0.000 [−0.013, +0.018] | yes / yes | no / not established | negative |
 | CounterFact | 0.000 (floor) | 0.000 (floor) | yes | yes | negative (uninformative) |
-| grammar | — | — | — | — | incomplete (SD-22); supplement: −0.000 [−0.003, +0.002], negative |
+| grammar (v3 rerun, DEC-029/030/032) | 0.000 [0, 0] (floor) | 0.000 [0, 0] (floor) | yes (C2 acquires +0.301 over C1, +0.100 over CR) | yes | **negative (complete: 2044/2047/2046 of 2,048 items per realization; 4/1/2 paraphrase-less items excluded by the disclosed inventory rule)** |
 
 Descriptive means over the 15 runs per cell:
 
@@ -126,7 +126,8 @@ This grid search does not lift the grammar's RET-GS limitation when its criterio
 | R8/R9 grammar absent | replacement grammar (PA-2), provisional until the clock passed | GRAM-01/02, DATA-06/07, SD-20 |
 | B4 | element-wise value parity failed; sensitivity control did not qualify form (b); localization: the reference's fp32 reductions | DEC-020, SD-21, `logs/grace_*` |
 | Freeze v1 | superseded before any result: loader refused editing realizations because of the grammar's `.npz` binding | DEC-026 |
-| Grammar paraphrase seeds | per-process hash salt → paraphrase sequences differ between runs; 0–5 undefined RET-GS per run; supplement excludes 28/22/41 items across the 20 cells of each realization; frozen classification `incomplete` | SD-22 |
+| Grammar paraphrase seeds | per-process hash salt in v2 → paraphrase sequences differed between runs, 0–5 undefined RET-GS per run, frozen classification `incomplete` (archived); fixed by a content-hash seed and rerun under manifest v3 (DEC-029/030): complete and negative with 4/1/2 paraphrase-less items per realization excluded by an outcome-independent, disclosed inventory rule (DEC-031/032) | SD-22; `results/S4/partial/s4_06_grammar_v3.json`; the v2 row and supplement remain in `results/S4/partial/` |
+| (v2 grammar row, archived) | frozen classification `incomplete` | SD-22 |
 | Post-freeze source changes | analysis tree v2 is recorded; later default-preserving ablation knobs also changed `cap/{cap,memory,calibrate}.py` in `b530baf`. Snapshot 170fad3 had full tree `9b1d9984c3d4…`; DEC-029/030 subsequently binds v3 tree `67787f49ec16…`. The 270 reviewed run configurations still bind the original v2 tree | DEC-028; X2 |
 | Drift coverage | Editing assay scores 4,064 positions instead of all available validation tokens required by SD-3; full-validation evaluation remains unresolved | `logs/ongoing_followup_20260911/drift_remediation.md`; X2 |
 | Exploratory list | Grammar 5% radius added after confirmation; difficulty weighting omitted; byte-ceiling runs have 280 available edits | S4 frozen list; S8-02; X2 |

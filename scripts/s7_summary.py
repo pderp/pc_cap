@@ -9,13 +9,17 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXP = "frozen-confirmatory-v2-84126123"
+EXPS = {"frozen-confirmatory-v2-84126123": ("zsre", "counterfact"),  # v2 rows stand for the editing datasets
+        "frozen-confirmatory-v3-163d04e2": ("grammar",)}  # the grammar rows come from the v3 rerun (DEC-029/030/032); the v2 grammar reversals are superseded
 
 
 def main() -> int:
-    files = sorted(glob.glob(str(ROOT / "results" / "S7" / EXP / "*" / "*" / "r*" / "p*" / "*" / "reversals.json")))
-    rows, out = [], {"experiment_id": EXP, "written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "checkpoints": []}
-    md = ["# S7-01/02 — cloned-state reversals and damage matrices (PDF D.9)", "", f"Rendered {out['written']} from {len(files)} checkpoint runs (`results/S7/{EXP}/`).", "",
+    files = []
+    for exp, datasets in EXPS.items():
+        for ds in datasets:
+            files += sorted(glob.glob(str(ROOT / "results" / "S7" / exp / ds / "*" / "r*" / "p*" / "*" / "reversals.json")))
+    rows, out = [], {"experiments": EXPS, "written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "checkpoints": []}
+    md = ["# S7-01/02 — cloned-state reversals and damage matrices (PDF D.9)", "", f"Rendered {out['written']} from {len(files)} checkpoint runs (zsRE and CounterFact under v2; grammar under v3, `results/S7/<experiment>/`).", "",
           "D_ij = mean JS (nats) over Q = both edits' prefixes (prompt + paraphrases) and unrelated controls; I_ij = mean over Q_i of L_i(U_j U_i s) − L_i(U_i s) (complete-answer NLL, nats; positive = harm); I_ji symmetric. 100 fixed pairs per checkpoint (CounterFact 75: shared stratum 9, DEC-023).", ""]
     for f in files:
         d = json.load(open(f))
@@ -26,12 +30,12 @@ def main() -> int:
             acc["n"] += 1
             acc["i_lost_ij"] += int(a["ij"]["i"][1] < 1.0)  # i not exact after i then j
             acc["j_lost_ji"] += int(a["ji"]["j"][1] < 1.0)
-        rec = {"dataset": d["dataset"], "arm": d["arm"], "checkpoint": ck, "n_pairs": d["n_pairs"], "pairs_per_stratum": d["pairs_per_stratum"],
+        rec = {"dataset": d["dataset"], "arm": d["arm"], "experiment_id": d.get("experiment_id"), "checkpoint": ck, "n_pairs": d["n_pairs"], "pairs_per_stratum": d["pairs_per_stratum"],
                "damage_matrix": d["damage_matrix"], "accel_seconds": d["ledger_totals"]["total"]["accel_seconds"], "wall_seconds": d["wall_seconds"],
                "first_edit_not_exact_after_second": {"i_after_ij": acc["i_lost_ij"] / max(1, acc["n"]), "j_after_ji": acc["j_lost_ji"] / max(1, acc["n"])},
                "same_endpoint_fraction": d["damage_matrix"]["all"]["same_endpoint_fraction"]}
         out["checkpoints"].append(rec)
-        md += [f"## {d['dataset']} / {d['arm']} / {ck['tag']} ({ck['label']}; {ck['items']} items; state `{ck['state_hash'][:12]}…`)", "",
+        md += [f"## {d['dataset']} / {d['arm']} / {ck['tag']} ({ck['label']}; {ck['items']} items; state `{ck['state_hash'][:12]}…`; {d.get('experiment_id')})", "",
                "| stratum | n | I_ij (learn i, then j) | I_ji | both orders | harmful fraction | D_ij mean | D_ij max | rounds/update | allocations | evictions |",
                "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
         for stn, v in d["damage_matrix"].items():

@@ -1,6 +1,6 @@
 # Task status board
 
-Regenerated 2026-09-13 16:24 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 21:59 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
@@ -126,9 +126,9 @@ GPU seconds charged to tasks so far: 118743
 | S4-01 | Frozen manifest | **done** | INTEGRATOR | S3-06, DATA-02, DATA-08, S2-07, ANA-01 | none | yes | orchestrator |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
 | S4-02 | Scope selection | **done** | INTEGRATOR | S4-01 | none | yes | lead |  |  | v1 written by the lead (DEC-025), superseded before any result (DEC-026); v2 pending the same command |
 | S4-03 | Confirmatory run schedule | **done** | run owner | S4-02 | none | no | orchestrator |  |  | frozen.json written by the lead (DEC-025) |
-| S4-04 | Confirmatory run execution | **done** | run owner | S4-03 | lease | no | orchestrator |  | 210/210 confirmatory runs complete under frozen-confirmatory-v2 (11.49 accelerator h of 27.0; no failures after the v1 loader defect); results committed per arm |
+| S4-04 | Confirmatory run execution | **done** | run owner | S4-03 | lease | no | orchestrator |  | v2: 210/210 (11.49 h); v3 grammar rerun (DEC-029/030): 60/60, 1 code-drift refusal (analysis edit during the queue) rerun; results committed per arm |
 | S4-05 | Resource views | **done** | METRICS | S4-04 | none | no | orchestrator |  | resource views over all 210 runs (results/S4/resource_views.json); no arm within the comparable-compute band of C2 |
-| S4-06 | Frozen paired analysis and D3 audit | **done** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  | D3 memo written: primary claim not supported (zsRE negative; CounterFact/grammar at the primary-endpoint floor; grammar incomplete under policy, SD-22); awaits the lead's review |
+| S4-06 | Frozen paired analysis and D3 audit | **done** | METRICS+INTEGRATOR | S4-05 | none | yes | orchestrator |  | D3 memo + addenda §7 (drift supplement) and §8 (v3 grammar row: complete, negative); primary claim not supported on any dataset; awaits the lead's T4 review |
 
 ## S5
 
@@ -153,8 +153,8 @@ GPU seconds charged to tasks so far: 118743
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S7-01 | Cloned-state reversals | **done** | METRICS | S4-04 | lease | no | orchestrator |  | reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs |
-| S7-02 | Damage matrix | **done** | METRICS | S7-01 | lease | no | orchestrator |  | reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs |
+| S7-01 | Cloned-state reversals | **done** | METRICS | S4-04 | lease | no | orchestrator |  | reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs | grammar checkpoints rerun under v3 (zero damage/divergence, as v2) |
+| S7-02 | Damage matrix | **done** | METRICS | S7-01 | lease | no | orchestrator |  | reversals and damage matrices on 4 committed checkpoints (zsRE C2 ckpt300, CounterFact C2 end, grammar C2 ckpt1000 and end); 100/75/100/100 pairs | grammar checkpoints rerun under v3 (zero damage/divergence, as v2) |
 | S7-03 | Order variation from permutations | **partial** | METRICS | S4-04 | none | no | orchestrator |  | order variation computed for every arm on zsRE, CounterFact (B3 only nonzero) and the grammar; JS-at-identical-prefixes part pending checkpoints |
 | S7-04 | Optional HVP diagnostics | **pending** | METRICS | S7-03, S0-07b | lease | no |  |  |  |
 

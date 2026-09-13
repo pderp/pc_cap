@@ -29,9 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-13, 17:25 EDT)
 
-- **v0 close-out in progress**: the v3 grammar rerun (DEC-029/030/032) finishes ≈ 17:55 EDT; the post-queue chain then
-  re-applies analysis-tree v3 and runs the grammar analyses; the orchestrator writes the confirmatory-grade grammar row
-  into `docs/report.md` and `docs/D3_decision.md` and commits. The full-validation drift supplement is done
+- **v0 closed out (18:15 EDT)**: the v3 grammar rerun is analysed (complete, negative at the floor), the report and D3 memo
+  carry the row, the S7 grammar reversals are rerun under v3; only the lead's T4 review remains for v0. The full-validation drift supplement is done
   (`results/S4/drift_supplement.md`). Codex's P2/X2 corrections are applied (SD-23 too).
 - **Plan 9 (revision v1) is accepted with all defaults (DEC-033)** — `docs/updated_plan9.md` is the contract, the
   coding-agent guide (`docs/more_input/pc_cap_coding_agent_guide (1).pdf`) the specification. Stage 0 starts now on the CPU;

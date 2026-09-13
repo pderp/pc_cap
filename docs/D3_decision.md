@@ -25,7 +25,7 @@ in `manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-202
 | --- | --- | --- | --- | --- | --- |
 | zsRE | −0.030 [−0.041, −0.019] | +0.000 [−0.013, +0.018] | yes / yes | no (−0.019) / not established (−0.007) | **negative** |
 | CounterFact | 0.000 [0, 0] (exact-key floor) | 0.000 [0, 0] | yes | yes | **negative (uninformative: floor)** |
-| grammar (frozen) | — | — | — | — | **incomplete** (SD-22) |
+| grammar (v3 rerun; the v2 row below is archived) | 0.000 [0, 0] (floor) | 0.000 [0, 0] (floor) | yes (C2 acquires +0.301 over C1, +0.100 over CR) | yes | **negative (complete: 2044/2047/2046 of 2,048 items per realization; 4/1/2 paraphrase-less items excluded by the disclosed inventory rule)** |
 | grammar (supplement, complete pairs; not confirmatory) | −0.000 [−0.003, +0.002] | −0.000 [−0.004, +0.003] | yes | yes | negative |
 
 **The primary claim (C2 improves retained generalization over C1 and CR by ≥ 0.02) is not supported on any dataset.** On zsRE
@@ -83,3 +83,16 @@ CounterFact: both paired differences are zero for RET-GS, ES and LS; absolute ES
 ## 7. Addendum (2026-09-13, after X2): full-validation drift supplement
 
 SD-3's full-split drift assay was run as a labelled supplement on the zsRE realization-0, order-0 endpoint states (`results/S4/drift_supplement.md`; 245,110 positions): perplexity ratios C0 1.0010, C1 1.0019, C2 1.0036, CR 1.0030, B3 1.884. The recorded 4,064-position assay understated C2/CR (1.000 vs 1.004) but the cap arms stay within 0.4% of the base on the whole split; the classification tables are unchanged.
+
+## 8. Addendum (2026-09-13, 18:10 EDT): the version-3 grammar row
+
+SD-22 option (c) (DEC-029): the paraphrase seed became a content hash of the item id and the 60 grammar runs were rerun under
+`frozen-confirmatory-v3` (DEC-030; 60/60 complete, no failure; one job refused once on code drift caused by an analysis edit
+during the queue and was rerun). With the deterministic search, 4 / 1 / 2 items per realization have no paraphrase at all;
+DEC-031/032 define the expected RET-GS inventory as the items with at least one paraphrase (2044 / 2047 / 2046 of
+2,048), excluded ids reported in `results/S4/partial/s4_06_grammar_v3.json`. Result: **complete, negative** — C2 − C1 and
+C2 − CR RET-GS differences exactly 0.000 in every realization (with exact keys no paraphrase retrieves, so every arm returns
+the base's paraphrase answers), ES +0.301 / +0.100 for C2, LS identical. Order variation of RET-GS is now identical
+across arms (0.0066 over the 15 runs, 0 within each realization) — v2's arm-to-arm differences were the SD-22 noise. The S7
+grammar reversals were rerun under v3 (`results/S7/frozen-confirmatory-v3-163d04e2/`): zero damage and zero divergence in every
+stratum, as under v2.

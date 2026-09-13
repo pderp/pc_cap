@@ -134,12 +134,22 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     rows, notes = collect_rows(Path(args.root), args.dataset, args.experiment_id)
     exp = expected_from_loader(args.dataset)
+    excluded_rows = 0
+    if exp is not None and args.dataset == "grammar":
+        # DEC-031/032: items outside the expected RET-GS inventory (no paraphrase by construction) are not paired; their
+        # endpoint rows are dropped here and counted, never inferred
+        allowed = {r: set(ids) for r, ids in exp.items()}
+        kept = [row for row in rows if row["item_id"] in allowed.get(row["realization"], set())]
+        excluded_rows = len(rows) - len(kept)
+        rows = kept
+        if excluded_rows:
+            notes.append(f"{excluded_rows} endpoint rows of items outside the expected RET-GS inventory dropped (grammar_expected_exclusions; DEC-032)")
     rep = analyze_paired(rows, seed=args.seed, stream_id=args.dataset, expected_items=exp)
     out = Path(args.out) if args.out else ROOT / "results" / "S4" / f"paired_{args.dataset}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     excl = grammar_expected_exclusions() if args.dataset == "grammar" else None
     out.write_text(json.dumps({"dataset": args.dataset, "rows": len(rows), "expected_items_from_loader": exp is not None, "notes": notes,
-                               "grammar_expected_exclusions": excl, "report": rep}, indent=1, allow_nan=False) + "\n")
+                               "grammar_expected_exclusions": excl, "rows_excluded_by_inventory": excluded_rows, "report": rep}, indent=1, allow_nan=False) + "\n")
     out.with_suffix(".md").write_text(render(rep, args.dataset, notes))
     print(args.dataset, "rows", len(rows), "classification", rep.get("classification"), "->", out)
     return 0
