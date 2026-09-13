@@ -27,6 +27,7 @@ def main() -> int:
     ap.add_argument("--experiment-id", default="frozen-confirmatory-v2-84126123")
     ap.add_argument("--max-tokens", type=int, default=None, help="truncate the split (smoke only)")
     ap.add_argument("--out", default=str(ROOT / "results" / "S4" / "drift_supplement.json"))
+    ap.add_argument("--no-lease", action="store_true", help="share the GPU with a running queue (lead's choice; wall times of both are then perturbed)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -48,7 +49,9 @@ def main() -> int:
     out = {"label": "SUPPLEMENTARY: full-validation drift (SD-3) on endpoint learner states; the frozen runs used a 4,064-position sample", "experiment_id": exp,
            "dataset": args.dataset, "tokens_scored": None, "windows": n_pos // 128, "written": None, "runs": []}
     t0 = time.time()
-    with gpu_lease("S4:drift_supplement", stage="S4", projected_seconds=3 * 3600.0):
+    from contextlib import nullcontext
+
+    with (nullcontext() if args.no_lease else gpu_lease("S4:drift_supplement", stage="S4", projected_seconds=3 * 3600.0)):
         ledger = Ledger()
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
         ev = Evaluator(base, tok, [], tokens, drift_positions=n_pos, drift_window=128)  # base NLL over the full split, once
@@ -88,6 +91,7 @@ def main() -> int:
         per_arm.setdefault(row["arm"], []).append(row)
     out["per_arm"] = {a: {"n": len(v), "full_ratio_mean": float(np.mean([x["full"]["perplexity_ratio"] for x in v])), "full_ratio_max": float(np.max([x["full"]["perplexity_ratio"] for x in v])),
                           "restricted_ratio_mean": float(np.mean([x["restricted_4064"]["perplexity_ratio"] for x in v])), "full_loss_difference_mean": float(np.mean([x["full"]["loss_difference"] for x in v]))} for a, v in per_arm.items()}
+    out["concurrent_with_queue"] = bool(args.no_lease)
     out["written"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     out["wall_seconds"] = time.time() - t0
     Path(args.out).write_text(json.dumps(out, indent=1, default=float))
