@@ -1,0 +1,256 @@
+{
+ "stage": "S5",
+ "arm": "SE-E",
+ "base": "EPC",
+ "read": "h",
+ "dataset": "zsre",
+ "realization": 1,
+ "perm": 4,
+ "manifest": "manifests/confirm/zsre_r1.json",
+ "manifest_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+ "frozen_manifest_sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+ "src_tree_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+ "run_allowance_seconds": 2400.0,
+ "effective_run_allowance_seconds": 2400.0,
+ "stage_allowance_enforced": true,
+ "experiment_id": "frozen-confirmatory-v2-84126123",
+ "mode": "confirm",
+ "task": null,
+ "code_commit": "7bac6ef21729cbc8a08bcd65f441c08d049d5120",
+ "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "status": "complete",
+ "determinism": {
+  "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+  "omp_num_threads": "16",
+  "jax_default_matmul_precision": "highest",
+  "jax_enable_x64": false,
+  "jax_threefry_partitionable": false,
+  "jax_version": "0.11.1",
+  "backend": "gpu",
+  "devices": [
+   "cuda:0"
+  ]
+ },
+ "items_completed": 1000,
+ "items_planned": 1000,
+ "metrics": {
+  "es_immediate": {
+   "value": 0.666,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.321,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.303,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 0.365,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.168,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 0.5435435435435435,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 666,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 0.97,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0017283040788953485,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0017297984571794,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 38682624.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 335,
+   "3": 193,
+   "4": 222,
+   "5": 111,
+   "6": 54,
+   "7": 41,
+   "8": 23,
+   "9": 11,
+   "10": 4,
+   "11": 5,
+   "13": 1
+  }
+ },
+ "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "wall_seconds": 1619.2997999191284,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 66153,
+   "partial_forwards": 98298,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 227.99233705282677,
+   "accel_seconds": 227.99233705282677,
+   "peak_mem_mib": 1253.845703125,
+   "tokens": 3356450
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 210998,
+   "partial_forwards": 231447,
+   "reverses": 114489,
+   "settle_iters": 101768,
+   "prefix_microsteps": 6365,
+   "router_probes": 0,
+   "search_candidates": 76380,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 797.6572499055183,
+   "accel_seconds": 797.6572499055183,
+   "peak_mem_mib": 1253.845703125,
+   "tokens": 4111153
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 277151,
+   "partial_forwards": 329745,
+   "reverses": 114489,
+   "settle_iters": 101768,
+   "prefix_microsteps": 6365,
+   "router_probes": 0,
+   "search_candidates": 76380,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 1025.649586958345,
+   "accel_seconds": 1025.649586958345,
+   "peak_mem_mib": 1253.845703125,
+   "tokens": 7467603
+  },
+  "events": 372131,
+  "elapsed_wall_seconds": 1647.0203652381897,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": 2400.0,
+ "config": {
+  "dataset": "zsre",
+  "realization": 1,
+  "perm": 4,
+  "substrate_arm": "SE-E",
+  "base": "EPC",
+  "weights": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "credit": "error",
+  "credit_iters": 8,
+  "A": 0.3,
+  "radii": {
+   "1": 0.2807123899459839,
+   "2": 0.414623761177063,
+   "3": 0.18841182291507722
+  },
+  "b_m": {
+   "1": 70.72388458251953,
+   "2": 106.60531616210938,
+   "3": 425.7003860473633
+  },
+  "n_items": 1000,
+  "run_allowance_seconds": 2400.0,
+  "frozen_sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+  "realization_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+  "experiment_id": "frozen-confirmatory-v2-84126123",
+  "epc_checkpoint": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "frozen_identity": {
+   "tokenizer_json_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+  }
+ }
+}
