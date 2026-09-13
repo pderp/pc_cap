@@ -41,11 +41,11 @@ $P -m pccap.analysis.s3_05                                               # CR di
 ## 4. ePC checkpoint regeneration (REG-00…03)
 
 ```bash
-$P -m pccap.distill.data --parquet assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet   # shard, byte-exact
+$P -m pccap.distill.data --parquet ../assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet   # shard, byte-exact (assets/ is a sibling of pc_cap; Lane P found the relative path wrong)
 $P scripts/reg_timing_probe.py --micro 5 --timed 2                        # s/step per T (lease)
 results/REG/run_reg02_v2.sh 500 5400                                      # full run in resumable chunks (lease, ~12 h)
 $P -m pccap.distill.preflight --update-assets                             # [pending] REG-03 (GPU short)
-$P scripts/reg_pilot_compare.py --run pilot-100                           # trajectory vs the sibling's log
+$P scripts/reg_pilot_compare.py --run pilot-100                           # trajectory vs the sibling's log (set PCCAP_HDPC_PATH=<sibling checkout> if it is not at the default location; the sibling is read-only)
 ```
 
 ## 5. Development streams and throughput (S2-06, S3-04)
@@ -81,6 +81,14 @@ $P -m pccap.cli queue [--stage S5] [--max-jobs N] [--dry-run]   # S4-04: runs th
 $P scripts/s4_progress.py                         # read-only progress and ETA
 $P -m pccap.analysis.s4_05 --experiment-id <id> ; $P -m pccap.analysis.s4_06 --dataset zsre --experiment-id <id> ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2 --experiment-id <id>   # as pairs complete (the id is the frozen name + hash prefix, e.g. frozen-confirmatory-v2-84126123)
 ```
+
+### Reruns
+
+Every `pccap run` refuses (exit 4) when its run directory already holds a complete result; pass `--force` only for a
+deliberate rerun — it archives the previous result and checkpoint directories as `*.superseded-<stamp>` (never deletes
+them). Confirm-mode jobs additionally refuse on any change under `src/pccap` since the freeze (exit 2, code drift) and on
+frozen-identity mismatches; after the confirmatory execution the analysis tree is versioned separately
+(`manifests/analysis_versions.json`, DEC-028). The queue (`pccap queue`) applies these rules automatically.
 
 ## 7. Artifact index
 

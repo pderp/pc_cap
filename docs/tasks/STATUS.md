@@ -1,15 +1,15 @@
 # Task status board
 
-Regenerated 2026-09-13 06:52 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 06:54 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 70 |
+| done | 71 |
 | in_progress | 1 |
 | partial | 4 |
 | ready | 4 |
-| pending | 10 |
+| pending | 9 |
 
 GPU seconds charged to tasks so far: 118443
 
@@ -111,7 +111,7 @@ GPU seconds charged to tasks so far: 118443
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | HARN-C2 | C2 probe binding and general stream runner (pccap run --stage S3, all cap arms) | **done** | INTEGRATOR | S0-10, S2-02 | short | no | orchestrator |  |  |
-| S3-01 | Full control suite and development run matrix | **pending** | INTEGRATOR | S0-11, DATA-03, CAP-07, S2-05, DATA-06 | short | yes |  |  |  |
+| S3-01 | Full control suite and development run matrix | **done** | INTEGRATOR | S0-11, DATA-03, CAP-07, S2-05, DATA-06 | short | yes | codex |  | control register PC-1…PC-10 with evidence and status (PC-10 recorded failed/unqualified; B4 unavailable); 63 CPU controls pass |
 | S3-02 | Constructed fixture runs | **done** | MEMORY+DATA | S3-01 | short | no | orchestrator |  |  |
 | S3-03 | Learned grammar runs and tracing | **done** | DATA+METRICS | S3-01, DATA-07 | lease | no | orchestrator |  |  |
 | S3-04 | Short editing checks | **done** | BASELINES+MEMORY | S3-01 | lease | no | orchestrator |  | cap arms done; baselines + second order pending |

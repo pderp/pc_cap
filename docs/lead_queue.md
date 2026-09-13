@@ -170,3 +170,5 @@ the classification is reported as `incomplete` **plus a labelled supplementary a
 (`results/S4/partial/s4_06_grammar_supplement.json`). Your options if you want a confirmatory-grade grammar answer:
 (b) an explicit exclusion category in the policy (post-hoc; DEC), or (c) rerun the 60 grammar runs (~1 accelerator
 hour) under a version-3 manifest with the deterministic paraphrase seed. Default: (a) as applied.
+
+- 2026-09-13 04:30 EDT (orchestrator): **Codex's round 4 evaluated.** B4-D: the first-gradient difference is localized to the *reference's* fp32 loss/head reductions (JAX is closer to float64); no JAX defect found; B4 stays unavailable and SD-21's cause statement is narrowed accordingly. S3-01 done (`docs/controls.md`, mirrored on the board). V4: the three S7 findings confirmed closed (9 S7 tests pass). Lane P: all 27 CPU reproduction commands run in the recreated environment; the three initial failures were path/env issues, fixed in REPRODUCE.md now. Pending proofreading request from Codex on its own B4-D report (count correction): fine to apply; it is Codex's file.
