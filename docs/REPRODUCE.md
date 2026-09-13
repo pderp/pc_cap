@@ -7,23 +7,36 @@ directory `/home/derp/cap/pc_cap` for every command. Resources live one level up
 **[illustrative]** (the shape of a command the stage will use). *lease* = holds the GPU lease for
 minutes to hours; *GPU short* = needs a free device, no lease.
 
+For a fresh shell or isolated source copy, set:
+
+```bash
+P=/home/derp/cap/assets/envs/venv-check-plan6-df/bin/python
+export PCCAP_HDPC_PATH=/home/derp/cap/llm-by-neural-predictive-coding
+```
+
+P2 verified the CPU commands on snapshot `170fad3`; results are in `logs/reproduce_final.md`. Additional v3 checks at `2b35079` passed 24 affected tests, the 60-job grammar-only preview and one matching-source confirm dry-run; see `logs/p2_x2_v3_transition/review.md`.
+Regeneration commands write their destinations and belong in a fresh isolated copy during an audit.
+Keep resources outside the repo, and preserve the `../assets` relationship or use explicit absolute paths.
+Set `make PY="$P" test-fast` to actually use the chosen recreated environment. For CPU-only checks,
+set `JAX_PLATFORMS=cpu` and `CUDA_VISIBLE_DEVICES=` before each fresh shell.
+
 ## 1. Environment and assets
 
 ```bash
 $P -c "import pccap; print(pccap.determinism_report())"      # [verified] determinism flags, versions
 $P scripts/fetch_assets.py --verify                              # [verified] datasets/model hashes vs manifests/datasets.json
 $P -m pccap.harness.schema validate manifests/frozen.draft.json --kind manifest_frozen   # [verified] frozen draft
-make test-fast                                                   # [verified] CPU tests, ~1 min
+make PY="$P" test-fast                                           # [verified] P2: 360 passed, 5 skipped, 52 deselected
 make test-gpu                                                    # [verified] short GPU tests, ~2 min (device must be free)
 ```
 
 ## 2. Controls (S0) and substrate properties (S1)
 
 ```bash
-$P -m pytest -q tests/controls -m gpu            # PC-1…PC-9 on the real base (GPU short)
+$P -m pytest -q tests/controls -m gpu            # GPU-marked PC-2/3/8/9; combined coverage is in docs/controls.md (GPU short)
 $P -m pccap.cli report --stage S0                # results/S0/report.md
 $P -m pccap.analysis.s1_p2 ; $P -m pccap.analysis.s1_p3 ; $P -m pccap.analysis.s1_p5 ; $P -m pccap.analysis.s1_p6   # BP rows (lease)
-$P -m pccap.analysis.s1_p1 --epc-weights /home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz   # [pending] P1 (lease)
+$P -m pccap.analysis.s1_p1 --epc-weights /home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz   # P1 GPU rerun; full H record at git 25c988b (lease)
 $P -m pccap.analysis.s1_p3 --epc-weights <same npz>   # ePC rows likewise for p2/p5/p6
 $P -m pccap.cli report --stage S1
 ```
@@ -75,20 +88,33 @@ JAX_PLATFORMS=cpu $P -m pccap.analysis.s3_03                             # [veri
 ```bash
 $P scripts/sample_confirm.py                      # DATA-02 sealed realizations/orders
 $P -m pccap.harness.freeze --draft --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # manifests/frozen.draft.json (proposal)
-$P -m pccap.harness.freeze --final --i-am-the-lead --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # the lead's CP-E act → manifests/frozen.json (frozen-confirmatory-v2, DEC-027; v1 superseded by DEC-026)
+$P -m pccap.harness.freeze --final --i-am-the-lead --run-allowance-seconds 2400 --stage-allowance S4=97200 --stage-allowance S5=64800   # the lead's CP-E act → manifests/frozen.json (current default frozen-confirmatory-v3, DEC-030; v3 supersedes grammar only)
 $P -m pccap.harness.schedule                      # results/S4/jobs.json (fixed order: 210 S4 jobs, then 60 S5; B4 unavailable, SB reused)
-$P -m pccap.cli queue [--stage S5] [--max-jobs N] [--dry-run]   # S4-04: runs the list in order, one subprocess per job under the lease; resumable; stops on refusals and systematic failures; stop file results/S4/queue.stop
+$P -m pccap.cli queue --dataset grammar --dry-run  # active v3 CPU preview: requires final freeze and matching schedule
+mkdir -p results/S5                              # needed on a fresh copy before an S5 dry-run (P2 finding)
+$P -m pccap.cli queue --stage S5 --dry-run          # CPU preview; creates queue_summary_dryrun.json
+# The run owner may execute a version-authorized queue without --dry-run; --max-jobs N bounds a session.
+# Stop file: results/S4/queue.stop. The active v3 queue is grammar-only (--dataset grammar); other results retain v2.
+$P -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C0 --base GRAM --realization 0 --perm 0 --manifest manifests/grammar/streams.json --dry-run   # P2 v3 delta: exit 0 with matching source; no override or experiment execution
+$P scripts/s7_summary.py                         # CPU; rewrites results/S7/summary.json and summary.md (use isolated copy)
 $P scripts/s4_progress.py                         # read-only progress and ETA
 $P -m pccap.analysis.s4_05 --experiment-id <id> ; $P -m pccap.analysis.s4_06 --dataset zsre --experiment-id <id> ; $P -m pccap.analysis.s7_03 --dataset zsre --arm C2 --experiment-id <id>   # as pairs complete (the id is the frozen name + hash prefix, e.g. frozen-confirmatory-v2-84126123)
 ```
+
+`<id>`, `<npz>`, `<same npz>` and `N` are placeholders, not literal shell arguments. Supply actual values.
+`s4_05`, `s4_06` and `s7_03` accept `--out` to preserve existing reports. The final freeze remains the lead's act;
+sampling sealed realizations is not part of the reproduction audit. Queue dry-run writes a summary but executes no jobs.
+P2 exactly reproduced the numerical sections of the saved zsRE paired analysis, resource views, zsRE C2 order summary
+and all four S7 summaries. Its historical frozen-source positive control resolved one confirm dry-run without GPU or
+sealed-payload access; that historical control does not authorize bypassing a source mismatch. The current matching-source v3 dry-run also passes, as recorded in the transition addendum.
 
 ### Reruns
 
 Every `pccap run` refuses (exit 4) when its run directory already holds a complete result; pass `--force` only for a
 deliberate rerun — it archives the previous result and checkpoint directories as `*.superseded-<stamp>` (never deletes
 them). Confirm-mode jobs additionally refuse on any change under `src/pccap` since the freeze (exit 2, code drift) and on
-frozen-identity mismatches; after the confirmatory execution the analysis tree is versioned separately
-(`manifests/analysis_versions.json`, DEC-028). The queue (`pccap queue`) applies these rules automatically.
+frozen-identity mismatches; after v2 execution the analysis tree was versioned separately
+(`manifests/analysis_versions.json`, DEC-028); later ablation knobs and the deterministic grammar seed/filter are bound by the lead's v3 freeze (DEC-029/030). The queue (`pccap queue`) applies these rules automatically.
 
 ## 7. Artifact index
 
