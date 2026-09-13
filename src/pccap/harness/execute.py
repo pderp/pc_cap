@@ -83,7 +83,7 @@ def subprocess_invoke(job: dict, log_dir: Path, force: bool = False) -> int:
 
 def run_queue(jobs: list[dict], frozen: dict, frozen_sha: str, invoke=None, *, max_jobs: int | None = None, stop_file: Path | None = None,
               queue_log: Path | None = None, log_dir: Path | None = None, dry_run: bool = False, stage: str = "S4",
-              max_consecutive_failures: int = 3) -> dict:
+              max_consecutive_failures: int = 3, dataset: str | None = None) -> dict:
     """Execute the scheduled jobs of ``stage`` in order. ``invoke(job, force=False) -> exit code`` defaults to the subprocess
     runner; tests inject an in-process fake. ``max_consecutive_failures`` correctness failures in a row that completed no
     item stop the queue (a systematic failure, not a run result). Returns the queue summary."""
@@ -93,7 +93,7 @@ def run_queue(jobs: list[dict], frozen: dict, frozen_sha: str, invoke=None, *, m
                "ok": 0, "correctness_failure": 0, "stopped": None, "unavailable": 0, "attempts": []}
     n = 0
     for job in jobs:
-        if job["stage"] != stage:
+        if job["stage"] != stage or (dataset is not None and job["dataset"] != dataset):
             continue
         if job["status"] != "scheduled":
             summary["unavailable"] += 1
@@ -151,6 +151,7 @@ def main(argv=None) -> int:
     ap.add_argument("--stage", default="S4")
     ap.add_argument("--max-jobs", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--dataset", default=None, help="run only this dataset's jobs (e.g. a version-3 grammar rerun)")
     args = ap.parse_args(argv)
     frozen = ROOT / "manifests" / "frozen.json"
     if not frozen.exists():
@@ -166,7 +167,7 @@ def main(argv=None) -> int:
         return 2
     out_dir = RESULTS / args.stage
     summary = run_queue(jobs_doc["jobs"], frozen_obj, frozen_sha, max_jobs=args.max_jobs, stop_file=out_dir / "queue.stop", queue_log=out_dir / "queue.jsonl",
-                        log_dir=out_dir / "queue_logs", dry_run=args.dry_run, stage=args.stage)
+                        log_dir=out_dir / "queue_logs", dry_run=args.dry_run, stage=args.stage, dataset=args.dataset)
     (out_dir / ("queue_summary_dryrun.json" if args.dry_run else "queue_summary.json")).write_text(json.dumps(summary, indent=1))
     print(json.dumps({k: v for k, v in summary.items() if k != "attempts"}, indent=1))
     return 0 if summary["stopped"] is None or summary["stopped"].startswith(("max_jobs", "stop file")) else 3

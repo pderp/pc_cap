@@ -169,8 +169,11 @@ def build(draft: bool = True) -> tuple[dict, list[str]]:
     except Exception as e:  # pragma: no cover
         pending.append(f"base_checkpoints.bp.param_digest ({e})")
     man = {
-        # v1 (2026-09-11 09:05 EDT) was superseded before any result: loader binding defect (DEC-026)
-        "name": "frozen-confirmatory-v2" + ("-draft" if draft else ""), "mode": "confirm", "stage": "S4", "seed": 0,
+        # v1 (2026-09-11 09:05 EDT) was superseded before any result: loader binding defect (DEC-026); v2 ran the whole
+        # design; v3 (SD-22 option (c)) binds the deterministic paraphrase seed and reruns the GRAMMAR dataset only
+        "name": "frozen-confirmatory-v3" + ("-draft" if draft else ""), "mode": "confirm", "stage": "S4", "seed": 0,
+        "version_note": {"version": 3, "supersedes": "frozen-confirmatory-v2-84126123 for the grammar dataset only (SD-22: deterministic paraphrase seed); "
+                         "the zsRE and CounterFact results and the S5 runs stand under v2 unchanged; every other field is identical to v2"},
         "frozen_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()) if not draft else None, "draft": draft,
         "code_commit": {"git_head": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain")), "src_tree_sha256": tree_sha(ROOT / "src" / "pccap"),
                         "note": "the lead commits; src_tree_sha256 identifies the uncommitted working tree"},

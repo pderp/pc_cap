@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -60,7 +61,9 @@ def paraphrase_prefixes(g: Grammar, item: EditItem, n: int = N_PARAPHRASES) -> l
     # the latent = the copy chains' seed values (one under lag 6, two alternating under lag 12): the first two class-3 occurrences
     latent = {"class3": [int(prefix[i]) for i in occ[:2]]} if occ and kind != "shared_1" else None
     out = []
-    seed = 800_000 + 7 * int(st.get("seed", 0)) if "seed" in st else 800_000 + hash(item.item_id) % 100_000
+    # SD-22: the seed must not depend on Python's per-process hash salt; without a strata seed it is derived from a
+    # content hash of the item id (identical in every process), so every run evaluates the same paraphrase sequences.
+    seed = 800_000 + 7 * int(st.get("seed", 0)) if "seed" in st else 800_000 + int(hashlib.sha256(item.item_id.encode()).hexdigest()[:8], 16) % 100_000
     tries = 0
     while len(out) < n and tries < 50:
         toks, p, label = g.sequence(c, sw, seed + tries, kind, latent_override=latent)

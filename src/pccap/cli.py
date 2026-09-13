@@ -39,6 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("--stage", default="S4")
     q.add_argument("--max-jobs", type=int, default=None)
     q.add_argument("--dry-run", action="store_true")
+    q.add_argument("--dataset", default=None)
     return ap
 
 
@@ -51,7 +52,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "queue":
         from pccap.harness import execute
 
-        qargs = ["--stage", args.stage] + (["--jobs", args.jobs] if args.jobs else []) + (["--max-jobs", str(args.max_jobs)] if args.max_jobs is not None else []) + (["--dry-run"] if args.dry_run else [])
+        qargs = ["--stage", args.stage] + (["--jobs", args.jobs] if args.jobs else []) + (["--max-jobs", str(args.max_jobs)] if args.max_jobs is not None else []) + (["--dry-run"] if args.dry_run else []) + (["--dataset", args.dataset] if args.dataset else [])
         return execute.main(qargs)
     if args.cmd == "run":
         from pccap.harness import runner
