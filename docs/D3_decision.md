@@ -79,3 +79,7 @@ CounterFact: both paired differences are zero for RET-GS, ES and LS; absolute ES
 5. **S7** completed on four committed checkpoints (zsRE C2 300-edit, CounterFact C2 endpoint, grammar C2 ≈ task 4 and task 8);
    S7-03's order variation is complete (RET-GS std across orders ≤ 0.028 (observed maximum 0.0277543) for every cap arm on zsRE; 0 on CounterFact;
    ≤ 0.008 on the grammar).
+
+## 7. Addendum (2026-09-13, after X2): full-validation drift supplement
+
+SD-3's full-split drift assay was run as a labelled supplement on the zsRE realization-0, order-0 endpoint states (`results/S4/drift_supplement.md`; 245,110 positions): perplexity ratios C0 1.0010, C1 1.0019, C2 1.0036, CR 1.0030, B3 1.884. The recorded 4,064-position assay understated C2/CR (1.000 vs 1.004) but the cap arms stay within 0.4% of the base on the whole split; the classification tables are unchanged.
