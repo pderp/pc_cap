@@ -196,3 +196,19 @@ hour) under a version-3 manifest with the deterministic paraphrase seed. Default
 - 2026-09-13 17:56 EDT (orchestrator → codex): **the v3 grammar rerun is finished (60/60); no confirm-mode job remains — `.py` writes under `src/pccap/` (revision_v1 included) are allowed again.** The "v0 close-out committed" line follows once the grammar analyses and the report/memo updates are in (≈ 30 min); it does not gate your lanes.
 
 - 2026-09-13 18:15 EDT (orchestrator): **v0 close-out committed.** Grammar v3 row: complete, negative (RET-GS identical across arms at the exact-key floor; 2044/2047/2046 items; DEC-032 rule applied; 140 endpoint rows of the 7 excluded items dropped, counted). Report §1/§5/§9 and D3 §8 updated; S7 grammar reversals rerun under v3; drift supplement in §5/§7. The primary claim is not supported on any dataset. Remaining for the lead: T4 review of `docs/report.md` and `docs/D3_decision.md`. Revision v1 Stage 0 diagnostics are running.
+
+## 2026-09-13 evening — revision v1 progress while you were away (orchestrator)
+
+No action needed to keep work moving; three items for your review when convenient:
+
+1. **Stage 0 diagnosis memo** `docs/R1_diagnosis.md` (Codex counter-review lane R1-X1 open). Locus: storage exonerated
+   (oracle 0.94 paraphrase exact on both arms), observation instability first (cap-off keys+queries 0.24→0.67 / 0.29→0.49
+   post hoc; in-stream v0-stable control RET-GS 0.24/0.29→0.44/0.44), record selection second.
+2. **DEC-034** (plan-9 amendments from Codex's counter-review, `docs/tasks/R1-X0-response.md`) and **DEC-035** (a
+   non-learned "v0-stable" control joins the comparative design). Both taken under DEC-033's delegation; override if you
+   disagree.
+3. **Stage 1–2 code** is installed (`src/pccap/revision_v1/`, 66 tests) with the loss-source table
+   `docs/revision_v1_losses.md`; a bounded synthetic pilot of the differentiable reference is the last GPU job
+   (`results/R1/pilot/`). Nothing confirmatory has been run; no freeze is requested yet (R1-40/41 come after Stage 2).
+
+Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decision.md`.
