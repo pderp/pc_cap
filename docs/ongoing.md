@@ -45,32 +45,31 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — revision v1, Stage 0–2 (CPU; open now; new files first, edit requests for anything existing)
+## 3. Lanes for Codex — revision v1, next (CPU; open now)
 
-### Lane R1-00 — baseline reconstruction (guide §0; ≈ 2 h)
+R1-00 and R1-X0 are done and mirrored; R1-20's generator is installed as `pccap.revision_v1.episodes` (your repair bundle
+applied verbatim). The plan-9 amendments are in `docs/tasks/R1-X0-response.md` / DEC-034. Next lanes:
 
-`scripts/r1_00_baseline.py` → `manifests/revision_v1/baseline.json`: commit, dirty diff hash, Python/JAX/FabricPC
-versions, tokenizer and checkpoint hashes, dtype, device, seeds, dataset hashes; the zsRE reference table reproduced
-from the saved records (`results/S4/frozen-confirmatory-v2-84126123/zsre/C1`, `results/S5/…/zsre/{SE-A,SE-E}`) to six
-decimals: ES 0.998467 / 0.998533 / 0.662333, RET-ES 0.523667 / 0.522067 / 0.366133, RET-GS 0.139467 / 0.137467 /
-0.156333, learning s/run 272.793 / 267.558 / 816.588 — per-realization and per-order records preserved; `docs/tasks/R1-00.md`.
+### Lane R1-D1 — exclusion register and fresh-draw candidate inventory (X0-09; DEC-034(c))
 
-### Lane R1-20 — episode generator, synthetic domain first (guide §2; ≈ 1–2 days)
+`scripts/r1_d1_exclusions.py` → `manifests/revision_v1/exclusions.json` (versioned): every normalized subject in both old
+eligible pools, v0 development and S0, the challenge sets, all 496 exposed S7 candidate subjects (zsRE) and 141 (CounterFact),
+and every subject any revision-development episode has emitted (read `logs/r1_codex_20260913/episodes_v2/`); then the
+MEND-train candidate inventory after exclusion with raw-record and deduplicated-subject counts, alias/entity resolution
+notes and unresolved mentions in paraphrase/locality text. No sealing, no E.2 pass (the orchestrator runs that on the GPU).
+`docs/tasks/R1-D1.md`.
 
-`src/pccap/revision_v1/episodes.py` (new file; Codex-owned): episodes with a support history of 2–8 facts/rules, one new
-edit, ≥ 2 unseen paraphrases, a near-miss, an old-fact query, an unrelated example; two-fact composition only where the
-answer is unambiguous; explicit split / entity / paraphrase-family ids and generator seeds; query labels only in
-training/evaluation containers. Start from the grammar generator (`pccap.fixtures.grammar_generator`, extended in a new
-module, not edited) with an explicit latent scope; then the development editing pools (`manifests/dev/*_dev.json`) with
-partition by fact/entity and paraphrase family. Tests under `tests/revision_v1/test_episodes.py` (separation, determinism,
-label containment). `docs/tasks/R1-20.md`.
+### Lane R1-20b — CounterFact episode set for Stage 2 and the generator partition manifest (X0-10)
 
-### Lane R1-X0 — counter-review of plan 9 against the three input documents (read-only + `logs/review_plan9.md`)
+Finish the natural-data path for CounterFact (zsRE is an evaluation stream only, DEC-034(b)); the partition manifest for the
+extended grammar generator (reserved latent scopes / entities / surface families; ≥ 2 unseen paraphrases per emitted item or
+the episode is rejected whole; final-generation version and seed reservation). The teacher preservation targets you need
+(cap-disabled greedy answers and top-k logits on every episode query prefix) are produced by the orchestrator's GPU pass once
+you write the prefix list to `manifests/revision_v1/teacher_targets_request.json`.
 
-Where the plan drops, weakens or misreads a requirement of the proposal or the guide; where its budget or calendar is
-unsupported; what the fresh-data decision (D-R2) implies for subject disjointness with the S7 inventory.
+### Lane R1-X1 — counter-review of the Stage 0 diagnosis memo (when `docs/R1_diagnosis.md` appears)
 
-### Lane R1-23 (later, after Stage 1) — data-separation and update-path audits (guide §2 "Audits").
+Read-only; `logs/review_r1_diagnosis.md`.
 
 ## 4. Interfaces and coordination
 
