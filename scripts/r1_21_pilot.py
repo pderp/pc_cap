@@ -120,7 +120,7 @@ def main() -> int:
                 if lab.role == "composition":
                     continue
                 n_t = len(lab.target_ids)
-                ans = greedy(lambda ids: cap.predict(ids).logits, q.prompt_ids, n_t)
+                ans = greedy(lambda ids, cap=cap: cap.predict(ids).logits, q.prompt_ids, n_t)
                 roles.setdefault(lab.role, []).append(int(ans == [int(y) for y in lab.target_ids]))
                 if lab.role in ("near_miss", "unrelated"):
                     off = greedy(lambda ids: base.forward(ids, (), phase="query", last_only=True).logits, q.prompt_ids, n_t)
