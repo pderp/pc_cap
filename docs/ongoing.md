@@ -24,7 +24,15 @@ the queue stops). Therefore: no edits under `src/pccap/` after the freeze — no
 a versioned manifest and `--allow-code-drift` recorded by the orchestrator (plan 4 §2). Tests under `tests/` and everything
 outside `src/pccap` are unaffected.
 
-## 1. State (2026-09-13, 02:45 EDT)
+## 1. State (2026-09-13, 05:45 EDT)
+
+- **Everything confirmatory is done and analysed**: S4 (210 runs) and S5 (60 runs); frozen paired analyses (zsRE negative,
+  CounterFact floor, grammar incomplete under SD-22 + labelled supplement); D3 memo (`docs/D3_decision.md`); S5 report;
+  S7 reversals on four checkpoints (`results/S7/summary.md`); analysis-tree v2 (DEC-028). **S8-02 ablations running** on
+  the GPU (≈ 1 h left); **S8-03 report draft 1** in `docs/report.md` (§8 pending). Codex's round 4 is evaluated and mirrored.
+- Remaining before the handoff (S8-04): fill report §8, the final-tree reproduction audit (S8-01), the lead's review of the
+  D3 memo and the report (T4 / CP-F), and the lead's SD-22 choice (default (a) applied).
+
 
 - **S4 and S5 complete** (270 runs, 20.4 accelerator h, no failures). Confirmatory execution is over; the post-freeze
   source rule now applies only to `src/pccap/harness`, `cap`, `bases`, `pc`, `data` (nothing may change how a run would
@@ -77,39 +85,27 @@ before (`src/pccap/{distill,pc,harness,cap,analysis,routers,transport,bases,fixt
 except lane-named subtrees, `manifests/`, `docs/decisions.md`, `docs/spec_defects.md`, `docs/lead_queue.md`,
 `logs/` except lane reports).
 
-## 3. Lanes for Codex — round 4 (independent of §2 and of each other; none needs the GPU lease)
+## 3. Lanes for Codex — round 5 (all CPU; open now unless marked)
 
-### Lane B4-D — localize the first cross-framework gradient difference (CPU; in progress; deadline 2026-09-12 12:00 EDT)
+### Lane X2 — counter-review of the D3 memo and the report draft (read-only + `logs/review_report_draft1.md`)
 
-Owned: the B4 files (`src/pccap/baselines/{grace_jax,grace_batch,grace_parity,grace_adapter}.py`, `tests/baselines/`,
-`scripts/grace_*.py`, `results/S2/grace_jax/`, `docs/baselines/grace_adapter.md`, `docs/tasks/S2-05.md`) and a new
-`logs/grace_gradient_localization.md`. Fixed inputs, vector-Jacobian products compared at successive boundaries (hook
-suffix → GELU → residual add → later blocks → `ln_f` → head → loss reduction), masks and prompt indexing checked alongside
-kernels. Known facts to rule in or out first: both sides use `gelu_new` and ε = 1e-5 (checked); the JAX side runs at
-`highest` matmul precision; the reference runs PyTorch-CPU fp32 — a 1e-4 relative first-gradient gap is large for that
-pairing (SD-14's logit gap was ≤ 1e-3 absolute), so a real difference is plausible. If a genuine implementation
-difference is found and fixed in your files, rerun PC-10 (form (b) test rewrite) and the sensitivity control from the
-preregistered policy; if none is found by the deadline, write that finding and B4 is accepted unavailable at the freeze.
+Check every number in `docs/D3_decision.md` and `docs/report.md` §1–§7, §9–§10 against the results files they name
+(`results/S4/partial/s4_06_*`, `results/S4/resource_views.json`, `results/S5/paired_*.json`, `results/S7/summary.json`,
+run ledgers); flag any statement not supported by a file, any policy wording that drifts from `manifests/frozen.json`
+(DEC-009), and any place where a floor or the SD-22 incompleteness is stated too strongly or too weakly. Propose corrections
+as a patch under `docs/tasks/`; do not edit the memo or the report.
 
-### Lane S3-01 — the full control-suite table (CPU, documentation; open now)
+### Lane P2 — final-tree reproduction audit (after the ablations finish; the orchestrator posts "S8-02 done")
 
-`docs/controls.md` with PC-1…PC-10, test paths, last run, status; the development run matrix references; the "full
-before S7" items; `docs/tasks/S3-01.md`. PC-10 is recorded exactly as it stands (output-level agreement, element-wise
-value parity failed, sensitivity prerequisite unmet, B4 unregistered) — an accurate table, not a passing one. The
-orchestrator reviews and mirrors the board row.
+Repeat Lane P on the final tree (all CPU commands of `docs/REPRODUCE.md`, in the recreated environment, fresh shells),
+plus the dry-run form of one confirm-mode job (`--dry-run`) and `python scripts/s7_summary.py`; `logs/reproduce_final.md`.
+This is S8-01's reproduction audit; the orchestrator mirrors it.
 
-### Lane V4 — re-check of the S7 repairs (CPU; open now)
+### Lane B4-D2 (optional, only if you have time) — reduction probes across the committed parity cases
 
-Rerun `scripts/review_s7_inventory.py` (your counterexamples are now regressions in `tests/analysis/test_s7_01.py`)
-against the repaired `s7_01` and the rebuilt inventory (grammar seed block 5,000,000+, `strata_qualification` text);
-confirm findings 1–3 closed and the E.2 selection regenerated consistently (sha in both files); write
-`logs/review_p4_s7_r2.md`. New files only.
-
-### Lane P — reproduction pre-audit (CPU; optional, after the above)
-
-Run every CPU command in `docs/REPRODUCE.md` from a fresh shell in the recreated ENV-05 environment
-(`assets/envs/venv-check-plan6-df`), record which succeed, which need the GPU, and which are stale (S8-01 will repeat
-this on the final tree); `logs/reproduce_preaudit.md`.
+The bounded next step your B4-D report names: the fixed reduction probes across all 20 committed cases, measuring whether
+the first-gradient reduction discrepancies predict the recorded trajectory differences. New files only; no perturbation
+search; `logs/grace_reduction_survey.md`.
 
 ## 4. Interfaces and coordination
 

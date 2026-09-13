@@ -172,3 +172,9 @@ the classification is reported as `incomplete` **plus a labelled supplementary a
 hour) under a version-3 manifest with the deterministic paraphrase seed. Default: (a) as applied.
 
 - 2026-09-13 04:30 EDT (orchestrator): **Codex's round 4 evaluated.** B4-D: the first-gradient difference is localized to the *reference's* fp32 loss/head reductions (JAX is closer to float64); no JAX defect found; B4 stays unavailable and SD-21's cause statement is narrowed accordingly. S3-01 done (`docs/controls.md`, mirrored on the board). V4: the three S7 findings confirmed closed (9 S7 tests pass). Lane P: all 27 CPU reproduction commands run in the recreated environment; the three initial failures were path/env issues, fixed in REPRODUCE.md now. Pending proofreading request from Codex on its own B4-D report (count correction): fine to apply; it is Codex's file.
+
+## Programme close-out (2026-09-13 05:45 EDT) — what remains, and what is yours
+
+- Done: all confirmatory runs, the frozen analyses, D3 memo, S5 report, S7, analysis-tree v2, report draft 1 (`docs/report.md`).
+- Running: S8-02 ablations (≈ 1 h). Then: report §8, S8-01 final reproduction audit (Codex Lane P2), S8-04 handoff package.
+- **Yours:** (1) review the D3 memo and the report (T4 / CP-F before any external release); (2) SD-22 choice (default (a) applied; (c) = a 1-hour grammar rerun under a version-3 manifest if you want a confirmatory-grade grammar row); (3) whether to accept S1-07 (D-H stayed partial).
