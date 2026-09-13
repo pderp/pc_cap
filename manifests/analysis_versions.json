@@ -19,6 +19,18 @@
    ],
    "run_affecting": false,
    "note": "no module under harness/, cap/, bases/, pc/, data/, fixtures/ changed after the freeze; the src tree hash differs from v1 only through analysis/ (DEC-028)"
+  },
+  {
+   "version": 3,
+   "analysis_tree_sha256": "4b5130575edf012ab9c13442581046a51409872fd4ba18effdcc28191f5b10c4",
+   "src_tree_sha256": "e7bd017b82a69b4c9aade985a4516edad0254c2f25b000ff69d2ac299a5ecefb",
+   "git_head": "e0944acb3fcdf0dd8781f20cabb249c5c2549902",
+   "recorded": "2026-09-13T21:55:37Z",
+   "changes": [
+    "pccap.analysis.s4_06: grammar expected RET-GS inventory = items with \u2265 1 deterministic paraphrase (DEC-031/032); grammar_expected_exclusions reported"
+   ],
+   "run_affecting": false,
+   "note": "applied after the v3 grammar rerun finished (the v3 freeze bound the tree without it; the working-tree revert during the rerun is recorded in S4-04)"
   }
  ],
  "source_versions": [
@@ -54,6 +66,16 @@
    ],
    "change": "analysis-tree v3: grammar expected RET-GS inventory excludes generator-determined paraphrase-less items (reported as grammar_expected_exclusions)",
    "status": "committed; temporarily reverted in the working tree while the v3 grammar queue runs (the v3 freeze binds the whole package tree); re-applied after the queue"
+  },
+  {
+   "commit": "e0944acb3fcdf0dd8781f20cabb249c5c2549902",
+   "date": "2026-09-13",
+   "files": [
+    "src/pccap/harness/execute.py"
+   ],
+   "change": "Codex P2 fix: create results/<stage> before writing the queue summary",
+   "run_affecting": false,
+   "note": "after the last confirm-mode job (v3 grammar rerun complete 21:54Z); any later confirm-mode run needs a version-4 manifest"
   }
  ]
 }
