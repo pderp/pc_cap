@@ -90,3 +90,18 @@ slots per bank); the oracle is an upper bound with unavailable deployment inform
 shadow key matrix and was never written into the cap (state hash asserted unchanged); the v2 zsRE calibration radii were
 not re-tuned for cap-off keys, so the stable_rebuilt numbers understate what a re-calibrated fixed geometry could do — a
 question for the v0-stable control, not for this memo.
+
+## 7. Addendum (20:25 EDT): the v0-stable control measured (R1-14, DEC-035)
+
+`scripts/r1_14_v0_stable.py` reran the same 100-edit stream with `StableCap` (v0 with every key taken from the
+write-free pass, at write and read; `results/R1/v0_stable.md`):
+
+| arm | RET-ES live → stable | RET-GS live → stable | LS | unrelated firing |
+| --- | ---: | ---: | ---: | ---: |
+| C1 | 0.92 → 0.99 | 0.24 → 0.44 | 1.00 | 0.000 |
+| C2 | 0.79 → 0.97 | 0.29 → 0.44 | 1.00 | 0.000 |
+
+The in-stream gain (0.44) is smaller than the post-hoc shadow-key figure (0.67 / 0.49) because the stream's own
+conflict handling and radius shrinking now act on stable keys; site 3 fires the item's own record on 46 of 100
+paraphrases, another item's on 18, nothing on 36 — the selection residual the learned reader must close. Both arms
+converge to the same site-3 firing pattern under stable keys, as expected: firing depends on keys and radii only.
