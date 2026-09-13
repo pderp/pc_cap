@@ -73,6 +73,15 @@ def expected_from_loader(dataset: str) -> dict | None:
         return None
     fz = json.loads(frozen.read_text())
     exp = {}
+    if dataset == "grammar":
+        # Analysis-tree v2 (DEC-028): the grammar has no realization file — its streams are seed-addressed (DATA-06) and
+        # every committed order of a realization edits the same items (the task order changes, the item set does not).
+        from pccap.data.grammar_streams import stream
+
+        n_per_task = int(fz["stream_lengths"]["grammar_train_count"])
+        for r in fz["realizations"]:
+            exp[r] = [it.item_id for it in stream(r, 0, n_per_task)]
+        return exp
     for r in fz["realizations"]:
         man = load_confirm(Path(fz["confirm_dir"]) / f"{dataset}_r{r}.json", frozen=frozen)
         from pccap.data.selection import subset_ids

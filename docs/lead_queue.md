@@ -160,3 +160,13 @@ The orchestrator regenerates the job list and restarts the queue automatically w
 - 2026-09-12 11:55 EDT (orchestrator): **S4-04 complete** — 210/210 runs, 11.49 accelerator h (42% of the ceiling after headroom), no failures. zsRE and CounterFact paired analyses: classification **negative** on both required contrasts (zsRE C2−C1 RET-GS −0.030 [−0.041, −0.019]; C2−CR +0.000 [−0.013, +0.018]; CounterFact at the exact-key floor). **S5 queue started** (60 SE-A/SE-E jobs). Grammar paired analysis waits on the analysis-tree fix after S5 (post-freeze rule). D3 audit (S4-06) after that.
 
 - 2026-09-13 02:45 EDT (orchestrator): **S5-02 complete** — 60/60, 8.89 accelerator h. Confirmatory execution is finished (S4 + S5 = 20.4 accelerator h). zsRE substrate contrasts: SE-A ≈ SB; SE-E retains +0.019 RET-GS but acquires 34% fewer edits (both negative by policy); CounterFact at the floor. **The post-freeze source rule is lifted for the analysis tree**: the grammar collector fix and the S7 checkpoint runner land next as analysis-tree version 2 (DEC-028), then the grammar paired analysis, the D3 audit (S4-06), the S7 checkpoint runs and the S8 report.
+
+## Grammar paired analysis: SD-22 (2026-09-13 03:10 EDT) — a decision when convenient
+
+The grammar's frozen paired analysis classifies **incomplete**: a per-process hash salt made the paraphrase seeds differ
+between runs, and 0–3 items per cell of 2,048 have no paraphrase at all (undefined RET-GS), so ≈ 6 pairs per cell are
+undefined and the policy refuses to infer them (SD-22). No arm is favoured by this. Applied now, no decision needed:
+the classification is reported as `incomplete` **plus a labelled supplementary analysis on the complete-pair subset**
+(`results/S4/partial/s4_06_grammar_supplement.json`). Your options if you want a confirmatory-grade grammar answer:
+(b) an explicit exclusion category in the policy (post-hoc; DEC), or (c) rerun the 60 grammar runs (~1 accelerator
+hour) under a version-3 manifest with the deterministic paraphrase seed. Default: (a) as applied.
