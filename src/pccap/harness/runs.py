@@ -239,7 +239,10 @@ def run_stream(learner, items: list[EditItem], router, budget: Budget, evaluator
             if permitted is not None:
                 kw["permitted_banks"] = permitted(it)
             # baseline learners charge the shared ledger inside their own ledger.call blocks (Lane F)
-            out = update_item(learner, it, router, budget, Transport(), **kw) if hasattr(learner, "banks") else learner.update_item(it)
+            if getattr(learner, "own_update_path", False):  # revision v1 controls: a cap-shaped learner with its own learning rule
+                out = learner.update_item(it, router, budget)
+            else:
+                out = update_item(learner, it, router, budget, Transport(), **kw) if hasattr(learner, "banks") else learner.update_item(it)
             guard.commit()
         completed = idx + 1
         led_after_update = ledger_snapshot()

@@ -30,6 +30,8 @@ class MatchedRule:
 class MatchedUpdateCap(StableCap):
     """StableCap + gradient-step value updates (the common fast-update rule)."""
 
+    own_update_path = True  # run_stream calls this class's update_item instead of pccap.cap.learn.update_item
+
     def __init__(self, base, cfg: CapConfig, ledger, rule: MatchedRule | None = None):
         super().__init__(base, cfg, ledger)
         self.rule = rule or MatchedRule()
