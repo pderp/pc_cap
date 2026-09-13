@@ -1,14 +1,14 @@
 # Task status board
 
-Regenerated 2026-09-13 06:54 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-13 06:55 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
 | done | 71 |
 | in_progress | 1 |
-| partial | 4 |
-| ready | 4 |
+| partial | 5 |
+| ready | 3 |
 | pending | 9 |
 
 GPU seconds charged to tasks so far: 118443
@@ -162,7 +162,7 @@ GPU seconds charged to tasks so far: 118443
 
 | ID | title | status | role | deps | GPU | review | agent | commit | note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S8-01 | Core completion and reproduction audit | **ready** | INTEGRATOR+METRICS | S4-06 | lease | yes |  |  |  |
+| S8-01 | Core completion and reproduction audit | **partial** | INTEGRATOR+METRICS | S4-06 | lease | yes | orchestrator |  | core-completion table written; final-tree reproduction audit pending (Lane P ran the CPU pre-audit) |
 | S8-02 | Fixed exploratory ablations | **pending** | run owner | S8-01 | lease | no |  |  |  |
 | S8-03 | Integrated report | **pending** | INTEGRATOR | S8-01, S5-04, S7-03 | none | yes |  |  |  |
 | S8-04 | Handoff package and T4 | **partial** | INTEGRATOR | S8-03 | none | yes | orchestrator |  |  |
