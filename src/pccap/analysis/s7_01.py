@@ -307,7 +307,9 @@ def materialize(rec: dict, tok=None, grammar=None) -> EditItem:
         gsp = rec["grammar"]
         g = grammar or Grammar()
         toks, p, label = g.sequence(gsp["context"], Switches.task(gsp["context"]), gsp["seed"], gsp["kind"])
-        return _item(toks, p, label, rec["item_id"], gsp["context"])
+        it = _item(toks, p, label, rec["item_id"], gsp["context"])
+        it.strata["seed"] = int(gsp["seed"])  # deterministic paraphrase seed branch in grammar_eval.paraphrase_prefixes (SD-22)
+        return it
     from pccap.data.tokenize import tokenize_pair
 
     te = tokenize_pair(tok, rec["prompt"], rec["answer"])
@@ -562,12 +564,133 @@ def e2_filter(man: dict, out: Path, batch: int = 64) -> dict:
     return result
 
 
+# ----------------------------------------------------------------------------- S7-01/02 on committed checkpoints (GPU)
+CHECKPOINT_PLAN = {  # dataset → (arm, checkpoint tag, label) per PDF S7: 300-edit endpoint per dataset; grammar end of task 4 and 8
+    "zsre": [("C2", "ckpt300", "300-edit checkpoint of the 1000-item stream")],
+    "counterfact": [("C2", "end", "300-edit endpoint")],
+    "grammar": [("C2", "ckpt1000", "≈ end of task 4 (1000 of 1024 sequences; the frozen checkpoint nearest the task boundary)"), ("C2", "end", "end of task 8 (2048 sequences)")],
+}
+
+
+def run_checkpoint(dataset: str, arm: str, tag: str, realization: int = 0, perm: int = 0, n_pairs: int | None = None, out_root: Path | None = None) -> dict:
+    """Cloned-state reversals on one committed S4 checkpoint: rebuild the frozen learner, import the checkpoint state
+    (hash-verified against checkpoints.json), materialize the E.2-selected pairs, run ``reversal`` per pair under the
+    frozen budget and router, and write the per-pair records and the damage matrix (results/S7/<exp>/…)."""
+    import hashlib
+
+    from pccap.contracts import Budget as _Budget
+    from pccap.harness.arms import make_learner, router_for
+    from pccap.harness.lease import gpu_lease
+    from pccap.harness.ledger import Ledger
+    from pccap.harness.snapshot import load as load_state
+
+    frozen = json.loads((ROOT / "manifests" / "frozen.json").read_text())
+    fsha = hashlib.sha256((ROOT / "manifests" / "frozen.json").read_bytes()).hexdigest()
+    exp = f"{frozen['name']}-{fsha[:8]}"
+    base_kind = "GRAM" if dataset == "grammar" else "BP"
+    run_dir = ROOT / "results" / "S4" / exp / dataset / arm / base_kind / "h" / str(realization) / str(perm)
+    ck_dir = Path(ROOT.parent / "assets" / "runs" / "S4" / exp / dataset / arm / base_kind / "h" / str(realization) / str(perm))
+    ck_meta = next(c for c in json.loads((run_dir / "checkpoints.json").read_text()) if c["tag"] == tag)
+    man = json.loads(MANIFEST.read_text())
+    sel = json.loads(MANIFEST.with_name("s7_pairs_e2.json").read_text())
+    assert sel["inventory_sha256_pairs"] == man["sha256_pairs"], "E.2 selection does not match the inventory"
+    chosen = {st: sel["selection"][dataset][st] for st in STRATA}
+    by_id = {p_["pair_id"]: p_ for p_ in man["pairs"][dataset]}
+    budget = _Budget(A=float(frozen["A"]), epsilon=float(frozen["epsilon"]), R=int(frozen["R"]), tau_edit=float(frozen["tau_edit"]))
+    out_root = out_root or (ROOT / "results" / "S7" / exp / dataset / arm / f"r{realization}" / f"p{perm}" / tag)
+    out_root.mkdir(parents=True, exist_ok=True)
+    t0 = time.time()
+    with gpu_lease(f"S7:{dataset}:{arm}:{tag}", stage="S7", projected_seconds=3600.0):
+        import pccap
+
+        det = pccap.assert_determinism()
+        ledger = Ledger()
+        if dataset == "grammar":
+            from pccap.fixtures.grammar_eval import (
+                GrammarTokenizer,
+                grammar_context,
+                locality_prefixes,
+                with_paraphrases,
+            )
+
+            gc = grammar_context(realization, perm, int(frozen["stream_lengths"]["grammar_train_count"]), ledger=ledger)
+            base, tok = gc["base"], GrammarTokenizer()
+            cal = (frozen.get("calibration") or {}).get("GRAM")
+            radii = {int(m): float(v) for m, v in cal["radii"]["grammar"].items()} if cal else gc["radii"]
+            b_m = {int(m): float(v) for m, v in cal["b_m"].items()} if cal else gc["b_m"]
+            seed = 1000 * realization + 10 * perm
+            cr = (frozen.get("cr_distribution") or {}).get("grammar")
+            router = router_for(arm, cr_distribution=cr, cr_label="cr_frozen_grammar" if cr else "cr_profile_uniform")
+            controls = [np.asarray(x, np.int32) for x in locality_prefixes(16)]
+            g = None
+
+            def mat(rec):
+                return with_paraphrases([materialize(rec, grammar=g)])[0]
+        else:
+            from pccap.bases.bp import BPBase
+            from pccap.data.confirm import load as load_confirm
+            from pccap.data.tokenize import GPT2Tokenizer
+
+            base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
+            man_r = load_confirm(Path(frozen["confirm_dir"]) / f"{dataset}_r{realization}.json", frozen=ROOT / "manifests" / "frozen.json")
+            seeds = man_r["named_seeds"][str(frozen["order_seeds"][perm])]
+            radii = {int(k): float(v) for k, v in frozen["radii"]["bank"][dataset].items()}
+            b_m = {int(k): float(v) for k, v in frozen["b_m"].items()}
+            seed = int(seeds["seed_router"])
+            cr = frozen["cr_distribution"].get(dataset) if frozen.get("cr_distribution") else None
+            router = router_for(arm, cr_distribution=cr, cr_label=frozen["cr_distribution"]["labels"].get(dataset, "cr_frozen") if cr else "cr_profile_uniform")
+            controls = None
+
+            def mat(rec):
+                return materialize(rec, tok=tok)
+        from pccap.harness.identity import check_frozen_identity
+
+        identity = check_frozen_identity(frozen, base=base if base_kind == "BP" else None, base_kind=base_kind if base_kind == "BP" else "GRAM",
+                                         tokenizer=tok if base_kind == "BP" else None, weights_path=None if base_kind == "BP" else __import__("pccap.fixtures.grammar_model", fromlist=["WEIGHTS"]).WEIGHTS)
+        learner_seed = int(seeds["seed_cap_init"]) if dataset != "grammar" else seed
+        read = frozen["radii"]["read"]
+
+        def make():
+            return make_learner(arm, base, ledger, radii=radii, bank_scales=b_m, read=read, seed=learner_seed)
+
+        ck_path = ck_dir / f"learner_{tag}.ckpt"
+        file_sha = hashlib.sha256(ck_path.read_bytes()).hexdigest()
+        assert file_sha == ck_meta["checkpoint_sha256"], f"checkpoint file sha256 {file_sha[:12]} differs from checkpoints.json {ck_meta['checkpoint_sha256'][:12]}"
+        state = load_state(ck_path, expected_hash=ck_meta["state_hash"])  # the snapshot's content hash = the learner state hash
+        probe = make()
+        probe.import_state(state.clone())
+        assert probe.state_hash() == ck_meta["state_hash"], "checkpoint state hash differs from checkpoints.json"
+        h_before = base.checksum()
+        pairs, records = [], []
+        for st in STRATA:
+            for pid in chosen[st][: n_pairs] if n_pairs else chosen[st]:
+                pr = by_id[pid]
+                a, b = mat(pr["a"]), mat(pr["b"])
+                Q = evaluation_set(a, b, tok=tok if dataset != "grammar" else tok, controls=controls)
+                pairs.append((pid, st, a, b, Q))
+        res = run_pairs(make, state, pairs, router, budget, seed=seed)
+        assert base.checksum() == h_before, "base changed during S7 (PC-8)"
+    for r in res["pairs"]:
+        records.append({k: v for k, v in r.items() if k not in ("dist",)})
+    out = {"stage": "S7", "experiment_id": exp, "dataset": dataset, "arm": arm, "checkpoint": {"tag": tag, "items": ck_meta["items"], "sha256": ck_meta["checkpoint_sha256"], "state_hash": ck_meta["state_hash"],
+                                                                                          "label": next((lab for a_, t_, lab in CHECKPOINT_PLAN.get(dataset, []) if a_ == arm and t_ == tag), tag)},
+           "realization": realization, "perm": perm, "n_pairs": len(pairs), "pairs_per_stratum": {st: sum(1 for p_ in pairs if p_[1] == st) for st in STRATA},
+           "budget": budget.__dict__, "radii": radii, "b_m": b_m, "read": read, "frozen_identity": identity, "determinism": det,
+           "damage_matrix": res["damage_matrix"], "pairs": records, "ledger_totals": ledger.totals(), "wall_seconds": time.time() - t0,
+           "written": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    (out_root / "reversals.json").write_text(json.dumps(out, indent=1, default=float))
+    return out
+
+
 # ----------------------------------------------------------------------------- CLI
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--build", action="store_true", help="write manifests/dev/s7_pairs.json")
     ap.add_argument("--seed", type=int, default=SEED)
-    ap.add_argument("--checkpoint", default=None, help="GPU run on a committed learner checkpoint (S7-01/02; needs the frozen manifest)")
+    ap.add_argument("--checkpoint", default=None, help="S7-01/02 on a committed checkpoint: DATASET:ARM:TAG (e.g. zsre:C2:ckpt300); GPU lease")
+    ap.add_argument("--realization", type=int, default=0)
+    ap.add_argument("--perm", type=int, default=0)
+    ap.add_argument("--pairs", type=int, default=None, help="pairs per stratum (default: the full E.2 selection)")
     ap.add_argument("--e2-filter", action="store_true", help="apply the E.2 teacher filter to the inventory once (GPU) → manifests/dev/s7_pairs_e2.json")
     args = ap.parse_args(argv)
     if args.e2_filter:
@@ -582,7 +705,12 @@ def main(argv=None) -> int:
         print(json.dumps({"counts": man["counts"], "shortfalls": man["shortfalls"], "sha256_pairs": man["sha256_pairs"]}, indent=1))
         return 0
     if args.checkpoint:
-        raise SystemExit("the checkpoint run is wired after S4-04 commits checkpoints (needs the frozen arm, the GPU lease and the E.2 filter pass)")
+        ds, arm, tag = args.checkpoint.split(":")
+        res = run_checkpoint(ds, arm, tag, realization=args.realization, perm=args.perm, n_pairs=args.pairs)
+        dm = res["damage_matrix"]
+        print(json.dumps({"pairs": res["n_pairs"], "per_stratum": res["pairs_per_stratum"], "wall_s": round(res["wall_seconds"]),
+                          "damage": {st: {k: dm[st].get(k) for k in ("n", "I_ij_mean", "I_ji_mean", "D_ij_mean", "same_endpoint_fraction")} for st in dm}}, indent=1, default=float))
+        return 0
     ap.print_help()
     return 0
 
