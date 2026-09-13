@@ -74,6 +74,9 @@ def test_hard_null_gives_exact_zero_writes_and_bound_holds():
     W_small = jnp.full((3, 768), 1e-4)  # inside the bound → untouched
     W2, s2 = bound_writes(W_small, CC)
     assert float(s2) < CC.A and np.allclose(np.asarray(W2), np.asarray(W_small))
+    # a hard null (mass exactly 0) must give finite gradients (the bound's norm at W = 0)
+    g0 = jax.grad(lambda c, m: jnp.sum(writes(cp, CC, q, c, m)[0] ** 2), argnums=(0, 1))(code, jnp.asarray(0.0))
+    assert np.all(np.isfinite(np.asarray(g0[0]))) and np.isfinite(float(g0[1]))
     # gradients flow to the code and to the null mass
     g = jax.grad(lambda c, m: jnp.sum(writes(cp, CC, q, c, m)[0] ** 2), argnums=(0, 1))(code, jnp.asarray(0.7))
     assert np.all(np.isfinite(np.asarray(g[0]))) and np.isfinite(float(g[1]))

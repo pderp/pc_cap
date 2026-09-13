@@ -37,7 +37,8 @@ def raw_writes(params: dict, cfg: ControllerConfig, q, code):
 def bound_writes(W, cfg: ControllerConfig):
     """Project [n_banks, d] onto Σ_m ‖w_m‖ / b_m ≤ A by a single rescale (identity inside the bound)."""
     b = jnp.asarray(cfg.bank_scales, jnp.float32)
-    s = jnp.sum(jnp.linalg.norm(W, axis=1) / b)
+    norms = jnp.sqrt(jnp.sum(W * W, axis=1) + 1e-12)  # safe norm: finite gradient at W = 0 (a hard null)
+    s = jnp.sum(norms / b)
     scale = jnp.where(s > cfg.A, cfg.A / jnp.maximum(s, 1e-12), 1.0)
     return W * scale, s
 
