@@ -72,9 +72,10 @@ def keys_for(base: BPBase, tok: GPT2Tokenizer, prompts: list[str]) -> dict[int, 
     return {m: np.stack(v) for m, v in out.items()}
 
 
-def calibrate_radii(edit_keys: dict, para_keys: dict, para_owner: np.ndarray, unrel_keys: dict) -> dict:
+def calibrate_radii(edit_keys: dict, para_keys: dict, para_owner: np.ndarray, unrel_keys: dict, false_fire_max: float = FALSE_FIRE_MAX) -> dict:
     """Per bank: candidate radii from a 20-quantile grid of observed distances; largest with
-    unrelated false-fire ≤ 1%; ties by paraphrase coverage."""
+    unrelated false-fire ≤ ``false_fire_max`` (1%, the frozen criterion; other values only for the S8-02 ablation);
+    ties by paraphrase coverage."""
     result = {}
     for m in (1, 2, 3):
         E, P, U = edit_keys[m], para_keys[m], unrel_keys[m]
@@ -85,7 +86,7 @@ def calibrate_radii(edit_keys: dict, para_keys: dict, para_owner: np.ndarray, un
         for r in grid:
             ff = float((d_unrel <= r).mean())
             cov = float((d_para <= r).mean())
-            cands.append({"radius": float(r), "false_fire": ff, "coverage": cov, "admissible": ff <= FALSE_FIRE_MAX})
+            cands.append({"radius": float(r), "false_fire": ff, "coverage": cov, "admissible": ff <= false_fire_max})
         adm = [c for c in cands if c["admissible"] and c["radius"] > 0]
         if adm:
             best = max(adm, key=lambda c: (c["radius"], c["coverage"]))

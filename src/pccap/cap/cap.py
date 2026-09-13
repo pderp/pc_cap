@@ -75,6 +75,7 @@ class CapConfig:
     key_dim: int | None = None
     credit: str = "adjoint"  # "adjoint" (SB, SE-A) or "error" (SE-E: settled ePC error at the site, PDF S5 / D.6)
     credit_iters: int = 8  # SE-E nominal horizon (SD-6)
+    ceiling_factor: float = 1.0  # S8-02 ablation only: byte ceiling = B_cap × factor (0.5 / 2.0); confirmatory runs use 1.0
 
     def banks(self) -> tuple[int, ...]:
         return ARM_BANKS[self.arm]
@@ -89,7 +90,7 @@ class Cap:
         self.dk = int(cfg.key_dim or cfg.d)
         self.blocks = dict(getattr(base, "bank_blocks", None) or g.BANK_BLOCK)  # site block per bank (a base may declare its own; R2-09)
         self.rng = random.Random(cfg.seed)
-        ceilings = mem.bank_ceilings(cfg.arm, self.d)
+        ceilings = mem.bank_ceilings(cfg.arm, self.d, float(getattr(cfg, "ceiling_factor", 1.0)))
         self.layouts = {m: mem.BankLayout.plan(m, ceilings[m], self.dk, self.d, cfg.overhead_bytes) for m in cfg.banks()}
         self.banks: dict[int, BankState] = {}
         for m in cfg.banks():
@@ -253,7 +254,7 @@ class Cap:
         return c
 
     def memory_bytes(self) -> MemoryReport:
-        rep = mem.memory_report({m: bs.bank for m, bs in self.banks.items()}, self.layouts, mem.b_cap(self.d))
+        rep = mem.memory_report({m: bs.bank for m, bs in self.banks.items()}, self.layouts, int(round(mem.b_cap(self.d) * float(getattr(self.cfg, "ceiling_factor", 1.0)))))
         idx = sum(bs.index_bytes() for bs in self.banks.values())
         rep.index_bytes += idx
         rep.allocated_bytes += idx

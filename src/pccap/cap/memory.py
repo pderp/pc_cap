@@ -30,8 +30,9 @@ def slot_bytes(dk: int, d: int) -> int:
     return 4 * dk + 4 * d + SLOT_BYTES
 
 
-def bank_ceilings(arm: str, d: int) -> dict[int, int]:
-    B = b_cap(d)
+def bank_ceilings(arm: str, d: int, ceiling_factor: float = 1.0) -> dict[int, int]:
+    """Per-bank byte ceilings from B_cap(d); ``ceiling_factor`` ≠ 1 only for the S8-02 fixed-byte ablation (half / double)."""
+    B = int(round(b_cap(d) * float(ceiling_factor)))
     if arm in ONE_BANK_ARMS:
         return {3: B}
     if arm in THREE_BANK_ARMS:
