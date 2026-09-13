@@ -31,6 +31,7 @@ def main() -> int:
     ap.add_argument("--tag", default=None, help="output subfolder (default: the estimator name)")
     ap.add_argument("--domain", choices=("synthetic", "counterfact"), default="synthetic", help="episode source: synthetic generator or CounterFact natural episodes (tokenized by Codex's adapter)")
     ap.add_argument("--history", type=int, default=4)
+    ap.add_argument("--no-lease", action="store_true", help="run beside another lease holder (small footprint; development pilots only)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -50,7 +51,8 @@ def main() -> int:
     OUT = OUT_ROOT / (args.tag or args.estimator)
     OUT.mkdir(parents=True, exist_ok=True)
     t_start = time.time()
-    with gpu_lease("R1:pilot", stage="R1", projected_seconds=3 * 3600.0):
+    import contextlib
+    with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:pilot", stage="R1", projected_seconds=3 * 3600.0)):
         ledger = Ledger()
         if args.estimator == "epc":
             from pccap.bases.epc import EPCBase
@@ -149,9 +151,9 @@ def main() -> int:
                 lab = labels[q.query_id]
                 if lab.role == "composition":
                     continue
-                n_t = len(lab.target_ids)
+                n_t = len(lab.target_ids) or 3  # preserve roles without a teacher continuation: compare three greedy tokens
                 ans = greedy(lambda ids, cap=cap: cap.predict(ids).logits, q.prompt_ids, n_t)
-                roles.setdefault(lab.role, []).append(int(ans == [int(y) for y in lab.target_ids]))
+                roles.setdefault(lab.role, []).append(int(bool(lab.target_ids) and ans == [int(y) for y in lab.target_ids]))
                 if lab.role in ("near_miss", "unrelated"):
                     off = greedy(lambda ids: base.forward(ids, (), phase="query", last_only=True).logits, q.prompt_ids, n_t)
                     preserved.setdefault(lab.role, []).append(int(ans == off))

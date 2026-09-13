@@ -113,11 +113,15 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig) -> EpisodeFe
         p_last, p_span, _ = observe(prompt)
         prefixes = []
         cur = prompt
-        for y in np.asarray(lab.target_ids, np.int32):
+        targets = [int(y) for y in np.asarray(lab.target_ids, np.int32)]
+        if lab.role in PRESERVE_ROLES and not targets:
+            targets = [-1]  # natural data carries no teacher continuation: preserve the distribution at the prompt's last position
+        for y in targets:
             last, span, cl = observe(cur, prompt_mask(len(prompt), len(cur)), want_logits=lab.role in PRESERVE_ROLES)
             T = g.bucket_len(len(cur))
             prefixes.append(PrefixFeat(ids=g.pad_ids(cur, T), n=len(cur), target=int(y), last=last, span=span, capoff_logits=cl))
-            cur = np.concatenate([cur, np.int32([int(y)])])
+            if y >= 0:
+                cur = np.concatenate([cur, np.int32([int(y)])])
         tgt = index[lab.supporting_record_ids[0]] if lab.role in ANSWER_ROLES else -1
         queries.append(QueryFeat(query_id=q.query_id, role=lab.role, last=p_last, span=p_span, prefixes=prefixes, target_record=tgt))
     return EpisodeFeatures(episode_id=episode.episode_id, supports=supports, queries=queries, skipped=skipped, cost=cost)
