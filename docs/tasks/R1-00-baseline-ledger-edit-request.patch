@@ -1,0 +1,12 @@
+--- a/scripts/r1_00_baseline.py
++++ b/scripts/r1_00_baseline.py
+@@ -61,7 +61,8 @@
+             require(m["items_completed"] == m["items_planned"] == len(items) == 1000, f"item count {p}")
+             require(c["experiment_id"] == EXPERIMENT and c["arm"] == arm and c["dataset"] == "zsre", f"identity {p}")
+             require(m["base_hash_before"] == m["base_hash_after"] == c["base_hash_before"] == c["base_hash_after"], f"base changed {p}")
+-            require(cost == m["ledger_totals"] == c["ledger_totals"], f"ledger mismatch {p}")
++            for phase in ("learning", "query", "total"):
++                require(cost[phase] == m["ledger_totals"][phase] == c["ledger_totals"][phase], f"ledger mismatch {phase} {p}")
+             require(len({i["item_id"] for i in items}) == 1000, f"duplicate items {p}")
+             require([i["index"] for i in items] == list(range(1000)), f"item order {p}")
+             values = {k: float(m["metrics"][k]["value"]) for k in METRICS}

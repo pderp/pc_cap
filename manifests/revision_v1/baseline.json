@@ -1,0 +1,2176 @@
+{
+  "task": "R1-00",
+  "written_utc": "2026-09-13T21:26:53.989779+00:00",
+  "baseline_status": "pre_closeout_snapshot_not_final_revision_freeze",
+  "snapshot": {
+    "commit": "075c4bbae73b2b246e006305eb54c627c27e730b",
+    "tracked_dirty_diff_sha256": "5da34695455010633f5440617da88f88b22545f0663379a1ef0831671b7a42c8",
+    "tracked_dirty_diff": "diff --git a/results/S4/queue.jsonl b/results/S4/queue.jsonl\nindex 8a9f05e..e94a4f6 100644\n--- a/results/S4/queue.jsonl\n+++ b/results/S4/queue.jsonl\n@@ -259,3 +259,6 @@\n {\"job\": {\"dataset\": \"grammar\", \"arm\": \"C1\", \"realization\": 2, \"perm\": 2, \"n_items\": 256}, \"cmd\": \"/home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C1 --base GRAM --read h --realization 2 --perm 2 --manifest manifests/grammar/streams.json\", \"run_dir\": \"/home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C1/GRAM/h/2/2\", \"start\": \"2026-09-13T20:36:21Z\", \"archived_previous_attempt\": null, \"exit\": 0, \"end\": \"2026-09-13T20:46:09Z\", \"wall_seconds\": 588.8380682468414, \"status\": \"complete\", \"items_completed\": 2048}\n {\"job\": {\"dataset\": \"grammar\", \"arm\": \"C1\", \"realization\": 2, \"perm\": 3, \"n_items\": 256}, \"cmd\": \"/home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C1 --base GRAM --read h --realization 2 --perm 3 --manifest manifests/grammar/streams.json\", \"run_dir\": \"/home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C1/GRAM/h/2/3\", \"start\": \"2026-09-13T20:46:09Z\", \"archived_previous_attempt\": null, \"exit\": 0, \"end\": \"2026-09-13T20:56:13Z\", \"wall_seconds\": 603.868510723114, \"status\": \"complete\", \"items_completed\": 2048}\n {\"job\": {\"dataset\": \"grammar\", \"arm\": \"C1\", \"realization\": 2, \"perm\": 4, \"n_items\": 256}, \"cmd\": \"/home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C1 --base GRAM --read h --realization 2 --perm 4 --manifest manifests/grammar/streams.json\", \"run_dir\": \"/home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C1/GRAM/h/2/4\", \"start\": \"2026-09-13T20:56:13Z\", \"archived_previous_attempt\": null, \"exit\": 0, \"end\": \"2026-09-13T21:06:07Z\", \"wall_seconds\": 593.2216427326202, \"status\": \"complete\", \"items_completed\": 2048}\n+{\"job\": {\"dataset\": \"grammar\", \"arm\": \"C2\", \"realization\": 2, \"perm\": 0, \"n_items\": 256}, \"cmd\": \"/home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 0 --manifest manifests/grammar/streams.json\", \"run_dir\": \"/home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0\", \"start\": \"2026-09-13T21:06:07Z\", \"archived_previous_attempt\": null, \"exit\": 0, \"end\": \"2026-09-13T21:11:25Z\", \"wall_seconds\": 318.4940011501312, \"status\": \"complete\", \"items_completed\": 2048}\n+{\"job\": {\"dataset\": \"grammar\", \"arm\": \"C2\", \"realization\": 2, \"perm\": 1, \"n_items\": 256}, \"cmd\": \"/home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 1 --manifest manifests/grammar/streams.json\", \"run_dir\": \"/home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1\", \"start\": \"2026-09-13T21:11:25Z\", \"archived_previous_attempt\": null, \"exit\": 0, \"end\": \"2026-09-13T21:16:39Z\", \"wall_seconds\": 314.3627209663391, \"status\": \"complete\", \"items_completed\": 2048}\n+{\"job\": {\"dataset\": \"grammar\", \"arm\": \"C2\", \"realization\": 2, \"perm\": 2, \"n_items\": 256}, \"cmd\": \"/home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 2 --manifest manifests/grammar/streams.json\", \"run_dir\": \"/home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2\", \"start\": \"2026-09-13T21:16:39Z\", \"archived_previous_attempt\": null, \"exit\": 0, \"end\": \"2026-09-13T21:21:52Z\", \"wall_seconds\": 312.23182821273804, \"status\": \"complete\", \"items_completed\": 2048}\ndiff --git a/results/S4/queue_logs/grammar_C2_r2_p0.log b/results/S4/queue_logs/grammar_C2_r2_p0.log\nindex 4f01ad1..90566e6 100644\n--- a/results/S4/queue_logs/grammar_C2_r2_p0.log\n+++ b/results/S4/queue_logs/grammar_C2_r2_p0.log\n@@ -3,3 +3,4 @@\n complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v2-84126123/grammar/C2/GRAM/h/2/0\n \n === 2026-09-13T21:06:07Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 0 --manifest manifests/grammar/streams.json\n+complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0\ndiff --git a/results/S4/queue_logs/grammar_C2_r2_p1.log b/results/S4/queue_logs/grammar_C2_r2_p1.log\nindex 848a5e5..87a4f92 100644\n--- a/results/S4/queue_logs/grammar_C2_r2_p1.log\n+++ b/results/S4/queue_logs/grammar_C2_r2_p1.log\n@@ -1,3 +1,6 @@\n \n === 2026-09-12T15:08:07Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 1 --manifest manifests/grammar/streams.json\n complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v2-84126123/grammar/C2/GRAM/h/2/1\n+\n+=== 2026-09-13T21:11:25Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 1 --manifest manifests/grammar/streams.json\n+complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1\ndiff --git a/results/S4/queue_logs/grammar_C2_r2_p2.log b/results/S4/queue_logs/grammar_C2_r2_p2.log\nindex 32ce4eb..286f3b2 100644\n--- a/results/S4/queue_logs/grammar_C2_r2_p2.log\n+++ b/results/S4/queue_logs/grammar_C2_r2_p2.log\n@@ -1,3 +1,6 @@\n \n === 2026-09-12T15:13:21Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 2 --manifest manifests/grammar/streams.json\n complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v2-84126123/grammar/C2/GRAM/h/2/2\n+\n+=== 2026-09-13T21:16:39Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 2 --manifest manifests/grammar/streams.json\n+complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2\ndiff --git a/results/S4/queue_logs/grammar_C2_r2_p3.log b/results/S4/queue_logs/grammar_C2_r2_p3.log\nindex b4e2091..0c9937a 100644\n--- a/results/S4/queue_logs/grammar_C2_r2_p3.log\n+++ b/results/S4/queue_logs/grammar_C2_r2_p3.log\n@@ -1,3 +1,5 @@\n \n === 2026-09-12T15:18:30Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 3 --manifest manifests/grammar/streams.json\n complete: /home/derp/cap/pc_cap/results/S4/frozen-confirmatory-v2-84126123/grammar/C2/GRAM/h/2/3\n+\n+=== 2026-09-13T21:21:52Z /home/derp/cap/venv/bin/python -m pccap.cli run --stage S4 --mode confirm --dataset grammar --arm C2 --base GRAM --read h --realization 2 --perm 3 --manifest manifests/grammar/streams.json\ndiff --git a/src/pccap/analysis/s4_06.py b/src/pccap/analysis/s4_06.py\nindex 9b02eae..85d4c24 100644\n--- a/src/pccap/analysis/s4_06.py\n+++ b/src/pccap/analysis/s4_06.py\n@@ -76,12 +76,11 @@ def expected_from_loader(dataset: str) -> dict | None:\n     if dataset == \"grammar\":\n         # Analysis-tree v2 (DEC-028): the grammar has no realization file \u2014 its streams are seed-addressed (DATA-06) and\n         # every committed order of a realization edits the same items (the task order changes, the item set does not).\n-        # Analysis-tree v3 (DEC-029/SD-22): with the deterministic paraphrase seed, an item's paraphrase count is a fixed\n-        # property of the item; items with NO paraphrase have no RET-GS by construction in every arm and every order, so\n-        # the expected RET-GS inventory excludes them \u2014 an outcome-independent, generator-determined exclusion recorded in\n-        # ``grammar_expected_exclusions``. (Under v2's per-process seeds this set varied per cell, SD-22.)\n+        from pccap.data.grammar_streams import stream\n+\n+        n_per_task = int(fz[\"stream_lengths\"][\"grammar_train_count\"])\n         for r in fz[\"realizations\"]:\n-            exp[r] = [iid for iid, n in _grammar_paraphrase_counts(fz, r).items() if n >= 1]\n+            exp[r] = [it.item_id for it in stream(r, 0, n_per_task)]\n         return exp\n     for r in fz[\"realizations\"]:\n         man = load_confirm(Path(fz[\"confirm_dir\"]) / f\"{dataset}_r{r}.json\", frozen=frozen)\n@@ -91,29 +90,6 @@ def expected_from_loader(dataset: str) -> dict | None:\n     return exp\n \n \n-def _grammar_paraphrase_counts(fz: dict, realization: int) -> dict[str, int]:\n-    from pccap.data.grammar_streams import stream\n-    from pccap.fixtures.grammar_eval import with_paraphrases\n-\n-    n_per_task = int(fz[\"stream_lengths\"][\"grammar_train_count\"])\n-    return {it.item_id: len(it.paraphrases) for it in with_paraphrases(stream(realization, 0, n_per_task))}\n-\n-\n-def grammar_expected_exclusions() -> dict | None:\n-    \"\"\"Items excluded from the grammar's expected RET-GS inventory because the (deterministic) paraphrase search finds\n-    none: per realization, the ids and counts (reported with every grammar paired analysis).\"\"\"\n-    frozen = ROOT / \"manifests\" / \"frozen.json\"\n-    if not frozen.exists():\n-        return None\n-    fz = json.loads(frozen.read_text())\n-    out = {}\n-    for r in fz[\"realizations\"]:\n-        counts = _grammar_paraphrase_counts(fz, r)\n-        out[str(r)] = {\"n_items\": len(counts), \"excluded_no_paraphrase\": sorted(i for i, n in counts.items() if n == 0),\n-                       \"n_excluded\": sum(1 for n in counts.values() if n == 0), \"n_one_paraphrase\": sum(1 for n in counts.values() if n == 1)}\n-    return out\n-\n-\n def render(rep: dict, dataset: str, notes: list[str]) -> str:\n     L = [f\"# Frozen paired analysis \u2014 {dataset} (S4-06)\", \"\", f\"Rendered {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}; policy DEC-009; `pccap.analysis.paired` (ANA-01).\", \"\",\n          f\"**Classification: {rep.get('classification')}**\", \"\"]\n@@ -137,9 +113,7 @@ def main(argv=None) -> int:\n     rep = analyze_paired(rows, seed=args.seed, stream_id=args.dataset, expected_items=exp)\n     out = Path(args.out) if args.out else ROOT / \"results\" / \"S4\" / f\"paired_{args.dataset}.json\"\n     out.parent.mkdir(parents=True, exist_ok=True)\n-    excl = grammar_expected_exclusions() if args.dataset == \"grammar\" else None\n-    out.write_text(json.dumps({\"dataset\": args.dataset, \"rows\": len(rows), \"expected_items_from_loader\": exp is not None, \"notes\": notes,\n-                               \"grammar_expected_exclusions\": excl, \"report\": rep}, indent=1, allow_nan=False) + \"\\n\")\n+    out.write_text(json.dumps({\"dataset\": args.dataset, \"rows\": len(rows), \"expected_items_from_loader\": exp is not None, \"notes\": notes, \"report\": rep}, indent=1, allow_nan=False) + \"\\n\")\n     out.with_suffix(\".md\").write_text(render(rep, args.dataset, notes))\n     print(args.dataset, \"rows\", len(rows), \"classification\", rep.get(\"classification\"), \"->\", out)\n     return 0\n",
+    "status_at_start": " M results/S4/queue.jsonl\n M results/S4/queue_logs/grammar_C2_r2_p0.log\n M results/S4/queue_logs/grammar_C2_r2_p1.log\n M results/S4/queue_logs/grammar_C2_r2_p2.log\n M results/S4/queue_logs/grammar_C2_r2_p3.log\n M src/pccap/analysis/s4_06.py\n?? docs/tasks/CODEX-R1-20260913.claim.json\n?? docs/tasks/R1-00-baseline-ledger-edit-request.patch\n?? docs/tasks/R1-created-files-repairs.json\n?? docs/tasks/R1-created-files-repairs.patch\n?? logs/r1_codex_20260913/data_inventory.json\n?? logs/r1_codex_20260913/proposed/r1_00_baseline.py\n?? logs/r1_codex_20260913/proposed/r1_20_episodes.py\n?? logs/r1_codex_20260913/proposed/test_episodes.py\n?? logs/r1_codex_20260913/proposed_tests.test.py\n?? logs/r1_codex_20260913/proposed_tests.txt\n?? logs/review_plan9.md\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/checkpoints.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/cost.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/items.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/metrics.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/checkpoints.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/cost.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/items.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/metrics.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/checkpoints.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/cost.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/items.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/metrics.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/3/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/3/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/3/items.jsonl\n?? results/S4/post_queue_chain_status.txt\n?? results/S4/queue.pid\n?? results/S4/queue_session5_grammar_v3.log\n?? scripts/r1_00_baseline.py\n?? scripts/r1_20_episodes.py\n?? scripts/r1_validate_proposed.py\n?? scripts/r1_x0_data_inventory.py\n?? tests/revision_v1/test_episodes.py\n",
+    "untracked_files_included_in_diff": false,
+    "status_at_end": " M results/S4/queue.jsonl\n M results/S4/queue_logs/grammar_C2_r2_p0.log\n M results/S4/queue_logs/grammar_C2_r2_p1.log\n M results/S4/queue_logs/grammar_C2_r2_p2.log\n M results/S4/queue_logs/grammar_C2_r2_p3.log\n M src/pccap/analysis/s4_06.py\n?? docs/tasks/CODEX-R1-20260913.claim.json\n?? docs/tasks/R1-00-baseline-ledger-edit-request.patch\n?? docs/tasks/R1-created-files-repairs.json\n?? docs/tasks/R1-created-files-repairs.patch\n?? logs/r1_codex_20260913/data_inventory.json\n?? logs/r1_codex_20260913/proposed/r1_00_baseline.py\n?? logs/r1_codex_20260913/proposed/r1_20_episodes.py\n?? logs/r1_codex_20260913/proposed/test_episodes.py\n?? logs/r1_codex_20260913/proposed_tests.test.py\n?? logs/r1_codex_20260913/proposed_tests.txt\n?? logs/review_plan9.md\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/checkpoints.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/cost.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/items.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/0/metrics.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/checkpoints.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/cost.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/items.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/1/metrics.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/checkpoints.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/cost.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/items.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/2/metrics.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/3/config.json\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/3/decisions.jsonl\n?? results/S4/frozen-confirmatory-v3-163d04e2/grammar/C2/GRAM/h/2/3/items.jsonl\n?? results/S4/post_queue_chain_status.txt\n?? results/S4/queue.pid\n?? results/S4/queue_session5_grammar_v3.log\n?? scripts/r1_00_baseline.py\n?? scripts/r1_20_episodes.py\n?? scripts/r1_validate_proposed.py\n?? scripts/r1_x0_data_inventory.py\n?? tests/revision_v1/test_episodes.py\n",
+    "commit_at_end": "075c4bbae73b2b246e006305eb54c627c27e730b",
+    "commit_and_tracked_diff_stable": true
+  },
+  "python": {
+    "executable": "/home/derp/cap/venv/bin/python",
+    "version": "3.12.14"
+  },
+  "package_versions": {
+    "jax": "0.11.1",
+    "jaxlib": "0.11.1",
+    "fabricpc": "0.5.2",
+    "numpy": "2.5.3",
+    "tokenizers": "0.23.2"
+  },
+  "audit_runtime": {
+    "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+    "omp_num_threads": "2",
+    "jax_default_matmul_precision": "highest",
+    "jax_enable_x64": false,
+    "jax_threefry_partitionable": false,
+    "jax_version": "0.11.1",
+    "backend": "cpu",
+    "devices": [
+      "cpu:0"
+    ]
+  },
+  "historical_dtype": "float32 model parameters (bp._digest/gpt2_jax.to_device); x64 disabled in saved configs",
+  "fabricpc": {
+    "path": "/home/derp/cap/FabricPC",
+    "commit": "6b946820984b7bc52692a16ddd21199e5d11189e",
+    "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "assets": {
+    "/home/derp/cap/assets/data/raw/counterfact/counterfact.json": {
+      "available": true,
+      "expected_sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+      "actual_sha256": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/gpt2/config.json": {
+      "available": true,
+      "expected_sha256": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+      "actual_sha256": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/gpt2/merges.txt": {
+      "available": true,
+      "expected_sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "actual_sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/gpt2/model.safetensors": {
+      "available": true,
+      "expected_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+      "actual_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/gpt2/tokenizer.json": {
+      "available": true,
+      "expected_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+      "actual_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/gpt2/vocab.json": {
+      "available": true,
+      "expected_sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+      "actual_sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/openwebtext/distillation-probes.bin": {
+      "available": true,
+      "expected_sha256": "b57f1306c262dc70ea2c9cb91794089a1370d7f9a91b7ddb765063226bb57878",
+      "actual_sha256": "b57f1306c262dc70ea2c9cb91794089a1370d7f9a91b7ddb765063226bb57878",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/openwebtext/hf/plain_text/train-00000-of-00080.parquet": {
+      "available": true,
+      "expected_sha256": "caed9f4b7053d7cd4d1a13ce9ec9224d84a3bba1f11579193562a7e31ebe656e",
+      "actual_sha256": "caed9f4b7053d7cd4d1a13ce9ec9224d84a3bba1f11579193562a7e31ebe656e",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/openwebtext/openwebtext.bin": {
+      "available": true,
+      "expected_sha256": "ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+      "actual_sha256": "ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/ud_ewt/en_ewt-ud-dev.conllu": {
+      "available": true,
+      "expected_sha256": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8",
+      "actual_sha256": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/ud_ewt/en_ewt-ud-test.conllu": {
+      "available": true,
+      "expected_sha256": "fa024f43dc5da3c5ac02563bc9bd0e974f46cbb1560823976a8f342a37dc494a",
+      "actual_sha256": "fa024f43dc5da3c5ac02563bc9bd0e974f46cbb1560823976a8f342a37dc494a",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/ud_ewt/en_ewt-ud-train.conllu": {
+      "available": true,
+      "expected_sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+      "actual_sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/wikitext103/test-00000-of-00001.parquet": {
+      "available": true,
+      "expected_sha256": "5f1bea067869d04849c0f975a2b29c4ff47d867f484f5010ea5e861eab246d91",
+      "actual_sha256": "5f1bea067869d04849c0f975a2b29c4ff47d867f484f5010ea5e861eab246d91",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/wikitext103/train-00000-of-00002.parquet": {
+      "available": true,
+      "expected_sha256": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+      "actual_sha256": "74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/wikitext103/train-00001-of-00002.parquet": {
+      "available": true,
+      "expected_sha256": "ba090ac30dbf5461e8dcbdd1a1b8e6f3cf9c2c756d64f0c1220450acd514f720",
+      "actual_sha256": "ba090ac30dbf5461e8dcbdd1a1b8e6f3cf9c2c756d64f0c1220450acd514f720",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/wikitext103/validation-00000-of-00001.parquet": {
+      "available": true,
+      "expected_sha256": "204929b7ff9d6184953f867dedb860e40aa69c078fc1e54b3baaa8fb28511c4c",
+      "actual_sha256": "204929b7ff9d6184953f867dedb860e40aa69c078fc1e54b3baaa8fb28511c4c",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/zsre/zsre_mend_eval.json": {
+      "available": true,
+      "expected_sha256": "8a371d512f8a6ab175db4ef672181d5c0e52da23298cb51e5a2eeea2f89aa9cd",
+      "actual_sha256": "8a371d512f8a6ab175db4ef672181d5c0e52da23298cb51e5a2eeea2f89aa9cd",
+      "matches": true
+    },
+    "/home/derp/cap/assets/data/raw/zsre/zsre_mend_train.json": {
+      "available": true,
+      "expected_sha256": "4f3ac245e9c0baaf633f9e6cb765ffa8e83d594a74520a6cc3539497328c0722",
+      "actual_sha256": "4f3ac245e9c0baaf633f9e6cb765ffa8e83d594a74520a6cc3539497328c0722",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz": {
+      "available": true,
+      "expected_sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51",
+      "actual_sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51",
+      "matches": true
+    },
+    "/home/derp/cap/assets/models/grammar/grammar_base.npz": {
+      "available": true,
+      "expected_sha256": "23fbc42b127ce1b44b83ca368e0cbcb8e413f768b7c8d6d11aacfd217f4167d5",
+      "actual_sha256": "23fbc42b127ce1b44b83ca368e0cbcb8e413f768b7c8d6d11aacfd217f4167d5",
+      "matches": true
+    }
+  },
+  "manifest_sha256": {
+    "manifests/assets.json": "c54b97781e0710ef2fc29efb25bc26d23997459cac6e7207dcf874a695b7b1ba",
+    "manifests/datasets.json": "2d35b500d89d86b42f58d35bd57f005a53a0bf9657b9436386a45216243cc475",
+    "manifests/frozen.json": "163d04e2a1e0ba83e18fa2ee0b51b7a5560ed12086b5f4df1e6b0f6d20d4cbe8",
+    "requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "manifests/dev/challenges.json": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+    "manifests/dev/counterfact_dev.json": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+    "manifests/dev/grace_parity_cases.json": "05e640c00671449f8d739fc5dbd00431494b7f9e9568001f40776640fac6338a",
+    "manifests/dev/grace_parity_selection.json": "1d77156006658067f352c0abc11ead43c4351719b25bd1caf1029c59cc7d228f",
+    "manifests/dev/lm_sets.json": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e",
+    "manifests/dev/p5_subsets.json": "7bcb11d342d1c86d254a73baefb9aec3495813aae7a035ae6449b003017ad391",
+    "manifests/dev/pools.json": "23e56ab9b75323a1e9191474c94453b9f0673abe87694a94a9ea142e77eef29b",
+    "manifests/dev/reserved_subjects.json": "627027addab39389f990100fe886d7ef75c3a49bcde5065321e957c48f4bb986",
+    "manifests/dev/s0_sample.json": "36dff70620182a96b12f7d7949bf42ba938ab8fd059d4dd04f9275effd11dd44",
+    "manifests/dev/s0_smoke.json": "3ea188dd258bbaa1b383b92700d779790294347a46f7dad336ab727f7f5aa6b0",
+    "manifests/dev/s3_grammar_dev.json": "ecfae637a9ad51dd996b985006e770e46f4267b6297fd2993d4600f9d7b69036",
+    "manifests/dev/s3_grammar_smoke.json": "c50e7f603c0e542499261b5a87435d884167d471f9e12a10b34c8da5c5c86a46",
+    "manifests/dev/s3_smoke.json": "07fc00e495759529717d08085ffa89d0407c1263026c2c4298b6105cf6a57345",
+    "manifests/dev/s5_arms.json": "fdc168baf7fc311d747f066455dfdff95178be22e53681049f165da076bbb5d0",
+    "manifests/dev/s5_smoke.json": "fbfdb5156cafa3462b0820114311c38cbb100186d70f19b53daca54930341bde",
+    "manifests/dev/s7_pairs.json": "1984a5767d3cd30331f8cf4be51e3a93250152a1606e11a3034ee6fef523294f",
+    "manifests/dev/s7_pairs_e2.json": "ddf05677626bb2cafdcac9d395ebc56db172bf2844464fd03a59a0b480fd94da",
+    "manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "manifests/grammar/generator.json": "2b6d1cbdf9da094ea62213d5a94e497031bf3550584ae4724fb37ea1ea0daed2",
+    "manifests/grammar/streams.json": "9c6957928444401b05496c737f405936c7e03914717bb4a4c1b03ac98673ef51",
+    "manifests/grammar/tracing.json": "a588059ead5c0fccab594193323100e65bc1fe0bf926c582214fa313817623ef"
+  },
+  "manifest_seed_fields": {
+    "manifests/assets.json": {},
+    "manifests/datasets.json": {},
+    "manifests/frozen.json": {
+      "seed": 0,
+      "order_seeds": [
+        100,
+        101,
+        102,
+        103,
+        104
+      ],
+      "cap_seed": "1000*realization + 10*(order_seed-100)",
+      "router_seed": "1000*realization + 10*(order_seed-100) + 1",
+      "replay_seed": "1000*realization + 10*(order_seed-100) + 2"
+    },
+    "manifests/dev/challenges.json": {
+      "seed": 23
+    },
+    "manifests/dev/counterfact_dev.json": {
+      "seed": 13
+    },
+    "manifests/dev/grace_parity_cases.json": {},
+    "manifests/dev/grace_parity_selection.json": {},
+    "manifests/dev/lm_sets.json": {
+      "seeds": {
+        "H": 11,
+        "P2": 12,
+        "P3": 13
+      }
+    },
+    "manifests/dev/p5_subsets.json": {
+      "seed": 17
+    },
+    "manifests/dev/pools.json": {},
+    "manifests/dev/reserved_subjects.json": {},
+    "manifests/dev/s0_sample.json": {
+      "seed": 7
+    },
+    "manifests/dev/s0_smoke.json": {
+      "seed": 0
+    },
+    "manifests/dev/s3_grammar_dev.json": {
+      "seed": 0
+    },
+    "manifests/dev/s3_grammar_smoke.json": {
+      "seed": 0
+    },
+    "manifests/dev/s3_smoke.json": {
+      "seed": 0,
+      "order_seed": 100
+    },
+    "manifests/dev/s5_arms.json": {
+      "seed": 0
+    },
+    "manifests/dev/s5_smoke.json": {
+      "seed": 0,
+      "order_seed": 100
+    },
+    "manifests/dev/s7_pairs.json": {
+      "seed": 71
+    },
+    "manifests/dev/s7_pairs_e2.json": {},
+    "manifests/dev/zsre_dev.json": {
+      "seed": 13
+    },
+    "manifests/grammar/generator.json": {
+      "grammar.rule_seed": 7,
+      "seed_ranges": {
+        "base_train": [
+          0,
+          200000
+        ],
+        "base_heldout": [
+          200000,
+          220000
+        ],
+        "task_train": "300_000 + 20_000*context + 1_000*realization + i",
+        "task_eval": "500_000 + 20_000*context + i (2,000 per task)",
+        "heldout_combinations": "600_000 + 20_000*context + i",
+        "sample_hash": 90000
+      }
+    },
+    "manifests/grammar/streams.json": {
+      "seeds": {
+        "train": "300000 + 20000*task + 10000*realization + i",
+        "eval": "500000 + 20000*task + i",
+        "heldout": "600000 + 20000*task + {0|5000} + i"
+      }
+    },
+    "manifests/grammar/tracing.json": {
+      "seed": 0
+    }
+  },
+  "reference": {
+    "experiment_id": "frozen-confirmatory-v2-84126123",
+    "runs": {
+      "C1": [
+        {
+          "realization": 0,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 0,
+            "seed_router": 1,
+            "seed_replay": 2
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.502,
+          "ret_gs_end": 0.125,
+          "learning_seconds": 280.8858726391336,
+          "total_seconds": 511.4198877204908,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/0/metrics.json": "9a2c8e8e4a2fe3d905d125421e9d17b570525558b97191ed17160c67fbcf4403",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/0/config.json": "cf863c15186cf21799f6e41f0c830cb922f91857d772d3214191af5239f365ad",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/0/cost.json": "6590d026aa66eb919746985288b11d5e6b8a755ac1badb2a6078ee9558931e3a",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/0/items.jsonl": "aa295743112ed8088be02910b2c7a3245c366e5b0c2c92a8a6bf415869671a43"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "6a1cf590e74a514577344bed35f500239ee0e4c5",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 0,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 10,
+            "seed_router": 11,
+            "seed_replay": 12
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.514,
+          "ret_gs_end": 0.123,
+          "learning_seconds": 276.59854023740627,
+          "total_seconds": 507.5079756388441,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/1/metrics.json": "1e8716caa78a165f9ee78f7394921b262853e9b4550a46bdee0fa7c87920fdbe",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/1/config.json": "55e9e51e7ab3276e00fea671ff60d41297653e77a7bd23970543e14d7a7ba96e",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/1/cost.json": "58496228a48681a695aa095273cc6c9620717a694530bf5f70e64081cc76de15",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/1/items.jsonl": "21e72358721850921d447dced57ff4d8362964fd3961ea691ef7259e605ad6eb"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "10f3ef06fcab62d346cd6637b8985ad7210ee718",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 0,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 20,
+            "seed_router": 21,
+            "seed_replay": 22
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 1.0,
+          "ret_es_end": 0.523,
+          "ret_gs_end": 0.133,
+          "learning_seconds": 278.45220194151625,
+          "total_seconds": 511.5939622175647,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/2/metrics.json": "4bbd8b645be5d13a2e3e526ff15c3029a97c9d5bd4869a7921f5cb2d1fdb88c6",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/2/config.json": "e050d90bf0a091fb3f9e8404fe73635ef26d91494d7ba4d4d021ad5ad21c622a",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/2/cost.json": "fbe8546e7f4b6cf92d082d13562672386a4198cfb8f6ef0887e8a314b3083c2b",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/2/items.jsonl": "f6097abcbcf1e1807b4783579ac3c218d71919240fd724fc81a5d8273a5ed57a"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "10f3ef06fcab62d346cd6637b8985ad7210ee718",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 0,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 30,
+            "seed_router": 31,
+            "seed_replay": 32
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.997,
+          "ret_es_end": 0.519,
+          "ret_gs_end": 0.131,
+          "learning_seconds": 275.5445763505995,
+          "total_seconds": 509.34355901542585,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/3/metrics.json": "53516a3872accd7a3dcb46ee757e017f0ce8db698b9c2b8a452df9b03d2b3104",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/3/config.json": "bd130868bb435cbb0af6706481c48d45767508de611ce5ef2ef56f86bd981541",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/3/cost.json": "c379e4e253df9e8292b3b158dd37472feaf84ced0e499984deeef6cf1c94d0ea",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/3/items.jsonl": "7a61d6f7a7a8b0a9d2f75fb117e30cc164e54a424b2a205e8cb743a33a478a8f"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5783d4114713a09c47e792a6e1a51974ad9b5a39",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 0,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 40,
+            "seed_router": 41,
+            "seed_replay": 42
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 1.0,
+          "ret_es_end": 0.503,
+          "ret_gs_end": 0.127,
+          "learning_seconds": 277.58841801667586,
+          "total_seconds": 513.1683825238142,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/4/metrics.json": "6a8a60d2c1d3637b224834d161f876d71843cc2eca851747c2ea405c02d88a21",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/4/config.json": "f284259f21fb9af26ab4ac7d56caa6f062952902a9cf81a2eda1982f1c42f003",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/4/cost.json": "fb61e86fa0e76e37fc9616b6e2ad392d625b2f9313bfb5408fdef8ae89b4ef86",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/0/4/items.jsonl": "28de7be56ed32a53c8ece083f763326a0140949a77eb76c70285d7cb13d247a5"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5783d4114713a09c47e792a6e1a51974ad9b5a39",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 1,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 1000,
+            "seed_router": 1001,
+            "seed_replay": 1002
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.529,
+          "ret_gs_end": 0.133,
+          "learning_seconds": 266.3445203215815,
+          "total_seconds": 490.000874929945,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/0/metrics.json": "8d2fac61954ce17af06f2abf35706a3ed38bcebfab665c68b79aadf061b396af",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/0/config.json": "1affb34ed479ea4501993815a12d6ff78b9988f5057b91948d73f62aa76ad243",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/0/cost.json": "03b1a99209a81f66c9116a2a62f6c6050107b96580cd849b115405e8d52560a9",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/0/items.jsonl": "f78ee509dfcf80ec4f8db3737274860e000192c02a71c329a35c40b1e0086204"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "361301f75e6d5739148ec82d0918c45f85abd2ae",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 1,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 1010,
+            "seed_router": 1011,
+            "seed_replay": 1012
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 1.0,
+          "ret_es_end": 0.528,
+          "ret_gs_end": 0.132,
+          "learning_seconds": 268.5982790151611,
+          "total_seconds": 497.47106808656827,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/1/metrics.json": "3779868b1c6d88e44316afd0f9ab6b6739e44042a1ab758a0efc8e840a1b0877",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/1/config.json": "8d09a98b488891fc26615f17252db4c7727c051805e9398611cfad35449868ba",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/1/cost.json": "e0b220273ad6fd3c7cd1bebb9cc6b22d82f9ef4a572e6a1a48f8d3f52c8906b2",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/1/items.jsonl": "56f08b149c02ef76b019439c620a5efcd2e33723bb6436e280814d1e74753fdb"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "21f42887bc3bfcc132aa7f792517efdc0a38bb90",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 1,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 1020,
+            "seed_router": 1021,
+            "seed_replay": 1022
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.546,
+          "ret_gs_end": 0.121,
+          "learning_seconds": 267.36074431450106,
+          "total_seconds": 496.48060367791913,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/2/metrics.json": "b0a0fb9c5d4232816e37505e5d14cd924593286c7a4f97282bfbbb3baa5300f6",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/2/config.json": "e5522045b1ef4b9e137c8bbb5a570afd6b62f0625ac1f30b6ea8be631b132852",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/2/cost.json": "0915f2203b175517c436eb975529807f14bcc913440414670dcfc2491ec3a695",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/2/items.jsonl": "e2cf79e692fa65e87c8d9d2be1fb9b82894cf82dfa35b45e9d580c431680baf0"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "21f42887bc3bfcc132aa7f792517efdc0a38bb90",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 1,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 1030,
+            "seed_router": 1031,
+            "seed_replay": 1032
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.542,
+          "ret_gs_end": 0.157,
+          "learning_seconds": 264.5478164021624,
+          "total_seconds": 491.4438803746598,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/3/metrics.json": "3bb9706ea2347efd348e7aee55c304c4029059b9b788cb90a4685b967dde8910",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/3/config.json": "945b8c59abf81af3e2db21076588869c79e9db05fe994bd9f1cfc6ed5f7c9ded",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/3/cost.json": "e3935c04bde790c8329a0dcdcc305d50e509b9d1090490e7215903f49fe80749",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/3/items.jsonl": "01ebee8ce00b9121ce60745d994913017fc164c3d212a29cf4b08e5a4afa1a64"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "21f42887bc3bfcc132aa7f792517efdc0a38bb90",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 1,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 1040,
+            "seed_router": 1041,
+            "seed_replay": 1042
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.541,
+          "ret_gs_end": 0.157,
+          "learning_seconds": 261.44158636569045,
+          "total_seconds": 493.10093448567204,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/4/metrics.json": "7423eaf6cc291febf0ce59572b8c1fbb72ef0b4fa36fe261bc33ecfcde92904b",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/4/config.json": "3c89c2a07c1a8f9b1a1f0acc035b7c995f73a28ad5970b1981b2125978212c40",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/4/cost.json": "20c6a33651b7b4774f82813870a4afdad69cc0b36fe8ad40064f209887f6306a",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/1/4/items.jsonl": "9c6c1f8dee4485e051ea0852f1b012fae566f6e4b351d617a1b043016b5d1e3c"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "21f42887bc3bfcc132aa7f792517efdc0a38bb90",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 2,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 2000,
+            "seed_router": 2001,
+            "seed_replay": 2002
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.498,
+          "ret_gs_end": 0.15,
+          "learning_seconds": 275.9878711818019,
+          "total_seconds": 501.25119483214803,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/0/metrics.json": "40b773288c14811f833cdd556b93b7e03adb9e45be1e83f44722fc4ace5e091c",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/0/config.json": "4eb966973b24e5155406f9e8ef49e2d0cbd77fbe6df77bdbe572ca17817b8e2c",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/0/cost.json": "2baeacab09d517deb15253a7862c22617f57b0fcd2546de44a45a159c18deedf",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/0/items.jsonl": "0fb3a1127b32bb2ff4b7e466e1b22afd7f6ad28e069f8109f1ada2212c5c3025"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "b0d31583be1d9a15b693c9de8cfac992fc1e9768",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 2,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 2010,
+            "seed_router": 2011,
+            "seed_replay": 2012
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.526,
+          "ret_gs_end": 0.148,
+          "learning_seconds": 273.78920080827083,
+          "total_seconds": 506.76728500204626,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/1/metrics.json": "4fb12a6246eec93eb2c5e634bd9021e2d019d9b511142fa135de8eb90f5cd135",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/1/config.json": "65b586dc1b6d27202250661b505060fcec9ef75fe6296b1acfa75b4214289cda",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/1/cost.json": "be516760d40e3e649710eff416c40e342c6d0db2b890d12d156d8310feadbe51",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/1/items.jsonl": "b2b5885810ae2689235268453290b3ffdda3feed414ac550d2f1d4e507ea2f7e"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "105b2b696f149f295eadb799a2064c38b3e207a1",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 2,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 2020,
+            "seed_router": 2021,
+            "seed_replay": 2022
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.54,
+          "ret_gs_end": 0.163,
+          "learning_seconds": 274.60545668157283,
+          "total_seconds": 496.8521799374139,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/2/metrics.json": "11ec298e22d2904b5ca554333c4a66ca9aa3a3e333be7dbca1a2fcd0bed9b992",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/2/config.json": "3f004997824dd70c5b59f24809b37b6ab1f5bb822f4a7682155fa7916e930d6a",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/2/cost.json": "04603db6b88849fb158438d57e6a1bf02fc7a8331ceb702259c5edde6bed3e8f",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/2/items.jsonl": "6840fb9b7fafefbe29179f701bb56c3d469a1ded74d7b4b3517196105ed88857"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "105b2b696f149f295eadb799a2064c38b3e207a1",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 2,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 2030,
+            "seed_router": 2031,
+            "seed_replay": 2032
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.992,
+          "ret_es_end": 0.506,
+          "ret_gs_end": 0.148,
+          "learning_seconds": 275.8058271739865,
+          "total_seconds": 502.4197224789532,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/3/metrics.json": "72233ceea33cca5cfbd1d363c41625fccefc4b9c10a0887b5046b9f5abcf2961",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/3/config.json": "3e2eadf4e63e4bd9338b8060e92bd2395ed1deff96910b17ef596c7a440f2638",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/3/cost.json": "81c5b16c339cbfef4295729d26fc5c4e788e14254202f1dde5949be0946dc307",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/3/items.jsonl": "23123bc1426d3be94798fbbb2072d53f3882efe71854a907ef710307af433ee2"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "105b2b696f149f295eadb799a2064c38b3e207a1",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        },
+        {
+          "realization": 2,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 2040,
+            "seed_router": 2041,
+            "seed_replay": 2042
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 1.0,
+          "ret_es_end": 0.538,
+          "ret_gs_end": 0.144,
+          "learning_seconds": 274.339655855787,
+          "total_seconds": 509.4556988811819,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/4/metrics.json": "751d4808627539f38a36768afd489a67c3d94a47a8ae7d22c2f59d19de614155",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/4/config.json": "339c05d27868cbca49fea6ceb4d3ea91cdfca2f40f4010819c187c077f7de97b",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/4/cost.json": "8c4e931f98ed8968bb1cfc5750017fec13d31766cac23ed7825e490f45fff55f",
+            "results/S4/frozen-confirmatory-v2-84126123/zsre/C1/BP/h/2/4/items.jsonl": "7a2723eddb65496c099a560dcce6c3565a7cce5001bd9cf17bfba251828c303a"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "105b2b696f149f295eadb799a2064c38b3e207a1",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        }
+      ],
+      "SE-A": [
+        {
+          "realization": 0,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 0,
+            "seed_router": 1,
+            "seed_replay": 2
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.506,
+          "ret_gs_end": 0.116,
+          "learning_seconds": 270.85345395386685,
+          "total_seconds": 504.7819566070102,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/0/metrics.json": "e9b2e9e542acf62b93cc194ae0a82b151770a1eee2a95f9807ce3bb15ce46c5b",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/0/config.json": "994cde972ed75899e9f101c6bf80a787a9e039e8d9a9508d53382d16e0bceef5",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/0/cost.json": "4924bac8cd25e8faa39697ad89804f51384b28df71c5141723815a11f50448c2",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/0/items.jsonl": "c31b907994e46fbb2b923f5f707dbb884a525c113cf199060d0616965f93651c"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "d3f907e0eaa85ccaaacb3f986aeda830f1635282",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 10,
+            "seed_router": 11,
+            "seed_replay": 12
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.997,
+          "ret_es_end": 0.498,
+          "ret_gs_end": 0.124,
+          "learning_seconds": 272.2882992400555,
+          "total_seconds": 499.94286303105764,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/1/metrics.json": "77853c5c1e73cb7b946598a5f07ee867bdac7ea05a91dd20aa5d4cb42d0fc74e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/1/config.json": "db050ad1f96e7d9a1b89e5808c0c79e95f3b3749407884d08c099e6fc0638293",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/1/cost.json": "7f06ba00342f97a50ba271b1726113a3896ef07bbffd1acbc4fe85a6b25849d3",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/1/items.jsonl": "db3f090c5122df6652a5612e6da6d268cc8844a108ea8994a5d09bdee8617453"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "e59df93efe5f30d5b12be896028b4ee9851ad0d1",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 20,
+            "seed_router": 21,
+            "seed_replay": 22
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.525,
+          "ret_gs_end": 0.131,
+          "learning_seconds": 270.5867369220359,
+          "total_seconds": 499.57430909888353,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/2/metrics.json": "ec0dfe5cd7685f2572113cc9650d64f57d0c784a191ab77ec1f145265a2e8d01",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/2/config.json": "e653bb5a47490a2b313603855c4ae4150fe822685621f9e5300ce76297c8843f",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/2/cost.json": "0816ab80b2782a70d6e94ee8fd38569d2a9aa31efd46eb472fff4820c36485fa",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/2/items.jsonl": "f272f35a30f4dfefa1efc8d25cb2eb6a4bdee05d2e10a4e456b6615d9e9e3d66"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "e59df93efe5f30d5b12be896028b4ee9851ad0d1",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 30,
+            "seed_router": 31,
+            "seed_replay": 32
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.515,
+          "ret_gs_end": 0.13,
+          "learning_seconds": 271.37749404401984,
+          "total_seconds": 503.4690196218435,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/3/metrics.json": "f0251fa2921a9cd5b46ddddc087bb727c01c4bbd6a336a29b6ffa3bc87eda867",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/3/config.json": "93444f564736139072d98bd3339f2d5f86f68cb3d0c7014dadb727803b99004b",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/3/cost.json": "945ba0f4003e5f77284c864e9ce76de590af241a0b8cbf5a9c4b4918c8983ec0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/3/items.jsonl": "e47c09c7f63e2f0010a7feb56ef88861c9c0b2edea5fa55e6775c7598bd74074"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "e59df93efe5f30d5b12be896028b4ee9851ad0d1",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 40,
+            "seed_router": 41,
+            "seed_replay": 42
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.997,
+          "ret_es_end": 0.497,
+          "ret_gs_end": 0.129,
+          "learning_seconds": 272.4069312319625,
+          "total_seconds": 507.11504309263546,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/4/metrics.json": "0a1bb0a0eb2bcce0858a1ea2bfc9a54e95ef5933862c84f649435e7ebd8fee1d",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/4/config.json": "54c541371f9458437cb28b7282bd8c3e572867464e2d88e32aae0d7093e763b3",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/4/cost.json": "246ada6005d0618a8939d18e0b6b783454584b82e4fff98f171898936d90912f",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/0/4/items.jsonl": "780c5ddb98f373599cb217c0d93e6afb4e4caaefa7562f6f3901bc64ace7898b"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "e59df93efe5f30d5b12be896028b4ee9851ad0d1",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 1000,
+            "seed_router": 1001,
+            "seed_replay": 1002
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.536,
+          "ret_gs_end": 0.141,
+          "learning_seconds": 261.86192831455264,
+          "total_seconds": 491.6596999132307,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/0/metrics.json": "04ef71a28fcaefa9820f8d99dd40a318ee65292da538d622dfd9aee89fa78a36",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/0/config.json": "3939780105c0181ec35692d0cf062bd96ee85c4022ffe808ac16e43c0919f6d2",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/0/cost.json": "3ab0686a991a14a69cfd877c994c52c8ea71337b89f186fabc4b87f9301a5f1a",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/0/items.jsonl": "36aba63941a6a5217e7eaf7a3053066215bb18ee865e1eebcdcb872fc44762a0"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "4341624bbddd370e2d2af46072708c0edc2f3d57",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 1010,
+            "seed_router": 1011,
+            "seed_replay": 1012
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.526,
+          "ret_gs_end": 0.128,
+          "learning_seconds": 262.6648591191042,
+          "total_seconds": 486.8607628416503,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/1/metrics.json": "3609ca9bfa6f2981e5a9e3d57bcfbe5ac6a7d55d68cbba5b134a9a557eaaa3d7",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/1/config.json": "d35518f394a0205a1079722fef47161066712a50429deb84b593e3bba3dfcc56",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/1/cost.json": "2132b74d61eaaf18cec52b574046b901ae0968d16b4932f9f739229d50e0d817",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/1/items.jsonl": "988a2070b3cbabf5cb684788c688a8696d255f09dcb61fa8a2c972c294895615"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5c54fb8ef3bba6b2e9d0de3460aff275fc059d3b",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 1020,
+            "seed_router": 1021,
+            "seed_replay": 1022
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.556,
+          "ret_gs_end": 0.149,
+          "learning_seconds": 260.4819143161876,
+          "total_seconds": 492.1238210017327,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/2/metrics.json": "1c8008349a2cec77bf3ed2cd5b613dd01eefab11a68d092c2dcb8a66343b144c",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/2/config.json": "950096456368c1d95e47ba80832937d620afc03d6cddd374af8d176184d38380",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/2/cost.json": "2ad953a8ff91e0e4ffd571b3a0fd16acf9c4988cd3ea710074afc7b30dd2c042",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/2/items.jsonl": "d7eb4ff12b8c5cd932daa49412e9de44a8d6536019c34aab2bf6e3be2437d159"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5c54fb8ef3bba6b2e9d0de3460aff275fc059d3b",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 1030,
+            "seed_router": 1031,
+            "seed_replay": 1032
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.528,
+          "ret_gs_end": 0.119,
+          "learning_seconds": 261.171139266924,
+          "total_seconds": 491.421140946215,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/3/metrics.json": "65fd79109d72bc0ca36d8e428764dbedf713a28022e2ce751d138458f8b32629",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/3/config.json": "febd21321b2a7fc2079c379f4b6d2049f648042ce3a449f6c7ac47642f1d2976",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/3/cost.json": "bd41ae7966d4b9ca22e706ca46a025da07a218638310269a7e78632dda4126f7",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/3/items.jsonl": "e584283b49e0e5bf914b9ce8260815815570644dca2f8b9058563495953d1e2a"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5c54fb8ef3bba6b2e9d0de3460aff275fc059d3b",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 1040,
+            "seed_router": 1041,
+            "seed_replay": 1042
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.535,
+          "ret_gs_end": 0.162,
+          "learning_seconds": 258.7571514073061,
+          "total_seconds": 489.8034740315052,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/4/metrics.json": "256a94fb9a371e004cb65da3f69b2786dfb69d307c2bb0d7f523c9876dfc8f41",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/4/config.json": "ff23e311ca50d65f022d530999a8650cc9e566062627ea8776a0b549eb85578b",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/4/cost.json": "704a562c14d31aae08d3ac3869d0de483b9e804390ca53956d5160a17f0aef0e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/1/4/items.jsonl": "f2a0ffda9b6f5c7589c39f9abf825428f5015540175024731ad2016e885c655e"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5c54fb8ef3bba6b2e9d0de3460aff275fc059d3b",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 2000,
+            "seed_router": 2001,
+            "seed_replay": 2002
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.504,
+          "ret_gs_end": 0.135,
+          "learning_seconds": 269.3427241644822,
+          "total_seconds": 505.2448888961226,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/0/metrics.json": "1d467c05cb6c223e972e637857d12a76fb494db7377b5e71fa6d42522c697f4d",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/0/config.json": "712aba9a47e74038f631f03c9ee7daac1bfc93566e14b181d62394d1197996c6",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/0/cost.json": "0bd3c1e032ad2cf84e0efc69fd36c0b94dbba3354e52d6ed8b6ad13e6d531717",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/0/items.jsonl": "5db1aa1cf7626707c3a826eeac691505ddf4cefd2f116df2dbaddc99ed3797a9"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "2b555a2d5e097bc8ee155821f4ee5daca7e96ce4",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 2010,
+            "seed_router": 2011,
+            "seed_replay": 2012
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 1.0,
+          "ret_es_end": 0.525,
+          "ret_gs_end": 0.158,
+          "learning_seconds": 269.8284615270095,
+          "total_seconds": 510.5548478476703,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/1/metrics.json": "3154d9e9bbfeb878b433bd7a6ba575d448fdaa53a84c72340d99906c4f30be09",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/1/config.json": "399fb4cf36243c6aab0170793bae2f2ca88f1adff3be015e861a3fcbf75cfe37",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/1/cost.json": "4fa75971ede12c6f774eaa61c5b4b4e3acc75a7c0a927a9c63a90ac5e7c9a80e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/1/items.jsonl": "7c7519089db5b7693c99ef09d4ec605c2ba952c803b6d0e99ebecc2af714bc20"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "3260ee97235ff7dae1f35b5d49c20bbc006bc7e3",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 2020,
+            "seed_router": 2021,
+            "seed_replay": 2022
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.999,
+          "ret_es_end": 0.538,
+          "ret_gs_end": 0.157,
+          "learning_seconds": 269.2618159785634,
+          "total_seconds": 503.81930551712867,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/2/metrics.json": "5173468abfc197fc5b8e11a3fe32e810c376e8af63ab9e9f75ff04e698e8465a",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/2/config.json": "d3c5dee12c0062930063cbfe2a5fc6dfb7dcd7bc6490f710dc92c40eefbad97f",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/2/cost.json": "1ffc92d1e7b9d203359318e2e7940e3956843566685dc4434477f2ddf673fccc",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/2/items.jsonl": "423ab41efd32f951734ddcbedc413b13ef1be5d18921cba0356e6fd9aa85d846"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "3260ee97235ff7dae1f35b5d49c20bbc006bc7e3",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 2030,
+            "seed_router": 2031,
+            "seed_replay": 2032
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.998,
+          "ret_es_end": 0.522,
+          "ret_gs_end": 0.136,
+          "learning_seconds": 269.18367845308967,
+          "total_seconds": 494.2360870335251,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/3/metrics.json": "3ad8567099563150fade45795ea987d18d0bceb34da94d4cb85ef786b7d19a3b",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/3/config.json": "18ce2fe636ef77c4405dbbc63488f8356af48928429a3f618f30afed57724129",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/3/cost.json": "a9025aeb085a6604b3266b108b254622542e9060327cc93956613a3c84ee6cb5",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/3/items.jsonl": "1c619b754599365aa89ef3ada747ed7f8db59bb3845322da59c81ddfa1ded38e"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "3260ee97235ff7dae1f35b5d49c20bbc006bc7e3",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 2040,
+            "seed_router": 2041,
+            "seed_replay": 2042
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 1.0,
+          "ret_es_end": 0.52,
+          "ret_gs_end": 0.147,
+          "learning_seconds": 273.30340552621055,
+          "total_seconds": 507.19362896773964,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/4/metrics.json": "debceaf30aa84aa65c5f0b459d88edacabe90bdde58f947d807a333457792bb0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/4/config.json": "fff5a451e79e56d972e7edaff563039a4d87e01be13b7786f44847c1e502f619",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/4/cost.json": "c5360bf78bb524cf94a1bae1b73c70b0b2f7e0d6f5ac65e861c5348fd547883e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-A/EPC/h/2/4/items.jsonl": "9c0332e146ae8fd768d9872e8abf4b7b239a265d4c1be88a72623055c41ccc5e"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "3260ee97235ff7dae1f35b5d49c20bbc006bc7e3",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        }
+      ],
+      "SE-E": [
+        {
+          "realization": 0,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 0,
+            "seed_router": 1,
+            "seed_replay": 2
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.653,
+          "ret_es_end": 0.355,
+          "ret_gs_end": 0.148,
+          "learning_seconds": 827.7849870806094,
+          "total_seconds": 1059.3927724207751,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/0/metrics.json": "5f4fd7460e4e00d2db5bfb0a653ad66a9b7bb4a5c1d94b99efd272b9457e13ac",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/0/config.json": "f6e9e39cd943f6f8705e643eb285360b2afe4c9f69af430bc3076f00d30ec7cd",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/0/cost.json": "20b023c06d412bb47218f701307f1319271db711839964fa6644b4fdd7e85ea0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/0/items.jsonl": "4596851bcd7dbe50bd9a9252ecddd00c3c9e2b5d11b1e63b73e82c760b752e81"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "e59df93efe5f30d5b12be896028b4ee9851ad0d1",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 10,
+            "seed_router": 11,
+            "seed_replay": 12
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.675,
+          "ret_es_end": 0.365,
+          "ret_gs_end": 0.155,
+          "learning_seconds": 820.4023649488809,
+          "total_seconds": 1051.9227560588624,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/1/metrics.json": "135885e89d911333b2f679f820850c15293914c53883b6d4fbb5cab60afb52e0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/1/config.json": "31437ff6b1ad6413d5c4850b342d9dcbb3df033e0c1ccac803be7e0ebcd64715",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/1/cost.json": "f3aa9695ea720571908d3081e0847e9fc540f354cc168c93da3265085228b2f0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/1/items.jsonl": "49ae4d23854eaeb4b9980a44171b8cbbda264aedefad5b0bf1114e0a44ca8fcb"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "056fe742e00b365cf7120a8d9cd91cec3e9639f9",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 20,
+            "seed_router": 21,
+            "seed_replay": 22
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.636,
+          "ret_es_end": 0.337,
+          "ret_gs_end": 0.16,
+          "learning_seconds": 828.103607836063,
+          "total_seconds": 1056.814527229173,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/2/metrics.json": "2c2ae95fd46364bc0bd9c0b54c6f1ac82f4023b291e16a43a38ae4e923b40ac7",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/2/config.json": "b18d0c37ceef449ae9c9274a68bbc6729b8a21b5ccfa78d4196cb80b7bd83fbf",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/2/cost.json": "3f9e866afb00854bde040d520318cc715735040b70a9bfd15e05734f7597f535",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/2/items.jsonl": "dbad18e968662481ccebf8152da696089be8c7719a1d6ea543401c8ad5455e7e"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "056fe742e00b365cf7120a8d9cd91cec3e9639f9",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 30,
+            "seed_router": 31,
+            "seed_replay": 32
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.659,
+          "ret_es_end": 0.361,
+          "ret_gs_end": 0.148,
+          "learning_seconds": 827.2705411182251,
+          "total_seconds": 1058.8256038302789,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/3/metrics.json": "c6a657dcdf55dd06bcadddb5cf6fbf4943485f2ce87e2ebaa8270e5435d69f97",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/3/config.json": "107b61cb1fef85d14961ad6b74cf1af625a56837aec0d867e768f124db38f82d",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/3/cost.json": "d00b21ea6151e9a6c74efa5e5aeed924c97c347b745d6fdbaec4f16adfebedb5",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/3/items.jsonl": "890928cd88090a9486d93f3d350c6639c7fe5a475ff41a9c9d2165d5f8ca6ab1"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "056fe742e00b365cf7120a8d9cd91cec3e9639f9",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 0,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 40,
+            "seed_router": 41,
+            "seed_replay": 42
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.646,
+          "ret_es_end": 0.362,
+          "ret_gs_end": 0.143,
+          "learning_seconds": 825.1300016236492,
+          "total_seconds": 1050.2520046064164,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/4/metrics.json": "e80ede434b13333b09cc3424b25dcdc02156912f23cabe3d29f69387a95b0ff1",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/4/config.json": "31117cd8b702abd368567a062d0da71383dbf45c351ccdffe9b3f79ba91a58a0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/4/cost.json": "4af742e2c7aab93607d6549192a22509eabfb28faae3d559c1be0aed36cb11cd",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/0/4/items.jsonl": "968ef889257021834a4e39ab4807eb994c11c19e4a53bbca9d84f981820831f8"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "056fe742e00b365cf7120a8d9cd91cec3e9639f9",
+          "dataset_sha256": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 1000,
+            "seed_router": 1001,
+            "seed_replay": 1002
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.687,
+          "ret_es_end": 0.39,
+          "ret_gs_end": 0.143,
+          "learning_seconds": 796.941934593604,
+          "total_seconds": 1024.2694917008048,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/0/metrics.json": "7e435fc15fcfce23cb4431e166c147086712f52d859f348f97ffed258747613f",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/0/config.json": "85e9734202d0cd3328f41b6ee404587a7c0040b4050edaf600fb987053e30553",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/0/cost.json": "e7d52de9c18ff86e6b3f2faf581747c88009893e4e1ecc3b93eaef067522fa65",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/0/items.jsonl": "9c0d4eee38ace038e3866e0c9dfb01ea1318978398788d24f052c486e5e4d8f6"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "5c54fb8ef3bba6b2e9d0de3460aff275fc059d3b",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 1010,
+            "seed_router": 1011,
+            "seed_replay": 1012
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.695,
+          "ret_es_end": 0.391,
+          "ret_gs_end": 0.179,
+          "learning_seconds": 802.8955005166354,
+          "total_seconds": 1028.5411076276796,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/1/metrics.json": "21216784accea8159eade195bfe886de010550c223c68a0df35c688f377e6ed6",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/1/config.json": "63101e30060d16689dd532eefe89eb68375253acd72b3c30302bc60733290d76",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/1/cost.json": "cbd6a55c7e06a1254714b769a2c95418e7480f766782e4484b0a6ebc5f7db00e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/1/items.jsonl": "25e07d0aad37571a72d28cde788657fcf2e5900e39820243eabc98a9511d9d24"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "7bac6ef21729cbc8a08bcd65f441c08d049d5120",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 1020,
+            "seed_router": 1021,
+            "seed_replay": 1022
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.664,
+          "ret_es_end": 0.394,
+          "ret_gs_end": 0.166,
+          "learning_seconds": 795.4228227381827,
+          "total_seconds": 1021.2297318966594,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/2/metrics.json": "7698d75d335e1e48a59b73c73e232efae6dfcb06e9773da26d4648749c731bff",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/2/config.json": "1f37ce8a071cf533601d22218f3f574c1af1f1b6471c542d9e9cc6827bed6ce2",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/2/cost.json": "b13d50f6c851a746c90fefa96c6ca3e92cf77192359626013c42f9946323516e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/2/items.jsonl": "ca287b1ec7e42f989d6c52b670b20ae52c4838619884e31d89e3fc61d665c727"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "7bac6ef21729cbc8a08bcd65f441c08d049d5120",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 1030,
+            "seed_router": 1031,
+            "seed_replay": 1032
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.661,
+          "ret_es_end": 0.345,
+          "ret_gs_end": 0.142,
+          "learning_seconds": 788.1166262103943,
+          "total_seconds": 1012.957698774524,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/3/metrics.json": "d9a93fa058a97a4063973a3710ec1dfd693abd25084aeac64009b1f0ec7bba82",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/3/config.json": "b4ca32810978a329528e2332ed397556f8549b59b0f9c5c3ae9f850efe21efcb",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/3/cost.json": "d2077863e03a4f02edf44adbc3a16e730e871a78fd0cd11caf9637cc64745929",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/3/items.jsonl": "ab0465034695347ad468fdab690aff652d6824e6ebfb140fbffb7ee343903f34"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "7bac6ef21729cbc8a08bcd65f441c08d049d5120",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 1,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 1040,
+            "seed_router": 1041,
+            "seed_replay": 1042
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.666,
+          "ret_es_end": 0.365,
+          "ret_gs_end": 0.168,
+          "learning_seconds": 797.6572499055183,
+          "total_seconds": 1025.649586958345,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/4/metrics.json": "10bf7aed58132ccc77f8970a540febf4a380d00a336b7bf41796c3ff45bf580e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/4/config.json": "59d321ba38ae5c4aad30ea7a816402a93d4315591bdaaa3ed2bad60a72c8a287",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/4/cost.json": "efda849ee1133f6e9f2c1cf86e51e771dbbdaf43bdc5bf963c7f7dadf8cf0d6f",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/1/4/items.jsonl": "18e6f0fd9029a80adee25a6c80bb5e103dca1e91818adebc17e57a753cf883e8"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "7bac6ef21729cbc8a08bcd65f441c08d049d5120",
+          "dataset_sha256": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 0,
+          "order_seed": 100,
+          "named_seeds": {
+            "seed_cap_init": 2000,
+            "seed_router": 2001,
+            "seed_replay": 2002
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.656,
+          "ret_es_end": 0.373,
+          "ret_gs_end": 0.158,
+          "learning_seconds": 833.2706918815384,
+          "total_seconds": 1067.2356717186049,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/0/metrics.json": "48a1e29da6d263ed1357afb30c6630c7069202c03609c98ccbb88e2e0014dc88",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/0/config.json": "3f9ef393c43b7a03be7e11caedf1c22b744e3b74fbbb57fbef71217b8f47b39e",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/0/cost.json": "aa77e4996e69bff33d5cc4fdf09ec95e22a3605b9b012a0b37b5b8ec96d83855",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/0/items.jsonl": "ca7f09e1b362a8a05845cf8f06c9d56ba3d897b316480f93115345b58427c9e9"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "3260ee97235ff7dae1f35b5d49c20bbc006bc7e3",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 1,
+          "order_seed": 101,
+          "named_seeds": {
+            "seed_cap_init": 2010,
+            "seed_router": 2011,
+            "seed_replay": 2012
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.664,
+          "ret_es_end": 0.358,
+          "ret_gs_end": 0.154,
+          "learning_seconds": 818.2449335230049,
+          "total_seconds": 1054.8003348498605,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/1/metrics.json": "8b8b99210fd36f1b41d3638cf622ad5ea6fc96262c68309e3d5a25bb7b802bb0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/1/config.json": "f1054b90a7a6062420191b4653e4c69643618caa4bea5080209062bc313ce466",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/1/cost.json": "53f492b53e633487c8af62391698592197663d8ce9dd819da15c59256566f796",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/1/items.jsonl": "55c6f79c8fa92ada8a2db72d9f37d7cf6c84b5fbe522e83ff278dc677f9adc5d"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "eb1b2f08ae3909c83887ec5d265cf6d229634593",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 2,
+          "order_seed": 102,
+          "named_seeds": {
+            "seed_cap_init": 2020,
+            "seed_router": 2021,
+            "seed_replay": 2022
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.673,
+          "ret_es_end": 0.367,
+          "ret_gs_end": 0.157,
+          "learning_seconds": 825.0616728900932,
+          "total_seconds": 1051.7848078848328,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/2/metrics.json": "737a9c277dc042fc32b8bb947e8356b6b76dd4796349d2fc8ed77dbd2370dbf0",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/2/config.json": "fa0b057e7e5df5ae3b1d1069571a82a1bea3df3614c69b2f32a7536b095d3f15",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/2/cost.json": "de904bed664fd6c8476ec071a16cbcc6b152825347ea72f5373239f74fb90956",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/2/items.jsonl": "08fb47d18c57cf37855b8b8cc8adebe50bbdc58808cab4721558321097e10060"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "eb1b2f08ae3909c83887ec5d265cf6d229634593",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 3,
+          "order_seed": 103,
+          "named_seeds": {
+            "seed_cap_init": 2030,
+            "seed_router": 2031,
+            "seed_replay": 2032
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.644,
+          "ret_es_end": 0.372,
+          "ret_gs_end": 0.163,
+          "learning_seconds": 830.0297766310396,
+          "total_seconds": 1059.1150471093133,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/3/metrics.json": "919e28235b84e811b7c73567555a48e1bd0c7761f9d7cceaa6791f9ee66b1499",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/3/config.json": "bba77e9c5bc787b35f1083dbc257556761a68aa8120bcfda318e3bec9deec3f4",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/3/cost.json": "57a01fc57eddfb48176419aeb62271214b5a525b12b8a85a44dc0738363a0250",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/3/items.jsonl": "780eb9ee7a292ee056939eb9ac6c5b9bf90f06807f0aab0e9f072a9e2c282453"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "eb1b2f08ae3909c83887ec5d265cf6d229634593",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        },
+        {
+          "realization": 2,
+          "order": 4,
+          "order_seed": 104,
+          "named_seeds": {
+            "seed_cap_init": 2040,
+            "seed_router": 2041,
+            "seed_replay": 2042
+          },
+          "seed_provenance": "v2 DATA-02 seed convention; C1 metrics also record named seeds",
+          "es_immediate": 0.656,
+          "ret_es_end": 0.357,
+          "ret_gs_end": 0.161,
+          "learning_seconds": 832.482363118208,
+          "total_seconds": 1064.7983576862607,
+          "n_items": 1000,
+          "input_sha256": {
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/4/metrics.json": "1474aa265e8816f3ba538cbf01d942338d85b17ce5a64b2a7fedbd5d772936d1",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/4/config.json": "61397b626d1331db1dad3f0259328a94e6c766c7ec0c9defaf7ec5e19fc9f5b2",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/4/cost.json": "dbd455e3bbc250f4b1819e25c49700641cdd95cca309512a995d278b0a6e2ecd",
+            "results/S5/frozen-confirmatory-v2-84126123/zsre/SE-E/EPC/h/2/4/items.jsonl": "acff5cc36a34813b2cd0bbc973369daef71c0458b1d5f35227ea6ddd7851e705"
+          },
+          "historical_determinism": {
+            "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+            "omp_num_threads": "16",
+            "jax_default_matmul_precision": "highest",
+            "jax_enable_x64": false,
+            "jax_threefry_partitionable": false,
+            "jax_version": "0.11.1",
+            "backend": "gpu",
+            "devices": [
+              "cuda:0"
+            ]
+          },
+          "historical_source_sha256": "0f20e120067b40eb09f346ebaa5f83578b325c581125eb0e86faa9d98d14e22f",
+          "historical_code_commit": "eb1b2f08ae3909c83887ec5d265cf6d229634593",
+          "dataset_sha256": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+          "base_parameter_digest": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b"
+        }
+      ]
+    },
+    "means": {
+      "C1": {
+        "es_immediate": 0.9984666666666666,
+        "ret_es_end": 0.5236666666666667,
+        "ret_gs_end": 0.13946666666666666,
+        "learning_seconds": 272.7927044870565,
+        "total_seconds": 502.5518139868431,
+        "guide_display": [
+          "0.998467",
+          "0.523667",
+          "0.139467",
+          "272.793"
+        ],
+        "matches_guide": true,
+        "per_realization": {
+          "0": {
+            "es_immediate": 0.9988,
+            "ret_es_end": 0.5122,
+            "ret_gs_end": 0.1278,
+            "learning_seconds": 277.8139218370663,
+            "total_seconds": 510.60675342322793
+          },
+          "1": {
+            "es_immediate": 0.9992,
+            "ret_es_end": 0.5372,
+            "ret_gs_end": 0.14,
+            "learning_seconds": 265.6585892838193,
+            "total_seconds": 493.69947231095284
+          },
+          "2": {
+            "es_immediate": 0.9974,
+            "ret_es_end": 0.5216000000000001,
+            "ret_gs_end": 0.15059999999999998,
+            "learning_seconds": 274.9056023402838,
+            "total_seconds": 503.34921622634863
+          }
+        }
+      },
+      "SE-A": {
+        "es_immediate": 0.9985333333333334,
+        "ret_es_end": 0.5220666666666667,
+        "ret_gs_end": 0.13746666666666668,
+        "learning_seconds": 267.55799956435806,
+        "total_seconds": 499.1867232298634,
+        "guide_display": [
+          "0.998533",
+          "0.522067",
+          "0.137467",
+          "267.558"
+        ],
+        "matches_guide": true,
+        "per_realization": {
+          "0": {
+            "es_immediate": 0.9978,
+            "ret_es_end": 0.5082,
+            "ret_gs_end": 0.126,
+            "learning_seconds": 271.5025830783881,
+            "total_seconds": 502.9766382902861
+          },
+          "1": {
+            "es_immediate": 0.9986,
+            "ret_es_end": 0.5362,
+            "ret_gs_end": 0.1398,
+            "learning_seconds": 260.9873984848149,
+            "total_seconds": 490.3737797468668
+          },
+          "2": {
+            "es_immediate": 0.9992,
+            "ret_es_end": 0.5218,
+            "ret_gs_end": 0.1466,
+            "learning_seconds": 270.18401712987105,
+            "total_seconds": 504.20975165243726
+          }
+        }
+      },
+      "SE-E": {
+        "es_immediate": 0.6623333333333333,
+        "ret_es_end": 0.3661333333333333,
+        "ret_gs_end": 0.15633333333333332,
+        "learning_seconds": 816.5876716410431,
+        "total_seconds": 1045.8393000234928,
+        "guide_display": [
+          "0.662333",
+          "0.366133",
+          "0.156333",
+          "816.588"
+        ],
+        "matches_guide": true,
+        "per_realization": {
+          "0": {
+            "es_immediate": 0.6538,
+            "ret_es_end": 0.356,
+            "ret_gs_end": 0.1508,
+            "learning_seconds": 825.7383005214855,
+            "total_seconds": 1055.441532829101
+          },
+          "1": {
+            "es_immediate": 0.6746,
+            "ret_es_end": 0.377,
+            "ret_gs_end": 0.1596,
+            "learning_seconds": 796.2068267928669,
+            "total_seconds": 1022.5295233916025
+          },
+          "2": {
+            "es_immediate": 0.6586000000000001,
+            "ret_es_end": 0.3654,
+            "ret_gs_end": 0.1586,
+            "learning_seconds": 827.8178876087768,
+            "total_seconds": 1059.5468438497744
+          }
+        }
+      }
+    },
+    "all_reference_checks_pass": true,
+    "uncertainty": "15 orders per arm, grouped into 3 realizations; no new interval or independent n=15 claim",
+    "retention_method": "saved endpoint metrics; acquisition additionally recounted from 45,000 per-item records"
+  },
+  "gpu_seconds": 0,
+  "wall_seconds": 2.028103555087,
+  "limitations": [
+    "No training or prediction rerun; retention is reconstructed from saved metrics.",
+    "New revision dataset selection and all model-training gates remain separate tasks.",
+    "Moving checkout status is disclosed; only --closeout-commit identifies the lead's final baseline."
+  ]
+}

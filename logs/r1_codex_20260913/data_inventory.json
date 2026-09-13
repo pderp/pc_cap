@@ -1,0 +1,72 @@
+{
+  "task": "R1-X0",
+  "sources_sha256": {
+    "manifests/datasets.json": "2d35b500d89d86b42f58d35bd57f005a53a0bf9657b9436386a45216243cc475",
+    "manifests/dev/pools.json": "23e56ab9b75323a1e9191474c94453b9f0673abe87694a94a9ea142e77eef29b",
+    "manifests/dev/s7_pairs.json": "1984a5767d3cd30331f8cf4be51e3a93250152a1606e11a3034ee6fef523294f",
+    "manifests/dev/s7_pairs_e2.json": "ddf05677626bb2cafdcac9d395ebc56db172bf2844464fd03a59a0b480fd94da",
+    "manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "/home/derp/cap/assets/data/prepared/editing/zsre_eligible.jsonl": "e06a8cdbb6ac4e10329edff3759a2c131c105920e7ce79e6cdd58003859ddca5",
+    "manifests/dev/counterfact_dev.json": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+    "/home/derp/cap/assets/data/prepared/editing/counterfact_eligible.jsonl": "7da6be1dd09ded12a0cd98171645ca9f97c5279f773ada82de3dd04b128edd33",
+    "manifests/dev/s0_sample.json": "36dff70620182a96b12f7d7949bf42ba938ab8fd059d4dd04f9275effd11dd44",
+    "/home/derp/cap/assets/data/raw/zsre/zsre_mend_train.json": "4f3ac245e9c0baaf633f9e6cb765ffa8e83d594a74520a6cc3539497328c0722"
+  },
+  "development_paraphrases": {
+    "zsre": {
+      "items": 300,
+      "unique_unseen_paraphrases_histogram": {
+        "1": 300
+      },
+      "items_with_at_least_two": 0
+    },
+    "counterfact": {
+      "items": 300,
+      "unique_unseen_paraphrases_histogram": {
+        "2": 300
+      },
+      "items_with_at_least_two": 300
+    }
+  },
+  "s7": {
+    "zsre": {
+      "candidate_pairs": 300,
+      "selected_pairs": 100,
+      "candidate_unique_subjects": 496,
+      "selected_unique_subjects": 166,
+      "unselected_candidate_subjects": 330,
+      "candidate_subjects_sha256": "b8012e1e20aca2054255125285a26f7f052c1b8e145af3339f88ccef81d42853"
+    },
+    "counterfact": {
+      "candidate_pairs": 75,
+      "selected_pairs": 75,
+      "candidate_unique_subjects": 141,
+      "selected_unique_subjects": 141,
+      "unselected_candidate_subjects": 0,
+      "candidate_subjects_sha256": "5b04b192e1475f82b082f3dd8011e286b84491bb601691aebe803f233d793264"
+    }
+  },
+  "mend_train": {
+    "raw_subject_fields": 163196,
+    "unique_subjects": 91612,
+    "empty_subject_fields": 0,
+    "v0_dev_subjects_union": 622,
+    "all_v0_eligible_pool_subjects_union": 30295,
+    "unique_subjects_outside_dev_and_all_old_pools": 88999,
+    "additional_excluded_s7_inventory_subjects": 496,
+    "additional_excluded_selected_s7_subjects": 166,
+    "conservative_unique_subject_candidates": 88503,
+    "conservative_candidate_subject_set_sha256": "3b6c648e3f923925172da3dde287304ede79f673414a936e96287a5d8a9f9b2a",
+    "candidate_record_count": 155833
+  },
+  "eligibility_status": "subject candidates only; not tokenization/E.2-filtered and not reserved for confirmation",
+  "policy": "Conservative review excludes all exposed S7 inventory candidates, including unselected candidates; lead must freeze the exact exclusion inventory.",
+  "unresolved": [
+    "Subject strings are not canonical entity IDs; aliases and neighborhood/query entities require explicit handling.",
+    "Challenge-set subjects and any newly exposed development subjects must join the exclusion register.",
+    "Do not count raw records as unique eligible facts or as three independent realizations.",
+    "Do not use this audit's subject counts as teacher-filtered confirmation capacity."
+  ],
+  "sealed_realization_payloads_opened": 0,
+  "gpu_seconds": 0
+}

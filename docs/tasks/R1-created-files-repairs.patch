@@ -1,0 +1,47 @@
+--- a/scripts/r1_00_baseline.py
++++ b/scripts/r1_00_baseline.py
+@@ -61,7 +61,8 @@
+             require(m["items_completed"] == m["items_planned"] == len(items) == 1000, f"item count {p}")
+             require(c["experiment_id"] == EXPERIMENT and c["arm"] == arm and c["dataset"] == "zsre", f"identity {p}")
+             require(m["base_hash_before"] == m["base_hash_after"] == c["base_hash_before"] == c["base_hash_after"], f"base changed {p}")
+-            require(cost == m["ledger_totals"] == c["ledger_totals"], f"ledger mismatch {p}")
++            for phase in ("learning", "query", "total"):
++                require(cost[phase] == m["ledger_totals"][phase] == c["ledger_totals"][phase], f"ledger mismatch {phase} {p}")
+             require(len({i["item_id"] for i in items}) == 1000, f"duplicate items {p}")
+             require([i["index"] for i in items] == list(range(1000)), f"item order {p}")
+             values = {k: float(m["metrics"][k]["value"]) for k in METRICS}
+--- a/scripts/r1_20_episodes.py
++++ b/scripts/r1_20_episodes.py
+@@ -177,7 +177,8 @@
+     scopes = [(c, v) for c in contexts for v in range(CLASS_SIZE)]
+     near = (context, (value + 1) % CLASS_SIZE)
+     unrelated = (other, (second_value + 1) % CLASS_SIZE)
+-    reserved = {(context, value), second_scope, near, unrelated}
++    reserved = {(context, value), second_scope, near, unrelated,
++                (other, original - class_tokens(4)[0])}
+     free = [s for s in scopes if s not in reserved]
+     rng.shuffle(free)
+     history_scopes = [second_scope] + ([(context, value)] if revision else [])
+@@ -414,7 +415,8 @@
+     for i, (prompt, role, row, target, records) in enumerate(specifications):
+         qid = digest((eid, "query", i))[:24]
+         queries.append(PredictionQuery(qid, prompt=prompt))
+-        labels.append(QueryLabel(qid, role, (normalize(row["subject"]),), paraphrase_family(row, prompt),
++        entities = ("unresolved-neighborhood:" + digest(prompt),) if role == "near_miss" else (normalize(row["subject"]),)
++        labels.append(QueryLabel(qid, role, entities, paraphrase_family(row, prompt),
+                                  target=target, target_source="development_supplied_edit" if target is not None else "teacher_prediction_required",
+                                  supporting_record_ids=records))
+     out = LabeledEpisode(eid, split, seed, partition_seed, "natural-development-v1",
+--- a/tests/revision_v1/test_episodes.py
++++ b/tests/revision_v1/test_episodes.py
+@@ -87,9 +87,8 @@
+ 
+ 
+ def test_seed_determinism_across_fresh_processes():
+-    code = "import sys; sys.path.insert(0, 'scripts'); import r1_20_episodes as e; print(e.digest(e.asdict(e.synthetic_episode(31, 'dev', revision=True)))))"
++    code = "import sys; sys.path.insert(0, 'scripts'); import r1_20_episodes as e; print(e.digest(e.asdict(e.synthetic_episode(31, 'dev', revision=True))))"
+     # Build the command without relying on this process's module cache/hash seed.
+-    code = code[:-1]
+     outputs = []
+     for seed in ("0", "713"):
+         env = {**os.environ, "PYTHONHASHSEED": seed, "PYTHONDONTWRITEBYTECODE": "1",
