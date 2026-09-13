@@ -1,0 +1,294 @@
+{
+ "dataset": "zsre",
+ "experiment_id": "frozen-confirmatory-v2-84126123",
+ "written": "2026-09-13T05:26:55Z",
+ "method": "frozen analyze_paired with arm relabelling (treatment\u2192C2, comparator\u2192C1); SB = the S4 C1 runs",
+ "rows": {
+  "SB": 15000,
+  "SE-A": 15000,
+  "SE-E": 15000
+ },
+ "notes": [],
+ "contrasts": {
+  "SE-A-SB": {
+   "treatment": "SE-A",
+   "comparator": "SB",
+   "status": "complete",
+   "classification_of_this_contrast": "negative",
+   "checks": {
+    "ret_gs_practical_gain": false,
+    "ret_gs_lower_above_zero": false,
+    "es_noninferiority": true,
+    "ls_noninferiority": false
+   },
+   "measures": {
+    "ret_gs": {
+     "status": "complete",
+     "estimate": {
+      "value": -0.002,
+      "status": "ok",
+      "units": "accuracy_fraction",
+      "numerator": -0.006,
+      "denominator": 3.0,
+      "n": 3,
+      "strata": {},
+      "exclusions": []
+     },
+     "interval": {
+      "lower": -0.004,
+      "upper": -0.00019999999999999966,
+      "confidence": 0.975,
+      "sides": 2,
+      "method": "percentile_linear"
+     },
+     "seed": 0,
+     "draws": 10000,
+     "unit": "stream_realization",
+     "orders_kept_together": true,
+     "realization_means": [
+      -0.0018,
+      -0.00019999999999999966,
+      -0.004
+     ],
+     "order_min": [
+      -0.009,
+      -0.038,
+      -0.015
+     ],
+     "order_max": [
+      0.002,
+      0.028,
+      0.01
+     ],
+     "small_sample_note": "Three realizations give descriptive small-sample uncertainty; orders are not independent datasets."
+    },
+    "es": {
+     "status": "complete",
+     "estimate": {
+      "value": 6.66666666666667e-05,
+      "status": "ok",
+      "units": "accuracy_fraction",
+      "numerator": 0.0002000000000000001,
+      "denominator": 3.0,
+      "n": 3,
+      "strata": {},
+      "exclusions": []
+     },
+     "interval": {
+      "lower": -0.001,
+      "upper": 0.0018000000000000002,
+      "confidence": 0.975,
+      "sides": 2,
+      "method": "percentile_linear"
+     },
+     "seed": 0,
+     "draws": 10000,
+     "unit": "stream_realization",
+     "orders_kept_together": true,
+     "realization_means": [
+      -0.001,
+      -0.0006000000000000001,
+      0.0018000000000000002
+     ],
+     "order_min": [
+      -0.003,
+      -0.001,
+      0.0
+     ],
+     "order_max": [
+      0.001,
+      0.0,
+      0.006
+     ],
+     "small_sample_note": "Three realizations give descriptive small-sample uncertainty; orders are not independent datasets."
+    },
+    "ls": {
+     "status": "complete",
+     "estimate": {
+      "value": -0.02133333333333334,
+      "status": "ok",
+      "units": "accuracy_fraction",
+      "numerator": -0.06400000000000002,
+      "denominator": 3.0,
+      "n": 3,
+      "strata": {},
+      "exclusions": []
+     },
+     "interval": {
+      "lower": -0.040999999999999995,
+      "upper": 0.0040000000000000036,
+      "confidence": 0.975,
+      "sides": 2,
+      "method": "percentile_linear"
+     },
+     "seed": 0,
+     "draws": 10000,
+     "unit": "stream_realization",
+     "orders_kept_together": true,
+     "realization_means": [
+      -0.040999999999999995,
+      0.0040000000000000036,
+      -0.027000000000000024
+     ],
+     "order_min": [
+      -0.09499999999999997,
+      -0.020000000000000018,
+      -0.06000000000000006
+     ],
+     "order_max": [
+      0.0050000000000000044,
+      0.050000000000000044,
+      -0.0050000000000000044
+     ],
+     "small_sample_note": "Three realizations give descriptive small-sample uncertainty; orders are not independent datasets."
+    }
+   },
+   "missing": [],
+   "margins": {
+    "ret_gs": 0.02,
+    "es": -0.02,
+    "ls": -0.01
+   }
+  },
+  "SE-E-SE-A": {
+   "treatment": "SE-E",
+   "comparator": "SE-A",
+   "status": "complete",
+   "classification_of_this_contrast": "negative",
+   "checks": {
+    "ret_gs_practical_gain": false,
+    "ret_gs_lower_above_zero": true,
+    "es_noninferiority": false,
+    "ls_noninferiority": true
+   },
+   "measures": {
+    "ret_gs": {
+     "status": "complete",
+     "estimate": {
+      "value": 0.018866666666666667,
+      "status": "ok",
+      "units": "accuracy_fraction",
+      "numerator": 0.0566,
+      "denominator": 3.0,
+      "n": 3,
+      "strata": {},
+      "exclusions": []
+     },
+     "interval": {
+      "lower": 0.012000000000000002,
+      "upper": 0.0248,
+      "confidence": 0.975,
+      "sides": 2,
+      "method": "percentile_linear"
+     },
+     "seed": 0,
+     "draws": 10000,
+     "unit": "stream_realization",
+     "orders_kept_together": true,
+     "realization_means": [
+      0.0248,
+      0.0198,
+      0.012
+     ],
+     "order_min": [
+      0.014,
+      0.002,
+      -0.004
+     ],
+     "order_max": [
+      0.032,
+      0.051,
+      0.027
+     ],
+     "small_sample_note": "Three realizations give descriptive small-sample uncertainty; orders are not independent datasets."
+    },
+    "es": {
+     "status": "complete",
+     "estimate": {
+      "value": -0.3362,
+      "status": "ok",
+      "units": "accuracy_fraction",
+      "numerator": -1.0086,
+      "denominator": 3.0,
+      "n": 3,
+      "strata": {},
+      "exclusions": []
+     },
+     "interval": {
+      "lower": -0.34400000000000003,
+      "upper": -0.324,
+      "confidence": 0.975,
+      "sides": 2,
+      "method": "percentile_linear"
+     },
+     "seed": 0,
+     "draws": 10000,
+     "unit": "stream_realization",
+     "orders_kept_together": true,
+     "realization_means": [
+      -0.344,
+      -0.324,
+      -0.34059999999999996
+     ],
+     "order_min": [
+      -0.363,
+      -0.338,
+      -0.354
+     ],
+     "order_max": [
+      -0.322,
+      -0.304,
+      -0.326
+     ],
+     "small_sample_note": "Three realizations give descriptive small-sample uncertainty; orders are not independent datasets."
+    },
+    "ls": {
+     "status": "complete",
+     "estimate": {
+      "value": 0.019333333333333338,
+      "status": "ok",
+      "units": "accuracy_fraction",
+      "numerator": 0.05800000000000002,
+      "denominator": 3.0,
+      "n": 3,
+      "strata": {},
+      "exclusions": []
+     },
+     "interval": {
+      "lower": -0.003000000000000004,
+      "upper": 0.032000000000000015,
+      "confidence": 0.975,
+      "sides": 2,
+      "method": "percentile_linear"
+     },
+     "seed": 0,
+     "draws": 10000,
+     "unit": "stream_realization",
+     "orders_kept_together": true,
+     "realization_means": [
+      0.032000000000000015,
+      -0.0030000000000000035,
+      0.029000000000000005
+     ],
+     "order_min": [
+      -0.029999999999999916,
+      -0.03000000000000003,
+      0.0
+     ],
+     "order_max": [
+      0.11499999999999999,
+      0.025000000000000022,
+      0.125
+     ],
+     "small_sample_note": "Three realizations give descriptive small-sample uncertainty; orders are not independent datasets."
+    }
+   },
+   "missing": [],
+   "margins": {
+    "ret_gs": 0.02,
+    "es": -0.02,
+    "ls": -0.01
+   }
+  }
+ }
+}
