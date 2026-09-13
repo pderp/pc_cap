@@ -212,3 +212,9 @@ No action needed to keep work moving; three items for your review when convenien
    (`results/R1/pilot/`). Nothing confirmatory has been run; no freeze is requested yet (R1-40/41 come after Stage 2).
 
 Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decision.md`.
+
+4. (later the same evening) **Stage 2 pilots**: the differentiable reference trains — on held-out synthetic episodes the
+   learned reader answers 41 % of unseen paraphrases exactly (from 3 % after the first short pilot) while leaving
+   unrelated answers unchanged (100 %) and near-misses (94 %); the matched ePC-surrogate run at the identical schedule is
+   in progress (`docs/R1_stage2_notes.md`). Non-learned controls on the 100-edit zsRE stream: v0-stable and
+   matched-update both at RET-GS 0.44 (v0 live 0.24/0.29).
