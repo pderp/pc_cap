@@ -1,0 +1,219 @@
+{
+ "stage": "S5",
+ "arm": "SE-E",
+ "base": "EPC",
+ "status": "complete",
+ "items_completed": 300,
+ "items_planned": 300,
+ "metrics": {
+  "es_immediate": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.8866666666666667,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 300,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 11332800.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 300
+  }
+ },
+ "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+ "wall_seconds": 453.56541872024536,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 75283,
+   "partial_forwards": 19464,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 209.4571831850335,
+   "accel_seconds": 209.4571831850335,
+   "peak_mem_mib": 1208.75732421875,
+   "tokens": 2806778
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 29392,
+   "partial_forwards": 21672,
+   "reverses": 17424,
+   "settle_iters": 15488,
+   "prefix_microsteps": 736,
+   "router_probes": 0,
+   "search_candidates": 8832,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 114.87054529797751,
+   "accel_seconds": 114.87054529797751,
+   "peak_mem_mib": 1208.75732421875,
+   "tokens": 305144
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 104675,
+   "partial_forwards": 41136,
+   "reverses": 17424,
+   "settle_iters": 15488,
+   "prefix_microsteps": 736,
+   "router_probes": 0,
+   "search_candidates": 8832,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 324.327728483011,
+   "accel_seconds": 324.327728483011,
+   "peak_mem_mib": 1208.75732421875,
+   "tokens": 3111922
+  },
+  "events": 48789,
+  "elapsed_wall_seconds": 501.93989634513855,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": 2400.0,
+ "config": {
+  "dataset": "counterfact",
+  "realization": 1,
+  "perm": 0,
+  "substrate_arm": "SE-E",
+  "base": "EPC",
+  "weights": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "credit": "error",
+  "credit_iters": 8,
+  "A": 0.3,
+  "radii": {
+   "1": 0.0,
+   "2": 0.0,
+   "3": 0.0
+  },
+  "b_m": {
+   "1": 70.72388458251953,
+   "2": 106.60531616210938,
+   "3": 425.7003860473633
+  },
+  "n_items": 300,
+  "run_allowance_seconds": 2400.0,
+  "frozen_sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+  "realization_sha256": "3a20a1704ed42dcaf12adb2a7619b79a2c3067871226118e086ba568013d652d",
+  "experiment_id": "frozen-confirmatory-v2-84126123",
+  "epc_checkpoint": "/home/derp/cap/assets/models/epc/epc-50m/checkpoints/final-009766/params.npz",
+  "frozen_identity": {
+   "tokenizer_json_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+  }
+ }
+}
