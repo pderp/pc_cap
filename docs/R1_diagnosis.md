@@ -1,6 +1,6 @@
 # Revision v1 — Stage 0 diagnosis memo (R1-04)
 
-Orchestrator, 2026-09-13 19:40 EDT. Inputs: `scripts/r1_diagnostics.py` (revised per R1-X0 finding X0-14, commit `f8c8c74`),
+Orchestrator, 2026-09-13 18:15 EDT. Inputs: `scripts/r1_diagnostics.py` (revised per R1-X0 finding X0-14, commit `f8c8c74`),
 outputs under `results/R1/` (`diagnostics_{C1,C2}.json`, `traces_{C1,C2}.jsonl`, `diagnostics.md`; the earlier pre-review pass
 is kept under `results/R1/prereview/` and is superseded). Setting: the v0 cap under the frozen v2 zsRE calibration and
 budget (A = 0.3, R = 5, τ = 0.1), a fresh 100-edit zsRE development stream (seed 21, order seed 1), arms C1 (fixed
@@ -91,7 +91,7 @@ shadow key matrix and was never written into the cap (state hash asserted unchan
 not re-tuned for cap-off keys, so the stable_rebuilt numbers understate what a re-calibrated fixed geometry could do — a
 question for the v0-stable control, not for this memo.
 
-## 7. Addendum (20:25 EDT): the v0-stable control measured (R1-14, DEC-035)
+## 7. Addendum (18:20 EDT): the v0-stable control measured (R1-14, DEC-035)
 
 `scripts/r1_14_v0_stable.py` reran the same 100-edit stream with `StableCap` (v0 with every key taken from the
 write-free pass, at write and read; `results/R1/v0_stable.md`):

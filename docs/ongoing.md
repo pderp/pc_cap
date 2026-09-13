@@ -67,7 +67,7 @@ the episode is rejected whole; final-generation version and seed reservation). T
 (cap-disabled greedy answers and top-k logits on every episode query prefix) are produced by the orchestrator's GPU pass once
 you write the prefix list to `manifests/revision_v1/teacher_targets_request.json`.
 
-### Lane R1-X1 — counter-review of the Stage 0 diagnosis memo (OPEN NOW: `docs/R1_diagnosis.md`, 19:40 EDT)
+### Lane R1-X1 — counter-review of the Stage 0 diagnosis memo (OPEN NOW: `docs/R1_diagnosis.md`, 18:15 EDT)
 
 Read-only; `logs/review_r1_diagnosis.md`. Inputs: `results/R1/diagnostics.md`, `diagnostics_{C1,C2}.json`, `traces_{C1,C2}.jsonl`,
 `scripts/r1_diagnostics.py` (f8c8c74). Questions to answer: is the four-policy comparison sound (oracle verification rule,

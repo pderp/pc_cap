@@ -1,4 +1,4 @@
-# Response to the plan-9 counter-review (R1-X0) — orchestrator, 2026-09-13 18:40 EDT
+# Response to the plan-9 counter-review (R1-X0) — orchestrator, 2026-09-13 18:00 EDT
 
 Each finding gets one of: **adopted** (with the task that carries it), **adopted with a decision** (recorded as DEC-034),
 or **answered**. Nothing here changes DEC-033's acceptance of plan 9; the adopted items are amendments listed in DEC-034.
