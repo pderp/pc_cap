@@ -47,18 +47,23 @@ def run_b(frozen) -> list[dict]:
             for r in REALIZATIONS:
                 items, unrelated = load_dev_items("zsre", 300, seed=41 + r)
                 for o in ORDERS:
-                    ledger = Ledger()
-                    base = BPBase(ledger=ledger)
-                    tok = GPT2Tokenizer()
-                    cap = Cap(base, CapConfig(arm=arm, read=frozen["radii"]["read"], radii=radii, bank_scales=b_m, seed=1000 * r + 10 * o, d=base.d, ceiling_factor=factor), ledger)
-                    ev = Evaluator(base, tok, unrelated[:200], drift_sample(4096))
                     rd = OUT / "b_byte_ceiling" / f"x{factor}" / arm / f"r{r}" / f"o{o}"
-                    m = run_stream(cap, _order(items, r, o), router_for(arm, cr_distribution=None), budget, ev, rd, ledger, checkpoints=(100,), seed=1000 * r + 10 * o + 1, arm=arm)
+                    if (rd / "metrics.json").exists():  # a finished run is reused, never recomputed
+                        m = json.loads((rd / "metrics.json").read_text())
+                        accel = m["ledger_totals"]["total"]["accel_seconds"]
+                    else:
+                        ledger = Ledger()
+                        base = BPBase(ledger=ledger)
+                        tok = GPT2Tokenizer()
+                        cap = Cap(base, CapConfig(arm=arm, read=frozen["radii"]["read"], radii=radii, bank_scales=b_m, seed=1000 * r + 10 * o, d=base.d, ceiling_factor=factor), ledger)
+                        ev = Evaluator(base, tok, unrelated[:200], drift_sample(4096))
+                        m = run_stream(cap, _order(items, r, o), router_for(arm, cr_distribution=None), budget, ev, rd, ledger, checkpoints=(100,), seed=1000 * r + 10 * o + 1, arm=arm)
+                        accel = ledger.totals()["total"]["accel_seconds"]
                     k = m["metrics"]
                     rows.append({"ablation": "b_byte_ceiling", "factor": factor, "arm": arm, "realization": r, "order": o, "items": m["items_completed"],
                                  "es": k["es_immediate"]["value"], "ret_es": k["ret_es_end"]["value"], "ret_gs": k["ret_gs_end"]["value"], "ls": k["ls_complete_answer_end"]["value"],
-                                 "occupied_bytes": k["memory_occupied_bytes"]["value"], "accel_s": ledger.totals()["total"]["accel_seconds"]})
-                    print(json.dumps(rows[-1]))
+                                 "occupied_bytes": k["memory_occupied_bytes"]["value"], "accel_s": accel})
+                    print(json.dumps(rows[-1]), flush=True)
     return rows
 
 
@@ -66,7 +71,7 @@ def run_c(frozen) -> list[dict]:
     from pccap.cap.calibrate import calibrate_radii, residual_scales
     from pccap.cap.features import z as zfeat
     from pccap.contracts import Budget
-    from pccap.fixtures import grammar_streams as gs
+    from pccap.data import grammar_streams as gs
     from pccap.fixtures.grammar_eval import (
         Grammar,
         GrammarTokenizer,
@@ -74,7 +79,8 @@ def run_c(frozen) -> list[dict]:
         locality_prefixes,
         with_paraphrases,
     )
-    from pccap.fixtures.grammar_model import CONTEXTS, WEIGHTS, GrammarBase
+    from pccap.fixtures.grammar_generator import CONTEXTS
+    from pccap.fixtures.grammar_model import WEIGHTS, GrammarBase
     from pccap.harness.arms import make_learner, router_for
     from pccap.harness.ledger import Ledger
     from pccap.harness.runs import Evaluator, run_stream
@@ -125,7 +131,7 @@ def run_c(frozen) -> list[dict]:
                     rows.append({"ablation": "c_grammar_radius5", "keys": label, "arm": arm, "realization": r, "order": o, "items": m["items_completed"],
                                  "es": k["es_immediate"]["value"], "ret_es": k["ret_es_end"]["value"], "ret_gs": k["ret_gs_end"]["value"], "ls": k["ls_complete_answer_end"]["value"],
                                  "accel_s": ledger.totals()["total"]["accel_seconds"]})
-                    print(json.dumps(rows[-1]))
+                    print(json.dumps(rows[-1]), flush=True)
     return rows
 
 
