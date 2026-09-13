@@ -2292,16 +2292,16 @@
    ],
    "gpu": "lease",
    "review": true,
-   "status": "partial",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-13T22:31:06+00:00",
-   "finished": null,
+   "finished": "2026-09-13T23:32:48+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "train.py reference + loss table (docs/revision_v1_losses.md); gate-5 tests pass on a tiny CPU base; synthetic pilot running (scripts/r1_21_pilot.py \u2192 results/R1/pilot)"
+   "note": "reference trainer + loss table; gate 5; pilots bp_100/bp_500 (docs/R1_stage2_notes.md): dev paraphrase exact 0.41, unrelated unchanged 1.00"
   },
   {
    "id": "R1-22",
@@ -2322,7 +2322,7 @@
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "epc_train.py: alternating ePC surrogate (write gradients from EPCBase settled site errors, CE head for answers, KD head for preservation; \u03b8 via controller/reader VJP); CPU equivalence test; GPU pilot pending"
+   "note": "epc_train.py + CPU equivalence test; matched ePC pilot epc_500_lr1e-3 running"
   },
   {
    "id": "R1-23",

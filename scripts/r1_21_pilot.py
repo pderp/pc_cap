@@ -93,7 +93,9 @@ def main() -> int:
                 print(json.dumps({k: (round(v, 4) if isinstance(v, float) else v) for k, v in m.items()}), flush=True)
         train_s = time.time() - t0
         after = evaluate(theta)
-        np.savez(OUT / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
+        wdir = Path("/home/derp/cap/assets/runs/pc_cap/R1/pilot") / OUT.name  # weights live under assets/, not in the repo
+        wdir.mkdir(parents=True, exist_ok=True)
+        np.savez(wdir / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
         # behavioural check: fresh learner per dev episode, adapt on supports (fast_steps = 0: initial codes), greedy answers
         cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0), tau_edit=float(frozen["tau_edit"]))
         roles: dict[str, list[int]] = {}
@@ -128,7 +130,7 @@ def main() -> int:
                 null_rates.setdefault(lab.role, []).append(cap.selection_for(np.asarray(q.prompt_ids, np.int32)).null_mass)
         behav = {r: {"label_exact": float(np.mean(v)), "n": len(v), "null_mass_mean": float(np.mean(null_rates[r])),
                      "unchanged_from_capoff": (float(np.mean(preserved[r])) if r in preserved else None)} for r, v in roles.items()}
-        summary = {"args": vars(args), "estimator": args.estimator, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta),
+        summary = {"args": vars(args), "estimator": args.estimator, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
                    "featurize_wall_s": feat_s, "train_wall_s": train_s, "dev_before": before, "dev_after": after, "behavioural_dev": behav,
                    "answer_roles": list(ANSWER_ROLES), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))
