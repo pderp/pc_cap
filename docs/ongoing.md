@@ -77,7 +77,7 @@ shadow-key rebuild, teacher-forced exactness); does the memo's locus claim follo
 ### Lane R1-23 — data-separation and update-path audits (can start now on the installed code)
 
 Stage 1–2 code is installed under `src/pccap/revision_v1/` (`contracts, observations, memory, reader, controller, adapt,
-learner, train, v0_stable`) with tests under `tests/revision_v1/` (66 pass) and the loss-source table in
+learner, train, v0_stable`) with tests under `tests/revision_v1/` (72 pass; `epc_train` added) and the loss-source table in
 `docs/revision_v1_losses.md`. Audit targets: (1) `RevisionCap.predict` and `selection_for` never receive or read a
 target (signature and data-flow); (2) `adapt_record` changes only the taught record's code (and creates/supersedes one
 record); (3) `train.py` uses labels only through `LabeledEpisode.query_labels` and applies L3 only to preserve roles;
