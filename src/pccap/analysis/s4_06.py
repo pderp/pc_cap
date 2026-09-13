@@ -76,11 +76,12 @@ def expected_from_loader(dataset: str) -> dict | None:
     if dataset == "grammar":
         # Analysis-tree v2 (DEC-028): the grammar has no realization file — its streams are seed-addressed (DATA-06) and
         # every committed order of a realization edits the same items (the task order changes, the item set does not).
-        from pccap.data.grammar_streams import stream
-
-        n_per_task = int(fz["stream_lengths"]["grammar_train_count"])
+        # Analysis-tree v3 (DEC-029/SD-22): with the deterministic paraphrase seed, an item's paraphrase count is a fixed
+        # property of the item; items with NO paraphrase have no RET-GS by construction in every arm and every order, so
+        # the expected RET-GS inventory excludes them — an outcome-independent, generator-determined exclusion recorded in
+        # ``grammar_expected_exclusions``. (Under v2's per-process seeds this set varied per cell, SD-22.)
         for r in fz["realizations"]:
-            exp[r] = [it.item_id for it in stream(r, 0, n_per_task)]
+            exp[r] = [iid for iid, n in _grammar_paraphrase_counts(fz, r).items() if n >= 1]
         return exp
     for r in fz["realizations"]:
         man = load_confirm(Path(fz["confirm_dir"]) / f"{dataset}_r{r}.json", frozen=frozen)
@@ -88,6 +89,29 @@ def expected_from_loader(dataset: str) -> dict | None:
 
         exp[r] = subset_ids(man, int(fz["stream_lengths"][dataset]))  # the same subset every order edits (selection rule)
     return exp
+
+
+def _grammar_paraphrase_counts(fz: dict, realization: int) -> dict[str, int]:
+    from pccap.data.grammar_streams import stream
+    from pccap.fixtures.grammar_eval import with_paraphrases
+
+    n_per_task = int(fz["stream_lengths"]["grammar_train_count"])
+    return {it.item_id: len(it.paraphrases) for it in with_paraphrases(stream(realization, 0, n_per_task))}
+
+
+def grammar_expected_exclusions() -> dict | None:
+    """Items excluded from the grammar's expected RET-GS inventory because the (deterministic) paraphrase search finds
+    none: per realization, the ids and counts (reported with every grammar paired analysis)."""
+    frozen = ROOT / "manifests" / "frozen.json"
+    if not frozen.exists():
+        return None
+    fz = json.loads(frozen.read_text())
+    out = {}
+    for r in fz["realizations"]:
+        counts = _grammar_paraphrase_counts(fz, r)
+        out[str(r)] = {"n_items": len(counts), "excluded_no_paraphrase": sorted(i for i, n in counts.items() if n == 0),
+                       "n_excluded": sum(1 for n in counts.values() if n == 0), "n_one_paraphrase": sum(1 for n in counts.values() if n == 1)}
+    return out
 
 
 def render(rep: dict, dataset: str, notes: list[str]) -> str:
@@ -113,7 +137,9 @@ def main(argv=None) -> int:
     rep = analyze_paired(rows, seed=args.seed, stream_id=args.dataset, expected_items=exp)
     out = Path(args.out) if args.out else ROOT / "results" / "S4" / f"paired_{args.dataset}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps({"dataset": args.dataset, "rows": len(rows), "expected_items_from_loader": exp is not None, "notes": notes, "report": rep}, indent=1, allow_nan=False) + "\n")
+    excl = grammar_expected_exclusions() if args.dataset == "grammar" else None
+    out.write_text(json.dumps({"dataset": args.dataset, "rows": len(rows), "expected_items_from_loader": exp is not None, "notes": notes,
+                               "grammar_expected_exclusions": excl, "report": rep}, indent=1, allow_nan=False) + "\n")
     out.with_suffix(".md").write_text(render(rep, args.dataset, notes))
     print(args.dataset, "rows", len(rows), "classification", rep.get("classification"), "->", out)
     return 0
