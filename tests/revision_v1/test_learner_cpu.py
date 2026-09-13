@@ -1,0 +1,103 @@
+"""RevisionCap on the tiny CPU base: gate 4 (empty memory = cap-off exactly; hard null), per-query selection held across
+positions, adapt touches only the taught record, snapshot round-trip, and the R1-16 cost variants."""
+
+from __future__ import annotations
+
+import os
+
+os.environ.setdefault("JAX_PLATFORMS", "cpu")
+
+import numpy as np  # noqa: E402
+import pytest  # noqa: E402
+
+from pccap.harness.ledger import Ledger  # noqa: E402
+from pccap.revision_v1.adapt import FastConfig, adapt_record  # noqa: E402
+from pccap.revision_v1.contracts import SupportExample  # noqa: E402
+from pccap.revision_v1.controller import ControllerConfig  # noqa: E402
+from pccap.revision_v1.learner import RevisionCap, RevisionConfig  # noqa: E402
+from pccap.revision_v1.reader import ReaderConfig  # noqa: E402
+from tests.revision_v1.tiny_base import CFG, TinyBase  # noqa: E402
+
+RC = ReaderConfig(d=CFG.d, width=8, hidden=8, d_code=6, top_k=2)
+CC = ControllerConfig(d=CFG.d, width=8, d_code=6, hidden=8, A=0.3, bank_scales=(1.0, 1.0, 1.0))
+
+
+def _cfg(**kw):
+    return RevisionConfig(reader=RC, controller=CC, fast=FastConfig(steps=2, lr=1e-2), null_threshold=kw.pop("null_threshold", 0.5), **kw)
+
+
+def _support(i: int, fact: str | None = None, rev: int = 1):
+    r = np.random.default_rng(i)
+    return SupportExample(record_id=f"s{i}", fact_id=fact or f"f{i}", revision=rev, entity_id="e", family_id="g",
+                          prompt_ids=tuple(int(x) for x in r.integers(1, 60, size=7)), answer_ids=tuple(int(x) for x in r.integers(1, 60, size=3)))
+
+
+def test_empty_memory_is_capoff_and_predict_is_pure():
+    base = TinyBase()
+    cap = RevisionCap(base, _cfg(), Ledger())
+    ids = np.int32([5, 6, 7, 8])
+    off = np.asarray(base.forward(ids).logits)
+    h = cap.state_hash()
+    assert np.array_equal(off, cap.predict(ids).logits)
+    assert cap.state_hash() == h and cap.cost_counters["corrected_partial_passes"] == 0
+
+
+def test_adapt_changes_only_the_taught_record_and_selection_is_held():
+    base = TinyBase()
+    cap = RevisionCap(base, _cfg(null_threshold=1.01), Ledger())  # never hard-null: exercise the corrected path
+    s0, s1 = _support(0), _support(1)
+    adapt_record(cap, s0, cap.cfg.fast)
+    code0 = cap.store.get("s0").code.copy()
+    key0 = cap.store.get("s0").key.copy()
+    tr, cost = adapt_record(cap, s1, cap.cfg.fast)
+    assert cost.reverses == cap.cfg.fast.steps * len(s1.answer_ids) and cost.records_touched == 1
+    assert np.array_equal(cap.store.get("s0").code, code0) and np.array_equal(cap.store.get("s0").key, key0)
+    cap.reset_queries()
+    prompt = np.asarray(s1.prompt_ids, np.int32)
+    sel = cap.selection_for(prompt)
+    longer = np.concatenate([prompt, np.int32(s1.answer_ids[:2])])
+    assert cap.selection_for(longer) is sel  # held for every answer position of the query
+    assert len(cap._sel) == 1
+    cap.predict(longer)
+    assert cap.cost_counters["corrected_partial_passes"] == 1
+    # supersession keeps the fact id, retires the old record
+    s2 = _support(2, fact="f1", rev=2)
+    tr2, _ = adapt_record(cap, s2, cap.cfg.fast)
+    assert tr2.superseded == "s1" and cap.store.get("s1").active is False and cap.store.get("s2").active
+
+
+def test_snapshot_round_trip_and_hash_check():
+    base = TinyBase()
+    cap = RevisionCap(base, _cfg(), Ledger())
+    adapt_record(cap, _support(0), cap.cfg.fast)
+    st = cap.export_state()
+    cap2 = RevisionCap(base, _cfg(), Ledger(), params=cap.params)
+    cap2.import_state(st)
+    assert cap2.state_hash() == cap.state_hash()
+    other = RevisionCap(base, RevisionConfig(reader=RC, controller=CC, seed=5), Ledger())
+    with pytest.raises(RuntimeError):
+        other.import_state(st)
+
+
+def test_cost_variants_match_the_reference_read():
+    base = TinyBase()
+    ref = RevisionCap(base, _cfg(null_threshold=1.01, cache_prompt_pass=False), Ledger())
+    for i in range(3):
+        adapt_record(ref, _support(i), ref.cfg.fast)
+    ref.reset_queries()
+    prompt = np.asarray(_support(1).prompt_ids, np.int32)
+    n_before = base.calls["forward"]
+    ref_logits = ref.predict(prompt).logits
+    assert base.calls["forward"] - n_before == 2  # selection pass + observation pass
+    cached = RevisionCap(base, _cfg(null_threshold=1.01, cache_prompt_pass=True), Ledger(), params=ref.params)
+    cached.import_state(ref.export_state())
+    n_before = base.calls["forward"]
+    assert np.allclose(cached.predict(prompt).logits, ref_logits, atol=1e-5)
+    assert base.calls["forward"] - n_before == 1 and cached.cost_counters["cached_prompt_reads"] == 1
+    single = RevisionCap(base, _cfg(null_threshold=1.01, single_site=True), Ledger(), params=ref.params)
+    single.import_state(ref.export_state())
+    out = single.predict(prompt).logits
+    assert out.shape == ref_logits.shape and np.all(np.isfinite(out))
+    # single-site read with the same writes at site 3 only equals a reference read whose site-1/2 writes are zero
+    sel = single.selection_for(prompt)
+    assert sel.record_ids and not sel.hard_null

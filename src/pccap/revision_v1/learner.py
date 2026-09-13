@@ -53,6 +53,8 @@ class RevisionConfig:
     controller: ControllerConfig = field(default_factory=ControllerConfig)
     fast: FastConfig = field(default_factory=FastConfig)
     null_threshold: float = 0.5  # hard null at evaluation when null mass ≥ threshold
+    cache_prompt_pass: bool = True  # R1-16: reuse the selection pass as the observation of the prompt position (saves one pass per query)
+    single_site: bool = False  # R1-16 variant: writes only at site 3 (partial pass from block 11 instead of block 3)
     ceiling_bytes: int = DEFAULT_CEILING
     seed: int = 0
     tau_edit: float = 0.1
@@ -66,6 +68,7 @@ class Selection:
     null_mass: float
     code: np.ndarray | None  # applicability-weighted code (None on a hard null)
     hard_null: bool
+    prompt_pass: object = None  # the selection pass (ForwardResult) kept for the prompt-position read when caching is on
 
 
 class RevisionCap:
@@ -84,6 +87,7 @@ class RevisionCap:
         self.n_params = param_count(params)
         self.store = RecordStore(dk=cfg.reader.width, d_code=cfg.reader.d_code, ceiling_bytes=cfg.ceiling_bytes, encoder_version=ENCODER_VERSION)
         self._sel: dict[bytes, Selection] = {}
+        self.cost_counters = {"selection_passes": 0, "cached_prompt_reads": 0, "corrected_partial_passes": 0}
         rc, cc = cfg.reader, cfg.controller
         self.jit_query = jax.jit(lambda p, last, span: query_embedding(p, rc, last, span))
         self.jit_key_apply = jax.jit(lambda p, q, keys, mask: applicability(p, rc, q, keys, mask))
@@ -94,11 +98,13 @@ class RevisionCap:
     # ------------------------------------------------------------------ selection (once per query)
     def _select(self, prompt: np.ndarray) -> Selection:
         fr = self.base.forward(prompt, (), retain_sites=True, phase="query", last_only=True)
+        self.cost_counters["selection_passes"] += 1
         obs = observation_from_pass(fr, prompt, None, self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
         cands = self.store.retrieve(np.asarray(q), self.cfg.reader.top_k, query_version=self.enc.encoder_version)
+        keep = fr if self.cfg.cache_prompt_pass else None
         if not cands:
-            return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True)
+            return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, keep)
         k = self.cfg.reader.top_k
         keys = np.zeros((k, self.cfg.reader.width), np.float32)
         mask = np.zeros(k, bool)
@@ -111,7 +117,7 @@ class RevisionCap:
         code = None
         if not hard:
             code = np.asarray(sum(float(w[i]) * recs[i].code for i in range(len(recs))) / max(float(w.sum()), 1e-12), np.float32)
-        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard)
+        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, keep)
 
     def selection_for(self, ids: np.ndarray) -> Selection:
         ids = np.asarray(ids, np.int32).reshape(-1)
@@ -130,19 +136,28 @@ class RevisionCap:
     def predict(self, ids, full: bool = False) -> ForwardResult:
         ids = np.asarray(ids, np.int32).reshape(-1)
         sel = self.selection_for(ids)
-        fr = self.base.forward(ids, (), retain_sites=True, phase="query", last_only=not full)
         cost = RevisionCost(phase="query")
-        cost.add(fr.cost)
-        cost.extra_pass_forwards += 1
+        if sel.prompt_pass is not None and not full and len(ids) == sel.prompt_len:
+            fr = sel.prompt_pass  # cached observation of the prompt position (already charged by the selection)
+            self.cost_counters["cached_prompt_reads"] += 1
+        else:
+            fr = self.base.forward(ids, (), retain_sites=True, phase="query", last_only=not full)
+            cost.add(fr.cost)
+            cost.extra_pass_forwards += 1
         if sel.hard_null:
             return ForwardResult(logits=np.asarray(fr.logits), sites={}, cost=cost)
         obs = observation_from_pass(fr, ids, prompt_mask(min(sel.prompt_len, len(ids)), len(ids)), self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
-        W = np.asarray(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(1.0 - sel.null_mass)), np.float32)
+        W = np.array(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(1.0 - sel.null_mass)), np.float32)
         p = len(ids) - 1
-        wl = [Write(SiteId(m, self.blocks[m], p), W[m - 1]) for m in (1, 2, 3)]
-        fr2 = self.base.forward_from(1, fr.hidden[1], ids, wl, phase="query", retain_sites=False, last_only=not full)
+        if self.cfg.single_site:
+            W[0] = 0.0
+            W[1] = 0.0
+        first = 3 if self.cfg.single_site else 1
+        wl = [Write(SiteId(m, self.blocks[m], p), W[m - 1]) for m in (1, 2, 3) if m >= first]
+        fr2 = self.base.forward_from(first, fr.hidden[first], ids, wl, phase="query", retain_sites=False, last_only=not full)
         cost.add(fr2.cost)
+        self.cost_counters["corrected_partial_passes"] += 1
         cost.records_touched += len(sel.record_ids)
         return ForwardResult(logits=np.asarray(fr2.logits), sites={}, cost=cost)
 
