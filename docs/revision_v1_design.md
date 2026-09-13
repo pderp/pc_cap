@@ -70,3 +70,30 @@ separate condition.
 query width 256; reader MLP 2 × 256; top-k = 4; controller 2 × 512 → 3 × 768; fact code d_code = 256; A = 0.3;
 fast steps ∈ {1, 3, 5}; lr ∈ {1e-3, 1e-2}; ceiling 64 MiB; base frozen; reader/controller pre-trained on synthetic
 episodes (Stage 2) then frozen for the first evaluation. Parameter count reported exactly at construction.
+
+## As built (2026-09-13 evening; Stage 1–2 code under `src/pccap/revision_v1/`)
+
+- `contracts.py` re-exports the installed episode containers (Codex R1-20) instead of defining a separate `Episode`;
+  adds `Observation`, `MemoryRecord`, `RevisionCost`, `Predict/Adapt/OuterResult`, an `EditItem → SupportExample`
+  adapter and the signature gate `assert_no_target_parameter`.
+- `observations.py`: `ObservationEncoder.observe` (one write-free pass) and `observation_from_pass` so the read path
+  reuses the same pass for the corrected partial forward (one full + one partial pass per position, as in v0).
+- `memory.py`: `RecordStore` (immutable ids, supersession, deterministic ties, key-version refusal + `rebuild_keys`, full
+  byte ceiling, `LearnerState` round-trip).
+- `reader.py` / `controller.py`: JAX pytrees; siamese tap encoder (LN[last; span] per tap → 256), query/key/code heads,
+  applicability softmax with a learned null logit; controller MLP 512×2 → 3×768, scaled by non-null mass, aggregate
+  bound Σ‖w_m‖/b_m ≤ A with a safe norm (finite gradient at zero writes); 3.28 M parameters at the first configuration.
+- `adapt.py`: support-only fast rule on the record code (base adjoint → controller VJP; accepted-step / rollback / norm
+  bound). With untrained weights it barely moves the support loss (lr screen 1e-2…10): the fast rule's usefulness is a
+  Stage 2 outcome, so the reference trainer runs with `fast_steps = 0` first.
+- `learner.py`: `RevisionCap` behind the v0 harness surface. Selection (records + null) happens once per query from the
+  prompt and is held for every answer position (cache keyed by the longest cached prompt that prefixes the query; reset
+  on every update). Hard null returns the cap-off logits exactly. R1-16 variants: `cache_prompt_pass` (reuse the
+  selection pass for the prompt-position read) and `single_site` (writes at site 3 only; partial pass from block 11).
+- `train.py`: differentiable reference (featurize once; L1/L2/L3 as pure functions of θ through the base's jitted
+  forward; optax); `epc_train.py`: the alternating ePC surrogate (settled site errors as write gradients; CE head for
+  answers, KD head for preservation; θ through a controller/reader VJP). Loss table: `docs/revision_v1_losses.md`.
+- `v0_stable.py`: `StableCap` (DEC-035 control).
+- Gates: 1/3/4 (CPU tests), 2/3/4/6 on the real base (`scripts/r1_12_profile.py`), 5 (finite differences on a tiny
+  CPU base; ePC/BP equivalence when write gradients coincide), X0-12 mechanics (`scripts/r1_21_overfit_check.py`);
+  gate 7 waits for trained weights (`scripts/r1_21_pilot.py`).
