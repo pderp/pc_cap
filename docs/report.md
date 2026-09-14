@@ -90,6 +90,8 @@ C2−CR locality non-inferiority is not established: Δ LS −0.007 [−0.026, +
 
 ## 6. Substrate comparison (S5; `results/S5/report.md`)
 
+> **SD-24 (added 2026-09-13 evening):** the SE-E row below was produced with a defective ePC energy (site prior on the post-write latent), so its credit direction was dominated by the write vector; treat SE-E as a measurement of that defective rule. SE-A is unaffected. Details: `docs/spec_defects.md` SD-24, `docs/D3_decision.md` §9, DEC-036.
+
 SB reuses the S4 C1 runs; SE-A uses the regenerated ePC base with adjoint credit, and SE-E uses that base with eight-iteration finite-error credit. The 60 S5 confirmatory runs consume 8.88985 recorded accelerator hours. On zsRE, SE-A−SB RET-GS is −0.0020 [−0.0040, −0.0002], ES +0.000067, and LS −0.02133 [−0.041, +0.004]. Acquisition non-inferiority passes; locality non-inferiority is not established. A small RET-GS difference is not a general equivalence result.
 
 SE-E−SE-A RET-GS is +0.01887 [+0.0120, +0.0248]: the point is below the 0.02 margin, but the interval extends above it. ES is −0.3362 [−0.344, −0.324], so the frozen negative classification is driven by lost acquisition. RET-GS is measured over the endpoint inventory, not only acquired edits. CounterFact's paired differences are zero on RET-GS/ES/LS; absolute RET-GS is zero and ES/LS are one. Both substrate contrasts remain negative by the frozen rule.

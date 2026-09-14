@@ -218,3 +218,9 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
    unrelated answers unchanged (100 %) and near-misses (94 %); the matched ePC-surrogate run at the identical schedule is
    in progress (`docs/R1_stage2_notes.md`). Non-learned controls on the 100-edit zsRE stream: v0-stable and
    matched-update both at RET-GS 0.44 (v0 live 0.24/0.29).
+
+5. (21:20 EDT) **SD-24 — please read before your T4 review of the report.** The v0 ePC base penalized the cap write inside
+   the site's prior energy, so the S5 SE-E (finite-error credit) row measured a defective rule; SE-A and every cap arm are
+   unaffected. I fixed the energy in place (DEC-036) because revision v1's ePC surrogate needs it; the report and memo
+   carry the annotation. Decision for you: rerun SE-E under a version-4 manifest (≈ 3 A100-hours) or leave the row
+   annotated. Default if you say nothing: leave it annotated.

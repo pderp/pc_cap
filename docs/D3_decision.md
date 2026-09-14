@@ -96,3 +96,13 @@ the base's paraphrase answers), ES +0.301 / +0.100 for C2, LS identical. Order v
 across arms (0.0066 over the 15 runs, 0 within each realization) — v2's arm-to-arm differences were the SD-22 noise. The S7
 grammar reversals were rerun under v3 (`results/S7/frozen-confirmatory-v3-163d04e2/`): zero damage and zero divergence in every
 stratum, as under v2.
+
+## 9. Addendum (2026-09-13, 21:20 EDT): SD-24 — the SE-E substrate row was produced under a defective energy
+
+While testing the revision v1 ePC surrogate, the orchestrator found that the ePC base's site prior was evaluated on the
+latent after the cap write (½‖e + w‖² instead of ½‖e‖²), so finite-error credit pointed largely along −w rather than the
+loss gradient (cosine to the adjoint ≈ 0.05 with writes, 1.00 without; `docs/spec_defects.md` SD-24). Consequences for
+§5: SE-A (adjoint credit on the ePC base) is unaffected; SE-E's frozen contrast (RET-GS +0.019 vs SE-A, ES −0.336) is a
+measurement of the defective credit rule, not of finite-iteration error credit as specified, and its "lost acquisition"
+reading should not be cited as a property of ePC credit. The energy is fixed in place (DEC-036); a corrected SE-E rerun
+under a version-4 manifest is possible (about 3 A100-hours for the 20 SE-E runs) and is left to the lead.
