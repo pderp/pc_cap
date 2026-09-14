@@ -97,3 +97,11 @@ episodes (Stage 2) then frozen for the first evaluation. Parameter count reporte
 - Gates: 1/3/4 (CPU tests), 2/3/4/6 on the real base (`scripts/r1_12_profile.py`), 5 (finite differences on a tiny
   CPU base; ePC/BP equivalence when write gradients coincide), X0-12 mechanics (`scripts/r1_21_overfit_check.py`);
   gate 7 waits for trained weights (`scripts/r1_21_pilot.py`).
+
+- Update (2026-09-14 early): after the R1-23 audit and the Stage 2 pilots the read/write path was reshaped — record codes
+  come from the prompt + answer observation; the query and key heads are tied and score by scaled cosine (the store
+  retrieves by the same score); a record carries explicit per-answer-position delta writes taught by normalized adjoint
+  steps under the aggregate bound (v0's mechanism) that replace the controller's write; deployment selection is hard
+  top-1 with a null threshold and an optional cosine gate; the null logit is pairwise (query and best key). The
+  non-learned instance of this design (random reader weights, cosine gate 0.93) reaches ES 1.00 / RET-GS 0.65 / LS 1.00 on
+  the zsRE development stream and is the reference the trained reader must beat (`docs/R1_stage2_notes.md`).
