@@ -381,3 +381,19 @@ Occupancy 250 (R50-07), mixed reader, null 0.5: zsRE 1.00 / 1.00 / 0.98 / 1.00; 
 (from 0.795 at 100 records). Locality holds at 2.5× occupancy; CounterFact paraphrase retention loses about 0.07,
 consistent with more near-neighbour records competing for the same subject-free features. Codex's R1-46 review is
 answered in `docs/tasks/R1-46-response.md` (R50-04/06/08/09 repaired).
+
+## Scale profile by memory size (R50-07; mixed reader, null 0.5, banks; `results/R1/scale_profile_r1_50_stream_mixed.json`)
+
+| memory | zsRE paraphrase fires own / in top-4 | zsRE locality hard-null | zsRE out-of-memory hard-null | CounterFact paraphrase fires own / in top-4 | CounterFact locality hard-null | CounterFact out hard-null |
+| ---: | --- | ---: | ---: | --- | ---: | ---: |
+| 64 | 1.00 / 1.00 | 1.00 | 0.92 | 0.72 / 0.88 | 0.97 | 1.00 |
+| 100 | 0.98 / 1.00 | 1.00 | 0.87 | 0.81 / 0.95 | 0.99 | 1.00 |
+| 300 | 0.99 / 1.00 | 1.00 | 0.67 | 0.80 / 0.90 | 0.99 | 0.98 |
+| 1,000 | 0.98 / 1.00 | 1.00 | — | 0.59 / 0.73 | 0.98 | — |
+
+Reading: the null is stable with memory size on both datasets (locality hard-null ≥ 0.97 everywhere); two scale effects
+remain. (a) CounterFact candidate recall: at 1,000 records the own record is outside the top-4 for 27 % of paraphrases,
+so the loss is retrieval, not the null — a larger candidate set is the cheap fix (tested next). (b) zsRE out-of-memory
+prompts (edit-like prompts of facts not in memory) are accepted more often as memory grows (hard-null 0.92 → 0.67 at
+300): a near-duplicate record with high lexical overlap wins. This population is not in the current LS endpoint (NQ
+locality prompts) but is the right stress test for a fresh-draw protocol; recorded as an open risk for R1-40b.
