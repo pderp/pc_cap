@@ -1,0 +1,128 @@
+{
+ "dataset": "zsre",
+ "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_lex_s2/theta.npz",
+ "ls_min": 0.99,
+ "rows": [
+  {
+   "null_threshold": 0.15,
+   "gate": null,
+   "ES": 0.97,
+   "RET_ES": 0.97,
+   "RET_GS": 0.21,
+   "LS": 0.98
+  },
+  {
+   "null_threshold": 0.15,
+   "gate": 0.93,
+   "ES": 0.97,
+   "RET_ES": 0.97,
+   "RET_GS": 0.2,
+   "LS": 1.0
+  },
+  {
+   "null_threshold": 0.25,
+   "gate": null,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.43,
+   "LS": 0.98
+  },
+  {
+   "null_threshold": 0.25,
+   "gate": 0.93,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.42,
+   "LS": 1.0
+  },
+  {
+   "null_threshold": 0.5,
+   "gate": null,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.68,
+   "LS": 0.82
+  },
+  {
+   "null_threshold": 0.5,
+   "gate": 0.93,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.67,
+   "LS": 1.0
+  },
+  {
+   "null_threshold": 0.7,
+   "gate": null,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.82,
+   "LS": 0.7
+  },
+  {
+   "null_threshold": 0.7,
+   "gate": 0.93,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.81,
+   "LS": 1.0
+  },
+  {
+   "null_threshold": 0.85,
+   "gate": null,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.88,
+   "LS": 0.58
+  },
+  {
+   "null_threshold": 0.85,
+   "gate": 0.93,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.87,
+   "LS": 1.0
+  },
+  {
+   "null_threshold": 0.95,
+   "gate": null,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.96,
+   "LS": 0.36
+  },
+  {
+   "null_threshold": 0.95,
+   "gate": 0.93,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.95,
+   "LS": 1.0
+  },
+  {
+   "null_threshold": 1.01,
+   "gate": null,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.98,
+   "LS": 0.16
+  },
+  {
+   "null_threshold": 1.01,
+   "gate": 0.93,
+   "ES": 1.0,
+   "RET_ES": 1.0,
+   "RET_GS": 0.97,
+   "LS": 0.96
+  }
+ ],
+ "chosen": {
+  "null_threshold": 0.95,
+  "gate": 0.93,
+  "ES": 1.0,
+  "RET_ES": 1.0,
+  "RET_GS": 0.95,
+  "LS": 1.0
+ },
+ "rule": "maximize RET-GS subject to LS \u2265 ls_min on the development stream; fixed before the freeze; confirmatory streams are fresh draws"
+}

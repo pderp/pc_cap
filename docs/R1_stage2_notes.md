@@ -333,3 +333,11 @@ Query-style-free null on zsRE, threshold sweep: 0.15 → 0.86 / 0.64; 0.25 → 0
 right locality rule); the locality rule is dataset-specific until the null is trained on both domains (M3, waiting on the
 zsRE training pool, Codex R1-D3 → `scripts/r1_d3_e2_filter.py`). If M3 does not unify the rule, the fallback is a
 per-dataset rule fixed on development streams before the freeze (M5), stated as such in the protocol.
+
+## M5 operating points (seed-2 reader; development streams; LS ≥ 0.99) — 2026-09-14, 13:05 EDT
+
+`scripts/r1_52_operating_point.py` over 7 null thresholds × {no gate, gate 0.93}: CounterFact → null 0.7, no gate:
+RET-GS 0.935 / LS 1.00; zsRE → null 0.95 + gate 0.93: RET-GS 0.95 / LS 1.00
+(`results/R1/operating_point_*_r1_50_stream_lex_s2.json`). Development-stream choices (one stream, one order each); under
+the fallback protocol they are fixed before the freeze and the confirmatory streams are fresh draws. The single-rule
+version (null trained on both domains, M3) is still preferred and waits on the zsRE pool.
