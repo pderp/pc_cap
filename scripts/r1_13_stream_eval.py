@@ -39,6 +39,7 @@ def main() -> int:
     ap.add_argument("--tag", default=None)
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact"))
+    ap.add_argument("--stream-seed", type=int, default=21, help="which 100 development items form the stream (21 = the Stage 0 stream)")
     ap.add_argument("--fast-steps", type=int, default=0)
     ap.add_argument("--fast-lr", type=float, default=1e-2)
     ap.add_argument("--delta-steps", type=int, default=0)
@@ -79,7 +80,7 @@ def main() -> int:
     taken = [str(d) for d in destinations if d.exists()]
     if taken:
         raise SystemExit(f"run identity {tag!r} already has artifacts (never overwritten; choose a new tag): {taken}")  # X26-03: before any setup
-    items, unrelated = load_dev_items(args.dataset, args.n, seed=21)
+    items, unrelated = load_dev_items(args.dataset, args.n, seed=args.stream_seed)
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_eval", stage="R1", projected_seconds=3600.0)):
         ledger = Ledger()
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
@@ -117,6 +118,7 @@ def main() -> int:
                                  "unrelated_hard_null_rate": float(np.mean([x >= args.null_threshold for x in unrel]))},
                    "best_scores": best_scores, "read_counters": cap.cost_counters, "wall_seconds": time.time() - t0, "ledger": ledger.totals()}
         summary["dataset"] = args.dataset
+        summary["stream_seed"] = args.stream_seed
         (OUT / f"stream_eval_{tag}.json").write_text(json.dumps(summary, indent=1, default=float))
         md_path = OUT / "stream_eval.md"
         if not md_path.exists():

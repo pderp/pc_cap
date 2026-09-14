@@ -341,3 +341,9 @@ RET-GS 0.935 / LS 1.00; zsRE → null 0.95 + gate 0.93: RET-GS 0.95 / LS 1.00
 (`results/R1/operating_point_*_r1_50_stream_lex_s2.json`). Development-stream choices (one stream, one order each); under
 the fallback protocol they are fixed before the freeze and the confirmatory streams are fresh draws. The single-rule
 version (null trained on both domains, M3) is still preferred and waits on the zsRE pool.
+
+Second development streams (seed 22: a different 100 of the 300 development items, overlap 36 / 33 with the seed-21 streams),
+same seed-2 reader and the chosen rules: CounterFact null 0.7 → ES 1.00 / RET-ES 1.00 / RET-GS 0.935 / LS 1.00; zsRE null
+0.95 + gate 0.93 → 1.00 / 1.00 / 0.95 / 1.00 — numerically the same as on the calibration streams (coincidence to three
+decimals; the item sets differ). One order each; still development evidence, but the operating points are not tuned to
+one particular stream.
