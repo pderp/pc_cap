@@ -376,3 +376,8 @@ Seed replicates of the mixed-domain reader (null 0.5, no gate; RET-GS / LS; ES a
 
 Three seeds and two streams agree: zsRE 0.96–0.99, CounterFact 0.765–0.805, LS 1.00 throughout, one rule. This is the
 condition to carry into the run matrix (R1-40b) and the freeze (R1-41).
+
+Occupancy 250 (R50-07), mixed reader, null 0.5: zsRE 1.00 / 1.00 / 0.98 / 1.00; CounterFact 1.00 / 1.00 / 0.722 / 1.00
+(from 0.795 at 100 records). Locality holds at 2.5× occupancy; CounterFact paraphrase retention loses about 0.07,
+consistent with more near-neighbour records competing for the same subject-free features. Codex's R1-46 review is
+answered in `docs/tasks/R1-46-response.md` (R50-04/06/08/09 repaired).
