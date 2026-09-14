@@ -42,6 +42,7 @@ class LossConfig:
     w_preserve: float = 1.0
     w_code_norm: float = 0.0
     fast_steps: int = 0  # 0 = reference (initial codes from prompt+answer); >0 is NOT implemented in the outer loop (rejected at construction)
+    balance_null: bool = True  # L2: null-target and record-target queries carry equal total weight per episode
 
     def __post_init__(self):
         if self.fast_steps != 0:
@@ -88,7 +89,7 @@ class EpisodeFeatures:
     cost: RevisionCost = field(default_factory=lambda: RevisionCost(phase="learning"))
 
 
-def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_prompt: bool = True) -> EpisodeFeatures:
+def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_prompt: bool = True, own_prompt_history: bool = False) -> EpisodeFeatures:
     """Write-free passes for every support prompt and every query prefix (charged to the learning column).
 
     ``include_own_prompt`` adds, for every support, a query equal to the support prompt with the taught answer as target
@@ -118,7 +119,7 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_
     from pccap.revision_v1.contracts import PredictionQuery, QueryLabel
     extra_q, extra_l = [], []
     if include_own_prompt:
-        for s in supports_in:
+        for s in (supports_in if own_prompt_history else tuple(episode.inputs.new_support)):
             qid = f"own:{s.record_id}"
             extra_q.append(PredictionQuery(query_id=qid, prompt_ids=tuple(s.prompt_ids), prompt=s.prompt))
             extra_l.append(QueryLabel(query_id=qid, role="own_prompt", entity_ids=(s.entity_id,), family_id=s.family_id, target_ids=tuple(s.answer_ids), target=s.answer, target_source="support", supporting_record_ids=(s.record_id,)))
@@ -166,17 +167,25 @@ def _selection(theta, rc: ReaderConfig, keys, q_sel):
     return logits, probs[:-1], probs[-1]
 
 
-def retrieval_loss(theta, rc: ReaderConfig, feats: EpisodeFeatures):
-    """L2: CE over ALL episode records + null, per query; target = supporting record or null."""
+def retrieval_loss(theta, rc: ReaderConfig, feats: EpisodeFeatures, balance_null: bool = True):
+    """L2: CE over ALL episode records + null, per query; target = supporting record or null. With ``balance_null`` the
+    null-target queries and the record-target queries each carry half of the episode's weight (the own-prompt role would
+    otherwise outnumber the null targets 4:1)."""
     keys, _ = _records(theta, rc, feats)
     R = keys.shape[0]
+    n_null = sum(1 for q in feats.queries if q.target_record < 0)
+    n_rec = len(feats.queries) - n_null
     total = 0.0
     for q in feats.queries:
         q_sel = query_embedding(theta["reader"], rc, jnp.asarray(q.last), jnp.asarray(q.span))
         logits, _, _ = _selection(theta, rc, keys, q_sel)
         tgt = R if q.target_record < 0 else q.target_record
-        total = total + (jax.nn.logsumexp(logits) - logits[tgt])
-    return total / max(1, len(feats.queries))
+        if balance_null and n_null and n_rec:
+            wq = 0.5 / (n_null if q.target_record < 0 else n_rec)
+        else:
+            wq = 1.0 / max(1, len(feats.queries))
+        total = total + wq * (jax.nn.logsumexp(logits) - logits[tgt])
+    return total
 
 
 def prefix_loss(theta, rc: ReaderConfig, cc: ControllerConfig, base_params, base_cfg, feats: EpisodeFeatures, qi: int, ti: int):
@@ -205,7 +214,7 @@ def episode_grads(theta, rc, cc, base_params, base_cfg, feats: EpisodeFeatures, 
         return jax.tree_util.tree_map(lambda a, b: a + scale * b, grads, gr)
 
     if lc.w_retrieval:
-        l, gr = jax.value_and_grad(retrieval_loss)(theta, rc, feats)
+        l, gr = jax.value_and_grad(retrieval_loss)(theta, rc, feats, lc.balance_null)
         metrics["retrieval"] = float(l)
         grads = acc(gr, lc.w_retrieval)
     for qi, q in enumerate(feats.queries):

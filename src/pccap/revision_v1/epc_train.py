@@ -109,7 +109,7 @@ def episode_grads_epc(theta, rc, cc, feats: EpisodeFeatures, lc: LossConfig, wri
         return jax.tree_util.tree_map(lambda a, b: a + scale * b, grads, gr)
 
     if lc.w_retrieval:
-        l, gr = jax.value_and_grad(retrieval_loss)(theta, rc, feats)
+        l, gr = jax.value_and_grad(retrieval_loss)(theta, rc, feats, lc.balance_null)
         metrics["retrieval"] = float(l)
         grads = acc(gr, lc.w_retrieval)
     for qi, q in enumerate(feats.queries):

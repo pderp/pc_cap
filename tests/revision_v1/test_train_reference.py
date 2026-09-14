@@ -141,7 +141,7 @@ def test_outer_step_reduces_loss():
 def test_own_prompt_queries_are_added_from_supports():
     base, feats, theta = _setup()
     own = [q for q in feats.queries if q.role == "own_prompt"]
-    assert len(own) == len(feats.supports)
+    assert len(own) == 1  # the new support only (history own-prompts are optional)
     for q in own:
         s = feats.supports[q.target_record]
         assert q.query_id == f"own:{s.record_id}" and q.prefixes and q.prefixes[0].target >= 0
