@@ -1,0 +1,210 @@
+{
+  "budget": {
+    "arithmetic": {
+      "charged_forward_pass_tokens": 493752,
+      "full_steps": 3857,
+      "input_end_exclusive": 493752,
+      "input_start": 0,
+      "optimizer_steps": 3858,
+      "requested_forward_pass_tokens": 493752,
+      "scored_next_token_targets": 493752,
+      "seq_len": 128,
+      "student_forward_tokens": 493752,
+      "student_reverse_passes": 3858,
+      "student_reverse_token_positions": 493752,
+      "tail_sequence_tokens": 56,
+      "target_end_exclusive": 493753,
+      "target_start": 1,
+      "teacher_forward_tokens": 0,
+      "unique_source_tokens_read": 493753,
+      "unit": "valid student forward input-token positions; reverse work and lookahead reads separate"
+    },
+    "comparison": "LM uses one forward and one reverse per source position; KD uses teacher+student forwards and a student reverse. Equal forward-token counts do not match reverse work, source exposure or accelerator seconds.",
+    "exact_training_passes_verified": false,
+    "limitations": [
+      "BP direct outer-gradient GPT-2 calls are absent from the ledger.",
+      "Learning phase includes featurization and some development scoring.",
+      "ePC token totals do not multiply every relaxation pass.",
+      "Without reconciliation this is a reported-ledger diagnostic, not a compute-matched control."
+    ],
+    "literal_companion_arithmetic": {
+      "charged_forward_pass_tokens": 493752,
+      "full_steps": 1928,
+      "optimizer_steps": 1929,
+      "requested_forward_pass_tokens": 493752,
+      "reverse_token_positions_separately_reported": 246876,
+      "seq_len": 128,
+      "source_tokens": 246876,
+      "student_forward_tokens": 246876,
+      "student_reverse_passes": 1929,
+      "tail_sequence_tokens": 92,
+      "teacher_forward_tokens": 246876,
+      "unit": "input tokens on full teacher/student forward passes; reverse sweeps reported separately",
+      "unspent_odd_pass_token": 0
+    },
+    "matched_tokens": 493752,
+    "matching_basis": "same selected pilot learning forward-input-token ledger as literal control; NOT exact compute matching",
+    "pilots": [
+      {
+        "path": "/home/derp/cap/pc_cap/results/R1/pilot/cf_pool3k_pairnull_400/summary.json",
+        "query_tokens_excluded": 10721,
+        "reported_learning_tokens": 493752,
+        "sha256": "612ed2703240158daeb83de352a7ed92a1f2f9df290becf40c578ba0a5ed9d0f",
+        "steps": 400,
+        "tag": "cf_pool3k_pairnull_400"
+      }
+    ],
+    "query_phase_excluded": true,
+    "reported_learning_tokens": 493752,
+    "source_exposure_matched_alternative": {
+      "lm_input_tokens": 246876,
+      "note": "would halve the present LM forward budget; needs a joint revised decision/recipe, not a silent switch",
+      "status": "not_selected"
+    }
+  },
+  "companion": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_control_v2.json",
+    "sha256": "2f64645090559837514e09d4a39480d8c7c435f28715fbe7074d41d8d3aee4b1"
+  },
+  "data": {
+    "dtype": "uint16-le",
+    "heldout_start": 50001920,
+    "path": "/home/derp/cap/assets/data/raw/openwebtext/openwebtext.bin",
+    "sha256": "ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+    "tokens": 52500000,
+    "train_end_exclusive": 50001920,
+    "train_start": 0,
+    "wrap": false
+  },
+  "evaluation": {
+    "base_conditions": [
+      "original",
+      "continued"
+    ],
+    "calibration": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+    "cap_seed": 0,
+    "caps": [
+      "v0_stable_C1",
+      "revision"
+    ],
+    "datasets": [
+      "zsre",
+      "counterfact"
+    ],
+    "delta_lr": 0.1,
+    "delta_steps": 5,
+    "drift": {
+      "dtype": "int32",
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+      "shape": [
+        247289
+      ]
+    },
+    "drift_scope": "same fixed-prefix method as drift_supplement, declared development subset, not full validation split",
+    "drift_scored_positions": 16256,
+    "drift_window": 128,
+    "drift_windows": 128,
+    "edits_per_stream": 100,
+    "exclude_s0": true,
+    "fast_steps": 0,
+    "fidelity_kl_temperature": 1.0,
+    "fidelity_window": 128,
+    "fidelity_windows": 64,
+    "locality_prompts": 50,
+    "locality_reference": "original base for all four cells (common reference)",
+    "margins": {
+      "es": -0.02,
+      "kl_nats": 0.001,
+      "ls": -0.01,
+      "nll_increase": 0.01,
+      "ret_gs": 0.05
+    },
+    "min_score": null,
+    "null_threshold": 0.5,
+    "query_boundary": "reset each independent query; teacher-forced prefixes explicitly select original prompt before prediction",
+    "reader": {
+      "pairwise_null": true
+    },
+    "selection_seed": 21,
+    "theta": {
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/cf_pool3k_pairnull_400/theta.npz",
+      "sha256": "dbd7d9738c3775f85560e166f93854ec9629229504ce83f68a455b63137dfa16"
+    },
+    "theta_policy": "fixed selected pilot theta on both bases; no retuning/retraining in this control",
+    "update_seed": 1
+  },
+  "evaluation_policy": "byte-for-byte JSON-value equivalent to the literal companion; same theta, streams, original-base locality reference and development fidelity probes",
+  "evaluation_sha256": "5c0899f2e7a01fa311951a8a74fa34076831eef8abebb32cbbf3a2bbb5956b95",
+  "gpu_seconds": 0,
+  "launch_allowed": false,
+  "legacy_source_binding_caveat": "companion's old broad source registry may be stale after repairs; copied evaluation/resource values are verified here, old implementation hashes are not silently adopted",
+  "name": "r1_24_control_lm",
+  "recipe": {
+    "batch_size": 1,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "difference_from_REG": "ordinary BP language-model continuation, seq128/batch1, no teacher or PC relaxation, exact tail length",
+    "dropout": false,
+    "eps": 1e-08,
+    "estimator": "exact_bp_next_token_base_continuation",
+    "loss_mask": "all n valid logits including last; padded bucket rows excluded",
+    "objective": "mean next-token cross-entropy over valid consecutive positions",
+    "optimizer": "Adam",
+    "optimizer_reset": true,
+    "reset_context": "causal context resets at each 128-token chunk; no gap in scored target indices",
+    "reuse": "distill.recipe Adam constants, distill.data.load_shard, distill.train.batched_logits; new execution adapter required",
+    "seed": 1729,
+    "seq_len": 128,
+    "targets": "OpenWebText tokens[s+1:s+n+1] for inputs tokens[s:s+n]",
+    "teacher_forward_required": false,
+    "weight_decay": 0.0,
+    "weight_lr": 1e-06
+  },
+  "required_before_execution": [
+    "lead chooses informative LM control",
+    "new runtime implements hard-target CE; existing KD runner must refuse this task id",
+    "refresh both recipes against the exact execution source version and select common evaluation theta if policy changes",
+    "reconcile pilot pass tokens and profile forward/reverse cost for any matched-compute claim",
+    "lease and owner GPU scheduling"
+  ],
+  "schema_version": 1,
+  "sources_sha256": {
+    "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "/home/derp/cap/assets/data/raw/openwebtext/openwebtext.bin": "ae5b795aadcd3ef8990826c1ef37661b53b216e962e3bec8510a8758fecf540d",
+    "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+    "/home/derp/cap/assets/runs/pc_cap/R1/pilot/cf_pool3k_pairnull_400/theta.npz": "dbd7d9738c3775f85560e166f93854ec9629229504ce83f68a455b63137dfa16",
+    "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "/home/derp/cap/pc_cap/manifests/dev/counterfact_dev.json": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+    "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e",
+    "/home/derp/cap/pc_cap/manifests/dev/s0_sample.json": "36dff70620182a96b12f7d7949bf42ba938ab8fd059d4dd04f9275effd11dd44",
+    "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "/home/derp/cap/pc_cap/manifests/reference.json": "80fb81c23026eb3eeec459de4ccd1fc9c8e5d6766dd30d388e4ae6f021c3b2d7",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_control_v2.json": "2f64645090559837514e09d4a39480d8c7c435f28715fbe7074d41d8d3aee4b1",
+    "/home/derp/cap/pc_cap/results/R1/pilot/cf_pool3k_pairnull_400/summary.json": "612ed2703240158daeb83de352a7ed92a1f2f9df290becf40c578ba0a5ed9d0f",
+    "/home/derp/cap/pc_cap/scripts/r1_24_lm_recipe.py": "9da5ffb7730faa31e21d2cbe0335283e9c91dc44dbc43020ea0b725604259d7e",
+    "/home/derp/cap/pc_cap/scripts/r1_24_runtime.py": "010f3419c8023cd75e32ee9b09a38eda997ad2e560282d38bdec359b70d62988",
+    "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "/home/derp/cap/pc_cap/src/pccap/distill/data.py": "fe8be45c7e4560ff863d3fe394f1b31774287f87eaa6abb621bd35a1c8d500df",
+    "/home/derp/cap/pc_cap/src/pccap/distill/recipe.py": "94acc478e444aec3a1c93a18b898c6a595c61a4dce6b1bb6c7b3c4fdeb9cb9d1",
+    "/home/derp/cap/pc_cap/src/pccap/distill/train.py": "b8b0252b8103bd71c21424b81a0808a2442ece77a5048f0ca38a6d52d2dd324f",
+    "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc"
+  },
+  "status": "dry_recipe_pending_lead_decision_and_runtime",
+  "stopping": {
+    "allocation_note": "proposed finite ceilings only; orchestrator schedules GPU execution and accounts its development allowance",
+    "checks": "before every optimizer/evaluation unit; one in-flight kernel may overshoot; nonfinite update rejected",
+    "historical_allowances_not_new_allocation": {},
+    "thresholds": "held-out KL > .001 or NLL increase > .01 labels fidelity failure; no threshold-based hyperparameter search",
+    "total_wall_seconds": 7200,
+    "training_wall_seconds": 1800
+  },
+  "student_start": {
+    "path": "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+    "sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707"
+  },
+  "task": "R1-24b",
+  "training_executed": false
+}

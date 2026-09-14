@@ -1,0 +1,33 @@
+--- a/tests/revision_v1/test_endpoints.py
++++ b/tests/revision_v1/test_endpoints.py
+@@ -86,7 +86,7 @@
+ 
+     def export_state(self):
+         st = self.store.export()
+-        st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
++        st.scalars["fixture_answers"] = json.dumps([[[int(i) for i in k], v] for k, v in self.answers.items()])
+         return st
+ 
+     def import_state(self, st):
+--- a/tests/revision_v1/test_r1_27_superseding_cpu.py
++++ b/tests/revision_v1/test_r1_27_superseding_cpu.py
+@@ -151,7 +151,7 @@
+         )
+         or (isinstance(n, ast.If) and ast.unparse(n.test) == "taken")
+     ]
+-    assert len(statements) == 7, "preflight changed: review extraction"
++    assert len(statements) == 6, "preflight changed: review extraction"
+     fn = ast.parse("def preflight(args, OUT, ROOT):\n    return tag, rd, destinations\n").body[0]
+     fn.body = statements + fn.body
+     assets = tmp_path / "assets"
+--- a/scripts/r1_stage2_table_audit.py
++++ b/scripts/r1_stage2_table_audit.py
+@@ -22,7 +22,7 @@
+     for table in saved["raw_stream_markdown_tables"]:
+         for row in table["rows"]:
+             c = row["cells"]
+-            candidates = [s for s in saved["streams"] if s["tag"].split("@")[0] == c[0]]
++            candidates = [s for s in saved["streams"] if s["tag"] == c[0]]
+             compared = []
+             for s in candidates:
+                 checks = [

@@ -1,0 +1,340 @@
+FFF.F.F...                                                               [100%]
+=================================== FAILURES ===================================
+_____________ test_near_miss_uses_capoff_answer_and_restores_state _____________
+
+    def test_near_miss_uses_capoff_answer_and_restores_state():
+        tok = Tokenizer()
+        cap = Cap(tok, {"neighbour?": "base answer"})
+        before = cap.state_hash()
+>       result = EndpointEvaluator(cap, tok).near_miss(near_row())
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_endpoints.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pccap/revision_v1/endpoints.py:235: in near_miss
+    return self._case("near_miss_preservation", row, operation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:198: in _case
+    result.update(operation(result["case_id"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:228: in operation
+    own, own_trace = self._read(self.learner, prompt)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:135: in _read
+    before = self.learner.state_hash()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:98: in state_hash
+    return self.export_state().content_hash()
+           ^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:89: in export_state
+    st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/__init__.py:231: in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f4e13e27b00>, o = np.int32(3)
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type int32 is not JSON serializable
+
+/usr/lib64/python3.12/json/encoder.py:180: TypeError
+____________ test_revision_new_answer_and_retirement_both_required _____________
+
+    def test_revision_new_answer_and_retirement_both_required():
+        tok = Tokenizer()
+        cap = Cap(tok)
+>       result = EndpointEvaluator(cap, tok).revision(revision_row())
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_endpoints.py:207: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pccap/revision_v1/endpoints.py:282: in revision
+    return self._case("revision", row, operation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:198: in _case
+    result.update(operation(result["case_id"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:260: in operation
+    first, first_trace = self._read(self.learner, prompt)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:135: in _read
+    before = self.learner.state_hash()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:98: in state_hash
+    return self.export_state().content_hash()
+           ^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:89: in export_state
+    st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/__init__.py:231: in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f4e13e27b00>, o = np.int32(2)
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type int32 is not JSON serializable
+
+/usr/lib64/python3.12/json/encoder.py:180: TypeError
+_____________ test_resource_rejection_remains_distinct_and_charged _____________
+
+    def test_resource_rejection_remains_distinct_and_charged():
+        tok = Tokenizer()
+        cap = Cap(tok)
+        cap.fail_revision = True
+>       result = EndpointEvaluator(cap, tok).revision(revision_row())
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_endpoints.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pccap/revision_v1/endpoints.py:282: in revision
+    return self._case("revision", row, operation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:198: in _case
+    result.update(operation(result["case_id"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:260: in operation
+    first, first_trace = self._read(self.learner, prompt)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:135: in _read
+    before = self.learner.state_hash()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:98: in state_hash
+    return self.export_state().content_hash()
+           ^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:89: in export_state
+    st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/__init__.py:231: in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f4e13e27b00>, o = np.int32(2)
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type int32 is not JSON serializable
+
+/usr/lib64/python3.12/json/encoder.py:180: TypeError
+________ test_composition_uses_generated_bridge_and_checks_missing_hops ________
+
+    def test_composition_uses_generated_bridge_and_checks_missing_hops():
+        tok = Tokenizer()
+        cap = Cap(tok)
+        row = comp_row()
+        ev = EndpointEvaluator(cap, tok)
+>       result = ev.composition(row, verification=verification(row))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_endpoints.py:247: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pccap/revision_v1/endpoints.py:328: in composition
+    return self._case("composition_two_hop", row, operation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:198: in _case
+    result.update(operation(result["case_id"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:309: in operation
+    first, trace1 = self._read(self.learner, p1)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:135: in _read
+    before = self.learner.state_hash()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:98: in state_hash
+    return self.export_state().content_hash()
+           ^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:89: in export_state
+    st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/__init__.py:231: in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f4e13e27b00>, o = np.int32(2)
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type int32 is not JSON serializable
+
+/usr/lib64/python3.12/json/encoder.py:180: TypeError
+_________________ test_read_mutation_raises_and_restores_clone _________________
+
+    def test_read_mutation_raises_and_restores_clone():
+        tok = Tokenizer()
+        cap = Cap(tok)
+        cap.mutate_read = True
+        before = cap.state_hash()
+        with pytest.raises(RuntimeError, match="mutated"):
+>           EndpointEvaluator(cap, tok).near_miss(near_row())
+
+tests/revision_v1/test_endpoints.py:272: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/pccap/revision_v1/endpoints.py:235: in near_miss
+    return self._case("near_miss_preservation", row, operation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:198: in _case
+    result.update(operation(result["case_id"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:228: in operation
+    own, own_trace = self._read(self.learner, prompt)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/endpoints.py:135: in _read
+    before = self.learner.state_hash()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:98: in state_hash
+    return self.export_state().content_hash()
+           ^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_endpoints.py:89: in export_state
+    st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/__init__.py:231: in dumps
+    return _default_encoder.encode(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:200: in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.12/json/encoder.py:258: in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f4e13e27b00>, o = np.int32(2)
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return super().default(o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type int32 is not JSON serializable
+
+/usr/lib64/python3.12/json/encoder.py:180: TypeError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_endpoints.py::test_near_miss_uses_capoff_answer_and_restores_state
+FAILED tests/revision_v1/test_endpoints.py::test_revision_new_answer_and_retirement_both_required
+FAILED tests/revision_v1/test_endpoints.py::test_resource_rejection_remains_distinct_and_charged
+FAILED tests/revision_v1/test_endpoints.py::test_composition_uses_generated_bridge_and_checks_missing_hops
+FAILED tests/revision_v1/test_endpoints.py::test_read_mutation_raises_and_restores_clone
+5 failed, 5 passed in 1.71s

@@ -1,0 +1,11 @@
+--- a/tests/revision_v1/test_endpoints.py
++++ b/tests/revision_v1/test_endpoints.py
+@@ -86,7 +86,7 @@
+ 
+     def export_state(self):
+         st = self.store.export()
+-        st.scalars["fixture_answers"] = json.dumps([[list(k), v] for k, v in self.answers.items()])
++        st.scalars["fixture_answers"] = json.dumps([[[int(i) for i in k], v] for k, v in self.answers.items()])
+         return st
+ 
+     def import_state(self, st):

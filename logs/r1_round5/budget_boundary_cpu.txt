@@ -1,0 +1,70 @@
+..............................FFx                                        [100%]
+=================================== FAILURES ===================================
+__________________ test_dataset_and_orphan_summary_preflight ___________________
+
+tmp_path = PosixPath('/home/derp/cap/pc_cap/logs/r1_round5/budget_boundary_fixtures/test_dataset_and_orphan_summar0')
+
+    def test_dataset_and_orphan_summary_preflight(tmp_path):
+>       fn, root, _ = admission(tmp_path)
+                      ^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_27_superseding_cpu.py:176: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/derp/cap/pc_cap/logs/r1_round5/budget_boundary_fixtures/test_dataset_and_orphan_summar0')
+
+    def admission(tmp_path):
+        tree = ast.parse((ROOT / "scripts/r1_13_stream_eval.py").read_text())
+        main = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "main")
+        names = {"tag", "rd", "destinations", "taken"}
+        statements = [
+            n
+            for n in main.body
+            if (
+                isinstance(n, ast.Assign)
+                and any(isinstance(t, ast.Name) and t.id in names for t in n.targets)
+            )
+            or (isinstance(n, ast.If) and ast.unparse(n.test) == "taken")
+        ]
+>       assert len(statements) == 7, "preflight changed: review extraction"
+E       AssertionError: preflight changed: review extraction
+E       assert 6 == 7
+E        +  where 6 = len([<ast.Assign object at 0x7f85582c6c90>, <ast.Assign object at 0x7f85582c7890>, <ast.Assign object at 0x7f853005c210>, <ast.Assign object at 0x7f85582d1b90>, <ast.Assign object at 0x7f85582c0bd0>, <ast.If object at 0x7f85582c31d0>])
+
+tests/revision_v1/test_r1_27_superseding_cpu.py:154: AssertionError
+____________________ test_existing_run_directory_preflight _____________________
+
+tmp_path = PosixPath('/home/derp/cap/pc_cap/logs/r1_round5/budget_boundary_fixtures/test_existing_run_directory_pr0')
+
+    def test_existing_run_directory_preflight(tmp_path):
+>       fn, root, _ = admission(tmp_path)
+                      ^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_27_superseding_cpu.py:189: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/derp/cap/pc_cap/logs/r1_round5/budget_boundary_fixtures/test_existing_run_directory_pr0')
+
+    def admission(tmp_path):
+        tree = ast.parse((ROOT / "scripts/r1_13_stream_eval.py").read_text())
+        main = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "main")
+        names = {"tag", "rd", "destinations", "taken"}
+        statements = [
+            n
+            for n in main.body
+            if (
+                isinstance(n, ast.Assign)
+                and any(isinstance(t, ast.Name) and t.id in names for t in n.targets)
+            )
+            or (isinstance(n, ast.If) and ast.unparse(n.test) == "taken")
+        ]
+>       assert len(statements) == 7, "preflight changed: review extraction"
+E       AssertionError: preflight changed: review extraction
+E       assert 6 == 7
+E        +  where 6 = len([<ast.Assign object at 0x7f8500368bd0>, <ast.Assign object at 0x7f8500357050>, <ast.Assign object at 0x7f8500355590>, <ast.Assign object at 0x7f8500355110>, <ast.Assign object at 0x7f8500354c50>, <ast.If object at 0x7f8500338b50>])
+
+tests/revision_v1/test_r1_27_superseding_cpu.py:154: AssertionError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_27_superseding_cpu.py::test_dataset_and_orphan_summary_preflight
+FAILED tests/revision_v1/test_r1_27_superseding_cpu.py::test_existing_run_directory_preflight
+2 failed, 30 passed, 1 xfailed in 3.81s

@@ -2720,6 +2720,90 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "logs/audit_r1_26.md X26-01..04 \u2192 R1-27 (done)"
+  },
+  {
+   "id": "R1-43",
+   "title": "Endpoint harness: near-miss, revision, composition",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-13"
+   ],
+   "gpu": "short",
+   "review": true,
+   "status": "partial",
+   "agent": "codex\u2192orchestrator",
+   "worktree": null,
+   "started": "2026-09-14T11:38:34+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "endpoints.py + CPU tests + schema (Codex); fixture patch applied; GPU run over the real base pending (orchestrator)"
+  },
+  {
+   "id": "R1-24b",
+   "title": "Informative continuation recipe (LM on matched tokens)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-24"
+   ],
+   "gpu": "none",
+   "review": true,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T11:38:34+00:00",
+   "finished": "2026-09-14T11:38:34+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "r1_24_control_lm.json + generator + 23 tests; dry deliverable; lead decision and GPU run pending"
+  },
+  {
+   "id": "R1-X4",
+   "title": "Counter-review of the Stage 2 notes",
+   "stage": "R1",
+   "role": "REVIEW",
+   "deps": [
+    "R1-21"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T11:38:34+00:00",
+   "finished": "2026-09-14T11:38:34+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "logs/review_r1_stage2.md X4-01..10; response pending"
+  },
+  {
+   "id": "R1-30a",
+   "title": "Stage 3 design note (cap-level PC energy)",
+   "stage": "R1",
+   "role": "INTEGRATOR",
+   "deps": [
+    "R1-22"
+   ],
+   "gpu": "none",
+   "review": true,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T11:38:34+00:00",
+   "finished": "2026-09-14T11:38:34+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "docs/R1_stage3_design_draft.md; specification only"
   }
  ]
 }

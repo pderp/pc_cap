@@ -1,0 +1,124 @@
+{
+  "bindings": {
+    "scripts/r1_stage2_table_audit.py": {
+      "before_sha256": "4124334469c74526610e73e0d4e2f0c2e046441f46f0461b5d1eb208810953eb",
+      "proposed_sha256": "08ed99ebf409df269ebe3dabb9048854e4a6b38c75e83d8058e4b5b79b4df8ea"
+    },
+    "tests/revision_v1/test_endpoints.py": {
+      "before_sha256": "1e7254d52eb551a4e74e95c53a3481fb2e6a679ced383e8dc3b85bddaf1a84fd",
+      "proposed_sha256": "e5b008e768654bfe9aa005ef80ba0d54d584290682383941f28739a61ad66ab0"
+    },
+    "tests/revision_v1/test_r1_27_superseding_cpu.py": {
+      "before_sha256": "fa8ab50bb874a4dbd7c6be43bc6283ff7573f84d6cb24c15030b70642fedd365",
+      "proposed_sha256": "d7fb4584d31284c003355b3b41d148999ed15fa64219ad1207c27b09353fcac3"
+    }
+  },
+  "checks": [
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_near_miss_uses_capoff_answer_and_restores_state"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_revision_new_answer_and_retirement_both_required"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_resource_rejection_remains_distinct_and_charged"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_overlapping_revision_aliases_refused_before_update"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_composition_uses_generated_bridge_and_checks_missing_hops"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_unverified_composition_does_no_work"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_read_mutation_raises_and_restores_clone"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_bridge_template_requires_unique_whole_entity"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_actual_inventory_counts"
+    },
+    {
+      "file": "tests/revision_v1/test_endpoints.py",
+      "status": "passed",
+      "test": "test_real_tiny_cap_resets_between_independent_queries"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_constructor_and_different_valid_requested_ceiling"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_import_validates_before_adoption_and_recomputes_weight_charge"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_raw_store_requires_explicit_validation"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_failed_delta_revision_is_atomic_billed_and_guard_restorable"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_mixed_adaptation_refused_before_base_work"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_dot_reader_and_store_select_same_record"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_selection_forward_returned_once_per_query"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_dataset_and_orphan_summary_preflight"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "passed",
+      "test": "test_existing_run_directory_preflight"
+    },
+    {
+      "file": "tests/revision_v1/test_r1_27_superseding_cpu.py",
+      "status": "expected_failure_actual_checkpoint_guard",
+      "test": "test_actual_orphan_checkpoint_root_is_refused"
+    }
+  ],
+  "edits_applied": false,
+  "gpu_seconds": 0,
+  "mode": "direct test invocation with repaired source in memory",
+  "table_rows": 30,
+  "table_unique_matches": 30,
+  "task": "R1-round5"
+}
