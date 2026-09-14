@@ -366,3 +366,12 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     realizations × 5 orders = 360 cells; with the measured per-cell cost that is ≈ 140 h of accelerator wall time.
     Whether the reader is also trained on a MQuAKE pool (same-source claim, as for zsRE and CounterFact) or evaluated
     on MQuAKE as a transfer test is your call; default: a 1,000-item MQuAKE training pool and a three-seed retrain.
+
+24. (2026-09-14, 18:50 EDT) MQuAKE teacher pass done: all 6,043 prepared items are teacher-eligible (the base never
+    produces the counterfactual target). DEC-046 (proposed default): 200-item development slice + 500-item training
+    pool (not the 1,000 I first suggested — yield), zsRE-overlap subjects left to zsRE, ≈ 5,150 items kept for the
+    confirmatory draw. The reader retrain on three pools and the MQuAKE development streams run next; say "transfer
+    only" if you would rather not train on MQuAKE. R1-24 follow-up: the informative LM continuation still fails its
+    fidelity gate at lr 1e-7 (KL 0.019 vs the 0.001 gate); lr 3e-8 and 1e-8 are running to map the curve — at the
+    lr where the gate passes the base has barely moved, so U03 will likely resolve as a labelled failed gate or a
+    scope amendment rather than a certified informative control.

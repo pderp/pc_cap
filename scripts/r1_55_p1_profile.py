@@ -50,7 +50,7 @@ def _digest(it: dict) -> bytes:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--theta", required=True, help="reader weights .npz, or 'random' for the non-learned control (cosine gate 0.93)")
-    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact"))
+    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact", "mquake"))
     ap.add_argument("--tag", required=True)
     ap.add_argument("--occupancies", default="100,300,1000")
     ap.add_argument("--queries", type=int, default=100)

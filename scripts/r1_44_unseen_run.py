@@ -27,7 +27,7 @@ def _digest(it: dict) -> bytes:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--theta", required=True)
-    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact"))
+    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact", "mquake"))
     ap.add_argument("--tag", required=True)
     ap.add_argument("--n-unseen", type=int, default=100)
     ap.add_argument("--n-edits", type=int, default=100, help="edits before the checkpoint; above 300 the dev stream is extended with labelled training-pool rows beyond index 1000")

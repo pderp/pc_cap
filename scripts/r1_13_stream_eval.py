@@ -38,7 +38,7 @@ def main() -> int:
     ap.add_argument("--theta", required=True)
     ap.add_argument("--tag", default=None)
     ap.add_argument("--n", type=int, default=100)
-    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact"))
+    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact", "mquake"))
     ap.add_argument("--stream-seed", type=int, default=21, help="which 100 development items form the stream (21 = the Stage 0 stream)")
     ap.add_argument("--fast-steps", type=int, default=0)
     ap.add_argument("--fast-lr", type=float, default=1e-2)
