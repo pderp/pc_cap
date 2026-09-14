@@ -2355,16 +2355,16 @@
    ],
    "gpu": "lease",
    "review": false,
-   "status": "pending",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-14T16:37:04+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "X0-01; DEC-034(a)"
+   "note": "DEC-040 both treatments run: literal passes fidelity, S1\u2212S0 within \u00b10.05; LM fails fidelity (KL 0.095); R0\u2212S1 +0.49\u20130.59 / +0.78\u20130.80"
   },
   {
    "id": "R1-30",
@@ -2825,6 +2825,132 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "X4-10 guard repaired; reference regenerated under fresh identities; wording corrections; docs/tasks/R1-X4-response.md"
+  },
+  {
+   "id": "R1-X6",
+   "title": "Audit of the round-6 repairs and the reference identity",
+   "stage": "R1",
+   "role": "REVIEW",
+   "deps": [
+    "R1-28"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T16:37:04+00:00",
+   "finished": "2026-09-14T16:37:04+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "logs/audit_r1_28b.md; scale risks reproduced; cache/population admission still incomplete"
+  },
+  {
+   "id": "R1-44",
+   "title": "Unseen-edit-prompt endpoint",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-43"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "partial",
+   "agent": "codex\u2192orchestrator",
+   "worktree": null,
+   "started": "2026-09-14T16:37:04+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "endpoints_unseen.py + 10 CPU tests (Codex); GPU adapter/run pending"
+  },
+  {
+   "id": "R1-40c",
+   "title": "Run matrix v3 (240 cells; endpoints + DEC-040 conditions)",
+   "stage": "R1",
+   "role": "INTEGRATOR",
+   "deps": [
+    "R1-40b"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "partial",
+   "agent": "codex\u2192orchestrator",
+   "worktree": null,
+   "started": "2026-09-14T16:37:04+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "run_matrix_draft_v3.json; profiles and ceilings pending (orchestrator); freeze R1-41"
+  },
+  {
+   "id": "R1-D2",
+   "title": "CounterFact confirmatory candidates (both readings)",
+   "stage": "R1",
+   "role": "DATA",
+   "deps": [
+    "R1-D1b"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T16:37:04+00:00",
+   "finished": "2026-09-14T16:37:04+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "strict v3: 0 from the remainder; reason-specific exception: 12,246; no distinct local fresh source; lead decision pending"
+  },
+  {
+   "id": "R1-47",
+   "title": "Stage 2 report draft",
+   "stage": "R1",
+   "role": "INTEGRATOR",
+   "deps": [
+    "R1-21"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "partial",
+   "agent": "codex\u2192orchestrator",
+   "worktree": null,
+   "started": "2026-09-14T16:37:04+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "docs/R1_stage2_report_draft.md + addendum (flags ordinary-text drift +0.60/+0.39 nats after edits \u2014 diagnosis R1-54); orchestrator revises"
+  },
+  {
+   "id": "R1-54",
+   "title": "Ordinary-text drift of the learned cap: diagnosis and null population",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-47"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "in_progress",
+   "agent": "orchestrator",
+   "worktree": null,
+   "started": "2026-09-14T16:37:04+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "drift assay after edits: +0.60 (zsRE) / +0.39 (CounterFact) nats on 16,256 positions; hypothesis: false firing on ordinary text (null never trained on it)"
   }
  ]
 }

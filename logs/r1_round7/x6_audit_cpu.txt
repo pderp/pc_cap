@@ -1,0 +1,32 @@
+{"dataset": "counterfact", "memory": 64, "para_fires_own": 0.71875, "para_in_topk": 0.875, "outside_hard_null": 1.0, "outside_n": 200}
+{"dataset": "counterfact", "memory": 100, "para_fires_own": 0.81, "para_in_topk": 0.95, "outside_hard_null": 0.995, "outside_n": 200}
+{"dataset": "counterfact", "memory": 300, "para_fires_own": 0.795, "para_in_topk": 0.9, "outside_hard_null": 0.98, "outside_n": 200}
+{"dataset": "counterfact", "memory": 1000, "para_fires_own": 0.59, "para_in_topk": 0.725, "outside_hard_null": null, "outside_n": 0}
+{"dataset": "zsre", "memory": 64, "para_fires_own": 1.0, "para_in_topk": 1.0, "outside_hard_null": 0.915, "outside_n": 200}
+{"dataset": "zsre", "memory": 100, "para_fires_own": 0.98, "para_in_topk": 1.0, "outside_hard_null": 0.87, "outside_n": 200}
+{"dataset": "zsre", "memory": 300, "para_fires_own": 0.985, "para_in_topk": 1.0, "outside_hard_null": 0.665, "outside_n": 200}
+{"dataset": "zsre", "memory": 1000, "para_fires_own": 0.98, "para_in_topk": 0.995, "outside_hard_null": null, "outside_n": 0}
+{
+  "output": "logs/r1_round7/x6_audit.json",
+  "risks": {
+    "counterfact_selection_scale_loss_reproduced": true,
+    "zsre_outside_rejection_scale_loss_reproduced": true,
+    "counterfact_1000_fires_own": 0.59,
+    "counterfact_1000_candidate_recall": 0.725,
+    "zsre_outside_hard_null_at_100": 0.87,
+    "zsre_outside_hard_null_at_300": 0.665,
+    "outside_at_1000_is_unavailable_not_perfect": true
+  },
+  "ledger": {
+    "bank_tokens": 313579,
+    "outer_tokens": 458002,
+    "forward_pass_tokens": 771581,
+    "reconciliation_forward_tokens": 771581,
+    "matches": true,
+    "ledger_run_theta_hash": "d1d9bc609fe30ae4b39654d6c432d8f264e89afa9799400a4d74e475e4acfe28",
+    "reference_theta_hash": "e53d7ee1baaf9c47a827b5914cad1a128214484587c1b6da28a6816a56e7d81e",
+    "same_checkpoint": false,
+    "scope": "rerun accounting, not retroactive original-run costs; forward/reverse token conventions separate"
+  },
+  "wall_seconds": 16.92976842005737
+}
