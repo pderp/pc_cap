@@ -45,6 +45,8 @@ def main() -> int:
     ap.add_argument("--eval-theta", default=None, help="skip training: load these weights and run the dev + behavioural evaluation only")
     ap.add_argument("--eval-fast-steps", type=int, default=0, help="fast steps in the behavioural check (default 0 = initial codes only)")
     ap.add_argument("--eval-fast-lr", type=float, default=1e-2)
+    ap.add_argument("--eval-delta-steps", type=int, default=0, help="v0-style delta-write steps per support in the behavioural check")
+    ap.add_argument("--eval-delta-lr", type=float, default=0.1)
     args = ap.parse_args()
     import sys
 
@@ -178,7 +180,7 @@ def main() -> int:
         wdir.mkdir(parents=True, exist_ok=True)
         np.savez(wdir / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
         # behavioural check: fresh learner per dev episode, adapt on supports (fast_steps = 0: initial codes), greedy answers
-        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.eval_fast_steps, lr=args.eval_fast_lr), tau_edit=float(frozen["tau_edit"]))
+        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.eval_fast_steps, lr=args.eval_fast_lr, delta_steps=args.eval_delta_steps, delta_lr=args.eval_delta_lr, tau=float(frozen["tau_edit"])), tau_edit=float(frozen["tau_edit"]))
         roles: dict[str, list[int]] = {}
         sel_hit: dict[str, list[int]] = {}
         preserved: dict[str, list[int]] = {}

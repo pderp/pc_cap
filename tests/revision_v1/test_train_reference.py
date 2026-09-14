@@ -118,7 +118,7 @@ def test_retrieval_loss_reaches_records_outside_top_k():
     # the retrieval loss runs over ALL records: every record key gets a gradient even with top_k = 2 at inference
     gr = jax.grad(retrieval_loss)(theta, RC, feats)
     assert len(feats.supports) > RC.top_k
-    kh = np.asarray(gr["reader"]["key_head"][-1]["w"])
+    kh = np.asarray(gr["reader"]["query_head"][-1]["w"])  # tied heads: the key path trains the shared head
     assert np.any(kh != 0)
     # move one record's features far away: its own gradient is still non-zero (it is the target of some query or a null distractor)
     from pccap.revision_v1.train import _records

@@ -40,6 +40,8 @@ def main() -> int:
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--fast-steps", type=int, default=0)
     ap.add_argument("--fast-lr", type=float, default=1e-2)
+    ap.add_argument("--delta-steps", type=int, default=0)
+    ap.add_argument("--delta-lr", type=float, default=0.1)
     ap.add_argument("--null-threshold", type=float, default=0.5)
     ap.add_argument("--no-lease", action="store_true")
     args = ap.parse_args()
@@ -67,13 +69,13 @@ def main() -> int:
         k1, k2 = jax.random.split(jax.random.PRNGKey(0))
         template = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         theta = load_theta(Path(args.theta), template)
-        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.fast_steps, lr=args.fast_lr), null_threshold=args.null_threshold, tau_edit=float(frozen["tau_edit"]))
+        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.fast_steps, lr=args.fast_lr, delta_steps=args.delta_steps, delta_lr=args.delta_lr, tau=float(frozen["tau_edit"])), null_threshold=args.null_threshold, tau_edit=float(frozen["tau_edit"]))
         cap = RevisionCap(base, cfg, ledger, params=theta)
         ph = cap.params_hash
         ev = Evaluator(base, tok, unrelated[:50], None)
         rd = OUT / "streams_revision" / tag
         t0 = time.time()
-        m = run_stream(cap, items, None, Budget(A=float(frozen["A"]), R=max(1, args.fast_steps), tau_edit=float(frozen["tau_edit"])), ev, rd, ledger, checkpoints=(), seed=1, arm="R1")
+        m = run_stream(cap, items, None, Budget(A=float(frozen["A"]), R=max(1, args.fast_steps, args.delta_steps), tau_edit=float(frozen["tau_edit"])), ev, rd, ledger, checkpoints=(), seed=1, arm="R1")
         assert params_hash(cap.params) == ph, "reusable weights changed during the stream (gate 2)"
         sm = {k: v["value"] for k, v in m["metrics"].items() if k in ("es_immediate", "ret_es_end", "ret_gs_end", "ls_complete_answer_end")}
         # null-mass profile on the items' own prompts and paraphrases at the endpoint
@@ -95,7 +97,7 @@ def main() -> int:
             md_path.write_text("# Revision v1 learner on the Stage 0 zsRE development stream (100 edits)\n\nReference rows: v0 live C1/C2 RET-GS 0.24/0.29; v0-stable and matched-update RET-GS 0.44, RET-ES 0.99, LS 1.00.\n\n| tag | fast steps | null thr | ES | RET-ES | RET-GS | LS | null mass prompt / paraphrase / unrelated | hard-null rate prompt / para / unrel | wall |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | ---: |\n")
         nm = summary["null_mass"]
         with md_path.open("a") as f:
-            f.write(f"| {tag} | {args.fast_steps} | {args.null_threshold} | {sm['es_immediate']:.3f} | {sm['ret_es_end']:.3f} | {sm['ret_gs_end']:.3f} | {sm['ls_complete_answer_end']:.3f} | {nm['prompt_mean']:.2f} / {nm['paraphrase_mean']:.2f} / {nm['unrelated_mean']:.2f} | {nm['prompt_hard_null_rate']:.2f} / {nm['paraphrase_hard_null_rate']:.2f} / {nm['unrelated_hard_null_rate']:.2f} | {summary['wall_seconds']:.0f} s |\n")
+            f.write(f"| {tag} | {args.fast_steps}c/{args.delta_steps}d | {args.null_threshold} | {sm['es_immediate']:.3f} | {sm['ret_es_end']:.3f} | {sm['ret_gs_end']:.3f} | {sm['ls_complete_answer_end']:.3f} | {nm['prompt_mean']:.2f} / {nm['paraphrase_mean']:.2f} / {nm['unrelated_mean']:.2f} | {nm['prompt_hard_null_rate']:.2f} / {nm['paraphrase_hard_null_rate']:.2f} / {nm['unrelated_hard_null_rate']:.2f} | {summary['wall_seconds']:.0f} s |\n")
         print(json.dumps({"tag": tag, "stream": sm, "null_mass": nm, "wall_s": round(summary["wall_seconds"])}), flush=True)
     return 0
 
