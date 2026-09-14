@@ -59,3 +59,21 @@ def test_bank_and_episode_populations_and_training_step(monkeypatch):
     st_ = tr.init(theta)
     theta2, st_, m = tr.outer_step(theta, st_, [ep])
     assert np.isfinite(m["grad_norm"]) and m["retrieval"] > 0 and m["answer_n"] > 0 and m["preserve_n"] == 3
+
+
+def test_mixed_pool_episode_draws_from_every_pool(monkeypatch):
+    import pccap.revision_v1.stream_train as st
+    monkeypatch.setattr(st, "tokenize_pair", lambda tok, p, a: type("P", (), {"prompt_ids": np.asarray(tok.encode(p), np.int32), "answer_ids": np.asarray([5, 6], np.int32)})())
+    base = TinyBase()
+    enc = ObservationEncoder(base, taps=RC.taps)
+    b1 = build_bank(base, enc, _rows(10), RC, tok=_Tok())
+    rows2 = _rows(6)
+    for r in rows2:
+        r["item_id"] = "z-" + r["item_id"]
+        r["dataset"] = "zsre"
+    b2 = build_bank(base, enc, rows2, RC, tok=_Tok())
+    bank = st.merge_banks([b1, b2])
+    assert len(bank.items) == 16 and bank.dataset == "counterfact+zsre"
+    ep = st.stream_episode_mixed([list(range(10)), list(range(10, 16))], bank, np.random.default_rng(0), n_memory=8, n_query_records=4, n_out=4)
+    ids = [s.record_id for s in ep.supports]
+    assert len(ids) == 8 and any(i.startswith("z-") for i in ids) and any(not i.startswith("z-") for i in ids)

@@ -21,7 +21,7 @@ ASSETS = Path("/home/derp/cap/assets/runs/pc_cap/R1")
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pool", default="manifests/revision_v1/train_pool_counterfact_v1.json")
+    ap.add_argument("--pool", default="manifests/revision_v1/train_pool_counterfact_v1.json", help="one pool, or several separated by ',' (mixed-domain training)")
     ap.add_argument("--pool-items", type=int, default=1000)
     ap.add_argument("--held-out", type=int, default=100, help="last N bank items are held out for dev episodes")
     ap.add_argument("--steps", type=int, default=300)
@@ -45,7 +45,12 @@ def main() -> int:
     from pccap.revision_v1.controller import ControllerConfig, init_controller
     from pccap.revision_v1.observations import ObservationEncoder
     from pccap.revision_v1.reader import ReaderConfig, init_reader, params_hash
-    from pccap.revision_v1.stream_train import build_bank, stream_episode
+    from pccap.revision_v1.stream_train import (
+        build_bank,
+        merge_banks,
+        stream_episode,
+        stream_episode_mixed,
+    )
     from pccap.revision_v1.train import LossConfig
     from pccap.revision_v1.train_fast import FastTrainer
 
@@ -62,29 +67,42 @@ def main() -> int:
     if OUT.exists():
         raise SystemExit(f"{OUT} exists; choose a new tag")
     OUT.mkdir(parents=True)
-    rows = json.loads((ROOT / args.pool).read_text())["items"][: args.pool_items]
-    bank_path = ASSETS / "banks" / f"{Path(args.pool).stem}_{args.pool_items}.pkl"
+    pools = [x for x in args.pool.split(",") if x]
     t_start = time.time()
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_train", stage="R1", projected_seconds=3 * 3600.0)):
         ledger = Ledger()
         base = BPBase(ledger=ledger)
         enc = ObservationEncoder(base, taps=rc.taps)
         t0 = time.time()
-        if bank_path.exists():
-            bank = pickle.loads(bank_path.read_bytes())
-            print(json.dumps({"bank": "loaded", "items": len(bank.items), "path": str(bank_path)}), flush=True)
-        else:
-            bank = build_bank(base, enc, rows, rc, progress=100)
-            bank_path.parent.mkdir(parents=True, exist_ok=True)
-            bank_path.write_bytes(pickle.dumps(bank))
-            print(json.dumps({"bank": "built", "items": len(bank.items), "passes": bank.cost.extra_pass_forwards, "wall_s": round(time.time() - t0)}), flush=True)
+        banks, offsets = [], []
+        for pool in pools:
+            rows = json.loads((ROOT / pool).read_text())["items"][: args.pool_items]
+            bank_path = ASSETS / "banks" / f"{Path(pool).stem}_{args.pool_items}.pkl"
+            if bank_path.exists():
+                b = pickle.loads(bank_path.read_bytes())
+                print(json.dumps({"bank": "loaded", "pool": pool, "items": len(b.items)}), flush=True)
+            else:
+                b = build_bank(base, enc, rows, rc, progress=100)
+                bank_path.parent.mkdir(parents=True, exist_ok=True)
+                bank_path.write_bytes(pickle.dumps(b))
+                print(json.dumps({"bank": "built", "pool": pool, "items": len(b.items), "passes": b.cost.extra_pass_forwards, "wall_s": round(time.time() - t0)}), flush=True)
+            offsets.append(sum(len(x.items) for x in banks))
+            banks.append(b)
+        bank = merge_banks(banks)
         bank_s = time.time() - t0
-        n = len(bank.items)
-        train_idx = list(range(0, n - args.held_out))
-        dev_idx = list(range(n - args.held_out, n))
+        # per-pool train/held-out split (the last held_out items of every pool are development)
+        train_by_pool, dev_by_pool = [], []
+        for off, b in zip(offsets, banks):
+            n_b = len(b.items)
+            train_by_pool.append(list(range(off, off + n_b - args.held_out)))
+            dev_by_pool.append(list(range(off + n_b - args.held_out, off + n_b)))
+        train_idx = [i for ix in train_by_pool for i in ix]
+        dev_idx = [i for ix in dev_by_pool for i in ix]
         rng = np.random.default_rng(args.seed)
         dev_rng = np.random.default_rng(args.seed + 1000)
-        dev_eps = [stream_episode(bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), pool_indices=dev_idx, episode_id=f"dev-{i}") for i in range(6)]
+        mixed = len(banks) > 1
+        dev_eps = [(stream_episode_mixed(dev_by_pool, bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), episode_id=f"dev-{i}") if mixed
+                    else stream_episode(bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), pool_indices=dev_idx, episode_id=f"dev-{i}")) for i in range(6)]
         k1, k2 = jax.random.split(jax.random.PRNGKey(args.seed))
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay)
@@ -103,7 +121,8 @@ def main() -> int:
         log = (OUT / "metrics.jsonl").open("w")
         t0 = time.time()
         for step in range(args.steps):
-            batch = [stream_episode(bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, pool_indices=train_idx) for _ in range(args.batch)]
+            batch = [(stream_episode_mixed(train_by_pool, bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out) if mixed
+                      else stream_episode(bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, pool_indices=train_idx)) for _ in range(args.batch)]
             theta, st, m = tr.outer_step(theta, st, batch)
             m.update(step=step, wall_s=time.time() - t0)
             if args.dev_every and (step + 1) % args.dev_every == 0:

@@ -125,3 +125,26 @@ def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 
         lpf = PrefixFeat(ids=it.own[0].ids, n=it.own[0].n, target=-1, last=it.key_last, span=it.key_span, capoff_logits=None)
         queries.append(QueryFeat(query_id=f"out:{it.item_id}", role="unrelated_no_kl", last=it.key_last, span=it.key_span, prefixes=[lpf], target_record=-1, query_ids=it.prompt_ids))
     return EpisodeFeatures(episode_id=episode_id or f"stream-{rng.integers(1 << 31)}", supports=supports, queries=queries)
+
+
+def merge_banks(banks: list[FeatureBank]) -> FeatureBank:
+    """Concatenate banks from several pools (mixed-domain training); item ids stay unique per pool naming."""
+    items = [it for b in banks for it in b.items]
+    cost = RevisionCost(phase="learning")
+    for b in banks:
+        cost.add(b.cost)
+    return FeatureBank(items=items, dataset="+".join(sorted({b.dataset for b in banks})), cost=cost)
+
+
+def stream_episode_mixed(banks_idx: list[list[int]], bank: FeatureBank, rng: np.random.Generator, n_memory: int = 64, n_query_records: int = 8, n_out: int = 8,
+                         episode_id: str = "") -> EpisodeFeatures:
+    """Memory drawn from every pool in proportion to its size (so each domain's own prompts, paraphrases, locality nulls and
+    out-of-memory nulls appear in every episode); queries as in ``stream_episode``."""
+    sizes = np.asarray([len(ix) for ix in banks_idx], float)
+    share = sizes / sizes.sum()
+    picked = []
+    for ix, sh in zip(banks_idx, share):
+        k = max(1, int(round((n_memory + n_out) * sh)))
+        picked.extend(rng.permutation(np.asarray(ix))[:k].tolist())
+    picked = rng.permutation(np.asarray(picked)).tolist()
+    return stream_episode(bank, rng, n_memory=n_memory, n_query_records=n_query_records, n_out=n_out, pool_indices=picked, episode_id=episode_id)
