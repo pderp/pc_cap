@@ -1,0 +1,146 @@
+{
+  "task": "R1-X2",
+  "source_sha256_before": {
+    "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "src/pccap/revision_v1/adapt.py": "ec82e49148f1d00b2a9cf0672a630739447751c7c57364f449a35ba5b17f69f1",
+    "src/pccap/revision_v1/contracts.py": "01f55b4c70d1ffa36db8404e76d060c04741fe5992f3e7a118d59272c1a5993e",
+    "src/pccap/revision_v1/controller.py": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+    "src/pccap/revision_v1/epc_train.py": "03b28a908d1af72e40a297016f808f92a5a57092e71765345ce738a03ede2e7a",
+    "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "src/pccap/revision_v1/final_namespace.py": "451ed93d4d6085a38c35f6d17a532ddda7085f68084b8a5c44aab4ba2946c7bc",
+    "src/pccap/revision_v1/learner.py": "7bb3835c743572c45463d080fd217c2c4b3266b8de7313efcde664afa01799a6",
+    "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "src/pccap/revision_v1/memory.py": "0ae4f8bb7cfca6d59f98061a81943194f3bbbcac127291cae725a056bb5e25e8",
+    "src/pccap/revision_v1/observations.py": "eae45d586303bdb7e8dc16cd965922c2af0666f12c528b51eaaa4c618d75b150",
+    "src/pccap/revision_v1/reader.py": "e5fb0f0fd4dfef32952794643c0d196410b1bf3430eaaad572d0e78985e1a1bf",
+    "src/pccap/revision_v1/train.py": "ca1481a57b438fe0325f9b04c6e1e63417e9ed8127efa35940c65f9eca1a61e1",
+    "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76"
+  },
+  "source_sha256_after": {
+    "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "src/pccap/revision_v1/adapt.py": "ec82e49148f1d00b2a9cf0672a630739447751c7c57364f449a35ba5b17f69f1",
+    "src/pccap/revision_v1/contracts.py": "01f55b4c70d1ffa36db8404e76d060c04741fe5992f3e7a118d59272c1a5993e",
+    "src/pccap/revision_v1/controller.py": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+    "src/pccap/revision_v1/epc_train.py": "03b28a908d1af72e40a297016f808f92a5a57092e71765345ce738a03ede2e7a",
+    "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "src/pccap/revision_v1/final_namespace.py": "451ed93d4d6085a38c35f6d17a532ddda7085f68084b8a5c44aab4ba2946c7bc",
+    "src/pccap/revision_v1/learner.py": "7bb3835c743572c45463d080fd217c2c4b3266b8de7313efcde664afa01799a6",
+    "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "src/pccap/revision_v1/memory.py": "0ae4f8bb7cfca6d59f98061a81943194f3bbbcac127291cae725a056bb5e25e8",
+    "src/pccap/revision_v1/observations.py": "eae45d586303bdb7e8dc16cd965922c2af0666f12c528b51eaaa4c618d75b150",
+    "src/pccap/revision_v1/reader.py": "e5fb0f0fd4dfef32952794643c0d196410b1bf3430eaaad572d0e78985e1a1bf",
+    "src/pccap/revision_v1/train.py": "ca1481a57b438fe0325f9b04c6e1e63417e9ed8127efa35940c65f9eca1a61e1",
+    "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76"
+  },
+  "controls": {
+    "support_answer_path": {
+      "keys_equal": true,
+      "codes_changed": true,
+      "own_prompt_queries": 1
+    },
+    "unsupported_fast_unroll": {
+      "raised": "NotImplementedError",
+      "message": "fast steps inside the outer loop are not implemented; run with fast_steps = 0 (R23-02)"
+    },
+    "unsupported_epc_penalty": {
+      "raised": "NotImplementedError",
+      "message": "the code-norm penalty is not implemented in the ePC surrogate; set w_code_norm = 0 in both trainers (R23-09)"
+    },
+    "nonfinite_revision": {
+      "reason": "non_finite_code",
+      "state_restored": true,
+      "new_removed": true,
+      "old_active": true
+    },
+    "snapshot_configuration": {
+      "single_site": {
+        "raised": "RuntimeError",
+        "message": "snapshot was produced under a different semantic configuration (R23-06)"
+      },
+      "null_threshold": {
+        "raised": "RuntimeError",
+        "message": "snapshot was produced under a different semantic configuration (R23-06)"
+      },
+      "binary_mass": {
+        "raised": "RuntimeError",
+        "message": "snapshot was produced under a different semantic configuration (R23-06)"
+      },
+      "hard_top1": {
+        "raised": "RuntimeError",
+        "message": "snapshot was produced under a different semantic configuration (R23-06)"
+      }
+    },
+    "resume_weight_accounting": {
+      "original": {
+        "keys": 32,
+        "codes": 24,
+        "deltas": 0,
+        "metadata": 128,
+        "tokens": 28,
+        "index": 0,
+        "weights": 7616,
+        "total": 7828
+      },
+      "restored": {
+        "keys": 32,
+        "codes": 24,
+        "deltas": 0,
+        "metadata": 128,
+        "tokens": 28,
+        "index": 0,
+        "weights": 0,
+        "total": 212
+      },
+      "same_state_hash": true,
+      "weights_before_import": 7616
+    },
+    "constructor_ceiling": {
+      "ceiling": 1,
+      "reported_bytes": 7616,
+      "accepted": true
+    },
+    "metadata_ceiling": {
+      "reported": 184,
+      "serialized_lower_bound": 10141
+    },
+    "zero_weight_delta_candidate": {
+      "ids": [
+        "selected",
+        "not-selected"
+      ],
+      "weights": [
+        1.0,
+        0.0
+      ],
+      "selected_record_has_delta": false,
+      "selection_delta_present": true,
+      "selection_delta_norm": 0.0,
+      "logits_max_abs_change": 0.08973574638366699
+    },
+    "independent_query_boundary": {
+      "inherited_prompt_len": 2,
+      "fresh_prompt_len": 3
+    },
+    "returned_cost": {
+      "actual_full_forwards": 1,
+      "returned_full_forwards": 0
+    },
+    "noncosine_config": {
+      "store_metric": "cos",
+      "dot_training_scores": [
+        3.535533905029297,
+        0.3535533845424652
+      ],
+      "retrieved": "large"
+    },
+    "nearzero_cosine": {
+      "training_scores": [
+        0.09999499469995499,
+        5.773502349853516
+      ],
+      "retrieved": "large"
+    },
+    "base_and_reusable_weights_frozen": true
+  },
+  "gpu_seconds": 0
+}

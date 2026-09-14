@@ -1,0 +1,55 @@
+{
+  "noncosine_ranking": {
+    "training_scores": [
+      3.535533905029297,
+      0.3889087438583374
+    ],
+    "training_best": "large",
+    "deployed_best": "aligned",
+    "store_metric": "cos"
+  },
+  "delta_capacity_direct_api": {
+    "error": "delta write would exceed the ceiling",
+    "state_changed": true,
+    "old_active": false,
+    "replacement_present": true,
+    "scope": "direct adapt_record, no ItemGuard; generic harness exception rollback is a separate boundary"
+  },
+  "delta_acceptance_comparator_controlled_oracle": {
+    "controller_initial_loss": 100.0,
+    "delta_initial_capoff_loss": 1.0,
+    "delta_final_loss": 2.0,
+    "accepted": true,
+    "scope": "controlled loss oracle, demonstrates comparison rule; not a measured GPT-2 loss trajectory"
+  },
+  "mixed_fast_config": {
+    "code_steps": 1,
+    "delta_steps_requested": 5,
+    "delta_stored": false,
+    "configuration_rejected": false,
+    "actual_steps": 1
+  },
+  "development_delta_sizes": {
+    "zsre": {
+      "items": 300,
+      "mean_answer_tokens": 3.736666666666667,
+      "max_answer_tokens": 13,
+      "median_answer_tokens": 3.0,
+      "delta_bytes_per_answer_prefix": 9216,
+      "mean_delta_bytes_per_record": 34437.12,
+      "max_delta_bytes_per_record": 119808,
+      "scope": "all existing development rows, not a sampled/final stream; predictions before overhead/revisions"
+    },
+    "counterfact": {
+      "items": 300,
+      "mean_answer_tokens": 2.0,
+      "max_answer_tokens": 2,
+      "median_answer_tokens": 2.0,
+      "delta_bytes_per_answer_prefix": 9216,
+      "mean_delta_bytes_per_record": 18432.0,
+      "max_delta_bytes_per_record": 18432,
+      "scope": "all existing development rows, not a sampled/final stream; predictions before overhead/revisions"
+    }
+  },
+  "gpu_seconds": 0
+}

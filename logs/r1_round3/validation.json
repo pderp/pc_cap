@@ -1,0 +1,59 @@
+{
+  "task": "CODEX-R1-round3",
+  "head": "cfc6db6f3823a4b9bac923a20f9af6c0313d151d",
+  "gpu_seconds": 0,
+  "new_tests": {
+    "passed": 26,
+    "seconds": 0.82,
+    "paths": [
+      "tests/revision_v1/test_r1_24_control.py",
+      "tests/revision_v1/test_final_namespace.py"
+    ]
+  },
+  "existing_repair_tests": {
+    "passed": 25,
+    "seconds": 30.62,
+    "paths": [
+      "tests/revision_v1/test_learner_cpu.py",
+      "tests/revision_v1/test_contracts_memory.py",
+      "tests/revision_v1/test_reader_controller.py",
+      "tests/revision_v1/test_train_reference.py",
+      "tests/revision_v1/test_epc_surrogate.py"
+    ]
+  },
+  "concurrent_change_recheck": {
+    "passed": 6,
+    "seconds": 18.33,
+    "paths": [
+      "tests/revision_v1/test_train_reference.py",
+      "tests/revision_v1/test_epc_surrogate.py"
+    ]
+  },
+  "new_class_balance_tests": {
+    "passed": 3,
+    "seconds": 2.58,
+    "path": "tests/revision_v1/test_r1_x2_class_balance.py"
+  },
+  "distinct_selected_pytest_cases": 54,
+  "checks": {
+    "all_3000_training_reasons": true,
+    "all_old_explicit_exclusions_preserved": true,
+    "v2_candidate_count_recomputed": true,
+    "candidate_exclusion_overlap": 0,
+    "control_v2_bound_sources_unchanged": true,
+    "control_v1_correctly_refuses_concurrent_source_change": true,
+    "namespace_bound_sources_unchanged": true,
+    "current_audited_sources_unchanged": true,
+    "new_python_files_parse": 9,
+    "tracked_changes": [],
+    "staged_changes": [],
+    "final_examples_emitted": 0
+  },
+  "test_scope": "selected CPU tests; no GPU execution of the control and no full-system certification",
+  "control_reproduction_paths": [
+    "logs/r1_round3/r1_25_controls.json",
+    "logs/r1_round3/r1_25_controls_cfc6db6.json",
+    "logs/r1_round3/r1_25_edge_cases.json",
+    "logs/r1_round3/r1_23_legacy_boundaries.json"
+  ]
+}
