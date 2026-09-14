@@ -44,7 +44,8 @@ def main() -> int:
     from pccap.revision_v1.observations import ObservationEncoder
     from pccap.revision_v1.reader import ReaderConfig, init_reader, params_hash
     from pccap.revision_v1.stream_train import build_bank, stream_episode
-    from pccap.revision_v1.train import LossConfig, Trainer, episode_grads
+    from pccap.revision_v1.train import LossConfig
+    from pccap.revision_v1.train_fast import FastTrainer
 
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
@@ -78,13 +79,13 @@ def main() -> int:
         dev_eps = [stream_episode(bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), pool_indices=dev_idx, episode_id=f"dev-{i}") for i in range(6)]
         k1, k2 = jax.random.split(jax.random.PRNGKey(args.seed))
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
-        tr = Trainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay)
+        tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay)
         st = tr.init(theta)
 
         def evaluate(th):
             agg = {}
             for f in dev_eps:
-                _, m = episode_grads(th, rc, cc, base.params, base.cfg, f, tr.lc)
+                _, m = tr.episode_grads(th, f)
                 for k, v in m.items():
                     agg[k] = agg.get(k, 0.0) + v / len(dev_eps)
             return agg
