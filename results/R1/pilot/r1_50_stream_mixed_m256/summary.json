@@ -1,0 +1,152 @@
+{
+ "args": {
+  "pool": "manifests/revision_v1/train_pool_counterfact_v1.json,manifests/revision_v1/train_pool_zsre_v1.json",
+  "pool_items": 1000,
+  "held_out": 100,
+  "steps": 300,
+  "batch": 2,
+  "n_memory": 256,
+  "n_query_records": 16,
+  "n_out": 16,
+  "lr": 0.001,
+  "weight_decay": 0.01,
+  "dev_every": 50,
+  "seed": 0,
+  "tag": "r1_50_stream_mixed_m256",
+  "no_lease": true,
+  "stop_tokens": "manifests/revision_v1/stop_tokens_v1.json",
+  "no_query_null": false
+ },
+ "bank_wall_s": 1.1946322917938232,
+ "train_wall_s": 467.2501337528229,
+ "banks": [
+  {
+   "pool": "manifests/revision_v1/train_pool_counterfact_v1.json",
+   "sha256": "d5a12325376825463a27737ac88f19d5a2712fc0d185805d48ffa3341d6a853b",
+   "identity": {
+    "pool_content_sha256": "2239bd259a63981438c4267c0834cbd5486d9878342b4c13084714ac4dc7312e",
+    "n_items": 1000,
+    "base_checksum": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "encoder_version": 1,
+    "taps": [
+     1,
+     2,
+     3
+    ],
+    "builder_version": 2,
+    "max_paraphrases": 2,
+    "max_locality": 2,
+    "logits_dtype": "float16"
+   },
+   "construction_cost": {
+    "full_forwards": 12000,
+    "tokens": 168438,
+    "accel_seconds": 17.191484193434007
+   },
+   "shared_cost_policy": "charged once at construction; reuse charges nothing (R50-09)"
+  },
+  {
+   "pool": "manifests/revision_v1/train_pool_zsre_v1.json",
+   "sha256": "cde7997956394b99cb539e5e5f3df1395e7f28bc349834e74c42eab2ace71837",
+   "identity": {
+    "pool_content_sha256": "141e048854890634978eb57e5595540f522c3717ee0a7279f80bcec8830fccfc",
+    "n_items": 1000,
+    "base_checksum": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "encoder_version": 1,
+    "taps": [
+     1,
+     2,
+     3
+    ],
+    "builder_version": 2,
+    "max_paraphrases": 2,
+    "max_locality": 2,
+    "logits_dtype": "float16"
+   },
+   "construction_cost": {
+    "full_forwards": 11372,
+    "tokens": 145141,
+    "accel_seconds": 15.320043109473772
+   },
+   "shared_cost_policy": "charged once at construction; reuse charges nothing (R50-09)"
+  }
+ ],
+ "dev_before": {
+  "answer": 6.34204088354184,
+  "answer_n": 94.33333333333334,
+  "preserve": 0.00700952991489127,
+  "preserve_n": 15.999999999999998,
+  "retrieval": 8.17291259765625,
+  "code_norm": 0.0
+ },
+ "dev_after_best": {
+  "answer": 3.048333191667017,
+  "answer_n": 94.33333333333334,
+  "preserve": 0.05388713763325844,
+  "preserve_n": 15.999999999999998,
+  "retrieval": 0.25960286458333337,
+  "code_norm": 0.0
+ },
+ "dev_after_final": {
+  "answer": 3.05081758564289,
+  "answer_n": 94.33333333333334,
+  "preserve": 0.007305393607869822,
+  "preserve_n": 15.999999999999998,
+  "retrieval": 0.2798055013020833,
+  "code_norm": 0.0
+ },
+ "best_step": 249,
+ "theta_hash": "bea565c6fb8b2e6e47bb9e61c8c5b7d5a2d08ccdda10992644c6df7e0d0b69a9",
+ "theta_path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_m256/theta.npz",
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 0,
+   "partial_forwards": 0,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "accel_seconds": 0.0,
+   "peak_mem_mib": 0.0,
+   "tokens": 0
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 69892,
+   "partial_forwards": 0,
+   "reverses": 69892,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "accel_seconds": 0.0,
+   "peak_mem_mib": 0.0,
+   "tokens": 902786
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 69892,
+   "partial_forwards": 0,
+   "reverses": 69892,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "accel_seconds": 0.0,
+   "peak_mem_mib": 0.0,
+   "tokens": 902786
+  },
+  "events": 2561,
+  "elapsed_wall_seconds": 515.893194437027,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "total_wall_s": 515.8932023048401
+}

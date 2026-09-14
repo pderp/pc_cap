@@ -402,3 +402,10 @@ Top-16 candidates on CounterFact (`scale_profile_r1_50_stream_mixed_top16.json`)
 rises 0.73 → 0.895 but "fires the own record" only 0.59 → 0.64 and locality hard-null slips 0.98 → 0.925: at that scale
 the limit is the selection among near-duplicate candidates, not retrieval. The lever is training with larger memories
 (256-record episodes; run `r1_50_stream_mixed_m256`, profiled and evaluated next).
+
+256-record training (`r1_50_stream_mixed_m256`; 16 query records + 16 out-of-memory nulls per episode): streams zsRE
+1.00 / 1.00 / 0.97 / 1.00, CounterFact 1.00 / 1.00 / 0.83 / 0.98; profile at 1,000 records: CounterFact fires-own 0.625
+(64-record training: 0.59), zsRE out-of-memory hard-null 0.59 / 0.50 at 100 / 300 (64-record training: 0.87 / 0.67). A
+modest CounterFact gain at scale, a small LS cost and a worse unseen-prompt rejection on zsRE — not a clear improvement;
+the 64-record mixed reader (seeds 0–2) stays the reference configuration, and the scale effects stay recorded as
+protocol risks for the run matrix (memory sizes and an unseen-edit-prompt endpoint).
