@@ -70,13 +70,15 @@ longest common token span, relation-template overlap — and report, per dataset
 "paraphrase vs locality near-neighbour" and "paraphrase vs other item's prompt". Deliver `logs/r1_round6/near_neighbour_separability.json`
 + `docs/tasks/R1-45.md` with a recommendation of the two features to feed the null head. CPU only; no model.
 
-### Lane R1-46 — stream-scale episode specification review (M1/M2; read-only, when `src/pccap/revision_v1/stream_train.py` appears)
+### Lane R1-46 — stream-scale episode specification review (OPEN NOW: `stream_train.py`, `train_fast.py`, the lexical feature in `reader.py`, `scripts/r1_50_stream_train.py`; result: one null for both datasets, see `docs/R1_stage2_notes.md` §M3)
 
 Review the orchestrator's stream-scale episode builder and feature bank for label leakage (queries must never carry
 targets into the reader), population definitions (in-memory paraphrases / own prompts / locality nulls / out-of-memory
 prompt nulls), class balance, and the deployment-prevalence argument for threshold selection (M5). `logs/review_r1_50.md`.
 
-### Lane R1-40b — prune and re-cost the run-matrix draft (unchanged from before; lower priority)
+### Lane R1-D1e — exclusion register v3: fold in the 6,000 drawn zsRE training subjects (`train_pool_zsre_candidates_v1.json`, reason `train_pool_zsre_v1`) and restate the confirmatory candidate counts; `docs/tasks/R1-D1e.md`
+
+### Lane R1-40b — re-cost the run-matrix draft under the CURRENT primary condition (learned reader, mixed-domain training; one deployment rule) and X4-08 byte scaling
 
 As previously specified (`run_matrix_draft_v2.json`, DEC-038 default and X4-08 byte scaling); do it after the three lanes above.
 

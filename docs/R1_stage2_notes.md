@@ -347,3 +347,18 @@ same seed-2 reader and the chosen rules: CounterFact null 0.7 → ES 1.00 / RET-
 0.95 + gate 0.93 → 1.00 / 1.00 / 0.95 / 1.00 — numerically the same as on the calibration streams (coincidence to three
 decimals; the item sets differ). One order each; still development evidence, but the operating points are not tuned to
 one particular stream.
+
+## M3: one null for both domains (2026-09-14, 14:50 EDT)
+
+`r1_50_stream_mixed`: mixed bank (1,000 CounterFact + 1,000 zsRE training-pool items, DEC-037/039), 64-record memories
+drawn from both pools, 300 steps × 2 (2 min); best held-out retrieval CE 0.19. Learned null alone, no gate, one threshold:
+
+| stream | null 0.5 | null 0.7 |
+| --- | ---: | ---: |
+| zsRE | ES 1.00 / RET-ES 1.00 / RET-GS **0.98** / LS **1.00** | 1.00 / 1.00 / 0.98 / 1.00 |
+| CounterFact | 1.00 / 1.00 / **0.795** / **1.00** | 1.00 / 1.00 / 0.805 / 1.00 |
+
+Against v0 live (zsRE 0.24–0.29, CounterFact 0.00) and the non-learned controls (0.44 / 0.18): the learned reader with
+stream-scale mixed-domain training and the lexical feature is the primary revision condition with a single deployment
+rule. The recovery plan's five mismatches are all addressed (M1/M2 stream episodes, M3 mixed domains, M4 lexical feature,
+M5 no longer needed for the rule). Seeds and second streams follow.

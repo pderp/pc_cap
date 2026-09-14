@@ -293,3 +293,11 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     (DEC-039, default yes) so the null sees both domains; Codex's R1-D3 candidate list is the blocker, my teacher filter
     is ready. Fallback: a per-dataset rule fixed on development streams before the freeze (stated in the protocol).
     DEC-038 (drop the learned reader) is withdrawn.
+
+15. (14:50 EDT) **One rule for both datasets.** With Codex's zsRE candidate list filtered by the teacher (DEC-039) and
+    mixed-domain stream-scale training, the learned null alone (threshold 0.5, no gate, nothing per dataset) gives
+    zsRE ES 1.00 / RET-ES 1.00 / RET-GS 0.98 / LS 1.00 and CounterFact 1.00 / 1.00 / 0.80 / 1.00 on the development
+    streams. The learned reader is the primary revision condition; the per-dataset fallback is no longer needed.
+    Remaining before Stage 4: seed/stream replication (running), Codex's re-audit of the new trainer, the run matrix
+    (R1-40b) and your freeze. Decisions still open for you: the R1-24 informative continuation condition; acceptance of
+    exclusions v2 (register v3 will add the 6,000 drawn zsRE subjects).
