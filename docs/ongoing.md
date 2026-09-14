@@ -47,35 +47,38 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 6 (CPU; open now)
+## 3. Lanes for Codex — round 6 (CPU; open now) — learned-reader recovery first (lead directive)
 
-Round 5 (R1-43, R1-24b, R1-X4, R1-30a, R1-27 fixtures) is committed (`5ee8b56`) with your three one-line corrections
-applied; X4-10 is repaired and the non-learned reference regenerated under fresh per-dataset identities (`08c6321`,
-`docs/tasks/R1-X4-response.md`). Pending lead decisions: DEC-038 (non-learned system as the primary revision condition),
-the D1b policy acceptance, and the R1-24 informative variant. Lanes that do not wait on them:
+The lead wants the learned reader to work before other issues. The recovery plan is in `docs/R1_stage2_notes.md`
+("Learned-reader recovery plan"). Lanes below are non-blocking and non-blocked; they feed that plan directly. Round 5 is
+committed (`5ee8b56`); X4-10 is repaired and the reference regenerated (`08c6321`).
 
-### Lane R1-40b — prune and re-cost the run-matrix draft under the DEC-038 default and X4-08
+### Lane R1-D3 — zsRE training pool candidate list (M3; DEC-039 default: yes)
 
-Produce `manifests/revision_v1/run_matrix_draft_v2.json` from your v1 draft: primary conditions = v0 live (C1, C2),
-v0-stable, matched-update, R1-nonlearned (random tied cosine reader + cosine gate 0.93 + per-position deltas); secondary
-= learned reader (best available weights, reported as negative); drop cells that depend on a working learned null. Re-cost
-persistent bytes with the corrected delta scaling (9 KB × answer tokens per record; ceiling binds near 1,700 edits at 4
-tokens) and state per cell whether a 1,000-edit stream fits the 64 MiB ceiling or needs a bounded-position write.
-Keep everything unlaunchable/unfrozen. `docs/tasks/R1-40b.md`.
+From `manifests/revision_v1/zsre_fresh_candidates_v1.json` (58,498 clear), emit `manifests/revision_v1/train_pool_zsre_candidates_v1.json`:
+6,000 candidates (seed 139; so that ≥ 3,000 survive the teacher filter) with prompt, rephrase, answer, aliases, locality
+prompt/answer, subject, per-record hashes, and the exclusion reasons that will apply to them (`train_pool_zsre_v1`) for
+register v3. Record explicitly that these leave the confirmatory candidate pool (58,498 → ≥ 52,498). No tokenization or
+teacher execution. `docs/tasks/R1-D3.md`.
 
-### Lane R1-X5 — re-audit of R1-28 and the regenerated reference
+### Lane R1-45 — near-neighbour separability analysis (M4; text only)
 
-Read-only: verify that `ref_nonlearned_gate0.93_v2` and `…@counterfact` have distinct results and checkpoint roots
-with consistent per-item files, that the guard now derives the checkpoint root from the harness expression, and recount
-the two summaries from their item files. Also refresh your obsolete R1-26 fixtures (`test_r1_26_boundary_audit_cpu.py`
-builds a cap with `ceiling_bytes=1`, which X26-01 now refuses) in a superseding test file. `logs/audit_r1_28.md`.
+For the CounterFact and zsRE development pools (`manifests/dev/*_dev.json`, all 300 items each) and the 3k CounterFact
+training pool: for every item, compare its paraphrases and its locality prompts against its own prompt on lexical
+features — subject-token overlap (with and without a stoplist of the 200 most frequent GPT-2 tokens in the pools),
+longest common token span, relation-template overlap — and report, per dataset, the ROC/separability of each feature for
+"paraphrase vs locality near-neighbour" and "paraphrase vs other item's prompt". Deliver `logs/r1_round6/near_neighbour_separability.json`
++ `docs/tasks/R1-45.md` with a recommendation of the two features to feed the null head. CPU only; no model.
 
-### Lane R1-D1d — E.2 admission list for the fresh zsRE draw (CPU side)
+### Lane R1-46 — stream-scale episode specification review (M1/M2; read-only, when `src/pccap/revision_v1/stream_train.py` appears)
 
-From `zsre_fresh_candidates_v1.json` (58,498 clear), prepare the exact ordered prompt list and batch plan the orchestrator
-will run through the BP teacher (E.2: keep items whose greedy answer is outside the aliases), with per-record hashes, the
-expected retention needed (≥ 5.13 %) and the stopping rule (stop once 3 × 1,000 + reserve are eligible, or report a
-shortfall). `manifests/revision_v1/zsre_e2_plan_v1.json`, `docs/tasks/R1-D1d.md`. No teacher execution.
+Review the orchestrator's stream-scale episode builder and feature bank for label leakage (queries must never carry
+targets into the reader), population definitions (in-memory paraphrases / own prompts / locality nulls / out-of-memory
+prompt nulls), class balance, and the deployment-prevalence argument for threshold selection (M5). `logs/review_r1_50.md`.
+
+### Lane R1-40b — prune and re-cost the run-matrix draft (unchanged from before; lower priority)
+
+As previously specified (`run_matrix_draft_v2.json`, DEC-038 default and X4-08 byte scaling); do it after the three lanes above.
 
 ## 4. Interfaces and coordination
 

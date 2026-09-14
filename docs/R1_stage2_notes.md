@@ -262,3 +262,19 @@ directories were overwritten by CounterFact runs (X4-01) are historical: `random
 (X4-02..08) are recorded in `docs/tasks/R1-X4-response.md`: cost columns are wall times; the fact-code result is a negative
 for the tested configurations; the zsRE 0.65 is a one-stream development comparator attributed to the observation
 geometry and the per-position write rule; delta bytes scale with answer tokens (≈ 37 KB per 4-token record).
+
+## Learned-reader recovery plan (2026-09-14, 08:40 EDT; lead directive: make the learned reader work before other issues)
+
+Why the trained nulls fail on the streams while passing training-style episodes — four mismatches, each with a fix:
+
+| # | mismatch (episode → stream) | fix | who |
+| --- | --- | --- | --- |
+| M1 | memory of 5 records → 100 records; the pairwise null was never shown a best-key drawn from a large memory | **stream-scale training episodes**: a memory of 64–128 pool records per episode with queries drawn from IN-memory records (own prompt, paraphrases, their locality prompts as nulls) and from OUT-of-memory facts (their prompts as nulls); a feature bank caches every pool item's observations once so 100-record episodes cost no extra base passes | orchestrator (R1-50) |
+| M2 | null targets = other facts' prompts → stream LS prompts = the items' own locality near-neighbours | stream episodes take null queries from the locality prompts of records IN memory (the exact LS population) and from out-of-memory prompts | orchestrator (R1-50) |
+| M3 | CounterFact-only training → zsRE domain shift (zsRE null inverted) | a **zsRE training pool** (3,000 items from the D1c clear candidates, one rephrase + locality each, E.2-filtered by the teacher; exposure recorded, excluded from the fresh draw) and mixed-domain training | Codex prepares the list (R1-D3), orchestrator runs E.2 and trains |
+| M4 | the null sees only tapped-feature geometry; near-neighbours share the relation and differ in the subject, which mean-pooled span features blur | a **lexical pairwise feature** (overlap of the query's tokens with the record's support-prompt tokens, common tokens excluded) fed to the null head, and max-pooled prompt-span features beside the mean | orchestrator (R1-51); Codex quantifies separability first (R1-45) |
+| M5 | null threshold 0.5 = balanced-episode calibration ≠ deployment prevalence | per-dataset threshold selected on a development stream and reported as such; the confirmatory streams are fresh | orchestrator (R1-52) |
+
+Order: R1-50 (M1+M2) first with the CounterFact pool, evaluated on both streams; then M4; then M3 when the zsRE pool is
+ready; M5 last. Success criterion (X4-07): a learned null re-enters the primary condition only if it beats the cosine
+gate's LS on BOTH streams without losing RET-GS on a fresh development draw. Until then DEC-038's default stands.

@@ -269,3 +269,9 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     with LS 1.00); the learned reader is a secondary, honestly-negative condition; CounterFact near-neighbour locality is
     reported as unsolved. Stage 4's run matrix (Codex's R1-40 draft) would be pruned accordingly before the profiling
     runs. I will not launch any further reader training unless you ask.
+
+12. (08:40 EDT) Per your direction, the learned reader is the priority: the recovery plan (five mismatches, five fixes,
+    order and success criterion) is in `docs/R1_stage2_notes.md`; DEC-038 stays a proposal, not a decision. First run:
+    stream-scale training episodes with locality near-neighbours as nulls. One data decision inside the plan:
+    a zsRE TRAINING pool of 3,000 items from the fresh-draw candidates (exposure recorded; removed from the confirmatory
+    draw) — default: yes (DEC-039), Codex prepares the list, I run the teacher filter.
