@@ -107,3 +107,16 @@ whereas v0's direct gradient optimization of the write vector acquired every edi
 record an explicit fast-state delta write (3 × 768, taught by the base adjoint under the same aggregate bound, as in v0
 and the matched-update control) on top of the controller's code-driven write; the learned reader keeps selection, the
 null and stable observations. Bytes: 9 KB per record, within the ceiling for the stream lengths in plan 9.
+
+## Design change after the 3k-pool run (2026-09-14, 00:30 EDT): explicit deltas and tied heads
+
+Diagnostics on a held-out CounterFact support with the cf_pool3k weights: (1) the fast rule through the code lowers the
+support loss only slowly (3.43 → 2.50 after 20 steps at lr 100); (2) an explicit per-record delta write taught by
+normalized adjoint steps (the v0 mechanism) reaches 3.04 and then stalls, because the controller's raw write has aggregate
+7.8 against the bound 0.3 — after projection the delta is ≈ 4 % of the direction; (3) the reader hard-nulls the support's
+OWN prompt on unseen facts (null mass 1.00): separate query/key heads only align on training facts. Changes (commit
+29a8ec9): the query and key heads are tied (an identical observation scores itself by construction, the learned part is
+paraphrase similarity), and a record's taught delta replaces the code-driven write (the controller's write serves only
+records without a delta). The learned reader therefore keeps selection, the null and stable observations; acquisition is
+v0's gradient write per record. Run cf_pool3k_tied_400 retrains the reader under this design; evaluation with delta
+steps follows on the CounterFact dev episodes and on the zsRE stream against the 0.44 controls.
