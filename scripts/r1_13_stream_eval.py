@@ -46,6 +46,7 @@ def main() -> int:
     ap.add_argument("--null-threshold", type=float, default=0.5)
     ap.add_argument("--no-lease", action="store_true")
     ap.add_argument("--min-score", type=float, default=None, help="cosine firing threshold (non-learned gate)")
+    ap.add_argument("--no-pairwise-null", action="store_true", help="reader without the pairwise null head (weights trained before it existed)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -63,7 +64,7 @@ def main() -> int:
     tag = args.tag or Path(args.theta).parent.name
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
-    rc, cc = ReaderConfig(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+    rc, cc = ReaderConfig(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     items, unrelated = load_dev_items(args.dataset, args.n, seed=21)
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_eval", stage="R1", projected_seconds=3600.0)):
         ledger = Ledger()

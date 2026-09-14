@@ -32,6 +32,7 @@ class ReaderConfig:
     tie_heads: bool = True  # key head == query head (siamese): an identical observation always scores itself maximally
     cosine: bool = True  # scores on L2-normalized embeddings (self-match = 1 is the maximum; the store retrieves by the same score)
     score_scale: float = 10.0  # inverse temperature for cosine scores (cosine ∈ [-1, 1] needs a scale to be decisive)
+    pairwise_null: bool = True  # the null logit sees the query AND the best-matching key (near-neighbour rejection needs a pairwise decision)
 
 
 def _dense(key, n_in: int, n_out: int, scale: float | None = None) -> dict:
@@ -61,6 +62,7 @@ def init_reader(key, cfg: ReaderConfig) -> dict:
         **({} if cfg.tie_heads else {"key_head": _mlp(k_k, (cfg.width, cfg.hidden, cfg.width))}),
         "code_head": _mlp(k_c, (cfg.width, cfg.hidden, cfg.d_code)),
         "null": {"w": jax.random.normal(k_n, (cfg.width,), jnp.float32) / np.sqrt(cfg.width), "b": jnp.asarray(cfg.null_bias, jnp.float32)},
+        **({"null_pair": _mlp(jax.random.fold_in(k_n, 1), (3 * cfg.width, cfg.hidden, 1))} if cfg.pairwise_null else {}),
     }
 
 
@@ -111,16 +113,28 @@ def pair_scores(cfg: ReaderConfig, q, keys):
     return (keys @ q) / (jnp.sqrt(cfg.width) * cfg.temperature)
 
 
-def null_score(params: dict, cfg: ReaderConfig, q):
+def null_score(params: dict, cfg: ReaderConfig, q, k_best=None):
+    """Null logit: query-only (linear) plus, when configured and a best key exists, a pairwise term on [q̂, k̂, q̂⊙k̂]."""
     qq = unit(q) * jnp.sqrt(cfg.width) if cfg.cosine else q
-    return (qq @ params["null"]["w"] + params["null"]["b"]) / cfg.temperature
+    out = (qq @ params["null"]["w"] + params["null"]["b"])
+    if cfg.pairwise_null and "null_pair" in params and k_best is not None:
+        qn, kn = unit(q), unit(k_best)
+        out = out + _apply_mlp(params["null_pair"], jnp.concatenate([qn, kn, qn * kn]) * jnp.sqrt(cfg.width))[0]
+    return out / cfg.temperature
+
+
+def best_key(scores, keys, mask):
+    """The key of the best-scoring (unmasked) candidate — a non-differentiable choice; gradients flow through its features."""
+    i = jnp.argmax(jnp.where(mask, scores, -jnp.inf))
+    return keys[i]
 
 
 def applicability(params: dict, cfg: ReaderConfig, q, cand_keys, cand_mask):
     """Softmax over [k candidate scores, null]. ``cand_mask`` (bool [k]) masks padding. Returns (weights [k], null_mass, logits [k+1])."""
     scores = pair_scores(cfg, q, cand_keys)
     scores = jnp.where(cand_mask, scores, -1e9)
-    null_logit = null_score(params, cfg, q)
+    kb = jnp.where(jnp.any(cand_mask), best_key(scores, cand_keys, cand_mask), jnp.zeros_like(q))
+    null_logit = null_score(params, cfg, q, kb if cfg.pairwise_null else None)
     logits = jnp.concatenate([scores, null_logit[None]])
     probs = jax.nn.softmax(logits)
     weights = probs[:-1] * cand_mask

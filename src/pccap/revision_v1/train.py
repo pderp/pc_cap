@@ -147,7 +147,8 @@ def _records(theta, rc: ReaderConfig, feats: EpisodeFeatures):
 
 def _selection(theta, rc: ReaderConfig, keys, q_sel):
     scores = pair_scores(rc, q_sel, keys)
-    null_logit = null_score(theta["reader"], rc, q_sel)
+    kb = keys[jnp.argmax(scores)] if rc.pairwise_null else None
+    null_logit = null_score(theta["reader"], rc, q_sel, kb)
     logits = jnp.concatenate([scores, null_logit[None]])
     probs = jax.nn.softmax(logits)
     return logits, probs[:-1], probs[-1]

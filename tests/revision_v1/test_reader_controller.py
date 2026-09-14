@@ -93,3 +93,17 @@ def test_tied_heads_make_an_identical_observation_its_own_best_match():
     keys = jnp.concatenate([k[None], others])
     w, null, _ = applicability(rp, RC, q, keys, jnp.ones(5, bool))
     assert int(jnp.argmax(w)) == 0
+
+
+def test_pairwise_null_depends_on_the_best_key():
+    rp = init_reader(jax.random.PRNGKey(0), RC)
+    assert "null_pair" in rp
+    last, span = _obs(21)
+    q = query_embedding(rp, RC, last, span)
+    keys_a = jnp.stack([record_key(rp, RC, *_obs(s)) for s in (30, 31)])
+    keys_b = jnp.stack([record_key(rp, RC, *_obs(s)) for s in (32, 33)])
+    _, null_a, _ = applicability(rp, RC, q, keys_a, jnp.ones(2, bool))
+    _, null_b, _ = applicability(rp, RC, q, keys_b, jnp.ones(2, bool))
+    assert float(null_a) != float(null_b)  # the same query, different candidates → different null mass
+    g = jax.grad(lambda p: applicability(p, RC, q, keys_a, jnp.ones(2, bool))[1])(rp)
+    assert np.any(np.asarray(g["null_pair"][0]["w"]) != 0)

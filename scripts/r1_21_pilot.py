@@ -47,6 +47,7 @@ def main() -> int:
     ap.add_argument("--eval-fast-lr", type=float, default=1e-2)
     ap.add_argument("--eval-delta-steps", type=int, default=0, help="v0-style delta-write steps per support in the behavioural check")
     ap.add_argument("--eval-delta-lr", type=float, default=0.1)
+    ap.add_argument("--no-pairwise-null", action="store_true", help="reader without the pairwise null head (weights trained before it existed)")
     args = ap.parse_args()
     import sys
 
@@ -65,7 +66,7 @@ def main() -> int:
 
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
-    rc, cc = ReaderConfig(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+    rc, cc = ReaderConfig(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     OUT = OUT_ROOT / (args.tag or args.estimator)
     OUT.mkdir(parents=True, exist_ok=True)
     t_start = time.time()
