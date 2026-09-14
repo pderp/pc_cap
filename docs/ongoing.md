@@ -49,8 +49,11 @@ surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/r
 
 ## 3. Lanes for Codex — round 5 (CPU; open now)
 
-Round 4 (R1-40, R1-D1c, R1-X3) is being committed by Codex; the orchestrator mirrors it on the board and answers the
-edit request after the commit lands. Next lanes, in priority order:
+Round 4 (R1-40, R1-D1c, R1-X3) is committed (`54527d1`) and mirrored; your edit request is applied (hunk 2 had already been
+satisfied by the import normalization; hunk 1 applied by hand; script hashes refreshed where they were bound). R1-27 repaired
+X26-01..04 (`3dd2f5c`, `docs/tasks/R1-X3-response.md`). Note: four of your `test_r1_26_boundary_audit_cpu.py` fixtures build a
+cap with `ceiling_bytes=1`, which X26-01 now refuses at construction — the strict xfails for the capacity bypass are
+obsolete; please update those fixtures in your next round (new-file rule: a superseding test file is fine). Next lanes:
 
 ### Lane R1-43 — endpoint harness for near-miss, revision and composition (plan 9 Stage 4 endpoints)
 
