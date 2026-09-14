@@ -37,8 +37,9 @@ def prefix_writes(theta, rc: ReaderConfig, cc: ControllerConfig, feats: EpisodeF
     keys, codes = _records(theta, rc, feats)
     q = feats.queries[qi]
     pf = q.prefixes[ti]
+    from pccap.revision_v1.train import lex_matrix
     q_sel = query_embedding(theta["reader"], rc, jnp.asarray(q.last), jnp.asarray(q.span))
-    _, w, null = _selection(theta, rc, keys, q_sel)
+    _, w, null = _selection(theta, rc, keys, q_sel, jnp.asarray(lex_matrix(rc, feats)[qi]))
     code_mix = (w @ codes) / jnp.maximum(w.sum(), 1e-12)
     q_t = query_embedding(theta["reader"], rc, jnp.asarray(pf.last), jnp.asarray(pf.span))
     W, _ = writes(theta["controller"], cc, q_t, code_mix, 1.0 - null)

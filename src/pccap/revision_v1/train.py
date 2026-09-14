@@ -69,6 +69,7 @@ class SupportFeat:
     code_last: np.ndarray | None = None  # prompt+answer observation with the answer span (code; R23-02)
     code_span: np.ndarray | None = None
     fast_delta: np.ndarray | None = None
+    prompt_ids: np.ndarray | None = None  # support prompt tokens (lexical feature, M4)
 
 
 @dataclass
@@ -79,6 +80,7 @@ class QueryFeat:
     span: np.ndarray
     prefixes: list[PrefixFeat]
     target_record: int  # index into supports, or -1 for null
+    query_ids: np.ndarray | None = None  # query prompt tokens (lexical feature, M4)
 
 
 @dataclass
@@ -114,7 +116,7 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_
         full = np.concatenate([ids, np.asarray(s.answer_ids, np.int32)])
         c_last, c_span, _ = observe(full, answer_mask(len(ids), len(full)))
         index[s.record_id] = len(supports)
-        supports.append(SupportFeat(record_id=s.record_id, fact_id=s.fact_id, last=last, span=span, code_last=c_last, code_span=c_span))
+        supports.append(SupportFeat(record_id=s.record_id, fact_id=s.fact_id, last=last, span=span, code_last=c_last, code_span=c_span, prompt_ids=ids))
     labels = {lab.query_id: lab for lab in episode.query_labels}
     queries, skipped = [], {}
     from pccap.revision_v1.contracts import PredictionQuery, QueryLabel
@@ -147,7 +149,7 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_
             if y >= 0:
                 cur = np.concatenate([cur, np.int32([int(y)])])
         tgt = index[lab.supporting_record_ids[0]] if lab.role in ANSWER_ROLES else -1
-        queries.append(QueryFeat(query_id=q.query_id, role=lab.role, last=p_last, span=p_span, prefixes=prefixes, target_record=tgt))
+        queries.append(QueryFeat(query_id=q.query_id, role=lab.role, last=p_last, span=p_span, prefixes=prefixes, target_record=tgt, query_ids=prompt))
     return EpisodeFeatures(episode_id=episode.episode_id, supports=supports, queries=queries, skipped=skipped, cost=cost)
 
 
@@ -159,10 +161,30 @@ def _records(theta, rc: ReaderConfig, feats: EpisodeFeatures):
     return keys, codes
 
 
-def _selection(theta, rc: ReaderConfig, keys, q_sel):
+def lex_matrix(rc: ReaderConfig, feats: "EpisodeFeatures") -> np.ndarray:
+    """[Q, R] lexical overlap features (zeros when ids are missing or the feature is off)."""
+    from pccap.revision_v1.reader import lex_feature
+    Q, R = len(feats.queries), len(feats.supports)
+    out = np.zeros((Q, R), np.float32)
+    if not rc.lexical:
+        return out
+    for qi, q in enumerate(feats.queries):
+        if q.query_ids is None:
+            continue
+        for ri, s in enumerate(feats.supports):
+            if s.prompt_ids is not None:
+                out[qi, ri] = lex_feature(q.query_ids, s.prompt_ids, rc.stop_tokens)
+    return out
+
+
+def _selection(theta, rc: ReaderConfig, keys, q_sel, lex_row=None):
     scores = pair_scores(rc, q_sel, keys)
+    if rc.lexical and "lex" in theta["reader"] and lex_row is not None:
+        scores = scores + theta["reader"]["lex"]["score_w"] * lex_row
     kb = keys[jnp.argmax(scores)] if rc.pairwise_null else None
     null_logit = null_score(theta["reader"], rc, q_sel, kb)
+    if rc.lexical and "lex" in theta["reader"] and lex_row is not None:
+        null_logit = null_logit - theta["reader"]["lex"]["null_w"] * jnp.max(lex_row)
     logits = jnp.concatenate([scores, null_logit[None]])
     probs = jax.nn.softmax(logits)
     return logits, probs[:-1], probs[-1]
@@ -176,10 +198,11 @@ def retrieval_loss(theta, rc: ReaderConfig, feats: EpisodeFeatures, balance_null
     R = keys.shape[0]
     n_null = sum(1 for q in feats.queries if q.target_record < 0)
     n_rec = len(feats.queries) - n_null
+    lex = lex_matrix(rc, feats)
     total = 0.0
-    for q in feats.queries:
+    for qi, q in enumerate(feats.queries):
         q_sel = query_embedding(theta["reader"], rc, jnp.asarray(q.last), jnp.asarray(q.span))
-        logits, _, _ = _selection(theta, rc, keys, q_sel)
+        logits, _, _ = _selection(theta, rc, keys, q_sel, jnp.asarray(lex[qi]))
         tgt = R if q.target_record < 0 else q.target_record
         if balance_null and n_null and n_rec:
             wq = 0.5 / (n_null if q.target_record < 0 else n_rec)
@@ -195,7 +218,7 @@ def prefix_loss(theta, rc: ReaderConfig, cc: ControllerConfig, base_params, base
     q = feats.queries[qi]
     pf = q.prefixes[ti]
     q_sel = query_embedding(theta["reader"], rc, jnp.asarray(q.last), jnp.asarray(q.span))
-    _, w, null = _selection(theta, rc, keys, q_sel)
+    _, w, null = _selection(theta, rc, keys, q_sel, jnp.asarray(lex_matrix(rc, feats)[qi]))
     code_mix = (w @ codes) / jnp.maximum(w.sum(), 1e-12)
     q_t = query_embedding(theta["reader"], rc, jnp.asarray(pf.last), jnp.asarray(pf.span))
     W, _ = writes(theta["controller"], cc, q_t, code_mix, 1.0 - null)

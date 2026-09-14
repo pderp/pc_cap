@@ -32,6 +32,7 @@ from pccap.revision_v1.train import (
     PRESERVE_ROLES,
     EpisodeFeatures,
     LossConfig,
+    lex_matrix,
 )
 
 
@@ -45,10 +46,11 @@ class PackedEpisode:
     q_span: np.ndarray
     q_target: np.ndarray  # [Q] int; R for null
     q_is_null: np.ndarray  # [Q] bool
+    lex: np.ndarray  # [Q, R] lexical overlap features
     groups: list[dict]  # each: kind, ids [P,T], n [P], target [P], last/span [P,taps,d], q_index [P], capoff [P,V] (preserve only)
 
 
-def pack_episode(feats: EpisodeFeatures, vocab: int) -> PackedEpisode:
+def pack_episode(feats: EpisodeFeatures, vocab: int, rc_for_lex: ReaderConfig | None = None) -> PackedEpisode:
     R = len(feats.supports)
     sup_last = np.stack([s.last for s in feats.supports]).astype(np.float32)
     sup_span = np.stack([s.span for s in feats.supports]).astype(np.float32)
@@ -75,7 +77,7 @@ def pack_episode(feats: EpisodeFeatures, vocab: int) -> PackedEpisode:
         if kind == "preserve":
             grp["capoff"] = np.stack([np.asarray(pf.capoff_logits, np.float32) for _, pf in rows])
         groups.append(grp)
-    return PackedEpisode(sup_last, sup_span, code_last, code_span, q_last, q_span, q_target, q_is_null, groups)
+    return PackedEpisode(sup_last, sup_span, code_last, code_span, q_last, q_span, q_target, q_is_null, lex_matrix(rc_for_lex, feats) if rc_for_lex is not None else np.zeros((len(feats.queries), R), np.float32), groups)
 
 
 def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
@@ -83,15 +85,20 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
     v_code = jax.vmap(lambda p, last, span: initial_code(p, rc, last, span), in_axes=(None, 0, 0))
     v_query = jax.vmap(lambda p, last, span: query_embedding(p, rc, last, span), in_axes=(None, 0, 0))
 
-    def selection(theta, keys, q):
+    def selection(theta, keys, q, lex_row):
         scores = pair_scores(rc, q, keys)
+        if rc.lexical and "lex" in theta["reader"]:
+            scores = scores + theta["reader"]["lex"]["score_w"] * lex_row
         kb = keys[jnp.argmax(scores)] if rc.pairwise_null else None
-        logits = jnp.concatenate([scores, null_score(theta["reader"], rc, q, kb)[None]])
+        nl = null_score(theta["reader"], rc, q, kb)
+        if rc.lexical and "lex" in theta["reader"]:
+            nl = nl - theta["reader"]["lex"]["null_w"] * jnp.max(lex_row)
+        logits = jnp.concatenate([scores, nl[None]])
         probs = jax.nn.softmax(logits)
         return logits, probs[:-1], probs[-1]
 
-    def retrieval(theta, keys, q_emb, q_target, q_is_null):
-        logits = jax.vmap(lambda q: selection(theta, keys, q)[0])(q_emb)  # [Q, R+1]
+    def retrieval(theta, keys, q_emb, q_target, q_is_null, lex):
+        logits = jax.vmap(lambda q, lr: selection(theta, keys, q, lr)[0])(q_emb, lex)  # [Q, R+1]
         ce = jax.vmap(lambda lg, t: jax.nn.logsumexp(lg) - lg[t])(logits, q_target)
         n_null = jnp.sum(q_is_null)
         n_rec = q_is_null.shape[0] - n_null
@@ -102,17 +109,17 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
             w = jnp.full(q_is_null.shape, 1.0 / q_is_null.shape[0])
         return jnp.sum(w * ce)
 
-    def group_loss(theta, base_params, packed_sup, q_last, q_span, q_target, q_is_null, grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff, kind: str, with_retrieval: bool):
+    def group_loss(theta, base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff, kind: str, with_retrieval: bool):
         sup_last, sup_span, code_last, code_span = packed_sup
         keys = v_key(theta["reader"], sup_last, sup_span)
         codes = v_code(theta["reader"], code_last, code_span)
         q_emb = v_query(theta["reader"], q_last, q_span)
         total = 0.0
         if with_retrieval and lc.w_retrieval:
-            total = total + lc.w_retrieval * retrieval(theta, keys, q_emb, q_target, q_is_null)
+            total = total + lc.w_retrieval * retrieval(theta, keys, q_emb, q_target, q_is_null, lex)
 
         def one(ids, n, target, last, span, qi, capoff_row):
-            _, w, null = selection(theta, keys, q_emb[qi])
+            _, w, null = selection(theta, keys, q_emb[qi], lex[qi])
             code_mix = (w @ codes) / jnp.maximum(w.sum(), 1e-12)
             q_t = query_embedding(theta["reader"], rc, last, span)
             W, _ = writes(theta["controller"], cc, q_t, code_mix, 1.0 - null)
@@ -145,26 +152,27 @@ class FastTrainer:
         self.vocab = int(base_cfg.vocab)
         self.get, self._retrieval, self._v_key, self._v_query = _make_fns(rc, cc, base_cfg, self.lc)
         self.opt = optax.chain(optax.clip_by_global_norm(clip), optax.adamw(lr, weight_decay=weight_decay))
-        self._jit_retrieval = jax.jit(jax.value_and_grad(lambda th, sl, ss, ql, qs, qt, qn: self.lc.w_retrieval * self._retrieval(th, self._v_key(th["reader"], sl, ss), self._v_query(th["reader"], ql, qs), qt, qn)))
+        self._jit_retrieval = jax.jit(jax.value_and_grad(lambda th, sl, ss, ql, qs, qt, qn, lx: self.lc.w_retrieval * self._retrieval(th, self._v_key(th["reader"], sl, ss), self._v_query(th["reader"], ql, qs), qt, qn, lx)))
 
     def init(self, theta):
         return self.opt.init(theta)
 
     def episode_grads(self, theta, feats: EpisodeFeatures):
-        pe = pack_episode(feats, self.vocab)
+        pe = pack_episode(feats, self.vocab, self.rc)
         packed_sup = (jnp.asarray(pe.sup_last), jnp.asarray(pe.sup_span), jnp.asarray(pe.code_last), jnp.asarray(pe.code_span))
         q_last, q_span, q_target, q_is_null = (jnp.asarray(pe.q_last), jnp.asarray(pe.q_span), jnp.asarray(pe.q_target), jnp.asarray(pe.q_is_null))
+        lex = jnp.asarray(pe.lex)
         metrics = {"answer": 0.0, "answer_n": 0, "preserve": 0.0, "preserve_n": 0, "retrieval": 0.0, "code_norm": 0.0}
         grads = jax.tree_util.tree_map(jnp.zeros_like, theta)
         with_ret = bool(self.lc.w_retrieval)
         if not pe.groups and with_ret:
-            l, gr = self._jit_retrieval(theta, packed_sup[0], packed_sup[1], q_last, q_span, q_target, q_is_null)
+            l, gr = self._jit_retrieval(theta, packed_sup[0], packed_sup[1], q_last, q_span, q_target, q_is_null, lex)
             metrics["retrieval"] = float(l) / max(self.lc.w_retrieval, 1e-12)
             return gr, metrics
         for gi, grp in enumerate(pe.groups):
             capoff = jnp.asarray(grp["capoff"]) if grp["kind"] == "preserve" else jnp.zeros((grp["ids"].shape[0], 1), jnp.float32)
             fn = self.get(grp["kind"], with_ret and gi == 0)
-            (l, per_sum), gr = fn(theta, self.base_params, packed_sup, q_last, q_span, q_target, q_is_null, jnp.asarray(grp["ids"]), jnp.asarray(grp["n"]), jnp.asarray(grp["target"]),
+            (l, per_sum), gr = fn(theta, self.base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, jnp.asarray(grp["ids"]), jnp.asarray(grp["n"]), jnp.asarray(grp["target"]),
                                   jnp.asarray(grp["last"]), jnp.asarray(grp["span"]), jnp.asarray(grp["q_index"]), capoff)
             grads = jax.tree_util.tree_map(jnp.add, grads, gr)
             metrics[grp["kind"]] += float(per_sum)

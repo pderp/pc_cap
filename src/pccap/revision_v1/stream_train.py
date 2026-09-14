@@ -108,20 +108,20 @@ def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 
     supports, queries = [], []
     for i in mem:
         it = bank.items[int(i)]
-        supports.append(SupportFeat(record_id=it.item_id, fact_id=it.fact_id, last=it.key_last, span=it.key_span, code_last=it.code_last, code_span=it.code_span))
+        supports.append(SupportFeat(record_id=it.item_id, fact_id=it.fact_id, last=it.key_last, span=it.key_span, code_last=it.code_last, code_span=it.code_span, prompt_ids=it.prompt_ids))
     q_records = rng.choice(len(mem), size=min(n_query_records, len(mem)), replace=False)
     for j in q_records:
         it = bank.items[int(mem[j])]
-        queries.append(QueryFeat(query_id=f"own:{it.item_id}", role="own_prompt", last=it.key_last, span=it.key_span, prefixes=it.own, target_record=int(j)))
+        queries.append(QueryFeat(query_id=f"own:{it.item_id}", role="own_prompt", last=it.key_last, span=it.key_span, prefixes=it.own, target_record=int(j), query_ids=it.prompt_ids))
         if it.paraphrases:
             p_last, p_span, prefs = it.paraphrases[int(rng.integers(len(it.paraphrases)))]
-            queries.append(QueryFeat(query_id=f"para:{it.item_id}", role="new_paraphrase", last=p_last, span=p_span, prefixes=prefs, target_record=int(j)))
+            queries.append(QueryFeat(query_id=f"para:{it.item_id}", role="new_paraphrase", last=p_last, span=p_span, prefixes=prefs, target_record=int(j), query_ids=prefs[0].ids[: prefs[0].n]))
         if it.locality:
             l_last, l_span, lpf = it.locality[int(rng.integers(len(it.locality)))]
-            queries.append(QueryFeat(query_id=f"loc:{it.item_id}", role="unrelated", last=l_last, span=l_span, prefixes=[lpf], target_record=-1))
+            queries.append(QueryFeat(query_id=f"loc:{it.item_id}", role="unrelated", last=l_last, span=l_span, prefixes=[lpf], target_record=-1, query_ids=lpf.ids[: lpf.n]))
     for i in out:
         it = bank.items[int(i)]
         # an out-of-memory fact's prompt: nothing in memory applies (L2 null target only; no stored cap-off logits)
         lpf = PrefixFeat(ids=it.own[0].ids, n=it.own[0].n, target=-1, last=it.key_last, span=it.key_span, capoff_logits=None)
-        queries.append(QueryFeat(query_id=f"out:{it.item_id}", role="unrelated_no_kl", last=it.key_last, span=it.key_span, prefixes=[lpf], target_record=-1))
+        queries.append(QueryFeat(query_id=f"out:{it.item_id}", role="unrelated_no_kl", last=it.key_last, span=it.key_span, prefixes=[lpf], target_record=-1, query_ids=it.prompt_ids))
     return EpisodeFeatures(episode_id=episode_id or f"stream-{rng.integers(1 << 31)}", supports=supports, queries=queries)

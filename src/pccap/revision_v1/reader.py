@@ -33,6 +33,8 @@ class ReaderConfig:
     cosine: bool = True  # scores on L2-normalized embeddings (self-match = 1 is the maximum; the store retrieves by the same score)
     score_scale: float = 10.0  # inverse temperature for cosine scores (cosine ∈ [-1, 1] needs a scale to be decisive)
     pairwise_null: bool = True  # the null logit sees the query AND the best-matching key (near-neighbour rejection needs a pairwise decision)
+    lexical: bool = True  # M4: token overlap between the query and a record's support prompt enters the score and the null
+    stop_tokens: tuple[int, ...] = ()  # tokens ignored by the overlap (document-frequent); part of the semantic configuration
 
 
 def _dense(key, n_in: int, n_out: int, scale: float | None = None) -> dict:
@@ -63,6 +65,7 @@ def init_reader(key, cfg: ReaderConfig) -> dict:
         "code_head": _mlp(k_c, (cfg.width, cfg.hidden, cfg.d_code)),
         "null": {"w": jax.random.normal(k_n, (cfg.width,), jnp.float32) / np.sqrt(cfg.width), "b": jnp.asarray(cfg.null_bias, jnp.float32)},
         **({"null_pair": _mlp(jax.random.fold_in(k_n, 1), (3 * cfg.width, cfg.hidden, 1))} if cfg.pairwise_null else {}),
+        **({"lex": {"score_w": jnp.asarray(5.0, jnp.float32), "null_w": jnp.asarray(5.0, jnp.float32)}} if cfg.lexical else {}),
     }
 
 
@@ -129,12 +132,35 @@ def best_key(scores, keys, mask):
     return keys[i]
 
 
-def applicability(params: dict, cfg: ReaderConfig, q, cand_keys, cand_mask):
-    """Softmax over [k candidate scores, null]. ``cand_mask`` (bool [k]) masks padding. Returns (weights [k], null_mass, logits [k+1])."""
+def lexical_overlap(query_ids, record_ids, stop: tuple[int, ...] | frozenset) -> tuple[float, float]:
+    """(fraction of the record's non-stop tokens present in the query, fraction of the query's non-stop tokens present in the record)."""
+    st = set(stop)
+    r = {int(t) for t in np.asarray(record_ids).reshape(-1)} - st
+    q = {int(t) for t in np.asarray(query_ids).reshape(-1)} - st
+    if not r or not q:
+        return 0.0, 0.0
+    inter = len(r & q)
+    return inter / len(r), inter / len(q)
+
+
+def lex_feature(query_ids, record_ids, stop) -> float:
+    """Scalar overlap feature used by the reader: the mean of the two directional overlaps."""
+    a, b = lexical_overlap(query_ids, record_ids, stop)
+    return 0.5 * (a + b)
+
+
+def applicability(params: dict, cfg: ReaderConfig, q, cand_keys, cand_mask, cand_lex=None):
+    """Softmax over [k candidate scores, null]. ``cand_mask`` (bool [k]) masks padding; ``cand_lex`` ([k], optional) is the
+    lexical overlap feature per candidate. Returns (weights [k], null_mass, logits [k+1])."""
     scores = pair_scores(cfg, q, cand_keys)
+    if cfg.lexical and "lex" in params and cand_lex is not None:
+        scores = scores + params["lex"]["score_w"] * cand_lex
     scores = jnp.where(cand_mask, scores, -1e9)
     kb = jnp.where(jnp.any(cand_mask), best_key(scores, cand_keys, cand_mask), jnp.zeros_like(q))
     null_logit = null_score(params, cfg, q, kb if cfg.pairwise_null else None)
+    if cfg.lexical and "lex" in params and cand_lex is not None:
+        best_lex = jnp.max(jnp.where(cand_mask, cand_lex, 0.0))
+        null_logit = null_logit - params["lex"]["null_w"] * best_lex
     logits = jnp.concatenate([scores, null_logit[None]])
     probs = jax.nn.softmax(logits)
     weights = probs[:-1] * cand_mask

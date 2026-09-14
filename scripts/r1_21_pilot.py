@@ -37,6 +37,7 @@ def main() -> int:
     ap.add_argument("--domain", choices=("synthetic", "counterfact"), default="synthetic", help="episode source: synthetic generator or CounterFact natural episodes (tokenized by Codex's adapter)")
     ap.add_argument("--history", type=int, default=4)
     ap.add_argument("--no-lease", action="store_true", help="run beside another lease holder (small footprint; development pilots only)")
+    ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
     ap.add_argument("--fresh-episodes", action="store_true", help="draw a new batch of training episodes (new seeds) at every step instead of cycling a fixed set")
     ap.add_argument("--dev-every", type=int, default=0, help="evaluate the dev losses every N steps (0 = only before/after) and keep the best-dev weights")
     ap.add_argument("--weight-decay", type=float, default=0.0)
@@ -67,7 +68,13 @@ def main() -> int:
 
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
-    rc, cc = ReaderConfig(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+
+    def _reader_config(**kw):
+        if args.stop_tokens == "none":
+            return ReaderConfig(lexical=False, **kw)
+        toks = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
+        return ReaderConfig(lexical=True, stop_tokens=toks, **kw)
+    rc, cc = _reader_config(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     OUT = OUT_ROOT / (args.tag or args.estimator)
     OUT.mkdir(parents=True, exist_ok=True)
     t_start = time.time()

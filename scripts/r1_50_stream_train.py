@@ -35,6 +35,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--tag", default="r1_50_stream")
     ap.add_argument("--no-lease", action="store_true")
+    ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -49,7 +50,13 @@ def main() -> int:
 
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
-    rc, cc = ReaderConfig(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+
+    def _reader_config(**kw):
+        if args.stop_tokens == "none":
+            return ReaderConfig(lexical=False, **kw)
+        toks = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
+        return ReaderConfig(lexical=True, stop_tokens=toks, **kw)
+    rc, cc = _reader_config(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     OUT = OUT_ROOT / args.tag
     if OUT.exists():
         raise SystemExit(f"{OUT} exists; choose a new tag")

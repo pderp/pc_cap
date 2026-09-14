@@ -104,7 +104,7 @@ class RevisionCap:
         self.cost_counters = {"selection_passes": 0, "cached_prompt_reads": 0, "corrected_partial_passes": 0}
         rc, cc = cfg.reader, cfg.controller
         self.jit_query = jax.jit(lambda p, last, span: query_embedding(p, rc, last, span))
-        self.jit_key_apply = jax.jit(lambda p, q, keys, mask: applicability(p, rc, q, keys, mask))
+        self.jit_key_apply = jax.jit(lambda p, q, keys, mask, lex: applicability(p, rc, q, keys, mask, lex))
         self.jit_writes = jax.jit(lambda p, q, code, mass: writes(p, cc, q, code, mass)[0])
         self.jit_writes_with_delta = jax.jit(lambda p, q, code, delta, mass: writes_with_delta(p, cc, q, code, delta, mass)[0])
         self._vjp_fn = lambda p, q, code: jax.vjp(lambda c: writes(p, cc, q, c, jnp.asarray(1.0))[0], code)
@@ -117,7 +117,9 @@ class RevisionCap:
         sel_cost = fr.cost
         obs = observation_from_pass(fr, prompt, None, self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
-        cands = self.store.retrieve(np.asarray(q), self.cfg.reader.top_k, query_version=self.enc.encoder_version)
+        rc_ = self.cfg.reader
+        lex_w = float(self.params["reader"]["lex"]["score_w"]) if (rc_.lexical and "lex" in self.params["reader"]) else 0.0
+        cands = self.store.retrieve(np.asarray(q), rc_.top_k, query_version=self.enc.encoder_version, query_ids=prompt, lex_weight=lex_w, stop_tokens=rc_.stop_tokens, score_scale=rc_.score_scale / rc_.temperature)
         keep = fr if self.cfg.cache_prompt_pass else None
         if not cands:
             return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, prompt_pass=keep, pending_cost=sel_cost)
@@ -127,7 +129,12 @@ class RevisionCap:
         recs = [self.store.get(c.record_id) for c in cands]
         for i, r in enumerate(recs):
             keys[i], mask[i] = r.key, True
-        w, null, _ = self.jit_key_apply(self.params["reader"], q, jnp.asarray(keys), jnp.asarray(mask))
+        lex = np.zeros(k, np.float32)
+        if rc_.lexical and "lex" in self.params["reader"]:
+            from pccap.revision_v1.reader import lex_feature
+            for i, r in enumerate(recs):
+                lex[i] = lex_feature(prompt, r.source_ids, rc_.stop_tokens) if r.source_ids is not None else 0.0
+        w, null, _ = self.jit_key_apply(self.params["reader"], q, jnp.asarray(keys), jnp.asarray(mask), jnp.asarray(lex))
         w, null = np.asarray(w, np.float32), float(null)
         qn = np.asarray(q, np.float32)
         qn = qn / (np.linalg.norm(qn) + 1e-8)
