@@ -14,6 +14,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | cf_bp_500_lr1e-3 | BP reference, CounterFact natural episodes | 128 | 500 × 4 | 1e-3 | 6.55 → 3.22 | 1.94 → 1.53 | 0.005 → 0.000 | 0.03 | 0.00 | 1.00 | 1.00 | 0.12 / 1.00 / 1.00 | 73 min |
 | cf_fresh_wd_400 (prompt-only codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.55 → 2.21 | 1.94 → 1.17 | 0.005 → 0.11 | 0.19 | 0.00 | 0.81 | 1.00 | 0.01 / 0.81 / 0.92 | 72 min |
 | cf_fresh_wd_400_r25 (answer-sensitive codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.59 → 2.29 | 1.94 → 1.13 | 0.006 → 0.000 | 0.16 | 0.00 | 1.00 | 1.00 | 0.08 / 1.00 / 1.00 | 72 min |
+| cf_pool3k_r25_600 | BP, CounterFact 3k training pool (DEC-037), fresh episodes/step, wd 0.01, best-dev @ 449, 32 dev eps | fresh | 600 × 4 | 1e-3 | 8.02 → 3.50 | 1.87 → 0.70 | 0.007 → 0.006 | 0.03 (n=64) | 0.00 | 1.00 | 0.97 | 0.03 / 0.99 / 0.98 | 100 min |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -93,3 +94,16 @@ hurts held-out answers (2.21 vs 2.29; paraphrase exact 0.19 vs 0.16), preservati
 retention is zero in both — the selection or the codes of history records fail on dev episodes. The 3k-pool run decides
 whether facts, not mechanism, were the limit; a per-role selection diagnostic (top-1 record vs supporting record, null
 mass) is added to the pilot for the runs after it.
+
+## 3k-pool verdict (cf_pool3k_r25_600) and the fast rule with trained weights
+
+With 3,000 training facts the training answer loss no longer collapses (≈ 2.0 at the end) and the held-out loss improves
+only to 3.50; paraphrase exact 0.03 (2/64), old fact 0/32; top-1 selection hits the supporting record on 41 % of
+paraphrases and 56 % of old-fact queries; preservation 1.00 / 0.97 with null masses 0.03 vs 0.99. Re-evaluating the same
+weights with the fast rule on (5 steps, lr 0.1 / 1 / 10) changes nothing. So, with the current design, selection is
+mediocre and answer production for unseen facts fails: a 256-d observation-derived code passed through a fixed controller
+does not carry an arbitrary new answer, and the fast rule's gradient through that controller is too weak to inject it —
+whereas v0's direct gradient optimization of the write vector acquired every edit (ES 1.00). Next design step: give each
+record an explicit fast-state delta write (3 × 768, taught by the base adjoint under the same aggregate bound, as in v0
+and the matched-update control) on top of the controller's code-driven write; the learned reader keeps selection, the
+null and stable observations. Bytes: 9 KB per record, within the ceiling for the stream lengths in plan 9.

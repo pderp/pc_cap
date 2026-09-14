@@ -42,7 +42,13 @@ def main() -> int:
     ap.add_argument("--weight-decay", type=float, default=0.0)
     ap.add_argument("--mix-synthetic", type=float, default=0.0, help="fraction of each batch drawn from synthetic episodes when --domain counterfact")
     ap.add_argument("--pool", default=None, help="natural rows source: a train_pool manifest (DEC-037) instead of the development pools")
+    ap.add_argument("--eval-theta", default=None, help="skip training: load these weights and run the dev + behavioural evaluation only")
+    ap.add_argument("--eval-fast-steps", type=int, default=0, help="fast steps in the behavioural check (default 0 = initial codes only)")
+    ap.add_argument("--eval-fast-lr", type=float, default=1e-2)
     args = ap.parse_args()
+    import sys
+
+    sys.path.insert(0, str(ROOT / "scripts"))
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
     from pccap.harness.lease import gpu_lease
@@ -75,8 +81,6 @@ def main() -> int:
             train_eps = [synthetic_episode(1000 + i, "train", history_size=args.history) for i in range(args.train)]
             dev_eps = [synthetic_episode(5000 + i, "dev", history_size=args.history) for i in range(args.dev)]
         else:
-            import sys
-            sys.path.insert(0, str(ROOT / "scripts"))
             from pccap.data.tokenize import GPT2Tokenizer
             from pccap.revision_v1.episodes import load_development, natural_episode
             from r1_20_text_adapter import (
@@ -124,6 +128,10 @@ def main() -> int:
                     agg[k] = agg.get(k, 0.0) + v / len(dev_f)
             return agg
 
+        if args.eval_theta:
+            from r1_13_stream_eval import load_theta  # keystr-named npz → pytree
+            theta = load_theta(Path(args.eval_theta), theta)
+            args.steps = 0
         before = evaluate(theta)
         rng = np.random.default_rng(args.seed)
         log = (OUT / "metrics.jsonl").open("w")
@@ -170,7 +178,7 @@ def main() -> int:
         wdir.mkdir(parents=True, exist_ok=True)
         np.savez(wdir / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
         # behavioural check: fresh learner per dev episode, adapt on supports (fast_steps = 0: initial codes), greedy answers
-        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0), tau_edit=float(frozen["tau_edit"]))
+        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.eval_fast_steps, lr=args.eval_fast_lr), tau_edit=float(frozen["tau_edit"]))
         roles: dict[str, list[int]] = {}
         sel_hit: dict[str, list[int]] = {}
         preserved: dict[str, list[int]] = {}
