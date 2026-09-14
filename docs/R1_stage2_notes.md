@@ -151,3 +151,11 @@ has NO trained component and reaches RET-GS 0.65 with LS 1.00 against the contro
 becomes the reference condition ("R1-nonlearned") that the trained reader/null must beat; it also relocates the source of
 the paraphrase gain to the observation geometry (write-free features at blocks 3/7/11, last position + prompt span,
 cosine) rather than to learning. One seed, one order, 100 edits: development evidence only.
+
+CounterFact development stream (same condition, `random_tied_cos_min0.93@counterfact`): ES 1.00, RET-ES 1.00, RET-GS 0.18,
+LS 0.16. Here the untrained geometry fails on both counts: CounterFact paraphrases carry long distractor prefixes (mean
+best cosine 0.95, p10 0.92) while the locality prompts are near-neighbours of the same relation (mean 0.97, p90 0.99), so
+no fixed cosine threshold separates them. Two consequences: (1) the zsRE 0.65 is a property of zsRE's paraphrase/locality
+structure, not a general result; (2) near-neighbour rejection needs a pairwise decision (query vs the best record —
+same subject or not), whereas the current null logit is a function of the query alone and can only learn "this looks like
+a near-miss prompt". A pairwise null head is the next design item if the trained reader does not separate near-misses.

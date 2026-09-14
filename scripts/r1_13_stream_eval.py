@@ -38,6 +38,7 @@ def main() -> int:
     ap.add_argument("--theta", required=True)
     ap.add_argument("--tag", default=None)
     ap.add_argument("--n", type=int, default=100)
+    ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact"))
     ap.add_argument("--fast-steps", type=int, default=0)
     ap.add_argument("--fast-lr", type=float, default=1e-2)
     ap.add_argument("--delta-steps", type=int, default=0)
@@ -63,7 +64,7 @@ def main() -> int:
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     rc, cc = ReaderConfig(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
-    items, unrelated = load_dev_items("zsre", args.n, seed=21)
+    items, unrelated = load_dev_items(args.dataset, args.n, seed=21)
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_eval", stage="R1", projected_seconds=3600.0)):
         ledger = Ledger()
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
@@ -75,6 +76,7 @@ def main() -> int:
         ph = cap.params_hash
         ev = Evaluator(base, tok, unrelated[:50], None)
         rd = OUT / "streams_revision" / tag
+        tag = tag if args.dataset == "zsre" else f"{tag}@{args.dataset}"
         t0 = time.time()
         m = run_stream(cap, items, None, Budget(A=float(frozen["A"]), R=max(1, args.fast_steps, args.delta_steps), tau_edit=float(frozen["tau_edit"])), ev, rd, ledger, checkpoints=(), seed=1, arm="R1")
         assert params_hash(cap.params) == ph, "reusable weights changed during the stream (gate 2)"
@@ -101,6 +103,7 @@ def main() -> int:
                                  "prompt_hard_null_rate": float(np.mean([x >= args.null_threshold for x in nulls["prompt"]])), "paraphrase_hard_null_rate": float(np.mean([x >= args.null_threshold for x in nulls["paraphrase"]])),
                                  "unrelated_hard_null_rate": float(np.mean([x >= args.null_threshold for x in unrel]))},
                    "best_scores": best_scores, "read_counters": cap.cost_counters, "wall_seconds": time.time() - t0, "ledger": ledger.totals()}
+        summary["dataset"] = args.dataset
         (OUT / f"stream_eval_{tag}.json").write_text(json.dumps(summary, indent=1, default=float))
         md_path = OUT / "stream_eval.md"
         if not md_path.exists():
