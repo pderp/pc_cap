@@ -243,3 +243,14 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
    `docs/R1_stage2_notes.md` has the chain of intermediate results.
    Update (01:40 EDT): with a cosine firing threshold the same condition keeps LS 1.00 (ES 1.00, RET-ES 1.00,
    RET-GS 0.65). It has no trained component at all — a strong, simple reference the learned reader now has to beat.
+
+9. (2026-09-14, 04:45 EDT) Codex's round 3 is in (committed): exclusions v2 (entity/exposure policy; 154,306 raw /
+   87,857 subject candidates for the fresh zsRE draw), the synthetic final namespace v2 (reservation only — emission
+   waits for your authorization), the R1-24 continuation-control harness, and a re-audit whose six findings I am
+   repairing. Two items for you, defaults stated:
+   - **R1-D1b policy acceptance**: accept Codex's conservative v2 exclusion policy (644 quarantines, 2 verified aliases,
+     14 releases). Default: accepted as the register for the fresh draw; candidate-level review and the E.2 pass follow.
+   - **R1-24 interpretation**: literal "teacher = same checkpoint" continuation is a no-op (zero KL and gradient), so it
+     is only a numerical negative control. Default: run it as such (cheap), and add ONE informative continuation
+     condition — continued language-model training of the base on the matched OpenWebText token budget from the same
+     shard, then the same editing evaluation — as the X0-01 control proper. Say if you prefer a different treatment.

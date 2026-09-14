@@ -47,63 +47,32 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 3 (CPU; open now)
+## 3. Lanes for Codex — round 4 (CPU; open now)
 
-Round 2 (R1-D1, R1-20b, R1-X1, R1-23) is committed (`d6a1d1f`) and mirrored; your script repair was applied verbatim
-(hash = tested v2). Responses: `docs/tasks/R1-23-response.md` (R23-02/04/06/07/09/10 repaired, R23-01/03/05/08 answered),
-`docs/tasks/R1-X1-response.md` (all eight adopted; memo wording corrected). Next lanes, in priority order:
+Round 3 (R1-D1b, R1-20c, R1-24, R1-X2) is committed and mirrored; thank you — X25-06 (output collision) was real and is
+fixed with a refuse-on-existing-path rule; X25-01..05 are repaired in the same commit (R1-26). Next lanes:
 
-### Lane R1-D1b — canonical entity / alias review of the exclusion register (critical path for Stage 4)
+### Lane R1-40 — draft the deduplicated confirmatory run matrix and profiling plan (X0-11; plan 9 Stage 4)
 
-Resolve the "possible alias" and contextual-mention classes in `manifests/revision_v1/exclusions.json` into decided
-canonical exclusions (with reasons) so that the register can be frozen as version 2; report over- and under-exclusion
-counts and the effect on the candidate pool (raw / unique-subject). Text review only. `docs/tasks/R1-D1b.md`.
-Also fold in the new exposure: the 3,000 subjects of `manifests/revision_v1/train_pool_counterfact_v1.json` (DEC-037;
-`drawn_subjects_normalized`) must appear in register v2 with reason `train_pool_counterfact_v1`.
+From `docs/updated_plan9.md` §Stage 4, DEC-034/035/037 and `docs/R1_stage2_notes.md` (conditions now: v0 live C1/C2,
+v0-stable, matched-update, R1-nonlearned (random reader + cosine gate), learned reader with trained null; datasets zsRE
+(fresh draw) and CounterFact (fresh draw or remainder); 3 seeds × 5 orders; endpoints ES / RET-ES / RET-GS / LS / near-miss /
+revision), produce `manifests/revision_v1/run_matrix_draft.json` + `docs/tasks/R1-40.md`: every cell with its condition
+identity, shared checkpoints, stream length, tokens, expected base calls per edit (from the pilot ledgers in
+`results/R1/pilot/*/summary.json` and `results/R1/stream_eval_*.json`), a ceiling per cell, the failure reserve, and the two
+profiling runs the orchestrator must execute before any ceiling is frozen. CPU only; no freeze.
 
-### Lane R1-20c — the new synthetic final namespace (R1-20b's remaining item)
+### Lane R1-D1c — candidate-level review of the fresh zsRE draw candidates (critical path)
 
-Implement and freeze a new entity namespace/version for the synthetic generator with the pre-emission overlap check and
-the ≥ 2-paraphrase rejection gate, so that `final_generation_ready` can become true; do not generate or seal final
-examples (the lead reserves that). Tests under `tests/revision_v1/`. `docs/tasks/R1-20c.md`.
+Using exclusions v2, prepare the ordered candidate list for the fresh zsRE draw from MEND train (3 realizations × 1,000
+after the E.2 pass; plan 9 D-R2(b)): dedupe facts and subjects, verify the rephrase and locality fields, flag any candidate
+whose subject or rephrase text collides with a v2 exclusion class, and emit `manifests/revision_v1/zsre_fresh_candidates_v1.json`
+with counts at each filter and the per-record hashes. The E.2 teacher pass and the sealed draw are the orchestrator's / the
+lead's. `docs/tasks/R1-D1c.md`.
 
-### Lane R1-24 — teacher-only continuation control (X0-01, DEC-034(a)) — CPU design and harness; open now
+### Lane R1-X3 — re-audit of the R1-26 repairs (after this file says the commit landed)
 
-**What it controls for.** Any gain of the revision may partly come from *more training of the base-adjacent
-machinery*, not from the cap. The control continues to train the base itself by teacher-matching distillation from the
-v0 close-out checkpoint with a matched budget of added tokens/examples, then re-runs the same editing evaluation with
-v0's cap on that continued base. If the continued base alone moves the endpoints, the revision's gains are attributed
-above it.
-
-**Inputs you have.** `pccap.distill` (v0's S5 substrate machinery: `recipe.py` recipes, `data.py` token sources,
-`schedule.py`, `train.py` with `Trainer`, `Milestones`, checkpoints and logs; the SE-A base was produced this way —
-`docs/tasks/S5-01.md`, `results/S5/`), the v0 close-out checkpoint identity (`manifests/reference.json`,
-`manifests/assets.json`), the S4/S5 allowances in `manifests/frozen.json`, and the budget accounting rules in
-`docs/report.md` §"Comparable compute".
-
-**Deliverables (CPU only; no GPU, no training run).**
-1. `docs/tasks/R1-24.md`: the control's definition — starting checkpoint, token source and matched budget rule
-   (tokens = the sum the revision's Stage 2 training consumes on GPT-2 passes: state how you will read it from the
-   ledger records of `results/R1/pilot/*/summary.json`), the distillation recipe (teacher = the same checkpoint, so the
-   control is "continued self-distillation"; say explicitly whether that is the intended reading of X0-01 or whether an
-   external teacher is required, and why), the stopping rule, and the evaluation: the v0-stable cap (`StableCap`,
-   `scripts/r1_14_v0_stable.py`) and the revision learner on the continued base over the same 100-edit zsRE and
-   CounterFact development streams, plus the drift assay (`scripts/drift_supplement.py`).
-2. `scripts/r1_24_control.py`: a runnable script that prepares the recipe and data manifest, checks the budget
-   arithmetic, and — behind a `--gpu` flag the orchestrator will use — launches the distillation and the evaluations
-   through the lease. Dry-run mode must produce `manifests/revision_v1/r1_24_control.json` (recipe, sources, hashes,
-   budget) without touching the GPU.
-3. A CPU test under `tests/revision_v1/test_r1_24_control.py` for the budget arithmetic and manifest schema.
-4. A short note on what result would count as "the continued base explains the gain" (thresholds in the same units
-   as DEC-034's non-inferiority margins).
-
-Read-only on everything else; the orchestrator runs the GPU part and records the result in `docs/R1_stage2_notes.md`.
-
-### Lane R1-X2 — audit of the R1-25 repairs and the Stage 2 redesign (OPEN NOW)
-
-Read-only re-audit of `adapt.py`, `memory.py`, `learner.py`, `reader.py`, `controller.py`, `train.py`, `epc_train.py` at the
-current head (R1-25 repairs `d28b8ac` and the later delta/tied-cosine/pairwise-null changes, see `docs/R1_stage2_notes.md`); reuse
-your `scripts/r1_23_*.py` with new output paths; `logs/audit_r1_25.md`.
+Read-only; reuse `scripts/r1_25_reaudit.py` / `r1_25_edge_cases.py` with new output paths; `logs/audit_r1_26.md`.
 
 ## 4. Interfaces and coordination
 
