@@ -241,3 +241,5 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
    stable observations, a siamese cosine reader and v0-style per-position writes, RET-GS 0.65 vs 0.44 for the non-learned
    controls (ES 1.00) — but locality is not yet handled (LS 0.24 without a null). The trained null is the next step;
    `docs/R1_stage2_notes.md` has the chain of intermediate results.
+   Update (01:40 EDT): with a cosine firing threshold the same condition keeps LS 1.00 (ES 1.00, RET-ES 1.00,
+   RET-GS 0.65). It has no trained component at all — a strong, simple reference the learned reader now has to beat.

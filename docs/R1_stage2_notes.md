@@ -132,3 +132,22 @@ v0's radius-gated key distance. Locality is destroyed because nothing rejects un
 as a non-learned fallback, a cosine firing threshold) must restore LS without giving back RET-GS. The intermediate
 variants document why each piece is needed: one delta per record ES 0.02; soft mixing ES 0.13; dot-product scoring with
 hard top-1 ES 0.23; cosine + hard top-1 ES 1.00.
+
+## Non-learned revision condition on the zsRE stream (2026-09-14, 01:40 EDT)
+
+Cosine firing threshold (v0's radius in cosine units) with the random tied reader, per-position deltas, hard top-1:
+
+| min cosine | ES | RET-ES | RET-GS | LS |
+| ---: | ---: | ---: | ---: | ---: |
+| none | 1.00 | 1.00 | 0.65 | 0.24 |
+| 0.90 | 1.00 | 1.00 | 0.65 | 0.98 |
+| **0.93** | 1.00 | 1.00 | **0.65** | **1.00** |
+| 0.95 | 1.00 | 1.00 | 0.65 | 1.00 |
+
+Score populations with the random reader: own prompts 1.00, paraphrases mean 0.98 (p10 0.96), unrelated mean 0.86
+(p90 0.89), so a fixed threshold separates them on this stream. This condition — stable observations, a siamese cosine
+embedding of the tapped features (random weights), v0's per-prefix gradient writes, top-1 selection and a cosine gate —
+has NO trained component and reaches RET-GS 0.65 with LS 1.00 against the controls' 0.44 (v0 live 0.24 / 0.29). It
+becomes the reference condition ("R1-nonlearned") that the trained reader/null must beat; it also relocates the source of
+the paraphrase gain to the observation geometry (write-free features at blocks 3/7/11, last position + prompt span,
+cosine) rather than to learning. One seed, one order, 100 edits: development evidence only.
