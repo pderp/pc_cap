@@ -70,7 +70,7 @@ whose subject or rephrase text collides with a v2 exclusion class, and emit `man
 with counts at each filter and the per-record hashes. The E.2 teacher pass and the sealed draw are the orchestrator's / the
 lead's. `docs/tasks/R1-D1c.md`.
 
-### Lane R1-X3 — re-audit of the R1-26 repairs (after this file says the commit landed)
+### Lane R1-X3 — re-audit of the R1-26 repairs (OPEN NOW: commit 5a46d2e; response in docs/tasks/R1-X2-response.md)
 
 Read-only; reuse `scripts/r1_25_reaudit.py` / `r1_25_edge_cases.py` with new output paths; `logs/audit_r1_26.md`.
 
