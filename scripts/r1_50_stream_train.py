@@ -84,7 +84,7 @@ def main() -> int:
             expected = bank_identity(rows, enc.base_hash, enc.encoder_version, rc.taps, 2, 2, np.float16)
             if bank_path.exists():
                 b = pickle.loads(bank_path.read_bytes())
-                if not b.identity:  # banks built before R50-06 carry no identity: verify content against the pool, then stamp
+                if not getattr(b, "identity", None):  # banks built before R50-06 carry no identity: verify content against the pool, then stamp
                     if b.content_hash() != hashlib.sha256(b"".join(it.item_id.encode() + np.asarray(it.prompt_ids, np.int32).tobytes() + np.asarray(it.answer_ids, np.int32).tobytes() for it in b.items)).hexdigest() or len(b.items) != len(rows) or any(it.item_id != r["item_id"] for it, r in zip(b.items, rows)):
                         raise SystemExit(f"cached bank {bank_path} does not match the pool; delete it")
                     b.identity = dict(expected)
