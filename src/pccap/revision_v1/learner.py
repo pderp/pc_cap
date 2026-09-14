@@ -28,7 +28,12 @@ from pccap.contracts import (
 from pccap.harness.snapshot import LearnerState
 from pccap.revision_v1.adapt import FastConfig, adapt_record
 from pccap.revision_v1.contracts import RevisionCost, support_from_edit_item
-from pccap.revision_v1.controller import ControllerConfig, init_controller, writes
+from pccap.revision_v1.controller import (
+    ControllerConfig,
+    init_controller,
+    writes,
+    writes_with_delta,
+)
 from pccap.revision_v1.memory import DEFAULT_CEILING, RecordStore
 from pccap.revision_v1.observations import (
     ENCODER_VERSION,
@@ -68,7 +73,8 @@ class Selection:
     null_mass: float
     code: np.ndarray | None  # applicability-weighted code (None on a hard null)
     hard_null: bool
-    prompt_pass: object = None  # the selection pass (ForwardResult) kept for the prompt-position read when caching is on
+    prompt_pass: object = None
+    delta: np.ndarray | None = None  # applicability-weighted delta write of the selected records (None when none carries one)  # the selection pass (ForwardResult) kept for the prompt-position read when caching is on
 
 
 class RevisionCap:
@@ -92,6 +98,7 @@ class RevisionCap:
         self.jit_query = jax.jit(lambda p, last, span: query_embedding(p, rc, last, span))
         self.jit_key_apply = jax.jit(lambda p, q, keys, mask: applicability(p, rc, q, keys, mask))
         self.jit_writes = jax.jit(lambda p, q, code, mass: writes(p, cc, q, code, mass)[0])
+        self.jit_writes_with_delta = jax.jit(lambda p, q, code, delta, mass: writes_with_delta(p, cc, q, code, delta, mass)[0])
         self._vjp_fn = lambda p, q, code: jax.vjp(lambda c: writes(p, cc, q, c, jnp.asarray(1.0))[0], code)
         self.vjp_writes = self._vjp_fn
 
@@ -114,10 +121,13 @@ class RevisionCap:
         w, null, _ = self.jit_key_apply(self.params["reader"], q, jnp.asarray(keys), jnp.asarray(mask))
         w, null = np.asarray(w, np.float32), float(null)
         hard = null >= self.cfg.null_threshold
-        code = None
+        code, delta = None, None
         if not hard:
-            code = np.asarray(sum(float(w[i]) * recs[i].code for i in range(len(recs))) / max(float(w.sum()), 1e-12), np.float32)
-        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, keep)
+            wsum = max(float(w.sum()), 1e-12)
+            code = np.asarray(sum(float(w[i]) * recs[i].code for i in range(len(recs))) / wsum, np.float32)
+            if any(r.delta is not None for r in recs):
+                delta = np.asarray(sum(float(w[i]) * recs[i].delta for i in range(len(recs)) if recs[i].delta is not None) / wsum, np.float32)
+        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, keep, delta)
 
     def selection_for(self, ids: np.ndarray) -> Selection:
         ids = np.asarray(ids, np.int32).reshape(-1)
@@ -148,7 +158,10 @@ class RevisionCap:
             return ForwardResult(logits=np.asarray(fr.logits), sites={}, cost=cost)
         obs = observation_from_pass(fr, ids, prompt_mask(min(sel.prompt_len, len(ids)), len(ids)), self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
-        W = np.array(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(1.0 - sel.null_mass)), np.float32)
+        if sel.delta is None:
+            W = np.array(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(1.0 - sel.null_mass)), np.float32)
+        else:
+            W = np.array(self.jit_writes_with_delta(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(sel.delta), jnp.asarray(1.0 - sel.null_mass)), np.float32)
         p = len(ids) - 1
         if self.cfg.single_site:
             W[0] = 0.0

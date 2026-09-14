@@ -46,12 +46,13 @@ class RecordStore:
     def bytes(self) -> dict[str, int]:
         n = len(self.records)
         toks = sum(r.source_tokens for r in self.records)
-        b = {"keys": n * self.dk * 4, "codes": n * self.d_code * 4, "metadata": n * META_BYTES_PER_RECORD, "tokens": toks * TOKEN_BYTES, "index": 0, "weights": int(self.weights_bytes)}
+        deltas = sum(int(r.delta.size) * 4 for r in self.records if r.delta is not None)
+        b = {"keys": n * self.dk * 4, "codes": n * self.d_code * 4, "deltas": deltas, "metadata": n * META_BYTES_PER_RECORD, "tokens": toks * TOKEN_BYTES, "index": 0, "weights": int(self.weights_bytes)}
         b["total"] = sum(b.values())
         return b
 
     def _would_exceed(self, rec: MemoryRecord) -> bool:
-        extra = self.dk * 4 + self.d_code * 4 + META_BYTES_PER_RECORD + rec.source_tokens * TOKEN_BYTES
+        extra = self.dk * 4 + self.d_code * 4 + META_BYTES_PER_RECORD + rec.source_tokens * TOKEN_BYTES + (0 if rec.delta is None else int(rec.delta.size) * 4)
         return self.bytes()["total"] + extra > self.ceiling_bytes
 
     # ------------------------------------------------------------------ mutation (adapt path only)
@@ -93,8 +94,24 @@ class RecordStore:
             old = self.get(restore)
             old.active, old.superseded_by = True, None
 
+    def set_delta(self, record_id: str, delta: np.ndarray | None, delta_bytes_budget: bool = True) -> None:
+        """Fast-state delta write of an active record (the other in-place change ``adapt`` may make)."""
+        rec = self.get(record_id)
+        if not rec.active:
+            raise ValueError(f"{record_id!r} is inactive")
+        if delta is None:
+            rec.delta = None
+            return
+        delta = np.ascontiguousarray(delta, np.float32)
+        if delta.ndim != 2 or not np.all(np.isfinite(delta)):
+            raise ValueError("delta must be a finite [n_banks, d] array")
+        old = 0 if rec.delta is None else int(rec.delta.size) * 4
+        if delta_bytes_budget and self.bytes()["total"] - old + int(delta.size) * 4 > self.ceiling_bytes:
+            raise CapacityError("delta write would exceed the ceiling")
+        rec.delta = delta
+
     def set_code(self, record_id: str, code: np.ndarray) -> None:
-        """The only in-place change ``adapt`` may make to an existing record."""
+        """An in-place change ``adapt`` may make to an existing record (the other is ``set_delta``)."""
         rec = self.get(record_id)
         if not rec.active:
             raise ValueError(f"{record_id!r} is inactive")
@@ -157,6 +174,8 @@ class RecordStore:
         for r in self.records:
             if r.source_ids is not None:
                 arrays[f"src/{r.record_id}"] = np.asarray(r.source_ids, np.int32)
+            if r.delta is not None:
+                arrays[f"delta/{r.record_id}"] = np.asarray(r.delta, np.float32)
         scalars = {"dk": self.dk, "d_code": self.d_code, "ceiling_bytes": self.ceiling_bytes, "encoder_version": self.encoder_version,
                    "index_version": self.index_version, "metric": self.metric,
                    "records": json.dumps([{"record_id": r.record_id, "fact_id": r.fact_id, "provenance": list(r.provenance), "superseded_by": r.superseded_by} for r in self.records])}
@@ -169,9 +188,11 @@ class RecordStore:
         meta = json.loads(sc["records"])
         for i, mrec in enumerate(meta):
             src = st.arrays.get(f"src/{mrec['record_id']}")
+            dl = st.arrays.get(f"delta/{mrec['record_id']}")
             rec = MemoryRecord(record_id=mrec["record_id"], fact_id=mrec["fact_id"], revision_id=int(st.arrays["revision_id"][i]), created_order=i,
                                key=np.ascontiguousarray(st.arrays["keys"][i]), code=np.ascontiguousarray(st.arrays["codes"][i]), provenance=tuple(mrec["provenance"]),
-                               source_ids=None if src is None else np.asarray(src, np.int32), active=bool(st.arrays["active"][i]), superseded_by=mrec["superseded_by"])
+                               source_ids=None if src is None else np.asarray(src, np.int32), delta=None if dl is None else np.asarray(dl, np.float32),
+                               active=bool(st.arrays["active"][i]), superseded_by=mrec["superseded_by"])
             store.records.append(rec)
             store._by_id[rec.record_id] = i
         return store

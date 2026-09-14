@@ -57,6 +57,7 @@ class MemoryRecord:
     code: np.ndarray  # float32 [d_code] fast state (the only thing ``adapt`` may change on an existing record)
     provenance: tuple[str, ...] = ()  # support ids that produced this record
     source_ids: np.ndarray | None = None  # int32 [S] support prefix tokens kept for key rebuilds (counted)
+    delta: np.ndarray | None = None  # float32 [n_banks, d] fast-state write taught from support (counted; zero when absent)
     active: bool = True
     superseded_by: str | None = None
 

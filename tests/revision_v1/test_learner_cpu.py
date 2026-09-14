@@ -127,3 +127,26 @@ def test_answer_enters_the_code_and_nonfinite_rolls_back_fully():
     tr, _ = adapt_record(cap3, SupportExample(**{**s0.__dict__, "record_id": "s0r2", "revision": 2}), FastConfig(steps=1, lr=float("inf")))
     assert tr.rolled_back_reason in ("non_finite_code", "non_finite_loss") and len(cap3.store.records) == n_before
     assert cap3.store.get("s0").active is True and cap3.store.get("s0").superseded_by is None
+
+
+def test_delta_steps_acquire_and_round_trip():
+    base = TinyBase()
+    cfg = RevisionConfig(reader=RC, controller=CC, fast=FastConfig(steps=0, delta_steps=8, delta_lr=0.05, tau=0.01), null_threshold=1.01)
+    cap = RevisionCap(base, cfg, Ledger())
+    s0 = _support(0)
+    tr, cost = adapt_record(cap, s0, cap.cfg.fast)
+    assert tr.accepted and tr.loss_after < tr.loss_before and cost.reverses >= len(s0.answer_ids)
+    rec = cap.store.get("s0")
+    assert rec.delta is not None and rec.delta.shape == (3, CFG.d) and cap.store.bytes()["deltas"] == 3 * CFG.d * 4
+    cap.reset_queries()
+    prompt = np.asarray(s0.prompt_ids, np.int32)
+    sel = cap.selection_for(prompt)
+    assert sel.delta is not None
+    logits_with = cap.predict(prompt).logits
+    cap.store.set_delta("s0", None)
+    cap.reset_queries()
+    assert not np.allclose(cap.predict(prompt).logits, logits_with)  # the delta changes the read
+    cap.store.set_delta("s0", rec.delta if rec.delta is not None else np.zeros((3, CFG.d), np.float32))
+    back = RevisionCap(base, cfg, Ledger(), params=cap.params)
+    back.import_state(cap.export_state())
+    assert back.state_hash() == cap.state_hash() and back.store.get("s0").delta is not None

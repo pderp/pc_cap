@@ -53,3 +53,10 @@ def writes(params: dict, cfg: ControllerConfig, q, code, non_null_mass):
 def aggregate(W, cfg: ControllerConfig) -> float:
     b = np.asarray(cfg.bank_scales, np.float32)
     return float(np.sum(np.linalg.norm(np.asarray(W), axis=1) / b))
+
+
+def writes_with_delta(params: dict, cfg: ControllerConfig, q, code, delta, non_null_mass):
+    """Writes for one query when the selected records carry explicit delta writes: (controller + delta) · mass, then the bound."""
+    W = (raw_writes(params, cfg, q, code) + delta) * non_null_mass
+    W, s = bound_writes(W, cfg)
+    return jnp.where(non_null_mass > 0, W, jnp.zeros_like(W)), s
