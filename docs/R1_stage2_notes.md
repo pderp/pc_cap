@@ -362,3 +362,6 @@ Against v0 live (zsRE 0.24–0.29, CounterFact 0.00) and the non-learned control
 stream-scale mixed-domain training and the lexical feature is the primary revision condition with a single deployment
 rule. The recovery plan's five mismatches are all addressed (M1/M2 stream episodes, M3 mixed domains, M4 lexical feature,
 M5 no longer needed for the rule). Seeds and second streams follow.
+
+Second development streams (seed 22), mixed reader, null 0.5: zsRE 1.00 / 1.00 / 0.99 / 1.00; CounterFact 1.00 / 1.00 /
+0.765 / 1.00. Seed replicates of the mixed training are running.
