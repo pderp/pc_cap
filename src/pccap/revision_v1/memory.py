@@ -38,6 +38,7 @@ class RecordStore:
     ceiling_bytes: int = DEFAULT_CEILING
     encoder_version: int = 1
     index_version: int = 0
+    lexical_version: int = 0  # monotone invalidation epoch for support/active-set mutations
     weights_bytes: int = 0  # R23-07: reusable weights count against the same persistent-state ceiling
     records: list[MemoryRecord] = field(default_factory=list)
     _by_id: dict[str, int] = field(default_factory=dict, repr=False)
@@ -68,6 +69,7 @@ class RecordStore:
         rec.created_order = len(self.records)
         self.records.append(rec)
         self._by_id[rec.record_id] = len(self.records) - 1
+        self.lexical_version += 1
         return rec
 
     def supersede(self, old_id: str, new: MemoryRecord) -> MemoryRecord:
@@ -90,6 +92,7 @@ class RecordStore:
             raise ValueError("only the newest record can be removed")
         self.records.pop()
         del self._by_id[record_id]
+        self.lexical_version += 1
         if restore is not None:
             old = self.get(restore)
             old.active, old.superseded_by = True, None

@@ -3130,16 +3130,20 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-14T23:25:51+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "src/pccap/revision_v1/analysis.py",
+    "tests/revision_v1/test_analysis.py",
+    "docs/tasks/R1-57.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "CPU; new module + tests on synthetic inventories; consumes the R1-13 stream summaries and endpoint summaries"
+   "note": "independent-inventory analysis adapter (pairing, missingness, margins, bootstrap), 16 tests, development dry run (v3-v2 seed 0: zsRE 0, CounterFact -0.01); MQuAKE/360-cell support next"
   },
   {
    "id": "R1-58",
@@ -3151,16 +3155,19 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-14T23:25:51+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "scripts/r1_58_draw_streams.py",
+    "docs/tasks/R1-58.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "CPU; script + tests; no draw, no seal, no payload opened; both CounterFact readings supported"
+   "note": "draw/split/seal recipe bound to register v3 and candidate inventories, 16+5 tests, count-only reports for strict/exception and three datasets; no draw/seal"
   },
   {
    "id": "R1-59",
@@ -3174,16 +3181,19 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-14T23:25:52+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/R1_stage4_protocol_draft_v2.md",
+    "docs/tasks/R1-59.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "CPU; new document; reconciles U02/U08/U16 with results/R1/p1_profile and the endpoint runs"
+   "note": "protocol draft v2: gate adopted, 360 cells retained, U01-U18 reconciled (owner/lead gates left open); 138 h homogeneous scenario, not a measured all-condition ceiling"
   },
   {
    "id": "R1-X8",
@@ -3195,16 +3205,20 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-14T23:25:52+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "logs/review_r1_56.md",
+    "docs/tasks/R1-X8-edit-request.md",
+    "docs/tasks/R1-X8-cache-repair.patch"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "CPU; new review file; edit requests for the orchestrator"
+   "note": "counter-review: DF cache stale under same-count import and remove/add (repair patch applied by the orchestrator); P1 profile scope qualified; report corrections requested (67/33 pairs, drift residual, locality firing != LS)"
   },
   {
    "id": "R1-D4",
@@ -3212,6 +3226,32 @@
    "stage": "R1",
    "role": "BASE",
    "deps": [],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": "2026-09-14T23:25:52+00:00",
+   "commit": null,
+   "evidence": [
+    "manifests/revision_v1/mquake_items_v1.json",
+    "docs/tasks/R1-D4.md",
+    "scripts/r1_d4_prepare_mquake.py"
+   ],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "6,043 items on 5,577 unexposed subjects (5,418 after zsRE overlap), 19 target conflicts retained, 2 locality + 2 near-miss candidates per item, composition inventory 9,218 cases (4,981 with all dependencies); teacher pass is the orchestrator's"
+  },
+  {
+   "id": "R1-D1g",
+   "title": "Exclusion register v4: DEC-042 exception for CounterFact, MQuAKE subjects, zsRE overlap rule",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-D1f",
+    "R1-D4"
+   ],
    "gpu": "none",
    "review": false,
    "status": "ready",
@@ -3223,7 +3263,73 @@
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "source assets/data/raw/mquake/MQuAKE-CF.json (sha fbf1ab9e…); 6,043 unique rewrites on unexposed subjects; spec in docs/ongoing.md §3"
+   "note": "round 10; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "R1-60",
+   "title": "Composition endpoint module over the MQuAKE composition inventory (U09/U11)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-D4",
+    "R1-43"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 10; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "R1-61",
+   "title": "Stage 4 cell driver with comparator adapters, checkpoints, resume and refusal gates (U11/U17)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-58",
+    "R1-44"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 10; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "R1-57b",
+   "title": "Analysis adapter for three datasets, 360 cells, composition/unseen secondary outcomes",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-57",
+    "R1-59"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 10; spec in docs/ongoing.md §3"
   }
  ]
 }

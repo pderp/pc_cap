@@ -604,3 +604,21 @@ self-distillation run does change parameters (floating-point residuals of 3e-5 n
 near-no-op, not an identity; (3) the informative LM treatment's fidelity gate remains failed regardless of its improved
 held-out NLL — a fidelity-valid S1_LM needs a KL-bounded recipe or an explicit scope amendment before it can be a
 Stage 4 condition (U03 in the protocol draft).
+
+## Third dataset: MQuAKE-CF chosen over WikiFactDiff and RippleEdits (DEC-045; 2026-09-14, 17:40 EDT)
+
+The strict register v3 leaves no fresh CounterFact item (every CounterFact subject is in the old eligible pool), so the
+lead asked for an external source. Three were inspected from the network (copies in the session scratchpad only;
+nothing under `assets/` until the lead's approval):
+
+| source | licence | usable items | paraphrases | locality | answers (GPT-2 tokens) | verdict |
+| --- | --- | ---: | --- | --- | --- | --- |
+| MQuAKE-CF (Princeton, 2023) | MIT | 7,236 unique (subject, relation) counterfactual rewrites, 6,043 on subjects outside register v3; 37 relations | question form of each cloze prompt; aliases from `new_single_hops` | same-relation prompts of other subjects (CounterFact convention) | 77 % ≤ 3 tokens | **chosen**: CounterFact-like construction, short answers, and 9,218 verified two-hop questions (3 paraphrases each) for the composition endpoint |
+| WikiFactDiff (Orange, 2024) | CC-BY-SA-4.0 | 32,873 replacement updates but only 5,031 with entity objects (4,813 unexposed); 157 relations | 4 templates per update | 3 neighbour facts per update | median 5 tokens, 19 % ≥ 8 | real-world updates 2021→2023 (unknown to GPT-2): a different claim; long answers; kept in mind for a later stage |
+| RippleEdits (2023) | MIT | 4,755 edits (1,948 recent / 1,922 random / 885 popular) | subject-aliasing tests for 731 of the recent edits only | relation-specificity tests for most | — | prompts ship with the subject blanked (Wikidata id only): label lookups needed; thinner coverage |
+| KnowEdit WikiData_counterfact | MIT | 2,340 | subject aliasing | relation specificity | — | too small |
+
+MQuAKE-CF subjects overlap CounterFact's by 837 and the register by 924 (removed in the 6,043 count); overlap with the
+zsRE pools is 22 subjects. The lead keeps CounterFact (hence the DEC-042 exception) and adds MQuAKE-CF as the third
+dataset; the matrix becomes 360 cells. Codex lane R1-D4 prepares the items; the orchestrator's teacher pass follows
+(zsRE rule: the base's greedy answer must not already match the new answer; one paraphrase suffices, as for zsRE).

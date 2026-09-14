@@ -1,7 +1,7 @@
 # Ongoing work (the single current log; previous versions are dated under `docs/archive/`)
 
-Rewritten 2026-09-11 06:55 EDT, updated 2026-09-14 17:20 EDT (round 8 committed; round 9 lanes) by the orchestrating session for
-the concurrent round of `docs/updated_plan7.md`. Previous version: `docs/archive/ongoing-2026-09-14-1515.md`. Rules §1 are
+Rewritten 2026-09-11 06:55 EDT, updated 2026-09-14 18:30 EDT (round 9 committed; round 10 lanes) by the orchestrating session for
+the concurrent round of `docs/updated_plan7.md`. Previous version: `docs/archive/ongoing-2026-09-14-1830.md`. Rules §1 are
 unchanged and restated in `CONTRIBUTING.md`: JAX only, sibling/FabricPC read-only, resources under
 `assets/`, **no commits by agents** (the lead commits; the orchestrator commits only when the lead asks),
 task records in `docs/tasks/<ID>.md`, claim rows with the status tool or a claim JSON, lease for any GPU
@@ -40,6 +40,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   ceiling with exact restore; edit 0.07–0.13 s; query 10–15 ms; a full 1,000-edit cell with every endpoint at three
   checkpoints ≈ 1,150 s. Codex's 240-cell matrix v3 ≈ 92 h against the 15 h envelope; the lead keeps the full scope (DEC-044);
   ceilings will be set from the measured components.
+- **Round 9 committed by Codex** (`678c703`): analysis adapter (R1-57), draw recipe dry-run (R1-58), protocol v2 (R1-59, 360 cells),
+  counter-review (R1-X8; cache repair applied), MQuAKE preparation (R1-D4: 6,043 items, composition inventory).
 - **Round 8 committed** (`c401f55`): Stage 4 protocol draft (R1-49, gates U01–U18), frozen register binding
   (R1-D1f, `exclusions_frozen_v3.json`), ordinary-text null spec (R1-50b), R1-24 review (R1-X7; qualifications applied
   to the notes).
@@ -55,77 +57,58 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 9 (CPU; open now)
+## 3. Lanes for Codex — round 10 (CPU; open now)
 
-Round 8 is committed and mirrored. These lanes prepare the freeze while the lead's three decisions are pending; none of
-them depends on a decision, and none draws, seals or runs the base.
+Round 9 is committed (Codex's own commit `678c703`) and mirrored; the cache repair from R1-X8 is applied (the two
+test-maintenance patches no longer applied — the contexts had already changed — and the tests they targeted pass).
+Standing rules as before: new files only; CPU only; no teacher, base, draw or seal; edit requests as patches.
 
-### Lane R1-57 — revision analysis adapter (U15)
+### Lane R1-D1g — exclusion register v4 (DEC-042 exception, DEC-045 MQuAKE)
 
-A new module `src/pccap/revision_v1/analysis.py` (+ `tests/revision_v1/test_analysis.py`) that turns the Stage 4 cell
-outputs into the pre-registered contrasts: inputs are the R1-13 stream summaries (`results/R1/streams_revision/<tag>/`
-and `stream_eval_<tag>.json`), the endpoint summaries (`results/R1/endpoints/<tag>/summary.json`) and an expected
-inventory (cells × conditions × realizations × orders) supplied independently of the outputs. Per contrast: paired by
-item and update order across conditions, clustered by realization; report point differences, cluster-bootstrap and
-paired intervals labelled preliminary at three clusters; the classifier from the protocol draft §6 (ΔRET-GS ≥ 0.05
-with lower bound > 0; ES loss ≤ 0.02; LS loss ≤ 0.01) applied per dataset; missing cells, failed acquisitions and
-unavailable endpoints retained in the denominators, never imputed. Tests on synthetic inventories with known answers,
-including a missing-cell case and a case where the v0 `paired.py` conventions (0.02 margin, fixed arm names) would give a
-different verdict. Done-when: the module runs on the existing development outputs as a dry run (`--dry-run` prints the
-table with a "development, not confirmatory" banner) and the tests pass.
+A new policy/register version binding, in the style of R1-D1f: (1) the CounterFact reason-specific exception
+(waive `old_eligible:counterfact` only; every other reason active) applied to the R1-D2 inventory, so the 12,246
+conditional candidates become the CounterFact candidate list; (2) MQuAKE subjects (`r1_d4_v1/subjects.jsonl`) added
+as a new exposure source once the pool exists (`manifests/revision_v1/mquake_pool_v1.json`, written by the
+orchestrator's teacher pass; if absent, bind the R1-D4 subject inventory and mark the pool binding pending); (3) the
+159 zsRE-overlap subjects resolved by a stated rule (default: they stay in the zsRE fresh candidates and leave the
+MQuAKE inventory, since zsRE's fresh draw is the scarcer resource — say so if you disagree with the default); (4)
+cross-dataset exposure counts for all three datasets. Output: `manifests/revision_v1/exclusions_frozen_v4.json` with
+child hashes, `scripts/r1_d1g_freeze_register_v4.py`, tests. No draw.
 
-### Lane R1-58 — fresh-stream draw / split / seal recipe, dry-run only (U06, U07)
+### Lane R1-60 — composition endpoint module (U09/U11)
 
-A script `scripts/r1_58_draw_streams.py` bound to `manifests/revision_v1/exclusions_frozen_v3.json` and the candidate
-inventories (`counterfact_fresh_candidates_v1.json`, `zsre_fresh_candidates_v1.json`): for a named source decision
-(`--counterfact-source strict|exception`, both readings supported), draws three realizations per dataset (zsRE, CounterFact, and MQuAKE once R1-D4's inventory exists) of 1,000 edit
-items plus 100 outside items and the near-miss / revision reserves, disjoint across roles and realizations, stratified
-as the protocol draft §3 states, with an explicit shortfall rule; writes an unsealed draw manifest with every id, hash
-and RNG parameter, and refuses to seal or to write a payload unless `--i-am-the-lead` is present (which you must not
-pass). Tests: determinism, disjointness, register exclusion, refusal paths, both source readings, shortfall reporting.
-Done-when: `--dry-run` reports counts per role and realization for both readings without writing anything but the
-report under `logs/`.
+`src/pccap/revision_v1/endpoints_composition.py` + tests on TinyBase, in the style of `endpoints.py` and
+`endpoints_unseen.py`: input = the R1-D4 composition inventory (`r1_d4_v1/composition.jsonl`; a case = a multi-hop
+question with three paraphrases, the pre-edit answer, the post-edit answer with aliases, and the edit items it depends
+on). Evaluation on an independent clone: teach the dependency edits (all of them, in order), then decode each
+paraphrase; success = the post-edit answer (alias match, greedy ≤ 32 tokens, newline/EOS stop), reported per
+paraphrase and per case (all three); also the cap-off answer and whether the pre-edit answer reappears. Cases whose
+dependencies conflict (the 19 conflicts) or include an excluded item are reported as unavailable, never imputed.
+Denominators: planned cases, evaluable, scored. Provide the inventory selection rule for the confirmatory runs (which
+cases attach to which realization: only cases whose dependencies are all in that realization's edit stream) and its
+expected-count arithmetic for R1-58.
 
-### Lane R1-59 — Stage 4 protocol draft v2 (U02, U08, U16)
+### Lane R1-61 — Stage 4 cell driver with comparator adapters (U11/U17)
 
-A new document `docs/R1_stage4_protocol_draft_v2.md` that reconciles your draft with what is now measured: primary
-condition v3 (the gate, `primary_condition_v3.json`) and v2 as the no-gate comparison; the P1 profile numbers
-(`results/R1/p1_profile/*/summary.json`, `docs/R1_stage2_notes.md` §"R1-40c P1"); the unseen endpoint at
-100/300/1,000 with and without the gate; the drift recount; the endpoint costs (R1-43 151 s, R1-44 ≈ 75–200 s, drift
-≈ 165 s per checkpoint for the full 128-window assay). The lead has decided (DEC-044) that the scope is NOT cut: price the full matrix — now 8 conditions × 3 datasets (MQuAKE-CF added, DEC-045) × 3 realizations × 5 orders = 360
-cells — from the measured components (cells × wall hours with the 0.2 reserve, per condition and dataset, shared
-training charged once) and state which U-gates the measurements close; do not propose reductions. Keep U01–U18 with their status updated; do not close a gate the lead owns.
+`scripts/r1_61_cell_driver.py` (+ a module under `src/pccap/revision_v1/` if you prefer, + TinyBase tests): runs ONE
+matrix cell — condition × dataset × realization × order — from a sealed-stream manifest (use the R1-58 dry-run
+inventory format; on TinyBase use synthetic items) with checkpoints at 100/300/1,000: at each checkpoint the retention
+(RET-ES/RET-GS over all edited items), locality (LS), unseen-prompt (R1-44 adapter), and at the final checkpoint the
+near-miss/revision (R1-43), composition (R1-60) and drift assays; ledger charging per phase; state hash before/after
+every endpoint (restore equality); resume from the last completed checkpoint; refusal on any code-identity or manifest
+mismatch; all outputs to a new directory named by the cell identity. Comparator adapters: `R1_learned_ff` (v3: gate)
+and `v2` (no gate) via `RevisionCap`; `R1_nonlearned` (random reader, gate 0.93); `v0_stable` (`revision_v1/v0_stable`);
+`matched_update` (R1-15); `v0_live_C1/C2` (`pccap.harness.arms.make_learner`) — each through the same query-reset and
+observer interface (memory bytes, firing, active records). Where an adapter's observer cannot be provided
+(v0 caps have no selection object), report the field as unavailable rather than zero. The orchestrator validates the
+driver on the real base and runs it.
 
-### Lane R1-D4 — MQuAKE-CF preparation (DEC-045; CPU; highest priority of the round)
+### Lane R1-57b — analysis adapter: three datasets, 360 cells, composition and unseen endpoints
 
-Source: `/home/derp/cap/assets/data/raw/mquake/MQuAKE-CF.json` (sha256 in `manifests/datasets.json`; MIT). Produce, as
-new files, `scripts/r1_d4_prepare_mquake.py`, tests, `manifests/revision_v1/mquake_items_v1.json` (item inventory with
-hashes, no payload text needed in the manifest) and the prepared resource under
-`/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/`. Rules: (1) one item per unique (subject, relation_id)
-rewrite; when several instances give different `target_new` for the same pair, keep the first by `case_id` and record
-the conflict; (2) prompt = the cloze template with the subject filled (`"{} is employed by"` → `"Carl Sagan is employed
-by"`), answer = `target_new.str`, aliases = the matching `new_single_hops[].answer_alias` (plus the string itself),
-paraphrases = the `question` form (and any second cloze/question variant found in `single_hops`/`new_single_hops` for
-the same triple); (3) locality prompts = two same-relation cloze prompts of other subjects with their `target_true`
-(the CounterFact neighbourhood convention), never sharing the subject; near-miss reserves the same way, disjoint from
-the locality prompts; (4) composition inventory = the instances' `questions` (three paraphrases), `answer`/`new_answer`
-with aliases and the `orig` triples, keyed to the edit items they depend on, marked `verified_source: MQuAKE` — these
-are the direct composition questions R1-43 lacks; (5) exposure: drop every item whose normalized subject is in
-`manifests/revision_v1/exclusions_v3.json` (NFKC, casefold, whitespace) and list the 924 dropped; emit the MQuAKE
-subject inventory for the register's next version; report the overlap with the zsRE fresh candidates; (6) no teacher,
-no base, no draw, no seal: the teacher/eligibility pass is the orchestrator's. Counts to report: items, subjects,
-relations, answer-token histogram (use `pccap.data.tokenize`), locality coverage, composition questions per item.
-
-### Lane R1-X8 — counter-review of R1-55, R1-56 and the Stage 2 report revision
-
-Review `scripts/r1_55_p1_profile.py`, the R1-56 gate in `src/pccap/revision_v1/learner.py` (`_rare_overlap`,
-`rare_overlap_min`, `rare_df_max`), its test, the extended `scripts/r1_44_unseen_run.py` (pool fillers and
-pool-sourced outside prompts) and `docs/R1_stage2_report.md` against the notes and the result files. Questions to
-answer: is the document-frequency cache invalidated correctly under supersession and removal; can the gate's
-rarity criterion be gamed by a query that repeats a record's rare token; are the pool-sourced fillers and outside
-prompts admissible as development evidence and correctly labelled; are the report's numbers bound to files; is
-anything in the report stated as established that the evidence does not support. Output `logs/review_r1_56.md` with
-edit requests for the orchestrator.
+Extend `analysis.py` by new files only (`analysis_stage4.py` or similar): the expected inventory generator for
+8 × 3 × 3 × 5 cells with the checkpoint set, the composition and unseen endpoint summaries as secondary outcomes
+(descriptive unless a margin is registered — U14), the v2-vs-v3 comparison as a declared secondary contrast, and
+missing-cell accounting per condition. Dry run on the development outputs with the "not confirmatory" banner.
 
 ## 4. Interfaces and coordination
 

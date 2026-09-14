@@ -166,8 +166,8 @@ class RevisionCap:
 
     def _rare_overlap(self, prompt: np.ndarray, source_ids: np.ndarray) -> int:
         """Number of distinct non-stop tokens shared by the query and the record's support that occur in at most
-        ``rare_df_max`` active records (document frequency over the current memory; recomputed when the store grows)."""
-        version = (len(self.store.records), len(self.store.active_records()))
+        ``rare_df_max`` active records (document frequency over the current memory; invalidated on store mutation and state restore)."""
+        version = (id(self.store), self.store.lexical_version)
         if getattr(self, "_df_cache", (None,))[0] != version:
             df: dict[int, int] = {}
             for r in self.store.active_records():
@@ -287,6 +287,7 @@ class RevisionCap:
         candidate.ceiling_bytes = self.cfg.ceiling_bytes  # the configured policy governs; a snapshot cannot raise it
         candidate.validate()
         self.store = candidate
+        self.__dict__.pop("_df_cache", None)
         self.reset_queries()
 
     def state_hash(self) -> str:
