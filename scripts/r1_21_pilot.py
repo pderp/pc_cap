@@ -41,6 +41,7 @@ def main() -> int:
     ap.add_argument("--dev-every", type=int, default=0, help="evaluate the dev losses every N steps (0 = only before/after) and keep the best-dev weights")
     ap.add_argument("--weight-decay", type=float, default=0.0)
     ap.add_argument("--mix-synthetic", type=float, default=0.0, help="fraction of each batch drawn from synthetic episodes when --domain counterfact")
+    ap.add_argument("--pool", default=None, help="natural rows source: a train_pool manifest (DEC-037) instead of the development pools")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -81,7 +82,12 @@ def main() -> int:
             from r1_20_text_adapter import (
                 tokenize_natural_episode,  # Codex R1-20: project tokenization convention
             )
-            rows, _ = load_development(ROOT)
+            if args.pool:
+                pool = json.loads(Path(args.pool).read_text())
+                assert pool.get("mode") == "train_pool", "only a declared training pool may replace the development pools"
+                rows = pool["items"]
+            else:
+                rows, _ = load_development(ROOT)
             tok = GPT2Tokenizer()
 
             def natural(seeds, split, want):
@@ -197,7 +203,7 @@ def main() -> int:
                 null_rates.setdefault(lab.role, []).append(cap.selection_for(np.asarray(q.prompt_ids, np.int32)).null_mass)
         behav = {r: {"label_exact": float(np.mean(v)), "n": len(v), "null_mass_mean": float(np.mean(null_rates[r])),
                      "unchanged_from_capoff": (float(np.mean(preserved[r])) if r in preserved else None)} for r, v in roles.items()}
-        summary = {"args": vars(args), "estimator": args.estimator, "domain": args.domain, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
+        summary = {"args": vars(args), "estimator": args.estimator, "domain": args.domain, "pool": args.pool, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
                    "featurize_wall_s": feat_s, "train_wall_s": train_s, "best_dev": {"answer": best["dev_answer"], "step": best["step"]}, "final_after": (evaluate(final_theta) if best["theta"] is not None else None), "dev_before": before, "dev_after": after, "behavioural_dev": behav,
                    "answer_roles": list(ANSWER_ROLES), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))
