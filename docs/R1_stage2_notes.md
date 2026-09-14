@@ -587,3 +587,10 @@ overlap ≥ 1 as the primary condition (`manifests/revision_v1/primary_condition
 residual 10 % at 1,000 records is reported as the endpoint's development value. A stop list with capitalized forms is
 a possible data fix before the freeze (it would change the lexical feature the reader was trained with, so it would
 need a retrain; not done).
+
+Seed coverage of the gated condition (v3; `mixed_text_s{1,2}_rare1_*`, `text_s{1,2}_rare1_n1000_unseen_zsre`,
+`endpoints/text_s0_rare1_v1`): seeds 1 and 2 keep exactly their ungated stream results (zsRE 0.98 / 0.96, CounterFact
+0.85 / 0.79, ES / RET-ES / LS 1.00) and fire on 10 % / 11 % of unseen zsRE prompts at 1,000 records (seed 0: 10 %);
+near-miss preservation 100/100, revision 100/100 (new-answer paraphrase exactness 0.79, reappearance 0) are unchanged
+under the gate. v3 = v2 weights + gate is therefore fully characterised on the development streams: zsRE RET-GS
+0.96–0.98, CounterFact 0.715–0.85, LS 1.00, unseen false fires 10–11 % at 1,000 zsRE records, 0 % CounterFact.

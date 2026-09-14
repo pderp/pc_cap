@@ -31,7 +31,8 @@
   "counterfact": "RET-GS 0.725 / 0.85 / 0.79 (seeds 0–2, stream 21), LS 1.00; ES 1.00; RET-ES 1.00",
   "ordinary_text_drift": "seed 0, 32 windows × 128 positions, per-position selection: after 100 zsRE edits 0.000 nats (ratio 1.000); after 100 CounterFact edits +0.012 nats (ratio 1.012; v1 reader +0.379, ratio 1.46)",
   "endpoints_seed0": "near-miss preservation 100/100; revision 100/100 (old answer reappearance 0); unseen-edit-prompt false fires zsRE 7/100, CounterFact 0/100 (after 100 edits)",
-  "with_gate_seed0": "zsRE RET-GS 0.96 / LS 1.00; CounterFact 0.715 / 1.00 (stream 21); unseen false fires zsRE 5 % / 11 % / 10 % at 100 / 300 / 1,000 records (45 % without the gate at 1,000), CounterFact 0 % at 1,000"
+  "with_gate_seed0": "zsRE RET-GS 0.96 / LS 1.00; CounterFact 0.715 / 1.00 (stream 21); unseen false fires zsRE 5 % / 11 % / 10 % at 100 / 300 / 1,000 records (45 % without the gate at 1,000), CounterFact 0 % at 1,000",
+  "with_gate_seeds": "seeds 0/1/2 stream 21: zsRE RET-GS 0.96 / 0.98 / 0.96, CounterFact 0.715 / 0.85 / 0.79, ES/RET-ES/LS 1.00; unseen zsRE false fires at 1,000 records 10 / 10 / 11 %; near-miss 100/100, revision 100/100 (seed 0)"
  },
  "controls": [
   "v0 live C1/C2",
@@ -43,7 +44,7 @@
  "open_risks": [
   "CounterFact selection among near-duplicate candidates at ≥ 1,000 records (fires-own 0.59–0.625 in the bank profile; P1/P3 profiles at 300/1,000 records on the real base in progress)",
   "residual ordinary-text firing after CounterFact edits (+0.012 nats; the assay's fixed-length probes at 16/48/96 saw none, so the firing is at other prefix lengths)",
-  "unseen-edit-prompt false fires on zsRE 10 % at 1,000 records with the gate (rare relation words and subword fragments); seeds 1–2 not yet evaluated with the gate"
+  "unseen-edit-prompt false fires on zsRE 10 % at 1,000 records with the gate (rare relation words and subword fragments); 10–11 % over three seeds"
  ],
  "evidence": "docs/R1_stage2_notes.md (R1-54 and seeds sections); results/R1/stream_eval.md (mixed_text* rows); results/R1/drift_assay_r1_50_stream_mixed_text_*.json; results/R1/endpoints/text_s0_v1*/",
  "supersedes": "primary_condition_v2 (same reader weights; adds the R1-56 deployment gate)"

@@ -26,6 +26,7 @@ def main() -> int:
     ap.add_argument("--near", type=int, default=100)
     ap.add_argument("--revision", type=int, default=100)
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
+    ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate: minimum memory-rare tokens shared with the selected record")
     ap.add_argument("--no-lease", action="store_true")
     args = ap.parse_args()
     import pccap  # noqa: F401
@@ -54,7 +55,7 @@ def main() -> int:
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
         k1, k2 = jax.random.split(jax.random.PRNGKey(0))
         theta = load_theta(Path(args.theta), {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)})
-        cap = RevisionCap(base, RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0, delta_steps=5, delta_lr=0.1, tau=float(frozen["tau_edit"])), null_threshold=0.5, tau_edit=float(frozen["tau_edit"])), ledger, params=theta)
+        cap = RevisionCap(base, RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0, delta_steps=5, delta_lr=0.1, tau=float(frozen["tau_edit"])), null_threshold=0.5, rare_overlap_min=args.rare_overlap, tau_edit=float(frozen["tau_edit"])), ledger, params=theta)
         doc, binding = load_dev_challenges()
         ev = EndpointEvaluator(cap, tok, base=base, max_new=32, ledger=ledger)
         near_rows = [ev.near_miss(row) for row in doc["near_neighbour"]["items"][: args.near]]

@@ -162,7 +162,9 @@ share at least one memory-rare token (document frequency ≤ 2 over the active r
 costs nothing measurable on the streams (zsRE 0.96 / 1.00, CounterFact 0.715 / 1.00 vs 0.96 / 0.725) and cuts the
 unseen false fires to 5 % / 11 % / 10 % at 100 / 300 / 1,000 zsRE records and to 0 % at 1,000 CounterFact records.
 Requiring two rare tokens reaches 1 % but rejects single-token subjects on their own prompts (ES 0.98–0.99,
-CounterFact RET-GS 0.62), so the one-token gate is the proposed primary rule (condition v3, DEC-043 proposed).
+CounterFact RET-GS 0.62), so the one-token gate is the proposed primary rule (condition v3, DEC-043 proposed). Seeds 1 and 2 keep their
+ungated stream results exactly under the gate and fire on 10–11 % of unseen zsRE prompts at 1,000 records; the
+near-miss and revision endpoints are unchanged.
 
 ### 5.3 Cost and state at occupancy (R1-40c P1; [results/R1/p1_profile/](../results/R1/p1_profile/))
 

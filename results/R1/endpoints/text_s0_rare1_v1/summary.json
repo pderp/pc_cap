@@ -1,0 +1,133 @@
+{
+ "tag": "text_s0_rare1_v1",
+ "theta": {
+  "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_text/theta.npz",
+  "sha256": "c5777b5bf0df754766463737f53f641f624de8bc98ac0420fd99bec8850730db",
+  "params_hash": "dc4ebb22b1179076abf763d9c3847fa7a7b520b3431e794216eb5d63f9b2f1a3"
+ },
+ "reader": {
+  "lexical": true,
+  "stop_tokens": "manifests/revision_v1/stop_tokens_v1.json",
+  "null_threshold": 0.5,
+  "delta_steps": 5,
+  "delta_lr": 0.1
+ },
+ "base_checksum": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+ "challenge_binding": {
+  "path": "/home/derp/cap/pc_cap/manifests/dev/challenges.json",
+  "sha256": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+  "inventory": {
+   "near_neighbour": {
+    "available_rows": 400,
+    "source_population_n": 20085,
+    "required": 100,
+    "source_status": "ok",
+    "shortfall": 0,
+    "sha256_items": "9916af939aed42a256951ff09ad76ea599c7641e33bbbec66e4fd4e6163975a5"
+   },
+   "composition": {
+    "available_rows": 54,
+    "source_population_n": 54,
+    "required": 100,
+    "source_status": "unsupported",
+    "shortfall": 46,
+    "sha256_items": "35ceec12dd30b8df4f47c28046f9461b6e81a65b08cd26607d22614977c2bda4"
+   },
+   "temporal_correction": {
+    "available_rows": 100,
+    "source_population_n": 100,
+    "required": 100,
+    "source_status": "ok",
+    "shortfall": 0,
+    "sha256_items": "201e20be9612717bbee07a7e67daf93592c2adead737f7b5f859352b1e0ff2b8"
+   }
+  }
+ },
+ "starting_state": "empty memory; each case restores a clone",
+ "near_miss": {
+  "n": 100,
+  "summary": {
+   "planned": 100,
+   "scored": 100,
+   "successes": 100,
+   "status_counts": {
+    "ok": 100
+   },
+   "evaluated_fraction": 1.0,
+   "full_inventory_fraction": 1.0,
+   "denominator_policy": "all evaluable cases, including unsuccessful acquisition/answers; unreachable and resource failures reported separately, never imputed",
+   "coverage": 1.0
+  }
+ },
+ "revision": {
+  "n": 100,
+  "summary": {
+   "planned": 100,
+   "scored": 100,
+   "successes": 100,
+   "status_counts": {
+    "ok": 100
+   },
+   "evaluated_fraction": 1.0,
+   "full_inventory_fraction": 1.0,
+   "denominator_policy": "all evaluable cases, including unsuccessful acquisition/answers; unreachable and resource failures reported separately, never imputed",
+   "coverage": 1.0
+  }
+ },
+ "composition": {
+  "status": "unreachable",
+  "reason": "no verified direct composition questions supplied (R1-43 \u00a7composition); two-hop chains are diagnostic only",
+  "rows_available": 54
+ },
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 5772,
+   "partial_forwards": 918,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 12.147360946051776,
+   "accel_seconds": 12.147360946051776,
+   "peak_mem_mib": 755.814453125,
+   "tokens": 130457
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 3760,
+   "partial_forwards": 0,
+   "reverses": 1280,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 11.209620557259768,
+   "accel_seconds": 11.209620557259768,
+   "peak_mem_mib": 755.814453125,
+   "tokens": 32434
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 9532,
+   "partial_forwards": 918,
+   "reverses": 1280,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 23.356981503311545,
+   "accel_seconds": 23.356981503311545,
+   "peak_mem_mib": 755.814453125,
+   "tokens": 162891
+  },
+  "events": 10450,
+  "elapsed_wall_seconds": 134.10329580307007,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "wall_seconds": 134.10330319404602
+}
