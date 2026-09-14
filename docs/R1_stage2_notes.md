@@ -17,6 +17,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | cf_pool3k_r25_600 | BP, CounterFact 3k training pool (DEC-037), fresh episodes/step, wd 0.01, best-dev @ 449, 32 dev eps | fresh | 600 × 4 | 1e-3 | 8.02 → 3.50 | 1.87 → 0.70 | 0.007 → 0.006 | 0.03 (n=64) | 0.00 | 1.00 | 0.97 | 0.03 / 0.99 / 0.98 | 100 min |
 | cf_pool3k_tiedcos_400 | BP, 3k pool, tied cosine reader (query-only null), fresh episodes, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.27 | 5.14 → 0.91 | 0.009 → 0.065 | 0.05 (top-1 hit 0.45) | 0.06 (top-1 0.53) | 1.00 | 1.00 | 0.02 / 0.98 / 0.98 | 74 min |
 | cf_pool3k_pairnull_400 | BP, 3k pool, tied cosine + pairwise null (no own-prompt role), fresh episodes, wd 0.01, best-dev @ 349 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.29 | 5.32 → 0.98 | 0.009 → 0.14 | 0.03 (top-1 0.45) | 0.03 (top-1 0.53) | 0.97 | 0.94 | 0.001 / 0.96 / 0.93 | 74 min |
+| cf_pool3k_pair_own_400 | BP, 3k pool, tied cosine + pairwise null + own-prompt queries (all supports), fresh, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 7.41 → 2.62 | 3.06 → 0.74 | 0.009 → 1.12 | 0.06 (top-1 0.53) | 0.28 (top-1 0.69) | 0.34 | 0.66 | 0.06 / 0.43 / 0.63 | 147 min (shared GPU) |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -191,3 +192,21 @@ RET-GS and 0.08 LS. The trained reader's value must come from its null decision,
 combined run (`cf_pool3k_pair_own_400`: pairwise null + own-prompt queries) is the test. If the trained null does not
 transfer to zsRE, the next data decision is a zsRE training pool from MEND train (one paraphrase per item; own-prompt +
 rephrase + locality queries), which would amend DEC-034(b) for training only.
+
+## Combined reader (pairwise null + own-prompt queries) on the streams (2026-09-14, 04:15 EDT)
+
+| stream | null threshold | ES | RET-ES | RET-GS | LS |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| zsRE | 0.5 | 1.00 | 1.00 | 0.61 | 0.14 |
+| zsRE | 0.3 | 1.00 | 1.00 | 0.60 | 0.14 |
+| zsRE | 0.15 | 0.98 | 0.98 | 0.55 | 0.18 |
+| CounterFact | 0.5 | 0.96 | 0.97 | 0.28 | 0.20 |
+| CounterFact | 0.3 | 0.89 | 0.91 | 0.28 | 0.24 |
+| CounterFact | 0.15 | 0.62 | 0.71 | 0.27 | 0.54 |
+
+The own-prompt role removes self-rejection (ES 1.00 / 0.96) and the trained similarity now beats the random reader on
+CounterFact paraphrases (RET-GS 0.28 vs 0.18; old-fact top-1 0.69 vs 0.53) — but the null became too permissive
+(unrelated null mass 0.05 zsRE / 0.20 CounterFact; LS 0.14 / 0.20): five own-prompt queries per episode outnumbered the
+two null-target queries 4:1 and the null threshold cannot recover locality without losing acquisition. Fix in training:
+class-balanced L2 (null-target and record-target queries carry equal weight) and one own-prompt query per episode (the new
+support); run `cf_pool3k_pair_own_bal_400`.
