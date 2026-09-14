@@ -27,16 +27,18 @@ outside `src/pccap` are unaffected.
 **(17:56 EDT) The hold on `src/pccap/` is lifted: the v3 grammar rerun is finished and no confirm-mode job remains. New
 modules go under `src/pccap/revision_v1/` as planned; anything drafted under `revision_v1_staging/` can move in.**
 
-## 1. State (2026-09-13, 17:25 EDT)
+## 1. State (2026-09-14, 04:00 EDT)
 
-- **v0 closed out (18:15 EDT)**: the v3 grammar rerun is analysed (complete, negative at the floor), the report and D3 memo
-  carry the row, the S7 grammar reversals are rerun under v3; only the lead's T4 review remains for v0. The full-validation drift supplement is done
-  (`results/S4/drift_supplement.md`). Codex's P2/X2 corrections are applied (SD-23 too).
-- **Plan 9 (revision v1) is accepted with all defaults (DEC-033)** — `docs/updated_plan9.md` is the contract, the
-  coding-agent guide (`docs/more_input/pc_cap_coding_agent_guide (1).pdf`) the specification. Stage 0 starts now on the CPU;
-  GPU diagnostics after the rerun. The v0 frozen manifests, sealed data and results are never modified.
-- Rules unchanged (§ top). New code lives under `src/pccap/revision_v1/` behind adapters; tests under
-  `tests/revision_v1/`; task ids `R1-<stage><seq>` with records in `docs/tasks/`.
+- **v0 closed** (close-out identity `cb04d5e`); the lead's T4 review of the report/memo is still outstanding. SD-24 (ePC
+  energy penalized the cap write) is fixed in place (DEC-036); the S5 SE-E row is annotated.
+- **Revision v1**: Stage 0 memo done (counter-review adopted); Stage 1 modules installed and audited (R1-23 → R1-25
+  repairs committed); Stage 2 pilots have reshaped the read/write path — tied cosine reader over stable observations,
+  v0-style per-position delta writes, hard top-1 selection, pairwise null. The NON-LEARNED instance (random reader,
+  cosine gate) reaches ES 1.00 / RET-GS 0.65 / LS 1.00 on the zsRE development stream (controls 0.44) but fails on
+  CounterFact (near-neighbour locality); trained readers are being evaluated (`docs/R1_stage2_notes.md`).
+- DEC-037: a 3,000-item CounterFact training pool from the unopened remainder (exposure → register v2).
+- Rules unchanged (§ top). New code under `src/pccap/revision_v1/`; tests under `tests/revision_v1/` (77 pass); task ids
+  `R1-<stage><seq>` with records in `docs/tasks/`.
 
 ## 2. Orchestrator lane (do not touch)
 
@@ -65,15 +67,42 @@ Implement and freeze a new entity namespace/version for the synthetic generator 
 the ≥ 2-paraphrase rejection gate, so that `final_generation_ready` can become true; do not generate or seal final
 examples (the lead reserves that). Tests under `tests/revision_v1/`. `docs/tasks/R1-20c.md`.
 
-### Lane R1-24 — teacher-only continuation control (design + CPU harness; X0-01, DEC-034(a))
+### Lane R1-24 — teacher-only continuation control (X0-01, DEC-034(a)) — CPU design and harness; open now
 
-Specify and implement the CPU side of the control: continued teacher-matching distillation of the base from the v0
-close-out checkpoint with matched added tokens/examples (the `pccap.distill` machinery), its own cap retrained under the
-same allowance, and the comparison record. The GPU run is the orchestrator's. `docs/tasks/R1-24.md`.
+**What it controls for.** Any gain of the revision may partly come from *more training of the base-adjacent
+machinery*, not from the cap. The control continues to train the base itself by teacher-matching distillation from the
+v0 close-out checkpoint with a matched budget of added tokens/examples, then re-runs the same editing evaluation with
+v0's cap on that continued base. If the continued base alone moves the endpoints, the revision's gains are attributed
+above it.
 
-### Lane R1-X2 — audit of the R1-25 repairs (when this file says so)
+**Inputs you have.** `pccap.distill` (v0's S5 substrate machinery: `recipe.py` recipes, `data.py` token sources,
+`schedule.py`, `train.py` with `Trainer`, `Milestones`, checkpoints and logs; the SE-A base was produced this way —
+`docs/tasks/S5-01.md`, `results/S5/`), the v0 close-out checkpoint identity (`manifests/reference.json`,
+`manifests/assets.json`), the S4/S5 allowances in `manifests/frozen.json`, and the budget accounting rules in
+`docs/report.md` §"Comparable compute".
 
-Read-only re-audit of `adapt.py`, `memory.py`, `learner.py`, `train.py`, `epc_train.py` after commit `R1-25`; reuse
+**Deliverables (CPU only; no GPU, no training run).**
+1. `docs/tasks/R1-24.md`: the control's definition — starting checkpoint, token source and matched budget rule
+   (tokens = the sum the revision's Stage 2 training consumes on GPT-2 passes: state how you will read it from the
+   ledger records of `results/R1/pilot/*/summary.json`), the distillation recipe (teacher = the same checkpoint, so the
+   control is "continued self-distillation"; say explicitly whether that is the intended reading of X0-01 or whether an
+   external teacher is required, and why), the stopping rule, and the evaluation: the v0-stable cap (`StableCap`,
+   `scripts/r1_14_v0_stable.py`) and the revision learner on the continued base over the same 100-edit zsRE and
+   CounterFact development streams, plus the drift assay (`scripts/drift_supplement.py`).
+2. `scripts/r1_24_control.py`: a runnable script that prepares the recipe and data manifest, checks the budget
+   arithmetic, and — behind a `--gpu` flag the orchestrator will use — launches the distillation and the evaluations
+   through the lease. Dry-run mode must produce `manifests/revision_v1/r1_24_control.json` (recipe, sources, hashes,
+   budget) without touching the GPU.
+3. A CPU test under `tests/revision_v1/test_r1_24_control.py` for the budget arithmetic and manifest schema.
+4. A short note on what result would count as "the continued base explains the gain" (thresholds in the same units
+   as DEC-034's non-inferiority margins).
+
+Read-only on everything else; the orchestrator runs the GPU part and records the result in `docs/R1_stage2_notes.md`.
+
+### Lane R1-X2 — audit of the R1-25 repairs and the Stage 2 redesign (OPEN NOW)
+
+Read-only re-audit of `adapt.py`, `memory.py`, `learner.py`, `reader.py`, `controller.py`, `train.py`, `epc_train.py` at the
+current head (R1-25 repairs `d28b8ac` and the later delta/tied-cosine/pairwise-null changes, see `docs/R1_stage2_notes.md`); reuse
 your `scripts/r1_23_*.py` with new output paths; `logs/audit_r1_25.md`.
 
 ## 4. Interfaces and coordination
