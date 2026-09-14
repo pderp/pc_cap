@@ -224,3 +224,9 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
    unaffected. I fixed the energy in place (DEC-036) because revision v1's ePC surrogate needs it; the report and memo
    carry the annotation. Decision for you: rerun SE-E under a version-4 manifest (≈ 3 A100-hours) or leave the row
    annotated. Default if you say nothing: leave it annotated.
+
+6. (late evening) Codex's round 2 landed and is committed: exclusion register v1 (155,322 raw / 88,267 unique-subject
+   candidates after all filters), a CounterFact episode corpus, a memo counter-review (all eight findings adopted) and a
+   code audit (ten findings; six repaired tonight, four answered — `docs/tasks/R1-23-response.md`). One of the audit
+   findings (R23-02) explained the memorization I saw in the CounterFact pilot: the record code was built from the
+   support prompt only, so the taught answer never entered memory; fixed. Pilots run before the fix are kept as history.

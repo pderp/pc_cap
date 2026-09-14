@@ -45,50 +45,34 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — revision v1, next (CPU; open now)
+## 3. Lanes for Codex — round 3 (CPU; open now)
 
-R1-00 and R1-X0 are done and mirrored; R1-20's generator is installed as `pccap.revision_v1.episodes` (your repair bundle
-applied verbatim). The plan-9 amendments are in `docs/tasks/R1-X0-response.md` / DEC-034. Next lanes:
+Round 2 (R1-D1, R1-20b, R1-X1, R1-23) is committed (`d6a1d1f`) and mirrored; your script repair was applied verbatim
+(hash = tested v2). Responses: `docs/tasks/R1-23-response.md` (R23-02/04/06/07/09/10 repaired, R23-01/03/05/08 answered),
+`docs/tasks/R1-X1-response.md` (all eight adopted; memo wording corrected). Next lanes, in priority order:
 
-### Lane R1-D1 — exclusion register and fresh-draw candidate inventory (X0-09; DEC-034(c))
+### Lane R1-D1b — canonical entity / alias review of the exclusion register (critical path for Stage 4)
 
-`scripts/r1_d1_exclusions.py` → `manifests/revision_v1/exclusions.json` (versioned): every normalized subject in both old
-eligible pools, v0 development and S0, the challenge sets, all 496 exposed S7 candidate subjects (zsRE) and 141 (CounterFact),
-and every subject any revision-development episode has emitted (read `logs/r1_codex_20260913/episodes_v2/`); then the
-MEND-train candidate inventory after exclusion with raw-record and deduplicated-subject counts, alias/entity resolution
-notes and unresolved mentions in paraphrase/locality text. No sealing, no E.2 pass (the orchestrator runs that on the GPU).
-`docs/tasks/R1-D1.md`.
+Resolve the "possible alias" and contextual-mention classes in `manifests/revision_v1/exclusions.json` into decided
+canonical exclusions (with reasons) so that the register can be frozen as version 2; report over- and under-exclusion
+counts and the effect on the candidate pool (raw / unique-subject). Text review only. `docs/tasks/R1-D1b.md`.
 
-### Lane R1-20b — CounterFact episode set for Stage 2 and the generator partition manifest (X0-10)
+### Lane R1-20c — the new synthetic final namespace (R1-20b's remaining item)
 
-Note (orchestrator, later that evening): `natural_episode(..., dataset="counterfact")` + your `tokenize_natural_episode` already
-feed a CounterFact training pilot (`scripts/r1_21_pilot.py --domain counterfact`); preservation needs no teacher targets in
-the installed loss (L3 is a KL to the write-free logits computed on the fly). What remains in this lane: the partition
-manifest, the ≥ 2-paraphrase rule per emitted item, and a statement of which CounterFact dev subjects the episodes expose
-(they feed the exclusion register, R1-D1).
+Implement and freeze a new entity namespace/version for the synthetic generator with the pre-emission overlap check and
+the ≥ 2-paraphrase rejection gate, so that `final_generation_ready` can become true; do not generate or seal final
+examples (the lead reserves that). Tests under `tests/revision_v1/`. `docs/tasks/R1-20c.md`.
 
-Finish the natural-data path for CounterFact (zsRE is an evaluation stream only, DEC-034(b)); the partition manifest for the
-extended grammar generator (reserved latent scopes / entities / surface families; ≥ 2 unseen paraphrases per emitted item or
-the episode is rejected whole; final-generation version and seed reservation). The teacher preservation targets you need
-(cap-disabled greedy answers and top-k logits on every episode query prefix) are produced by the orchestrator's GPU pass once
-you write the prefix list to `manifests/revision_v1/teacher_targets_request.json`.
+### Lane R1-24 — teacher-only continuation control (design + CPU harness; X0-01, DEC-034(a))
 
-### Lane R1-X1 — counter-review of the Stage 0 diagnosis memo (OPEN NOW: `docs/R1_diagnosis.md`, 18:15 EDT)
+Specify and implement the CPU side of the control: continued teacher-matching distillation of the base from the v0
+close-out checkpoint with matched added tokens/examples (the `pccap.distill` machinery), its own cap retrained under the
+same allowance, and the comparison record. The GPU run is the orchestrator's. `docs/tasks/R1-24.md`.
 
-Read-only; `logs/review_r1_diagnosis.md`. Inputs: `results/R1/diagnostics.md`, `diagnostics_{C1,C2}.json`, `traces_{C1,C2}.jsonl`,
-`scripts/r1_diagnostics.py` (f8c8c74). Questions to answer: is the four-policy comparison sound (oracle verification rule,
-shadow-key rebuild, teacher-forced exactness); does the memo's locus claim follow; what would change it. Also DEC-035.
+### Lane R1-X2 — audit of the R1-25 repairs (when this file says so)
 
-
-### Lane R1-23 — data-separation and update-path audits (can start now on the installed code)
-
-Stage 1–2 code is installed under `src/pccap/revision_v1/` (`contracts, observations, memory, reader, controller, adapt,
-learner, train, v0_stable`) with tests under `tests/revision_v1/` (72 pass; `epc_train` added) and the loss-source table in
-`docs/revision_v1_losses.md`. Audit targets: (1) `RevisionCap.predict` and `selection_for` never receive or read a
-target (signature and data-flow); (2) `adapt_record` changes only the taught record's code (and creates/supersedes one
-record); (3) `train.py` uses labels only through `LabeledEpisode.query_labels` and applies L3 only to preserve roles;
-(4) the observation encoder is write-free (no `Write` reaches `base.forward` in the observation path); (5) parameter
-count and byte accounting claims. Read-only; `logs/audit_r1_23.md`; findings by id.
+Read-only re-audit of `adapt.py`, `memory.py`, `learner.py`, `train.py`, `epc_train.py` after commit `R1-25`; reuse
+your `scripts/r1_23_*.py` with new output paths; `logs/audit_r1_25.md`.
 
 ## 4. Interfaces and coordination
 
