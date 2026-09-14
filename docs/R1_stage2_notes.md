@@ -12,6 +12,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | bp_100_lr1e-4 | BP reference | 64 | 100 × 4 | 1e-4 | 6.22 → 4.02 | 1.89 → 1.31 | 0.005 → 0.38 | 0.03 | 0.00 | n/a (label metric only) | n/a | 0.47 / 0.50 / 0.57 | 8.5 min |
 | bp_500_lr1e-3 | BP reference | 128 | 500 × 4 | 1e-3 | 6.22 → 2.85 | 1.89 → 0.46 | 0.005 → 0.46 | **0.41** | 0.125 | 0.94 | 1.00 | 0.31 / 0.82 / 0.89 | 44 min |
 | cf_bp_500_lr1e-3 | BP reference, CounterFact natural episodes | 128 | 500 × 4 | 1e-3 | 6.55 → 3.22 | 1.94 → 1.53 | 0.005 → 0.000 | 0.03 | 0.00 | 1.00 | 1.00 | 0.12 / 1.00 / 1.00 | 73 min |
+| epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
 Observations after bp_500: the training answer loss was still falling (50-step means 3.60 → 1.63), so the reader is not
@@ -58,3 +59,21 @@ and queries drawn from the same rows), weight decay and early stopping on the de
 training, and — the plan's own answer — a larger natural training pool from the fresh-data draw (R1-D1 exclusion
 register, then the E.2 filter over MEND train; plan 9 D-R2). The first three are cheap and run next; the fourth is on
 Codex's critical path.
+
+## Matched estimator comparison (prompt-only-code design; synthetic domain; seeds, episodes and schedule identical)
+
+| dev metric after 500 × 4 | BP reference (bp_500) | ePC-credit surrogate, corrected (epc_500_sd24) |
+| --- | ---: | ---: |
+| answer NLL | 2.85 | 4.50 |
+| retrieval CE (exact in both) | 0.46 | 0.96 |
+| preservation KL | 0.46 | 1.14 |
+| paraphrase exact / old fact | 0.41 / 0.125 | 0.25 / 0.25 |
+| near-miss / unrelated unchanged | 0.94 / 1.00 | 1.00 / 0.81 |
+| wall | 44 min | 68 min (≈ 6× the base calls per prefix) |
+
+Reading: with the SD-24 fix the surrogate's write gradient has cosine ≥ 0.97 to backprop at 8 iterations, yet it trains
+more slowly and preserves less at the same optimizer schedule; the settled-error magnitude differs from the true gradient
+by a prefix-dependent factor (norm ratio 0.55 at 8 iterations), which changes the effective step size after global-norm
+clipping, and the preservation gradient from the KD head is the weakest part (training feedforward KL 1–2 vs 0.4). The
+comparison is one seed on the pre-R23-02 design and is not a Stage 4 claim. Next: repeat both estimators on the repaired
+(answer-sensitive) design with the CounterFact corpus once cf_fresh_wd_400_r25 shows what the reference reaches.
