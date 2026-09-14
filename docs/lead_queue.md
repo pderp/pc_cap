@@ -275,3 +275,9 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     stream-scale training episodes with locality near-neighbours as nulls. One data decision inside the plan:
     a zsRE TRAINING pool of 3,000 items from the fresh-draw candidates (exposure recorded; removed from the confirmatory
     draw) — default: yes (DEC-039), Codex prepares the list, I run the teacher filter.
+
+13. (11:05 EDT) **The learned reader now works on CounterFact**: stream-scale training + a lexical overlap feature give
+    ES 1.00 / RET-ES 1.00 / RET-GS 0.775 / LS 1.00 on the CounterFact development stream (v0: 0.00 at the exact-key
+    floor; every control 0.00–0.18). zsRE is not there yet (RET-GS 0.49, LS 0.98 — the null over-rejects zsRE
+    paraphrases after CounterFact-only training); the zsRE training pool (DEC-039, Codex R1-D3) and a per-dataset
+    threshold are next. DEC-038 as proposed is withdrawn: the learned reader stays in the primary condition.

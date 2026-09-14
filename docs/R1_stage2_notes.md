@@ -278,3 +278,21 @@ Why the trained nulls fail on the streams while passing training-style episodes 
 Order: R1-50 (M1+M2) first with the CounterFact pool, evaluated on both streams; then M4; then M3 when the zsRE pool is
 ready; M5 last. Success criterion (X4-07): a learned null re-enters the primary condition only if it beats the cosine
 gate's LS on BOTH streams without losing RET-GS on a fresh development draw. Until then DEC-038's default stands.
+
+## M1+M2+M4 together: the learned reader beats every control on CounterFact (2026-09-14, 11:05 EDT)
+
+Run `r1_50_stream_lex` (stream-scale episodes over a 1,000-item CounterFact feature bank, 64-record memories, in-memory
+locality near-neighbours and out-of-memory prompts as null targets; tied cosine reader + pairwise null + lexical overlap
+feature with stop list v1; 300 steps × 2 episodes, 2 min of training; best held-out retrieval CE 0.40):
+
+| stream | ES | RET-ES | RET-GS | LS | null mass own / paraphrase / unrelated |
+| --- | ---: | ---: | ---: | ---: | --- |
+| CounterFact | 1.00 | 1.00 | **0.775** | **1.00** | 0.17 / 0.19 / 1.00 |
+| zsRE | 0.98 | 0.98 | 0.49 | 0.98 | 0.20 / 0.52 / 0.87 |
+
+For reference on CounterFact: v0 live 0.00 (exact-key floor, LS 1.0), v0-stable / matched-update 0.00, non-learned
+revision 0.18 / 0.16. The lexical diagnostic explains the gain: on the bank, overlap alone ranks a paraphrase's own record
+first 94 % of the time while locality near-neighbours overlap their item's prompt at 0.035 (paraphrases 0.48); the tapped
+features alone ranked the own record ~100th of 400. On zsRE the same reader now rejects half the paraphrases (rewordings
+with lower overlap; CounterFact-only training) — M3 (zsRE-domain training pool) and M5 (per-dataset threshold) are the
+next steps for zsRE, where the non-learned gate still holds 0.65 / 1.00.
