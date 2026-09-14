@@ -281,3 +281,6 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     floor; every control 0.00–0.18). zsRE is not there yet (RET-GS 0.49, LS 0.98 — the null over-rejects zsRE
     paraphrases after CounterFact-only training); the zsRE training pool (DEC-039, Codex R1-D3) and a per-dataset
     threshold are next. DEC-038 as proposed is withdrawn: the learned reader stays in the primary condition.
+    Update (11:40 EDT): on zsRE the same trained reader with the cosine gate reaches ES 1.00 / RET-ES 1.00 / RET-GS 0.97 /
+    LS 1.00. The similarity is solved on both datasets; only the locality decision differs per dataset (learned null on
+    CounterFact, cosine gate on zsRE). One rule for both waits on the zsRE training pool (Codex R1-D3 → my teacher filter).

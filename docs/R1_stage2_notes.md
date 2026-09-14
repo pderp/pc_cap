@@ -300,3 +300,11 @@ next steps for zsRE, where the non-learned gate still holds 0.65 / 1.00.
 zsRE null-threshold sweep with the same weights (`r1_50_lex_null*`): 0.5 → RET-GS 0.49 / LS 0.98; 0.7 → 0.62 / 0.92;
 0.85 → 0.77 / 0.82; 0.95 → 0.86 / 0.64. The trained similarity is strong on zsRE too (0.86 with the null nearly off, vs
 0.65 for the non-learned gate); the CounterFact-trained null is what is miscalibrated there (M3/M5).
+
+Combined rules (2026-09-14, 11:40 EDT), same weights: on zsRE the cosine gate 0.93 with the null off gives **ES 1.00 /
+RET-ES 1.00 / RET-GS 0.97 / LS 1.00** (null 0.95 + gate: 0.85 / 1.00); on CounterFact the gate is harmful (paraphrase mean
+cosine 0.85 < gate; RET-GS 0.14–0.21) while the learned null alone gives 0.775 / 1.00. So the trained similarity is
+excellent on both datasets; the locality decision is the only open piece: the CounterFact-trained null over-rejects zsRE
+paraphrases, and the cosine geometry that separates zsRE unrelated prompts (0.74 vs 0.98) does not separate CounterFact
+near-neighbours (0.98 vs 0.85). One rule for both datasets needs the null trained on both domains (M3) — or a null that
+does not depend on the query's style (dropping the query-only linear term; tested next).
