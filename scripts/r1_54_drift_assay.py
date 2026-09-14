@@ -71,18 +71,21 @@ def main() -> int:
 
             def __init__(self, learner):
                 self.learner = learner
+                self.fired = self.n = 0
 
             def predict(self, ids):
                 self.learner.reset_queries()
-                self.learner.selection_for(np.asarray(ids, np.int32))
+                self.fired += int(not self.learner.selection_for(np.asarray(ids, np.int32)).hard_null)  # every scored position counts
+                self.n += 1
                 return self.learner.predict(ids)
 
             def last_logits_batch(self, seqs, phase="query"):
                 return np.stack([self.predict(s).logits for s in seqs])
 
-        nll_on = ev._drift_nll(PerPositionCap(cap))
+        ppc = PerPositionCap(cap)
+        nll_on = ev._drift_nll(ppc)
         nll_off = ev._drift_nll(base)
-        out["rules"][rule] = {"fire_rate_on_ordinary_prefixes": float(np.mean(fired)), "drift_nll_cap_on": nll_on, "drift_nll_cap_off": nll_off, "delta_nats": nll_on - nll_off, "ppl_ratio": float(np.exp(nll_on - nll_off))}
+        out["rules"][rule] = {"fire_rate_on_ordinary_prefixes": float(np.mean(fired)), "fire_rate_all_scored_positions": ppc.fired / max(1, ppc.n), "scored_positions": ppc.n, "drift_nll_cap_on": nll_on, "drift_nll_cap_off": nll_off, "delta_nats": nll_on - nll_off, "ppl_ratio": float(np.exp(nll_on - nll_off))}
         print(json.dumps({rule: {k: round(v, 4) for k, v in out["rules"][rule].items()}}), flush=True)
     tag = args.tag or Path(args.theta).parent.name
     (ROOT / "results" / "R1" / f"drift_assay_{tag}_{args.dataset}.json").write_text(json.dumps(out, indent=1))

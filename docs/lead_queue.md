@@ -318,3 +318,16 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     - **New scientific risk from Codex's report addendum**: the learned cap raises ordinary-text loss after edits
       (+0.60 nats zsRE, +0.39 CounterFact on the 16,256-position drift subset) — the null was never trained on ordinary
       text. Diagnosis and a fix (ordinary-text windows as null targets) are my next work (R1-54); no decision needed.
+
+19. (2026-09-14, 15:55 EDT; while you are away) **R1-54 resolved; reference condition v2.** Training the null on
+    ordinary-text windows removes the drift (zsRE edits: 0.000 nats; CounterFact edits: +0.012 nats vs +0.379 for the
+    v1 reader) with retention intact over three seeds (zsRE RET-GS 0.96–0.98, CounterFact 0.725–0.85, LS 1.00 on all).
+    `manifests/revision_v1/primary_condition_v2.json` is the development reference now; nothing is frozen. Endpoints on
+    the real base with it: near-miss preservation 100/100, revision 100/100, unseen-edit-prompt false fires 7 % (zsRE)
+    and 0 % (CounterFact) after 100 edits. Running next, unattended: the R1-40c P1 edit/memory profile (edit and query
+    cost, persistent-state bytes and restore equality at 100/300/1,000 records, learned and non-learned) and the
+    unseen-prompt endpoint at 300 and 1,000 records. Memory above 300 records uses training-pool rows beyond the 1,000
+    the reader was trained on as labelled fillers — no fresh candidate is opened. Two things remain yours: DEC-042
+    (CounterFact source; default = the exception) and, after the profiles, the run-matrix scope: Codex's v3 draft prices
+    the legacy proxy at 223 h against the 15 h envelope, so a scope cut is needed before any freeze (I will propose one
+    with the measured ceilings).

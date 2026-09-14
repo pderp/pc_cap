@@ -2735,12 +2735,15 @@
    "agent": "codex\u2192orchestrator",
    "worktree": null,
    "started": "2026-09-14T11:38:34+00:00",
-   "finished": null,
+   "finished": "2026-09-14T17:16:46+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "scripts/r1_43_endpoints_run.py",
+    "results/R1/endpoints/text_s0_v1/summary.json"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "endpoints.py + CPU tests + schema (Codex); fixture patch applied; GPU run over the real base pending (orchestrator)"
+   "note": "endpoints.py + CPU tests (Codex); GPU run over the real base with the v2 reader: near-miss preservation 100/100, revision 100/100 (old answer reappearance 0), composition unreachable (no verified direct questions, 54 two-hop rows diagnostic only); 151 s"
   },
   {
    "id": "R1-24b",
@@ -2861,12 +2864,16 @@
    "agent": "codex\u2192orchestrator",
    "worktree": null,
    "started": "2026-09-14T16:37:04+00:00",
-   "finished": null,
+   "finished": "2026-09-14T17:16:47+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "scripts/r1_44_unseen_run.py",
+    "results/R1/endpoints/text_s0_v1_unseen_zsre/summary.json",
+    "results/R1/endpoints/text_s0_v1_unseen_counterfact/summary.json"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "endpoints_unseen.py + 10 CPU tests (Codex); GPU adapter/run pending"
+   "note": "endpoints_unseen.py + 10 CPU tests (Codex); GPU adapter run with the v2 reader after 100 edits: false fires zsRE 7/100, CounterFact 0/100 (33 pairs untruncated at the 32-token limit); 300/1,000-record points running"
   },
   {
    "id": "R1-40c",
@@ -2941,16 +2948,21 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "in_progress",
+   "status": "done",
    "agent": "orchestrator",
    "worktree": null,
    "started": "2026-09-14T16:37:04+00:00",
-   "finished": null,
+   "finished": "2026-09-14T17:16:46+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/R1_stage2_notes.md",
+    "manifests/revision_v1/primary_condition_v2.json",
+    "results/R1/drift_assay_r1_50_stream_mixed_text_zsre.json",
+    "results/R1/drift_assay_r1_50_stream_mixed_text_counterfact.json"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "drift assay after edits: +0.60 (zsRE) / +0.39 (CounterFact) nats on 16,256 positions; hypothesis: false firing on ordinary text (null never trained on it)"
+   "note": "cause: the null never saw low-similarity text (fired on 36-49 % of ordinary prefixes); fix: 8 ordinary-text null queries per training episode (stream_train.build_text_bank/add_text_nulls). Drift 0.000 (zsRE) / +0.012 (CounterFact) nats vs +0.647 / +0.379; retention held over 3 seeds; reference condition v2"
   }
  ]
 }

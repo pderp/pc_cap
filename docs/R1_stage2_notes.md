@@ -454,3 +454,44 @@ cap-off logits kept for the preservation KL) remove the firing entirely at no co
 (one seed; the seed range of the reference was 0.765–0.805). v0's drift ratios were 1.001–1.004; the cosine floor 0.5 is
 kept as a non-learned fallback rule. Seed replicates of the text-null reader and its CounterFact-edit drift follow; if
 they hold, it becomes reference condition v2.
+
+## R1-43 / R1-44 endpoints on the real base with the text-null reader (2026-09-14, 15:20 EDT)
+
+Owner adapters for Codex's endpoint modules (`scripts/r1_43_endpoints_run.py`, `scripts/r1_44_unseen_run.py`), run with
+the ordinary-text-null reader (seed 0, `r1_50_stream_mixed_text`), null 0.5, lexical stop list v1, 5 delta steps; every
+case restores a clone of the starting state (`results/R1/endpoints/text_s0_v1*/`).
+
+| endpoint | population | n | result |
+| --- | --- | ---: | --- |
+| near-miss preservation (R1-43) | CounterFact near-neighbour rows from `manifests/dev/challenges.json` | 100 | preserved 100/100 (neighbour decoded text identical to cap-off); edited prompt exact 100/100; the neighbour query never fired (null mass ≥ 0.99998) |
+| revision (R1-43) | temporal-correction rows (v1 then v2 of the same fact) | 100 | revision success 100/100 (old acquired, old record retired, new record active, latest answer exact); old answer reappeared 0/300 queries; paraphrase exactness of the new answer 0.79 (mean over 2 paraphrases per case) |
+| composition (R1-43) | direct composition questions | 54 avail. | unreachable: no verified direct composition questions (two-hop chains are diagnostic only); shortfall 46 |
+| unseen edit-prompt (R1-44), zsRE | 100 original prompts of un-edited dev items after 100 edits | 100 | false fires 7/100 (all with answer changes); complete-answer preservation 0.93; all 200 answers terminated |
+| unseen edit-prompt (R1-44), CounterFact | same after 100 CounterFact edits | 100 | false fires 0/100; answer changes 0/100; 33 pairs hit the 32-token limit in both cap-off and cap-on decoding (base behaviour, not a cap effect), so the complete-pair preservation denominator is 67 |
+
+Costs: R1-43 (200 cases) 151 s wall, 9.5k full forwards; each R1-44 dataset ≈ 75 s. The zsRE unseen rate (7 %) is the
+declared scale risk (out-of-memory hard-null 0.87 → 0.67 at 300 in the bank profile); the 300/1,000-record points are
+what R1-40c's P3 profile must measure with the same adapter.
+
+## Text-null reader: seeds and CounterFact-edit drift → reference condition v2 (2026-09-14, 15:50 EDT)
+
+| seed | zsRE ES / RET-ES / RET-GS / LS | CounterFact ES / RET-ES / RET-GS / LS | training wall |
+| --- | --- | --- | ---: |
+| 0 (`r1_50_stream_mixed_text`) | 1.00 / 1.00 / 0.96 / 1.00 | 1.00 / 1.00 / 0.725 / 1.00 | — |
+| 1 | 1.00 / 1.00 / 0.98 / 1.00 | 1.00 / 1.00 / 0.85 / 1.00 | 351 s |
+| 2 | 1.00 / 1.00 / 0.96 / 1.00 | 1.00 / 1.00 / 0.79 / 1.00 | 368 s |
+
+Stream 21, 100 edits, null 0.5, no gate. The v1 reference's range was zsRE 0.96–0.99 and CounterFact 0.765–0.805, so
+the ordinary-text nulls cost nothing on zsRE and leave CounterFact inside its seed spread (0.725–0.85 vs 0.765–0.805).
+
+Ordinary-text drift after 100 **CounterFact** edits (32 windows × 128 positions, per-position selection):
+
+| reader | firing at probe lengths 16/48/96 | Δ NLL (nats) | perplexity ratio |
+| --- | ---: | ---: | ---: |
+| v1 reference (`r1_50_stream_mixed`) | 0.490 | +0.379 | 1.461 |
+| text-null reader (seed 0) | 0.000 | +0.012 | 1.012 |
+
+The +0.012 with no firing at the three probe lengths means a small number of positions at other prefix lengths still
+fire after CounterFact edits (the assay now counts firing at every scored position; `scripts/r1_54_drift_assay.py`).
+v0's drift ratios were 1.001–1.004; 1.012 is reported as a residual, not zero. The text-null reader is promoted to
+**reference condition v2** (`manifests/revision_v1/primary_condition_v2.json`; v1 is kept as the R1-54 comparison).
