@@ -59,6 +59,7 @@ class RevisionConfig:
     fast: FastConfig = field(default_factory=FastConfig)
     null_threshold: float = 0.5  # hard null at evaluation when null mass ≥ threshold
     hard_top1: bool = True  # deployment selection: the best-scoring record alone (v0's nearest slot); soft mixing only in training
+    min_score: float | None = None  # non-learned fallback gate: hard null when the best cosine score is below this (v0's radius, in cosine units)
     cache_prompt_pass: bool = True  # R1-16: reuse the selection pass as the observation of the prompt position (saves one pass per query)
     single_site: bool = False  # R1-16 variant: writes only at site 3 (partial pass from block 11 instead of block 3)
     ceiling_bytes: int = DEFAULT_CEILING
@@ -75,6 +76,7 @@ class Selection:
     code: np.ndarray | None  # applicability-weighted code (None on a hard null)
     hard_null: bool
     prompt_pass: object = None
+    best_score: float | None = None  # cosine of the best candidate (diagnostics / min_score gate)
     delta: np.ndarray | None = None  # applicability-weighted delta write of the selected records (None when none carries one)  # the selection pass (ForwardResult) kept for the prompt-position read when caching is on
 
 
@@ -112,7 +114,7 @@ class RevisionCap:
         cands = self.store.retrieve(np.asarray(q), self.cfg.reader.top_k, query_version=self.enc.encoder_version)
         keep = fr if self.cfg.cache_prompt_pass else None
         if not cands:
-            return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, keep)
+            return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, prompt_pass=keep)
         k = self.cfg.reader.top_k
         keys = np.zeros((k, self.cfg.reader.width), np.float32)
         mask = np.zeros(k, bool)
@@ -121,11 +123,15 @@ class RevisionCap:
             keys[i], mask[i] = r.key, True
         w, null, _ = self.jit_key_apply(self.params["reader"], q, jnp.asarray(keys), jnp.asarray(mask))
         w, null = np.asarray(w, np.float32), float(null)
+        qn = np.asarray(q, np.float32)
+        qn = qn / (np.linalg.norm(qn) + 1e-8)
+        cos = keys[: len(recs)] @ qn / (np.linalg.norm(keys[: len(recs)], axis=1) + 1e-8)
+        best_score = float(np.max(cos))
         if self.cfg.hard_top1 and w[: len(recs)].sum() > 0:
             one = np.zeros_like(w)
             one[int(np.argmax(w[: len(recs)]))] = 1.0
             w = one
-        hard = null >= self.cfg.null_threshold
+        hard = null >= self.cfg.null_threshold or (self.cfg.min_score is not None and best_score < self.cfg.min_score)
         code, delta = None, None
         if not hard:
             wsum = max(float(w.sum()), 1e-12)
@@ -137,7 +143,7 @@ class RevisionCap:
                 for wi, dl in with_d:
                     delta[: dl.shape[0]] += np.float32(wi) * dl
                 delta /= np.float32(wsum)
-        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, keep, delta)
+        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, prompt_pass=keep, delta=delta, best_score=best_score)
 
     def selection_for(self, ids: np.ndarray) -> Selection:
         ids = np.asarray(ids, np.int32).reshape(-1)
@@ -221,7 +227,7 @@ class RevisionCap:
     def semantic_config(self) -> str:
         return json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)},
                            "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold, "single_site": self.cfg.single_site,
-                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
+                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "min_score": self.cfg.min_score, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
 
     def import_state(self, st: LearnerState) -> None:
         if st.scalars.get("params_hash") != self.params_hash:

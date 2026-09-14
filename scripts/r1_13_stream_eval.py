@@ -44,6 +44,7 @@ def main() -> int:
     ap.add_argument("--delta-lr", type=float, default=0.1)
     ap.add_argument("--null-threshold", type=float, default=0.5)
     ap.add_argument("--no-lease", action="store_true")
+    ap.add_argument("--min-score", type=float, default=None, help="cosine firing threshold (non-learned gate)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -69,7 +70,7 @@ def main() -> int:
         k1, k2 = jax.random.split(jax.random.PRNGKey(0))
         template = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         theta = load_theta(Path(args.theta), template)
-        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.fast_steps, lr=args.fast_lr, delta_steps=args.delta_steps, delta_lr=args.delta_lr, tau=float(frozen["tau_edit"])), null_threshold=args.null_threshold, tau_edit=float(frozen["tau_edit"]))
+        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.fast_steps, lr=args.fast_lr, delta_steps=args.delta_steps, delta_lr=args.delta_lr, tau=float(frozen["tau_edit"])), null_threshold=args.null_threshold, min_score=args.min_score, tau_edit=float(frozen["tau_edit"]))
         cap = RevisionCap(base, cfg, ledger, params=theta)
         ph = cap.params_hash
         ev = Evaluator(base, tok, unrelated[:50], None)
@@ -81,16 +82,25 @@ def main() -> int:
         # null-mass profile on the items' own prompts and paraphrases at the endpoint
         cap.reset_queries()
         nulls = {"prompt": [], "paraphrase": []}
+        scores = {"prompt": [], "paraphrase": [], "unrelated": []}
         for it in items:
-            nulls["prompt"].append(cap.selection_for(np.asarray(it.prompt_ids, np.int32)).null_mass)
+            sp = cap.selection_for(np.asarray(it.prompt_ids, np.int32))
+            nulls["prompt"].append(sp.null_mass)
+            scores["prompt"].append(sp.best_score)
             for p_ in it.paraphrases:
-                nulls["paraphrase"].append(cap.selection_for(np.asarray(tok.encode(p_), np.int32)).null_mass)
-        unrel = [cap.selection_for(np.asarray(tok.encode(u), np.int32)).null_mass for u in unrelated[:200]]
+                sq = cap.selection_for(np.asarray(tok.encode(p_), np.int32))
+                nulls["paraphrase"].append(sq.null_mass)
+                scores["paraphrase"].append(sq.best_score)
+        unrel_sel = [cap.selection_for(np.asarray(tok.encode(u), np.int32)) for u in unrelated[:200]]
+        unrel = [x.null_mass for x in unrel_sel]
+        scores["unrelated"] = [x.best_score for x in unrel_sel]
+        sc = {k: [x for x in v if x is not None] for k, v in scores.items()}
+        best_scores = {k: {"mean": float(np.mean(v)), "p10": float(np.percentile(v, 10)), "p90": float(np.percentile(v, 90))} for k, v in sc.items() if v}
         summary = {"tag": tag, "theta": args.theta, "theta_hash": ph, "args": vars(args), "stream_metrics": sm, "records": len(cap.store.records), "bytes": cap.store.bytes(),
                    "null_mass": {"prompt_mean": float(np.mean(nulls["prompt"])), "paraphrase_mean": float(np.mean(nulls["paraphrase"])), "unrelated_mean": float(np.mean(unrel)),
                                  "prompt_hard_null_rate": float(np.mean([x >= args.null_threshold for x in nulls["prompt"]])), "paraphrase_hard_null_rate": float(np.mean([x >= args.null_threshold for x in nulls["paraphrase"]])),
                                  "unrelated_hard_null_rate": float(np.mean([x >= args.null_threshold for x in unrel]))},
-                   "read_counters": cap.cost_counters, "wall_seconds": time.time() - t0, "ledger": ledger.totals()}
+                   "best_scores": best_scores, "read_counters": cap.cost_counters, "wall_seconds": time.time() - t0, "ledger": ledger.totals()}
         (OUT / f"stream_eval_{tag}.json").write_text(json.dumps(summary, indent=1, default=float))
         md_path = OUT / "stream_eval.md"
         if not md_path.exists():
@@ -98,7 +108,7 @@ def main() -> int:
         nm = summary["null_mass"]
         with md_path.open("a") as f:
             f.write(f"| {tag} | {args.fast_steps}c/{args.delta_steps}d | {args.null_threshold} | {sm['es_immediate']:.3f} | {sm['ret_es_end']:.3f} | {sm['ret_gs_end']:.3f} | {sm['ls_complete_answer_end']:.3f} | {nm['prompt_mean']:.2f} / {nm['paraphrase_mean']:.2f} / {nm['unrelated_mean']:.2f} | {nm['prompt_hard_null_rate']:.2f} / {nm['paraphrase_hard_null_rate']:.2f} / {nm['unrelated_hard_null_rate']:.2f} | {summary['wall_seconds']:.0f} s |\n")
-        print(json.dumps({"tag": tag, "stream": sm, "null_mass": nm, "wall_s": round(summary["wall_seconds"])}), flush=True)
+        print(json.dumps({"tag": tag, "stream": sm, "best_scores": best_scores, "wall_s": round(summary["wall_seconds"])}), flush=True)
     return 0
 
 
