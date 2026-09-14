@@ -303,3 +303,8 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     exclusions v2 (register v3 will add the 6,000 drawn zsRE subjects).
 
 16. (2026-09-14 afternoon) R1-24 decided: option 3, both treatments (DEC-040). Running.
+
+17. (12:15 EDT) R1-24 done (both treatments; `docs/R1_stage2_notes.md`). Continued-base training does not explain the
+    revision's gain (S1−S0 within ±0.05 RET-GS; R0−S1 +0.49 to +0.59 zsRE, +0.78 to +0.80 CounterFact). The informative
+    LM continuation fails its own fidelity gate (the base moved 0.095 nats on the held-out tail), so a KL-bounded variant
+    is the follow-up if you want that control certified; the literal control passes and is the recorded negative control.

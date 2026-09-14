@@ -409,3 +409,27 @@ the limit is the selection among near-duplicate candidates, not retrieval. The l
 modest CounterFact gain at scale, a small LS cost and a worse unseen-prompt rejection on zsRE — not a clear improvement;
 the 64-record mixed reader (seeds 0–2) stays the reference configuration, and the scale effects stay recorded as
 protocol risks for the run matrix (memory sizes and an unseen-edit-prompt endpoint).
+
+## R1-24 teacher-only continuation control — both treatments run (DEC-040; 2026-09-14, 12:15 EDT)
+
+Budget: 771,581 forward-pass tokens (the reference reader's re-executed training ledger 458,002 + feature-bank
+construction 313,579; reverse positions 458,002 reported separately). Evaluation: the same two 100-edit development
+streams, S0 = original base + v0-stable cap, S1 = continued base + v0-stable cap, R0/R1 = original/continued base +
+reference reader; LS is scored against the ORIGINAL base's answers in every cell (common reference).
+
+| treatment | fidelity (held-out tail) | zsRE S0 → S1 (RET-GS / LS) | zsRE R0 → R1 | CounterFact S0 → S1 | CounterFact R0 → R1 |
+| --- | --- | --- | --- | --- | --- |
+| literal self-KD (3,014 steps) | KL 3e-5, ΔNLL −6e-5: pass | 0.44 / 1.00 → 0.49 / 1.00 | 0.98 / 1.00 → 0.98 / 1.00 | 0.00 / 1.00 → 0.00 / 0.92 | 0.795 / 1.00 → 0.795 / 0.92 |
+| LM continuation (6,028 steps, lr 1e-6) | KL 0.095, ΔNLL −0.105: **fail** | 0.44 / 1.00 → 0.39 / 0.86 | 0.98 / 1.00 → 0.97 / 0.88 | 0.00 / 1.00 → 0.00 / 0.28 | 0.795 / 1.00 → 0.775 / 0.28 |
+
+Reading (DEC-033 margins: RET-GS 0.05, ES −0.02, LS −0.01). Continued-base training does not explain the revision's
+gain: with the no-op control S1−S0 is +0.05 (zsRE) and 0.00 (CounterFact) while R0−S1 stays +0.49 and +0.795; the
+informative continuation moves S1 in the wrong direction (−0.05 / 0.00) and R0−S1 stays +0.59 / +0.795. The informative
+treatment fails its pre-registered fidelity gate (the base's own held-out distribution moved by 0.095 nats, i.e. the
+budget at lr 1e-6 is a substantial base change), so it is not a valid matched control as run: the LS collapse under it
+(0.86 / 0.28) is the base answering its own locality prompts differently, not the cap's damage — the same collapse
+appears with no cap writes at all (S1 rows). A valid informative control needs a KL-bounded continuation (smaller step or
+a KL penalty to the original) that passes fidelity; that is a follow-up, not a Stage 4 blocker. Two side findings:
+(1) the reference reader keeps its retention on a substantially changed base (0.97 / 0.775) — robustness to base drift;
+(2) even the no-op control moved CounterFact's LS by 0.08 through floating-point residuals of 3e-5 nats, which says the
+50-prompt complete-answer LS metric is sensitive to near-tie answers; report it with its step size.
