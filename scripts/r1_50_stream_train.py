@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import hashlib
 import json
 import pickle
 import time
@@ -46,10 +47,12 @@ def main() -> int:
     from pccap.revision_v1.observations import ObservationEncoder
     from pccap.revision_v1.reader import ReaderConfig, init_reader, params_hash
     from pccap.revision_v1.stream_train import (
+        bank_identity,
         build_bank,
         merge_banks,
         stream_episode,
         stream_episode_mixed,
+        verify_bank,
     )
     from pccap.revision_v1.train import LossConfig
     from pccap.revision_v1.train_fast import FastTrainer
@@ -78,9 +81,16 @@ def main() -> int:
         for pool in pools:
             rows = json.loads((ROOT / pool).read_text())["items"][: args.pool_items]
             bank_path = ASSETS / "banks" / f"{Path(pool).stem}_{args.pool_items}.pkl"
+            expected = bank_identity(rows, enc.base_hash, enc.encoder_version, rc.taps, 2, 2, np.float16)
             if bank_path.exists():
                 b = pickle.loads(bank_path.read_bytes())
-                print(json.dumps({"bank": "loaded", "pool": pool, "items": len(b.items)}), flush=True)
+                if not b.identity:  # banks built before R50-06 carry no identity: verify content against the pool, then stamp
+                    if b.content_hash() != hashlib.sha256(b"".join(it.item_id.encode() + np.asarray(it.prompt_ids, np.int32).tobytes() + np.asarray(it.answer_ids, np.int32).tobytes() for it in b.items)).hexdigest() or len(b.items) != len(rows) or any(it.item_id != r["item_id"] for it, r in zip(b.items, rows)):
+                        raise SystemExit(f"cached bank {bank_path} does not match the pool; delete it")
+                    b.identity = dict(expected)
+                    bank_path.write_bytes(pickle.dumps(b))
+                verify_bank(b, expected)
+                print(json.dumps({"bank": "loaded", "pool": pool, "items": len(b.items), "bank_sha256": b.content_hash()}), flush=True)
             else:
                 b = build_bank(base, enc, rows, rc, progress=100)
                 bank_path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,7 +115,7 @@ def main() -> int:
                     else stream_episode(bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), pool_indices=dev_idx, episode_id=f"dev-{i}")) for i in range(6)]
         k1, k2 = jax.random.split(jax.random.PRNGKey(args.seed))
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
-        tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay)
+        tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay, ledger=ledger)
         st = tr.init(theta)
 
         def evaluate(th):
@@ -140,9 +150,12 @@ def main() -> int:
             theta = jax.tree_util.tree_map(lambda x: jax.numpy.asarray(x), best["theta"])
         after = evaluate(theta)
         wdir = ASSETS / "pilot" / args.tag
-        wdir.mkdir(parents=True, exist_ok=True)
+        if wdir.exists():
+            raise SystemExit(f"{wdir} exists: weights are never overwritten — choose a new tag")
+        wdir.mkdir(parents=True)
         np.savez(wdir / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
-        summary = {"args": vars(args), "bank_wall_s": bank_s, "train_wall_s": train_s, "dev_before": before, "dev_after_best": after, "dev_after_final": evaluate(final_theta),
+        summary = {"args": vars(args), "bank_wall_s": bank_s, "train_wall_s": train_s,
+                   "banks": [{"pool": pool, "sha256": b.content_hash(), "identity": b.identity, "construction_cost": {"full_forwards": b.cost.full_forwards, "tokens": b.cost.tokens, "accel_seconds": b.cost.accel_seconds}, "shared_cost_policy": "charged once at construction; reuse charges nothing (R50-09)"} for pool, b in zip(pools, banks)], "dev_before": before, "dev_after_best": after, "dev_after_final": evaluate(final_theta),
                    "best_step": best["step"], "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))
         print(json.dumps({"dev_before": before, "dev_after_best": after, "best_step": best["step"], "train_wall_s": round(train_s)}, default=float), flush=True)

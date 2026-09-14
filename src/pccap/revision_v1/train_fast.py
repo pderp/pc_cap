@@ -147,8 +147,9 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
 class FastTrainer:
     """Drop-in for train.Trainer at stream scale: same losses, jitted per (kind, shapes)."""
 
-    def __init__(self, rc: ReaderConfig, cc: ControllerConfig, base_params, base_cfg, lc: LossConfig | None = None, lr: float = 1e-4, clip: float = 1.0, weight_decay: float = 0.0):
+    def __init__(self, rc: ReaderConfig, cc: ControllerConfig, base_params, base_cfg, lc: LossConfig | None = None, lr: float = 1e-4, clip: float = 1.0, weight_decay: float = 0.0, ledger=None):
         self.rc, self.cc, self.base_params, self.base_cfg, self.lc = rc, cc, base_params, base_cfg, lc or LossConfig()
+        self.ledger = ledger  # R50-09: outer answer/preservation work (one forward + one reverse per prefix) is charged when a ledger is given
         self.vocab = int(base_cfg.vocab)
         self.get, self._retrieval, self._v_key, self._v_query = _make_fns(rc, cc, base_cfg, self.lc)
         self.opt = optax.chain(optax.clip_by_global_norm(clip), optax.adamw(lr, weight_decay=weight_decay))
@@ -175,6 +176,10 @@ class FastTrainer:
             (l, per_sum), gr = fn(theta, self.base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, jnp.asarray(grp["ids"]), jnp.asarray(grp["n"]), jnp.asarray(grp["target"]),
                                   jnp.asarray(grp["last"]), jnp.asarray(grp["span"]), jnp.asarray(grp["q_index"]), capoff)
             grads = jax.tree_util.tree_map(jnp.add, grads, gr)
+            if self.ledger is not None:
+                from pccap.contracts import CostRecord
+                P = int(grp["ids"].shape[0])
+                self.ledger.charge(CostRecord(phase="learning", full_forwards=P, reverses=P, tokens=int(np.sum(grp["n"]))))
             metrics[grp["kind"]] += float(per_sum)
             metrics[f"{grp['kind']}_n"] += int(grp["ids"].shape[0])
             if gi == 0 and with_ret:

@@ -10,6 +10,8 @@ prompts of OUT-of-memory facts (null targets). Labels live only in the EpisodeFe
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -38,14 +40,40 @@ class ItemFeatures:
     subject: str = ""
 
 
+BUILDER_VERSION = 2  # bump when build_bank's observation recipe changes
+
+
 @dataclass
 class FeatureBank:
     items: list[ItemFeatures]
     dataset: str
     cost: RevisionCost = field(default_factory=lambda: RevisionCost(phase="learning"))
+    identity: dict = field(default_factory=dict)  # R50-06: pool content hash, ordered item/token hash, base checksum, encoder version/taps, builder version, limits, logits dtype
 
     def by_id(self) -> dict[str, ItemFeatures]:
         return {it.item_id: it for it in self.items}
+
+    def content_hash(self) -> str:
+        h = hashlib.sha256()
+        for it in self.items:
+            h.update(it.item_id.encode())
+            h.update(np.asarray(it.prompt_ids, np.int32).tobytes())
+            h.update(np.asarray(it.answer_ids, np.int32).tobytes())
+        return h.hexdigest()
+
+
+def bank_identity(rows: list[dict], base_hash: str, encoder_version: int, taps, max_paraphrases: int, max_locality: int, logits_dtype) -> dict:
+    pool = hashlib.sha256(json.dumps([(r["item_id"], r["prompt_ids"], r["answer_ids"]) for r in rows], sort_keys=True).encode()).hexdigest()
+    return {"pool_content_sha256": pool, "n_items": len(rows), "base_checksum": base_hash, "encoder_version": int(encoder_version), "taps": list(taps),
+            "builder_version": BUILDER_VERSION, "max_paraphrases": max_paraphrases, "max_locality": max_locality, "logits_dtype": np.dtype(logits_dtype).name}
+
+
+def verify_bank(bank: "FeatureBank", expected: dict) -> None:
+    """Refuse a cached bank whose recorded identity differs from the requested one (R50-06)."""
+    got = bank.identity
+    for k, v in expected.items():
+        if got.get(k) != v:
+            raise ValueError(f"cached bank identity mismatch on {k!r}: cached {got.get(k)!r} != requested {v!r}")
 
 
 def build_bank(base, enc, rows: list[dict], rc: ReaderConfig, tok: GPT2Tokenizer | None = None, max_paraphrases: int = 2,
@@ -95,7 +123,8 @@ def build_bank(base, enc, rows: list[dict], rc: ReaderConfig, tok: GPT2Tokenizer
                                   prompt_ids=prompt, answer_ids=answer, own=own, paraphrases=paras, locality=locs, subject=row.get("subject", "")))
         if progress and (i + 1) % progress == 0:
             print(f"bank {i + 1}/{len(rows)}", flush=True)
-    return FeatureBank(items=items, dataset=rows[0].get("dataset", "") if rows else "", cost=cost)
+    ident = bank_identity(rows, enc.base_hash, enc.encoder_version, rc.taps, max_paraphrases, max_locality, logits_dtype)
+    return FeatureBank(items=items, dataset=rows[0].get("dataset", "") if rows else "", cost=cost, identity=ident)
 
 
 def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 64, n_query_records: int = 8, n_out: int = 8,
@@ -142,9 +171,30 @@ def stream_episode_mixed(banks_idx: list[list[int]], bank: FeatureBank, rng: np.
     out-of-memory nulls appear in every episode); queries as in ``stream_episode``."""
     sizes = np.asarray([len(ix) for ix in banks_idx], float)
     share = sizes / sizes.sum()
+    total = n_memory + n_out
+    counts = [max(2, int(np.floor(total * sh))) for sh in share]  # R50-04: at least two items per domain
+    while sum(counts) < total:
+        counts[int(np.argmax(share))] += 1
+    while sum(counts) > total:
+        counts[int(np.argmax(counts))] -= 1
     picked = []
-    for ix, sh in zip(banks_idx, share):
-        k = max(1, int(round((n_memory + n_out) * sh)))
+    for ix, k in zip(banks_idx, counts):
         picked.extend(rng.permutation(np.asarray(ix))[:k].tolist())
     picked = rng.permutation(np.asarray(picked)).tolist()
-    return stream_episode(bank, rng, n_memory=n_memory, n_query_records=n_query_records, n_out=n_out, pool_indices=picked, episode_id=episode_id)
+    ep = stream_episode(bank, rng, n_memory=n_memory, n_query_records=n_query_records, n_out=n_out, pool_indices=picked, episode_id=episode_id)
+    # R50-04: guarantee every domain contributes at least one query record (own prompt + paraphrase + locality null)
+    mem_ids = {s_.record_id for s_ in ep.supports}
+    queried = {q.query_id.split(":", 1)[1] for q in ep.queries if q.role in ("own_prompt",)}
+    for ix in banks_idx:
+        dom_items = [bank.items[i] for i in ix if bank.items[i].item_id in mem_ids]
+        if dom_items and not any(it.item_id in queried for it in dom_items):
+            it = dom_items[int(rng.integers(len(dom_items)))]
+            j = [s_.record_id for s_ in ep.supports].index(it.item_id)
+            ep.queries.append(QueryFeat(query_id=f"own:{it.item_id}", role="own_prompt", last=it.key_last, span=it.key_span, prefixes=it.own, target_record=j, query_ids=it.prompt_ids))
+            if it.paraphrases:
+                p_last, p_span, prefs = it.paraphrases[0]
+                ep.queries.append(QueryFeat(query_id=f"para:{it.item_id}", role="new_paraphrase", last=p_last, span=p_span, prefixes=prefs, target_record=j, query_ids=prefs[0].ids[: prefs[0].n]))
+            if it.locality:
+                l_last, l_span, lpf = it.locality[0]
+                ep.queries.append(QueryFeat(query_id=f"loc:{it.item_id}", role="unrelated", last=l_last, span=l_span, prefixes=[lpf], target_record=-1, query_ids=lpf.ids[: lpf.n]))
+    return ep
