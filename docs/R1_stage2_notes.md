@@ -365,3 +365,14 @@ M5 no longer needed for the rule). Seeds and second streams follow.
 
 Second development streams (seed 22), mixed reader, null 0.5: zsRE 1.00 / 1.00 / 0.99 / 1.00; CounterFact 1.00 / 1.00 /
 0.765 / 1.00. Seed replicates of the mixed training are running.
+
+Seed replicates of the mixed-domain reader (null 0.5, no gate; RET-GS / LS; ES and RET-ES ≥ 0.99 everywhere):
+
+| seed | zsRE (stream 21) | CounterFact (stream 21) |
+| --- | ---: | ---: |
+| 0 | 0.98 / 1.00 | 0.795 / 1.00 |
+| 1 | 0.96 / 1.00 | 0.78 / 1.00 |
+| 2 | 0.97 / 1.00 | 0.785 / 1.00 |
+
+Three seeds and two streams agree: zsRE 0.96–0.99, CounterFact 0.765–0.805, LS 1.00 throughout, one rule. This is the
+condition to carry into the run matrix (R1-40b) and the freeze (R1-41).
