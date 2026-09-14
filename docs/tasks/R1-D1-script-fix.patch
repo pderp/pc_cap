@@ -1,0 +1,12 @@
+--- a/scripts/r1_d1_exclusions.py
++++ b/scripts/r1_d1_exclusions.py
+@@ -84,7 +84,8 @@
+     steps.append(("plus_v0_development_and_s0", set(excluded)))
+     s7 = load(ROOT / "manifests/dev/s7_pairs.json")
+     s7_counts = {}
+-    for dataset, pairs in s7["pairs"].items():
++    for dataset in ("zsre", "counterfact"):
++        pairs = s7["pairs"][dataset]
+         subjects = set()
+         for pair in pairs:
+             for which in ("a", "b"):

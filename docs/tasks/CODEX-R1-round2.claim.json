@@ -1,0 +1,31 @@
+{
+  "agent": "Codex",
+  "status": "in_progress",
+  "created_utc": "2026-09-14T00:37:11.978604+00:00",
+  "start_commit": "9368d4799d4678171421c5049b5b3ec96f8d7206",
+  "tasks": [
+    "R1-D1",
+    "R1-20b",
+    "R1-X1",
+    "R1-23"
+  ],
+  "repair_status": "all five approved files already exactly applied by orchestrator in 8f49955",
+  "ownership": [
+    "scripts/r1_d1_exclusions.py",
+    "scripts/r1_20b_inventory.py",
+    "scripts/r1_x1_review.py",
+    "scripts/r1_23_audit.py",
+    "logs/r1_round2/",
+    "logs/review_r1_diagnosis.md",
+    "logs/audit_r1_23.md",
+    "manifests/revision_v1/exclusions.json",
+    "manifests/revision_v1/episode_partitions.json",
+    "manifests/revision_v1/teacher_targets_request.json"
+  ],
+  "constraints": [
+    "new files only beyond the five specifically approved repairs",
+    "no GPU work",
+    "no commits",
+    "orchestrator core modules and active results are read-only"
+  ]
+}

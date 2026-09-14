@@ -1,0 +1,407 @@
+{
+  "task": "R1-X1",
+  "gpu_seconds": 0,
+  "model_forward_calls": 0,
+  "sources_sha256": {
+    "/home/derp/cap/pc_cap/results/R1/diagnostics_C1.json": "17f3fc8441143ef68637b9ff8708527bed04abd4d772f4de7f0aea9967dda4ee",
+    "/home/derp/cap/pc_cap/results/R1/traces_C1.jsonl": "6aae22ab9dfbfccd122a5298f6b43322a73d6da7679fd41b5231a4a9b4110388",
+    "/home/derp/cap/pc_cap/results/R1/streams/C1/decisions.jsonl": "03e157e703dcd7fc0266e1fe3e4d65a3502940a22e17ef321873474cb56e9af5",
+    "/home/derp/cap/assets/runs/R1/streams/C1/learner_end.ckpt": "9c0a4a6dee2b3240a0786801210c589523bc1fc16933ba573c30e59b95d115c6",
+    "/home/derp/cap/pc_cap/results/R1/diagnostics_C2.json": "dfd362fc5aa28222d4b59b84daa7e14045243f081f0e860e47039ef8c0d56712",
+    "/home/derp/cap/pc_cap/results/R1/traces_C2.jsonl": "ddb371939576949be86c8bc55eae36a91cfde9044a22935f4759acf83a781665",
+    "/home/derp/cap/pc_cap/results/R1/streams/C2/decisions.jsonl": "104afcda821fade735c6e87ebaddfd3c405385ea6ca19a31df203396ce46765d",
+    "/home/derp/cap/assets/runs/R1/streams/C2/learner_end.ckpt": "55c5eb195a55637a71c1af0b40aefcbd5843c08d7fe9da4690e5b38f5434e241",
+    "/home/derp/cap/pc_cap/scripts/r1_diagnostics.py": "d1f88f01f773414412778b99f4e9a7b9b40c4a67da2ecd07a97022a627a4a7ad",
+    "/home/derp/cap/pc_cap/docs/R1_diagnosis.md": "ff2493a6cfedddc714ec0482fadf0d8be9d08996415d83361333b15871dbd094",
+    "/home/derp/cap/pc_cap/results/R1/diagnostics.md": "4d22a099bc9f224e0e36c7250b48f5512647c2dd143dae2e98fc7f2731d77abe",
+    "/home/derp/cap/pc_cap/results/R1/v0_stable.md": "c215b47fdf8ba6d0de61b3de439c6cf6f61f0663a06f0be3af05bc52d3e8f62f",
+    "/home/derp/cap/pc_cap/results/R1/matched_update.md": "39fabc4f6ed10fc2964d87f02205110958e45f8950887bc3eb214e07bb707eb4",
+    "/home/derp/cap/pc_cap/docs/decisions.md": "2cc9a69564aea1a8151e97fb14d3235343aa5a017936f5057d28764128870600"
+  },
+  "arms": {
+    "C1": {
+      "rows": 200,
+      "state_hash_verified": "eff06358dbf2371ae50f2dca8c455f43b2a0d1b5e3dcda2bc731d71968b3b5a5",
+      "all_saved_D1_and_D0_edited_query_aggregates_match": true,
+      "D1_recount": {
+        "prompt": {
+          "live": {
+            "n": 100,
+            "exact_rate": 0.92,
+            "tf_nll_sum_mean": 0.5557155195692984,
+            "tf_nll_token_mean": 0.16786777408379666,
+            "first_nll_mean": 0.49588624865266545,
+            "unavailable_positions_total": 0,
+            "exact_count": 92,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.13823769143514886
+          },
+          "oracle": {
+            "n": 100,
+            "exact_rate": 0.93,
+            "tf_nll_sum_mean": 0.4659845189584301,
+            "tf_nll_token_mean": 0.13113345057721632,
+            "first_nll_mean": 0.014305756777350069,
+            "unavailable_positions_total": 126,
+            "exact_count": 93,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.1159165470045846
+          },
+          "stable": {
+            "n": 100,
+            "exact_rate": 0.35,
+            "tf_nll_sum_mean": 5.866967973473034,
+            "tf_nll_token_mean": 1.7245764000803887,
+            "first_nll_mean": 4.507846778339073,
+            "unavailable_positions_total": 0,
+            "exact_count": 35,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 1.4594447695206552
+          },
+          "stable_rebuilt": {
+            "n": 100,
+            "exact_rate": 1.0,
+            "tf_nll_sum_mean": 0.06468356910196917,
+            "tf_nll_token_mean": 0.019017396864604047,
+            "first_nll_mean": 0.013757413895469242,
+            "unavailable_positions_total": 0,
+            "exact_count": 100,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.01609044007511671
+          }
+        },
+        "paraphrase": {
+          "live": {
+            "n": 100,
+            "exact_rate": 0.24,
+            "tf_nll_sum_mean": 7.641842007029291,
+            "tf_nll_token_mean": 2.492083803444036,
+            "first_nll_mean": 7.021095569068585,
+            "unavailable_positions_total": 0,
+            "exact_count": 24,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 1.9009557231416148
+          },
+          "oracle": {
+            "n": 100,
+            "exact_rate": 0.94,
+            "tf_nll_sum_mean": 0.47826845579410104,
+            "tf_nll_token_mean": 0.1393841080475553,
+            "first_nll_mean": 0.037858294289335605,
+            "unavailable_positions_total": 126,
+            "exact_count": 94,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.11897225268509976
+          },
+          "stable": {
+            "n": 100,
+            "exact_rate": 0.11,
+            "tf_nll_sum_mean": 9.571315796018048,
+            "tf_nll_token_mean": 2.973887609642814,
+            "first_nll_mean": 7.853621081732942,
+            "unavailable_positions_total": 0,
+            "exact_count": 11,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 2.3809243273676737
+          },
+          "stable_rebuilt": {
+            "n": 100,
+            "exact_rate": 0.67,
+            "tf_nll_sum_mean": 4.369307045081344,
+            "tf_nll_token_mean": 1.3589313444204956,
+            "first_nll_mean": 3.880711712353175,
+            "unavailable_positions_total": 0,
+            "exact_count": 67,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 1.0868922997714785
+          }
+        }
+      },
+      "D0_recount": {
+        "prompt": {
+          "1": {
+            "own": 96,
+            "other": 3,
+            "none": 1
+          },
+          "2": {
+            "own": 88,
+            "none": 9,
+            "other": 3
+          },
+          "3": {
+            "own": 92,
+            "other": 3,
+            "none": 5
+          }
+        },
+        "paraphrase": {
+          "1": {
+            "none": 30,
+            "other": 44,
+            "own": 26
+          },
+          "2": {
+            "own": 19,
+            "none": 54,
+            "other": 27
+          },
+          "3": {
+            "none": 72,
+            "own": 23,
+            "other": 5
+          }
+        }
+      },
+      "oracle_verification": {
+        "claimed": 1094,
+        "verified": 1080,
+        "reused_or_inactive": 14,
+        "target_mismatch": 0,
+        "missing_prefix": 112
+      },
+      "verified_oracle_last_accepted_prefix_mismatches": [],
+      "shadow_rebuild": {
+        "1": {
+          "rebuilt": 362,
+          "kept_stored": 0,
+          "multiple_candidate_prefixes": 0,
+          "capacity": 2048,
+          "active": 362
+        },
+        "2": {
+          "rebuilt": 356,
+          "kept_stored": 5,
+          "multiple_candidate_prefixes": 0,
+          "capacity": 2048,
+          "active": 361
+        },
+        "3": {
+          "rebuilt": 362,
+          "kept_stored": 0,
+          "multiple_candidate_prefixes": 0,
+          "capacity": 2048,
+          "active": 362
+        }
+      },
+      "shadow_rebuild_last_accepted_prefix_mismatches": [],
+      "unique_rebuilt_prefix_passes": 367,
+      "stable_rebuilt_site3_paraphrase_association": {
+        "own": {
+          "n": 71,
+          "exact": 67
+        },
+        "other": {
+          "n": 22,
+          "exact": 0
+        },
+        "none": {
+          "n": 7,
+          "exact": 0
+        }
+      },
+      "purpose_sum_seconds": 14.705913399462588,
+      "ledger_delta_seconds": 14.705913399462588,
+      "cost_residual_seconds": 0.0,
+      "unrelated_rows_saved": 0,
+      "limitations": [
+        "Recounts validate saved outcomes, not logits: no model recomputation here.",
+        "No per-query unrelated traces or stable/shadow unrelated locality measurements were persisted.",
+        "Oracle prefix identity additionally checked against chronological last accepted writes, beyond installed owner/token checks.",
+        "No current prefix-identity failures does not make owner+token alone a general prefix-identity guarantee."
+      ]
+    },
+    "C2": {
+      "rows": 200,
+      "state_hash_verified": "ed29f6a67d414cc6a5c9961e51cae4135faf5dfb4fb046094f8b86d7a61b83a7",
+      "all_saved_D1_and_D0_edited_query_aggregates_match": true,
+      "D1_recount": {
+        "prompt": {
+          "live": {
+            "n": 100,
+            "exact_rate": 0.79,
+            "tf_nll_sum_mean": 2.3532418941085633,
+            "tf_nll_token_mean": 0.7438466335690975,
+            "first_nll_mean": 2.34345546917739,
+            "unavailable_positions_total": 0,
+            "exact_count": 79,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.585383555748399
+          },
+          "oracle": {
+            "n": 100,
+            "exact_rate": 0.92,
+            "tf_nll_sum_mean": 0.5782225788479949,
+            "tf_nll_token_mean": 0.15725755481614592,
+            "first_nll_mean": 0.18598794217085454,
+            "unavailable_positions_total": 832,
+            "exact_count": 92,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.14383646239999873
+          },
+          "stable": {
+            "n": 100,
+            "exact_rate": 0.62,
+            "tf_nll_sum_mean": 4.370280088089464,
+            "tf_nll_token_mean": 1.252862600247818,
+            "first_nll_mean": 3.898952587833289,
+            "unavailable_positions_total": 0,
+            "exact_count": 62,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 1.087134350271011
+          },
+          "stable_rebuilt": {
+            "n": 100,
+            "exact_rate": 0.98,
+            "tf_nll_sum_mean": 0.5384814910047038,
+            "tf_nll_token_mean": 0.0882196506629944,
+            "first_nll_mean": 0.16202082381192726,
+            "unavailable_positions_total": 0,
+            "exact_count": 98,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.13395061965291136
+          }
+        },
+        "paraphrase": {
+          "live": {
+            "n": 100,
+            "exact_rate": 0.29,
+            "tf_nll_sum_mean": 8.122063799381596,
+            "tf_nll_token_mean": 2.398839744539307,
+            "first_nll_mean": 7.1332062246358126,
+            "unavailable_positions_total": 0,
+            "exact_count": 29,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 2.0204138804431833
+          },
+          "oracle": {
+            "n": 100,
+            "exact_rate": 0.94,
+            "tf_nll_sum_mean": 0.548792553223932,
+            "tf_nll_token_mean": 0.1484385174370875,
+            "first_nll_mean": 0.18930772528529835,
+            "unavailable_positions_total": 832,
+            "exact_count": 94,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 0.1365155605034657
+          },
+          "stable": {
+            "n": 100,
+            "exact_rate": 0.29,
+            "tf_nll_sum_mean": 9.34686558502454,
+            "tf_nll_token_mean": 2.801948825482423,
+            "first_nll_mean": 8.302176515148112,
+            "unavailable_positions_total": 0,
+            "exact_count": 29,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 2.3250909415483934
+          },
+          "stable_rebuilt": {
+            "n": 100,
+            "exact_rate": 0.49,
+            "tf_nll_sum_mean": 8.328127218228266,
+            "tf_nll_token_mean": 2.4838750381544776,
+            "first_nll_mean": 7.344117853475441,
+            "unavailable_positions_total": 0,
+            "exact_count": 49,
+            "total_target_tokens": 402,
+            "pooled_token_nll": 2.0716734373702153
+          }
+        }
+      },
+      "D0_recount": {
+        "prompt": {
+          "1": {
+            "other": 41,
+            "none": 55,
+            "own": 4
+          },
+          "2": {
+            "none": 79,
+            "other": 19,
+            "own": 2
+          },
+          "3": {
+            "none": 18,
+            "own": 77,
+            "other": 5
+          }
+        },
+        "paraphrase": {
+          "1": {
+            "other": 41,
+            "none": 58,
+            "own": 1
+          },
+          "2": {
+            "none": 73,
+            "other": 26,
+            "own": 1
+          },
+          "3": {
+            "none": 58,
+            "own": 32,
+            "other": 10
+          }
+        }
+      },
+      "oracle_verification": {
+        "claimed": 374,
+        "verified": 374,
+        "reused_or_inactive": 0,
+        "target_mismatch": 0,
+        "missing_prefix": 832
+      },
+      "verified_oracle_last_accepted_prefix_mismatches": [],
+      "shadow_rebuild": {
+        "1": {
+          "rebuilt": 6,
+          "kept_stored": 0,
+          "multiple_candidate_prefixes": 0,
+          "capacity": 2048,
+          "active": 6
+        },
+        "2": {
+          "rebuilt": 4,
+          "kept_stored": 0,
+          "multiple_candidate_prefixes": 0,
+          "capacity": 2048,
+          "active": 4
+        },
+        "3": {
+          "rebuilt": 364,
+          "kept_stored": 0,
+          "multiple_candidate_prefixes": 0,
+          "capacity": 2048,
+          "active": 364
+        }
+      },
+      "shadow_rebuild_last_accepted_prefix_mismatches": [],
+      "unique_rebuilt_prefix_passes": 365,
+      "stable_rebuilt_site3_paraphrase_association": {
+        "own": {
+          "n": 51,
+          "exact": 48
+        },
+        "other": {
+          "n": 28,
+          "exact": 1
+        },
+        "none": {
+          "n": 21,
+          "exact": 0
+        }
+      },
+      "purpose_sum_seconds": 9.765307091758586,
+      "ledger_delta_seconds": 9.765307091758586,
+      "cost_residual_seconds": 0.0,
+      "unrelated_rows_saved": 0,
+      "limitations": [
+        "Recounts validate saved outcomes, not logits: no model recomputation here.",
+        "No per-query unrelated traces or stable/shadow unrelated locality measurements were persisted.",
+        "Oracle prefix identity additionally checked against chronological last accepted writes, beyond installed owner/token checks.",
+        "No current prefix-identity failures does not make owner+token alone a general prefix-identity guarantee."
+      ]
+    }
+  }
+}

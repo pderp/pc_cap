@@ -2270,11 +2270,11 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "partial",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": "2026-09-13T22:01:52+00:00",
-   "finished": null,
+   "finished": "2026-09-14T01:07:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
@@ -2334,16 +2334,16 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "pending",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
-   "started": null,
-   "finished": null,
+   "started": "2026-09-14T01:07:20+00:00",
+   "finished": "2026-09-14T01:07:20+00:00",
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": ""
+   "note": "logs/audit_r1_23.md R23-01..10; bounded checks pass; repairs assigned to R1-25"
   },
   {
    "id": "R1-24",
@@ -2460,16 +2460,16 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "pending",
+   "status": "partial",
    "agent": "codex",
    "worktree": null,
-   "started": null,
+   "started": "2026-09-14T01:07:20+00:00",
    "finished": null,
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "X0-09; DEC-034(c); the E.2 pass is the orchestrator's GPU step"
+   "note": "exclusion register v1 (31,619 normalized exclusions; 155,322 raw / 88,267 subject candidates); script repair applied; entity review, E.2 pass and fresh draw pending"
   },
   {
    "id": "R1-X0",
@@ -2510,6 +2510,69 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "results/R1/v0_stable.md: RET-GS 0.24/0.29 \u2192 0.44/0.44; RET-ES 0.99/0.97; LS 1.0"
+  },
+  {
+   "id": "R1-20b",
+   "title": "CounterFact episode corpus + partition manifest",
+   "stage": "R1",
+   "role": "DATA",
+   "deps": [
+    "R1-20"
+   ],
+   "gpu": "none",
+   "review": true,
+   "status": "partial",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T01:07:20+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "128/16/16 CounterFact episodes under assets (r1_20b_v1); partition manifest; final synthetic namespace not implemented (final_generation_ready=false)"
+  },
+  {
+   "id": "R1-X1",
+   "title": "Counter-review of the Stage 0 memo",
+   "stage": "R1",
+   "role": "REVIEW",
+   "deps": [
+    "R1-04"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T01:07:20+00:00",
+   "finished": "2026-09-14T01:07:20+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "logs/review_r1_diagnosis.md X1-01..08; recount reproduces all aggregates; response pending"
+  },
+  {
+   "id": "R1-25",
+   "title": "Core repairs from the R1-23 audit",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-23"
+   ],
+   "gpu": "short",
+   "review": true,
+   "status": "in_progress",
+   "agent": "orchestrator",
+   "worktree": null,
+   "started": "2026-09-14T01:07:20+00:00",
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "R23-02 answer-sensitive code; R23-04 full rollback; R23-06 config in snapshot; R23-07 weights in ceiling; R23-09; R23-10 common geometry; responses R23-01/03/05/08"
   }
  ]
 }

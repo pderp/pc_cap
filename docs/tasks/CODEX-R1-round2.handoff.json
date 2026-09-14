@@ -1,0 +1,69 @@
+{
+  "agent": "Codex",
+  "status": "delivered_with_one_permission_pending",
+  "supersedes_claim": "docs/tasks/CODEX-R1-round2.claim.json",
+  "start_commit": "9368d4799d4678171421c5049b5b3ec96f8d7206",
+  "end_observed_commit": "459b6a33847d173d017a66b8eba1aa5ab2513d11",
+  "tasks": {
+    "R1-D1": "inventory delivered and independently checked; tested canonical script repair awaiting permission",
+    "R1-20b": "CPU corpus/partition/prefix manifests delivered; final synthetic namespace not implemented or sealed",
+    "R1-X1": "read-only diagnosis review complete; owner response pending",
+    "R1-23": "read-only code audit complete; owner repairs and remaining scientific implementation pending"
+  },
+  "owned_files_sha256": {
+    "docs/tasks/CODEX-R1-round2.claim.json": "0804e71d215be08fa07b9c3f6772660de4ba2d9c357d85f0e0e45d4162085007",
+    "docs/tasks/R1-D1-script-fix.json": "192fe5084f0ebba6d68909bff12df29b8adfb1a1bb82bda63951dc744b944ac9",
+    "docs/tasks/R1-D1-script-fix.patch": "1374b4eac72ea05515081532f6a6c20d58153cbfe20d5d3981e4e3d885955971",
+    "docs/tasks/R1-D1.md": "0a8509fa17d19617dea5ba51d8830946c434119b5e805672c93377e8ff950bfe",
+    "docs/tasks/R1-20b.md": "00ee8090dfc30816940dde49945e05d23ba6cabe7023a8ac4aae91b12ca42689",
+    "docs/tasks/R1-X1.md": "99359902b200cd2a9ab88a82807dd5629b2ceba88105bcb676fe46851b15af84",
+    "docs/tasks/R1-23.md": "dcacadaabe01f12d3d43ac30c688cc22153431d603a2c3ce2c12145099091a77",
+    "logs/R1_round2_handoff.md": "aadfffe2606395e35169321e27223f9d610429ce3b03d00bc9c2101d5d56e29b",
+    "logs/audit_r1_23.md": "106ccdcf68112d663b937b5c77a4ddb244755a24a71227605c336558108ce0ff",
+    "logs/review_r1_diagnosis.md": "d660a66e212bdf65534756c5e071206049a85b11c0d8b4f8210337af209ed28e",
+    "manifests/revision_v1/exclusions.json": "613fc56ba1bdf8cb7e326a3f87faf3b02137e3cf2a09010ee7f64fbb7015e00b",
+    "manifests/revision_v1/episode_partitions.json": "448fa1ca0fc6ea4bee5d155398479ab86de23fbe7f2bbc0c8f41c16b04df0907",
+    "manifests/revision_v1/teacher_targets_request.json": "4738f3d1b2bb9578029b353e81d1c9cd381682b8c47b6c2584cd89c9427b2b63",
+    "scripts/r1_20b_inventory.py": "91360227f5ac7e0c94fcaf40e2f2cccf60d4c4e467092c51e1f48c30efec9f42",
+    "scripts/r1_d1_exclusions.py": "256dd13515ee1ad18064d30b161718fa035aaf6589f2589d4c2a0ed5313fbf05",
+    "scripts/r1_d1_exclusions_v2.py": "cf77facaf038b785112e840c0e7d249a860a87fb99942c0bf938d17780194e79",
+    "scripts/r1_23_audit.py": "16f246f052ff230d3d47aa558a97f1986bdb9d18c9b7c7d00781bf20f6fff04b",
+    "scripts/r1_23_boundaries.py": "62a7e66b041d4a799f17a42360b19a1475475280674ed54f104276fc1a6a95a7",
+    "scripts/r1_x1_review.py": "780c50396eee45f6f9ca2ab9619ddc417ea6c2e1d66b01a6235a26f75da657b2",
+    "logs/r1_round2/approved_repairs_resolution.json": "56e4800be1d3718a099635b8d9aabd6ae99c1a57bf408b763b341d66bea5d754",
+    "logs/r1_round2/approved_repairs_tests.txt": "cbe0970b6d05ac64b0390de963a343180166708972a0dd7b23ecfa52f3de7573",
+    "logs/r1_round2/artifact_verification.json": "f1f3242aba1217e7030f4107d7fd8390b77122217907efdd3931e938ea6367ff",
+    "logs/r1_round2/episode_inventory.json": "bf8280834bf38e5080c0874bb55718e1696c62792445cb177d15f633224cf4e2",
+    "logs/r1_round2/final_validation.json": "4eade4af2982e704afa4fe7030a3a8ee2b635d9c8c0f55fc3f385a030f676a14",
+    "logs/r1_round2/r1_23_boundaries.json": "bb80204906c5e87bbbcfd1365484d9ba3779f555f87317fdbeff210e53ab86cf",
+    "logs/r1_round2/r1_23_controls.json": "5636e40b4face0d187d111926f07d6acf3e98043a6032aee6fd80e6de61fb8f6",
+    "logs/r1_round2/r1_23_support_steps.json": "bcca84e0f0d2765a76bedd98684f077b388e97916bfa4f97d28b8d1c5a9b3051",
+    "logs/r1_round2/r1_x1_recount.json": "83c76da9ca4fb11e6413cc71311745b025db7ba6eed8802bd74ef026ac85115b",
+    "logs/r1_round2/source_advance.json": "c3f27be0820bfca4c7e51403a3d5f8321f12c31825d86662a1775ce6a3981246"
+  },
+  "external_data_root": "/home/derp/cap/assets/data/prepared/revision_v1",
+  "external_versions": [
+    "r1_20b_v1",
+    "r1_d1_v1"
+  ],
+  "validation": {
+    "approved_repairs_tests_passed": 52,
+    "counterfact_episodes": 160,
+    "all_candidate_indices_reproduced": 155322,
+    "deduplicated_candidate_subjects": 88267,
+    "diagnosis_rows_recounted": 400,
+    "cpu_counterexamples_recorded": true,
+    "positive_boundary_controls_passed": true
+  },
+  "existing_files_edited_by_this_turn": [],
+  "gpu_seconds": 0,
+  "commits_by_this_turn": [],
+  "pending_permission": {
+    "target": "scripts/r1_d1_exclusions.py",
+    "patch": "docs/tasks/R1-D1-script-fix.patch",
+    "guard_hashes": "docs/tasks/R1-D1-script-fix.json",
+    "working_additive_alternative": "scripts/r1_d1_exclusions_v2.py"
+  },
+  "handoff": "logs/R1_round2_handoff.md",
+  "source_advance": "logs/r1_round2/source_advance.json"
+}

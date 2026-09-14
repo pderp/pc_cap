@@ -1,0 +1,148 @@
+{
+  "task": "R1-23",
+  "devices": [
+    "cpu:0"
+  ],
+  "source_sha256_before": {
+    "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "src/pccap/revision_v1/adapt.py": "f5be0e93c8d308be531e5085e7beaadefbd1943f678911ad4c799fb2ee2fa0bc",
+    "src/pccap/revision_v1/contracts.py": "6ef4c3381ced61ce05e8919bc72f1cb3a7e114a11cbc35140ff3b3352a4af5c1",
+    "src/pccap/revision_v1/controller.py": "e23d1b3b67120c93f05a2f4af80e13de8ea515e69cf4c9f8ff130fac4cea3581",
+    "src/pccap/revision_v1/epc_train.py": "ce85d67c1abd01183bdab910ae789cf3923f2188685b0a819e025909a51fbdc7",
+    "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "src/pccap/revision_v1/learner.py": "6482ed67c21f007d54605aceab0fbd5cf38f7cdb85028b342818da1465be21aa",
+    "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "src/pccap/revision_v1/memory.py": "64785866cc758e7ea3efa54f0aaa38460634bd723dac540bac588a5a4bc7c288",
+    "src/pccap/revision_v1/observations.py": "369e79d6b4e415e2be0f6bc69b530e475fc6877087828010e2c417f022dbd7ef",
+    "src/pccap/revision_v1/reader.py": "b9c1e43ff00bca46c9cbb0fce3807be420758f91940bcaf59afde8d720985305",
+    "src/pccap/revision_v1/train.py": "9590790e73a7ed26044ec62ee3a9a4b4d1e1158f0a596bc0dbd530b034282556",
+    "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76",
+    "scripts/r1_21_pilot.py": "b5075fa827468693fc479b1a110811cef889c49de5edc846bc35bb33a4c1ac7b",
+    "docs/revision_v1_losses.md": "700c6939e810787760939f2e6d593118ba29c0dcf7b1e71502f1f3493605c9cf"
+  },
+  "controls": {
+    "read_signatures": {
+      "predict": "(ids, full: 'bool' = False) -> 'ForwardResult'",
+      "selection_for": "(ids: 'np.ndarray') -> 'Selection'"
+    },
+    "support_answer_swap": {
+      "changed_support_count": 5,
+      "support_features_bit_identical": true,
+      "initial_keys_and_codes_bit_identical": true,
+      "query_labels_held_fixed": true,
+      "interpretation": "zero-step outer record construction ignores the taught answers; deliberate inconsistent-label intervention tests data flow"
+    },
+    "prefix_denominators": {
+      "answer": {
+        "reported_mean_one": 3.636373281478882,
+        "reported_mean_duplicate": 3.636373281478882,
+        "gradient_norm_one": 0.4272627532482147,
+        "gradient_norm_duplicate": 0.8545255064964294,
+        "max_abs_duplicate_minus_twice": 0.0,
+        "epc_stub_gradient_norm_one": 0.16267292201519012,
+        "epc_stub_gradient_norm_duplicate": 0.32534584403038025,
+        "epc_stub_max_abs_duplicate_minus_twice": 0.0,
+        "base_api_call_deltas_during_bp_gradients": {
+          "forward": 0,
+          "forward_from": 0,
+          "adjoint": 0
+        },
+        "epc_control_scope": "tests accumulation with a deterministic stand-in, not the actual ePC gradient estimator"
+      },
+      "preserve": {
+        "reported_mean_one": 0.0022783149033784866,
+        "reported_mean_duplicate": 0.0022783149033784866,
+        "gradient_norm_one": 0.00574383232742548,
+        "gradient_norm_duplicate": 0.01148766465485096,
+        "max_abs_duplicate_minus_twice": 0.0,
+        "epc_stub_gradient_norm_one": 0.07489608228206635,
+        "epc_stub_gradient_norm_duplicate": 0.1497921645641327,
+        "epc_stub_max_abs_duplicate_minus_twice": 0.0,
+        "base_api_call_deltas_during_bp_gradients": {
+          "forward": 0,
+          "forward_from": 0,
+          "adjoint": 0
+        },
+        "epc_control_scope": "tests accumulation with a deterministic stand-in, not the actual ePC gradient estimator"
+      }
+    },
+    "optional_code_penalty": {
+      "bp_loss": 1.0765374898910522,
+      "epc_loss": 0.0,
+      "bp_grad_norm": 8.858816146850586,
+      "epc_grad_norm": 0.0
+    },
+    "rejected_revision": {
+      "accepted": false,
+      "reason": "non_finite_code",
+      "persistent_state_changed": true,
+      "old_active": false,
+      "new_active": true,
+      "unrelated_code_unchanged": true,
+      "reusable_parameters_unchanged": true
+    },
+    "ordinary_support_update": {
+      "accepted": false,
+      "loss_before": 5.144599914550781,
+      "loss_after": 5.144599914550781,
+      "unrelated_code_unchanged": true,
+      "reusable_parameters_unchanged": true
+    },
+    "independent_query_prefix_collision": {
+      "second_prompt_tokens": 3,
+      "cached_selection_prompt_len": 2,
+      "fresh_selection_prompt_len": 3,
+      "logits_max_abs_difference": 0.0009642839431762695,
+      "condition": "p1 then independent p2 without explicit reset; current harness does not supply a per-query reset boundary"
+    },
+    "snapshot_configuration": {
+      "single_site_mismatch_accepted": true,
+      "single_site_mismatch_same_state_hash": true,
+      "single_site_logits_max_abs_difference": 0.0888204574584961,
+      "different_null_threshold_import_accepted": true,
+      "threshold_snapshot_hash_matches": false
+    },
+    "returned_query_cost": {
+      "actual_full_forward_calls": 1,
+      "returned_full_forwards": 0,
+      "returned_tokens": 0,
+      "cached_prompt_reads": 1
+    },
+    "capacity": {
+      "tiny_reusable_weight_bytes": 7356,
+      "accepted_ceiling_bytes": 1,
+      "empty_cap_reported_bytes": 0,
+      "long_record_ceiling_bytes": 256,
+      "long_record_reported_bytes": 192,
+      "long_record_serialized_payload_lower_bound_bytes": 20154,
+      "reported_index_bytes": 0,
+      "default_reusable_parameter_count": 3282689,
+      "default_reusable_weight_bytes": 13130756
+    },
+    "observation_write_free": {
+      "write_counts": [
+        0
+      ],
+      "base_parameters_unchanged": true
+    }
+  },
+  "source_sha256_after": {
+    "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "src/pccap/revision_v1/adapt.py": "f5be0e93c8d308be531e5085e7beaadefbd1943f678911ad4c799fb2ee2fa0bc",
+    "src/pccap/revision_v1/contracts.py": "6ef4c3381ced61ce05e8919bc72f1cb3a7e114a11cbc35140ff3b3352a4af5c1",
+    "src/pccap/revision_v1/controller.py": "e23d1b3b67120c93f05a2f4af80e13de8ea515e69cf4c9f8ff130fac4cea3581",
+    "src/pccap/revision_v1/epc_train.py": "ce85d67c1abd01183bdab910ae789cf3923f2188685b0a819e025909a51fbdc7",
+    "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "src/pccap/revision_v1/learner.py": "6482ed67c21f007d54605aceab0fbd5cf38f7cdb85028b342818da1465be21aa",
+    "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "src/pccap/revision_v1/memory.py": "64785866cc758e7ea3efa54f0aaa38460634bd723dac540bac588a5a4bc7c288",
+    "src/pccap/revision_v1/observations.py": "369e79d6b4e415e2be0f6bc69b530e475fc6877087828010e2c417f022dbd7ef",
+    "src/pccap/revision_v1/reader.py": "b9c1e43ff00bca46c9cbb0fce3807be420758f91940bcaf59afde8d720985305",
+    "src/pccap/revision_v1/train.py": "9590790e73a7ed26044ec62ee3a9a4b4d1e1158f0a596bc0dbd530b034282556",
+    "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76",
+    "scripts/r1_21_pilot.py": "b5075fa827468693fc479b1a110811cef889c49de5edc846bc35bb33a4c1ac7b",
+    "docs/revision_v1_losses.md": "700c6939e810787760939f2e6d593118ba29c0dcf7b1e71502f1f3493605c9cf"
+  },
+  "source_changed_during_controls": false,
+  "gpu_seconds": 0
+}
