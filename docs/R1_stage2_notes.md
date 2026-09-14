@@ -16,6 +16,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | cf_fresh_wd_400_r25 (answer-sensitive codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.59 → 2.29 | 1.94 → 1.13 | 0.006 → 0.000 | 0.16 | 0.00 | 1.00 | 1.00 | 0.08 / 1.00 / 1.00 | 72 min |
 | cf_pool3k_r25_600 | BP, CounterFact 3k training pool (DEC-037), fresh episodes/step, wd 0.01, best-dev @ 449, 32 dev eps | fresh | 600 × 4 | 1e-3 | 8.02 → 3.50 | 1.87 → 0.70 | 0.007 → 0.006 | 0.03 (n=64) | 0.00 | 1.00 | 0.97 | 0.03 / 0.99 / 0.98 | 100 min |
 | cf_pool3k_tiedcos_400 | BP, 3k pool, tied cosine reader (query-only null), fresh episodes, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.27 | 5.14 → 0.91 | 0.009 → 0.065 | 0.05 (top-1 hit 0.45) | 0.06 (top-1 0.53) | 1.00 | 1.00 | 0.02 / 0.98 / 0.98 | 74 min |
+| cf_pool3k_pairnull_400 | BP, 3k pool, tied cosine + pairwise null (no own-prompt role), fresh episodes, wd 0.01, best-dev @ 349 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.29 | 5.32 → 0.98 | 0.009 → 0.14 | 0.03 (top-1 0.45) | 0.03 (top-1 0.53) | 0.97 | 0.94 | 0.001 / 0.96 / 0.93 | 74 min |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -170,3 +171,23 @@ the same template. On zsRE the null is also inverted by domain shift (paraphrase
 (1) an `own_prompt` query role (support prompt → taught answer) in every training episode; (2) the pairwise null (run
 `cf_pool3k_pairnull_400` in progress; `cf_pool3k_pair_own_400` launched with both). Deployment keeps the non-learned
 cosine gate available as a fallback and the controls' numbers as the bar.
+
+## Trained similarity under the non-learned gate (2026-09-14, 03:30 EDT)
+
+After fixing the deployment write mass (binary: full write unless hard-nulled — the soft non-null mass had been scaling
+deltas to zero whenever the null was confident, commit 5a37027), the pairwise-null weights with the trained null disabled
+and the cosine gate 0.93:
+
+| stream | reader | ES | RET-ES | RET-GS | LS |
+| --- | --- | ---: | ---: | ---: | ---: |
+| zsRE | random tied (reference) | 1.00 | 1.00 | 0.65 | 1.00 |
+| zsRE | trained (cf_pool3k_pairnull) | 1.00 | 1.00 | 0.54 | 0.92 |
+| CounterFact | random tied (reference) | 1.00 | 1.00 | 0.18 | 0.16 |
+| CounterFact | trained (cf_pool3k_pairnull) | 1.00 | 1.00 | 0.02 | 0.04 |
+
+Training the similarity on CounterFact episodes made the cosine geometry WORSE for gating on both streams: CounterFact
+near-neighbour locality prompts now score 0.98 (above the gate) and paraphrases 0.72 (below it), and zsRE loses 0.11
+RET-GS and 0.08 LS. The trained reader's value must come from its null decision, not from the cosine geometry; the
+combined run (`cf_pool3k_pair_own_400`: pairwise null + own-prompt queries) is the test. If the trained null does not
+transfer to zsRE, the next data decision is a zsRE training pool from MEND train (one paraphrase per item; own-prompt +
+rephrase + locality queries), which would amend DEC-034(b) for training only.
