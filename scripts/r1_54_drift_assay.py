@@ -65,8 +65,22 @@ def main() -> int:
                 cap.reset_queries()
                 fired.append(int(not cap.selection_for(w[:L]).hard_null))
         ev = Evaluator(base, tok, unrelated[:50], drift, drift_positions=args.windows * args.window, drift_window=args.window)
-        cap.reset_queries()
-        nll_on = ev._drift_nll(cap)
+
+        class PerPositionCap:
+            """Ordinary text has no query boundary: every prefix is its own query (the R1-24 boundary evaluator's policy)."""
+
+            def __init__(self, learner):
+                self.learner = learner
+
+            def predict(self, ids):
+                self.learner.reset_queries()
+                self.learner.selection_for(np.asarray(ids, np.int32))
+                return self.learner.predict(ids)
+
+            def last_logits_batch(self, seqs, phase="query"):
+                return np.stack([self.predict(s).logits for s in seqs])
+
+        nll_on = ev._drift_nll(PerPositionCap(cap))
         nll_off = ev._drift_nll(base)
         out["rules"][rule] = {"fire_rate_on_ordinary_prefixes": float(np.mean(fired)), "drift_nll_cap_on": nll_on, "drift_nll_cap_off": nll_off, "delta_nats": nll_on - nll_off, "ppl_ratio": float(np.exp(nll_on - nll_off))}
         print(json.dumps({rule: {k: round(v, 4) for k, v in out["rules"][rule].items()}}), flush=True)
