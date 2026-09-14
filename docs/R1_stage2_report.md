@@ -25,7 +25,7 @@ On the real base the reader preserves 100/100 near-neighbour answers, completes 
 
 What is not established: fresh-data generalization (no confirmatory stream has been run), any advantage of predictive
 coding (the reference is BP-trained and feedforward), retention at 1,000 edits (CounterFact locality firing rises to
-10 % of locality prompts at 1,000 records; zsRE accepts 7 % / 25 % / 45 % of edit-style prompts about absent facts at 100 / 300 / 1,000 records), and
+10 % of locality prompts at 1,000 records; zsRE accepts 7 % / 25 % / 45 % of edit-style prompts about absent facts at 100 / 300 / 1,000 records, 5 % / 11 % / 10 % with the proposed rare-token gate), and
 compute-matched superiority over the controls. The run matrix (240 cells) does not fit the 15-hour envelope at
 measured costs; §7 proposes the cut for the lead's decision.
 
@@ -138,7 +138,7 @@ Per-position selection on 32 windows × 128 positions after 100 edits ([drift_as
 | **v2** | 0.000 / 0.000 / 1.000 | 0.000 at probe lengths / +0.012 / 1.012 |
 
 v0's ratios were 1.001–1.004. The +0.012 after CounterFact edits is residual firing at prefix lengths the fixed probes
-did not sample; the assay now counts every scored position and a recount is queued. Codex's addendum measured the v1
+did not sample: 14 of 4,064 scored positions (0.34 %) fire on the recount that counts every position. Codex's addendum measured the v1
 drift on the full 16,256-position subset (+0.60 / +0.39); the figures agree in kind.
 
 ### 5.2 Endpoints (R1-43, R1-44; v2 reader; [results/R1/endpoints/](../results/R1/endpoints/))
@@ -154,8 +154,15 @@ drift on the full 16,256-position subset (+0.60 / +0.39); the figures agree in k
 
 The zsRE unseen rate is the main scale risk: plausible edit-style prompts about facts not in memory are accepted more
 often as memory grows (7 → 25 → 45 % at 100 / 300 / 1,000 records; bank profile: out-of-memory hard-null 0.87 → 0.67 at 300). The 300/1,000-record points use
-training-pool rows beyond the reader's 1,000 training items as labelled memory fillers and outside prompts; a
-100-record run with the same pool-sourced prompts is queued to separate memory size from prompt source.
+training-pool rows beyond the reader's 1,000 training items as labelled memory fillers and outside prompts; with the
+same pool-sourced prompts at 100 records the rate is 12 %, so the growth (12 → 25 → 45 %) is a memory-size effect.
+Every false fire is a same-relation, different-subject prompt whose fired record shares only template words with the
+query (the record's subject appears in the query in 0 of 70 cases). R1-56 tests a non-learned gate — the query must
+share at least one memory-rare token (document frequency ≤ 2 over the active records) with the selected record — which
+costs nothing measurable on the streams (zsRE 0.96 / 1.00, CounterFact 0.715 / 1.00 vs 0.96 / 0.725) and cuts the
+unseen false fires to 5 % / 11 % / 10 % at 100 / 300 / 1,000 zsRE records and to 0 % at 1,000 CounterFact records.
+Requiring two rare tokens reaches 1 % but rejects single-token subjects on their own prompts (ES 0.98–0.99,
+CounterFact RET-GS 0.62), so the one-token gate is the proposed primary rule (condition v3, DEC-043 proposed).
 
 ### 5.3 Cost and state at occupancy (R1-40c P1; [results/R1/p1_profile/](../results/R1/p1_profile/))
 

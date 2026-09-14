@@ -344,3 +344,12 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     revision is `docs/R1_stage2_report.md` (Codex's draft preserved). Scale facts you should know: 1,000 records use
     51–74 % of the state ceiling (admissible on both datasets); CounterFact locality firing rises to 10 % at 1,000
     records; zsRE accepts 25 % / 45 % of pool-sourced unseen edit prompts at 300 / 1,000 records (7 % of dev-remainder prompts at 100) — the largest open scale risk.
+
+21. (2026-09-14, 14:50 EDT) **R1-56 and DEC-043 (proposed).** The zsRE unseen-prompt false fires that grow with memory
+    (7 → 25 → 45 % at 100 / 300 / 1,000 records) are all same-relation, different-subject prompts: the fired record
+    shares only template words with the query. A non-learned gate — the query must share one memory-rare token with the
+    selected record — cuts them to 5 / 11 / 10 % (CounterFact 5 → 0 % at 1,000) at a cost of at most one CounterFact
+    paraphrase on the streams. Default if you say nothing: it joins the primary condition as v3
+    (`manifests/revision_v1/primary_condition_v3.json`); v2 stays the no-gate comparison. The stricter two-token gate is
+    rejected (it refuses single-token subjects: CounterFact RET-GS 0.62). Everything above is committed; Codex's round 8
+    files are untouched and uncommitted until you say Codex is idle.

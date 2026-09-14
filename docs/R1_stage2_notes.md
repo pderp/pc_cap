@@ -492,7 +492,8 @@ Ordinary-text drift after 100 **CounterFact** edits (32 windows × 128 positions
 | text-null reader (seed 0) | 0.000 | +0.012 | 1.012 |
 
 The +0.012 with no firing at the three probe lengths means a small number of positions at other prefix lengths still
-fire after CounterFact edits (the assay now counts firing at every scored position; `scripts/r1_54_drift_assay.py`).
+fire after CounterFact edits: the recount over every scored position (`drift_assay_text_counterfact_v2.log`) finds 14 of
+4,064 positions firing (0.34 %), which is the whole residual.
 v0's drift ratios were 1.001–1.004; 1.012 is reported as a residual, not zero. The text-null reader is promoted to
 **reference condition v2** (`manifests/revision_v1/primary_condition_v2.json`; v1 is kept as the R1-54 comparison).
 
@@ -532,8 +533,8 @@ endpoint is admissible on both datasets without eviction. The one scale signal i
 the bank profile, now measured on the real base with decoding; LS at 1,000 CounterFact records will not stay at 1.00.
 Ledger accelerator seconds (57 s zsRE, 38 s CounterFact) are the charged base-call time; the wall includes Python
 selection, decoding and restore work, so ceilings must be set from wall time. The non-learned control has the same
-edit and query costs (its `fired_by_role` column in the first run used the null-mass rule rather than its cosine gate;
-rerun as `nonlearned_v2`).
+edit and query costs; under its own cosine gate (`nonlearned_v2`) it fires on 0 % of zsRE locality prompts and on 86–100 %
+of CounterFact locality prompts at every occupancy — the LS 0.16 of §4.1 seen from the selection side.
 
 ## Unseen edit-prompt endpoint by memory size (R1-44 adapter; v2 reader; `results/R1/endpoints/text_s0_n*_unseen_*/`)
 
@@ -543,16 +544,46 @@ prompts = 100 pool rows never edited (`--outside-from-pool`); at 100 records the
 | dataset | records | outside source | false fires | answer changes | complete pairs | wall |
 | --- | ---: | --- | ---: | ---: | ---: | ---: |
 | zsRE | 100 | dev remainder | 7 % | 7 | 100 | 73 s |
+| zsRE | 100 | training pool | 12 % | 12 | 100 | 72 s |
 | zsRE | 300 | training pool | 25 % | 25 | 100 | 98 s |
 | zsRE | 1,000 | training pool | 45 % | 45 | 99 | 200 s |
 | CounterFact | 100 | dev remainder | 0 % | 0 | 67 | 77 s |
+| CounterFact | 100 | training pool | 0 % | 0 | 65 | 73 s |
 | CounterFact | 300 | training pool | 2 % | 2 | 71 | 86 s |
 | CounterFact | 1,000 | training pool | 5 % | 5 | 70 | 148 s |
 
 Every false fire changed the answer. zsRE's acceptance of edit-style prompts about facts not in memory grows steeply
-with occupancy (7 → 25 → 45 %); CounterFact stays low (0 → 2 → 5 %). The 300/1,000 rows also change the prompt source
-(training-pool items are teacher-incorrect zsRE questions, closer in style to the memory than the dev remainder), so a
-100-record run with pool-sourced prompts is queued to separate source from size. CounterFact's incomplete pairs are
+with occupancy (7 → 25 → 45 %); CounterFact stays low (0 → 2 → 5 %). Prompt source matters less than size: with pool-sourced prompts at 100 records zsRE
+fires on 12 % (dev remainder 7 %), so the size effect is 12 → 25 → 45 % on one source. Every false fire at 300 and
+1,000 records is a same-relation, different-subject prompt (the fired record's subject appears in the query in 0 of
+70 cases; the query and record share 2.2 template words on average, e.g. "What company published The Firebrand?" fires
+"What company published Nail'd? → Deep Silver"): at 1,000 records almost every relation template has a stored
+record, and template overlap counts fully in the lexical feature. CounterFact's incomplete pairs are
 the base's untruncated answers (the 32-token limit), not a cap effect. This is the largest open scale risk for the
 1,000-edit endpoint and is a protocol fact, not a bug: the reader was trained with 64-record memories and
 out-of-memory nulls drawn at that scale.
+
+## R1-56: a memory-rare overlap gate against same-template false fires (2026-09-14, 14:35 EDT)
+
+Non-learned deployment rule (`RevisionConfig.rare_overlap_min`, `rare_df_max=2`): after the learned decision, the query
+must share at least `rare_overlap_min` distinct non-stop tokens with the selected record's support prompt, counting
+only tokens that occur in at most two active records (document frequency over the current memory, recomputed as it
+grows). Template words are common at any useful occupancy; subject tokens are rare. CPU test in
+`tests/revision_v1/test_learner_cpu.py`; the gate is part of the semantic configuration bound into snapshots.
+
+| condition | zsRE stream RET-GS / LS | CounterFact stream RET-GS / LS | zsRE unseen false fires at 100 (dev) / 300 / 1,000 | CounterFact unseen at 1,000 |
+| --- | --- | --- | --- | --- |
+| v2 reader, no gate | 0.96 / 1.00 | 0.725 / 1.00 | 7 % / 25 % / 45 % | 5 % |
+| v2 + rare overlap ≥ 1 | 0.96 / 1.00 | 0.715 / 1.00 | 5 % / 11 % / 10 % | 0 % |
+| v2 + rare overlap ≥ 2 | 0.94 / 1.00 (ES 0.99) | 0.62 / 1.00 (ES 0.98) | 3 % / — / 1 % | — |
+
+Every false fire still changes the answer. The gate removes the growth with memory size at a cost of at most one
+CounterFact paraphrase (0.715 vs 0.725; ES, RET-ES and LS unchanged). The ten residual zsRE fires at 1,000 records
+share one token that happens to be rare in memory: a relation word with one or two stored records ("established",
+"dissolve", "stars", "School"), a subword fragment ("CJ", "og") or a capitalized stop word the list misses ("Is",
+"of"). The two-token variant removes almost all of them (1 % at 1,000) but rejects single-token subjects on their own
+prompts (ES 0.99 / 0.98, CounterFact RET-GS 0.62), so it is not acceptable. **Recommendation:** v2 reader + rare
+overlap ≥ 1 as the primary condition (`manifests/revision_v1/primary_condition_v3.json`, DEC-043 proposed); the
+residual 10 % at 1,000 records is reported as the endpoint's development value. A stop list with capitalized forms is
+a possible data fix before the freeze (it would change the lexical feature the reader was trained with, so it would
+need a retrain; not done).
