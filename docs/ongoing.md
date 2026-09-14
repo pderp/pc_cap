@@ -47,50 +47,35 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 5 (CPU; open now)
+## 3. Lanes for Codex — round 6 (CPU; open now)
 
-Round 4 (R1-40, R1-D1c, R1-X3) is committed (`54527d1`) and mirrored; your edit request is applied (hunk 2 had already been
-satisfied by the import normalization; hunk 1 applied by hand; script hashes refreshed where they were bound). R1-27 repaired
-X26-01..04 (`3dd2f5c`, `docs/tasks/R1-X3-response.md`). Note: four of your `test_r1_26_boundary_audit_cpu.py` fixtures build a
-cap with `ceiling_bytes=1`, which X26-01 now refuses at construction — the strict xfails for the capacity bypass are
-obsolete; please update those fixtures in your next round (new-file rule: a superseding test file is fine). Next lanes:
+Round 5 (R1-43, R1-24b, R1-X4, R1-30a, R1-27 fixtures) is committed (`5ee8b56`) with your three one-line corrections
+applied; X4-10 is repaired and the non-learned reference regenerated under fresh per-dataset identities (`08c6321`,
+`docs/tasks/R1-X4-response.md`). Pending lead decisions: DEC-038 (non-learned system as the primary revision condition),
+the D1b policy acceptance, and the R1-24 informative variant. Lanes that do not wait on them:
 
-### Lane R1-43 — endpoint harness for near-miss, revision and composition (plan 9 Stage 4 endpoints)
+### Lane R1-40b — prune and re-cost the run-matrix draft under the DEC-038 default and X4-08
 
-Build, on the v0 harness surface the revision learner already exposes (`RevisionCap.update_item / predict /
-selection_for`, `docs/revision_v1_design.md` as built), a CPU-testable evaluator for the three endpoints plan 9 adds:
-near-miss preservation (the challenge set's near-neighbour rows: the edited fact's neighbour must keep its cap-off
-answer), revision (a second support for the same fact supersedes the first: the new answer wins, the old record is
-retired, the old answer is not produced), and two-hop composition (the challenge set's composition rows with verified
-labels; report "unreachable" honestly when a hop is missing). Inputs: `manifests/dev/challenges.json` (5 near-neighbour,
-6 composition, 5 temporal-correction rows), `pccap.harness.runs` (ES/GS/LS machinery), `tests/revision_v1/tiny_base.py`
-for CPU tests. Deliver `src/pccap/revision_v1/endpoints.py` (new file), `tests/revision_v1/test_endpoints.py`, and
-`docs/tasks/R1-43.md` with the denominators and the record schema; the GPU run over the real base is the orchestrator's.
+Produce `manifests/revision_v1/run_matrix_draft_v2.json` from your v1 draft: primary conditions = v0 live (C1, C2),
+v0-stable, matched-update, R1-nonlearned (random tied cosine reader + cosine gate 0.93 + per-position deltas); secondary
+= learned reader (best available weights, reported as negative); drop cells that depend on a working learned null. Re-cost
+persistent bytes with the corrected delta scaling (9 KB × answer tokens per record; ceiling binds near 1,700 edits at 4
+tokens) and state per cell whether a 1,000-edit stream fits the 64 MiB ceiling or needs a bounded-position write.
+Keep everything unlaunchable/unfrozen. `docs/tasks/R1-40b.md`.
 
-### Lane R1-24b — the informative continuation recipe (pending the lead's decision, prepare it now)
+### Lane R1-X5 — re-audit of R1-28 and the regenerated reference
 
-Beside the literal self-distillation manifest, prepare `manifests/revision_v1/r1_24_control_lm.json`: continued
-language-model training of the base (next-token cross-entropy on the same OpenWebText shard, consecutive positions,
-matched token budget read from the pilot ledgers, same optimizer family as `pccap.distill`), with the same evaluation
-block. Dry-run only; tests for the budget arithmetic; `docs/tasks/R1-24b.md`. If the lead chooses it, the orchestrator
-runs both.
+Read-only: verify that `ref_nonlearned_gate0.93_v2` and `…@counterfact` have distinct results and checkpoint roots
+with consistent per-item files, that the guard now derives the checkpoint root from the harness expression, and recount
+the two summaries from their item files. Also refresh your obsolete R1-26 fixtures (`test_r1_26_boundary_audit_cpu.py`
+builds a cap with `ceiling_bytes=1`, which X26-01 now refuses) in a superseding test file. `logs/audit_r1_28.md`.
 
-### Lane R1-X4 — counter-review of the Stage 2 notes and the non-learned condition
+### Lane R1-D1d — E.2 admission list for the fresh zsRE draw (CPU side)
 
-Read-only. `docs/R1_stage2_notes.md` now claims: the fact-code path cannot carry new answers; the non-learned condition
-(random tied cosine reader + per-position deltas + hard top-1 + cosine gate 0.93) reaches ES 1.00 / RET-GS 0.65 / LS 1.00
-on the zsRE stream and 0.18 / 0.16 on CounterFact; trained nulls do not transfer to the streams. Recount every table row
-from `results/R1/stream_eval_*.json`, `results/R1/streams_revision/*/items.jsonl` and `results/R1/pilot/*/summary.json`,
-check the cost columns against the ledgers, state what the zsRE 0.65 does and does not show (one stream, one order,
-100 edits, v2 calibration), and list what would change the recommendation to keep the null non-learned.
-`logs/review_r1_stage2.md`, findings by id.
-
-### Optional if capacity remains — Lane R1-30a — Stage 3 design note (cap-level PC energy)
-
-A written specification only: how a latent-energy cap (FabricPC nodes for the record/selection state, bounded settling
-steps, answer-objective coupling per X0-07) would sit on the current read path, what state resets per query, which
-approximations are declared, and the zero-step / feedforward / recurrent controls. Inputs: `logs/fabricpc_survey.md`,
-plan 9 §Stage 3, `docs/revision_v1_design.md`. `docs/R1_stage3_design_draft.md`. No code.
+From `zsre_fresh_candidates_v1.json` (58,498 clear), prepare the exact ordered prompt list and batch plan the orchestrator
+will run through the BP teacher (E.2: keep items whose greedy answer is outside the aliases), with per-record hashes, the
+expected retention needed (≥ 5.13 %) and the stopping rule (stop once 3 × 1,000 + reserve are eligible, or report a
+shortfall). `manifests/revision_v1/zsre_e2_plan_v1.json`, `docs/tasks/R1-D1d.md`. No teacher execution.
 
 ## 4. Interfaces and coordination
 
