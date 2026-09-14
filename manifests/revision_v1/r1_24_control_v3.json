@@ -509,12 +509,12 @@
   "training_wall_seconds": 1800
  },
  "student_start": {
-  "path": "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+  "path": "/home/derp/cap/assets/models/gpt2/model.safetensors",
   "sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707"
  },
  "task": "R1-24",
  "teacher": {
-  "path": "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+  "path": "/home/derp/cap/assets/models/gpt2/model.safetensors",
   "sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707"
  },
  "training_executed": false,
@@ -523,5 +523,6 @@
   "path": "manifests/revision_v1/primary_condition_v1.json",
   "sha256": "51560c17947b49c15529c9bd82949d941dfdc8678b2193350304d328368bf83c"
  },
- "decision": "DEC-040 (both treatments)"
+ "decision": "DEC-040 (both treatments)",
+ "snapshot_note": "the snapshot directory (assets/models/gpt2, symlinks to the HF blobs) is required because the runtime reads config.json beside the weights"
 }

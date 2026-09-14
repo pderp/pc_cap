@@ -514,7 +514,7 @@
   "training_wall_seconds": 1800
  },
  "student_start": {
-  "path": "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+  "path": "/home/derp/cap/assets/models/gpt2/model.safetensors",
   "sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707"
  },
  "task": "R1-24b",
@@ -528,6 +528,7 @@
  "name": "r1_24_control_lm_v2",
  "companion": {
   "path": "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_control_v3.json",
-  "sha256": "b5ac71e7a8be6009f6c34e7db20404b7b0d61515d16eecb37d7487af565b25ef"
- }
+  "sha256": "82745f183ed70120529289afec5cded121e220d0c0268e8a0f5fcec46b84958f"
+ },
+ "snapshot_note": "the snapshot directory (assets/models/gpt2, symlinks to the HF blobs) is required because the runtime reads config.json beside the weights"
 }
