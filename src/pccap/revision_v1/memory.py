@@ -143,8 +143,8 @@ class RecordStore:
         q = np.asarray(query_key, np.float32).reshape(self.dk)
         K = np.stack([r.key for r in act])
         if self.metric == "cos":
-            Kn = K / (np.linalg.norm(K, axis=1, keepdims=True) + 1e-8)
-            d = -(Kn @ (q / (np.linalg.norm(q) + 1e-8))).astype(np.float32)
+            Kn = K / np.sqrt(np.sum(K * K, axis=1, keepdims=True) + 1e-8)  # the reader's unit() formula
+            d = -(Kn @ (q / np.sqrt(np.sum(q * q) + 1e-8))).astype(np.float32)
         elif self.metric == "dot":
             d = -(K @ q).astype(np.float32)
         else:
@@ -180,14 +180,14 @@ class RecordStore:
             if r.delta is not None:
                 arrays[f"delta/{r.record_id}"] = np.asarray(r.delta, np.float32)
         scalars = {"dk": self.dk, "d_code": self.d_code, "ceiling_bytes": self.ceiling_bytes, "encoder_version": self.encoder_version,
-                   "index_version": self.index_version, "metric": self.metric,
+                   "index_version": self.index_version, "metric": self.metric, "weights_bytes": int(self.weights_bytes),
                    "records": json.dumps([{"record_id": r.record_id, "fact_id": r.fact_id, "provenance": list(r.provenance), "superseded_by": r.superseded_by} for r in self.records])}
         return LearnerState(arrays=arrays, scalars=scalars)
 
     @classmethod
     def from_state(cls, st: LearnerState) -> "RecordStore":
         sc = st.scalars
-        store = cls(dk=int(sc["dk"]), d_code=int(sc["d_code"]), ceiling_bytes=int(sc["ceiling_bytes"]), encoder_version=int(sc["encoder_version"]), index_version=int(sc["index_version"]), metric=str(sc.get("metric", "l2")))
+        store = cls(dk=int(sc["dk"]), d_code=int(sc["d_code"]), ceiling_bytes=int(sc["ceiling_bytes"]), encoder_version=int(sc["encoder_version"]), index_version=int(sc["index_version"]), metric=str(sc.get("metric", "l2")), weights_bytes=int(sc.get("weights_bytes", 0)))
         meta = json.loads(sc["records"])
         for i, mrec in enumerate(meta):
             src = st.arrays.get(f"src/{mrec['record_id']}")

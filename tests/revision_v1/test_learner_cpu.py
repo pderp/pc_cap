@@ -153,3 +153,23 @@ def test_delta_steps_acquire_and_round_trip():
     back = RevisionCap(base, cfg, Ledger(), params=cap.params)
     back.import_state(cap.export_state())
     assert back.state_hash() == cap.state_hash() and back.store.get("s0").delta is not None
+
+
+def test_x25_repairs_zero_weight_deltas_weights_bytes_and_combined_config():
+    base = TinyBase()
+    cfg = RevisionConfig(reader=RC, controller=CC, fast=FastConfig(steps=0, delta_steps=4, delta_lr=0.05, tau=0.01), null_threshold=1.01)
+    cap = RevisionCap(base, cfg, Ledger())
+    s0, s1 = _support(0), _support(1)
+    adapt_record(cap, s0, cap.cfg.fast)  # has a delta
+    cap2 = RevisionCap(base, cfg, Ledger(), params=cap.params)  # same semantic configuration for the import
+    cap2.import_state(cap.export_state())
+    cap2.cfg.fast = FastConfig(steps=0)  # then switch the fast rule off for the next record
+    adapt_record(cap2, s1, cap2.cfg.fast)  # no delta
+    cap2.reset_queries()
+    sel = cap2.selection_for(np.asarray(s1.prompt_ids, np.int32))
+    if sel.record_ids and sel.record_ids[int(np.argmax(sel.weights))] == "s1":
+        assert sel.delta is None  # X25-01: a zero-weight candidate's delta must not replace the selected record's controller write
+    assert cap2.store.bytes()["weights"] == cap.store.bytes()["weights"] > 0  # X25-02
+    with pytest.raises(NotImplementedError):
+        adapt_record(cap2, _support(2), FastConfig(steps=1, delta_steps=1))  # X25-04
+    assert "s2" not in cap2.store._by_id

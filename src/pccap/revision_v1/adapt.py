@@ -17,6 +17,7 @@ import numpy as np
 
 from pccap.contracts import SiteId, Write
 from pccap.revision_v1.contracts import MemoryRecord, RevisionCost, SupportExample, support_prefix
+from pccap.revision_v1.memory import CapacityError
 from pccap.revision_v1.observations import answer_mask, observation_from_pass, prompt_mask
 from pccap.revision_v1.reader import initial_code, obs_arrays, record_key
 
@@ -124,7 +125,10 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
     loss0, _, g = losses_and_grad(code)
     trace.loss_before = loss0
     trace.per_step_loss.append(loss0)
-    if fast.steps == 0 and fast.delta_steps > 0:
+    if fast.steps > 0 and fast.delta_steps > 0:
+        learner.store.remove(rec.record_id, restore=superseded)
+        raise NotImplementedError("code steps and delta steps together are not a defined rule; choose one (X25-04)")
+    if fast.delta_steps > 0:
         return _delta_steps(learner, rec, prefixes, q_emb, answer, code, loss0, fast, cost, trace)
     for step in range(fast.steps):
         new = code - np.float32(fast.lr) * g
@@ -161,7 +165,9 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
 def _delta_steps(learner, rec, prefixes, q_emb, answer, code, loss0, fast, cost, trace):
     """v0-style acquisition on the record's explicit per-prefix delta writes: one [n_banks, d] write per answer position
     (as v0 keeps one slot per prefix), each taught by normalized adjoint steps of size delta_lr·b_m per site under the
-    aggregate bound, stopping at tau per prefix. Accepted if the mean support loss fell; a non-finite step removes the record."""
+    aggregate bound, stopping at tau per prefix. Baseline (X25-04): ``loss0`` is the support loss under the code-driven
+    write, i.e. what the record would produce without a delta; accepted if the mean support loss under the deltas fell
+    below it. A non-finite step or a failed delta allocation removes the record (and restores a superseded one)."""
     base, cc = learner.base, learner.cfg.controller
     b = np.asarray(cc.bank_scales, np.float32)
     n_banks, d = cc.n_banks, cc.d
@@ -209,7 +215,13 @@ def _delta_steps(learner, rec, prefixes, q_emb, answer, code, loss0, fast, cost,
     L_mean = float(np.mean(per_after)) if per_after else float("nan")
     trace.per_step_loss.append(L_mean)
     if trace.rolled_back_reason is None and L_mean < loss0 - fast.improvement_abs:
-        learner.store.set_delta(rec.record_id, deltas)
+        try:
+            learner.store.set_delta(rec.record_id, deltas)
+        except CapacityError:
+            learner.store.remove(rec.record_id, restore=trace.superseded)  # X25-03: a failed delta allocation is a failed edit
+            trace.rolled_back_reason = "delta_capacity"
+            trace.loss_after, trace.per_prefix_loss_after = loss0, [float("nan")] * len(prefixes)
+            return trace, cost
         trace.accepted = True
         trace.loss_after, trace.per_prefix_loss_after = L_mean, per_after
     elif trace.rolled_back_reason is not None:

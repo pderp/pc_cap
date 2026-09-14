@@ -137,7 +137,7 @@ class RevisionCap:
         if not hard:
             wsum = max(float(w.sum()), 1e-12)
             code = np.asarray(sum(float(w[i]) * recs[i].code for i in range(len(recs))) / wsum, np.float32)
-            with_d = [(float(w[i]), recs[i].delta) for i in range(len(recs)) if recs[i].delta is not None]
+            with_d = [(float(w[i]), recs[i].delta) for i in range(len(recs)) if recs[i].delta is not None and float(w[i]) > 0]  # X25-01
             if with_d:
                 T = max(dl.shape[0] for _, dl in with_d)
                 delta = np.zeros((T,) + with_d[0][1].shape[1:], np.float32)
@@ -237,6 +237,7 @@ class RevisionCap:
         if st.scalars.get("config") != self.semantic_config():
             raise RuntimeError("snapshot was produced under a different semantic configuration (R23-06)")
         self.store = RecordStore.from_state(st)
+        self.store.weights_bytes = 4 * self.n_params  # X25-02: the ceiling charge for the weights is not part of the stored state
         self.reset_queries()
 
     def state_hash(self) -> str:

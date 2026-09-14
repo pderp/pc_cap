@@ -62,6 +62,7 @@ def main() -> int:
     from pccap.revision_v1.reader import ReaderConfig, init_reader, params_hash
 
     tag = args.tag or Path(args.theta).parent.name
+    tag = tag if args.dataset == "zsre" else f"{tag}@{args.dataset}"  # X25-06: the run identity (incl. dataset) is fixed before ANY path is chosen
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     rc, cc = ReaderConfig(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
@@ -77,7 +78,8 @@ def main() -> int:
         ph = cap.params_hash
         ev = Evaluator(base, tok, unrelated[:50], None)
         rd = OUT / "streams_revision" / tag
-        tag = tag if args.dataset == "zsre" else f"{tag}@{args.dataset}"
+        if rd.exists():
+            raise SystemExit(f"{rd} exists: results are never overwritten — choose a new tag")
         t0 = time.time()
         m = run_stream(cap, items, None, Budget(A=float(frozen["A"]), R=max(1, args.fast_steps, args.delta_steps), tau_edit=float(frozen["tau_edit"])), ev, rd, ledger, checkpoints=(), seed=1, arm="R1")
         assert params_hash(cap.params) == ph, "reusable weights changed during the stream (gate 2)"
