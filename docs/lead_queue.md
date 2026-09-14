@@ -261,3 +261,11 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     transfer either, my recommendation will be to keep the null non-learned (cosine gate) and let the learned part be
     the similarity only — the simpler measured control already gives RET-GS 0.65 / LS 1.00 on zsRE. No decision needed
     from you yet; I will state one when the run is in.
+
+11. (07:40 EDT) **Decision item (DEC-038 proposal): drop the learned reader from the primary revision condition.** All
+    five trained nulls fail to transfer to the evaluation streams (details in `docs/R1_stage2_notes.md`). Default if you
+    say nothing: the primary revision condition is the non-learned system (stable observations + random tied cosine
+    embedding + per-position gradient writes + cosine gate 0.93), which beats the controls on zsRE (RET-GS 0.65 vs 0.44
+    with LS 1.00); the learned reader is a secondary, honestly-negative condition; CounterFact near-neighbour locality is
+    reported as unsolved. Stage 4's run matrix (Codex's R1-40 draft) would be pruned accordingly before the profiling
+    runs. I will not launch any further reader training unless you ask.

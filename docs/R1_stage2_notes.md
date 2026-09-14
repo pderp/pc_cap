@@ -19,6 +19,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | cf_pool3k_pairnull_400 | BP, 3k pool, tied cosine + pairwise null (no own-prompt role), fresh episodes, wd 0.01, best-dev @ 349 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.29 | 5.32 → 0.98 | 0.009 → 0.14 | 0.03 (top-1 0.45) | 0.03 (top-1 0.53) | 0.97 | 0.94 | 0.001 / 0.96 / 0.93 | 74 min |
 | cf_pool3k_pair_own_400 | BP, 3k pool, tied cosine + pairwise null + own-prompt queries (all supports), fresh, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 7.41 → 2.62 | 3.06 → 0.74 | 0.009 → 1.12 | 0.06 (top-1 0.53) | 0.28 (top-1 0.69) | 0.34 | 0.66 | 0.06 / 0.43 / 0.63 | 147 min (shared GPU) |
 | cf_pool3k_pair_own_bal_400 | as above + class-balanced L2, one own-prompt query, best-dev @ 299 | fresh | 400 × 4 | 1e-3 | 7.84 → 3.40 | 6.27 → 0.87 | 0.009 → 0.61 | 0.06 (top-1 0.42) | 0.06 (top-1 0.66) | 0.94 | 0.94 | 0.01 / 0.78 / 0.84 | 85 min |
+| cf_pool3k_pair_own_loc_400 | as balanced + locality near-neighbour prompts as null targets, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 7.84 → 3.35 | 6.29 → 1.00 | 0.009 → 0.24 | 0.06 (top-1 0.38) | 0.03 (top-1 0.59) | 0.81 | 0.80 | 0.01 / 0.70 / 0.73 | 99 min |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -227,3 +228,25 @@ Fix in data: the new support's locality prompts join every training episode as n
 (`--locality-queries`; run `cf_pool3k_pair_own_loc_400`). If the trained null still does not transfer, the learned
 component reduces to the similarity and the null stays non-learned (the cosine gate) — the outcome X1-08 item 5 asks
 us to prefer when the simpler measured control explains the gain.
+
+## Locality-null reader on the streams (2026-09-14, 07:40 EDT) and the Stage 2 recommendation
+
+| stream | ES | RET-ES | RET-GS | LS | null mass own / paraphrase / unrelated |
+| --- | ---: | ---: | ---: | ---: | --- |
+| zsRE | 0.89 | 0.92 | 0.43 | 0.12 | 0.20 / 0.24 / 0.05 |
+| CounterFact | 0.53 | 0.60 | 0.16 | 0.50 | 0.42 / 0.01 / 0.54 |
+
+With locality near-neighbours as null targets the null still does not transfer: on zsRE it passes nearly every unrelated
+prompt; on CounterFact it rejects own prompts and locality prompts at about the same rate. Five trained readers
+(tiedcos, pairnull, pair+own, balanced, locality) all fail the same way on the streams while behaving inside
+training-style episodes, and the trained similarity under the non-learned gate was worse than the random reader.
+
+**Recommendation (for the lead; DEC-038 proposal).** For the revision v1 comparative design, the learned reader is
+dropped from the primary condition: the revision condition is the non-learned system — stable observations, the
+random-initialized tied cosine embedding, per-position gradient writes under the v0 bound, hard top-1 selection and a
+cosine gate — which on the zsRE development stream gives ES 1.00 / RET-ES 1.00 / RET-GS 0.65 / LS 1.00 against the controls'
+0.44, and on CounterFact 1.00 / 1.00 / 0.18 / 0.16 (v0 live: 0.0 at the exact-key floor with LS 1.0). The learned reader
+becomes a named secondary condition ("learned null", best available weights) reported honestly as not transferring.
+CounterFact's near-neighbour locality remains unsolved by either; it is the open problem to state in the Stage 2 report,
+with the pairwise-null failure mode documented. Stage 3 (cap-level PC energy) does not rest on a working learned reader
+and can be scoped as a design note (R1-30a) rather than an implementation until this is resolved.
