@@ -32,6 +32,7 @@ from pccap.revision_v1.reader import (
 
 ANSWER_ROLES = ("new_paraphrase", "old_fact", "own_prompt")
 PRESERVE_ROLES = ("near_miss", "unrelated")
+NULL_ONLY_ROLES = ("unrelated_no_kl",)  # null target in L2 only (stream episodes: out-of-memory prompts without stored cap-off logits)
 SKIPPED_ROLES = ("composition",)
 
 
@@ -218,6 +219,8 @@ def episode_grads(theta, rc, cc, base_params, base_cfg, feats: EpisodeFeatures, 
         metrics["retrieval"] = float(l)
         grads = acc(gr, lc.w_retrieval)
     for qi, q in enumerate(feats.queries):
+        if q.role in NULL_ONLY_ROLES:
+            continue
         for ti in range(len(q.prefixes)):
             (l, kind), gr = jax.value_and_grad(prefix_loss, has_aux=True)(theta, rc, cc, base_params, base_cfg, feats, qi, ti)
             metrics[kind] += float(l)

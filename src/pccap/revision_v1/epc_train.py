@@ -23,6 +23,7 @@ from pccap.revision_v1.controller import ControllerConfig, writes
 from pccap.revision_v1.reader import ReaderConfig, query_embedding
 from pccap.revision_v1.train import (
     ANSWER_ROLES,
+    NULL_ONLY_ROLES,
     EpisodeFeatures,
     LossConfig,
     _records,
@@ -113,6 +114,8 @@ def episode_grads_epc(theta, rc, cc, feats: EpisodeFeatures, lc: LossConfig, wri
         metrics["retrieval"] = float(l)
         grads = acc(gr, lc.w_retrieval)
     for qi, q in enumerate(feats.queries):
+        if q.role in NULL_ONLY_ROLES:
+            continue
         for ti, pf in enumerate(q.prefixes):
             W, vjp = jax.vjp(lambda th, qi=qi, ti=ti: prefix_writes(th, rc, cc, feats, qi, ti), theta)
             gW, loss, diag = write_grads(pf.ids[: pf.n], pf.target, np.asarray(W), q.role)
