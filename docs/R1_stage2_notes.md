@@ -120,3 +120,15 @@ paraphrase similarity), and a record's taught delta replaces the code-driven wri
 records without a delta). The learned reader therefore keeps selection, the null and stable observations; acquisition is
 v0's gradient write per record. Run cf_pool3k_tied_400 retrains the reader under this design; evaluation with delta
 steps follows on the CounterFact dev episodes and on the zsRE stream against the 0.44 controls.
+
+## First learner numbers on the zsRE stream above the controls (2026-09-14, 01:10 EDT)
+
+`results/R1/stream_eval.md`, rows `random_tied_*`: a RANDOM-initialized tied cosine reader (no training), stable
+observations, per-position delta writes (5 normalized adjoint steps, τ = 0.1), hard top-1 selection and no null
+(threshold 1.01) on the Stage 0 zsRE stream: ES 1.00, RET-ES 1.00, **RET-GS 0.65** (controls 0.44; v0 live 0.24/0.29),
+LS 0.24. Acquisition and retention now come from v0's per-prefix gradient write; the paraphrase gain comes from the
+siamese cosine geometry over stable observations (even untrained), which generalizes across formulations better than
+v0's radius-gated key distance. Locality is destroyed because nothing rejects unrelated prompts: the trained null (and,
+as a non-learned fallback, a cosine firing threshold) must restore LS without giving back RET-GS. The intermediate
+variants document why each piece is needed: one delta per record ES 0.02; soft mixing ES 0.13; dot-product scoring with
+hard top-1 ES 0.23; cosine + hard top-1 ES 1.00.

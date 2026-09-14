@@ -1,0 +1,97 @@
+{
+ "tag": "random_tied_pdelta5_nonull",
+ "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/random_tied/theta.npz",
+ "theta_hash": "fa3c0b5a0b162c7b11bfdc08ae77571b82780ada8a541afad1cbd04fc5019d00",
+ "args": {
+  "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/random_tied/theta.npz",
+  "tag": "random_tied_pdelta5_nonull",
+  "n": 100,
+  "fast_steps": 0,
+  "fast_lr": 0.01,
+  "delta_steps": 5,
+  "delta_lr": 0.1,
+  "null_threshold": 1.01,
+  "no_lease": true
+ },
+ "stream_metrics": {
+  "es_immediate": 0.13,
+  "ret_es_end": 0.08,
+  "ret_gs_end": 0.02,
+  "ls_complete_answer_end": 0.78
+ },
+ "records": 100,
+ "bytes": {
+  "keys": 102400,
+  "codes": 102400,
+  "deltas": 3704832,
+  "metadata": 12800,
+  "tokens": 4332,
+  "index": 0,
+  "weights": 12604420,
+  "total": 16531184
+ },
+ "null_mass": {
+  "prompt_mean": 0.0002632150363206165,
+  "paraphrase_mean": 0.0002832304930052487,
+  "unrelated_mean": 0.0003242047136518522,
+  "prompt_hard_null_rate": 0.0,
+  "paraphrase_hard_null_rate": 0.0,
+  "unrelated_hard_null_rate": 0.0
+ },
+ "read_counters": {
+  "selection_passes": 848,
+  "cached_prompt_reads": 700,
+  "corrected_partial_passes": 1747
+ },
+ "wall_seconds": 36.32680320739746,
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 3011,
+   "partial_forwards": 1747,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 13.776317663257942,
+   "accel_seconds": 13.776317663257942,
+   "peak_mem_mib": 723.388916015625,
+   "tokens": 76091
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 2346,
+   "partial_forwards": 0,
+   "reverses": 872,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 10.343069473048672,
+   "accel_seconds": 10.343069473048672,
+   "peak_mem_mib": 723.388916015625,
+   "tokens": 30576
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 5357,
+   "partial_forwards": 1747,
+   "reverses": 872,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 24.119387136306614,
+   "accel_seconds": 24.119387136306614,
+   "peak_mem_mib": 723.388916015625,
+   "tokens": 106667
+  },
+  "events": 6931,
+  "elapsed_wall_seconds": 43.92272067070007,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ }
+}
