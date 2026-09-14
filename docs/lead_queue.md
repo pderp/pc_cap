@@ -254,3 +254,10 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
      is only a numerical negative control. Default: run it as such (cheap), and add ONE informative continuation
      condition — continued language-model training of the base on the matched OpenWebText token budget from the same
      shard, then the same editing evaluation — as the X0-01 control proper. Say if you prefer a different treatment.
+
+10. (05:55 EDT) Status of the learned reader: the trained null decision is correct inside training-style episodes but
+    does not transfer to the evaluation streams (zsRE LS 0.10; CounterFact rejects half the own prompts). One more
+    data fix is training now (locality near-neighbour prompts as null targets; result ≈ 07:35 EDT). If it does not
+    transfer either, my recommendation will be to keep the null non-learned (cosine gate) and let the learned part be
+    the similarity only — the simpler measured control already gives RET-GS 0.65 / LS 1.00 on zsRE. No decision needed
+    from you yet; I will state one when the run is in.
