@@ -15,6 +15,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | cf_fresh_wd_400 (prompt-only codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.55 → 2.21 | 1.94 → 1.17 | 0.005 → 0.11 | 0.19 | 0.00 | 0.81 | 1.00 | 0.01 / 0.81 / 0.92 | 72 min |
 | cf_fresh_wd_400_r25 (answer-sensitive codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.59 → 2.29 | 1.94 → 1.13 | 0.006 → 0.000 | 0.16 | 0.00 | 1.00 | 1.00 | 0.08 / 1.00 / 1.00 | 72 min |
 | cf_pool3k_r25_600 | BP, CounterFact 3k training pool (DEC-037), fresh episodes/step, wd 0.01, best-dev @ 449, 32 dev eps | fresh | 600 × 4 | 1e-3 | 8.02 → 3.50 | 1.87 → 0.70 | 0.007 → 0.006 | 0.03 (n=64) | 0.00 | 1.00 | 0.97 | 0.03 / 0.99 / 0.98 | 100 min |
+| cf_pool3k_tiedcos_400 | BP, 3k pool, tied cosine reader (query-only null), fresh episodes, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.27 | 5.14 → 0.91 | 0.009 → 0.065 | 0.05 (top-1 hit 0.45) | 0.06 (top-1 0.53) | 1.00 | 1.00 | 0.02 / 0.98 / 0.98 | 74 min |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -159,3 +160,13 @@ no fixed cosine threshold separates them. Two consequences: (1) the zsRE 0.65 is
 structure, not a general result; (2) near-neighbour rejection needs a pairwise decision (query vs the best record —
 same subject or not), whereas the current null logit is a function of the query alone and can only learn "this looks like
 a near-miss prompt". A pairwise null head is the next design item if the trained reader does not separate near-misses.
+
+## Trained tied-cosine reader on the streams (2026-09-14, 02:40 EDT): the query-only null rejects own prompts
+
+`tiedcos_delta5_null0.5` (trained reader, deltas, null threshold 0.5): zsRE ES 0.02 / RET-GS 0.04 / LS 0.46; CounterFact
+ES 0.08 / RET-GS 0.22 / LS 0.90. The null hard-nulls the items' OWN prompts (98 % zsRE, 92 % CounterFact): training
+episodes never query a support's own prompt, and a query-only null cannot tell an own prompt from a near-miss prompt of
+the same template. On zsRE the null is also inverted by domain shift (paraphrases 0.91 null mass, unrelated 0.11). Fixes:
+(1) an `own_prompt` query role (support prompt → taught answer) in every training episode; (2) the pairwise null (run
+`cf_pool3k_pairnull_400` in progress; `cf_pool3k_pair_own_400` launched with both). Deployment keeps the non-learned
+cosine gate available as a fallback and the controls' numbers as the bar.

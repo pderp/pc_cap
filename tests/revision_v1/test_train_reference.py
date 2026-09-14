@@ -136,3 +136,12 @@ def test_outer_step_reduces_loss():
     l1 = float(_total_loss(theta, feats, base, tr.lc))
     assert l1 < l0, (l0, l1)
     assert np.isfinite(m["grad_norm"])
+
+
+def test_own_prompt_queries_are_added_from_supports():
+    base, feats, theta = _setup()
+    own = [q for q in feats.queries if q.role == "own_prompt"]
+    assert len(own) == len(feats.supports)
+    for q in own:
+        s = feats.supports[q.target_record]
+        assert q.query_id == f"own:{s.record_id}" and q.prefixes and q.prefixes[0].target >= 0

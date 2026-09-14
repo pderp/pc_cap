@@ -30,7 +30,7 @@ from pccap.revision_v1.reader import (
     record_key,
 )
 
-ANSWER_ROLES = ("new_paraphrase", "old_fact")
+ANSWER_ROLES = ("new_paraphrase", "old_fact", "own_prompt")
 PRESERVE_ROLES = ("near_miss", "unrelated")
 SKIPPED_ROLES = ("composition",)
 
@@ -88,8 +88,12 @@ class EpisodeFeatures:
     cost: RevisionCost = field(default_factory=lambda: RevisionCost(phase="learning"))
 
 
-def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig) -> EpisodeFeatures:
-    """Write-free passes for every support prompt and every query prefix (charged to the learning column)."""
+def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_prompt: bool = True) -> EpisodeFeatures:
+    """Write-free passes for every support prompt and every query prefix (charged to the learning column).
+
+    ``include_own_prompt`` adds, for every support, a query equal to the support prompt with the taught answer as target
+    (role ``own_prompt``): the evaluator's ES reads the item's own prompt, and without this role the null never sees an
+    exact self-match during training (it then rejects own prompts that look like near-miss prompts)."""
     cost = RevisionCost(phase="learning")
 
     def observe(ids: np.ndarray, mask=None, want_logits: bool = False):
@@ -111,7 +115,15 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig) -> EpisodeFe
         supports.append(SupportFeat(record_id=s.record_id, fact_id=s.fact_id, last=last, span=span, code_last=c_last, code_span=c_span))
     labels = {lab.query_id: lab for lab in episode.query_labels}
     queries, skipped = [], {}
-    for q in episode.inputs.queries:
+    from pccap.revision_v1.contracts import PredictionQuery, QueryLabel
+    extra_q, extra_l = [], []
+    if include_own_prompt:
+        for s in supports_in:
+            qid = f"own:{s.record_id}"
+            extra_q.append(PredictionQuery(query_id=qid, prompt_ids=tuple(s.prompt_ids), prompt=s.prompt))
+            extra_l.append(QueryLabel(query_id=qid, role="own_prompt", entity_ids=(s.entity_id,), family_id=s.family_id, target_ids=tuple(s.answer_ids), target=s.answer, target_source="support", supporting_record_ids=(s.record_id,)))
+    labels.update({lab.query_id: lab for lab in extra_l})
+    for q in tuple(episode.inputs.queries) + tuple(extra_q):
         lab = labels[q.query_id]
         if lab.role in SKIPPED_ROLES or lab.role not in ANSWER_ROLES + PRESERVE_ROLES:
             skipped[lab.role] = skipped.get(lab.role, 0) + 1
