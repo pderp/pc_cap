@@ -250,3 +250,15 @@ becomes a named secondary condition ("learned null", best available weights) rep
 CounterFact's near-neighbour locality remains unsolved by either; it is the open problem to state in the Stage 2 report,
 with the pairwise-null failure mode documented. Stage 3 (cap-level PC energy) does not rest on a working learned reader
 and can be scoped as a design note (R1-30a) rather than an implementation until this is resolved.
+
+## Reference regenerated under fresh identities (2026-09-14, 08:10 EDT; X4-01/X4-10)
+
+`ref_nonlearned_gate0.93_v2` (zsRE) and `ref_nonlearned_gate0.93_v2@counterfact`, run after the checkpoint-root guard fix:
+zsRE ES 1.00 / RET-ES 1.00 / RET-GS 0.65 / LS 1.00; CounterFact 1.00 / 1.00 / 0.18 / 0.16 — identical to the earlier
+summaries, now with per-dataset detail and checkpoint directories. The eight earlier zsRE summaries whose detail
+directories were overwritten by CounterFact runs (X4-01) are historical: `random_tied_cos_min0.93`,
+`tiedcos_delta5_null0.5`, `pairnull_delta5_null0.5`, `pairnull_delta5_gate0.93`, `pairnull_delta5_gate0.93_bin`,
+`pairown_delta5_null0.5`, `pairown_delta5_null0.3`, `pairown_delta5_null0.15`. Wording corrections from the review
+(X4-02..08) are recorded in `docs/tasks/R1-X4-response.md`: cost columns are wall times; the fact-code result is a negative
+for the tested configurations; the zsRE 0.65 is a one-stream development comparator attributed to the observation
+geometry and the per-position write rule; delta bytes scale with answer tokens (≈ 37 KB per 4-token record).

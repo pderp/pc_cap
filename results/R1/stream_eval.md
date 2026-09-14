@@ -36,3 +36,5 @@ Reference rows: v0 live C1/C2 RET-GS 0.24/0.29; v0-stable and matched-update RET
 | pairownbal_delta5_null0.5@counterfact | 0c/5d | 0.5 | 0.450 | 0.530 | 0.155 | 0.700 | 0.47 / 0.03 / 0.52 | 0.47 / 0.01 / 0.53 | 26 s |
 | pairownloc_delta5_null0.5 | 0c/5d | 0.5 | 0.890 | 0.920 | 0.430 | 0.120 | 0.20 / 0.24 / 0.05 | 0.08 / 0.16 / 0.03 | 31 s |
 | pairownloc_delta5_null0.5@counterfact | 0c/5d | 0.5 | 0.530 | 0.600 | 0.160 | 0.500 | 0.42 / 0.01 / 0.54 | 0.40 / 0.01 / 0.60 | 25 s |
+| ref_nonlearned_gate0.93_v2 | 0c/5d | 1.01 | 1.000 | 1.000 | 0.650 | 1.000 | 0.00 / 0.00 / 0.00 | 0.00 / 0.00 / 0.00 | 31 s |
+| ref_nonlearned_gate0.93_v2@counterfact | 0c/5d | 1.01 | 1.000 | 1.000 | 0.180 | 0.160 | 0.00 / 0.00 / 0.00 | 0.00 / 0.00 / 0.00 | 26 s |

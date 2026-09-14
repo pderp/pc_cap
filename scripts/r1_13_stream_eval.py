@@ -67,7 +67,7 @@ def main() -> int:
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     rc, cc = ReaderConfig(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     rd = OUT / "streams_revision" / tag
-    destinations = [OUT / f"stream_eval_{tag}.json", rd, Path("/home/derp/cap/assets/runs") / rd.relative_to(ROOT)]
+    destinations = [OUT / f"stream_eval_{tag}.json", rd, Path("/home/derp/cap/assets/runs") / rd.relative_to(ROOT / "results")]  # X4-10: the harness's own checkpoint-root expression
     taken = [str(d) for d in destinations if d.exists()]
     if taken:
         raise SystemExit(f"run identity {tag!r} already has artifacts (never overwritten; choose a new tag): {taken}")  # X26-03: before any setup
