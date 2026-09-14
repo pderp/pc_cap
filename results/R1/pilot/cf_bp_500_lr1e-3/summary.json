@@ -1,0 +1,121 @@
+{
+ "args": {
+  "train": 128,
+  "dev": 16,
+  "steps": 500,
+  "batch": 4,
+  "lr": 0.001,
+  "seed": 0,
+  "estimator": "bp",
+  "iters": 8,
+  "tag": "cf_bp_500_lr1e-3",
+  "domain": "counterfact",
+  "history": 4,
+  "no_lease": true
+ },
+ "estimator": "bp",
+ "domain": "counterfact",
+ "dev_eval": "exact reference losses (train.episode_grads) for both estimators",
+ "n_params": 3282689,
+ "theta_hash": "4f0f62523182ff4fa9d86e02138bf9b1dbeb0841c7c6ce85c39c80c640ae98ef",
+ "theta_path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/cf_bp_500_lr1e-3/theta.npz",
+ "featurize_wall_s": 8.463826417922974,
+ "train_wall_s": 4369.8957805633545,
+ "dev_before": {
+  "answer": 6.546810646851857,
+  "answer_n": 6.0,
+  "preserve": 0.005232197661825921,
+  "preserve_n": 2.0,
+  "retrieval": 1.936887688934803,
+  "code_norm": 0.0
+ },
+ "dev_after": {
+  "answer": 3.223421812057495,
+  "answer_n": 6.0,
+  "preserve": -4.60859370665645e-08,
+  "preserve_n": 2.0,
+  "retrieval": 1.534654337912798,
+  "code_norm": 0.0
+ },
+ "behavioural_dev": {
+  "new_paraphrase": {
+   "label_exact": 0.03125,
+   "n": 32,
+   "null_mass_mean": 0.12101936748142667,
+   "unchanged_from_capoff": null
+  },
+  "old_fact": {
+   "label_exact": 0.0,
+   "n": 16,
+   "null_mass_mean": 0.2559178032651698,
+   "unchanged_from_capoff": null
+  },
+  "near_miss": {
+   "label_exact": 0.0,
+   "n": 16,
+   "null_mass_mean": 0.99997428804636,
+   "unchanged_from_capoff": 1.0
+  },
+  "unrelated": {
+   "label_exact": 0.0,
+   "n": 16,
+   "null_mass_mean": 1.0,
+   "unchanged_from_capoff": 1.0
+  }
+ },
+ "answer_roles": [
+  "new_paraphrase",
+  "old_fact"
+ ],
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 288,
+   "partial_forwards": 82,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 2.067024933057837,
+   "accel_seconds": 2.067024933057837,
+   "peak_mem_mib": 854.921875,
+   "tokens": 5297
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 3152,
+   "partial_forwards": 0,
+   "reverses": 160,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 8.14746987062972,
+   "accel_seconds": 8.14746987062972,
+   "peak_mem_mib": 854.921875,
+   "tokens": 39813
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 3440,
+   "partial_forwards": 82,
+   "reverses": 160,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 10.214494803687558,
+   "accel_seconds": 10.214494803687558,
+   "peak_mem_mib": 854.921875,
+   "tokens": 45110
+  },
+  "events": 3522,
+  "elapsed_wall_seconds": 4463.090299844742,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "total_wall_s": 4463.090308666229
+}

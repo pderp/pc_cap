@@ -11,6 +11,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
 | bp_100_lr1e-4 | BP reference | 64 | 100 × 4 | 1e-4 | 6.22 → 4.02 | 1.89 → 1.31 | 0.005 → 0.38 | 0.03 | 0.00 | n/a (label metric only) | n/a | 0.47 / 0.50 / 0.57 | 8.5 min |
 | bp_500_lr1e-3 | BP reference | 128 | 500 × 4 | 1e-3 | 6.22 → 2.85 | 1.89 → 0.46 | 0.005 → 0.46 | **0.41** | 0.125 | 0.94 | 1.00 | 0.31 / 0.82 / 0.89 | 44 min |
+| cf_bp_500_lr1e-3 | BP reference, CounterFact natural episodes | 128 | 500 × 4 | 1e-3 | 6.55 → 3.22 | 1.94 → 1.53 | 0.005 → 0.000 | 0.03 | 0.00 | 1.00 | 1.00 | 0.12 / 1.00 / 1.00 | 73 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
 Observations after bp_500: the training answer loss was still falling (50-step means 3.60 → 1.63), so the reader is not
@@ -43,3 +44,17 @@ controller's writes carry no answer for this domain. Expected (plan 9 D-R2: the 
 natural domain trains the reader that is evaluated) and cheap to establish: the whole stream plus evaluation takes 28 s.
 Consequence: CounterFact natural episodes (Codex lane R1-20b) are on the critical path for Stage 2; the orchestrator
 checks whether the installed `natural_episode` already yields usable CounterFact training episodes.
+
+## CounterFact natural episodes (cf_bp_500): memorization, not generalization
+
+Training answer loss fell to 0.41 (100-step means 2.71 → 0.41) while the held-out answer loss stayed at 3.22 and only
+1 of 32 dev paraphrases decoded exactly; the null decision, by contrast, generalized perfectly on dev (null mass 1.00 on
+near-miss and unrelated, 0.12 on paraphrases; preservation 100 %). On the zsRE stream (`results/R1/stream_eval.md`,
+row cf_bp_500_lr1e-3) the same reader hard-nulls every zsRE prompt (null mass 0.998) and only 47 % of unrelated prompts,
+with LS 0.74: it learned to recognize its 128 training episodes' subjects and to reject everything else. Cause: the
+development pool is small (411 train-partition rows across both datasets, so the 128 episodes reuse the same facts) and
+the reader has 3.28 M parameters to memorize them. Remedies, in order of cost: fresh episodes every step (new supports
+and queries drawn from the same rows), weight decay and early stopping on the dev loss, mixed synthetic + natural
+training, and — the plan's own answer — a larger natural training pool from the fresh-data draw (R1-D1 exclusion
+register, then the E.2 filter over MEND train; plan 9 D-R2). The first three are cheap and run next; the fourth is on
+Codex's critical path.

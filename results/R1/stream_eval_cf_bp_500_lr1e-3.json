@@ -1,0 +1,93 @@
+{
+ "tag": "cf_bp_500_lr1e-3",
+ "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/cf_bp_500_lr1e-3/theta.npz",
+ "theta_hash": "4f0f62523182ff4fa9d86e02138bf9b1dbeb0841c7c6ce85c39c80c640ae98ef",
+ "args": {
+  "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/cf_bp_500_lr1e-3/theta.npz",
+  "tag": "cf_bp_500_lr1e-3",
+  "n": 100,
+  "fast_steps": 0,
+  "fast_lr": 0.01,
+  "null_threshold": 0.5,
+  "no_lease": true
+ },
+ "stream_metrics": {
+  "es_immediate": 0.0,
+  "ret_es_end": 0.0,
+  "ret_gs_end": 0.0,
+  "ls_complete_answer_end": 0.74
+ },
+ "records": 100,
+ "bytes": {
+  "keys": 102400,
+  "codes": 102400,
+  "metadata": 12800,
+  "tokens": 4332,
+  "index": 0,
+  "total": 221932
+ },
+ "null_mass": {
+  "prompt_mean": 0.9975470030307769,
+  "paraphrase_mean": 0.9922920626401901,
+  "unrelated_mean": 0.4732976884637901,
+  "prompt_hard_null_rate": 1.0,
+  "paraphrase_hard_null_rate": 0.99,
+  "unrelated_hard_null_rate": 0.47
+ },
+ "read_counters": {
+  "selection_passes": 848,
+  "cached_prompt_reads": 700,
+  "corrected_partial_passes": 58
+ },
+ "wall_seconds": 23.686143159866333,
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 1767,
+   "partial_forwards": 58,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 8.928131850785576,
+   "accel_seconds": 8.928131850785576,
+   "peak_mem_mib": 757.41845703125,
+   "tokens": 24577
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 1306,
+   "partial_forwards": 0,
+   "reverses": 402,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 7.236339628812857,
+   "accel_seconds": 7.236339628812857,
+   "peak_mem_mib": 757.41845703125,
+   "tokens": 17109
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 3073,
+   "partial_forwards": 58,
+   "reverses": 402,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 16.164471479598433,
+   "accel_seconds": 16.164471479598433,
+   "peak_mem_mib": 757.41845703125,
+   "tokens": 41686
+  },
+  "events": 2958,
+  "elapsed_wall_seconds": 30.928574323654175,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ }
+}
