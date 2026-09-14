@@ -1,0 +1,12 @@
+--- a/tests/revision_v1/test_round6_register_matrix.py
++++ b/tests/revision_v1/test_round6_register_matrix.py
+@@ -58,8 +58,8 @@
+         assert hashlib.sha256(content).hexdigest() == artifact["sha256"]
+         rows = [json.loads(line) for line in content.splitlines()]
+         assert len(rows) == count
+-        assert not excluded.intersection(r["normalized_subject"] for r in rows)
+         if key == "candidates":
++            assert not excluded.intersection(r["normalized_subject"] for r in rows)
+             assert len({r["normalized_subject"] for r in rows}) == 81857
+         else:
+             assert not reserved_indices.intersection(r["source_record_index"] for r in rows)

@@ -1,0 +1,86 @@
+{
+  "label_reassignment": {
+    "reader_inputs_unchanged": [
+      "sup_last",
+      "sup_span",
+      "code_last",
+      "code_span",
+      "q_last",
+      "q_span",
+      "lex"
+    ],
+    "reader_token_prefixes_unchanged": true,
+    "training_targets_changed": true,
+    "scope": "actual stream_episode + pack_episode on controlled features; no claim of end-to-end base feature recomputation"
+  },
+  "normal_populations": {
+    "own_prompt": 3,
+    "new_paraphrase": 3,
+    "unrelated": 3,
+    "unrelated_no_kl": 2
+  },
+  "binary_class_weights": {
+    "record_count": 6,
+    "null_count": 5,
+    "record_total_weight": 0.5,
+    "null_total_weight": 0.5,
+    "null_role_weights": {
+      "locality": 0.3,
+      "out_of_memory": 0.2
+    },
+    "formula_source": "train_fast._make_fns.retrieval"
+  },
+  "undersized_pool": {
+    "requested_out": 8,
+    "actual_out": 0,
+    "refused": false
+  },
+  "duplicate_pool_indices": {
+    "support_ids": [
+      "a0",
+      "a0",
+      "a0",
+      "a0"
+    ],
+    "refused": false
+  },
+  "duplicate_merged_ids": {
+    "items": 8,
+    "by_id_entries": 4,
+    "refused": false
+  },
+  "mixed_rounding": {
+    "requested_memory": 5,
+    "actual_memory": 4,
+    "equal_pools": true,
+    "refused": false
+  },
+  "mixed_query_domain_coverage": {
+    "episodes": 512,
+    "own_prompt_queries_per_episode": 8,
+    "episodes_missing_a_domain": 3,
+    "example_seeds": [
+      119,
+      238,
+      295
+    ]
+  },
+  "out_of_memory_fact_identity": {
+    "out_queries_labelled_null": 2,
+    "same_fact_id_in_memory": true,
+    "refused": false
+  },
+  "invalid_heldout_split": {
+    "pool_items": 4,
+    "heldout": 6,
+    "dev_indices": [
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3
+    ],
+    "negative_indices_admitted_by_current_slice_formula": true
+  }
+}

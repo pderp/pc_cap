@@ -1,0 +1,32 @@
+.F......................                                                 [100%]
+=================================== FAILURES ===================================
+_________ test_candidate_artifacts_match_hash_counts_and_reservations __________
+
+register = ({'candidates': {'path': '/home/derp/cap/assets/data/prepared/revision_v1/r1_d1b_v2/mend_candidate_subjects.jsonl', 'r...ects_before': 87857, 'confirmed_context_clear_after_new_exposure': None, 'exclusion_subjects_after': 38029, ...}, ...})
+
+    def test_candidate_artifacts_match_hash_counts_and_reservations(register):
+        _, reservation, new = register
+        excluded = {r["normalized_subject"] for r in new["exclusions"]}
+        reserved_indices = {r["source_record_index"] for r in reservation["items"]}
+        for key, count in (("candidates", 143753), ("clear_candidate_subject_survivors", 52498)):
+            artifact = new[key]
+            content = Path(artifact["path"]).read_bytes()
+            assert hashlib.sha256(content).hexdigest() == artifact["sha256"]
+            rows = [json.loads(line) for line in content.splitlines()]
+            assert len(rows) == count
+>           assert not excluded.intersection(r["normalized_subject"] for r in rows)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_round6_register_matrix.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7f850b9b7010>
+
+>   assert not excluded.intersection(r["normalized_subject"] for r in rows)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'normalized_subject'
+
+tests/revision_v1/test_round6_register_matrix.py:61: KeyError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_round6_register_matrix.py::test_candidate_artifacts_match_hash_counts_and_reservations
+1 failed, 23 passed in 2.39s

@@ -1,0 +1,576 @@
+{
+  "artifact_sha256": {
+    "logs/r1_round6/near_neighbour_separability.json": "673fad0ed4bb22a49ea8d841936052f450ebc923896c4ba14d65fc6d2b29afbd",
+    "logs/r1_round6/stream_response_evidence.json": "d078b2c3a2cfe14dccfeb76db54370227a9b42b5eac8563dfbf9ca8c4565d211",
+    "logs/r1_round6/stream_review_evidence.json": "ead6b0fb8ec46b837e66a5a4a4d27e04f82039ed3dd324f203fb7195f73dde0e",
+    "manifests/revision_v1/exclusions_v3.json": "e214de7d048c6b104fc62c75757eed01f12b47fb330eaeeb58c1a2bec8fbbd4a",
+    "manifests/revision_v1/run_matrix_draft_v2.json": "fc7eb745c849e11c2f3daf242d9708043e94da89c16756f890ffa7ac4ae70b22",
+    "manifests/revision_v1/train_pool_zsre_candidates_v1.json": "540ccf1448c5299d2b4861f85720a59f841ba2354aac18c1bc7ef72360b7f2ad"
+  },
+  "bindings": [
+    {
+      "consumers": [
+        "manifests/revision_v1/exclusions_v3.json"
+      ],
+      "current_sha256": "9335dac86d04e144cce421fde0b173e762c13b70a6a8280a197e9cb8b4dcbcbb",
+      "expected_sha256": "9335dac86d04e144cce421fde0b173e762c13b70a6a8280a197e9cb8b4dcbcbb",
+      "source": "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1b_v2/mend_candidate_subjects.jsonl",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json"
+      ],
+      "current_sha256": "c2e01edcd2506c0bae9240e52a6742f8183a2860560c4cbb332c4ef7a980b296",
+      "expected_sha256": "c2e01edcd2506c0bae9240e52a6742f8183a2860560c4cbb332c4ef7a980b296",
+      "source": "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/clear_candidates.jsonl",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+      "expected_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+      "source": "/home/derp/cap/assets/models/gpt2/model.safetensors",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json"
+      ],
+      "current_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+      "expected_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+      "source": "/home/derp/cap/assets/models/gpt2/tokenizer.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "f32884120deb59f59e73a893de9dfb1a47c3c827a941d81e1da90f3130f01503",
+      "expected_sha256": "d412b7995e2f70f4f66c572ae75f43ae60650a54f219d23d9e6962fba7dda929",
+      "note": "earlier bank review remains point-in-time evidence; owner stamped banks in place during R50-06 repairs. The later response audit binds the new bytes. No retroactive reconstruction of the old serialized resource is claimed.",
+      "source": "/home/derp/cap/assets/runs/pc_cap/R1/banks/train_pool_counterfact_v1_1000.pkl",
+      "status": "external_resource_changed_since_earlier_evidence"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "f32884120deb59f59e73a893de9dfb1a47c3c827a941d81e1da90f3130f01503",
+      "expected_sha256": "f32884120deb59f59e73a893de9dfb1a47c3c827a941d81e1da90f3130f01503",
+      "source": "/home/derp/cap/assets/runs/pc_cap/R1/banks/train_pool_counterfact_v1_1000.pkl",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "9b432438d78179249a478e3b3849d98715b0616a5e960cdfc111df559c9f02b9",
+      "expected_sha256": "9b432438d78179249a478e3b3849d98715b0616a5e960cdfc111df559c9f02b9",
+      "source": "/home/derp/cap/assets/runs/pc_cap/R1/banks/train_pool_zsre_v1_1000.pkl",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "9b432438d78179249a478e3b3849d98715b0616a5e960cdfc111df559c9f02b9",
+      "expected_sha256": "dcc3369c265c9e87923970b245e02abffeb9f471938b2a696109ca622751a3ea",
+      "note": "earlier bank review remains point-in-time evidence; owner stamped banks in place during R50-06 repairs. The later response audit binds the new bytes. No retroactive reconstruction of the old serialized resource is claimed.",
+      "source": "/home/derp/cap/assets/runs/pc_cap/R1/banks/train_pool_zsre_v1_1000.pkl",
+      "status": "external_resource_changed_since_earlier_evidence"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "9f676076ad94df2fb6a3257c5838edb9e365f7ddc808efd2d044ef6e01f626fd",
+      "expected_sha256": "9f676076ad94df2fb6a3257c5838edb9e365f7ddc808efd2d044ef6e01f626fd",
+      "source": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed/theta.npz",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "a0e50ef72af48963062f8acabcf02ca66171d5d87f12cebf7074978a38a8317c",
+      "expected_sha256": "a0e50ef72af48963062f8acabcf02ca66171d5d87f12cebf7074978a38a8317c",
+      "source": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/random_tied/theta.npz",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "7005772d8daaaf0796c865cf7005143d6f14102c54721bccbf4cae25249847e4",
+      "expected_sha256": "cc51a5ca76a8ef30ab10142460572616ff7b7cea28e210dbb5ab78e998a6d536",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/cc51a5ca76a8ef30ab10142460572616ff7b7cea28e210dbb5ab78e998a6d536/docs/R1_stage2_notes.md",
+      "snapshot_commit": "9bbf0c51e21e23b99f554e52b59f9f7b8096aee2",
+      "source": "/home/derp/cap/pc_cap/docs/R1_stage2_notes.md",
+      "status": "historical_repository_snapshot_preserved"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json"
+      ],
+      "current_sha256": "ebe3ca23d2da8b06cef2d18f5de11dbf1e3b0130a706e1a84209b2b895da6069",
+      "expected_sha256": "9dd6ddf8878f22adf2ee7a111921785370d6c75d50efd1722de7611aed865302",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/9dd6ddf8878f22adf2ee7a111921785370d6c75d50efd1722de7611aed865302/docs/lead_queue.md",
+      "snapshot_commit": "1725789bddbf4a8e79d9a12b2390d1de49885c03",
+      "source": "/home/derp/cap/pc_cap/docs/lead_queue.md",
+      "status": "historical_repository_snapshot_preserved"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "ebe3ca23d2da8b06cef2d18f5de11dbf1e3b0130a706e1a84209b2b895da6069",
+      "expected_sha256": "ebe3ca23d2da8b06cef2d18f5de11dbf1e3b0130a706e1a84209b2b895da6069",
+      "source": "/home/derp/cap/pc_cap/docs/lead_queue.md",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "b0614cbcccaae564668c67c9b954df4178c8e3f9fb4804c77964c229c74cc625",
+      "expected_sha256": "b0614cbcccaae564668c67c9b954df4178c8e3f9fb4804c77964c229c74cc625",
+      "source": "/home/derp/cap/pc_cap/docs/ongoing.md",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json"
+      ],
+      "current_sha256": "b0614cbcccaae564668c67c9b954df4178c8e3f9fb4804c77964c229c74cc625",
+      "expected_sha256": "f7310967e851b7901a511a4246f3b6f6dbc739042f40c71a0758513fc972bb38",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/f7310967e851b7901a511a4246f3b6f6dbc739042f40c71a0758513fc972bb38/docs/ongoing.md",
+      "snapshot_commit": "1725789bddbf4a8e79d9a12b2390d1de49885c03",
+      "source": "/home/derp/cap/pc_cap/docs/ongoing.md",
+      "status": "historical_repository_snapshot_preserved"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "ceb6274de2e63b479c890bd0a811dbfc9bcb4fdd08ac59956d12125e56de872f",
+      "expected_sha256": "ceb6274de2e63b479c890bd0a811dbfc9bcb4fdd08ac59956d12125e56de872f",
+      "source": "/home/derp/cap/pc_cap/docs/tasks/R1-46-response.md",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "e8cd32b5a21991ba1178a3112f62c5a0bd6a4f91bbb4ec97d1df127ac91234c9",
+      "expected_sha256": "e8cd32b5a21991ba1178a3112f62c5a0bd6a4f91bbb4ec97d1df127ac91234c9",
+      "source": "/home/derp/cap/pc_cap/docs/updated_plan9.md",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json"
+      ],
+      "current_sha256": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+      "expected_sha256": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+      "source": "/home/derp/cap/pc_cap/manifests/dev/counterfact_dev.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json"
+      ],
+      "current_sha256": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+      "expected_sha256": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+      "source": "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json"
+      ],
+      "current_sha256": "80fb81c23026eb3eeec459de4ccd1fc9c8e5d6766dd30d388e4ae6f021c3b2d7",
+      "expected_sha256": "80fb81c23026eb3eeec459de4ccd1fc9c8e5d6766dd30d388e4ae6f021c3b2d7",
+      "source": "/home/derp/cap/pc_cap/manifests/reference.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json",
+        "manifests/revision_v1/exclusions_v3.json"
+      ],
+      "current_sha256": "481e04c3eba70ea2f85aada9c0599c4f44031ea6cd7c75cf6c03cadec2c369a8",
+      "expected_sha256": "481e04c3eba70ea2f85aada9c0599c4f44031ea6cd7c75cf6c03cadec2c369a8",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v2.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "e214de7d048c6b104fc62c75757eed01f12b47fb330eaeeb58c1a2bec8fbbd4a",
+      "expected_sha256": "e214de7d048c6b104fc62c75757eed01f12b47fb330eaeeb58c1a2bec8fbbd4a",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v3.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "19af26cb7e2081afc9403acc2a8ada7ccbd298ef9aa8ec4ba76ef460c50be064",
+      "expected_sha256": "19af26cb7e2081afc9403acc2a8ada7ccbd298ef9aa8ec4ba76ef460c50be064",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_draft.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json",
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711",
+      "expected_sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json",
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+      "expected_sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/exclusions_v3.json"
+      ],
+      "current_sha256": "540ccf1448c5299d2b4861f85720a59f841ba2354aac18c1bc7ef72360b7f2ad",
+      "expected_sha256": "540ccf1448c5299d2b4861f85720a59f841ba2354aac18c1bc7ef72360b7f2ad",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_candidates_v1.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json",
+        "manifests/revision_v1/exclusions_v3.json"
+      ],
+      "current_sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e",
+      "expected_sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json",
+        "manifests/revision_v1/exclusions_v3.json"
+      ],
+      "current_sha256": "840f77494b7d747b92eadea88ecee2f6a12e59947a0ea8cc1dc0c51b92db78d7",
+      "expected_sha256": "840f77494b7d747b92eadea88ecee2f6a12e59947a0ea8cc1dc0c51b92db78d7",
+      "source": "/home/derp/cap/pc_cap/manifests/revision_v1/zsre_fresh_candidates_v1.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "17f3fc8441143ef68637b9ff8708527bed04abd4d772f4de7f0aea9967dda4ee",
+      "expected_sha256": "17f3fc8441143ef68637b9ff8708527bed04abd4d772f4de7f0aea9967dda4ee",
+      "source": "/home/derp/cap/pc_cap/results/R1/diagnostics_C1.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "dfd362fc5aa28222d4b59b84daa7e14045243f081f0e860e47039ef8c0d56712",
+      "expected_sha256": "dfd362fc5aa28222d4b59b84daa7e14045243f081f0e860e47039ef8c0d56712",
+      "source": "/home/derp/cap/pc_cap/results/R1/diagnostics_C2.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "30f2b6f42737ec9f18ab16b8287014402a2afaa2c7f7929cd8db0cc225cb9905",
+      "expected_sha256": "30f2b6f42737ec9f18ab16b8287014402a2afaa2c7f7929cd8db0cc225cb9905",
+      "source": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_mixed/summary.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "e625eb06fe8b37c88af2d23f4075844cc865acadc42590961185a42f9e26bb97",
+      "expected_sha256": "e625eb06fe8b37c88af2d23f4075844cc865acadc42590961185a42f9e26bb97",
+      "source": "/home/derp/cap/pc_cap/results/R1/stream_eval_mixed_null0.5.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "f0c224de4c162e950bdb70cf3bf0a8bb564cb88969f2e7ba5a4531f7d7affea3",
+      "expected_sha256": "f0c224de4c162e950bdb70cf3bf0a8bb564cb88969f2e7ba5a4531f7d7affea3",
+      "source": "/home/derp/cap/pc_cap/results/R1/stream_eval_mixed_null0.5@counterfact.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "9c461032e293d685f9c051518f60a877deab8fca78760b265ba2ea47aa8639c5",
+      "expected_sha256": "9c461032e293d685f9c051518f60a877deab8fca78760b265ba2ea47aa8639c5",
+      "source": "/home/derp/cap/pc_cap/results/R1/stream_eval_ref_nonlearned_gate0.93_v2.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "80c2d9d592575ea665fc0e3f792cca05ae1cf7c3490dcf1ce4fe8132d81c5c9e",
+      "expected_sha256": "80c2d9d592575ea665fc0e3f792cca05ae1cf7c3490dcf1ce4fe8132d81c5c9e",
+      "source": "/home/derp/cap/pc_cap/results/R1/stream_eval_ref_nonlearned_gate0.93_v2@counterfact.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "89dad3f6e24dccbe572f0d1c763d3bbb6ff492580fc524fd4add01bce44f11b1",
+      "expected_sha256": "89dad3f6e24dccbe572f0d1c763d3bbb6ff492580fc524fd4add01bce44f11b1",
+      "source": "/home/derp/cap/pc_cap/results/R1/streams_matched/C1/cost.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "88ee4c6336f408aa3068e57cc7d7a718c2bba6eb63c170db9bfc43977b2abc55",
+      "expected_sha256": "88ee4c6336f408aa3068e57cc7d7a718c2bba6eb63c170db9bfc43977b2abc55",
+      "source": "/home/derp/cap/pc_cap/results/R1/streams_stable/C1/cost.json",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "69a2e940a22df2887a7a87e7c81e73bb5409aed5b77e9e4ecd85f176c741a9c4",
+      "expected_sha256": "69a2e940a22df2887a7a87e7c81e73bb5409aed5b77e9e4ecd85f176c741a9c4",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_13_stream_eval.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "4a19c0647e116ceecfb714e6896876a4dedbfdf9dfa40d04edfc3a64cbb664b5",
+      "expected_sha256": "4a19c0647e116ceecfb714e6896876a4dedbfdf9dfa40d04edfc3a64cbb664b5",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_40b_matrix.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/near_neighbour_separability.json"
+      ],
+      "current_sha256": "a6db5e75c6808f580f47a0f1954d8a8255da041f7e531412db7d1fb2bb687901",
+      "expected_sha256": "a6db5e75c6808f580f47a0f1954d8a8255da041f7e531412db7d1fb2bb687901",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_45_lexical_separability.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "e432e6ae5c8661495b65b2d10f9bf0066c7584c41a2c09063f057ce8ee036911",
+      "expected_sha256": "e432e6ae5c8661495b65b2d10f9bf0066c7584c41a2c09063f057ce8ee036911",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_46_response_audit.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json",
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "b7ebb5003a24ad49e48baaf21a1315851844ebe52fcb628c352b39d7b847b41f",
+      "expected_sha256": "b7ebb5003a24ad49e48baaf21a1315851844ebe52fcb628c352b39d7b847b41f",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_46_stream_audit.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "61e5eb66dd44a61bb3af75fded2d20629715401c30945bed221b3ad7f7527e84",
+      "expected_sha256": "4790dee613e0e1ed831b188c849b829857f5621dc14244117b76b8de3aeadac6",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/4790dee613e0e1ed831b188c849b829857f5621dc14244117b76b8de3aeadac6/scripts/r1_50_stream_train.py",
+      "snapshot_commit": "e78aa60d8556c261f657449c690d607c507e873d",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_50_stream_train.py",
+      "status": "historical_repository_snapshot_preserved"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "61e5eb66dd44a61bb3af75fded2d20629715401c30945bed221b3ad7f7527e84",
+      "expected_sha256": "61e5eb66dd44a61bb3af75fded2d20629715401c30945bed221b3ad7f7527e84",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_50_stream_train.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "581347ddf38247533055c69b3cfdd3b4ca62dae3cf1c6959c9bc66fd58f9380a",
+      "expected_sha256": "581347ddf38247533055c69b3cfdd3b4ca62dae3cf1c6959c9bc66fd58f9380a",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_52_operating_point.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "581347ddf38247533055c69b3cfdd3b4ca62dae3cf1c6959c9bc66fd58f9380a",
+      "expected_sha256": "d9082ced230f45627d1caf7c38c08faf2f343f165d676665739e6af874d65171",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/d9082ced230f45627d1caf7c38c08faf2f343f165d676665739e6af874d65171/scripts/r1_52_operating_point.py",
+      "snapshot_commit": "e78aa60d8556c261f657449c690d607c507e873d",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_52_operating_point.py",
+      "status": "historical_repository_snapshot_preserved"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/exclusions_v3.json"
+      ],
+      "current_sha256": "f95a1552b43c2266e82ed37ed75ed7d9fb55fae9177dc6c30ef5034a67b07b5d",
+      "expected_sha256": "f95a1552b43c2266e82ed37ed75ed7d9fb55fae9177dc6c30ef5034a67b07b5d",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_d1e_exclusions_v3.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json"
+      ],
+      "current_sha256": "3b631e5ba09b2926d2d8a1b1c3ad6f968f0944da261fa2115dd5104f1c557ada",
+      "expected_sha256": "3b631e5ba09b2926d2d8a1b1c3ad6f968f0944da261fa2115dd5104f1c557ada",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_d3_candidates.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/train_pool_zsre_candidates_v1.json"
+      ],
+      "current_sha256": "4d03c0b36edae85d267d7efe213345978204febc2745e33747b2ad296e1c7ff9",
+      "expected_sha256": "4d03c0b36edae85d267d7efe213345978204febc2745e33747b2ad296e1c7ff9",
+      "source": "/home/derp/cap/pc_cap/scripts/r1_d3_e2_filter.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+      "expected_sha256": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+      "source": "/home/derp/cap/pc_cap/src/pccap/data/tokenize.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+      "expected_sha256": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/controller.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json",
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "43bab1aaf9798123d26819053f85396814b64c9bc6c13347d189bc5f9b1e943e",
+      "expected_sha256": "43bab1aaf9798123d26819053f85396814b64c9bc6c13347d189bc5f9b1e943e",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/learner.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json",
+        "manifests/revision_v1/run_matrix_draft_v2.json"
+      ],
+      "current_sha256": "c214c2a74cd396936cc674befda13c79ad04e126759872eed1a3b55d70169f64",
+      "expected_sha256": "c214c2a74cd396936cc674befda13c79ad04e126759872eed1a3b55d70169f64",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/memory.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "d32a948da1cbf0b96c02fbcba9402b08d30a92d46fde0576a9b8f02fdd1b7135",
+      "expected_sha256": "d32a948da1cbf0b96c02fbcba9402b08d30a92d46fde0576a9b8f02fdd1b7135",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/reader.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "06ce885a3ffb8f159d1dc2fc9c34d4e06f8cc7b8a92caf97b705e8048ed25640",
+      "expected_sha256": "06ce885a3ffb8f159d1dc2fc9c34d4e06f8cc7b8a92caf97b705e8048ed25640",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stream_train.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "06ce885a3ffb8f159d1dc2fc9c34d4e06f8cc7b8a92caf97b705e8048ed25640",
+      "expected_sha256": "d2745a5d853793f16110dca306652d7fe0c6098b953443b9e18d8a7909770c20",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/d2745a5d853793f16110dca306652d7fe0c6098b953443b9e18d8a7909770c20/src/pccap/revision_v1/stream_train.py",
+      "snapshot_commit": "e78aa60d8556c261f657449c690d607c507e873d",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stream_train.py",
+      "status": "historical_repository_snapshot_preserved"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "bd0f23ab212fc55ef67f236bc0e9a0b0e5fe378a6ee84cb65575738e5c3ee0c9",
+      "expected_sha256": "bd0f23ab212fc55ef67f236bc0e9a0b0e5fe378a6ee84cb65575738e5c3ee0c9",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/train.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_response_evidence.json"
+      ],
+      "current_sha256": "98c6011e6e423b26ebb3434de412da1d1e2b2e21ab968c1adc6ba4abe45b7390",
+      "expected_sha256": "98c6011e6e423b26ebb3434de412da1d1e2b2e21ab968c1adc6ba4abe45b7390",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/train_fast.py",
+      "status": "current_match"
+    },
+    {
+      "consumers": [
+        "logs/r1_round6/stream_review_evidence.json"
+      ],
+      "current_sha256": "98c6011e6e423b26ebb3434de412da1d1e2b2e21ab968c1adc6ba4abe45b7390",
+      "expected_sha256": "e2b0b56f9c7db3b538527e9203238cb5c89881fe70f12677de8fe7642f4fd4ff",
+      "snapshot": "/home/derp/cap/pc_cap/logs/r1_round6/source_snapshots/e2b0b56f9c7db3b538527e9203238cb5c89881fe70f12677de8fe7642f4fd4ff/src/pccap/revision_v1/train_fast.py",
+      "snapshot_commit": "f88b56dbb210327c1bb12ad09ddbe886c0896dda",
+      "source": "/home/derp/cap/pc_cap/src/pccap/revision_v1/train_fast.py",
+      "status": "historical_repository_snapshot_preserved"
+    }
+  ],
+  "counts": {
+    "current_match": 50,
+    "external_resource_changed_since_earlier_evidence": 2,
+    "historical_repository_snapshot_preserved": 7
+  },
+  "gpu_seconds": 0,
+  "head": "b7a38e501f37b834acb11e5cb1c904f5fb79a1b4",
+  "interpretation": "Source drift is reported, never fixed by changing a historical manifest; owner commits proceeded concurrently. Historical source snapshots are read-only evidence.",
+  "task": "CODEX-R1-round6"
+}
