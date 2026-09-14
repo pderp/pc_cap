@@ -172,6 +172,7 @@ def main() -> int:
         # behavioural check: fresh learner per dev episode, adapt on supports (fast_steps = 0: initial codes), greedy answers
         cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0), tau_edit=float(frozen["tau_edit"]))
         roles: dict[str, list[int]] = {}
+        sel_hit: dict[str, list[int]] = {}
         preserved: dict[str, list[int]] = {}
         null_rates: dict[str, list[float]] = {}
 
@@ -197,11 +198,15 @@ def main() -> int:
                 n_t = len(lab.target_ids) or 3  # preserve roles without a teacher continuation: compare three greedy tokens
                 ans = greedy(lambda ids, cap=cap: cap.predict(ids).logits, q.prompt_ids, n_t)
                 roles.setdefault(lab.role, []).append(int(bool(lab.target_ids) and ans == [int(y) for y in lab.target_ids]))
+                sel_q = cap.selection_for(np.asarray(q.prompt_ids, np.int32))
+                top1 = sel_q.record_ids[int(np.argmax(sel_q.weights))] if len(sel_q.record_ids) else None
+                sel_hit.setdefault(lab.role, []).append(int(bool(lab.supporting_record_ids) and top1 == lab.supporting_record_ids[0] and not sel_q.hard_null))
                 if lab.role in ("near_miss", "unrelated"):
                     off = greedy(lambda ids: base.forward(ids, (), phase="query", last_only=True).logits, q.prompt_ids, n_t)
                     preserved.setdefault(lab.role, []).append(int(ans == off))
                 null_rates.setdefault(lab.role, []).append(cap.selection_for(np.asarray(q.prompt_ids, np.int32)).null_mass)
         behav = {r: {"label_exact": float(np.mean(v)), "n": len(v), "null_mass_mean": float(np.mean(null_rates[r])),
+                     "top1_is_supporting_record": float(np.mean(sel_hit[r])) if r in sel_hit else None,
                      "unchanged_from_capoff": (float(np.mean(preserved[r])) if r in preserved else None)} for r, v in roles.items()}
         summary = {"args": vars(args), "estimator": args.estimator, "domain": args.domain, "pool": args.pool, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
                    "featurize_wall_s": feat_s, "train_wall_s": train_s, "best_dev": {"answer": best["dev_answer"], "step": best["step"]}, "final_after": (evaluate(final_theta) if best["theta"] is not None else None), "dev_before": before, "dev_after": after, "behavioural_dev": behav,

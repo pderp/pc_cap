@@ -13,6 +13,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | bp_500_lr1e-3 | BP reference | 128 | 500 × 4 | 1e-3 | 6.22 → 2.85 | 1.89 → 0.46 | 0.005 → 0.46 | **0.41** | 0.125 | 0.94 | 1.00 | 0.31 / 0.82 / 0.89 | 44 min |
 | cf_bp_500_lr1e-3 | BP reference, CounterFact natural episodes | 128 | 500 × 4 | 1e-3 | 6.55 → 3.22 | 1.94 → 1.53 | 0.005 → 0.000 | 0.03 | 0.00 | 1.00 | 1.00 | 0.12 / 1.00 / 1.00 | 73 min |
 | cf_fresh_wd_400 (prompt-only codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.55 → 2.21 | 1.94 → 1.17 | 0.005 → 0.11 | 0.19 | 0.00 | 0.81 | 1.00 | 0.01 / 0.81 / 0.92 | 72 min |
+| cf_fresh_wd_400_r25 (answer-sensitive codes) | BP, CounterFact dev pool, fresh episodes/step, wd 0.01, best-dev @ step 99 | fresh | 400 × 4 | 1e-3 | 6.59 → 2.29 | 1.94 → 1.13 | 0.006 → 0.000 | 0.16 | 0.00 | 1.00 | 1.00 | 0.08 / 1.00 / 1.00 | 72 min |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -86,3 +87,9 @@ the old eligible pool after removing the 3,000 sealed-realization items and 950 
 reasons; every item has ≥ 2 paraphrases, locality prompts and token ids. Episodes are generated from these rows with the
 installed generator (`--pool`); the run `cf_pool3k_r25_600` (repaired codes, fresh episodes, weight decay 0.01, dev every
 50 steps on 32 held-out episodes) is the first on this pool.
+
+Small-pool verdict (cf_fresh_wd_400 vs _r25): with ~100 distinct training facts the answer-sensitive code neither helps nor
+hurts held-out answers (2.21 vs 2.29; paraphrase exact 0.19 vs 0.16), preservation is perfect in both, and old-fact
+retention is zero in both — the selection or the codes of history records fail on dev episodes. The 3k-pool run decides
+whether facts, not mechanism, were the limit; a per-role selection diagnostic (top-1 record vs supporting record, null
+mass) is added to the pilot for the runs after it.
