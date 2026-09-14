@@ -312,3 +312,18 @@ does not depend on the query's style (dropping the query-only linear term; teste
 Seed robustness (CounterFact, null 0.5): seed 0 → RET-GS 0.775 / LS 1.00; seed 1 → 0.93 / 0.92 (the null's operating
 point varies with the seed; the similarity does not). Seed 2 and a query-style-free null variant (pairwise + lexical terms
 only) follow.
+
+## Seeds and the query-style-free null (2026-09-14, 12:20 EDT)
+
+| reader (stream-scale + lexical) | CounterFact null 0.5 | zsRE null 0.5 | zsRE gate 0.93, null off |
+| --- | ---: | ---: | ---: |
+| seed 0 | 0.775 / 1.00 | 0.49 / 0.98 | 0.97 / 1.00 |
+| seed 1 | 0.93 / 0.92 | — | — |
+| seed 2 | 0.93 / 1.00 | 0.68 / 0.82 | 0.97 / 0.96 |
+| seed 0, query-style-free null | 0.93 / 1.00 | 0.94 / 0.38 | — |
+
+(RET-GS / LS; ES and RET-ES are 1.00 in every cell.) Three seeds put CounterFact at RET-GS 0.78–0.93 with LS 0.92–1.00
+against a 0.00 floor. Dropping the query-only null term (pairwise + lexical terms only) keeps CounterFact at 0.93 / 1.00
+and removes the over-rejection of zsRE paraphrases (RET-GS 0.94) but then passes zsRE's unrelated prompts (LS 0.38): the
+zsRE locality population (unrelated facts, low overlap with any record, moderate cosine) is what the CounterFact-trained
+pairwise term does not reject. A null trained on both domains (M3) is the remaining step to one rule for both datasets.
