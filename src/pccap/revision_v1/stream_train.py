@@ -198,3 +198,44 @@ def stream_episode_mixed(banks_idx: list[list[int]], bank: FeatureBank, rng: np.
                 l_last, l_span, lpf = it.locality[0]
                 ep.queries.append(QueryFeat(query_id=f"loc:{it.item_id}", role="unrelated", last=l_last, span=l_span, prefixes=[lpf], target_record=-1, query_ids=lpf.ids[: lpf.n]))
     return ep
+
+
+@dataclass
+class TextNull:
+    """An ordinary-text prefix used as a null-target query (R1-54): features plus cap-off logits for the preservation KL."""
+
+    text_id: str
+    ids: np.ndarray
+    last: np.ndarray
+    span: np.ndarray
+    prefix: PrefixFeat
+
+
+def build_text_bank(base, enc, tokens: np.ndarray, rc: ReaderConfig, n_windows: int = 512, window: int = 128, prefix_lengths=(16, 48, 96),
+                    seed: int = 0, logits_dtype=np.float16) -> list[TextNull]:
+    """Ordinary-text null population from a pinned token array (training range only): random windows, several prefix lengths,
+    one write-free pass each with the cap-off logits kept (float16, declared approximation)."""
+    rng = np.random.default_rng(seed)
+    starts = rng.integers(0, len(tokens) - window, size=n_windows)
+    out = []
+    for s0 in starts:
+        win = np.asarray(tokens[int(s0) : int(s0) + window], np.int32)
+        for L in prefix_lengths:
+            ids = win[:L]
+            fr = base.forward(ids, (), retain_sites=True, phase="learning", last_only=True)
+            obs = observation_from_pass(fr, ids, None, enc.base_hash, enc.encoder_version, rc.taps)
+            last, span = obs_arrays(obs, rc)
+            T = g.bucket_len(len(ids))
+            pf = PrefixFeat(ids=g.pad_ids(ids, T), n=len(ids), target=-1, last=np.asarray(last), span=np.asarray(span), capoff_logits=np.asarray(fr.logits).astype(logits_dtype))
+            out.append(TextNull(text_id=f"text:{int(s0)}:{L}", ids=ids, last=np.asarray(last), span=np.asarray(span), prefix=pf))
+    return out
+
+
+def add_text_nulls(ep: EpisodeFeatures, text_bank: list[TextNull], rng: np.random.Generator, n_text: int = 8) -> EpisodeFeatures:
+    """Append ``n_text`` ordinary-text null queries (role 'unrelated': L2 null target + L3 preservation KL) to an episode."""
+    if not text_bank or n_text <= 0:
+        return ep
+    for i in rng.choice(len(text_bank), size=min(n_text, len(text_bank)), replace=False):
+        t = text_bank[int(i)]
+        ep.queries.append(QueryFeat(query_id=t.text_id, role="unrelated", last=t.last, span=t.span, prefixes=[t.prefix], target_record=-1, query_ids=t.ids))
+    return ep

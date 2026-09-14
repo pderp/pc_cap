@@ -38,6 +38,8 @@ def main() -> int:
     ap.add_argument("--no-lease", action="store_true")
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
     ap.add_argument("--no-query-null", action="store_true", help="null without the query-only linear term (pairwise + lexical only)")
+    ap.add_argument("--text-nulls", type=int, default=0, help="ordinary-text null queries per episode (R1-54; OpenWebText training range)")
+    ap.add_argument("--text-windows", type=int, default=512)
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -47,8 +49,10 @@ def main() -> int:
     from pccap.revision_v1.observations import ObservationEncoder
     from pccap.revision_v1.reader import ReaderConfig, init_reader, params_hash
     from pccap.revision_v1.stream_train import (
+        add_text_nulls,
         bank_identity,
         build_bank,
+        build_text_bank,
         merge_banks,
         stream_episode,
         stream_episode_mixed,
@@ -99,6 +103,12 @@ def main() -> int:
             offsets.append(sum(len(x.items) for x in banks))
             banks.append(b)
         bank = merge_banks(banks)
+        text_bank = []
+        if args.text_nulls:
+            from pccap.distill.data import load_shard
+            shard = load_shard(Path("/home/derp/cap/assets/data/raw/openwebtext/openwebtext.bin"))
+            text_bank = build_text_bank(base, enc, shard[:50_001_920], rc, n_windows=args.text_windows, seed=args.seed + 7)
+            print(json.dumps({"text_bank": len(text_bank), "windows": args.text_windows, "source": "openwebtext training range [0, 50,001,920)"}), flush=True)
         bank_s = time.time() - t0
         # per-pool train/held-out split (the last held_out items of every pool are development)
         train_by_pool, dev_by_pool = [], []
@@ -113,6 +123,7 @@ def main() -> int:
         mixed = len(banks) > 1
         dev_eps = [(stream_episode_mixed(dev_by_pool, bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), episode_id=f"dev-{i}") if mixed
                     else stream_episode(bank, dev_rng, n_memory=min(args.n_memory, len(dev_idx)), n_query_records=args.n_query_records, n_out=min(args.n_out, 8), pool_indices=dev_idx, episode_id=f"dev-{i}")) for i in range(6)]
+        dev_eps = [add_text_nulls(e, text_bank, dev_rng, args.text_nulls) for e in dev_eps]
         k1, k2 = jax.random.split(jax.random.PRNGKey(args.seed))
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay, ledger=ledger)
@@ -133,6 +144,7 @@ def main() -> int:
         for step in range(args.steps):
             batch = [(stream_episode_mixed(train_by_pool, bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out) if mixed
                       else stream_episode(bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, pool_indices=train_idx)) for _ in range(args.batch)]
+            batch = [add_text_nulls(b, text_bank, rng, args.text_nulls) for b in batch]
             theta, st, m = tr.outer_step(theta, st, batch)
             m.update(step=step, wall_s=time.time() - t0)
             if args.dev_every and (step + 1) % args.dev_every == 0:

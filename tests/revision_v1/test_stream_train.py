@@ -77,3 +77,20 @@ def test_mixed_pool_episode_draws_from_every_pool(monkeypatch):
     ep = st.stream_episode_mixed([list(range(10)), list(range(10, 16))], bank, np.random.default_rng(0), n_memory=8, n_query_records=4, n_out=4)
     ids = [s.record_id for s in ep.supports]
     assert len(ids) == 8 and any(i.startswith("z-") for i in ids) and any(not i.startswith("z-") for i in ids)
+
+
+def test_text_nulls_join_episodes_with_capoff_logits():
+    import pccap.revision_v1.stream_train as st
+    base = TinyBase()
+    enc = ObservationEncoder(base, taps=RC.taps)
+    tokens = np.random.default_rng(0).integers(1, 60, size=2000).astype(np.int32)
+    tb = st.build_text_bank(base, enc, tokens, RC, n_windows=4, window=32, prefix_lengths=(8, 16))
+    assert len(tb) == 8 and all(t.prefix.capoff_logits is not None and t.prefix.target == -1 for t in tb)
+    rows = _rows(6)
+    st.tokenize_pair, orig = (lambda tok, p, a: type("P", (), {"prompt_ids": np.asarray(tok.encode(p), np.int32), "answer_ids": np.asarray([5, 6], np.int32)})()), st.tokenize_pair
+    try:
+        bank = build_bank(base, enc, rows, RC, tok=_Tok())
+    finally:
+        st.tokenize_pair = orig
+    ep = st.add_text_nulls(stream_episode(bank, np.random.default_rng(1), n_memory=4, n_query_records=2, n_out=1), tb, np.random.default_rng(2), n_text=3)
+    assert sum(1 for q in ep.queries if q.query_id.startswith("text:")) == 3 and all(q.target_record == -1 for q in ep.queries if q.query_id.startswith("text:"))
