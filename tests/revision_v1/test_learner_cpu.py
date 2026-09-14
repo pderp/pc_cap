@@ -137,7 +137,7 @@ def test_delta_steps_acquire_and_round_trip():
     tr, cost = adapt_record(cap, s0, cap.cfg.fast)
     assert tr.accepted and tr.loss_after < tr.loss_before and cost.reverses >= len(s0.answer_ids)
     rec = cap.store.get("s0")
-    assert rec.delta is not None and rec.delta.shape == (3, CFG.d) and cap.store.bytes()["deltas"] == 3 * CFG.d * 4
+    assert rec.delta is not None and rec.delta.shape == (len(s0.answer_ids), 3, CFG.d) and cap.store.bytes()["deltas"] == len(s0.answer_ids) * 3 * CFG.d * 4
     cap.reset_queries()
     prompt = np.asarray(s0.prompt_ids, np.int32)
     sel = cap.selection_for(prompt)
@@ -145,11 +145,11 @@ def test_delta_steps_acquire_and_round_trip():
     logits_with = cap.predict(prompt).logits
     # with delta_replaces_controller the write is the bounded delta alone
     from pccap.revision_v1.controller import aggregate
-    assert aggregate(rec.delta, CC) <= CC.A + 1e-5
+    assert all(aggregate(rec.delta[t], CC) <= CC.A + 1e-5 for t in range(rec.delta.shape[0]))
     cap.store.set_delta("s0", None)
     cap.reset_queries()
     assert not np.allclose(cap.predict(prompt).logits, logits_with)  # the delta changes the read
-    cap.store.set_delta("s0", rec.delta if rec.delta is not None else np.zeros((3, CFG.d), np.float32))
+    cap.store.set_delta("s0", np.zeros((len(s0.answer_ids), 3, CFG.d), np.float32))
     back = RevisionCap(base, cfg, Ledger(), params=cap.params)
     back.import_state(cap.export_state())
     assert back.state_hash() == cap.state_hash() and back.store.get("s0").delta is not None

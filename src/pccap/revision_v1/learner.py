@@ -125,8 +125,13 @@ class RevisionCap:
         if not hard:
             wsum = max(float(w.sum()), 1e-12)
             code = np.asarray(sum(float(w[i]) * recs[i].code for i in range(len(recs))) / wsum, np.float32)
-            if any(r.delta is not None for r in recs):
-                delta = np.asarray(sum(float(w[i]) * recs[i].delta for i in range(len(recs)) if recs[i].delta is not None) / wsum, np.float32)
+            with_d = [(float(w[i]), recs[i].delta) for i in range(len(recs)) if recs[i].delta is not None]
+            if with_d:
+                T = max(dl.shape[0] for _, dl in with_d)
+                delta = np.zeros((T,) + with_d[0][1].shape[1:], np.float32)
+                for wi, dl in with_d:
+                    delta[: dl.shape[0]] += np.float32(wi) * dl
+                delta /= np.float32(wsum)
         return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, keep, delta)
 
     def selection_for(self, ids: np.ndarray) -> Selection:
@@ -158,10 +163,13 @@ class RevisionCap:
             return ForwardResult(logits=np.asarray(fr.logits), sites={}, cost=cost)
         obs = observation_from_pass(fr, ids, prompt_mask(min(sel.prompt_len, len(ids)), len(ids)), self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
-        if sel.delta is None:
+        t = len(ids) - sel.prompt_len  # answer position of this read (0 = the prompt's last position)
+        if sel.delta is None or t >= sel.delta.shape[0]:
+            if sel.delta is not None and self.cfg.controller.delta_replaces_controller:
+                return ForwardResult(logits=np.asarray(fr.logits), sites={}, cost=cost)  # beyond the taught answer: no write
             W = np.array(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(1.0 - sel.null_mass)), np.float32)
         else:
-            W = np.array(self.jit_writes_with_delta(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(sel.delta), jnp.asarray(1.0 - sel.null_mass)), np.float32)
+            W = np.array(self.jit_writes_with_delta(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(sel.delta[t]), jnp.asarray(1.0 - sel.null_mass)), np.float32)
         p = len(ids) - 1
         if self.cfg.single_site:
             W[0] = 0.0

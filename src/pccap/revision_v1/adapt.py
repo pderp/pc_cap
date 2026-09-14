@@ -159,61 +159,59 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
 
 
 def _delta_steps(learner, rec, prefixes, q_emb, answer, code, loss0, fast, cost, trace):
-    """v0-style acquisition on the record's explicit delta write: at every step, evaluate the base adjoint at the bounded
-    total write (controller + delta) for each support prefix, step the delta along the normalized site gradient (size
-    delta_lr·b_m per site), then project the total write back onto the aggregate bound. Accept if the support loss fell."""
-    base, params, cc = learner.base, learner.params, learner.cfg.controller
+    """v0-style acquisition on the record's explicit per-prefix delta writes: one [n_banks, d] write per answer position
+    (as v0 keeps one slot per prefix), each taught by normalized adjoint steps of size delta_lr·b_m per site under the
+    aggregate bound, stopping at tau per prefix. Accepted if the mean support loss fell; a non-finite step removes the record."""
+    base, cc = learner.base, learner.cfg.controller
     b = np.asarray(cc.bank_scales, np.float32)
     n_banks, d = cc.n_banks, cc.d
-    delta = np.zeros((n_banks, d), np.float32)
-
-    def total_write(q, dl):
-        W = np.asarray(learner.jit_writes_with_delta(params["controller"], q, jnp.asarray(code), jnp.asarray(dl), jnp.asarray(1.0)), np.float32)
-        return W
+    deltas = np.zeros((len(prefixes), n_banks, d), np.float32)
+    per_after, steps_total = [], 0
 
     def write_list(W, p):
         return [Write(SiteId(m, learner.blocks[m], p), np.asarray(W[m - 1], np.float32)) for m in range(1, n_banks + 1)]
 
-    def losses_only(dl):
-        per = []
-        for ids, q, y in zip(prefixes, q_emb, answer):
-            loss, fr = base.loss(ids, int(y), write_list(total_write(q, dl), len(ids) - 1), phase="learning")
-            cost.add(fr.cost)
-            per.append(float(loss))
-        return float(np.mean(per)), per
+    def bounded(dl):
+        agg = float(np.sum(np.linalg.norm(dl, axis=1) / b))
+        return dl * np.float32(cc.A / agg) if agg > cc.A else dl
 
-    L = loss0
-    for step in range(fast.delta_steps):
-        g_sum = np.zeros_like(delta)
-        for ids, q, y in zip(prefixes, q_emb, answer):
-            grads = base.adjoint(ids, int(y), write_list(total_write(q, delta), len(ids) - 1), phase="learning")
+    for t, (ids, y) in enumerate(zip(prefixes, answer)):
+        p = len(ids) - 1
+        loss, fr = base.loss(ids, int(y), [], phase="learning")
+        cost.add(fr.cost)
+        L = float(loss)
+        for _ in range(fast.delta_steps):
+            if L <= fast.tau:
+                break
+            grads = base.adjoint(ids, int(y), write_list(deltas[t], p), phase="learning")
             cost.reverses += 1
             cost.full_forwards += 1
             for m in range(1, n_banks + 1):
-                g_sum[m - 1] += np.asarray(grads[SiteId(m, learner.blocks[m], len(ids) - 1)], np.float32)
-        for m in range(n_banks):
-            n = float(np.linalg.norm(g_sum[m]))
-            if n > 0:
-                delta[m] -= np.float32(fast.delta_lr * b[m]) * g_sum[m] / np.float32(n)
-        # keep the delta itself inside the aggregate bound (the read applies the bound to the total write again)
-        agg = float(np.sum(np.linalg.norm(delta, axis=1) / b))
-        if agg > cc.A:
-            delta *= np.float32(cc.A / agg)
-        if not np.all(np.isfinite(delta)):
-            trace.rolled_back_reason = "non_finite_delta"
+                g = np.asarray(grads[SiteId(m, learner.blocks[m], p)], np.float32)
+                n = float(np.linalg.norm(g))
+                if n > 0:
+                    deltas[t, m - 1] -= np.float32(fast.delta_lr * b[m - 1]) * g / np.float32(n)
+            deltas[t] = bounded(deltas[t])
+            if not np.all(np.isfinite(deltas[t])):
+                trace.rolled_back_reason = "non_finite_delta"
+                break
+            loss, fr = base.loss(ids, int(y), write_list(deltas[t], p), phase="learning")
+            cost.add(fr.cost)
+            L = float(loss)
+            steps_total += 1
+            if not np.isfinite(L):
+                trace.rolled_back_reason = "non_finite_loss"
+                break
+        per_after.append(L)
+        if trace.rolled_back_reason is not None:
             break
-        L, per = losses_only(delta)
-        trace.per_step_loss.append(L)
-        trace.steps_used = step + 1
-        if not np.isfinite(L):
-            trace.rolled_back_reason = "non_finite_loss"
-            break
-        if L <= fast.tau:
-            break
-    if trace.rolled_back_reason is None and L < loss0 - fast.improvement_abs:
-        learner.store.set_delta(rec.record_id, delta)
+    trace.steps_used = steps_total
+    L_mean = float(np.mean(per_after)) if per_after else float("nan")
+    trace.per_step_loss.append(L_mean)
+    if trace.rolled_back_reason is None and L_mean < loss0 - fast.improvement_abs:
+        learner.store.set_delta(rec.record_id, deltas)
         trace.accepted = True
-        trace.loss_after, trace.per_prefix_loss_after = L, per
+        trace.loss_after, trace.per_prefix_loss_after = L_mean, per_after
     elif trace.rolled_back_reason is not None:
         learner.store.remove(rec.record_id, restore=trace.superseded)
         trace.loss_after, trace.per_prefix_loss_after = loss0, [float("nan")] * len(prefixes)

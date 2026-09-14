@@ -103,8 +103,8 @@ class RecordStore:
             rec.delta = None
             return
         delta = np.ascontiguousarray(delta, np.float32)
-        if delta.ndim != 2 or not np.all(np.isfinite(delta)):
-            raise ValueError("delta must be a finite [n_banks, d] array")
+        if delta.ndim != 3 or not np.all(np.isfinite(delta)):
+            raise ValueError("delta must be a finite [n_prefixes, n_banks, d] array")
         old = 0 if rec.delta is None else int(rec.delta.size) * 4
         if delta_bytes_budget and self.bytes()["total"] - old + int(delta.size) * 4 > self.ceiling_bytes:
             raise CapacityError("delta write would exceed the ceiling")
