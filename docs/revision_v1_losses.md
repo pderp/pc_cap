@@ -11,6 +11,11 @@ denominator, and which leaves are trainable or stopped. Anything not in this tab
 | L3 | preservation KL | every answer prefix of queries with role `near_miss` or `unrelated` | the cap-off logits of the same prefix (the write-free observation pass; identical to what a hard null returns) | per-prefix mean | reader (through selection mass and query), controller | base; cap-off logits |
 | L4 | code-norm penalty (optional, default 0) | all records | — | per-record mean | code head | — |
 
+Objective: the optimized quantity is the SUM over an episode's prefixes of the per-prefix terms (L1, L3) plus L2; the logged
+`answer`/`preserve` values are per-prefix means (R23-01). Record codes derive from the prompt + answer observation with the
+answer span as the summary mask (R23-02); keys from the prompt observation. The ePC trainer is an ePC-credit surrogate for
+the cap weights; the base stays frozen (R23-03).
+
 Rules:
 - Teacher imitation never scores a revised answer: L3 is applied only to roles whose correct behaviour is "unchanged"; a
   revised fact's queries are in L1 with the new answer as the target (asserted in `train.py`).

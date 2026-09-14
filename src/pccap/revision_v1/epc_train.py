@@ -140,6 +140,8 @@ class EPCTrainer:
     weight_decay: float = 0.0
 
     def __post_init__(self):
+        if self.lc.w_code_norm:
+            raise NotImplementedError("the code-norm penalty is not implemented in the ePC surrogate; set w_code_norm = 0 in both trainers (R23-09)")
         self.opt = optax.chain(optax.clip_by_global_norm(self.clip), optax.adamw(self.lr, weight_decay=self.weight_decay))
 
     def init(self, theta):

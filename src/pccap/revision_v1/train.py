@@ -19,7 +19,7 @@ import optax
 from pccap.bases import gpt2_jax as g
 from pccap.revision_v1.contracts import LabeledEpisode, RevisionCost
 from pccap.revision_v1.controller import ControllerConfig, writes
-from pccap.revision_v1.observations import observation_from_pass, prompt_mask
+from pccap.revision_v1.observations import answer_mask, observation_from_pass, prompt_mask
 from pccap.revision_v1.reader import (
     ReaderConfig,
     initial_code,
@@ -39,7 +39,11 @@ class LossConfig:
     w_retrieval: float = 1.0
     w_preserve: float = 1.0
     w_code_norm: float = 0.0
-    fast_steps: int = 0  # 0 = reference (initial codes only); >0 = first-order surrogate with constant deltas
+    fast_steps: int = 0  # 0 = reference (initial codes from prompt+answer); >0 is NOT implemented in the outer loop (rejected at construction)
+
+    def __post_init__(self):
+        if self.fast_steps != 0:
+            raise NotImplementedError("fast steps inside the outer loop are not implemented; run with fast_steps = 0 (R23-02)")
 
 
 @dataclass
@@ -56,8 +60,10 @@ class PrefixFeat:
 class SupportFeat:
     record_id: str
     fact_id: str
-    last: np.ndarray
+    last: np.ndarray  # prompt observation (key)
     span: np.ndarray
+    code_last: np.ndarray | None = None  # prompt+answer observation with the answer span (code; R23-02)
+    code_span: np.ndarray | None = None
     fast_delta: np.ndarray | None = None
 
 
@@ -97,8 +103,10 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig) -> EpisodeFe
     for s in supports_in:
         ids = np.asarray(s.prompt_ids, np.int32)
         last, span, _ = observe(ids)
+        full = np.concatenate([ids, np.asarray(s.answer_ids, np.int32)])
+        c_last, c_span, _ = observe(full, answer_mask(len(ids), len(full)))
         index[s.record_id] = len(supports)
-        supports.append(SupportFeat(record_id=s.record_id, fact_id=s.fact_id, last=last, span=span))
+        supports.append(SupportFeat(record_id=s.record_id, fact_id=s.fact_id, last=last, span=span, code_last=c_last, code_span=c_span))
     labels = {lab.query_id: lab for lab in episode.query_labels}
     queries, skipped = [], {}
     for q in episode.inputs.queries:
@@ -130,8 +138,8 @@ def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig) -> EpisodeFe
 # ---------------------------------------------------------------------------------------------- pure-JAX losses
 def _records(theta, rc: ReaderConfig, feats: EpisodeFeatures):
     keys = jnp.stack([record_key(theta["reader"], rc, jnp.asarray(s.last), jnp.asarray(s.span)) for s in feats.supports])
-    codes = jnp.stack([initial_code(theta["reader"], rc, jnp.asarray(s.last), jnp.asarray(s.span)) + (0.0 if s.fast_delta is None else jax.lax.stop_gradient(jnp.asarray(s.fast_delta)))
-                       for s in feats.supports])
+    codes = jnp.stack([initial_code(theta["reader"], rc, jnp.asarray(s.code_last if s.code_last is not None else s.last), jnp.asarray(s.code_span if s.code_span is not None else s.span))
+                       + (0.0 if s.fast_delta is None else jax.lax.stop_gradient(jnp.asarray(s.fast_delta))) for s in feats.supports])
     return keys, codes
 
 

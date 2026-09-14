@@ -17,7 +17,7 @@ import numpy as np
 
 from pccap.contracts import SiteId, Write
 from pccap.revision_v1.contracts import MemoryRecord, RevisionCost, SupportExample, support_prefix
-from pccap.revision_v1.observations import observation_from_pass, prompt_mask
+from pccap.revision_v1.observations import answer_mask, observation_from_pass, prompt_mask
 from pccap.revision_v1.reader import initial_code, obs_arrays, record_key
 
 
@@ -52,14 +52,20 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
     answer = np.asarray(support.answer_ids, np.int32)
     if prompt.size == 0 or answer.size == 0:
         raise ValueError("support needs a prompt and an answer")
-    # record key and initial code from the support prompt observation
+    # record key from the support PROMPT observation; initial code from the full support (prompt + answer) observation with the
+    # answer span as the summary mask, so the taught answer enters memory even with zero fast steps (R23-02)
     fr0 = base.forward(prompt, (), retain_sites=True, phase="learning", last_only=True)
     cost.add(fr0.cost)
     cost.extra_pass_forwards += 1
     obs0 = observation_from_pass(fr0, prompt, None, learner.enc.base_hash, learner.enc.encoder_version, rc.taps)
     last0, span0 = obs_arrays(obs0, rc)
     key = np.asarray(record_key(params["reader"], rc, last0, span0), np.float32)
-    code0 = np.asarray(initial_code(params["reader"], rc, last0, span0), np.float32)
+    full = np.concatenate([prompt, answer])
+    fr_full = base.forward(full, (), retain_sites=True, phase="learning", last_only=True)
+    cost.add(fr_full.cost)
+    cost.extra_pass_forwards += 1
+    obs_full = observation_from_pass(fr_full, full, answer_mask(len(prompt), len(full)), learner.enc.base_hash, learner.enc.encoder_version, rc.taps)
+    code0 = np.asarray(initial_code(params["reader"], rc, *obs_arrays(obs_full, rc)), np.float32)
     rec = MemoryRecord(record_id=support.record_id, fact_id=support.fact_id, revision_id=int(support.revision), created_order=-1,
                        key=key, code=code0.copy(), provenance=(support.record_id,), source_ids=prompt.copy())
     older = [r for r in learner.store.active_records() if r.fact_id == support.fact_id]
@@ -135,7 +141,13 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
         learner.store.set_code(rec.record_id, code)
         trace.accepted = True
         trace.loss_after, trace.per_prefix_loss_after = loss_after, per_after
+    elif trace.rolled_back_reason == "non_finite_code" or not np.isfinite(loss_after):
+        # R23-04: a non-finite update is a failed edit — remove the record and restore the superseded one
+        learner.store.remove(rec.record_id, restore=superseded)
+        trace.rolled_back_reason = trace.rolled_back_reason or "non_finite_loss"
+        trace.loss_after, trace.per_prefix_loss_after = loss0, [float("nan")] * len(prefixes)
     else:
-        trace.rolled_back_reason = trace.rolled_back_reason or "no_improvement"
+        # no improvement from the fast steps: the record stays with its initial (answer-derived) code; the supersession stands
+        trace.rolled_back_reason = "no_improvement"
         trace.loss_after, trace.per_prefix_loss_after = loss0, [float("nan")] * len(prefixes)
     return trace, cost

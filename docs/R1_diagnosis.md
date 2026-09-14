@@ -23,12 +23,15 @@ over the complete answer (exact = every position's argmax matches; the first-tok
 | live | the arm's sequential edited read (v0 as deployed) | 0.92 / 0.24 | 0.79 / 0.29 |
 | oracle | the item's own slot per answer prefix, verified against the current bank (owner digest, active, presented token); unverified or missing entries force none | 0.93 / 0.94 | 0.92 / 0.94 |
 | stable | cap-off (unedited-pass) query keys against the stored keys | 0.35 / 0.11 | 0.62 / 0.29 |
-| stable_rebuilt | cap-off query keys against keys re-derived from cap-off passes on every slot's write prefix (shadow keys; cap untouched) | 1.00 / 0.67 | 0.98 / 0.49 |
+| stable_rebuilt | cap-off query keys against keys re-derived from cap-off passes on every slot's write prefix (shadow keys; cap untouched; C1 near-complete: five site-2 slots keep stored keys, X1-02) | 1.00 / 0.67 | 0.98 / 0.49 |
 
-Teacher-forced NLL per answer moves the same way (C1 paraphrase: live 7.64, stable_rebuilt 4.37, oracle 0.48). Oracle
+Teacher-forced NLL per answer moves the same way for C1 (paraphrase: live 7.64, stable_rebuilt 4.37, oracle 0.48) but not
+for C2 (8.12 → 8.33 under stable_rebuilt while exactness improves; X1-06). Exactness here is teacher-forced argmax
+exactness, equivalent to greedy exact canonical decoding; `tf_nll_token_mean` averages per-answer token means (X1-03). Oracle
 verification: C1 1094 claimed bank×prefix entries, 1080 verified, 14 reused or inactive (excluded), 112 missing (27 items had
 answer prefixes with no accepted write); C2 374 claimed, all verified, 832 missing because C2 left banks 1 and 2 nearly
-empty (occupancy 6 / 4 / 364). Unrelated prompts never fire at any site in either arm (200 prompts).
+empty (occupancy 6 / 4 / 364). Unrelated prompts never fire at any site in either arm under the LIVE policy (200 prompts); the stable and shadow
+policies were not run on unrelated prompts in this pass (X1-05).
 
 Key geometry: C1's stored keys at site 3 sit a mean 0.23 (max 1.33) from their cap-off counterparts against a read radius
 of 0.189, and at site 2 a mean 0.22 against 0.414; C2's keys barely move (0.026 at site 3) because it rarely writes
@@ -42,15 +45,17 @@ pass costs about as much as a live read at every position; the key rebuild is 0.
 
 ## 3. Diagnosis
 
-1. **Storage is not the bottleneck.** With the right record forced, both arms answer 94 % of paraphrases exactly. The
-   values written by v0 carry the answer for formulations they never saw.
+1. **Storage is adequate for most tested paraphrases when the surviving entries are supplied** (X1-04 wording). With the
+   right record forced, both arms answer 94 % of paraphrases exactly on this short, low-pressure stream; the values
+   written by v0 carry the answer for formulations they never saw. This does not exonerate storage under eviction
+   pressure, revisions or composition.
 2. **The first failure is observational.** v0 computes keys at write time and queries at read time from a sequential
    edited pass, so what site 3 sees depends on what sites 1 and 2 just wrote for the same prefix. That moves keys and
    queries by more than the site-3 read radius (C1) or moves the query away from a nearly stable key (C2). Reading with
    unedited-pass queries against unedited-pass keys, with no learned component and no retraining, raises paraphrase exact
    answers from 0.24 to 0.67 (C1) and 0.29 to 0.49 (C2), and restores own-prompt recall to 1.00 / 0.98.
 3. **The second failure is selection.** With stable observations in place, the fixed geometry (nearest key inside a
-   radius, one record per site) still picks another item's record on 22–27 % of paraphrases and nothing on 7–21 %. Sites 1
+   radius, one record per site) still picks another item's record on 22–28 % of paraphrases and nothing on 7–21 %. Sites 1
    and 2 fire other items' records on most paraphrases in C1; the answer survives only when site 3 fires the right one.
    That residual (0.67 → 0.94, 0.49 → 0.94) is the applicability decision the learned reader with an explicit null is
    meant to make.
@@ -85,8 +90,8 @@ the locus is observation instability first, record selection second; storage is 
 
 ## 6. Caveats
 
-One stream, one seed and order, 100 zsRE development edits, banks far from eviction pressure (C1 362 of 6144 bytes-ceiling
-slots per bank); the oracle is an upper bound with unavailable deployment information; the stable_rebuilt policy uses a
+One stream, one seed and order, 100 zsRE development edits, banks far from eviction pressure (C1 occupancy 362 of 2,048
+slots per bank, 6,144 in total; X1-07); the C1 key rebuild comprised 1,080 keys from 367 unique prefix passes (C2: 374 from 365); the oracle is an upper bound with unavailable deployment information; the stable_rebuilt policy uses a
 shadow key matrix and was never written into the cap (state hash asserted unchanged); the v2 zsRE calibration radii were
 not re-tuned for cap-off keys, so the stable_rebuilt numbers understate what a re-calibrated fixed geometry could do — a
 question for the v0-stable control, not for this memo.
@@ -115,3 +120,9 @@ with a different endpoint state (rounds per prefix 4.56 vs 4.31; all prefixes re
 for this control (it writes at every site without a router), so it is one condition. Together with §7 this fixes the
 non-learned baseline the learned reader must beat: 0.44 on this stream, and it shows the value-update rule (search vs
 gradient steps) is not what limits v0 — the key geometry is.
+
+## 10. Addendum (late evening): counter-review R1-X1 applied
+
+Codex's recount (`logs/review_r1_diagnosis.md`) reproduces every aggregate, both state hashes and the cost reconciliation.
+Its eight findings are adopted (`docs/tasks/R1-X1-response.md`); the wording changes above (§2, §3.1, §3.5, §6) are the
+result. The in-stream 0.44 is the development comparator; 0.67 / 0.49 describe the post-hoc shadow assay.

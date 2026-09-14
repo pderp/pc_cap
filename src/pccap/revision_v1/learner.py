@@ -85,7 +85,7 @@ class RevisionCap:
         self.params = params
         self.params_hash = params_hash(params)
         self.n_params = param_count(params)
-        self.store = RecordStore(dk=cfg.reader.width, d_code=cfg.reader.d_code, ceiling_bytes=cfg.ceiling_bytes, encoder_version=ENCODER_VERSION)
+        self.store = RecordStore(dk=cfg.reader.width, d_code=cfg.reader.d_code, ceiling_bytes=cfg.ceiling_bytes, encoder_version=ENCODER_VERSION, weights_bytes=4 * self.n_params)
         self._sel: dict[bytes, Selection] = {}
         self.cost_counters = {"selection_passes": 0, "cached_prompt_reads": 0, "corrected_partial_passes": 0}
         rc, cc = cfg.reader, cfg.controller
@@ -189,12 +189,19 @@ class RevisionCap:
         st = self.store.export()
         st.scalars["params_hash"] = self.params_hash
         st.scalars["n_params"] = self.n_params
-        st.scalars["config"] = json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)}, "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold}, default=str, sort_keys=True)
+        st.scalars["config"] = self.semantic_config()
         return st
+
+    def semantic_config(self) -> str:
+        return json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)},
+                           "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold, "single_site": self.cfg.single_site,
+                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
 
     def import_state(self, st: LearnerState) -> None:
         if st.scalars.get("params_hash") != self.params_hash:
             raise RuntimeError("snapshot was produced with different reusable weights")
+        if st.scalars.get("config") != self.semantic_config():
+            raise RuntimeError("snapshot was produced under a different semantic configuration (R23-06)")
         self.store = RecordStore.from_state(st)
         self.reset_queries()
 

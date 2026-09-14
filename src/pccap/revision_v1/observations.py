@@ -65,6 +65,15 @@ class ObservationEncoder:
         return out, total
 
 
+def answer_mask(prompt_len: int, total_len: int) -> np.ndarray:
+    """Span mask covering the answer tokens of a prompt+answer sequence."""
+    if not 0 <= prompt_len < total_len:
+        raise ValueError((prompt_len, total_len))
+    m = np.zeros(total_len, bool)
+    m[prompt_len:] = True
+    return m
+
+
 def prompt_mask(prompt_len: int, total_len: int) -> np.ndarray:
     """Span mask covering the prompt tokens of a prompt+answer-prefix sequence."""
     if not 0 < prompt_len <= total_len:

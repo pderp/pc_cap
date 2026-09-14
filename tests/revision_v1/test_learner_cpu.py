@@ -89,15 +89,41 @@ def test_cost_variants_match_the_reference_read():
     n_before = base.calls["forward"]
     ref_logits = ref.predict(prompt).logits
     assert base.calls["forward"] - n_before == 2  # selection pass + observation pass
-    cached = RevisionCap(base, _cfg(null_threshold=1.01, cache_prompt_pass=True), Ledger(), params=ref.params)
+    other = RevisionCap(base, _cfg(null_threshold=1.01, cache_prompt_pass=True), Ledger(), params=ref.params)
+    with pytest.raises(RuntimeError):
+        other.import_state(ref.export_state())  # R23-06: a snapshot carries its semantic configuration
+    cached = RevisionCap(base, _cfg(null_threshold=1.01, cache_prompt_pass=False), Ledger(), params=ref.params)
     cached.import_state(ref.export_state())
+    cached.cfg.cache_prompt_pass = True  # the variant is switched after import (same stored state)
     n_before = base.calls["forward"]
     assert np.allclose(cached.predict(prompt).logits, ref_logits, atol=1e-5)
     assert base.calls["forward"] - n_before == 1 and cached.cost_counters["cached_prompt_reads"] == 1
-    single = RevisionCap(base, _cfg(null_threshold=1.01, single_site=True), Ledger(), params=ref.params)
+    single = RevisionCap(base, _cfg(null_threshold=1.01, cache_prompt_pass=False), Ledger(), params=ref.params)
     single.import_state(ref.export_state())
+    single.cfg.single_site = True
     out = single.predict(prompt).logits
     assert out.shape == ref_logits.shape and np.all(np.isfinite(out))
     # single-site read with the same writes at site 3 only equals a reference read whose site-1/2 writes are zero
     sel = single.selection_for(prompt)
     assert sel.record_ids and not sel.hard_null
+
+
+def test_answer_enters_the_code_and_nonfinite_rolls_back_fully():
+    base = TinyBase()
+    cap = RevisionCap(base, _cfg(), Ledger())
+    s0 = _support(0)
+    adapt_record(cap, s0, cap.cfg.fast)
+    code_a = cap.store.get("s0").code.copy()
+    key_a = cap.store.get("s0").key.copy()
+    cap2 = RevisionCap(base, _cfg(), Ledger(), params=cap.params)
+    swapped = SupportExample(**{**s0.__dict__, "answer_ids": tuple(int(x) for x in np.random.default_rng(9).integers(1, 60, size=3))})
+    adapt_record(cap2, swapped, cap2.cfg.fast)
+    assert np.array_equal(cap2.store.get("s0").key, key_a)  # the key depends on the prompt only
+    assert not np.array_equal(cap2.store.get("s0").code, code_a)  # the code depends on the taught answer (R23-02)
+    # non-finite fast step → the new record is removed and the superseded record restored (R23-04)
+    cap3 = RevisionCap(base, RevisionConfig(reader=RC, controller=CC, fast=FastConfig(steps=0)), Ledger(), params=cap.params)
+    adapt_record(cap3, s0, cap3.cfg.fast)
+    n_before = len(cap3.store.records)
+    tr, _ = adapt_record(cap3, SupportExample(**{**s0.__dict__, "record_id": "s0r2", "revision": 2}), FastConfig(steps=1, lr=float("inf")))
+    assert tr.rolled_back_reason in ("non_finite_code", "non_finite_loss") and len(cap3.store.records) == n_before
+    assert cap3.store.get("s0").active is True and cap3.store.get("s0").superseded_by is None

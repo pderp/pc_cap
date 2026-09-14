@@ -38,6 +38,7 @@ class RecordStore:
     ceiling_bytes: int = DEFAULT_CEILING
     encoder_version: int = 1
     index_version: int = 0
+    weights_bytes: int = 0  # R23-07: reusable weights count against the same persistent-state ceiling
     records: list[MemoryRecord] = field(default_factory=list)
     _by_id: dict[str, int] = field(default_factory=dict, repr=False)
 
@@ -45,7 +46,7 @@ class RecordStore:
     def bytes(self) -> dict[str, int]:
         n = len(self.records)
         toks = sum(r.source_tokens for r in self.records)
-        b = {"keys": n * self.dk * 4, "codes": n * self.d_code * 4, "metadata": n * META_BYTES_PER_RECORD, "tokens": toks * TOKEN_BYTES, "index": 0}
+        b = {"keys": n * self.dk * 4, "codes": n * self.d_code * 4, "metadata": n * META_BYTES_PER_RECORD, "tokens": toks * TOKEN_BYTES, "index": 0, "weights": int(self.weights_bytes)}
         b["total"] = sum(b.values())
         return b
 
@@ -81,6 +82,17 @@ class RecordStore:
         old.superseded_by = added.record_id
         return added
 
+    def remove(self, record_id: str, restore: str | None = None) -> None:
+        """Undo a failed insertion (R23-04): drop the record (it must be the newest) and reactivate ``restore`` if given."""
+        rec = self.get(record_id)
+        if rec is not self.records[-1]:
+            raise ValueError("only the newest record can be removed")
+        self.records.pop()
+        del self._by_id[record_id]
+        if restore is not None:
+            old = self.get(restore)
+            old.active, old.superseded_by = True, None
+
     def set_code(self, record_id: str, code: np.ndarray) -> None:
         """The only in-place change ``adapt`` may make to an existing record."""
         rec = self.get(record_id)
@@ -101,8 +113,11 @@ class RecordStore:
     def active_records(self) -> list[MemoryRecord]:
         return [r for r in self.records if r.active]
 
+    metric: str = "dot"  # R23-10: the same score the reader trains with (q·k); "l2" kept for tests/diagnostics
+
     def retrieve(self, query_key: np.ndarray, k: int, query_version: int | None = None) -> list[RetrievalCandidate]:
-        """Deterministic top-k by L2 distance over active records (ties: created order, then id). Read-only."""
+        """Deterministic top-k over active records by the declared metric (dot product descending, the reader's training
+        score; ties: created order, then id). ``distance`` reports the negative score for dot. Read-only."""
         if query_version is not None and query_version != self.encoder_version:
             raise KeyVersionMismatch(f"query encoder version {query_version} != store keys version {self.encoder_version}; rebuild_keys first")
         act = self.active_records()
@@ -110,7 +125,10 @@ class RecordStore:
             return []
         q = np.asarray(query_key, np.float32).reshape(self.dk)
         K = np.stack([r.key for r in act])
-        d = np.sqrt(np.sum((K - q[None, :]) ** 2, axis=1, dtype=np.float32))
+        if self.metric == "dot":
+            d = -(K @ q).astype(np.float32)
+        else:
+            d = np.sqrt(np.sum((K - q[None, :]) ** 2, axis=1, dtype=np.float32))
         order = sorted(range(len(act)), key=lambda i: (float(d[i]), act[i].created_order, act[i].record_id))[:k]
         return [RetrievalCandidate(record_id=act[i].record_id, distance=float(d[i]), rank=r) for r, i in enumerate(order)]
 
@@ -140,14 +158,14 @@ class RecordStore:
             if r.source_ids is not None:
                 arrays[f"src/{r.record_id}"] = np.asarray(r.source_ids, np.int32)
         scalars = {"dk": self.dk, "d_code": self.d_code, "ceiling_bytes": self.ceiling_bytes, "encoder_version": self.encoder_version,
-                   "index_version": self.index_version,
+                   "index_version": self.index_version, "metric": self.metric,
                    "records": json.dumps([{"record_id": r.record_id, "fact_id": r.fact_id, "provenance": list(r.provenance), "superseded_by": r.superseded_by} for r in self.records])}
         return LearnerState(arrays=arrays, scalars=scalars)
 
     @classmethod
     def from_state(cls, st: LearnerState) -> "RecordStore":
         sc = st.scalars
-        store = cls(dk=int(sc["dk"]), d_code=int(sc["d_code"]), ceiling_bytes=int(sc["ceiling_bytes"]), encoder_version=int(sc["encoder_version"]), index_version=int(sc["index_version"]))
+        store = cls(dk=int(sc["dk"]), d_code=int(sc["d_code"]), ceiling_bytes=int(sc["ceiling_bytes"]), encoder_version=int(sc["encoder_version"]), index_version=int(sc["index_version"]), metric=str(sc.get("metric", "l2")))
         meta = json.loads(sc["records"])
         for i, mrec in enumerate(meta):
             src = st.arrays.get(f"src/{mrec['record_id']}")
