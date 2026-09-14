@@ -53,7 +53,7 @@ The lead wants the learned reader to work before other issues. The recovery plan
 ("Learned-reader recovery plan"). Lanes below are non-blocking and non-blocked; they feed that plan directly. Round 5 is
 committed (`5ee8b56`); X4-10 is repaired and the reference regenerated (`08c6321`).
 
-### Lane R1-D3 — zsRE training pool candidate list (M3; DEC-039 default: yes)
+### Lane R1-D3 — zsRE training pool candidate list (M3; DEC-039 default: yes) — NOW THE CRITICAL PATH (12:30 EDT): the reader works on CounterFact (RET-GS 0.93 / LS 1.00) and on zsRE with a gate (0.97 / 1.00); one locality rule for both needs this pool; `scripts/r1_d3_e2_filter.py` consumes your list
 
 From `manifests/revision_v1/zsre_fresh_candidates_v1.json` (58,498 clear), emit `manifests/revision_v1/train_pool_zsre_candidates_v1.json`:
 6,000 candidates (seed 139; so that ≥ 3,000 survive the teacher filter) with prompt, rephrase, answer, aliases, locality

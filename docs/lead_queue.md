@@ -284,3 +284,12 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     Update (11:40 EDT): on zsRE the same trained reader with the cosine gate reaches ES 1.00 / RET-ES 1.00 / RET-GS 0.97 /
     LS 1.00. The similarity is solved on both datasets; only the locality decision differs per dataset (learned null on
     CounterFact, cosine gate on zsRE). One rule for both waits on the zsRE training pool (Codex R1-D3 → my teacher filter).
+
+14. (12:30 EDT) Learned-reader status after the recovery work: with stream-scale training and a lexical overlap feature
+    the reader's similarity is strong on both datasets — CounterFact RET-GS 0.78–0.93 (three seeds) with LS 0.92–1.00
+    under the learned null; zsRE RET-GS 0.95–0.97 with LS 0.96–1.00 under the cosine gate. What remains is one locality
+    rule for both datasets: the CounterFact-trained null over-rejects zsRE paraphrases or under-rejects zsRE unrelated
+    prompts, and the cosine gate fails on CounterFact near-neighbours. The fix on the table is the zsRE training pool
+    (DEC-039, default yes) so the null sees both domains; Codex's R1-D3 candidate list is the blocker, my teacher filter
+    is ready. Fallback: a per-dataset rule fixed on development streams before the freeze (stated in the protocol).
+    DEC-038 (drop the learned reader) is withdrawn.

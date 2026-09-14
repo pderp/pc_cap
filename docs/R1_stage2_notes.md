@@ -327,3 +327,9 @@ against a 0.00 floor. Dropping the query-only null term (pairwise + lexical term
 and removes the over-rejection of zsRE paraphrases (RET-GS 0.94) but then passes zsRE's unrelated prompts (LS 0.38): the
 zsRE locality population (unrelated facts, low overlap with any record, moderate cosine) is what the CounterFact-trained
 pairwise term does not reject. A null trained on both domains (M3) is the remaining step to one rule for both datasets.
+
+Query-style-free null on zsRE, threshold sweep: 0.15 → 0.86 / 0.64; 0.25 → 0.88 / 0.50; with the cosine gate (null off)
+0.95 / 1.00. State of play: similarity solved on both datasets (zsRE 0.95–0.97, CounterFact 0.93 with LS 1.00 under the
+right locality rule); the locality rule is dataset-specific until the null is trained on both domains (M3, waiting on the
+zsRE training pool, Codex R1-D3 → `scripts/r1_d3_e2_filter.py`). If M3 does not unify the rule, the fallback is a
+per-dataset rule fixed on development streams before the freeze (M5), stated as such in the protocol.
