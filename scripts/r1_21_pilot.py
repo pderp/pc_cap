@@ -48,6 +48,7 @@ def main() -> int:
     ap.add_argument("--eval-delta-steps", type=int, default=0, help="v0-style delta-write steps per support in the behavioural check")
     ap.add_argument("--eval-delta-lr", type=float, default=0.1)
     ap.add_argument("--no-pairwise-null", action="store_true", help="reader without the pairwise null head (weights trained before it existed)")
+    ap.add_argument("--locality-queries", action="store_true", help="natural episodes: add the new support row's locality prompts as null-target queries (role 'unrelated'; the streams' LS prompts are exactly these near-neighbours)")
     args = ap.parse_args()
     import sys
 
@@ -97,11 +98,28 @@ def main() -> int:
                 rows, _ = load_development(ROOT)
             tok = GPT2Tokenizer()
 
+            by_item = {r["item_id"]: r for r in rows}
+
+            def with_locality(ep):
+                if not args.locality_queries:
+                    return ep
+                from dataclasses import replace as _replace
+
+                from pccap.revision_v1.contracts import PredictionQuery, QueryLabel
+                qs, ls = list(ep.inputs.queries), list(ep.query_labels)
+                for sup in ep.inputs.new_support:
+                    row = by_item.get(sup.record_id.split(":")[0])
+                    for i, lp in enumerate((row or {}).get("locality_prompts", [])[:2]):
+                        qid = f"loc:{sup.record_id}:{i}"
+                        qs.append(PredictionQuery(query_id=qid, prompt_ids=tuple(int(x) for x in tok.encode(lp)), prompt=lp))
+                        ls.append(QueryLabel(query_id=qid, role="unrelated", entity_ids=(), family_id=sup.family_id, target_ids=(), target=None, target_source="teacher_prediction_required", supporting_record_ids=()))
+                return _replace(ep, inputs=_replace(ep.inputs, queries=tuple(qs)), query_labels=tuple(ls))
+
             def natural(seeds, split, want):
                 out, skipped = [], 0
                 for sd in seeds:
                     try:
-                        out.append(tokenize_natural_episode(natural_episode(rows, sd, split, history_size=args.history, dataset="counterfact"), tok))
+                        out.append(with_locality(tokenize_natural_episode(natural_episode(rows, sd, split, history_size=args.history, dataset="counterfact"), tok)))
                     except ValueError:
                         skipped += 1
                     if len(out) == want:
@@ -153,7 +171,7 @@ def main() -> int:
                         ep = None
                         while ep is None:
                             try:
-                                ep = tokenize_natural_episode(natural_episode(rows, fresh_seed, "train", history_size=args.history, dataset="counterfact"), tok)
+                                ep = with_locality(tokenize_natural_episode(natural_episode(rows, fresh_seed, "train", history_size=args.history, dataset="counterfact"), tok))
                             except ValueError:
                                 fresh_seed += 1
                     batch.append(featurize(base, enc, ep, rc))

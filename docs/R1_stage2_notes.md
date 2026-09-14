@@ -18,6 +18,7 @@ new) and answers its queries by greedy decoding. Weights under `/home/derp/cap/a
 | cf_pool3k_tiedcos_400 | BP, 3k pool, tied cosine reader (query-only null), fresh episodes, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.27 | 5.14 → 0.91 | 0.009 → 0.065 | 0.05 (top-1 hit 0.45) | 0.06 (top-1 0.53) | 1.00 | 1.00 | 0.02 / 0.98 / 0.98 | 74 min |
 | cf_pool3k_pairnull_400 | BP, 3k pool, tied cosine + pairwise null (no own-prompt role), fresh episodes, wd 0.01, best-dev @ 349 | fresh | 400 × 4 | 1e-3 | 8.03 → 3.29 | 5.32 → 0.98 | 0.009 → 0.14 | 0.03 (top-1 0.45) | 0.03 (top-1 0.53) | 0.97 | 0.94 | 0.001 / 0.96 / 0.93 | 74 min |
 | cf_pool3k_pair_own_400 | BP, 3k pool, tied cosine + pairwise null + own-prompt queries (all supports), fresh, wd 0.01, best-dev @ 399 | fresh | 400 × 4 | 1e-3 | 7.41 → 2.62 | 3.06 → 0.74 | 0.009 → 1.12 | 0.06 (top-1 0.53) | 0.28 (top-1 0.69) | 0.34 | 0.66 | 0.06 / 0.43 / 0.63 | 147 min (shared GPU) |
+| cf_pool3k_pair_own_bal_400 | as above + class-balanced L2, one own-prompt query, best-dev @ 299 | fresh | 400 × 4 | 1e-3 | 7.84 → 3.40 | 6.27 → 0.87 | 0.009 → 0.61 | 0.06 (top-1 0.42) | 0.06 (top-1 0.66) | 0.94 | 0.94 | 0.01 / 0.78 / 0.84 | 85 min |
 | epc_500_lr1e-3_sd24 | ePC-credit surrogate (8 iters), corrected energy | 128 | 500 × 4 | 1e-3 | 6.22 → 4.50 | 1.89 → 0.96 | 0.005 → 1.14 | 0.25 | 0.25 | 1.00 | 0.81 | 0.42 / 0.98 / 0.77 | 68 min |
 | epc_500_lr1e-3 (under SD-24 defect) | ePC surrogate (8 iters) | 128 | 500 × 4 | 1e-3 | 6.22 → 6.11 | 1.89 → 0.62 | 0.005 → 0.000 | 0.00 | 0.00 | 1.00 | 1.00 | 0.45 / 0.85 / 0.83 | 61 min |
 
@@ -210,3 +211,19 @@ CounterFact paraphrases (RET-GS 0.28 vs 0.18; old-fact top-1 0.69 vs 0.53) — b
 two null-target queries 4:1 and the null threshold cannot recover locality without losing acquisition. Fix in training:
 class-balanced L2 (null-target and record-target queries carry equal weight) and one own-prompt query per episode (the new
 support); run `cf_pool3k_pair_own_bal_400`.
+
+## Balanced reader on the streams (2026-09-14, 05:50 EDT): the trained null does not transfer to the streams
+
+| stream | ES | RET-ES | RET-GS | LS | null mass own / paraphrase / unrelated |
+| --- | ---: | ---: | ---: | ---: | --- |
+| zsRE | 0.93 | 0.97 | 0.44 | 0.10 | 0.14 / 0.20 / 0.02 |
+| CounterFact | 0.45 | 0.53 | 0.16 | 0.70 | 0.47 / 0.03 / 0.52 |
+
+Inside CounterFact training-style dev episodes the balanced null is right (near-miss 0.78, unrelated 0.84, own 0.01), but on
+the streams it is not: on zsRE it passes almost every unrelated prompt, on CounterFact it rejects half of the own prompts
+and half of the locality prompts. The episodes' "unrelated" queries are other facts' prompts, whereas the streams' LS
+prompts are the rows' locality near-neighbours (same relation, other subject), and a stream holds 100 records, not 5.
+Fix in data: the new support's locality prompts join every training episode as null-target queries
+(`--locality-queries`; run `cf_pool3k_pair_own_loc_400`). If the trained null still does not transfer, the learned
+component reduces to the similarity and the null stays non-learned (the cosine gate) — the outcome X1-08 item 5 asks
+us to prefer when the simpler measured control explains the gain.
