@@ -301,3 +301,5 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     Remaining before Stage 4: seed/stream replication (running), Codex's re-audit of the new trainer, the run matrix
     (R1-40b) and your freeze. Decisions still open for you: the R1-24 informative continuation condition; acceptance of
     exclusions v2 (register v3 will add the 6,000 drawn zsRE subjects).
+
+16. (2026-09-14 afternoon) R1-24 decided: option 3, both treatments (DEC-040). Running.
