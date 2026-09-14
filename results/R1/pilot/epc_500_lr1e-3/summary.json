@@ -1,0 +1,117 @@
+{
+ "args": {
+  "train": 128,
+  "dev": 16,
+  "steps": 500,
+  "batch": 4,
+  "lr": 0.001,
+  "seed": 0,
+  "estimator": "epc",
+  "iters": 8,
+  "tag": "epc_500_lr1e-3"
+ },
+ "estimator": "epc",
+ "dev_eval": "exact reference losses (train.episode_grads) for both estimators",
+ "n_params": 3282689,
+ "theta_hash": "b27e52383e999b57b6f0c3d74e908f9d83bfa370cff0c235c3b892eeae38b56b",
+ "theta_path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/epc_500_lr1e-3/theta.npz",
+ "featurize_wall_s": 6.154231786727905,
+ "train_wall_s": 3673.8338141441345,
+ "dev_before": {
+  "answer": 6.215630024671555,
+  "answer_n": 3.0,
+  "preserve": 0.004608655223819369,
+  "preserve_n": 2.0,
+  "retrieval": 1.887085385620594,
+  "code_norm": 0.0
+ },
+ "dev_after": {
+  "answer": 6.11191103855769,
+  "answer_n": 3.0,
+  "preserve": 1.949780510157595e-05,
+  "preserve_n": 2.0,
+  "retrieval": 0.6217113504535519,
+  "code_norm": 0.0
+ },
+ "behavioural_dev": {
+  "new_paraphrase": {
+   "label_exact": 0.0,
+   "n": 32,
+   "null_mass_mean": 0.4483992032764945,
+   "unchanged_from_capoff": null
+  },
+  "old_fact": {
+   "label_exact": 0.0,
+   "n": 16,
+   "null_mass_mean": 0.29622559259587433,
+   "unchanged_from_capoff": null
+  },
+  "near_miss": {
+   "label_exact": 0.8125,
+   "n": 16,
+   "null_mass_mean": 0.8490322288125753,
+   "unchanged_from_capoff": 1.0
+  },
+  "unrelated": {
+   "label_exact": 0.6875,
+   "n": 16,
+   "null_mass_mean": 0.8267255718819797,
+   "unchanged_from_capoff": 1.0
+  }
+ },
+ "answer_roles": [
+  "new_paraphrase",
+  "old_fact"
+ ],
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 112,
+   "partial_forwards": 37,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 1.0891789299203083,
+   "accel_seconds": 1.0891789299203083,
+   "peak_mem_mib": 1431.091552734375,
+   "tokens": 8353
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 96480,
+   "partial_forwards": 0,
+   "reverses": 90080,
+   "settle_iters": 80000,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 530.1239928883733,
+   "accel_seconds": 530.1239928883733,
+   "peak_mem_mib": 1431.091552734375,
+   "tokens": 905540
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 96592,
+   "partial_forwards": 37,
+   "reverses": 90080,
+   "settle_iters": 80000,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 531.2131718182936,
+   "accel_seconds": 531.2131718182936,
+   "peak_mem_mib": 1431.091552734375,
+   "tokens": 913893
+  },
+  "events": 16629,
+  "elapsed_wall_seconds": 3739.4827535152435,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "total_wall_s": 3739.4828639030457
+}
