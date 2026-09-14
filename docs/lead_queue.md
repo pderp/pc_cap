@@ -353,3 +353,8 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     (`manifests/revision_v1/primary_condition_v3.json`); v2 stays the no-gate comparison. The stricter two-token gate is
     rejected (it refuses single-token subjects: CounterFact RET-GS 0.62). Everything above is committed; Codex's round 8
     files are untouched and uncommitted until you say Codex is idle.
+
+22. (2026-09-14, 17:30 EDT) Recorded: DEC-043 accepted (gate → primary condition v3); DEC-044: scope not cut — the full
+    240-cell matrix stands and its ceilings will be set from the measured components (≈ 92 h; the 15 h envelope is
+    superseded by your decision). DEC-042 (CounterFact source) is explained in the session reply and stays open; the
+    default (reason-specific exception) applies only if you say nothing before the draw.

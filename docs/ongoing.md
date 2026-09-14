@@ -38,13 +38,12 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   `docs/R1_stage2_report.md`; running log `docs/R1_stage2_notes.md`; identities `manifests/revision_v1/primary_condition_v{1,2,3}.json`.
 - **Costs measured on the real base** (R1-55, `results/R1/p1_profile/`): 1,000 records use 51–74 % of the state
   ceiling with exact restore; edit 0.07–0.13 s; query 10–15 ms; a full 1,000-edit cell with every endpoint at three
-  checkpoints ≈ 1,150 s. Codex's 240-cell matrix v3 ≈ 92 h against the 15 h envelope; the orchestrator's proposal is
-  48 cells (one order per realization; drift + challenges at the final checkpoint) ≈ 13.5 h (`docs/lead_queue.md` 20).
+  checkpoints ≈ 1,150 s. Codex's 240-cell matrix v3 ≈ 92 h against the 15 h envelope; the lead keeps the full scope (DEC-044);
+  ceilings will be set from the measured components.
 - **Round 8 committed** (`c401f55`): Stage 4 protocol draft (R1-49, gates U01–U18), frozen register binding
   (R1-D1f, `exclusions_frozen_v3.json`), ordinary-text null spec (R1-50b), R1-24 review (R1-X7; qualifications applied
   to the notes).
-- **Lead decisions open**: DEC-042 (CounterFact source; default = exception), DEC-043 (gate; default = adopt), matrix
-  scope, then the freeze (R1-41). No draw, seal or launch before those.
+- **Lead decisions open**: DEC-042 (CounterFact source; default = exception), then the freeze (R1-41); DEC-043 accepted, DEC-044 keeps the full matrix. No draw, seal or launch before those.
 - Rules unchanged (§ top); Codex: new files only, CPU only, no sealed payloads, no real-base execution; edit requests
   as patches under `docs/tasks/`. Tests under `tests/revision_v1/` (CPU) must pass.
 
@@ -92,9 +91,9 @@ A new document `docs/R1_stage4_protocol_draft_v2.md` that reconciles your draft 
 condition v3 (the gate, `primary_condition_v3.json`) and v2 as the no-gate comparison; the P1 profile numbers
 (`results/R1/p1_profile/*/summary.json`, `docs/R1_stage2_notes.md` §"R1-40c P1"); the unseen endpoint at
 100/300/1,000 with and without the gate; the drift recount; the endpoint costs (R1-43 151 s, R1-44 ≈ 75–200 s, drift
-≈ 165 s per checkpoint for the full 128-window assay). Present the three scope options as cells × wall hours with
-reserve (the orchestrator's 48-cell proposal; 30 cells without S1/matched-update; the full 240) and state exactly which
-U-gates each option closes. Keep U01–U18 with their status updated; do not close a gate the lead owns.
+≈ 165 s per checkpoint for the full 128-window assay). The lead has decided (DEC-044) that the scope is NOT cut: price the full 240-cell
+matrix from the measured components (cells × wall hours with the 0.2 reserve, per condition and dataset, shared
+training charged once) and state which U-gates the measurements close; do not propose reductions. Keep U01–U18 with their status updated; do not close a gate the lead owns.
 
 ### Lane R1-X8 — counter-review of R1-55, R1-56 and the Stage 2 report revision
 
