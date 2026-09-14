@@ -1,0 +1,30 @@
+Command: /home/derp/cap/venv/bin/python -m pytest tests/revision_v1 -q -p no:cacheprovider -m not gpu and not slow and not lease --basetemp=/home/derp/cap/assets/test_tmp/round9_revision_final
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+...........................................ssssssss.........F........... [ 65%]
+..................................................F..................... [ 87%]
+........................................                                 [100%]
+=================================== FAILURES ===================================
+________________ test_actual_orphan_checkpoint_root_is_refused _________________
+[XPASS(strict)] X4-10: driver checks assets/runs/results/R1, harness writes assets/runs/R1
+___________ test_matrix_deduplicates_contrasts_and_pins_all_sources ____________
+
+matrix_module = <module 'r1_40_matrix' from '/home/derp/cap/pc_cap/scripts/r1_40_matrix.py'>
+matrix = {'schema_version': 1, 'task': 'R1-40', 'name': 'run_matrix_draft', 'status': 'draft_not_frozen_not_launchable', ...}
+
+    def test_matrix_deduplicates_contrasts_and_pins_all_sources(matrix_module, matrix):
+        matrix_module.validate_matrix(matrix)
+        assert len(matrix["cells"]) == 660
+        for path, expected in matrix["sources_sha256"].items():
+>           assert matrix_module.sha(Path(path)) == expected, path
+E           AssertionError: /home/derp/cap/pc_cap/docs/decisions.md
+E           assert 'd28dca5f319a...4ac9ad4d9a230' == '644690b4bc76...f1adee8a431f0'
+E             
+E             - 644690b4bc76bf9164c6fa8d56df2f9c6fa6a38acccd57086f8f1adee8a431f0
+E             + d28dca5f319a4b0ec995bf382ebc437c14202bca41f2f1f0cbe4ac9ad4d9a230
+
+tests/revision_v1/test_round4_data_matrix_cpu.py:153: AssertionError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_27_superseding_cpu.py::test_actual_orphan_checkpoint_root_is_refused
+FAILED tests/revision_v1/test_round4_data_matrix_cpu.py::test_matrix_deduplicates_contrasts_and_pins_all_sources
+2 failed, 318 passed, 8 skipped in 47.00s

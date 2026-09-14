@@ -1,0 +1,22 @@
+..F.............                                                         [100%]
+=================================== FAILURES ===================================
+___________________ test_missing_cell_retains_expected_axis ____________________
+
+tmp_path = PosixPath('/home/derp/cap/assets/test_tmp/r1_round9_analysis_preview2/test_missing_cell_retains_expe0')
+
+    def test_missing_cell_retains_expected_axis(tmp_path):
+        inv = fixture(tmp_path)
+        inv["cells"].pop()
+        r = analyze(inv, root=tmp_path)
+        c = r["comparisons"][0]
+        assert len(r["cells"]) == 12
+>       assert c["classification"] == "incomplete"
+E       AssertionError: assert 'unadmitted' == 'incomplete'
+E         
+E         - incomplete
+E         + unadmitted
+
+tests/revision_v1/test_analysis.py:134: AssertionError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_analysis.py::test_missing_cell_retains_expected_axis
+1 failed, 15 passed in 0.14s

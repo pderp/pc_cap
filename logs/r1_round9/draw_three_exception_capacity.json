@@ -1,0 +1,682 @@
+{
+  "allocation_order": [
+    "edits",
+    "outside",
+    "near_miss_support",
+    "near_miss_neighbour",
+    "revision"
+  ],
+  "binding": {
+    "bindings_sha256": {
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/clear_candidates.jsonl": "c2e01edcd2506c0bae9240e52a6742f8183a2860560c4cbb332c4ef7a980b296",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/flagged_candidates.jsonl": "490220628dd298dadbf9725161afd92beab4854bbaceefea7898c96542093f73",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/ordered_candidates.jsonl": "1d144e9937fb07d1c68b7737db014985f291da4952c91761b7a8bab5288a3a4d",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/record_review.jsonl": "30c9b1d3aa602d9030c60d0f7e8b601e4efbd48427181e160414f4ed5a6d1469",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1e_v3/mend_candidate_subjects.jsonl": "6a9aefc1a1f506973fe5a8db783b427849e70b578ca3f2665fc8815258b7ceb8",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1e_v3/prior_clear_subject_survivors.jsonl": "b43a5f4ce17736ef44bcbfd2154168d13efd45d85077a00ef1a31570057cf4a4",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d2_v1/counterfact_remainder_candidates.jsonl": "68c96577e15d31f6c49f87afc840e0d5b176c6fee2e089e222b556a55039acaf",
+      "/home/derp/cap/assets/data/prepared/revision_v1/r1_d2_v1/v3_additional_exclusions.jsonl": "784b0ea0ecfe985bc33746d9f1143ec8c00af3fa9b4059a1c76627711010b9ef",
+      "/home/derp/cap/pc_cap/manifests/revision_v1/counterfact_fresh_candidates_v1.json": "0d1ac13607ea5d2a3082dece3de01cc6a1943957b3ceb355382d5636cbccfe44",
+      "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v2.json": "481e04c3eba70ea2f85aada9c0599c4f44031ea6cd7c75cf6c03cadec2c369a8",
+      "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v3.json": "e214de7d048c6b104fc62c75757eed01f12b47fb330eaeeb58c1a2bec8fbbd4a",
+      "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_candidates_v1.json": "540ccf1448c5299d2b4861f85720a59f841ba2354aac18c1bc7ef72360b7f2ad",
+      "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e",
+      "/home/derp/cap/pc_cap/manifests/revision_v1/zsre_fresh_candidates_v1.json": "840f77494b7d747b92eadea88ecee2f6a12e59947a0ea8cc1dc0c51b92db78d7"
+    },
+    "candidate_admission": "not E2/context/fresh-exposure certified",
+    "mquake_manifest": {
+      "path": "/home/derp/cap/pc_cap/manifests/revision_v1/mquake_items_v1.json",
+      "sha256": "2cfaea61c1631b06a5036c298d4ecf5bb6c8b581d8560e32bcf55076430c9a25"
+    },
+    "mquake_removed": {
+      "cross_dataset_subject_overlap": 169,
+      "within_mquake_extra_relation": 456
+    },
+    "removed": {
+      "counterfact": {},
+      "zsre": {}
+    },
+    "source_reading": "exception",
+    "three_dataset_policy": "PROPOSED count-only zsRE then CounterFact then MQuAKE subject precedence; first prepared MQuAKE row per subject. No final-source or training allocation approval implied.",
+    "wrapper_path": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v3.json",
+    "wrapper_sha256": "d3549f43327ec80f497cfd71df82494c7c0bded02c8e6f5c2c333800b2489805"
+  },
+  "candidate_ids_emitted": 0,
+  "complete_capacity": true,
+  "counts": {
+    "edits": 1000,
+    "near_miss_neighbour": 100,
+    "near_miss_support": 100,
+    "outside": 100,
+    "revision": 50
+  },
+  "datasets": [
+    {
+      "available_candidates": 52498,
+      "dataset": "zsre",
+      "requested_total": 4050,
+      "shortfall": 0
+    },
+    {
+      "available_candidates": 12246,
+      "dataset": "counterfact",
+      "requested_total": 4050,
+      "shortfall": 0
+    },
+    {
+      "available_candidates": 5418,
+      "dataset": "mquake",
+      "requested_total": 4050,
+      "shortfall": 0
+    }
+  ],
+  "draws_emitted": 0,
+  "final_eligible_counts": null,
+  "future_draw_status": "three-dataset admission must bind the next register, training/transfer decision and eligible inventories; this CLI never draws",
+  "gpu_seconds": 0,
+  "mode": "three_dataset_count_only_dry_run",
+  "mquake_training_sensitivity_no_selection": {
+    "assumed_additional_disjoint_training_subjects": 1000,
+    "candidate_subject_capacity_after_reservation": 4418,
+    "confirmation_role_demand": 4050,
+    "note": "arithmetic only; no training set selected; aliases/context, teacher losses and composition dependency closures can consume this slack",
+    "pre_eligibility_surplus_after_training": 368
+  },
+  "new_register_required": true,
+  "note": "capacity quotas do not select candidate IDs; neither eligibility nor near-miss/revision semantics is certified",
+  "payloads_written": 0,
+  "realizations": 3,
+  "replacement": false,
+  "rng_used": false,
+  "roles": [
+    {
+      "capacity": 1000,
+      "dataset": "zsre",
+      "realization": 0,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 327,
+        "3-4": 420,
+        "5-8": 231,
+        "9+": 22
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 0,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 0,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 0,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "zsre",
+      "realization": 0,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 16,
+        "3-4": 21,
+        "5-8": 12,
+        "9+": 1
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "zsre",
+      "realization": 1,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 327,
+        "3-4": 420,
+        "5-8": 231,
+        "9+": 22
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 1,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 1,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 1,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "zsre",
+      "realization": 1,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 16,
+        "3-4": 21,
+        "5-8": 12,
+        "9+": 1
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "zsre",
+      "realization": 2,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 327,
+        "3-4": 420,
+        "5-8": 231,
+        "9+": 22
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 2,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 2,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "zsre",
+      "realization": 2,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 42,
+        "5-8": 23,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "zsre",
+      "realization": 2,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 16,
+        "3-4": 21,
+        "5-8": 12,
+        "9+": 1
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "counterfact",
+      "realization": 0,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 1000
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 0,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 0,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 0,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "counterfact",
+      "realization": 0,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 50
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "counterfact",
+      "realization": 1,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 1000
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 1,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 1,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 1,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "counterfact",
+      "realization": 1,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 50
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "counterfact",
+      "realization": 2,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 1000
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 2,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 2,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "counterfact",
+      "realization": 2,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 100
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "counterfact",
+      "realization": 2,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 50
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "mquake",
+      "realization": 0,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 323,
+        "3-4": 455,
+        "5-8": 200,
+        "9+": 22
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 0,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 32,
+        "3-4": 46,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 0,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 32,
+        "3-4": 46,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 0,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 32,
+        "3-4": 46,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "mquake",
+      "realization": 0,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 16,
+        "3-4": 23,
+        "5-8": 10,
+        "9+": 1
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "mquake",
+      "realization": 1,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 323,
+        "3-4": 454,
+        "5-8": 200,
+        "9+": 23
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 1,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 32,
+        "3-4": 46,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 1,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 32,
+        "3-4": 46,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 1,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 45,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "mquake",
+      "realization": 1,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 16,
+        "3-4": 23,
+        "5-8": 10,
+        "9+": 1
+      }
+    },
+    {
+      "capacity": 1000,
+      "dataset": "mquake",
+      "realization": 2,
+      "requested": 1000,
+      "role": "edits",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 323,
+        "3-4": 453,
+        "5-8": 201,
+        "9+": 23
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 2,
+      "requested": 100,
+      "role": "outside",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 45,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 2,
+      "requested": 100,
+      "role": "near_miss_support",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 32,
+        "3-4": 46,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 100,
+      "dataset": "mquake",
+      "realization": 2,
+      "requested": 100,
+      "role": "near_miss_neighbour",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 33,
+        "3-4": 45,
+        "5-8": 20,
+        "9+": 2
+      }
+    },
+    {
+      "capacity": 50,
+      "dataset": "mquake",
+      "realization": 2,
+      "requested": 50,
+      "role": "revision",
+      "shortfall": 0,
+      "strata": {
+        "1-2": 16,
+        "3-4": 23,
+        "5-8": 10,
+        "9+": 1
+      }
+    }
+  ],
+  "seals_written": 0,
+  "shortfall_rule": "report capacity only; actual draw aborts globally before any selection or write",
+  "stratification": "proportional answer-token-length quotas; bins include terminal tokens; largest remainder with lexical tie-break",
+  "task": "R1-58 DEC-045 addendum"
+}

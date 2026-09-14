@@ -1,0 +1,49 @@
+{
+ "name": "primary_condition_v2",
+ "date": "2026-09-14",
+ "status": "development reference; not frozen",
+ "condition": "learned reader (tied cosine + pairwise null + lexical overlap, stop list v1), stable observations, per-position delta writes (5 normalized adjoint steps, τ 0.1, A 0.3, v2 b_m), hard top-1 selection, null threshold 0.5, no cosine gate, binary write mass, top-k 4",
+ "training": "stream-scale mixed-domain episodes (64-record memories; CounterFact pool v1 + zsRE pool v1, 1,000 items each; 300 steps × 2; lr 1e-3; wd 0.01) plus 8 ordinary-text null queries per episode (512 OpenWebText training-range windows × prefix lengths 16/48/96, cap-off logits kept for the preservation KL; --text-nulls 8 --text-windows 512), scripts/r1_50_stream_train.py",
+ "weights": {
+  "seed0": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_text/theta.npz",
+   "sha256": "c5777b5bf0df754766463737f53f641f624de8bc98ac0420fd99bec8850730db"
+  },
+  "seed1": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_text_s1/theta.npz",
+   "sha256": "b1b290c91d1c0ad02749ac062da89c0f9a4fffde31fed5439cfa07bb70fd7adc"
+  },
+  "seed2": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_text_s2/theta.npz",
+   "sha256": "ab7a635410c0fba170b7c05e50da9036f99e54ccc187048c637abf0cbb1c7944"
+  }
+ },
+ "stop_tokens": {
+  "path": "manifests/revision_v1/stop_tokens_v1.json",
+  "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+ },
+ "pools": {
+  "train_pool_counterfact_v1": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+  "train_pool_zsre_v1": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+ },
+ "development_results": {
+  "zsre": "RET-GS 0.96 / 0.98 / 0.96 (seeds 0–2, stream 21), LS 1.00; ES 1.00; RET-ES 1.00",
+  "counterfact": "RET-GS 0.725 / 0.85 / 0.79 (seeds 0–2, stream 21), LS 1.00; ES 1.00; RET-ES 1.00",
+  "ordinary_text_drift": "seed 0, 32 windows × 128 positions, per-position selection: after 100 zsRE edits 0.000 nats (ratio 1.000); after 100 CounterFact edits +0.012 nats (ratio 1.012; v1 reader +0.379, ratio 1.46)",
+  "endpoints_seed0": "near-miss preservation 100/100; revision 100/100 (old answer reappearance 0); unseen-edit-prompt false fires zsRE 7/100, CounterFact 0/100 (after 100 edits)"
+ },
+ "controls": [
+  "v0 live C1/C2",
+  "v0-stable (DEC-035)",
+  "matched-update (R1-15)",
+  "R1-nonlearned (random tied cosine reader + cosine gate 0.93 + per-position deltas)",
+  "teacher-only continuation (R1-24, pending the lead's variant decision)"
+ ],
+ "open_risks": [
+  "CounterFact selection among near-duplicate candidates at ≥ 1,000 records (fires-own 0.59–0.625 in the bank profile; P1/P3 profiles at 300/1,000 records on the real base in progress)",
+  "unseen-edit-prompt false fires on zsRE (7 % after 100 edits; growth with memory size to be measured at 300/1,000)",
+  "residual ordinary-text firing after CounterFact edits (+0.012 nats; the assay's fixed-length probes at 16/48/96 saw none, so the firing is at other prefix lengths)"
+ ],
+ "evidence": "docs/R1_stage2_notes.md (R1-54 and seeds sections); results/R1/stream_eval.md (mixed_text* rows); results/R1/drift_assay_r1_50_stream_mixed_text_*.json; results/R1/endpoints/text_s0_v1*/",
+ "supersedes": "primary_condition_v1 (reference reader without ordinary-text nulls; kept as the R1-54 comparison)"
+}

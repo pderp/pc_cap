@@ -195,9 +195,6 @@ def test_existing_run_directory_preflight(tmp_path):
         fn(a, out, root)
 
 
-@pytest.mark.xfail(
-    strict=True, reason="X4-10: driver checks assets/runs/results/R1, harness writes assets/runs/R1"
-)
 def test_actual_orphan_checkpoint_root_is_refused(tmp_path):
     fn, root, assets = admission(tmp_path)
     out = root / "results/R1"

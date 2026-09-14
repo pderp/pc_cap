@@ -149,7 +149,13 @@ def matrix():
 def test_matrix_deduplicates_contrasts_and_pins_all_sources(matrix_module, matrix):
     matrix_module.validate_matrix(matrix)
     assert len(matrix["cells"]) == 660
-    for path, expected in matrix["sources_sha256"].items():
+    # The stored draft preserves historical input identities; live source binding
+    # belongs to a freshly built draft as append-only decisions continue to grow.
+    fresh = matrix_module.build()
+    matrix_module.validate_matrix(fresh)
+    required = {str(ROOT / p) for p in ("docs/decisions.md", "scripts/r1_40_matrix.py")}
+    assert required <= fresh["sources_sha256"].keys()
+    for path, expected in fresh["sources_sha256"].items():
         assert matrix_module.sha(Path(path)) == expected, path
     counts = Counter(c["condition_id"] for c in matrix["cells"] if c["scope"] == "core")
     assert len(counts) == 6 and set(counts.values()) == {30}

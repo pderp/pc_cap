@@ -1,0 +1,20 @@
+I001 [*] Import block is un-sorted or un-formatted
+ --> tests/revision_v1/test_analysis.py:3:1
+  |
+1 |   """Synthetic, inventory-first tests for revision analysis (CPU, no model)."""
+2 |
+3 | / import json
+4 | |
+5 | | import pytest
+6 | | from pccap.revision_v1.analysis import analyze, classify, paired_metric, validate_inventory
+  | |___________________________________________________________________________________________^
+help: Organize imports
+  |
+5 | import pytest
+6 +
+7 | from pccap.revision_v1.analysis import analyze, classify, paired_metric, validate_inventory
+  |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+11 files already formatted

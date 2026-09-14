@@ -1,0 +1,47 @@
+--- a/src/pccap/revision_v1/memory.py
++++ b/src/pccap/revision_v1/memory.py
+@@ -38,6 +38,7 @@
+     ceiling_bytes: int = DEFAULT_CEILING
+     encoder_version: int = 1
+     index_version: int = 0
++    lexical_version: int = 0  # monotone invalidation epoch for support/active-set mutations
+     weights_bytes: int = 0  # R23-07: reusable weights count against the same persistent-state ceiling
+     records: list[MemoryRecord] = field(default_factory=list)
+     _by_id: dict[str, int] = field(default_factory=dict, repr=False)
+@@ -68,6 +69,7 @@
+         rec.created_order = len(self.records)
+         self.records.append(rec)
+         self._by_id[rec.record_id] = len(self.records) - 1
++        self.lexical_version += 1
+         return rec
+ 
+     def supersede(self, old_id: str, new: MemoryRecord) -> MemoryRecord:
+@@ -90,6 +92,7 @@
+             raise ValueError("only the newest record can be removed")
+         self.records.pop()
+         del self._by_id[record_id]
++        self.lexical_version += 1
+         if restore is not None:
+             old = self.get(restore)
+             old.active, old.superseded_by = True, None
+--- a/src/pccap/revision_v1/learner.py
++++ b/src/pccap/revision_v1/learner.py
+@@ -166,8 +166,8 @@
+ 
+     def _rare_overlap(self, prompt: np.ndarray, source_ids: np.ndarray) -> int:
+         """Number of distinct non-stop tokens shared by the query and the record's support that occur in at most
+-        ``rare_df_max`` active records (document frequency over the current memory; recomputed when the store grows)."""
+-        version = (len(self.store.records), len(self.store.active_records()))
++        ``rare_df_max`` active records (document frequency over the current memory; invalidated on store mutation and state restore)."""
++        version = (id(self.store), self.store.lexical_version)
+         if getattr(self, "_df_cache", (None,))[0] != version:
+             df: dict[int, int] = {}
+             for r in self.store.active_records():
+@@ -287,6 +287,7 @@
+         candidate.ceiling_bytes = self.cfg.ceiling_bytes  # the configured policy governs; a snapshot cannot raise it
+         candidate.validate()
+         self.store = candidate
++        self.__dict__.pop("_df_cache", None)
+         self.reset_queries()
+ 
+     def state_hash(self) -> str:
