@@ -1,0 +1,74 @@
+{
+  "additional_source_snapshots": {
+    "src/pccap/revision_v1/train.py": {
+      "sha256": "bd0f23ab212fc55ef67f236bc0e9a0b0e5fe378a6ee84cb65575738e5c3ee0c9",
+      "snapshot": "logs/r1_round8/source_snapshot/src/pccap/revision_v1/train.py"
+    },
+    "src/pccap/revision_v1/train_fast.py": {
+      "sha256": "98c6011e6e423b26ebb3434de412da1d1e2b2e21ab968c1adc6ba4abe45b7390",
+      "snapshot": "logs/r1_round8/source_snapshot/src/pccap/revision_v1/train_fast.py"
+    }
+  },
+  "assay": {
+    "delta_nats": -1.1763433889200314e-06,
+    "drift_nll_cap_off": 4.109043887020015,
+    "drift_nll_cap_on": 4.1090427106766265,
+    "fire_rate_on_ordinary_prefixes": 0.0,
+    "firing_numerator": 0,
+    "firing_probes": 96,
+    "positions": 4064,
+    "ppl_ratio": 0.999998823657303,
+    "window": 128,
+    "windows": 32
+  },
+  "candidate_training_budget": {
+    "admitted": false,
+    "all_training_steps_charged": 300,
+    "best_step": 149,
+    "factual_bank_tokens_separately_itemized": 313579,
+    "old_reference_forward_tokens": 771581,
+    "outer_reverse_positions_if_ledger_semantics_match_source": 738863,
+    "proposed_reconciled_forward_tokens": 1134362,
+    "reverse_passes": 40737,
+    "text_bank_forward_tokens_already_in_ledger": 81920,
+    "total_forwards_including_factual_bank": 65645,
+    "training_ledger_forward_tokens_including_text_bank": 820783
+  },
+  "default_episode": {
+    "locality": 8,
+    "null": 24,
+    "null_per_query_weight": 0.020833333333333332,
+    "outside_factual": 8,
+    "own": 8,
+    "paraphrase": 8,
+    "positive": 16,
+    "positive_per_query_weight": 0.03125,
+    "preservation_prefixes": 16,
+    "queries": 40,
+    "text": 8,
+    "text_preservation_prefixes": 8,
+    "text_query_share": 0.2,
+    "text_total_l2_weight": 0.16666666666666666
+  },
+  "gpu_seconds": 0,
+  "main_source_index": "logs/r1_round8/source_evidence.json",
+  "model_execution": false,
+  "scope": "source inspection and summary arithmetic; no new tokens sampled, model executed or budget admitted",
+  "task": "R1-50b",
+  "text_bank": {
+    "construction_input_positions": 81920,
+    "full_window_token_allocation": 65536,
+    "maximum_distinct_forwarded_tokens": 49152,
+    "prefix_count": 1536,
+    "prefix_lengths": [
+      16,
+      48,
+      96
+    ],
+    "proposal_selection_dev_input_positions": 20480,
+    "proposal_selection_dev_prefixes": 384,
+    "proposal_selection_dev_windows": 128,
+    "proposed_unique_aligned_training_blocks": 390640,
+    "training_windows": 512
+  }
+}

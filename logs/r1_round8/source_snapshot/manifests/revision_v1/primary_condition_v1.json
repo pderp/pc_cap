@@ -1,0 +1,46 @@
+{
+ "name": "primary_condition_v1",
+ "date": "2026-09-14",
+ "status": "development reference; not frozen",
+ "condition": "learned reader (tied cosine + pairwise null + lexical overlap, stop list v1), stable observations, per-position delta writes (5 normalized adjoint steps, \u03c4 0.1, A 0.3, v2 b_m), hard top-1 selection, null threshold 0.5, no cosine gate, binary write mass, top-k 4",
+ "training": "stream-scale mixed-domain episodes (64-record memories; CounterFact pool v1 + zsRE pool v1, 1,000 items each; 300 steps \u00d7 2; lr 1e-3; wd 0.01), scripts/r1_50_stream_train.py",
+ "weights": {
+  "seed0": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed/theta.npz",
+   "sha256": "9f676076ad94df2fb6a3257c5838edb9e365f7ddc808efd2d044ef6e01f626fd"
+  },
+  "seed1": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_s1/theta.npz",
+   "sha256": "9e802179e0c375438693198edb623b75f17aa028fecf6fbc373551479bb440d6"
+  },
+  "seed2": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_mixed_s2/theta.npz",
+   "sha256": "d2c326a83769b795c472ac42a19789c6a1076c0d527de65389dca2315bb8588f"
+  }
+ },
+ "stop_tokens": {
+  "path": "manifests/revision_v1/stop_tokens_v1.json",
+  "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+ },
+ "pools": {
+  "train_pool_counterfact_v1": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+  "train_pool_zsre_v1": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+ },
+ "development_results": {
+  "zsre": "RET-GS 0.96\u20130.99, LS 1.00 (seeds 0\u20132; streams 21, 22)",
+  "counterfact": "RET-GS 0.765\u20130.805, LS 1.00 (seeds 0\u20132; streams 21, 22); 0.722 at 250 records"
+ },
+ "controls": [
+  "v0 live C1/C2",
+  "v0-stable (DEC-035)",
+  "matched-update (R1-15)",
+  "R1-nonlearned (random tied cosine reader + cosine gate 0.93 + per-position deltas)",
+  "teacher-only continuation (R1-24, pending the lead's variant decision)"
+ ],
+ "open_risks": [
+  "CounterFact selection among near-duplicate candidates at \u2265 1,000 records (fires-own 0.59\u20130.625)",
+  "unseen-edit-prompt rejection on zsRE degrades with memory size (out-of-memory hard-null 0.87 \u2192 0.67 at 300)",
+  "ledger accounting of outer training work is counted from R50-09 on; earlier summaries are wall time only"
+ ],
+ "evidence": "docs/R1_stage2_notes.md; results/R1/stream_eval.md; results/R1/scale_profile_*.json"
+}
