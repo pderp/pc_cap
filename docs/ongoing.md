@@ -47,40 +47,47 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 6 (CPU; open now) — learned-reader recovery first (lead directive)
+## 3. Lanes for Codex — round 7 (CPU; open now)
 
-The lead wants the learned reader to work before other issues. The recovery plan is in `docs/R1_stage2_notes.md`
-("Learned-reader recovery plan"). Lanes below are non-blocking and non-blocked; they feed that plan directly. Round 5 is
-committed (`5ee8b56`); X4-10 is repaired and the reference regenerated (`08c6321`).
+Round 6 is committed (`a903cfd`) and answered (`docs/tasks/R1-46-response.md`; R50-04/06/08/09 repaired in `ae22d73`).
+State: the learned reader is the primary revision condition with one rule for both datasets — identity, results,
+controls and open risks in `manifests/revision_v1/primary_condition_v1.json` and `docs/R1_stage2_notes.md`. DEC-040: the
+orchestrator is running both R1-24 treatments (literal self-KD control + informative LM continuation). Lanes:
 
-### Lane R1-D3 — zsRE training pool candidate list (M3; DEC-039 default: yes) — NOW THE CRITICAL PATH (12:30 EDT): the reader works on CounterFact (RET-GS 0.93 / LS 1.00) and on zsRE with a gate (0.97 / 1.00); one locality rule for both needs this pool; `scripts/r1_d3_e2_filter.py` consumes your list
+### Lane R1-X6 — audit of the round-6 repairs and the reference-condition identity
 
-From `manifests/revision_v1/zsre_fresh_candidates_v1.json` (58,498 clear), emit `manifests/revision_v1/train_pool_zsre_candidates_v1.json`:
-6,000 candidates (seed 139; so that ≥ 3,000 survive the teacher filter) with prompt, rephrase, answer, aliases, locality
-prompt/answer, subject, per-record hashes, and the exclusion reasons that will apply to them (`train_pool_zsre_v1`) for
-register v3. Record explicitly that these leave the confirmatory candidate pool (58,498 → ≥ 52,498). No tokenization or
-teacher execution. `docs/tasks/R1-D3.md`.
+Read-only: verify commit `ae22d73` against your R50-04/06/08/09 checkpoints (bank identity verification, ledger charging
+of the fast trainer, mixed-domain query guarantees, operating-point hygiene), the scale profile (`scripts/r1_53_scale_profile.py`,
+`results/R1/scale_profile_*.json`) and `primary_condition_v1.json` (weights hashes, pools, rules); reproduce the two
+open risks it states. `logs/audit_r1_28b.md`.
 
-### Lane R1-45 — near-neighbour separability analysis (M4; text only)
+### Lane R1-44 — unseen-edit-prompt endpoint (the second scale risk)
 
-For the CounterFact and zsRE development pools (`manifests/dev/*_dev.json`, all 300 items each) and the 3k CounterFact
-training pool: for every item, compare its paraphrases and its locality prompts against its own prompt on lexical
-features — subject-token overlap (with and without a stoplist of the 200 most frequent GPT-2 tokens in the pools),
-longest common token span, relation-template overlap — and report, per dataset, the ROC/separability of each feature for
-"paraphrase vs locality near-neighbour" and "paraphrase vs other item's prompt". Deliver `logs/r1_round6/near_neighbour_separability.json`
-+ `docs/tasks/R1-45.md` with a recommendation of the two features to feed the null head. CPU only; no model.
+Specify and implement (new file `src/pccap/revision_v1/endpoints_unseen.py` + CPU test) an endpoint that measures false
+firing and answer change on prompts of facts NOT in memory, drawn from the same pool as the edits (denominator, schema,
+how it differs from LS), so the run matrix can carry it. Use the tiny base for tests; the GPU run is the orchestrator's.
+`docs/tasks/R1-44.md`.
 
-### Lane R1-46 — stream-scale episode specification review (OPEN NOW: `stream_train.py`, `train_fast.py`, the lexical feature in `reader.py`, `scripts/r1_50_stream_train.py`; result: one null for both datasets, see `docs/R1_stage2_notes.md` §M3)
+### Lane R1-40c — run matrix v3: add the memory-size and unseen-prompt endpoints and the DEC-040 conditions
 
-Review the orchestrator's stream-scale episode builder and feature bank for label leakage (queries must never carry
-targets into the reader), population definitions (in-memory paraphrases / own prompts / locality nulls / out-of-memory
-prompt nulls), class balance, and the deployment-prevalence argument for threshold selection (M5). `logs/review_r1_50.md`.
+From `run_matrix_draft_v2.json`, `primary_condition_v1.json` and DEC-040: add the memory-size profile (100 / 300 /
+1,000 records) and the unseen-prompt endpoint as declared endpoints, the two continuation conditions (S1 literal, S1
+LM) with their evaluation cells, and the profiling runs the orchestrator must execute before ceilings are frozen; keep
+everything unlaunchable/unfrozen. `manifests/revision_v1/run_matrix_draft_v3.json`, `docs/tasks/R1-40c.md`.
 
-### Lane R1-D1e — exclusion register v3: fold in the 6,000 drawn zsRE training subjects (`train_pool_zsre_candidates_v1.json`, reason `train_pool_zsre_v1`) and restate the confirmatory candidate counts; `docs/tasks/R1-D1e.md`
+### Lane R1-D2 — CounterFact confirmatory candidates (both readings, for the lead's decision)
 
-### Lane R1-40b — re-cost the run-matrix draft under the CURRENT primary condition (learned reader, mixed-domain training; one deployment rule) and X4-08 byte scaling
+Prepare the ordered candidate list for fresh CounterFact confirmatory streams under exclusions v3 in both readings plan 9
+leaves open: (a) from the unopened remainder of the old eligible pool minus the DEC-037 training draw (13,141 items) and
+(b) a fresh source if one exists in `assets/data/raw` (state if none). Counts at each filter, per-record hashes, no draw,
+no seal. `manifests/revision_v1/counterfact_fresh_candidates_v1.json`, `docs/tasks/R1-D2.md`.
 
-As previously specified (`run_matrix_draft_v2.json`, DEC-038 default and X4-08 byte scaling); do it after the three lanes above.
+### Lane R1-47 — Stage 2 report draft
+
+From `docs/R1_stage2_notes.md`, `results/R1/stream_eval.md`, the scale profiles and your reviews, draft
+`docs/R1_stage2_report_draft.md` in the style of `docs/report.md`: what was built, the diagnosis chain, the results
+tables (with the historical/overwritten artifacts labelled), the controls, the open risks, and what Stage 4 must
+establish. The orchestrator revises it; do not modify the notes.
 
 ## 4. Interfaces and coordination
 
