@@ -29,6 +29,7 @@ class ReaderConfig:
     top_k: int = 4
     null_bias: float = 0.0
     temperature: float = 1.0
+    tie_heads: bool = True  # key head == query head (siamese): an identical observation always scores itself maximally
 
 
 def _dense(key, n_in: int, n_out: int, scale: float | None = None) -> dict:
@@ -55,7 +56,7 @@ def init_reader(key, cfg: ReaderConfig) -> dict:
     return {
         "tap": {str(m): _dense(tk, 2 * cfg.d, cfg.width) for m, tk in zip(cfg.taps, tap_keys)},
         "query_head": _mlp(k_q, (cfg.width, cfg.hidden, cfg.width)),
-        "key_head": _mlp(k_k, (cfg.width, cfg.hidden, cfg.width)),
+        **({} if cfg.tie_heads else {"key_head": _mlp(k_k, (cfg.width, cfg.hidden, cfg.width))}),
         "code_head": _mlp(k_c, (cfg.width, cfg.hidden, cfg.d_code)),
         "null": {"w": jax.random.normal(k_n, (cfg.width,), jnp.float32) / np.sqrt(cfg.width), "b": jnp.asarray(cfg.null_bias, jnp.float32)},
     }
@@ -89,7 +90,8 @@ def query_embedding(params: dict, cfg: ReaderConfig, last, span):
 
 
 def record_key(params: dict, cfg: ReaderConfig, last, span):
-    return _apply_mlp(params["key_head"], embed(params, cfg, last, span))
+    head = params["query_head"] if cfg.tie_heads or "key_head" not in params else params["key_head"]
+    return _apply_mlp(head, embed(params, cfg, last, span))
 
 
 def initial_code(params: dict, cfg: ReaderConfig, last, span):

@@ -143,6 +143,9 @@ def test_delta_steps_acquire_and_round_trip():
     sel = cap.selection_for(prompt)
     assert sel.delta is not None
     logits_with = cap.predict(prompt).logits
+    # with delta_replaces_controller the write is the bounded delta alone
+    from pccap.revision_v1.controller import aggregate
+    assert aggregate(rec.delta, CC) <= CC.A + 1e-5
     cap.store.set_delta("s0", None)
     cap.reset_queries()
     assert not np.allclose(cap.predict(prompt).logits, logits_with)  # the delta changes the read

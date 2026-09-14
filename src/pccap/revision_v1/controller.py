@@ -24,6 +24,7 @@ class ControllerConfig:
     hidden: int = 512
     A: float = 0.3
     bank_scales: tuple[float, ...] = (1.0, 1.0, 1.0)  # b_m per bank (v0 calibration)
+    delta_replaces_controller: bool = True  # a record's taught delta IS the write (v0 mechanism); the code-driven write serves records without one
 
 
 def init_controller(key, cfg: ControllerConfig) -> dict:
@@ -56,7 +57,8 @@ def aggregate(W, cfg: ControllerConfig) -> float:
 
 
 def writes_with_delta(params: dict, cfg: ControllerConfig, q, code, delta, non_null_mass):
-    """Writes for one query when the selected records carry explicit delta writes: (controller + delta) · mass, then the bound."""
-    W = (raw_writes(params, cfg, q, code) + delta) * non_null_mass
+    """Writes for one query when the selected records carry explicit delta writes: delta · mass (or controller + delta when
+    the controller is kept), then the bound."""
+    W = (delta if cfg.delta_replaces_controller else raw_writes(params, cfg, q, code) + delta) * non_null_mass
     W, s = bound_writes(W, cfg)
     return jnp.where(non_null_mass > 0, W, jnp.zeros_like(W)), s

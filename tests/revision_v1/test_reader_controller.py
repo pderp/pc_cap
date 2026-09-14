@@ -80,3 +80,16 @@ def test_hard_null_gives_exact_zero_writes_and_bound_holds():
     # gradients flow to the code and to the null mass
     g = jax.grad(lambda c, m: jnp.sum(writes(cp, CC, q, c, m)[0] ** 2), argnums=(0, 1))(code, jnp.asarray(0.7))
     assert np.all(np.isfinite(np.asarray(g[0]))) and np.isfinite(float(g[1]))
+
+
+def test_tied_heads_make_an_identical_observation_its_own_best_match():
+    rp = init_reader(jax.random.PRNGKey(0), RC)
+    assert RC.tie_heads and "key_head" not in rp
+    last, span = _obs(3)
+    q = query_embedding(rp, RC, last, span)
+    k = record_key(rp, RC, last, span)
+    assert np.allclose(np.asarray(q), np.asarray(k))
+    others = jnp.stack([record_key(rp, RC, *_obs(s)) for s in range(10, 14)])
+    keys = jnp.concatenate([k[None], others])
+    w, null, _ = applicability(rp, RC, q, keys, jnp.ones(5, bool))
+    assert int(jnp.argmax(w)) == 0
