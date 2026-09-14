@@ -1,0 +1,19 @@
+# Round 4 — approved repairs and commit handoff
+
+**Current status: the pending five-file repair is applied and verified.** This dated addendum supersedes the pending-permission status in the original round-4 task records, README and completion JSON; those records remain unchanged as history. The user approved proceeding and committing the work on 2026-09-14.
+
+Applied the exact two-script patch: legacy pilot tag fallback in `scripts/r1_40_matrix.py`, and import ordering in `scripts/r1_d1c_candidates.py`. Refreshed their provenance bindings in the candidate manifest/report and run-matrix draft. Every approved target matched its pinned pre-repair hash. Candidate counts, all external data and per-record hashes, matrix cells, and the original matrix budgets are unchanged.
+
+Claude advanced `docs/R1_stage2_notes.md` and `docs/lead_queue.md` while the request was pending. The draft's original versions are preserved byte-for-byte from commit `3ba95b5` in `logs/r1_round4/inputs_3ba95b5/docs/`, and its source registry explicitly points to those snapshots. The original paths/hashes and repair generation history remain recorded. No current planning document was edited or silently rebound to a different version.
+
+The ordinary matrix-builder command now exits 0; its fresh result is `logs/r1_round4/matrix_rebuild_approved.json`. Cells, conditions, checkpoints, profiles and evaluation ceilings exactly match the original draft. Its completed-pilot training-wall inventory includes Claude's newly completed balanced-reader run: 52,685.97 s rather than the original 47,598.37 s. This is an inventory update, not a change to the 538,920-second core evaluation ceiling-plus-reserve proposal. Neither inventory measures the project's total GPU allocation. Learned-null deployment selection remains pending.
+
+## Concurrent R1-27 and validation
+
+The approved scripts and artifacts first passed **43 tests with 4 strict expected failures in 14.81 s**. During final verification Claude committed R1-27 (`3dd2f5c`), changing four audited sources and responding to the audit in `docs/tasks/R1-X3-response.md`. The original audit hashes still match commit `3ba95b5`; the old findings and test results are historical, not assertions about the new core.
+
+Added one new file, `tests/revision_v1/conftest.py`, to bind only the eight historical R1-26 boundary controls to the exact source hashes recorded in their evidence. Their AST extraction and deliberately failing import examples require that source version. On a different core/driver version they are explicitly skipped with a successor-audit message. The gate does not skip ordinary current-core regression tests or the candidate/matrix tests. This avoids treating repaired counterexamples as current expected failures without editing the original audit scripts or tests. A successor audit should exercise the repaired contracts afresh; no claim of full R1-27 re-audit is made here.
+
+Compatibility check on R1-27: **40 passed, 8 historical controls skipped in 14.77 s**. Ruff is clean on all seven new Python files. All candidate and matrix source bindings match, including the preserved planning documents. Evidence: `logs/r1_round4/approved_repair_applied.json`, `pytest_approved.txt`, `pytest_r127_compatibility.txt`, `lint_approved.json`, and the final `approved_verification.json` (includes lint for the added gate).
+
+All three bounded CPU lanes are delivered: candidate review, confirmatory matrix/profiling draft, and repair audit. E.2/sealing, GPU profiles, checkpoint selection, budget decisions and the successor audit remain with the assigned owners. GPU use: 0. No task-board, core, sibling-repository or Claude-owned pilot file was edited by Codex. The user-requested commit contains this round's owned code, manifests, reports and validation artifacts. Pytest temporary files and Claude's untracked work are excluded.

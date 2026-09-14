@@ -1,0 +1,74 @@
+{
+  "status": "approved_repairs_verified",
+  "verified_utc": "2026-09-14T10:42:58.657236+00:00",
+  "head_before_commit": "57ab710d89b4c232a1e1f33283158949b09068ea",
+  "authorization": "User authorized pending fixes and committing this work",
+  "tests_before_concurrent_R1_27": {
+    "passed": 43,
+    "strict_expected_failures": 4,
+    "wall_seconds": 14.81,
+    "log": "logs/r1_round4/pytest_approved.txt"
+  },
+  "tests_on_R1_27": {
+    "passed": 40,
+    "historical_controls_skipped": 8,
+    "wall_seconds": 14.77,
+    "log": "logs/r1_round4/pytest_r127_compatibility.txt",
+    "scope": "data/matrix and current learner/memory/reader regression tests; not a full successor audit"
+  },
+  "lint": {
+    "returncode": 0,
+    "files": [
+      "scripts/r1_d1c_candidates.py",
+      "scripts/r1_40_matrix.py",
+      "scripts/r1_26_reaudit.py",
+      "scripts/r1_26_outcome_control.py",
+      "tests/revision_v1/test_round4_data_matrix_cpu.py",
+      "tests/revision_v1/test_r1_26_boundary_audit_cpu.py",
+      "tests/revision_v1/conftest.py"
+    ],
+    "stdout": "All checks passed!\n"
+  },
+  "ordinary_matrix_builder": {
+    "exit_code": 0,
+    "output": "logs/r1_round4/matrix_rebuild_approved.json",
+    "cell_definitions_and_ceilings_equal_original": true,
+    "budget_changes_due_to_concurrent_completed_pilot": {
+      "completed_pilot_training_wall_seconds_not_gpu_total": {
+        "draft": 47598.369015693665,
+        "current_rebuild": 52685.96614193916
+      }
+    }
+  },
+  "source_checks": {
+    "manifests/revision_v1/run_matrix_draft.json": {
+      "bindings": 40,
+      "mismatches": []
+    },
+    "manifests/revision_v1/zsre_fresh_candidates_v1.json": {
+      "bindings": 10,
+      "mismatches": []
+    },
+    "logs/r1_round4/zsre_candidate_review.json": {
+      "bindings": 10,
+      "mismatches": []
+    },
+    "logs/r1_round4/matrix_rebuild_approved.json": {
+      "bindings": 40,
+      "mismatches": []
+    }
+  },
+  "historical_audit_hashes_match_commit": "3ba95b55febe20d94f86180186ce163334261ad3",
+  "audit_sources_changed_by_concurrent_R1_27": [
+    "src/pccap/revision_v1/memory.py",
+    "src/pccap/revision_v1/adapt.py",
+    "src/pccap/revision_v1/learner.py",
+    "scripts/r1_13_stream_eval.py"
+  ],
+  "candidate_counts_and_external_payloads_unchanged": true,
+  "original_matrix_cells_and_budgets_unchanged": true,
+  "core_files_edited_by_codex": false,
+  "gpu_seconds": 0,
+  "board_edited_by_codex": false,
+  "supersedes": "logs/r1_round4/final_verification.json"
+}
