@@ -433,3 +433,24 @@ a KL penalty to the original) that passes fidelity; that is a follow-up, not a S
 (1) the reference reader keeps its retention on a substantially changed base (0.97 / 0.775) — robustness to base drift;
 (2) even the no-op control moved CounterFact's LS by 0.08 through floating-point residuals of 3e-5 nats, which says the
 50-prompt complete-answer LS metric is sensitive to near-tie answers; report it with its step size.
+
+## R1-54: ordinary-text drift of the learned cap — diagnosis and fix (2026-09-14, 13:20 EDT)
+
+Codex's report addendum found the reference reader raises ordinary-text loss after edits (+0.60 nats zsRE / +0.39
+CounterFact on the R1-24 drift subset). Reproduced with per-position selection on 32 fixed-prefix windows after the
+100-edit zsRE stream (`scripts/r1_54_drift_assay.py`; a first version that let sliding prefixes inherit the first
+token's selection showed zero drift and is filed as an artifact — ordinary text has no query boundary):
+
+| reader / rule | firing on ordinary prefixes | Δ NLL (nats) | perplexity ratio | zsRE RET-GS / LS | CounterFact RET-GS / LS |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| reference (mixed), null 0.5 | 0.365 | +0.647 | 1.91 | 0.98 / 1.00 | 0.795 / 1.00 |
+| reference + cosine floor 0.3 | 0.010 | +0.048 | 1.05 | — | — |
+| reference + cosine floor 0.5 | 0.010 | +0.002 | 1.002 | — | — |
+| **trained with ordinary-text nulls** (`r1_50_stream_mixed_text`), null 0.5 | **0.000** | **0.000** | **1.000** | 0.96 / 1.00 | 0.725 / 1.00 |
+
+Cause: the null was never shown low-similarity text (best cosine to any record ≈ 0.17 on ordinary prefixes) and fired
+on 36 % of it; 8 ordinary-text null queries per episode (512 OpenWebText training-range windows × 3 prefix lengths,
+cap-off logits kept for the preservation KL) remove the firing entirely at no cost to zsRE and a 0.07 dip on CounterFact
+(one seed; the seed range of the reference was 0.765–0.805). v0's drift ratios were 1.001–1.004; the cosine floor 0.5 is
+kept as a non-learned fallback rule. Seed replicates of the text-null reader and its CounterFact-edit drift follow; if
+they hold, it becomes reference condition v2.
