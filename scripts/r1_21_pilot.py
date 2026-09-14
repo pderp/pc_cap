@@ -12,7 +12,12 @@ import time
 from pathlib import Path
 
 import jax
+import jax.numpy as jnp
 import numpy as np
+
+
+def jnp_asarray(x):
+    return jnp.asarray(x)
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT_ROOT = ROOT / "results" / "R1" / "pilot"
@@ -32,6 +37,10 @@ def main() -> int:
     ap.add_argument("--domain", choices=("synthetic", "counterfact"), default="synthetic", help="episode source: synthetic generator or CounterFact natural episodes (tokenized by Codex's adapter)")
     ap.add_argument("--history", type=int, default=4)
     ap.add_argument("--no-lease", action="store_true", help="run beside another lease holder (small footprint; development pilots only)")
+    ap.add_argument("--fresh-episodes", action="store_true", help="draw a new batch of training episodes (new seeds) at every step instead of cycling a fixed set")
+    ap.add_argument("--dev-every", type=int, default=0, help="evaluate the dev losses every N steps (0 = only before/after) and keep the best-dev weights")
+    ap.add_argument("--weight-decay", type=float, default=0.0)
+    ap.add_argument("--mix-synthetic", type=float, default=0.0, help="fraction of each batch drawn from synthetic episodes when --domain counterfact")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -96,9 +105,9 @@ def main() -> int:
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         if args.estimator == "epc":
             from pccap.revision_v1.epc_train import EPCTrainer, EPCWriteGradients
-            tr = EPCTrainer(rc, cc, EPCWriteGradients(base, iters=args.iters), LossConfig(), lr=args.lr)
+            tr = EPCTrainer(rc, cc, EPCWriteGradients(base, iters=args.iters), LossConfig(), lr=args.lr, weight_decay=args.weight_decay)
         else:
-            tr = Trainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr)
+            tr = Trainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay)
         st = tr.init(theta)
 
         def evaluate(th):
@@ -113,15 +122,43 @@ def main() -> int:
         rng = np.random.default_rng(args.seed)
         log = (OUT / "metrics.jsonl").open("w")
         t0 = time.time()
+        best = {"dev_answer": float("inf"), "step": -1, "theta": None}
+        fresh_seed = 20000
         for step in range(args.steps):
-            idx = rng.choice(len(train_f), size=args.batch, replace=False)
-            theta, st, m = tr.outer_step(theta, st, [train_f[i] for i in idx])
+            if args.fresh_episodes:
+                batch = []
+                n_syn = int(round(args.batch * args.mix_synthetic)) if args.domain == "counterfact" else 0
+                for b in range(args.batch):
+                    fresh_seed += 1
+                    if b < n_syn or args.domain == "synthetic":
+                        ep = synthetic_episode(fresh_seed, "train", history_size=args.history)
+                    else:
+                        ep = None
+                        while ep is None:
+                            try:
+                                ep = tokenize_natural_episode(natural_episode(rows, fresh_seed, "train", history_size=args.history, dataset="counterfact"), tok)
+                            except ValueError:
+                                fresh_seed += 1
+                    batch.append(featurize(base, enc, ep, rc))
+            else:
+                idx = rng.choice(len(train_f), size=args.batch, replace=False)
+                batch = [train_f[i] for i in idx]
+            theta, st, m = tr.outer_step(theta, st, batch)
             m.update(step=step, wall_s=time.time() - t0)
+            if args.dev_every and (step + 1) % args.dev_every == 0:
+                dv = evaluate(theta)
+                m.update({f"dev_{k}": v for k, v in dv.items() if k in ("answer", "retrieval", "preserve")})
+                if dv["answer"] < best["dev_answer"]:
+                    best = {"dev_answer": dv["answer"], "step": step, "theta": jax.tree_util.tree_map(lambda x: np.array(x), theta)}
             log.write(json.dumps(m) + "\n")
             log.flush()
             if step % 10 == 0:
                 print(json.dumps({k: (round(v, 4) if isinstance(v, float) else v) for k, v in m.items()}), flush=True)
         train_s = time.time() - t0
+        final_theta = theta
+        if best["theta"] is not None:
+            theta = jax.tree_util.tree_map(jnp_asarray, best["theta"])
+            print(json.dumps({"best_dev_answer": best["dev_answer"], "best_step": best["step"]}), flush=True)
         after = evaluate(theta)
         wdir = Path("/home/derp/cap/assets/runs/pc_cap/R1/pilot") / OUT.name  # weights live under assets/, not in the repo
         wdir.mkdir(parents=True, exist_ok=True)
@@ -161,7 +198,7 @@ def main() -> int:
         behav = {r: {"label_exact": float(np.mean(v)), "n": len(v), "null_mass_mean": float(np.mean(null_rates[r])),
                      "unchanged_from_capoff": (float(np.mean(preserved[r])) if r in preserved else None)} for r, v in roles.items()}
         summary = {"args": vars(args), "estimator": args.estimator, "domain": args.domain, "dev_eval": "exact reference losses (train.episode_grads) for both estimators", "n_params": int(sum(int(np.prod(x.shape)) for x in jax.tree_util.tree_leaves(theta))), "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"),
-                   "featurize_wall_s": feat_s, "train_wall_s": train_s, "dev_before": before, "dev_after": after, "behavioural_dev": behav,
+                   "featurize_wall_s": feat_s, "train_wall_s": train_s, "best_dev": {"answer": best["dev_answer"], "step": best["step"]}, "final_after": (evaluate(final_theta) if best["theta"] is not None else None), "dev_before": before, "dev_after": after, "behavioural_dev": behav,
                    "answer_roles": list(ANSWER_ROLES), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))
         print(json.dumps({"dev_before": before, "dev_after": after, "behavioural_dev": behav, "train_wall_s": round(train_s)}, default=float), flush=True)
