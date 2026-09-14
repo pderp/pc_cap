@@ -308,3 +308,7 @@ excellent on both datasets; the locality decision is the only open piece: the Co
 paraphrases, and the cosine geometry that separates zsRE unrelated prompts (0.74 vs 0.98) does not separate CounterFact
 near-neighbours (0.98 vs 0.85). One rule for both datasets needs the null trained on both domains (M3) — or a null that
 does not depend on the query's style (dropping the query-only linear term; tested next).
+
+Seed robustness (CounterFact, null 0.5): seed 0 → RET-GS 0.775 / LS 1.00; seed 1 → 0.93 / 0.92 (the null's operating
+point varies with the seed; the similarity does not). Seed 2 and a query-style-free null variant (pairwise + lexical terms
+only) follow.

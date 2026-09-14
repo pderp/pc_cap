@@ -34,6 +34,7 @@ class ReaderConfig:
     score_scale: float = 10.0  # inverse temperature for cosine scores (cosine ∈ [-1, 1] needs a scale to be decisive)
     pairwise_null: bool = True  # the null logit sees the query AND the best-matching key (near-neighbour rejection needs a pairwise decision)
     lexical: bool = True  # M4: token overlap between the query and a record's support prompt enters the score and the null
+    query_null: bool = True  # query-only linear null term; False = pairwise + lexical terms only (domain-robust null)
     stop_tokens: tuple[int, ...] = ()  # tokens ignored by the overlap (document-frequent); part of the semantic configuration
 
 
@@ -119,7 +120,7 @@ def pair_scores(cfg: ReaderConfig, q, keys):
 def null_score(params: dict, cfg: ReaderConfig, q, k_best=None):
     """Null logit: query-only (linear) plus, when configured and a best key exists, a pairwise term on [q̂, k̂, q̂⊙k̂]."""
     qq = unit(q) * jnp.sqrt(cfg.width) if cfg.cosine else q
-    out = (qq @ params["null"]["w"] + params["null"]["b"])
+    out = (qq @ params["null"]["w"] + params["null"]["b"]) if cfg.query_null else params["null"]["b"]
     if cfg.pairwise_null and "null_pair" in params and k_best is not None:
         qn, kn = unit(q), unit(k_best)
         out = out + _apply_mlp(params["null_pair"], jnp.concatenate([qn, kn, qn * kn]) * jnp.sqrt(cfg.width))[0]

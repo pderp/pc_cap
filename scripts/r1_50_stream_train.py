@@ -36,6 +36,7 @@ def main() -> int:
     ap.add_argument("--tag", default="r1_50_stream")
     ap.add_argument("--no-lease", action="store_true")
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
+    ap.add_argument("--no-query-null", action="store_true", help="null without the query-only linear term (pairwise + lexical only)")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -53,9 +54,9 @@ def main() -> int:
 
     def _reader_config(**kw):
         if args.stop_tokens == "none":
-            return ReaderConfig(lexical=False, **kw)
+            return ReaderConfig(lexical=False, query_null=not args.no_query_null, **kw)
         toks = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
-        return ReaderConfig(lexical=True, stop_tokens=toks, **kw)
+        return ReaderConfig(lexical=True, stop_tokens=toks, query_null=not args.no_query_null, **kw)
     rc, cc = _reader_config(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     OUT = OUT_ROOT / args.tag
     if OUT.exists():
