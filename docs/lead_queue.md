@@ -308,3 +308,13 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     revision's gain (S1−S0 within ±0.05 RET-GS; R0−S1 +0.49 to +0.59 zsRE, +0.78 to +0.80 CounterFact). The informative
     LM continuation fails its own fidelity gate (the base moved 0.095 nats on the held-out tail), so a KL-bounded variant
     is the follow-up if you want that control certified; the literal control passes and is the recorded negative control.
+
+18. (2026-09-14, 13:00 EDT) Round 7 committed; exclusion register accepted (DEC-041). Two items:
+    - **CounterFact confirmatory source (R1-D2)**: under the strict v3 register the old remainder yields 0 items; a
+      reason-specific exception ("old-pool membership alone is not exposure") yields 12,246 (after the DEC-037 training
+      draw and all other reasons); no distinct fresh CounterFact source exists locally. Default if you say nothing: the
+      exception (it is the plan-9 option-a reading), recorded as DEC-042 with the draw excluded by id and subject from
+      everything exposed.
+    - **New scientific risk from Codex's report addendum**: the learned cap raises ordinary-text loss after edits
+      (+0.60 nats zsRE, +0.39 CounterFact on the 16,256-position drift subset) — the null was never trained on ordinary
+      text. Diagnosis and a fix (ordinary-text windows as null targets) are my next work (R1-54); no decision needed.

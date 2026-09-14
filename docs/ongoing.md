@@ -47,47 +47,38 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 7 (CPU; open now)
+## 3. Lanes for Codex — round 8 (CPU; open now)
 
-Round 6 is committed (`a903cfd`) and answered (`docs/tasks/R1-46-response.md`; R50-04/06/08/09 repaired in `ae22d73`).
-State: the learned reader is the primary revision condition with one rule for both datasets — identity, results,
-controls and open risks in `manifests/revision_v1/primary_condition_v1.json` and `docs/R1_stage2_notes.md`. DEC-040: the
-orchestrator is running both R1-24 treatments (literal self-KD control + informative LM continuation). Lanes:
+Round 7 is committed and mirrored; DEC-041 accepts the exclusion register (v2 policy, v3 register). Your addendum's
+ordinary-text drift finding is now R1-54 (orchestrator: diagnosis + ordinary-text null population). Lanes:
 
-### Lane R1-X6 — audit of the round-6 repairs and the reference-condition identity
+### Lane R1-49 — Stage 4 protocol draft (pre-registration document)
 
-Read-only: verify commit `ae22d73` against your R50-04/06/08/09 checkpoints (bank identity verification, ledger charging
-of the fast trainer, mixed-domain query guarantees, operating-point hygiene), the scale profile (`scripts/r1_53_scale_profile.py`,
-`results/R1/scale_profile_*.json`) and `primary_condition_v1.json` (weights hashes, pools, rules); reproduce the two
-open risks it states. `logs/audit_r1_28b.md`.
+From plan 9 §Stage 4, `run_matrix_draft_v3.json`, `primary_condition_v1.json`, DEC-033/034/035/037/039/040/041 and the
+endpoints now defined (ES, RET-ES, RET-GS, LS, near-miss/revision/composition, unseen-prompt, memory-size profile,
+ordinary-text drift): draft `docs/R1_stage4_protocol_draft.md` — conditions and their frozen identities, datasets and
+fresh draws, seeds/orders, endpoints with denominators and margins, the analysis plan (paired-cluster bootstrap as in
+v0), missingness rules, budget/ceiling fields to be frozen, and the exact list of what the lead's freeze binds. State
+every open placeholder. The orchestrator revises before the freeze.
 
-### Lane R1-44 — unseen-edit-prompt endpoint (the second scale risk)
+### Lane R1-D1f — frozen register manifest for DEC-041
 
-Specify and implement (new file `src/pccap/revision_v1/endpoints_unseen.py` + CPU test) an endpoint that measures false
-firing and answer change on prompts of facts NOT in memory, drawn from the same pool as the edits (denominator, schema,
-how it differs from LS), so the run matrix can carry it. Use the tiny base for tests; the GPU run is the orchestrator's.
-`docs/tasks/R1-44.md`.
+Produce `manifests/revision_v1/exclusions_frozen_v3.json`: the accepted register's identity (hash of v3, policy version,
+counts) plus the derived candidate inventories (zsRE fresh candidates v1; CounterFact under both readings) with their
+hashes, so that the draw scripts can bind one immutable object. No draw. `docs/tasks/R1-D1f.md`.
 
-### Lane R1-40c — run matrix v3: add the memory-size and unseen-prompt endpoints and the DEC-040 conditions
+### Lane R1-50b — ordinary-text null population: specification and denominators (R1-54 support)
 
-From `run_matrix_draft_v2.json`, `primary_condition_v1.json` and DEC-040: add the memory-size profile (100 / 300 /
-1,000 records) and the unseen-prompt endpoint as declared endpoints, the two continuation conditions (S1 literal, S1
-LM) with their evaluation cells, and the profiling runs the orchestrator must execute before ceilings are frozen; keep
-everything unlaunchable/unfrozen. `manifests/revision_v1/run_matrix_draft_v3.json`, `docs/tasks/R1-40c.md`.
+Specify how ordinary-text windows (the pinned OpenWebText training range, never the held-out tail) enter stream-scale
+episodes as null-target queries (sampling, prefix lengths, share per episode, class balance with the other null
+populations, what L3 preserves for them), and how the drift endpoint is reported (positions, prefix policy, ratio vs
+delta nats) — a written spec with denominators; the orchestrator implements. `docs/tasks/R1-50b.md`.
 
-### Lane R1-D2 — CounterFact confirmatory candidates (both readings, for the lead's decision)
+### Lane R1-X7 — review of the R1-24 execution records
 
-Prepare the ordered candidate list for fresh CounterFact confirmatory streams under exclusions v3 in both readings plan 9
-leaves open: (a) from the unopened remainder of the old eligible pool minus the DEC-037 training draw (13,141 items) and
-(b) a fresh source if one exists in `assets/data/raw` (state if none). Counts at each filter, per-record hashes, no draw,
-no seal. `manifests/revision_v1/counterfact_fresh_candidates_v1.json`, `docs/tasks/R1-D2.md`.
-
-### Lane R1-47 — Stage 2 report draft
-
-From `docs/R1_stage2_notes.md`, `results/R1/stream_eval.md`, the scale profiles and your reviews, draft
-`docs/R1_stage2_report_draft.md` in the style of `docs/report.md`: what was built, the diagnosis chain, the results
-tables (with the historical/overwritten artifacts labelled), the controls, the open risks, and what Stage 4 must
-establish. The orchestrator revises it; do not modify the notes.
+Read-only: `results/R1/r1_24/{r1_24_literal_v3b,r1_24_lm_v2b}/`, the two manifests, `r1_24_budget_reconciliation_v1.json`
+and the notes' interpretation (fidelity gates, S1−S0 and R0−S1 with the DEC-033 margins, the LS-collapse reading, the
+budget basis). `logs/review_r1_24.md`.
 
 ## 4. Interfaces and coordination
 
