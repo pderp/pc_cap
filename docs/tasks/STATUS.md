@@ -1,11 +1,11 @@
 # Task status board
 
-Regenerated 2026-09-14 08:46 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-14 10:39 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 95 |
+| done | 96 |
 | in_progress | 1 |
 | partial | 9 |
 | ready | 6 |

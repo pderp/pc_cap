@@ -173,3 +173,31 @@ def test_x25_repairs_zero_weight_deltas_weights_bytes_and_combined_config():
     with pytest.raises(NotImplementedError):
         adapt_record(cap2, _support(2), FastConfig(steps=1, delta_steps=1))  # X25-04
     assert "s2" not in cap2.store._by_id
+
+
+def test_x26_ceiling_at_construction_and_restore_metric_and_outcome_codes():
+    from pccap.revision_v1.memory import CapacityError
+    base = TinyBase()
+    with pytest.raises(CapacityError):
+        RevisionCap(base, RevisionConfig(reader=RC, controller=CC, ceiling_bytes=1), Ledger())  # X26-01: weights alone exceed the ceiling
+    cap = RevisionCap(base, _cfg(), Ledger())
+    adapt_record(cap, _support(0), cap.cfg.fast)
+    small = RevisionCap(base, RevisionConfig(reader=RC, controller=CC, fast=cap.cfg.fast, ceiling_bytes=cap.store.bytes()["total"] - 1), Ledger(), params=cap.params)
+    with pytest.raises(RuntimeError):
+        small.import_state(cap.export_state())  # the ceiling is part of the semantic configuration
+    assert cap.store.metric == "cos"  # X26-02: the store's metric follows the reader configuration
+    dot_cap = RevisionCap(base, RevisionConfig(reader=ReaderConfig(d=CFG.d, width=8, hidden=8, d_code=6, top_k=2, cosine=False), controller=CC), Ledger())
+    assert dot_cap.store.metric == "dot"
+    # X26-04: a capacity failure during the delta write is reported as a resource failure, not as no improvement
+    from pccap.contracts import EditItem
+    cap3 = RevisionCap(base, RevisionConfig(reader=RC, controller=CC, fast=FastConfig(steps=0, delta_steps=2, delta_lr=0.05, tau=0.01)), Ledger())
+    s1 = _support(1)
+    cap3.store.ceiling_bytes = cap3.store.bytes()["total"] + 8 * 4 + 6 * 4 + 128 + len(s1.prompt_ids) * 4 + 16  # room for the record, not its delta
+    item = EditItem(item_id="i1", digest=b"\x01" * 16, prompt="p", answer="a", aliases=[], paraphrases=[], locality_prompts=[],
+                    prompt_ids=np.asarray(s1.prompt_ids, np.int32), answer_ids=np.asarray(s1.answer_ids, np.int32), dataset="t", fact_id="f1")
+    out = cap3.update_item(item, None, None)
+    assert out.code == "acquisition_failure" and out.codes == ["resource_failure:delta_capacity"]
+    # returned cost of the first prediction includes the selection pass
+    cap.reset_queries()
+    r = cap.predict(np.asarray(_support(0).prompt_ids, np.int32))
+    assert r.cost.full_forwards >= 1

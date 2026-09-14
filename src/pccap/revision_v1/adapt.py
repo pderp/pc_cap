@@ -52,6 +52,8 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
     """Teach one support example. Mutates only ``learner.store`` (one new record; one supersession at most)."""
     base, params, rc = learner.base, learner.params, learner.cfg.reader
     cost = RevisionCost(phase="learning")
+    if fast.steps > 0 and fast.delta_steps > 0:
+        raise NotImplementedError("code steps and delta steps together are not a defined rule; choose one (X25-04)")  # before any base call
     prompt = np.asarray(support.prompt_ids, np.int32)
     answer = np.asarray(support.answer_ids, np.int32)
     if prompt.size == 0 or answer.size == 0:
@@ -125,9 +127,6 @@ def adapt_record(learner, support: SupportExample, fast: FastConfig) -> tuple[Ad
     loss0, _, g = losses_and_grad(code)
     trace.loss_before = loss0
     trace.per_step_loss.append(loss0)
-    if fast.steps > 0 and fast.delta_steps > 0:
-        learner.store.remove(rec.record_id, restore=superseded)
-        raise NotImplementedError("code steps and delta steps together are not a defined rule; choose one (X25-04)")
     if fast.delta_steps > 0:
         return _delta_steps(learner, rec, prefixes, q_emb, answer, code, loss0, fast, cost, trace)
     for step in range(fast.steps):

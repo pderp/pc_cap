@@ -200,5 +200,19 @@ class RecordStore:
             store._by_id[rec.record_id] = i
         return store
 
+    def validate(self) -> None:
+        """Admission check for a restored store (X26-01): ids unique, shapes and finiteness, and total bytes within the ceiling."""
+        ids = [r.record_id for r in self.records]
+        if len(set(ids)) != len(ids):
+            raise ValueError("duplicate record ids in the snapshot")
+        for r in self.records:
+            if r.key.shape != (self.dk,) or r.code.shape != (self.d_code,) or not (np.all(np.isfinite(r.key)) and np.all(np.isfinite(r.code))):
+                raise ValueError(f"record {r.record_id!r}: bad key/code")
+            if r.delta is not None and (r.delta.ndim != 3 or not np.all(np.isfinite(r.delta))):
+                raise ValueError(f"record {r.record_id!r}: bad delta")
+        total = self.bytes()["total"]
+        if total > self.ceiling_bytes:
+            raise CapacityError(f"restored state ({total} B) exceeds the configured ceiling ({self.ceiling_bytes} B)")
+
     def content_hash(self) -> str:
         return self.export().content_hash()

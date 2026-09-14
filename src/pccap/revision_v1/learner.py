@@ -34,7 +34,7 @@ from pccap.revision_v1.controller import (
     writes,
     writes_with_delta,
 )
-from pccap.revision_v1.memory import DEFAULT_CEILING, RecordStore
+from pccap.revision_v1.memory import DEFAULT_CEILING, CapacityError, RecordStore
 from pccap.revision_v1.observations import (
     ENCODER_VERSION,
     ObservationEncoder,
@@ -78,6 +78,7 @@ class Selection:
     hard_null: bool
     prompt_pass: object = None
     best_score: float | None = None  # cosine of the best candidate (diagnostics / min_score gate)
+    pending_cost: object = None  # the selection pass's CostRecord, returned once by the first prediction that uses the selection
     delta: np.ndarray | None = None  # applicability-weighted delta write of the selected records (None when none carries one)  # the selection pass (ForwardResult) kept for the prompt-position read when caching is on
 
 
@@ -95,7 +96,10 @@ class RevisionCap:
         self.params = params
         self.params_hash = params_hash(params)
         self.n_params = param_count(params)
-        self.store = RecordStore(dk=cfg.reader.width, d_code=cfg.reader.d_code, ceiling_bytes=cfg.ceiling_bytes, encoder_version=ENCODER_VERSION, weights_bytes=4 * self.n_params)
+        self.store = RecordStore(dk=cfg.reader.width, d_code=cfg.reader.d_code, ceiling_bytes=cfg.ceiling_bytes, encoder_version=ENCODER_VERSION,
+                                 weights_bytes=4 * self.n_params, metric="cos" if cfg.reader.cosine else "dot")  # X26-02: one metric for training, retrieval, snapshots
+        if self.store.bytes()["total"] > cfg.ceiling_bytes:
+            raise CapacityError(f"the reusable weights alone ({self.store.bytes()['total']} B) exceed the ceiling {cfg.ceiling_bytes} B (X26-01)")
         self._sel: dict[bytes, Selection] = {}
         self.cost_counters = {"selection_passes": 0, "cached_prompt_reads": 0, "corrected_partial_passes": 0}
         rc, cc = cfg.reader, cfg.controller
@@ -110,12 +114,13 @@ class RevisionCap:
     def _select(self, prompt: np.ndarray) -> Selection:
         fr = self.base.forward(prompt, (), retain_sites=True, phase="query", last_only=True)
         self.cost_counters["selection_passes"] += 1
+        sel_cost = fr.cost
         obs = observation_from_pass(fr, prompt, None, self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
         cands = self.store.retrieve(np.asarray(q), self.cfg.reader.top_k, query_version=self.enc.encoder_version)
         keep = fr if self.cfg.cache_prompt_pass else None
         if not cands:
-            return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, prompt_pass=keep)
+            return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, prompt_pass=keep, pending_cost=sel_cost)
         k = self.cfg.reader.top_k
         keys = np.zeros((k, self.cfg.reader.width), np.float32)
         mask = np.zeros(k, bool)
@@ -144,7 +149,7 @@ class RevisionCap:
                 for wi, dl in with_d:
                     delta[: dl.shape[0]] += np.float32(wi) * dl
                 delta /= np.float32(wsum)
-        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, prompt_pass=keep, delta=delta, best_score=best_score)
+        return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, prompt_pass=keep, delta=delta, best_score=best_score, pending_cost=sel_cost)
 
     def selection_for(self, ids: np.ndarray) -> Selection:
         ids = np.asarray(ids, np.int32).reshape(-1)
@@ -164,6 +169,10 @@ class RevisionCap:
         ids = np.asarray(ids, np.int32).reshape(-1)
         sel = self.selection_for(ids)
         cost = RevisionCost(phase="query")
+        if sel.pending_cost is not None:  # returned cost includes the selection pass once (returned-cost reconciliation)
+            cost.add(sel.pending_cost)
+            cost.extra_pass_forwards += 1
+            sel.pending_cost = None
         if sel.prompt_pass is not None and not full and len(ids) == sel.prompt_len:
             fr = sel.prompt_pass  # cached observation of the prompt position (already charged by the selection)
             self.cost_counters["cached_prompt_reads"] += 1
@@ -211,12 +220,18 @@ class RevisionCap:
             raise RuntimeError("reusable weights changed during adaptation (gate 2)")
         tau = self.cfg.tau_edit
         acquired = trace.accepted and all(np.isfinite(v) and v <= tau for v in trace.per_prefix_loss_after)
-        code = "accepted" if trace.accepted else "rejected_no_improvement"
-        prefix_outcomes = [{"prefix_index": t, "loss_before": None, "loss_after": v, "code": code} for t, v in enumerate(trace.per_prefix_loss_after)]
+        reason = trace.rolled_back_reason
+        if trace.accepted:
+            code, codes = "accepted", ["accepted"]
+        elif reason in ("no_improvement", None):
+            code, codes = "rejected_no_improvement", ["rejected_no_improvement"]
+        else:  # X26-04: capacity / numerical / unsupported-rule failures are resource failures, not scientific negatives
+            code, codes = "acquisition_failure", [f"resource_failure:{reason}"]
+        prefix_outcomes = [{"prefix_index": t, "loss_before": None, "loss_after": v, "code": code, "reason": reason} for t, v in enumerate(trace.per_prefix_loss_after)]
         c = CostRecord(phase="learning")
-        c.add(cost)
+        c.add(cost)  # includes failed work
         return ItemOutcome(item_id=item.item_id, code=code, acquired_threshold_all_prefixes=bool(acquired), prefix_outcomes=prefix_outcomes,
-                           rounds_used=trace.steps_used, cost=c, codes=[code])
+                           rounds_used=trace.steps_used, cost=c, codes=codes)
 
     # ------------------------------------------------------------------ state
     def export_state(self) -> LearnerState:
@@ -229,15 +244,19 @@ class RevisionCap:
     def semantic_config(self) -> str:
         return json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)},
                            "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold, "single_site": self.cfg.single_site,
-                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "binary_mass": self.cfg.binary_mass, "min_score": self.cfg.min_score, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
+                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "binary_mass": self.cfg.binary_mass, "min_score": self.cfg.min_score,
+                           "ceiling_bytes": self.cfg.ceiling_bytes, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
 
     def import_state(self, st: LearnerState) -> None:
         if st.scalars.get("params_hash") != self.params_hash:
             raise RuntimeError("snapshot was produced with different reusable weights")
         if st.scalars.get("config") != self.semantic_config():
             raise RuntimeError("snapshot was produced under a different semantic configuration (R23-06)")
-        self.store = RecordStore.from_state(st)
-        self.store.weights_bytes = 4 * self.n_params  # X25-02: the ceiling charge for the weights is not part of the stored state
+        candidate = RecordStore.from_state(st)  # X26-01: validate in a temporary store before any mutation
+        candidate.weights_bytes = 4 * self.n_params  # X25-02: the ceiling charge for the weights is not part of the stored state
+        candidate.ceiling_bytes = self.cfg.ceiling_bytes  # the configured policy governs; a snapshot cannot raise it
+        candidate.validate()
+        self.store = candidate
         self.reset_queries()
 
     def state_hash(self) -> str:

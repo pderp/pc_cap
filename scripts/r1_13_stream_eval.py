@@ -66,6 +66,11 @@ def main() -> int:
     frozen = json.loads((ROOT / "manifests" / "archive" / "frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     rc, cc = ReaderConfig(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+    rd = OUT / "streams_revision" / tag
+    destinations = [OUT / f"stream_eval_{tag}.json", rd, Path("/home/derp/cap/assets/runs") / rd.relative_to(ROOT)]
+    taken = [str(d) for d in destinations if d.exists()]
+    if taken:
+        raise SystemExit(f"run identity {tag!r} already has artifacts (never overwritten; choose a new tag): {taken}")  # X26-03: before any setup
     items, unrelated = load_dev_items(args.dataset, args.n, seed=21)
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_eval", stage="R1", projected_seconds=3600.0)):
         ledger = Ledger()
@@ -77,9 +82,6 @@ def main() -> int:
         cap = RevisionCap(base, cfg, ledger, params=theta)
         ph = cap.params_hash
         ev = Evaluator(base, tok, unrelated[:50], None)
-        rd = OUT / "streams_revision" / tag
-        if rd.exists():
-            raise SystemExit(f"{rd} exists: results are never overwritten — choose a new tag")
         t0 = time.time()
         m = run_stream(cap, items, None, Budget(A=float(frozen["A"]), R=max(1, args.fast_steps, args.delta_steps), tau_edit=float(frozen["tau_edit"])), ev, rd, ledger, checkpoints=(), seed=1, arm="R1")
         assert params_hash(cap.params) == ph, "reusable weights changed during the stream (gate 2)"
