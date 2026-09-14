@@ -358,3 +358,11 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     240-cell matrix stands and its ceilings will be set from the measured components (≈ 92 h; the 15 h envelope is
     superseded by your decision). DEC-042 (CounterFact source) is explained in the session reply and stays open; the
     default (reason-specific exception) applies only if you say nothing before the draw.
+
+23. (2026-09-14, 17:45 EDT) DEC-045 recorded: MQuAKE-CF downloaded and approved as the third dataset; Codex lane
+    R1-D4 prepares it (item conversion, locality/near-miss prompts, composition inventory, register cross-check). One
+    consequence to confirm: keeping CounterFact means the DEC-042 exception (reading a) is the only source for its
+    fresh streams — I will treat it as accepted unless you object. The matrix becomes 8 conditions × 3 datasets × 3
+    realizations × 5 orders = 360 cells; with the measured per-cell cost that is ≈ 140 h of accelerator wall time.
+    Whether the reader is also trained on a MQuAKE pool (same-source claim, as for zsRE and CounterFact) or evaluated
+    on MQuAKE as a transfer test is your call; default: a 1,000-item MQuAKE training pool and a three-seed retrain.

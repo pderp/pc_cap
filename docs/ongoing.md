@@ -43,7 +43,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 - **Round 8 committed** (`c401f55`): Stage 4 protocol draft (R1-49, gates U01–U18), frozen register binding
   (R1-D1f, `exclusions_frozen_v3.json`), ordinary-text null spec (R1-50b), R1-24 review (R1-X7; qualifications applied
   to the notes).
-- **Lead decisions open**: DEC-042 (CounterFact source; default = exception), then the freeze (R1-41); DEC-043 accepted, DEC-044 keeps the full matrix. No draw, seal or launch before those.
+- **DEC-045**: MQuAKE-CF is the third dataset (`assets/data/raw/mquake/`); CounterFact stays (which needs the DEC-042
+  exception). DEC-043 accepted, DEC-044 keeps the full matrix (now 360 cells). Then the freeze (R1-41). No draw, seal or launch before those.
 - Rules unchanged (§ top); Codex: new files only, CPU only, no sealed payloads, no real-base execution; edit requests
   as patches under `docs/tasks/`. Tests under `tests/revision_v1/` (CPU) must pass.
 
@@ -77,7 +78,7 @@ table with a "development, not confirmatory" banner) and the tests pass.
 
 A script `scripts/r1_58_draw_streams.py` bound to `manifests/revision_v1/exclusions_frozen_v3.json` and the candidate
 inventories (`counterfact_fresh_candidates_v1.json`, `zsre_fresh_candidates_v1.json`): for a named source decision
-(`--counterfact-source strict|exception`, both readings supported), draws three realizations per dataset of 1,000 edit
+(`--counterfact-source strict|exception`, both readings supported), draws three realizations per dataset (zsRE, CounterFact, and MQuAKE once R1-D4's inventory exists) of 1,000 edit
 items plus 100 outside items and the near-miss / revision reserves, disjoint across roles and realizations, stratified
 as the protocol draft §3 states, with an explicit shortfall rule; writes an unsealed draw manifest with every id, hash
 and RNG parameter, and refuses to seal or to write a payload unless `--i-am-the-lead` is present (which you must not
@@ -91,9 +92,29 @@ A new document `docs/R1_stage4_protocol_draft_v2.md` that reconciles your draft 
 condition v3 (the gate, `primary_condition_v3.json`) and v2 as the no-gate comparison; the P1 profile numbers
 (`results/R1/p1_profile/*/summary.json`, `docs/R1_stage2_notes.md` §"R1-40c P1"); the unseen endpoint at
 100/300/1,000 with and without the gate; the drift recount; the endpoint costs (R1-43 151 s, R1-44 ≈ 75–200 s, drift
-≈ 165 s per checkpoint for the full 128-window assay). The lead has decided (DEC-044) that the scope is NOT cut: price the full 240-cell
-matrix from the measured components (cells × wall hours with the 0.2 reserve, per condition and dataset, shared
+≈ 165 s per checkpoint for the full 128-window assay). The lead has decided (DEC-044) that the scope is NOT cut: price the full matrix — now 8 conditions × 3 datasets (MQuAKE-CF added, DEC-045) × 3 realizations × 5 orders = 360
+cells — from the measured components (cells × wall hours with the 0.2 reserve, per condition and dataset, shared
 training charged once) and state which U-gates the measurements close; do not propose reductions. Keep U01–U18 with their status updated; do not close a gate the lead owns.
+
+### Lane R1-D4 — MQuAKE-CF preparation (DEC-045; CPU; highest priority of the round)
+
+Source: `/home/derp/cap/assets/data/raw/mquake/MQuAKE-CF.json` (sha256 in `manifests/datasets.json`; MIT). Produce, as
+new files, `scripts/r1_d4_prepare_mquake.py`, tests, `manifests/revision_v1/mquake_items_v1.json` (item inventory with
+hashes, no payload text needed in the manifest) and the prepared resource under
+`/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/`. Rules: (1) one item per unique (subject, relation_id)
+rewrite; when several instances give different `target_new` for the same pair, keep the first by `case_id` and record
+the conflict; (2) prompt = the cloze template with the subject filled (`"{} is employed by"` → `"Carl Sagan is employed
+by"`), answer = `target_new.str`, aliases = the matching `new_single_hops[].answer_alias` (plus the string itself),
+paraphrases = the `question` form (and any second cloze/question variant found in `single_hops`/`new_single_hops` for
+the same triple); (3) locality prompts = two same-relation cloze prompts of other subjects with their `target_true`
+(the CounterFact neighbourhood convention), never sharing the subject; near-miss reserves the same way, disjoint from
+the locality prompts; (4) composition inventory = the instances' `questions` (three paraphrases), `answer`/`new_answer`
+with aliases and the `orig` triples, keyed to the edit items they depend on, marked `verified_source: MQuAKE` — these
+are the direct composition questions R1-43 lacks; (5) exposure: drop every item whose normalized subject is in
+`manifests/revision_v1/exclusions_v3.json` (NFKC, casefold, whitespace) and list the 924 dropped; emit the MQuAKE
+subject inventory for the register's next version; report the overlap with the zsRE fresh candidates; (6) no teacher,
+no base, no draw, no seal: the teacher/eligibility pass is the orchestrator's. Counts to report: items, subjects,
+relations, answer-token histogram (use `pccap.data.tokenize`), locality coverage, composition questions per item.
 
 ### Lane R1-X8 — counter-review of R1-55, R1-56 and the Stage 2 report revision
 

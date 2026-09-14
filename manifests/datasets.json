@@ -130,5 +130,54 @@
    "https://rome.baulab.info/data/dsets/zsre_mend_eval.json",
    "https://rome.baulab.info/data/dsets/zsre_mend_train.json"
   ]
+ },
+ "mquake": {
+  "fetched": "2026-09-14T21:37:38Z",
+  "url": [
+   "https://github.com/princeton-nlp/MQuAKE (raw.githubusercontent.com/princeton-nlp/MQuAKE/main/datasets/*)"
+  ],
+  "revision": "a4f38bbb1f117db6f92d5b3cecae5e625a27734c",
+  "licence": "MIT (Princeton NLP, 2023)",
+  "status": "present",
+  "approved": "lead, 2026-09-14 (DEC-045): MQuAKE-CF as the third confirmatory dataset; CounterFact kept",
+  "fields": [
+   "case_id",
+   "requested_rewrite[prompt, relation_id, target_new{str,id}, target_true{str,id}, subject, question]",
+   "questions",
+   "answer",
+   "answer_alias",
+   "new_answer",
+   "new_answer_alias",
+   "single_hops",
+   "new_single_hops",
+   "orig"
+  ],
+  "files": {
+   "data/raw/mquake/MQuAKE-CF.json": "fbf1ab9e5243e52da429f7636990096ae0b5f8fbf60f1d4d3a4bf0c9214cd6ea",
+   "data/raw/mquake/MQuAKE-CF-3k-v2.json": "f82091cbb668cef8f2537f79f1768af1840184450b347ff8c344336090ddc71e",
+   "data/raw/mquake/MQuAKE-T.json": "58500a1d4aaf9e036c23a1d9dd6be2d73d693e35a695614842f211ea5aff59f2",
+   "data/raw/mquake/LICENSE": "8872dbf8660b00890b5e07ce1ea1f7a44fa7ae4e1857da56caba172b51dab3cb",
+   "data/raw/mquake/README.md": "e48f96772d1a39a07a3e8cd34272a545a5ddd33685f0d2cbd6a98a98d9bc0e6e"
+  },
+  "inventory": {
+   "instances": 9218,
+   "rewrites": 16835,
+   "unique_subject_relation": 7236,
+   "subjects": 6501,
+   "relations": 37,
+   "subjects_in_exclusion_register_v3": 924,
+   "unique_rewrites_on_unexposed_subjects": 6043,
+   "target_new_gpt2_tokens": {
+    "1": 2353,
+    "2": 2109,
+    "3": 1109,
+    "4": 815,
+    "5": 346,
+    "6": 208,
+    "7": 131,
+    ">=8": 165
+   }
+  },
+  "notes": "MQuAKE-CF-3k-v2 and MQuAKE-T are kept for reference only; the confirmatory source is MQuAKE-CF (single-hop rewrites) with its multi-hop questions as the composition inventory. Nothing from this file has been opened for sampling."
  }
 }
