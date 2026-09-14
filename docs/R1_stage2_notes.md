@@ -296,3 +296,7 @@ first 94 % of the time while locality near-neighbours overlap their item's promp
 features alone ranked the own record ~100th of 400. On zsRE the same reader now rejects half the paraphrases (rewordings
 with lower overlap; CounterFact-only training) — M3 (zsRE-domain training pool) and M5 (per-dataset threshold) are the
 next steps for zsRE, where the non-learned gate still holds 0.65 / 1.00.
+
+zsRE null-threshold sweep with the same weights (`r1_50_lex_null*`): 0.5 → RET-GS 0.49 / LS 0.98; 0.7 → 0.62 / 0.92;
+0.85 → 0.77 / 0.82; 0.95 → 0.86 / 0.64. The trained similarity is strong on zsRE too (0.86 with the null nearly off, vs
+0.65 for the non-learned gate); the CounterFact-trained null is what is miscalibrated there (M3/M5).
