@@ -230,3 +230,9 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
    code audit (ten findings; six repaired tonight, four answered — `docs/tasks/R1-23-response.md`). One of the audit
    findings (R23-02) explained the memorization I saw in the CounterFact pilot: the record code was built from the
    support prompt only, so the taught answer never entered memory; fixed. Pilots run before the fix are kept as history.
+
+7. (late) **DEC-037** — I drew a 3,000-item CounterFact TRAINING pool from the unopened remainder of the old eligible pool
+   (sealed realizations, exposed subjects and single-paraphrase items removed; provenance in the manifest). Reason: the
+   development pools are too small and the reader memorizes them. The pool is never confirmatory and its subjects go into
+   the exclusion register v2. Override if you want the remainder kept whole for a CounterFact confirmatory draw (16,141
+   items remained before the draw; 13,141 after).

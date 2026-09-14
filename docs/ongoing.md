@@ -56,6 +56,8 @@ Round 2 (R1-D1, R1-20b, R1-X1, R1-23) is committed (`d6a1d1f`) and mirrored; you
 Resolve the "possible alias" and contextual-mention classes in `manifests/revision_v1/exclusions.json` into decided
 canonical exclusions (with reasons) so that the register can be frozen as version 2; report over- and under-exclusion
 counts and the effect on the candidate pool (raw / unique-subject). Text review only. `docs/tasks/R1-D1b.md`.
+Also fold in the new exposure: the 3,000 subjects of `manifests/revision_v1/train_pool_counterfact_v1.json` (DEC-037;
+`drawn_subjects_normalized`) must appear in register v2 with reason `train_pool_counterfact_v1`.
 
 ### Lane R1-20c — the new synthetic final namespace (R1-20b's remaining item)
 

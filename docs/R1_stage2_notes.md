@@ -77,3 +77,11 @@ by a prefix-dependent factor (norm ratio 0.55 at 8 iterations), which changes th
 clipping, and the preservation gradient from the KD head is the weakest part (training feedforward KL 1–2 vs 0.4). The
 comparison is one seed on the pre-R23-02 design and is not a Stage 4 claim. Next: repeat both estimators on the repaired
 (answer-sensitive) design with the CounterFact corpus once cf_fresh_wd_400_r25 shows what the reference reaches.
+
+## Training data (DEC-037)
+
+`manifests/revision_v1/train_pool_counterfact_v1.json`: 3,000 CounterFact items (seed 137) from the 16,141-item remainder of
+the old eligible pool after removing the 3,000 sealed-realization items and 950 items whose subjects are exposed for other
+reasons; every item has ≥ 2 paraphrases, locality prompts and token ids. Episodes are generated from these rows with the
+installed generator (`--pool`); the run `cf_pool3k_r25_600` (repaired codes, fresh episodes, weight decay 0.01, dev every
+50 steps on 32 held-out episodes) is the first on this pool.
