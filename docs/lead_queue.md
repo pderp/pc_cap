@@ -332,7 +332,7 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     the legacy proxy at 223 h against the 15 h envelope, so a scope cut is needed before any freeze (I will propose one
     with the measured ceilings).
 
-20. (2026-09-14, 13:45 EDT) **Run-matrix scope — a decision for you before the freeze.** Measured on the real base
+20. (2026-09-14, 13:30 EDT) **Run-matrix scope — a decision for you before the freeze.** Measured on the real base
     (P1 profile + endpoint runs, wall time): a learned 1,000-edit cell with every endpoint at all three checkpoints costs
     ≈ 1,150 s (edits 73–111 s; retention decoding ≈ 20 ms per query; full drift assay ≈ 165 s per checkpoint; near-miss +
     revision ≈ 150 s), ≈ 23 min with the 0.2 reserve, so Codex's 240-cell v3 matrix is ≈ 92 h against the 15 h
@@ -345,7 +345,7 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     51–74 % of the state ceiling (admissible on both datasets); CounterFact locality firing rises to 10 % at 1,000
     records; zsRE accepts 25 % / 45 % of pool-sourced unseen edit prompts at 300 / 1,000 records (7 % of dev-remainder prompts at 100) — the largest open scale risk.
 
-21. (2026-09-14, 14:50 EDT) **R1-56 and DEC-043 (proposed).** The zsRE unseen-prompt false fires that grow with memory
+21. (2026-09-14, 14:00 EDT) **R1-56 and DEC-043 (proposed).** The zsRE unseen-prompt false fires that grow with memory
     (7 → 25 → 45 % at 100 / 300 / 1,000 records) are all same-relation, different-subject prompts: the fired record
     shares only template words with the query. A non-learned gate — the query must share one memory-rare token with the
     selected record — cuts them to 5 / 11 / 10 % (CounterFact 5 → 0 % at 1,000) at a cost of at most one CounterFact

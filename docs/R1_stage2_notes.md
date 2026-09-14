@@ -563,7 +563,7 @@ the base's untruncated answers (the 32-token limit), not a cap effect. This is t
 1,000-edit endpoint and is a protocol fact, not a bug: the reader was trained with 64-record memories and
 out-of-memory nulls drawn at that scale.
 
-## R1-56: a memory-rare overlap gate against same-template false fires (2026-09-14, 14:35 EDT)
+## R1-56: a memory-rare overlap gate against same-template false fires (2026-09-14, 13:50 EDT)
 
 Non-learned deployment rule (`RevisionConfig.rare_overlap_min`, `rare_df_max=2`): after the learned decision, the query
 must share at least `rare_overlap_min` distinct non-stop tokens with the selected record's support prompt, counting
@@ -594,3 +594,13 @@ Seed coverage of the gated condition (v3; `mixed_text_s{1,2}_rare1_*`, `text_s{1
 near-miss preservation 100/100, revision 100/100 (new-answer paraphrase exactness 0.79, reappearance 0) are unchanged
 under the gate. v3 = v2 weights + gate is therefore fully characterised on the development streams: zsRE RET-GS
 0.96–0.98, CounterFact 0.715–0.85, LS 1.00, unseen false fires 10–11 % at 1,000 zsRE records, 0 % CounterFact.
+
+### R1-24 qualifications from Codex's review (R1-X7, applied 2026-09-14, 17:15 EDT)
+
+Codex's review of the execution records (`logs/review_r1_24.md`) reconciles all 16 cells and 9,042 accepted steps and
+asks for three qualifications to the R1-24 section above, which stand as written here: (1) the S1 cells carry an
+active v0-stable cap, so S1−S0 measures the continued base under that cap, not a bare base; (2) the literal
+self-distillation run does change parameters (floating-point residuals of 3e-5 nats), so it is a numerical
+near-no-op, not an identity; (3) the informative LM treatment's fidelity gate remains failed regardless of its improved
+held-out NLL — a fidelity-valid S1_LM needs a KL-bounded recipe or an explicit scope amendment before it can be a
+Stage 4 condition (U03 in the protocol draft).
