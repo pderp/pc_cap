@@ -455,7 +455,7 @@ cap-off logits kept for the preservation KL) remove the firing entirely at no co
 kept as a non-learned fallback rule. Seed replicates of the text-null reader and its CounterFact-edit drift follow; if
 they hold, it becomes reference condition v2.
 
-## R1-43 / R1-44 endpoints on the real base with the text-null reader (2026-09-14, 15:20 EDT)
+## R1-43 / R1-44 endpoints on the real base with the text-null reader (2026-09-14, 13:00 EDT)
 
 Owner adapters for Codex's endpoint modules (`scripts/r1_43_endpoints_run.py`, `scripts/r1_44_unseen_run.py`), run with
 the ordinary-text-null reader (seed 0, `r1_50_stream_mixed_text`), null 0.5, lexical stop list v1, 5 delta steps; every
@@ -473,7 +473,7 @@ Costs: R1-43 (200 cases) 151 s wall, 9.5k full forwards; each R1-44 dataset ≈ 
 declared scale risk (out-of-memory hard-null 0.87 → 0.67 at 300 in the bank profile); the 300/1,000-record points are
 what R1-40c's P3 profile must measure with the same adapter.
 
-## Text-null reader: seeds and CounterFact-edit drift → reference condition v2 (2026-09-14, 15:50 EDT)
+## Text-null reader: seeds and CounterFact-edit drift → reference condition v2 (2026-09-14, 13:15 EDT)
 
 | seed | zsRE ES / RET-ES / RET-GS / LS | CounterFact ES / RET-ES / RET-GS / LS | training wall |
 | --- | --- | --- | ---: |
@@ -495,3 +495,64 @@ The +0.012 with no firing at the three probe lengths means a small number of pos
 fire after CounterFact edits (the assay now counts firing at every scored position; `scripts/r1_54_drift_assay.py`).
 v0's drift ratios were 1.001–1.004; 1.012 is reported as a residual, not zero. The text-null reader is promoted to
 **reference condition v2** (`manifests/revision_v1/primary_condition_v2.json`; v1 is kept as the R1-54 comparison).
+
+## R1-40c P1 edit/memory profile on the real base (`scripts/r1_55_p1_profile.py`; `results/R1/p1_profile/`)
+
+1,000 edits per dataset in one stream (300 dev items, seed 21, then labelled training-pool rows beyond index 1,000 as
+fillers; no fresh candidate opened), reference reader v2 (seed 0) and the non-learned control (random tied reader,
+cosine gate 0.93); query profiles of 100 greedy decodes (50 own prompts, 50 locality prompts) at 100/300/1,000 active
+records; export → import → export restore check at every checkpoint. All 4,000 edits were accepted; no capacity
+failure.
+
+| quantity | zsRE | CounterFact |
+| --- | --- | --- |
+| cold first edit (compilation) | 3.5 s | 3.4 s |
+| warm edit p50 / p95, occupancy [0,100) | 0.130 / 0.287 s | 0.070 / 0.111 s |
+| warm edit p50 / p95, occupancy [300,1000) | 0.111 / 0.222 s | 0.073 / 0.080 s |
+| warm edit logical cost p50 (full forwards / reverses / tokens) | 19 / 7 / 232 | 12 / 4 / 103 |
+| warm edit p50 by answer positions [2,4) / [4,8) / [8,33) | 0.081 / 0.150 / 0.260 s | 0.073 / — / — |
+| query p50 / p95 at 100 records (greedy, ≤ 32 tokens) | 12.5 / 38 ms | 10.0 / 62 ms |
+| query p50 / p95 at 1,000 records | 14.4 / 29 ms | 14.6 / 66 ms |
+| per decode step p50 at 100 → 1,000 records | 3.8 → 5.3 ms | 4.4 → 6.8 ms |
+| persistent state at 100 / 300 / 1,000 records (weights 13.39 MB included) | 17.3 / 24.6 / 49.9 MB | 15.5 / 19.6 / 34.0 MB |
+| fraction of the 64 MiB ceiling at 1,000 records | 0.744 | 0.507 |
+| delta bytes at 1,000 records (answer positions mean / max) | 34.3 MB (3.7 / 14) | 18.4 MB (2 / 2) |
+| restore hash and byte equality at every checkpoint; import time at 1,000 | yes; 7 ms | yes; 6 ms |
+| own-prompt firing at 100 / 300 / 1,000 (v2 reader) | 1.00 / 1.00 / 1.00 | 1.00 / 1.00 / 1.00 |
+| locality-prompt firing at 100 / 300 / 1,000 (v2 reader) | 0.00 / 0.00 / 0.00 | 0.00 / 0.06 / 0.10 |
+| process RSS / device peak | 2.3 GB / 763 MiB | 2.2 GB / 752 MiB |
+| whole profile wall (1,000 edits + 300 queries + 3 restores) | 140 s | 90 s |
+
+Edit cost does not depend on occupancy (selection is not part of an edit); it scales with answer length (each answer
+position costs one prefix forward + reverse per delta step). Query cost grows slowly with occupancy through the
+lexical-overlap term (a Python loop over all records per prefix). The worst-case 32-position record costs 294,912 delta
+bytes; at the observed answer-length distributions 1,000 records use 51–74 % of the ceiling, so the 1,000-edit
+endpoint is admissible on both datasets without eviction. The one scale signal is CounterFact locality firing rising to
+6 % at 300 and 10 % at 1,000 records under the v2 reader (0 % at 100) — the near-duplicate risk already flagged from
+the bank profile, now measured on the real base with decoding; LS at 1,000 CounterFact records will not stay at 1.00.
+Ledger accelerator seconds (57 s zsRE, 38 s CounterFact) are the charged base-call time; the wall includes Python
+selection, decoding and restore work, so ceilings must be set from wall time. The non-learned control has the same
+edit and query costs (its `fired_by_role` column in the first run used the null-mass rule rather than its cosine gate;
+rerun as `nonlearned_v2`).
+
+## Unseen edit-prompt endpoint by memory size (R1-44 adapter; v2 reader; `results/R1/endpoints/text_s0_n*_unseen_*/`)
+
+Memory = the dev stream (300 items) extended with training-pool rows beyond index 1,000 as labelled fillers; outside
+prompts = 100 pool rows never edited (`--outside-from-pool`); at 100 records the earlier run used dev-remainder prompts.
+
+| dataset | records | outside source | false fires | answer changes | complete pairs | wall |
+| --- | ---: | --- | ---: | ---: | ---: | ---: |
+| zsRE | 100 | dev remainder | 7 % | 7 | 100 | 73 s |
+| zsRE | 300 | training pool | 25 % | 25 | 100 | 98 s |
+| zsRE | 1,000 | training pool | 45 % | 45 | 99 | 200 s |
+| CounterFact | 100 | dev remainder | 0 % | 0 | 67 | 77 s |
+| CounterFact | 300 | training pool | 2 % | 2 | 71 | 86 s |
+| CounterFact | 1,000 | training pool | 5 % | 5 | 70 | 148 s |
+
+Every false fire changed the answer. zsRE's acceptance of edit-style prompts about facts not in memory grows steeply
+with occupancy (7 → 25 → 45 %); CounterFact stays low (0 → 2 → 5 %). The 300/1,000 rows also change the prompt source
+(training-pool items are teacher-incorrect zsRE questions, closer in style to the memory than the dev remainder), so a
+100-record run with pool-sourced prompts is queued to separate source from size. CounterFact's incomplete pairs are
+the base's untruncated answers (the 32-token limit), not a cap effect. This is the largest open scale risk for the
+1,000-edit endpoint and is a protocol fact, not a bug: the reader was trained with 64-record memories and
+out-of-memory nulls drawn at that scale.

@@ -201,3 +201,26 @@ def test_x26_ceiling_at_construction_and_restore_metric_and_outcome_codes():
     cap.reset_queries()
     r = cap.predict(np.asarray(_support(0).prompt_ids, np.int32))
     assert r.cost.full_forwards >= 1
+
+
+def test_r1_56_rare_overlap_gate_rejects_template_only_queries():
+    """R1-56: with the gate, a query sharing only memory-common (template) tokens with the selected record is hard-nulled; a
+    query that carries one of the record's rare tokens keeps the learned decision; the gate is bound into the snapshot config."""
+    base = TinyBase()
+    cap = RevisionCap(base, _cfg(null_threshold=1.01, rare_overlap_min=1, rare_df_max=2), Ledger())
+    template = (10, 11, 12, 13)  # shared by every record → common
+    for i, subject in enumerate((21, 22, 23, 24, 25)):  # each subject token occurs in exactly one record → rare
+        s = SupportExample(record_id=f"s{i}", fact_id=f"f{i}", revision=1, entity_id="e", family_id="g", prompt_ids=template + (subject,), answer_ids=(40 + i,))
+        adapt_record(cap, s, cap.cfg.fast)
+    cap.reset_queries()
+    only_template = cap.selection_for(np.asarray(template + (99,), np.int32))  # a new subject: no rare token shared
+    assert only_template.hard_null and only_template.delta is None and only_template.code is None
+    cap.reset_queries()
+    with_subject = cap.selection_for(np.asarray(template + (23,), np.int32))
+    assert not with_subject.hard_null  # the learned decision stands (threshold 1.01 never nulls)
+    assert cap._rare_overlap(np.asarray(template + (23,), np.int32), np.asarray(template + (23,), np.int32)) == 1
+    assert cap._rare_overlap(np.asarray(template, np.int32), np.asarray(template + (23,), np.int32)) == 0
+    assert '"rare_overlap_min": 1' in cap.semantic_config()
+    off = RevisionCap(base, _cfg(null_threshold=1.01), Ledger(), params=cap.params)
+    with pytest.raises(RuntimeError):
+        off.import_state(cap.export_state())  # a different gate is a different semantic configuration (R23-06)

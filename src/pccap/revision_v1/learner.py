@@ -61,6 +61,8 @@ class RevisionConfig:
     hard_top1: bool = True  # deployment selection: the best-scoring record alone (v0's nearest slot); soft mixing only in training
     binary_mass: bool = True  # deployment writes are applied in full unless hard-nulled (the soft non-null mass is a training device)
     min_score: float | None = None  # non-learned fallback gate: hard null when the best cosine score is below this (v0's radius, in cosine units)
+    rare_overlap_min: int | None = None  # R1-56 non-learned gate: the query must share ≥ this many memory-rare tokens with the selected record's support
+    rare_df_max: int = 2  # a token is memory-rare when it occurs in at most this many active records' support (template words are common, subjects rare)
     cache_prompt_pass: bool = True  # R1-16: reuse the selection pass as the observation of the prompt position (saves one pass per query)
     single_site: bool = False  # R1-16 variant: writes only at site 3 (partial pass from block 11 instead of block 3)
     ceiling_bytes: int = DEFAULT_CEILING
@@ -145,6 +147,10 @@ class RevisionCap:
             one[int(np.argmax(w[: len(recs)]))] = 1.0
             w = one
         hard = null >= self.cfg.null_threshold or (self.cfg.min_score is not None and best_score < self.cfg.min_score)
+        if not hard and self.cfg.rare_overlap_min:
+            sel_rec = recs[int(np.argmax(w[: len(recs)]))]
+            if sel_rec.source_ids is None or self._rare_overlap(prompt, sel_rec.source_ids) < self.cfg.rare_overlap_min:
+                hard = True  # R1-56: same-template, different-subject queries share only common tokens with the record
         code, delta = None, None
         if not hard:
             wsum = max(float(w.sum()), 1e-12)
@@ -157,6 +163,23 @@ class RevisionCap:
                     delta[: dl.shape[0]] += np.float32(wi) * dl
                 delta /= np.float32(wsum)
         return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, prompt_pass=keep, delta=delta, best_score=best_score, pending_cost=sel_cost)
+
+    def _rare_overlap(self, prompt: np.ndarray, source_ids: np.ndarray) -> int:
+        """Number of distinct non-stop tokens shared by the query and the record's support that occur in at most
+        ``rare_df_max`` active records (document frequency over the current memory; recomputed when the store grows)."""
+        version = (len(self.store.records), len(self.store.active_records()))
+        if getattr(self, "_df_cache", (None,))[0] != version:
+            df: dict[int, int] = {}
+            for r in self.store.active_records():
+                if r.source_ids is not None:
+                    for t in set(int(x) for x in np.asarray(r.source_ids).reshape(-1)):
+                        df[t] = df.get(t, 0) + 1
+            self._df_cache = (version, df)
+        df = self._df_cache[1]
+        stop = set(int(t) for t in self.cfg.reader.stop_tokens)
+        q = set(int(x) for x in np.asarray(prompt).reshape(-1)) - stop
+        rare = {t for t in set(int(x) for x in np.asarray(source_ids).reshape(-1)) - stop if df.get(t, 0) <= self.cfg.rare_df_max}
+        return len(q & rare)
 
     def selection_for(self, ids: np.ndarray) -> Selection:
         ids = np.asarray(ids, np.int32).reshape(-1)
@@ -251,7 +274,7 @@ class RevisionCap:
     def semantic_config(self) -> str:
         return json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)},
                            "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold, "single_site": self.cfg.single_site,
-                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "binary_mass": self.cfg.binary_mass, "min_score": self.cfg.min_score,
+                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "binary_mass": self.cfg.binary_mass, "min_score": self.cfg.min_score, "rare_overlap_min": self.cfg.rare_overlap_min, "rare_df_max": self.cfg.rare_df_max,
                            "ceiling_bytes": self.cfg.ceiling_bytes, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
 
     def import_state(self, st: LearnerState) -> None:

@@ -319,7 +319,7 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
       (+0.60 nats zsRE, +0.39 CounterFact on the 16,256-position drift subset) — the null was never trained on ordinary
       text. Diagnosis and a fix (ordinary-text windows as null targets) are my next work (R1-54); no decision needed.
 
-19. (2026-09-14, 15:55 EDT; while you are away) **R1-54 resolved; reference condition v2.** Training the null on
+19. (2026-09-14, 13:20 EDT; while you are away) **R1-54 resolved; reference condition v2.** Training the null on
     ordinary-text windows removes the drift (zsRE edits: 0.000 nats; CounterFact edits: +0.012 nats vs +0.379 for the
     v1 reader) with retention intact over three seeds (zsRE RET-GS 0.96–0.98, CounterFact 0.725–0.85, LS 1.00 on all).
     `manifests/revision_v1/primary_condition_v2.json` is the development reference now; nothing is frozen. Endpoints on
@@ -331,3 +331,16 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     (CounterFact source; default = the exception) and, after the profiles, the run-matrix scope: Codex's v3 draft prices
     the legacy proxy at 223 h against the 15 h envelope, so a scope cut is needed before any freeze (I will propose one
     with the measured ceilings).
+
+20. (2026-09-14, 13:45 EDT) **Run-matrix scope — a decision for you before the freeze.** Measured on the real base
+    (P1 profile + endpoint runs, wall time): a learned 1,000-edit cell with every endpoint at all three checkpoints costs
+    ≈ 1,150 s (edits 73–111 s; retention decoding ≈ 20 ms per query; full drift assay ≈ 165 s per checkpoint; near-miss +
+    revision ≈ 150 s), ≈ 23 min with the 0.2 reserve, so Codex's 240-cell v3 matrix is ≈ 92 h against the 15 h
+    envelope. Proposal (default if you say nothing): all eight conditions, both datasets, three realizations, ONE update
+    order per realization (48 cells); full drift assay and the challenge endpoints at the final checkpoint only, the cheap
+    endpoints (retention, locality, unseen) at 100/300/1,000 — ≈ 14 min per cell, ≈ 13.5 h with reserve. Cost: order
+    effects are unmeasured in the confirmatory runs (stated in the protocol). Alternatives: (b) drop the two S1
+    continuation conditions and matched-update → 30 cells, two orders fit; (c) raise the envelope. The full report
+    revision is `docs/R1_stage2_report.md` (Codex's draft preserved). Scale facts you should know: 1,000 records use
+    51–74 % of the state ceiling (admissible on both datasets); CounterFact locality firing rises to 10 % at 1,000
+    records; zsRE accepts 25 % / 45 % of pool-sourced unseen edit prompts at 300 / 1,000 records (7 % of dev-remainder prompts at 100) — the largest open scale risk.

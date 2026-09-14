@@ -56,6 +56,7 @@ def main() -> int:
     ap.add_argument("--queries", type=int, default=100)
     ap.add_argument("--max-new", type=int, default=32)
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
+    ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate: minimum memory-rare tokens shared with the selected record")
     ap.add_argument("--no-lease", action="store_true")
     args = ap.parse_args()
     import pccap  # noqa: F401
@@ -92,7 +93,7 @@ def main() -> int:
         init = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         theta = init if nonlearned else load_theta(Path(args.theta), init)
         cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0, delta_steps=5, delta_lr=0.1, tau=float(frozen["tau_edit"])),
-                             null_threshold=0.5, tau_edit=float(frozen["tau_edit"]), min_score=0.93 if nonlearned else None)
+                             null_threshold=0.5, tau_edit=float(frozen["tau_edit"]), min_score=0.93 if nonlearned else None, rare_overlap_min=args.rare_overlap)
         cap = RevisionCap(base, cfg, ledger, params=theta)
         dev_items, _ = load_dev_items(args.dataset, 300, seed=21)
         dev_ids = {it.item_id for it in dev_items}
@@ -131,7 +132,7 @@ def main() -> int:
                 wall = time.perf_counter() - w0
                 sel = cap.selection_for(ids)
                 rows.append({"checkpoint": label, "role": role, "prompt_tokens": int(ids.size), "decode_steps": dec.steps, "stopped_by": dec.stopped_by, "wall_s": wall,
-                             "wall_per_step_s": wall / max(1, dec.steps), "fired": bool(sel.record_ids) and sel.null_mass < cfg.null_threshold,
+                             "wall_per_step_s": wall / max(1, dec.steps), "fired": not sel.hard_null,  # the deployed decision (null threshold and, for the non-learned control, the cosine gate)
                              "ledger_delta": _diff(q0, ledger.query.as_dict())})
             queries.extend(rows)
             b = cap.store.bytes()

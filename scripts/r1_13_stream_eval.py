@@ -49,6 +49,7 @@ def main() -> int:
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
     ap.add_argument("--no-query-null", action="store_true", help="null without the query-only linear term (pairwise + lexical only)")
     ap.add_argument("--min-score", type=float, default=None, help="cosine firing threshold (non-learned gate)")
+    ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate: minimum memory-rare tokens shared with the selected record")
     ap.add_argument("--no-pairwise-null", action="store_true", help="reader without the pairwise null head (weights trained before it existed)")
     args = ap.parse_args()
     import pccap  # noqa: F401
@@ -87,7 +88,7 @@ def main() -> int:
         k1, k2 = jax.random.split(jax.random.PRNGKey(0))
         template = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         theta = load_theta(Path(args.theta), template)
-        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.fast_steps, lr=args.fast_lr, delta_steps=args.delta_steps, delta_lr=args.delta_lr, tau=float(frozen["tau_edit"])), null_threshold=args.null_threshold, min_score=args.min_score, tau_edit=float(frozen["tau_edit"]))
+        cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=args.fast_steps, lr=args.fast_lr, delta_steps=args.delta_steps, delta_lr=args.delta_lr, tau=float(frozen["tau_edit"])), null_threshold=args.null_threshold, min_score=args.min_score, rare_overlap_min=args.rare_overlap, tau_edit=float(frozen["tau_edit"]))
         cap = RevisionCap(base, cfg, ledger, params=theta)
         ph = cap.params_hash
         ev = Evaluator(base, tok, unrelated[:50], None)

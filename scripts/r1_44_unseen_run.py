@@ -33,6 +33,7 @@ def main() -> int:
     ap.add_argument("--n-edits", type=int, default=100, help="edits before the checkpoint; above 300 the dev stream is extended with labelled training-pool rows beyond index 1000")
     ap.add_argument("--outside-from-pool", action="store_true", help="draw the outside (un-edited) prompts from training-pool rows beyond index 1000 instead of the dev remainder")
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
+    ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate: minimum memory-rare tokens shared with the selected record")
     ap.add_argument("--no-lease", action="store_true")
     args = ap.parse_args()
     import pccap  # noqa: F401
@@ -71,7 +72,7 @@ def main() -> int:
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
         k1, k2 = jax.random.split(jax.random.PRNGKey(0))
         theta = load_theta(Path(args.theta), {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)})
-        cap = RevisionCap(base, RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0, delta_steps=5, delta_lr=0.1, tau=float(frozen["tau_edit"])), null_threshold=0.5, tau_edit=float(frozen["tau_edit"])), ledger, params=theta)
+        cap = RevisionCap(base, RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0, delta_steps=5, delta_lr=0.1, tau=float(frozen["tau_edit"])), null_threshold=0.5, rare_overlap_min=args.rare_overlap, tau_edit=float(frozen["tau_edit"])), ledger, params=theta)
         items, _ = load_dev_items(args.dataset, min(args.n_edits, 300), seed=21)
         n_fill = args.n_edits - len(items)
         filler_rows, extra_iter = [], iter(extra_rows)
