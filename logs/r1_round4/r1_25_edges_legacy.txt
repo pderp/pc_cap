@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/derp/cap/pc_cap/scripts/r1_25_edge_cases.py", line 89, in <module>
+    main(sys.argv[1])
+  File "/home/derp/cap/pc_cap/scripts/r1_25_edge_cases.py", line 71, in main
+    trace,_ = adapt_record(c2,_support(0),FastConfig(steps=1,delta_steps=5))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/src/pccap/revision_v1/adapt.py", line 130, in adapt_record
+    raise NotImplementedError("code steps and delta steps together are not a defined rule; choose one (X25-04)")
+NotImplementedError: code steps and delta steps together are not a defined rule; choose one (X25-04)

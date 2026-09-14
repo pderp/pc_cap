@@ -1,0 +1,110 @@
+{
+  "support_answer_path": {
+    "keys_equal": true,
+    "codes_changed": true,
+    "own_prompt_queries": 1
+  },
+  "unsupported_fast_unroll": {
+    "raised": "NotImplementedError",
+    "message": "fast steps inside the outer loop are not implemented; run with fast_steps = 0 (R23-02)"
+  },
+  "unsupported_epc_penalty": {
+    "raised": "NotImplementedError",
+    "message": "the code-norm penalty is not implemented in the ePC surrogate; set w_code_norm = 0 in both trainers (R23-09)"
+  },
+  "nonfinite_revision": {
+    "reason": "non_finite_code",
+    "state_restored": true,
+    "new_removed": true,
+    "old_active": true
+  },
+  "snapshot_configuration": {
+    "single_site": {
+      "raised": "RuntimeError",
+      "message": "snapshot was produced under a different semantic configuration (R23-06)"
+    },
+    "null_threshold": {
+      "raised": "RuntimeError",
+      "message": "snapshot was produced under a different semantic configuration (R23-06)"
+    },
+    "binary_mass": {
+      "raised": "RuntimeError",
+      "message": "snapshot was produced under a different semantic configuration (R23-06)"
+    },
+    "hard_top1": {
+      "raised": "RuntimeError",
+      "message": "snapshot was produced under a different semantic configuration (R23-06)"
+    }
+  },
+  "resume_weight_accounting": {
+    "original": {
+      "keys": 32,
+      "codes": 24,
+      "deltas": 0,
+      "metadata": 128,
+      "tokens": 28,
+      "index": 0,
+      "weights": 7616,
+      "total": 7828
+    },
+    "restored": {
+      "keys": 32,
+      "codes": 24,
+      "deltas": 0,
+      "metadata": 128,
+      "tokens": 28,
+      "index": 0,
+      "weights": 7616,
+      "total": 7828
+    },
+    "same_state_hash": true,
+    "weights_before_import": 7616
+  },
+  "constructor_ceiling": {
+    "ceiling": 1,
+    "reported_bytes": 7616,
+    "accepted": true
+  },
+  "metadata_ceiling": {
+    "reported": 184,
+    "serialized_lower_bound": 10141
+  },
+  "zero_weight_delta_candidate": {
+    "ids": [
+      "selected",
+      "not-selected"
+    ],
+    "weights": [
+      1.0,
+      0.0
+    ],
+    "selected_record_has_delta": false,
+    "selection_delta_present": false,
+    "selection_delta_norm": null,
+    "logits_max_abs_change": 0.0
+  },
+  "independent_query_boundary": {
+    "inherited_prompt_len": 2,
+    "fresh_prompt_len": 3
+  },
+  "returned_cost": {
+    "actual_full_forwards": 1,
+    "returned_full_forwards": 0
+  },
+  "noncosine_config": {
+    "store_metric": "cos",
+    "dot_training_scores": [
+      3.535533905029297,
+      0.3535533845424652
+    ],
+    "retrieved": "large"
+  },
+  "nearzero_cosine": {
+    "training_scores": [
+      0.09999499469995499,
+      5.773502349853516
+    ],
+    "retrieved": "aligned"
+  },
+  "base_and_reusable_weights_frozen": true
+}

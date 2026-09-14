@@ -5,10 +5,10 @@ Do not edit by hand.
 
 | status | count |
 | --- | ---: |
-| done | 96 |
+| done | 98 |
 | in_progress | 1 |
-| partial | 9 |
-| ready | 6 |
+| partial | 10 |
+| ready | 5 |
 | pending | 8 |
 
 GPU seconds charged to tasks so far: 118743

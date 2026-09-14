@@ -2397,16 +2397,16 @@
    ],
    "gpu": "short",
    "review": true,
-   "status": "pending",
-   "agent": "orchestrator",
+   "status": "partial",
+   "agent": "codex\u2192orchestrator",
    "worktree": null,
-   "started": null,
+   "started": "2026-09-14T10:39:39+00:00",
    "finished": null,
    "commit": null,
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "X0-11; before any confirmatory launch"
+   "note": "run_matrix_draft.json (180 core / 660 inclusive cells; nothing launchable or frozen); profiling runs and ceilings are the orchestrator's; freeze R1-41 after"
   },
   {
    "id": "R1-41",
@@ -2678,6 +2678,48 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "X26-01..04 + returned cost + early refusal repaired; docs/tasks/R1-X3-response.md"
+  },
+  {
+   "id": "R1-D1c",
+   "title": "Fresh zsRE draw candidates (review, pre-E.2)",
+   "stage": "R1",
+   "role": "DATA",
+   "deps": [
+    "R1-D1b"
+   ],
+   "gpu": "none",
+   "review": true,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T10:39:39+00:00",
+   "finished": "2026-09-14T10:39:39+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "zsre_fresh_candidates_v1.json: 58,498 clear of automated checks (of 87,857 subject-deduplicated); E.2 pass and draw pending"
+  },
+  {
+   "id": "R1-X3",
+   "title": "Re-audit of the R1-26 repairs",
+   "stage": "R1",
+   "role": "REVIEW",
+   "deps": [
+    "R1-26"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-14T10:39:39+00:00",
+   "finished": "2026-09-14T10:39:39+00:00",
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "logs/audit_r1_26.md X26-01..04 \u2192 R1-27 (done)"
   }
  ]
 }

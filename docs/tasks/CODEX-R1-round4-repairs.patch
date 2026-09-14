@@ -1,0 +1,24 @@
+--- a/scripts/r1_40_matrix.py
++++ b/scripts/r1_40_matrix.py
+@@ -84,7 +84,7 @@
+         obj = load(p)
+         if obj.get("args",{}).get("steps",0) <= 0:
+             continue
+-        pilots.append({"path":str(p),"sha256":sources[str(p)],"tag":obj["args"]["tag"],"steps":obj["args"]["steps"],
++        pilots.append({"path":str(p),"sha256":sources[str(p)],"tag":obj["args"].get("tag", p.parent.name),"steps":obj["args"]["steps"],
+             "reported_learning_tokens":obj["ledger"]["learning"]["tokens"],"exact_training_pass_tokens":None,
+             "train_wall_seconds":obj.get("train_wall_s"),"bill_once_not_per_eval_cell":True})
+     own = load("results/R1/pilot/cf_pool3k_pair_own_400/summary.json")
+--- a/scripts/r1_d1c_candidates.py
++++ b/scripts/r1_d1c_candidates.py
+@@ -7,9 +7,9 @@
+ from __future__ import annotations
+ 
+ import argparse
+-from collections import Counter
+ import hashlib
+ import json
++from collections import Counter
+ from pathlib import Path
+ 
+ from r1_d1_exclusions import ASSETS, ROOT, norm, sha, words, write_json

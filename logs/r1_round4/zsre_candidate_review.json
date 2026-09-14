@@ -1,0 +1,119 @@
+{
+  "artifacts": {
+    "clear_candidates": {
+      "path": "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/clear_candidates.jsonl",
+      "sha256": "c2e01edcd2506c0bae9240e52a6742f8183a2860560c4cbb332c4ef7a980b296"
+    },
+    "flagged_candidates": {
+      "path": "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/flagged_candidates.jsonl",
+      "sha256": "490220628dd298dadbf9725161afd92beab4854bbaceefea7898c96542093f73"
+    },
+    "ordered_candidates": {
+      "path": "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/ordered_candidates.jsonl",
+      "sha256": "1d144e9937fb07d1c68b7737db014985f291da4952c91761b7a8bab5288a3a4d"
+    },
+    "record_review": {
+      "path": "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/record_review.jsonl",
+      "sha256": "30c9b1d3aa602d9030c60d0f7e8b601e4efbd48427181e160414f4ed5a6d1469"
+    }
+  },
+  "clear_candidate_token_summary": {
+    "answer_including_newline": {
+      "max": 21,
+      "mean": 3.7143150193168997,
+      "sum": 217280
+    },
+    "locality": {
+      "max": 31,
+      "mean": 14.230948066600568,
+      "sum": 832482
+    },
+    "prompt": {
+      "max": 28,
+      "mean": 11.01841088584225,
+      "sum": 644555
+    },
+    "rephrase": {
+      "max": 29,
+      "mean": 10.801412014085951,
+      "sum": 631861
+    }
+  },
+  "counts": {
+    "after_fact_dedup": 154277,
+    "after_field_validation": 154305,
+    "after_subject_dedup": 87857,
+    "after_token_validation": 154305,
+    "after_v2_exclusions": 154306,
+    "clear_pre_e2": 58498,
+    "duplicate_fact": 28,
+    "duplicate_subject": 66420,
+    "flagged": 29359,
+    "raw_records": 163196
+  },
+  "gpu_seconds": 0,
+  "limitations": [
+    "Lexical clear does not prove complete canonical entity disjointness or correct rephrase semantics.",
+    "Flagged candidates need a documented disposition before teacher filtering/final use.",
+    "First representative per subject may fail E.2 even if an alternate row would pass; no outcome-based substitution is authorized.",
+    "Candidate cross-realization contextual entity overlap must be checked after E.2; distinct primary subjects alone do not establish independent contexts.",
+    "If later training uses any candidate, register that exposure and regenerate candidates before a fresh draw."
+  ],
+  "policies": {
+    "E2": "keep complete BP-teacher greedy answers outside source answer aliases; run only after review by owner, not here",
+    "access": "all payloads are pre-final source candidates reviewed only for data preparation; no pilot/training use authorized by this artifact",
+    "fact_dedup": "NFKC/casefold/whitespace-normalized prompt plus canonical answer; operational fact identity, not a relation/entity graph",
+    "flags": "any word-boundary/punctuation-fold exclusion mention in subject, prompt, rephrase or locality is flagged; flags are conservative, not proven entity identity",
+    "locality": "source loc/loc_ans required; loc must differ from edit/rephrase; source nq prefix preserved; no new teacher labels manufactured",
+    "ordering": "ascending immutable source index; deterministic first structurally valid fact/subject representative, not a random draw",
+    "rephrase": "one source paraphrase for zsRE evaluation; nonempty, distinct text/tokens, within context; semantic equivalence NOT certified",
+    "subject_dedup": "same primary normalized subject keys as exclusions v2; known v2 aliases already excluded"
+  },
+  "provenance_refresh": {
+    "applied_utc": "2026-09-14T10:36:40.124589+00:00",
+    "authorization": "User: go ahead and commit your work please; follows the pending scoped edit request",
+    "change": "import ordering only; candidate selection, tokens, counts and payloads unchanged",
+    "original_script_sha256": "49467072712d0b86bacead593819e4a3844becaa37e48120fca2ad2948799ce3",
+    "patch_path": "docs/tasks/CODEX-R1-round4-repairs.patch",
+    "patch_sha256": "fb3dad8c00d121820d1f794c225f4dce21cdcc773079ce8f559a64957c475d01",
+    "updated_script_sha256": "cc1573070d33db292cdf41d22fcd32c28847e41ebfeb31bae389e0232396c8c4"
+  },
+  "requested_final_capacity": {
+    "clear_text_capacity_at_least_3000": true,
+    "final_realizations_assigned": 0,
+    "minimum_E2_retention_fraction_of_clear_candidates": 0.05128380457451537,
+    "realizations": 3,
+    "teacher_eligible_count": null,
+    "total": 3000,
+    "unique_subjects_per_realization": 1000
+  },
+  "review_flag_counts_overlapping": {
+    "loc_exclusion_mention": 23630,
+    "locality_answer_equals_edit_answer": 3,
+    "locality_mentions_edit_subject": 1,
+    "rephrase_exclusion_mention": 6971,
+    "rephrase_subject_not_literal": 414,
+    "src_exclusion_mention": 6526,
+    "src_subject_not_literal": 5,
+    "subject_exclusion_mention": 5694
+  },
+  "schema_version": 1,
+  "sealed_payloads_opened": 0,
+  "sources_sha256": {
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1b_v2/mend_candidate_subjects.jsonl": "9335dac86d04e144cce421fde0b173e762c13b70a6a8280a197e9cb8b4dcbcbb",
+    "/home/derp/cap/assets/data/raw/zsre/zsre_mend_train.json": "4f3ac245e9c0baaf633f9e6cb765ffa8e83d594a74520a6cc3539497328c0722",
+    "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/4b988bccc9dc5adacd403c00b4704976196548f8": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+    "/home/derp/cap/pc_cap/manifests/reference.json": "80fb81c23026eb3eeec459de4ccd1fc9c8e5d6766dd30d388e4ae6f021c3b2d7",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v2.json": "481e04c3eba70ea2f85aada9c0599c4f44031ea6cd7c75cf6c03cadec2c369a8",
+    "/home/derp/cap/pc_cap/scripts/r1_d1_exclusions.py": "cf77facaf038b785112e840c0e7d249a860a87fb99942c0bf938d17780194e79",
+    "/home/derp/cap/pc_cap/scripts/r1_d1c_candidates.py": "cc1573070d33db292cdf41d22fcd32c28847e41ebfeb31bae389e0232396c8c4",
+    "/home/derp/cap/pc_cap/src/pccap/data/splits.py": "66b00cf7514cf7c0016e945140f1d9ca717abab1e3a1441bd887b7e26d4e8530",
+    "/home/derp/cap/pc_cap/src/pccap/data/tokenize.py": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+  },
+  "status": "candidate_review_only_no_teacher_or_draw",
+  "structural_rejection_reasons_overlapping": {
+    "rephrase_equals_prompt": 1
+  },
+  "task": "R1-D1c"
+}

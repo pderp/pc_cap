@@ -1,0 +1,17 @@
+{
+  "command": [
+    "ruff",
+    "check",
+    "--no-cache",
+    "scripts/r1_d1c_candidates.py",
+    "scripts/r1_40_matrix.py",
+    "scripts/r1_26_reaudit.py",
+    "scripts/r1_26_outcome_control.py",
+    "tests/revision_v1/test_round4_data_matrix_cpu.py",
+    "tests/revision_v1/test_r1_26_boundary_audit_cpu.py"
+  ],
+  "returncode": 1,
+  "stdout": "I001 [*] Import block is un-sorted or un-formatted\n  --> scripts/r1_d1c_candidates.py:7:1\n   |\n 5 |   not assertions that a substring identifies the same real-world entity.\n 6 |   \"\"\"\n 7 | / from __future__ import annotations\n 8 | |\n 9 | | import argparse\n10 | | from collections import Counter\n11 | | import hashlib\n12 | | import json\n13 | | from pathlib import Path\n14 | |\n15 | | from r1_d1_exclusions import ASSETS, ROOT, norm, sha, words, write_json\n   | |_______________________________________________________________________^\nhelp: Organize imports\n   |\n9  | import argparse\n   - from collections import Counter\n10 | import hashlib\n11 | import json\n12 + from collections import Counter\n13 | from pathlib import Path\n   |\n\nFound 1 error.\n[*] 1 fixable with the `--fix` option.\n",
+  "stderr": "",
+  "pending_patch": "docs/tasks/CODEX-R1-round4-repairs.patch"
+}
