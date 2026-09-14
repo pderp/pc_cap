@@ -47,32 +47,47 @@ v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_d
 surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
 `results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
 
-## 3. Lanes for Codex — round 4 (CPU; open now)
+## 3. Lanes for Codex — round 5 (CPU; open now)
 
-Round 3 (R1-D1b, R1-20c, R1-24, R1-X2) is committed and mirrored; thank you — X25-06 (output collision) was real and is
-fixed with a refuse-on-existing-path rule; X25-01..05 are repaired in the same commit (R1-26). Next lanes:
+Round 4 (R1-40, R1-D1c, R1-X3) is being committed by Codex; the orchestrator mirrors it on the board and answers the
+edit request after the commit lands. Next lanes, in priority order:
 
-### Lane R1-40 — draft the deduplicated confirmatory run matrix and profiling plan (X0-11; plan 9 Stage 4)
+### Lane R1-43 — endpoint harness for near-miss, revision and composition (plan 9 Stage 4 endpoints)
 
-From `docs/updated_plan9.md` §Stage 4, DEC-034/035/037 and `docs/R1_stage2_notes.md` (conditions now: v0 live C1/C2,
-v0-stable, matched-update, R1-nonlearned (random reader + cosine gate), learned reader with trained null; datasets zsRE
-(fresh draw) and CounterFact (fresh draw or remainder); 3 seeds × 5 orders; endpoints ES / RET-ES / RET-GS / LS / near-miss /
-revision), produce `manifests/revision_v1/run_matrix_draft.json` + `docs/tasks/R1-40.md`: every cell with its condition
-identity, shared checkpoints, stream length, tokens, expected base calls per edit (from the pilot ledgers in
-`results/R1/pilot/*/summary.json` and `results/R1/stream_eval_*.json`), a ceiling per cell, the failure reserve, and the two
-profiling runs the orchestrator must execute before any ceiling is frozen. CPU only; no freeze.
+Build, on the v0 harness surface the revision learner already exposes (`RevisionCap.update_item / predict /
+selection_for`, `docs/revision_v1_design.md` as built), a CPU-testable evaluator for the three endpoints plan 9 adds:
+near-miss preservation (the challenge set's near-neighbour rows: the edited fact's neighbour must keep its cap-off
+answer), revision (a second support for the same fact supersedes the first: the new answer wins, the old record is
+retired, the old answer is not produced), and two-hop composition (the challenge set's composition rows with verified
+labels; report "unreachable" honestly when a hop is missing). Inputs: `manifests/dev/challenges.json` (5 near-neighbour,
+6 composition, 5 temporal-correction rows), `pccap.harness.runs` (ES/GS/LS machinery), `tests/revision_v1/tiny_base.py`
+for CPU tests. Deliver `src/pccap/revision_v1/endpoints.py` (new file), `tests/revision_v1/test_endpoints.py`, and
+`docs/tasks/R1-43.md` with the denominators and the record schema; the GPU run over the real base is the orchestrator's.
 
-### Lane R1-D1c — candidate-level review of the fresh zsRE draw candidates (critical path)
+### Lane R1-24b — the informative continuation recipe (pending the lead's decision, prepare it now)
 
-Using exclusions v2, prepare the ordered candidate list for the fresh zsRE draw from MEND train (3 realizations × 1,000
-after the E.2 pass; plan 9 D-R2(b)): dedupe facts and subjects, verify the rephrase and locality fields, flag any candidate
-whose subject or rephrase text collides with a v2 exclusion class, and emit `manifests/revision_v1/zsre_fresh_candidates_v1.json`
-with counts at each filter and the per-record hashes. The E.2 teacher pass and the sealed draw are the orchestrator's / the
-lead's. `docs/tasks/R1-D1c.md`.
+Beside the literal self-distillation manifest, prepare `manifests/revision_v1/r1_24_control_lm.json`: continued
+language-model training of the base (next-token cross-entropy on the same OpenWebText shard, consecutive positions,
+matched token budget read from the pilot ledgers, same optimizer family as `pccap.distill`), with the same evaluation
+block. Dry-run only; tests for the budget arithmetic; `docs/tasks/R1-24b.md`. If the lead chooses it, the orchestrator
+runs both.
 
-### Lane R1-X3 — re-audit of the R1-26 repairs (OPEN NOW: commit 5a46d2e; response in docs/tasks/R1-X2-response.md)
+### Lane R1-X4 — counter-review of the Stage 2 notes and the non-learned condition
 
-Read-only; reuse `scripts/r1_25_reaudit.py` / `r1_25_edge_cases.py` with new output paths; `logs/audit_r1_26.md`.
+Read-only. `docs/R1_stage2_notes.md` now claims: the fact-code path cannot carry new answers; the non-learned condition
+(random tied cosine reader + per-position deltas + hard top-1 + cosine gate 0.93) reaches ES 1.00 / RET-GS 0.65 / LS 1.00
+on the zsRE stream and 0.18 / 0.16 on CounterFact; trained nulls do not transfer to the streams. Recount every table row
+from `results/R1/stream_eval_*.json`, `results/R1/streams_revision/*/items.jsonl` and `results/R1/pilot/*/summary.json`,
+check the cost columns against the ledgers, state what the zsRE 0.65 does and does not show (one stream, one order,
+100 edits, v2 calibration), and list what would change the recommendation to keep the null non-learned.
+`logs/review_r1_stage2.md`, findings by id.
+
+### Optional if capacity remains — Lane R1-30a — Stage 3 design note (cap-level PC energy)
+
+A written specification only: how a latent-energy cap (FabricPC nodes for the record/selection state, bounded settling
+steps, answer-objective coupling per X0-07) would sit on the current read path, what state resets per query, which
+approximations are declared, and the zero-step / feedforward / recurrent controls. Inputs: `logs/fabricpc_survey.md`,
+plan 9 §Stage 3, `docs/revision_v1_design.md`. `docs/R1_stage3_design_draft.md`. No code.
 
 ## 4. Interfaces and coordination
 
