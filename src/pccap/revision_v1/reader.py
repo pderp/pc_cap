@@ -30,6 +30,8 @@ class ReaderConfig:
     null_bias: float = 0.0
     temperature: float = 1.0
     tie_heads: bool = True  # key head == query head (siamese): an identical observation always scores itself maximally
+    cosine: bool = True  # scores on L2-normalized embeddings (self-match = 1 is the maximum; the store retrieves by the same score)
+    score_scale: float = 10.0  # inverse temperature for cosine scores (cosine ∈ [-1, 1] needs a scale to be decisive)
 
 
 def _dense(key, n_in: int, n_out: int, scale: float | None = None) -> dict:
@@ -98,11 +100,27 @@ def initial_code(params: dict, cfg: ReaderConfig, last, span):
     return _apply_mlp(params["code_head"], embed(params, cfg, last, span))
 
 
+def unit(x):
+    return x / jnp.sqrt(jnp.sum(x * x, axis=-1, keepdims=True) + 1e-8)
+
+
+def pair_scores(cfg: ReaderConfig, q, keys):
+    """Scores of a query against keys [k, width]: scaled cosine (default) or dot / sqrt(width)."""
+    if cfg.cosine:
+        return (unit(keys) @ unit(q)) * cfg.score_scale / cfg.temperature
+    return (keys @ q) / (jnp.sqrt(cfg.width) * cfg.temperature)
+
+
+def null_score(params: dict, cfg: ReaderConfig, q):
+    qq = unit(q) * jnp.sqrt(cfg.width) if cfg.cosine else q
+    return (qq @ params["null"]["w"] + params["null"]["b"]) / cfg.temperature
+
+
 def applicability(params: dict, cfg: ReaderConfig, q, cand_keys, cand_mask):
     """Softmax over [k candidate scores, null]. ``cand_mask`` (bool [k]) masks padding. Returns (weights [k], null_mass, logits [k+1])."""
-    scores = (cand_keys @ q) / (jnp.sqrt(cfg.width) * cfg.temperature)
+    scores = pair_scores(cfg, q, cand_keys)
     scores = jnp.where(cand_mask, scores, -1e9)
-    null_logit = (q @ params["null"]["w"] + params["null"]["b"]) / cfg.temperature
+    null_logit = null_score(params, cfg, q)
     logits = jnp.concatenate([scores, null_logit[None]])
     probs = jax.nn.softmax(logits)
     weights = probs[:-1] * cand_mask

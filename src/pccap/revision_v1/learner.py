@@ -58,6 +58,7 @@ class RevisionConfig:
     controller: ControllerConfig = field(default_factory=ControllerConfig)
     fast: FastConfig = field(default_factory=FastConfig)
     null_threshold: float = 0.5  # hard null at evaluation when null mass ≥ threshold
+    hard_top1: bool = True  # deployment selection: the best-scoring record alone (v0's nearest slot); soft mixing only in training
     cache_prompt_pass: bool = True  # R1-16: reuse the selection pass as the observation of the prompt position (saves one pass per query)
     single_site: bool = False  # R1-16 variant: writes only at site 3 (partial pass from block 11 instead of block 3)
     ceiling_bytes: int = DEFAULT_CEILING
@@ -120,6 +121,10 @@ class RevisionCap:
             keys[i], mask[i] = r.key, True
         w, null, _ = self.jit_key_apply(self.params["reader"], q, jnp.asarray(keys), jnp.asarray(mask))
         w, null = np.asarray(w, np.float32), float(null)
+        if self.cfg.hard_top1 and w[: len(recs)].sum() > 0:
+            one = np.zeros_like(w)
+            one[int(np.argmax(w[: len(recs)]))] = 1.0
+            w = one
         hard = null >= self.cfg.null_threshold
         code, delta = None, None
         if not hard:
@@ -216,7 +221,7 @@ class RevisionCap:
     def semantic_config(self) -> str:
         return json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)},
                            "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold, "single_site": self.cfg.single_site,
-                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
+                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
 
     def import_state(self, st: LearnerState) -> None:
         if st.scalars.get("params_hash") != self.params_hash:

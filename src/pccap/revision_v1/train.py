@@ -23,7 +23,9 @@ from pccap.revision_v1.observations import answer_mask, observation_from_pass, p
 from pccap.revision_v1.reader import (
     ReaderConfig,
     initial_code,
+    null_score,
     obs_arrays,
+    pair_scores,
     query_embedding,
     record_key,
 )
@@ -144,8 +146,8 @@ def _records(theta, rc: ReaderConfig, feats: EpisodeFeatures):
 
 
 def _selection(theta, rc: ReaderConfig, keys, q_sel):
-    scores = (keys @ q_sel) / (jnp.sqrt(rc.width) * rc.temperature)
-    null_logit = (q_sel @ theta["reader"]["null"]["w"] + theta["reader"]["null"]["b"]) / rc.temperature
+    scores = pair_scores(rc, q_sel, keys)
+    null_logit = null_score(theta["reader"], rc, q_sel)
     logits = jnp.concatenate([scores, null_logit[None]])
     probs = jax.nn.softmax(logits)
     return logits, probs[:-1], probs[-1]

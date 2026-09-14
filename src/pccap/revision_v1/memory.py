@@ -130,7 +130,7 @@ class RecordStore:
     def active_records(self) -> list[MemoryRecord]:
         return [r for r in self.records if r.active]
 
-    metric: str = "dot"  # R23-10: the same score the reader trains with (q·k); "l2" kept for tests/diagnostics
+    metric: str = "cos"  # R23-10: the same score the reader trains with (cosine); "dot" and "l2" kept for tests/diagnostics
 
     def retrieve(self, query_key: np.ndarray, k: int, query_version: int | None = None) -> list[RetrievalCandidate]:
         """Deterministic top-k over active records by the declared metric (dot product descending, the reader's training
@@ -142,7 +142,10 @@ class RecordStore:
             return []
         q = np.asarray(query_key, np.float32).reshape(self.dk)
         K = np.stack([r.key for r in act])
-        if self.metric == "dot":
+        if self.metric == "cos":
+            Kn = K / (np.linalg.norm(K, axis=1, keepdims=True) + 1e-8)
+            d = -(Kn @ (q / (np.linalg.norm(q) + 1e-8))).astype(np.float32)
+        elif self.metric == "dot":
             d = -(K @ q).astype(np.float32)
         else:
             d = np.sqrt(np.sum((K - q[None, :]) ** 2, axis=1, dtype=np.float32))
