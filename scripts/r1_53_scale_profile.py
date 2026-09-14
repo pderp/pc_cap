@@ -68,6 +68,7 @@ def main() -> int:
     ap.add_argument("--queries", type=int, default=200)
     ap.add_argument("--null-threshold", type=float, default=0.5)
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
+    ap.add_argument("--top-k", type=int, default=4)
     args = ap.parse_args()
     from pccap.revision_v1.controller import ControllerConfig, init_controller
     from pccap.revision_v1.reader import (
@@ -80,7 +81,7 @@ def main() -> int:
     from r1_13_stream_eval import load_theta
 
     stop = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
-    rc = ReaderConfig(lexical=True, stop_tokens=stop)
+    rc = ReaderConfig(lexical=True, stop_tokens=stop, top_k=args.top_k)
     k1, k2 = jax.random.split(jax.random.PRNGKey(0))
     theta = load_theta(Path(args.theta), {"reader": init_reader(k1, rc), "controller": init_controller(k2, ControllerConfig())})
     v_key = jax.jit(jax.vmap(lambda p, l, s: record_key(p, rc, l, s), in_axes=(None, 0, 0)))
@@ -102,7 +103,7 @@ def main() -> int:
             per_size[str(M)] = profile_memory(items, keys_raw, mem, queries, outs, rc, theta, stop, j_q, j_app, args.null_threshold)
             print(bank.dataset, M, json.dumps({k: (round(v, 3) if isinstance(v, float) else v) for k, v in per_size[str(M)].items()}), flush=True)
         out[bank.dataset] = per_size
-    tag = Path(args.theta).parent.name
+    tag = Path(args.theta).parent.name + (f"_top{args.top_k}" if args.top_k != 4 else "")
     (ROOT / "results" / "R1" / f"scale_profile_{tag}.json").write_text(json.dumps({"theta": args.theta, "null_threshold": args.null_threshold, "profile": out}, indent=1))
     return 0
 

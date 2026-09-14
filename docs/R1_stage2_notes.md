@@ -397,3 +397,8 @@ so the loss is retrieval, not the null — a larger candidate set is the cheap f
 prompts (edit-like prompts of facts not in memory) are accepted more often as memory grows (hard-null 0.92 → 0.67 at
 300): a near-duplicate record with high lexical overlap wins. This population is not in the current LS endpoint (NQ
 locality prompts) but is the right stress test for a fresh-draw protocol; recorded as an open risk for R1-40b.
+
+Top-16 candidates on CounterFact (`scale_profile_r1_50_stream_mixed_top16.json`): in-candidate recall at 1,000 records
+rises 0.73 → 0.895 but "fires the own record" only 0.59 → 0.64 and locality hard-null slips 0.98 → 0.925: at that scale
+the limit is the selection among near-duplicate candidates, not retrieval. The lever is training with larger memories
+(256-record episodes; run `r1_50_stream_mixed_m256`, profiled and evaluated next).
