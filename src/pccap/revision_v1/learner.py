@@ -59,6 +59,7 @@ class RevisionConfig:
     fast: FastConfig = field(default_factory=FastConfig)
     null_threshold: float = 0.5  # hard null at evaluation when null mass ≥ threshold
     hard_top1: bool = True  # deployment selection: the best-scoring record alone (v0's nearest slot); soft mixing only in training
+    binary_mass: bool = True  # deployment writes are applied in full unless hard-nulled (the soft non-null mass is a training device)
     min_score: float | None = None  # non-learned fallback gate: hard null when the best cosine score is below this (v0's radius, in cosine units)
     cache_prompt_pass: bool = True  # R1-16: reuse the selection pass as the observation of the prompt position (saves one pass per query)
     single_site: bool = False  # R1-16 variant: writes only at site 3 (partial pass from block 11 instead of block 3)
@@ -175,12 +176,13 @@ class RevisionCap:
         obs = observation_from_pass(fr, ids, prompt_mask(min(sel.prompt_len, len(ids)), len(ids)), self.enc.base_hash, self.enc.encoder_version, self.cfg.reader.taps)
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
         t = len(ids) - sel.prompt_len  # answer position of this read (0 = the prompt's last position)
+        mass = 1.0 if self.cfg.binary_mass else 1.0 - sel.null_mass
         if sel.delta is None or t >= sel.delta.shape[0]:
             if sel.delta is not None and self.cfg.controller.delta_replaces_controller:
                 return ForwardResult(logits=np.asarray(fr.logits), sites={}, cost=cost)  # beyond the taught answer: no write
-            W = np.array(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(1.0 - sel.null_mass)), np.float32)
+            W = np.array(self.jit_writes(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(mass)), np.float32)
         else:
-            W = np.array(self.jit_writes_with_delta(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(sel.delta[t]), jnp.asarray(1.0 - sel.null_mass)), np.float32)
+            W = np.array(self.jit_writes_with_delta(self.params["controller"], q, jnp.asarray(sel.code), jnp.asarray(sel.delta[t]), jnp.asarray(mass)), np.float32)
         p = len(ids) - 1
         if self.cfg.single_site:
             W[0] = 0.0
@@ -227,7 +229,7 @@ class RevisionCap:
     def semantic_config(self) -> str:
         return json.dumps({"reader": self.cfg.reader.__dict__, "controller": {**self.cfg.controller.__dict__, "bank_scales": list(self.cfg.controller.bank_scales)},
                            "fast": self.cfg.fast.__dict__, "null_threshold": self.cfg.null_threshold, "single_site": self.cfg.single_site,
-                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "min_score": self.cfg.min_score, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
+                           "cache_prompt_pass": self.cfg.cache_prompt_pass, "hard_top1": self.cfg.hard_top1, "binary_mass": self.cfg.binary_mass, "min_score": self.cfg.min_score, "base": self.enc.base_hash, "encoder_version": self.enc.encoder_version}, default=str, sort_keys=True)
 
     def import_state(self, st: LearnerState) -> None:
         if st.scalars.get("params_hash") != self.params_hash:
