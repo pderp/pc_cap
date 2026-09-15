@@ -3852,6 +3852,30 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "heavy-tail additions; docs/heavy_tail_counter_review.md; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "OPS-1",
+   "title": "Process memory monitor (companion to sysmon): per-process RSS history as a user service",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [],
+   "gpu": "none",
+   "review": false,
+   "status": "done",
+   "agent": "codex",
+   "worktree": null,
+   "started": "2026-09-15T20:24:42+00:00",
+   "finished": "2026-09-15T20:24:42+00:00",
+   "commit": null,
+   "evidence": [
+    "scripts/process_memory_monitor.py",
+    "scripts/pccap-process-memory.service",
+    "docs/process_memory_monitor.md",
+    "tests/test_process_memory_monitor.py"
+   ],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "installed and running (pccap-process-memory.service); command-label patch applied by the orchestrator"
   }
  ]
 }
