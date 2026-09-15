@@ -30,6 +30,7 @@ def main() -> int:
     ap.add_argument("--n-memory", type=int, default=64)
     ap.add_argument("--n-query-records", type=int, default=8)
     ap.add_argument("--n-out", type=int, default=8)
+    ap.add_argument("--save-every", type=int, default=0, help="DEC-049: also save theta_step<N>.npz every N steps (candidates for stream-based checkpoint selection)")
     ap.add_argument("--kappa", type=float, default=0.0, help="HT-3: coupled-logarithm kappa in the answer and preservation terms (0 = current objective)")
     ap.add_argument("--clip-surprisal", type=float, default=None, help="HT-3 comparator: clip the answer surprisal at this value")
     ap.add_argument("--min-mem-mb", type=int, default=4096, help="R1-69 memory guard: stop (keeping the best checkpoint) when MemAvailable drops below this")
@@ -176,6 +177,10 @@ def main() -> int:
                     best = {"dev_retrieval": dv["retrieval"], "step": step, "theta": jax.tree_util.tree_map(lambda x: np.array(x), theta)}
             log.write(json.dumps(m) + "\n")
             log.flush()
+            if args.save_every and (step + 1) % args.save_every == 0:  # DEC-049 checkpoint candidates
+                cdir = ASSETS / "pilot" / args.tag
+                cdir.mkdir(parents=True, exist_ok=True)
+                np.savez(cdir / f"theta_step{step + 1}.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
             if step % 10 == 0:
                 print(json.dumps({k: (round(v, 4) if isinstance(v, float) else v) for k, v in m.items()}), flush=True)
         train_s = time.time() - t0
@@ -184,9 +189,9 @@ def main() -> int:
             theta = jax.tree_util.tree_map(lambda x: jax.numpy.asarray(x), best["theta"])
         after = evaluate(theta)
         wdir = ASSETS / "pilot" / args.tag
-        if wdir.exists():
+        if (wdir / "theta.npz").exists():
             raise SystemExit(f"{wdir} exists: weights are never overwritten — choose a new tag")
-        wdir.mkdir(parents=True)
+        wdir.mkdir(parents=True, exist_ok=True)
         np.savez(wdir / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
         summary = {"args": vars(args), "bank_wall_s": bank_s, "train_wall_s": train_s, "memory_guard_abort": aborted,
                    "banks": [{"pool": pool, "sha256": b.content_hash(), "identity": b.identity, "construction_cost": {"full_forwards": b.cost.full_forwards, "tokens": b.cost.tokens, "accel_seconds": b.cost.accel_seconds}, "shared_cost_policy": "charged once at construction; reuse charges nothing (R50-09)"} for pool, b in zip(pools, banks)], "dev_before": before, "dev_after_best": after, "dev_after_final": evaluate(final_theta),
