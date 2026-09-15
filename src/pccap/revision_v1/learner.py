@@ -121,7 +121,8 @@ class RevisionCap:
         q = self.jit_query(self.params["reader"], *obs_arrays(obs, self.cfg.reader))
         rc_ = self.cfg.reader
         lex_w = float(self.params["reader"]["lex"]["score_w"]) if (rc_.lexical and "lex" in self.params["reader"]) else 0.0
-        cands = self.store.retrieve(np.asarray(q), rc_.top_k, query_version=self.enc.encoder_version, query_ids=prompt, lex_weight=lex_w, stop_tokens=rc_.stop_tokens, score_scale=rc_.score_scale / rc_.temperature)
+        lex_weights = self._lex_weights() if getattr(rc_, "lex_idf", False) else None
+        cands = self.store.retrieve(np.asarray(q), rc_.top_k, query_version=self.enc.encoder_version, query_ids=prompt, lex_weight=lex_w, stop_tokens=rc_.stop_tokens, score_scale=rc_.score_scale / rc_.temperature, lex_weights=lex_weights)
         keep = fr if self.cfg.cache_prompt_pass else None
         if not cands:
             return Selection(len(prompt), [], np.zeros(0, np.float32), 1.0, None, True, prompt_pass=keep, pending_cost=sel_cost)
@@ -135,7 +136,7 @@ class RevisionCap:
         if rc_.lexical and "lex" in self.params["reader"]:
             from pccap.revision_v1.reader import lex_feature
             for i, r in enumerate(recs):
-                lex[i] = lex_feature(prompt, r.source_ids, rc_.stop_tokens) if r.source_ids is not None else 0.0
+                lex[i] = lex_feature(prompt, r.source_ids, rc_.stop_tokens, lex_weights) if r.source_ids is not None else 0.0
         w, null, _ = self.jit_key_apply(self.params["reader"], q, jnp.asarray(keys), jnp.asarray(mask), jnp.asarray(lex))
         w, null = np.asarray(w, np.float32), float(null)
         qn = np.asarray(q, np.float32)
@@ -163,6 +164,14 @@ class RevisionCap:
                     delta[: dl.shape[0]] += np.float32(wi) * dl
                 delta /= np.float32(wsum)
         return Selection(len(prompt), [r.record_id for r in recs], w[: len(recs)], null, code, hard, prompt_pass=keep, delta=delta, best_score=best_score, pending_cost=sel_cost)
+
+    def _lex_weights(self) -> dict[int, float]:
+        """Memory-rarity weights over the active records' support prompts (R1-57c), cached with the DF cache's epoch."""
+        version = (id(self.store), self.store.lexical_version)
+        if getattr(self, "_lexw_cache", (None,))[0] != version:
+            from pccap.revision_v1.reader import idf_weights
+            self._lexw_cache = (version, idf_weights([r.source_ids for r in self.store.active_records()], self.cfg.reader.stop_tokens))
+        return self._lexw_cache[1]
 
     def _rare_overlap(self, prompt: np.ndarray, source_ids: np.ndarray) -> int:
         """Number of distinct non-stop tokens shared by the query and the record's support that occur in at most
@@ -288,6 +297,7 @@ class RevisionCap:
         candidate.validate()
         self.store = candidate
         self.__dict__.pop("_df_cache", None)
+        self.__dict__.pop("_lexw_cache", None)
         self.reset_queries()
 
     def state_hash(self) -> str:

@@ -23,6 +23,8 @@ def main() -> int:
     ap.add_argument("--dataset", default="zsre")
     ap.add_argument("--rules", default="0.5:none,0.5:0.3,0.5:0.5")
     ap.add_argument("--windows", type=int, default=64)
+    ap.add_argument("--lex-idf", action="store_true", help="R1-57c: memory-rarity-weighted lexical overlap")
+    ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate")
     ap.add_argument("--window", type=int, default=128)
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
     ap.add_argument("--no-query-null", action="store_true")
@@ -42,7 +44,7 @@ def main() -> int:
     frozen = json.loads((ROOT / "manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     stop = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
-    rc, cc = ReaderConfig(lexical=True, stop_tokens=stop, query_null=not args.no_query_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+    rc, cc = ReaderConfig(lexical=True, stop_tokens=stop, query_null=not args.no_query_null, lex_idf=args.lex_idf), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     base = BPBase(ledger=Ledger())
     k1, k2 = jax.random.split(jax.random.PRNGKey(0))
     theta = load_theta(Path(args.theta), {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)})
@@ -55,7 +57,7 @@ def main() -> int:
     for rule in args.rules.split(","):
         th, gate = rule.split(":")
         cfg = RevisionConfig(reader=rc, controller=cc, fast=FastConfig(steps=0, delta_steps=5, delta_lr=0.1, tau=float(frozen["tau_edit"])), null_threshold=float(th),
-                             min_score=None if gate == "none" else float(gate), tau_edit=float(frozen["tau_edit"]))
+                             min_score=None if gate == "none" else float(gate), rare_overlap_min=args.rare_overlap, tau_edit=float(frozen["tau_edit"]))
         cap = RevisionCap(base, cfg, Ledger(), params=theta)
         for it in items:
             cap.update_item(it, None, None)

@@ -57,6 +57,7 @@ def main() -> int:
     ap.add_argument("--max-new", type=int, default=32)
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
     ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate: minimum memory-rare tokens shared with the selected record")
+    ap.add_argument("--lex-idf", action="store_true", help="R1-57c: memory-rarity-weighted lexical overlap")
     ap.add_argument("--no-lease", action="store_true")
     args = ap.parse_args()
     import pccap  # noqa: F401
@@ -81,7 +82,7 @@ def main() -> int:
     frozen = json.loads((ROOT / "manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json").read_text())
     b_m = tuple(float(frozen["b_m"][k]) for k in ("1", "2", "3"))
     stop = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
-    rc, cc = ReaderConfig(lexical=True, stop_tokens=stop), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
+    rc, cc = ReaderConfig(lexical=True, stop_tokens=stop, lex_idf=args.lex_idf), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     nonlearned = args.theta == "random"
     pool_path = ROOT / "manifests" / "revision_v1" / f"train_pool_{args.dataset}_v1.json"
     pool_rows = json.loads(pool_path.read_text())["items"]

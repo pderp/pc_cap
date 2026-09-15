@@ -38,6 +38,7 @@ def main() -> int:
     ap.add_argument("--no-lease", action="store_true")
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
     ap.add_argument("--no-query-null", action="store_true", help="null without the query-only linear term (pairwise + lexical only)")
+    ap.add_argument("--lex-idf", action="store_true", help="R1-57c: memory-rarity-weighted lexical overlap")
     ap.add_argument("--text-nulls", type=int, default=0, help="ordinary-text null queries per episode (R1-54; OpenWebText training range)")
     ap.add_argument("--text-windows", type=int, default=512)
     args = ap.parse_args()
@@ -68,7 +69,7 @@ def main() -> int:
         if args.stop_tokens == "none":
             return ReaderConfig(lexical=False, query_null=not args.no_query_null, **kw)
         toks = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
-        return ReaderConfig(lexical=True, stop_tokens=toks, query_null=not args.no_query_null, **kw)
+        return ReaderConfig(lexical=True, stop_tokens=toks, query_null=not args.no_query_null, lex_idf=args.lex_idf, **kw)
     rc, cc = _reader_config(), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     OUT = OUT_ROOT / args.tag
     if OUT.exists():

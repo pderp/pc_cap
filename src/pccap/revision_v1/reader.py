@@ -35,6 +35,7 @@ class ReaderConfig:
     pairwise_null: bool = True  # the null logit sees the query AND the best-matching key (near-neighbour rejection needs a pairwise decision)
     lexical: bool = True  # M4: token overlap between the query and a record's support prompt enters the score and the null
     query_null: bool = True  # query-only linear null term; False = pairwise + lexical terms only (domain-robust null)
+    lex_idf: bool = False  # R1-57c: weight lexical overlap by memory-rarity (log((N+1)/(df+1)) over the current records); template words count little, subjects count fully
     stop_tokens: tuple[int, ...] = ()  # tokens ignored by the overlap (document-frequent); part of the semantic configuration
 
 
@@ -133,20 +134,43 @@ def best_key(scores, keys, mask):
     return keys[i]
 
 
-def lexical_overlap(query_ids, record_ids, stop: tuple[int, ...] | frozenset) -> tuple[float, float]:
-    """(fraction of the record's non-stop tokens present in the query, fraction of the query's non-stop tokens present in the record)."""
+def idf_weights(token_ids_per_record, stop: tuple[int, ...] | frozenset) -> dict[int, float]:
+    """Memory-rarity weights for the lexical feature: w(t) = log((N+1)/(df(t)+1)) / log(N+1) over the N given records'
+    non-stop token sets (a token in every record weighs 0; a token in one record weighs ≈ 1 − log 2 / log(N+1)); tokens
+    absent from the memory weigh 1 (handled by the callers' ``.get(t, 1.0)``)."""
+    st = set(stop)
+    sets = [{int(t) for t in np.asarray(ids).reshape(-1)} - st for ids in token_ids_per_record if ids is not None]
+    n = len(sets)
+    if n == 0:
+        return {}
+    df: dict[int, int] = {}
+    for ts in sets:
+        for t in ts:
+            df[t] = df.get(t, 0) + 1
+    z = float(np.log(n + 1.0))
+    return {t: float(np.log((n + 1.0) / (c + 1.0)) / z) for t, c in df.items()}
+
+
+def lexical_overlap(query_ids, record_ids, stop: tuple[int, ...] | frozenset, weights: dict[int, float] | None = None) -> tuple[float, float]:
+    """(fraction of the record's non-stop tokens present in the query, fraction of the query's non-stop tokens present in
+    the record); with ``weights`` (memory-rarity, see ``idf_weights``) both fractions are weight-weighted."""
     st = set(stop)
     r = {int(t) for t in np.asarray(record_ids).reshape(-1)} - st
     q = {int(t) for t in np.asarray(query_ids).reshape(-1)} - st
     if not r or not q:
         return 0.0, 0.0
-    inter = len(r & q)
-    return inter / len(r), inter / len(q)
+    if weights is None:
+        inter = len(r & q)
+        return inter / len(r), inter / len(q)
+    w = lambda t: weights.get(t, 1.0)  # noqa: E731
+    inter = sum(w(t) for t in r & q)
+    rw, qw = sum(w(t) for t in r), sum(w(t) for t in q)
+    return (inter / rw if rw > 0 else 0.0), (inter / qw if qw > 0 else 0.0)
 
 
-def lex_feature(query_ids, record_ids, stop) -> float:
+def lex_feature(query_ids, record_ids, stop, weights: dict[int, float] | None = None) -> float:
     """Scalar overlap feature used by the reader: the mean of the two directional overlaps."""
-    a, b = lexical_overlap(query_ids, record_ids, stop)
+    a, b = lexical_overlap(query_ids, record_ids, stop, weights)
     return 0.5 * (a + b)
 
 

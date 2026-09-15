@@ -163,17 +163,18 @@ def _records(theta, rc: ReaderConfig, feats: EpisodeFeatures):
 
 def lex_matrix(rc: ReaderConfig, feats: "EpisodeFeatures") -> np.ndarray:
     """[Q, R] lexical overlap features (zeros when ids are missing or the feature is off)."""
-    from pccap.revision_v1.reader import lex_feature
+    from pccap.revision_v1.reader import idf_weights, lex_feature
     Q, R = len(feats.queries), len(feats.supports)
     out = np.zeros((Q, R), np.float32)
     if not rc.lexical:
         return out
+    weights = idf_weights([s.prompt_ids for s in feats.supports], rc.stop_tokens) if getattr(rc, "lex_idf", False) else None  # the episode's memory is the df population
     for qi, q in enumerate(feats.queries):
         if q.query_ids is None:
             continue
         for ri, s in enumerate(feats.supports):
             if s.prompt_ids is not None:
-                out[qi, ri] = lex_feature(q.query_ids, s.prompt_ids, rc.stop_tokens)
+                out[qi, ri] = lex_feature(q.query_ids, s.prompt_ids, rc.stop_tokens, weights)
     return out
 
 

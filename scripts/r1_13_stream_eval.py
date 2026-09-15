@@ -48,6 +48,7 @@ def main() -> int:
     ap.add_argument("--no-lease", action="store_true")
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json", help="lexical feature stop list (M4); 'none' disables the lexical feature")
     ap.add_argument("--no-query-null", action="store_true", help="null without the query-only linear term (pairwise + lexical only)")
+    ap.add_argument("--lex-idf", action="store_true", help="R1-57c: memory-rarity-weighted lexical overlap")
     ap.add_argument("--min-score", type=float, default=None, help="cosine firing threshold (non-learned gate)")
     ap.add_argument("--rare-overlap", type=int, default=None, help="R1-56 gate: minimum memory-rare tokens shared with the selected record")
     ap.add_argument("--no-pairwise-null", action="store_true", help="reader without the pairwise null head (weights trained before it existed)")
@@ -74,7 +75,7 @@ def main() -> int:
         if args.stop_tokens == "none":
             return ReaderConfig(lexical=False, query_null=not args.no_query_null, **kw)
         toks = tuple(int(t) for t in json.loads((ROOT / args.stop_tokens).read_text())["tokens"])
-        return ReaderConfig(lexical=True, stop_tokens=toks, query_null=not args.no_query_null, **kw)
+        return ReaderConfig(lexical=True, stop_tokens=toks, query_null=not args.no_query_null, lex_idf=args.lex_idf, **kw)
     rc, cc = _reader_config(pairwise_null=not args.no_pairwise_null), ControllerConfig(A=float(frozen["A"]), bank_scales=b_m)
     rd = OUT / "streams_revision" / tag
     destinations = [OUT / f"stream_eval_{tag}.json", rd, Path("/home/derp/cap/assets/runs") / rd.relative_to(ROOT / "results")]  # X4-10: the harness's own checkpoint-root expression

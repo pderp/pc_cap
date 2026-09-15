@@ -135,7 +135,7 @@ class RecordStore:
 
     metric: str = "cos"  # R23-10: the same score the reader trains with (cosine); "dot" and "l2" kept for tests/diagnostics
 
-    def retrieve(self, query_key: np.ndarray, k: int, query_version: int | None = None, query_ids=None, lex_weight: float = 0.0, stop_tokens=(), score_scale: float = 1.0) -> list[RetrievalCandidate]:
+    def retrieve(self, query_key: np.ndarray, k: int, query_version: int | None = None, query_ids=None, lex_weight: float = 0.0, stop_tokens=(), score_scale: float = 1.0, lex_weights: dict[int, float] | None = None) -> list[RetrievalCandidate]:
         """Deterministic top-k over active records by the declared metric (dot product descending, the reader's training
         score; ties: created order, then id). ``distance`` reports the negative score for dot. Read-only."""
         if query_version is not None and query_version != self.encoder_version:
@@ -150,7 +150,7 @@ class RecordStore:
             d = -(Kn @ (q / np.sqrt(np.sum(q * q) + 1e-8))).astype(np.float32)
             if query_ids is not None and lex_weight:
                 from pccap.revision_v1.reader import lex_feature
-                d = d * np.float32(score_scale) - np.float32(lex_weight) * np.asarray([lex_feature(query_ids, r.source_ids, stop_tokens) if r.source_ids is not None else 0.0 for r in act], np.float32)
+                d = d * np.float32(score_scale) - np.float32(lex_weight) * np.asarray([lex_feature(query_ids, r.source_ids, stop_tokens, lex_weights) if r.source_ids is not None else 0.0 for r in act], np.float32)
         elif self.metric == "dot":
             d = -(K @ q).astype(np.float32)
         else:

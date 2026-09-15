@@ -643,3 +643,30 @@ lowering the held-out NLL by 0.009 nats, so it is a certified informative contro
 column on the continued base is measured against the original base's answers: even a 0.0005-nat move changes 12 % of
 the CounterFact locality decodes (near-tie answers), which is why the protocol keeps the original base as the common
 LS reference and reports the S1 rows with their base shift. Runs `results/R1/r1_24/r1_24_lm_v3_lr*/`.
+
+## MQuAKE on the real base: three-pool readers, seed variance and its cause (2026-09-14, 21:30 EDT)
+
+Reader retrained on three pools (CounterFact 1,000 + zsRE 1,000 + MQuAKE 500 = pool v1, or 1,000 = pool v2; ordinary-text
+nulls; gate on; 100-edit development streams, stream 21; ES / RET-ES / RET-GS / LS):
+
+| reader | MQuAKE | zsRE | CounterFact |
+| --- | --- | --- | --- |
+| v2 reader, no MQuAKE training (transfer) | 1.00 / 1.00 / **0.16** / 0.98 | — | — |
+| three pools, MQuAKE 500, seed 0 / 1 / 2 | 0.80 / 1.00; 0.47 / 0.98; 0.82 / 0.98 | 0.98; 0.97; 0.98 (LS 1.00) | 0.66; 0.85; 0.83 (LS 1.00 / 0.98 / 1.00) |
+| three pools, MQuAKE 1,000, seed 0 / 1 / 2 | 0.79 / 1.00 (ES 0.92); 0.68 / 1.00; 0.56 / 1.00 | 0.98; 0.96; 0.95 | 0.76; 0.83; 0.785 |
+
+(RET-GS / LS shown for MQuAKE; ES and RET-ES are 1.00 unless stated.) MQuAKE unseen-prompt false fires 0/100 at 100
+records; ordinary-text drift after MQuAKE edits +0.005 nats (0.39 % of positions fire). Training on MQuAKE is
+necessary (0.16 → 0.80) and the DEC-046 default stands. The MQuAKE paraphrase result varies 0.47–0.82 across six
+reader instances while zsRE and CounterFact hold their ranges. Cause: the MQuAKE paraphrase is the question form of a
+cloze support ("Who is the employer of Carl Sagan?" vs "Carl Sagan is employed by"), and the same-relation locality
+prompts have cosine 0.99 to the best record, so the null decision rests on the lexical-overlap feature alone; failing
+paraphrases have lower plain overlap (0.54–0.56 vs 0.74–0.82 for successes) because the question form adds template
+words that count as non-overlap. For seed 1 (pool v1) the loss is null over-rejection: raising the threshold to 0.9 /
+0.97 recovers 0.76 / 0.81 at LS 0.92 / 0.90; the gate is not involved (0.47 without it). The larger pool does not
+stabilise it (seed 2: 0.82 → 0.56).
+
+Fix under test (R1-57c, `ReaderConfig.lex_idf`): weight the lexical overlap by memory rarity, w(t) = log((N+1)/(df+1))
+/ log(N+1) over the current memory (the episode's records in training, the store's active records at deployment), so
+template words weigh ≈ 0 and subject tokens ≈ 1 — the continuous form of the R1-56 gate, learned into the null.
+Unit test in `tests/revision_v1/test_r1_45_lexical.py`; retrain with pool v2 over three seeds running.
