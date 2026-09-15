@@ -16,8 +16,6 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 POOL = ROOT / "manifests" / "revision_v1" / "mquake_pool_v1.json"
 OVERLAP = Path("/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/zsre_overlap_subjects.jsonl")
-DEV_OUT = ROOT / "manifests" / "dev" / "mquake_dev.json"
-TRAIN_OUT = ROOT / "manifests" / "revision_v1" / "train_pool_mquake_v1.json"
 
 
 def main() -> int:
@@ -25,7 +23,10 @@ def main() -> int:
     ap.add_argument("--dev", type=int, default=200)
     ap.add_argument("--train", type=int, default=500)
     ap.add_argument("--seed", type=int, default=46)
+    ap.add_argument("--suffix", default="v1", help="output version suffix (v1 = DEC-046 sizes)")
     args = ap.parse_args()
+    DEV_OUT = ROOT / "manifests" / "dev" / ("mquake_dev.json" if args.suffix == "v1" else f"mquake_dev_{args.suffix}.json")
+    TRAIN_OUT = ROOT / "manifests" / "revision_v1" / f"train_pool_mquake_{args.suffix}.json"
     for p in (DEV_OUT, TRAIN_OUT):
         if p.exists():
             raise SystemExit(f"{p} exists; pools are versioned")
@@ -66,7 +67,7 @@ def main() -> int:
                "selection": "fixed-seed permutation; one item per subject; dev and training subjects disjoint; the zsRE-overlap subjects excluded from both",
                "unrelated_prompts": unrelated, "unrelated_source": "first locality prompt of remaining (unselected) pool items; same-relation prompts, harder than zsRE's NQ questions",
                "items": dev}
-    train_doc = {"name": "train_pool_mquake_v1", "dataset": "mquake", "date": "2026-09-14", "decision": "DEC-046 (proposed default)", "seed": args.seed,
+    train_doc = {"name": f"train_pool_mquake_{args.suffix}", "dataset": "mquake", "date": "2026-09-14", "decision": "DEC-046 (proposed default)", "seed": args.seed,
                  "sources_sha256": dev_doc["source"], "counts": dev_doc["counts"], "exposure": "training pool: its subjects go into register v4 as exposed; never confirmatory",
                  "items": train, "drawn_subjects_normalized": sorted({normalize_answer(it["subject"]) for it in train})}
     DEV_OUT.write_text(json.dumps(dev_doc, ensure_ascii=False) + "\n")

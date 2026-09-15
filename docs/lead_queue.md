@@ -375,3 +375,12 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     fidelity gate at lr 1e-7 (KL 0.019 vs the 0.001 gate); lr 3e-8 and 1e-8 are running to map the curve — at the
     lr where the gate passes the base has barely moved, so U03 will likely resolve as a labelled failed gate or a
     scope amendment rather than a certified informative control.
+
+25. (2026-09-14, 20:50 EDT) **MQuAKE on the real base, first numbers.** Reader retrained on three pools (CounterFact
+    1,000 + zsRE 1,000 + MQuAKE 500), gate on, 100-edit development streams: MQuAKE RET-GS 0.80 / 0.47 / 0.82 (seeds
+    0–2; LS 1.00 / 0.98 / 0.98), zsRE 0.98 / 0.97 / 0.98, CounterFact 0.66 / 0.85 / 0.83. The v2 reader without MQuAKE
+    training reaches only 0.16 on MQuAKE, so training on it is necessary (DEC-046 default confirmed). Seed 1's loss is
+    null calibration on the question-form paraphrases (raising the threshold recovers 0.76–0.81 at an LS cost), so a
+    1,000-item MQuAKE pool (v2, superset of v1; 4,489 items left for the confirmatory draw against ≈ 4,050 needed) is
+    being retrained now. MQuAKE unseen-prompt false fires 0/100 at 100 records; ordinary-text drift +0.005 nats.
+    R1-24: a fidelity-valid informative continuation exists at lr 1e-8 (DEC-047); same verdict as the literal control.

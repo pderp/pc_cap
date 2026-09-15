@@ -622,3 +622,24 @@ MQuAKE-CF subjects overlap CounterFact's by 837 and the register by 924 (removed
 zsRE pools is 22 subjects. The lead keeps CounterFact (hence the DEC-042 exception) and adds MQuAKE-CF as the third
 dataset; the matrix becomes 360 cells. Codex lane R1-D4 prepares the items; the orchestrator's teacher pass follows
 (zsRE rule: the base's greedy answer must not already match the new answer; one paraphrase suffices, as for zsRE).
+
+## R1-24 follow-up: a fidelity-valid informative continuation exists at lr 1e-8 (2026-09-14, 20:40 EDT)
+
+Same recipe as `r1_24_control_lm_v2` (Adam, seed 1729, 771,581 forward-pass tokens of the training shard, 128-token
+sequences) at smaller learning rates (`manifests/revision_v1/r1_24_control_lm_v3_lr*.json`; gate: KL ≤ 0.001 nats and
+NLL increase ≤ 0.01 on the held-out tail; S = v0-stable cap, R = revision cap v1 reader; LS against the original base):
+
+| weight lr | KL (nats) | ΔNLL | gate | zsRE S0 → S1 (RET-GS / LS) | zsRE R0 / R1 | CounterFact S0 → S1 | CounterFact R0 / R1 |
+| --- | ---: | ---: | --- | --- | --- | --- | --- |
+| 1e-6 (v2) | 0.0950 | −0.105 | fail | 0.44/1.00 → 0.39/0.86 | 0.98/1.00 / 0.97/0.88 | 0.00/1.00 → 0.00/0.28 | 0.795/1.00 / 0.775/0.28 |
+| 1e-7 | 0.0186 | −0.054 | fail | 0.44 → 0.45/0.94 | 0.98 / 0.98/0.94 | 0.00 → 0.00/0.64 | 0.795 / 0.795/0.64 |
+| 3e-8 | 0.0043 | −0.026 | fail | 0.44 → 0.45/0.98 | 0.98 / 0.98/0.98 | 0.00 → 0.00/0.82 | 0.795 / 0.795/0.82 |
+| **1e-8** | **0.0005** | −0.009 | **pass** | 0.44 → 0.45/0.98 | 0.98 / 0.98/0.98 | 0.00 → 0.00/0.88 | 0.795 / 0.795/0.88 |
+
+KL scales as ≈ lr^1.3 over this range. At lr 1e-8 the continuation passes the pre-registered gate while still
+lowering the held-out NLL by 0.009 nats, so it is a certified informative control (U03 closes by data: S1_LM =
+`r1_24_control_lm_v3_lr1e-8`). Its verdict is the same as the literal control's: S1−S0 is +0.01 / 0.00 and R0−S1 is
++0.53 / +0.795, so continued training of the base on the matched budget does not produce the revision's gain. The LS
+column on the continued base is measured against the original base's answers: even a 0.0005-nat move changes 12 % of
+the CounterFact locality decodes (near-tie answers), which is why the protocol keeps the original base as the common
+LS reference and reports the S1 rows with their base shift. Runs `results/R1/r1_24/r1_24_lm_v3_lr*/`.
