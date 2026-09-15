@@ -21,6 +21,7 @@ from pccap.data.tokenize import tokenize_pair
 from pccap.metrics.editing import normalize_answer
 from pccap.revision_v1.contracts import support_from_edit_item
 from pccap.revision_v1.reader import params_hash
+from pccap.revision_v1.selection_trace import selection_trace
 
 ROOT = Path(__file__).resolve().parents[3]
 KINDS = ("near_neighbour", "composition", "temporal_correction")
@@ -147,9 +148,12 @@ class EndpointEvaluator:
             # Reuse the query's cached selection; never pass an answer to it.
             if hasattr(model, "selection_for"):
                 sel = model.selection_for(ids)
-                selection = {"record_ids": list(sel.record_ids), "null_mass": float(sel.null_mass),
-                             "best_score": float(sel.best_score) if sel.best_score is not None and np.isfinite(sel.best_score) else None,
-                             "prompt_len": int(sel.prompt_len)}
+                try:  # R1-67: legacy fields + hard_null + gate verdict
+                    selection = selection_trace(sel, config=getattr(self.learner, "cfg", None))
+                except (AttributeError, ValueError):  # a selection object without weights/hard_null (test doubles, v0 caps): legacy fields only
+                    selection = {"record_ids": list(sel.record_ids), "null_mass": float(sel.null_mass),
+                                 "best_score": float(sel.best_score) if getattr(sel, "best_score", None) is not None and np.isfinite(sel.best_score) else None,
+                                 "prompt_len": int(sel.prompt_len), "hard_null": None, "trace": "legacy (selection_trace unavailable for this object)"}
             if self.learner.state_hash() != before:
                 raise RuntimeError("endpoint prediction mutated persistent state")
             return decoded, {"prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),

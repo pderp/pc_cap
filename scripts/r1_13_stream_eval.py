@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -40,6 +41,7 @@ def main() -> int:
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact", "mquake"))
     ap.add_argument("--dev-manifest", default=None, help="development manifest path overriding manifests/dev/<dataset>_dev.json (e.g. the self-contained MQuAKE v3 slice)")
+    ap.add_argument("--dev-manifest-sha256", default=None, help="pin of the development manifest (computed and recorded as unpinned when absent)")
     ap.add_argument("--stream-seed", type=int, default=21, help="which 100 development items form the stream (21 = the Stage 0 stream)")
     ap.add_argument("--fast-steps", type=int, default=0)
     ap.add_argument("--fast-lr", type=float, default=1e-2)
@@ -57,7 +59,6 @@ def main() -> int:
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
     from pccap.contracts import Budget
-    from pccap.data.tokenize import GPT2Tokenizer
     from pccap.harness.lease import gpu_lease
     from pccap.harness.ledger import Ledger
     from pccap.harness.runs import Evaluator, run_stream
@@ -83,22 +84,26 @@ def main() -> int:
     taken = [str(d) for d in destinations if d.exists()]
     if taken:
         raise SystemExit(f"run identity {tag!r} already has artifacts (never overwritten; choose a new tag): {taken}")  # X26-03: before any setup
+    from pccap.data.tokenize import GPT2Tokenizer as _Tok
+    tok = _Tok()
     if args.dev_manifest:
-        import numpy as _np
-
-        from pccap.contracts import EditItem as _EditItem
-        _man = json.loads((ROOT / args.dev_manifest).read_text())
-        _rng = _np.random.default_rng(args.stream_seed)
-        _idx = sorted(_rng.permutation(len(_man["items"]))[: args.n])
-        items = [_EditItem(item_id=it["item_id"], digest=bytes.fromhex(it["digest"]), prompt=it["prompt"], answer=it["answer"], aliases=it["aliases"], paraphrases=it["paraphrases"],
-                           locality_prompts=it["locality_prompts"], prompt_ids=_np.asarray(it["prompt_ids"], _np.int32), answer_ids=_np.asarray(it["answer_ids"], _np.int32), dataset=args.dataset, fact_id=it["fact_id"])
-                 for it in (_man["items"][i] for i in _idx)]
-        unrelated = _man["unrelated_prompts"]
+        from pccap.revision_v1.dev_loader import (
+            load_development_manifest,  # R1-67: validated development-only loader
+        )
+        dm = ROOT / args.dev_manifest
+        dm_sha = args.dev_manifest_sha256 or hashlib.sha256(dm.read_bytes()).hexdigest()
+        sources = {"dev_v3": str(ROOT / "manifests/dev/mquake_dev_v3.json"), "train_pool_mquake_v3": str(ROOT / "manifests/revision_v1/train_pool_mquake_v3.json"),
+                   "train_pool_mquake_v1": str(ROOT / "manifests/revision_v1/train_pool_mquake_v1.json"), "mquake_pool_v1": str(ROOT / "manifests/revision_v1/mquake_pool_v1.json")}
+        dev_sel = load_development_manifest(dm, dev_root=ROOT / "manifests/dev", dataset=args.dataset, n=args.n, seed=args.stream_seed, tokenizer=tok,
+                                            expected_sha256=dm_sha, tokenizer_sha256=tok.file_sha256(), source_paths=sources)
+        items, unrelated = list(dev_sel.items), list(dev_sel.unrelated_prompts)
+        dev_receipt = {**dev_sel.receipt, "manifest_sha256_pinned_by_caller": bool(args.dev_manifest_sha256)}
     else:
         items, unrelated = load_dev_items(args.dataset, args.n, seed=args.stream_seed)
+        dev_receipt = None
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_eval", stage="R1", projected_seconds=3600.0)):
         ledger = Ledger()
-        base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
+        base = BPBase(ledger=ledger)
         k1, k2 = jax.random.split(jax.random.PRNGKey(0))
         template = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
         theta = load_theta(Path(args.theta), template)
@@ -127,7 +132,7 @@ def main() -> int:
         scores["unrelated"] = [x.best_score for x in unrel_sel]
         sc = {k: [x for x in v if x is not None] for k, v in scores.items()}
         best_scores = {k: {"mean": float(np.mean(v)), "p10": float(np.percentile(v, 10)), "p90": float(np.percentile(v, 90))} for k, v in sc.items() if v}
-        summary = {"tag": tag, "theta": args.theta, "theta_hash": ph, "args": vars(args), "stream_metrics": sm, "records": len(cap.store.records), "bytes": cap.store.bytes(),
+        summary = {"tag": tag, "theta": args.theta, "theta_hash": ph, "args": vars(args), "dev_receipt": dev_receipt, "stream_metrics": sm, "records": len(cap.store.records), "bytes": cap.store.bytes(),
                    "null_mass": {"prompt_mean": float(np.mean(nulls["prompt"])), "paraphrase_mean": float(np.mean(nulls["paraphrase"])), "unrelated_mean": float(np.mean(unrel)),
                                  "prompt_hard_null_rate": float(np.mean([x >= args.null_threshold for x in nulls["prompt"]])), "paraphrase_hard_null_rate": float(np.mean([x >= args.null_threshold for x in nulls["paraphrase"]])),
                                  "unrelated_hard_null_rate": float(np.mean([x >= args.null_threshold for x in unrel]))},
