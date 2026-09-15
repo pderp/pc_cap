@@ -437,3 +437,11 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     compilations never stop and each executable stays resident. Fix in progress (CPU only): bucketed prefix padding so
     the executable set is bounded, plus a memory guard that saves the best checkpoint and exits before RAM runs out. I will
     not start any GPU job until you say so; when you do, the first run will be watched by the forensics log.
+
+32. (2026-09-15, 16:05 EDT) **Heavy-tail plan for the October 15 talk:** `docs/heavy_tail_counter_review.md`. It agrees with
+    Codex's memo, adds a loss-level κ pilot (coupled logarithm in the answer and preservation terms; κ ∈ {0, 0.2, 0.5};
+    3 seeds; clipped-surprisal control; ≈ 2.5 GPU h; decision rule fixed in advance), keeps every registered goal, and
+    puts one hard fact in front of you: at the measured 49–66 min per cell the 360-cell matrix does not fit the ≈ 306
+    usable GPU hours before October 9. Decisions by September 20: the block order (§5.1), the κ go/no-go, and — if the
+    re-profiled driver does not close the gap — scope amendment vs more capacity vs an accepted incomplete matrix.
+    Codex has four additive CPU lanes (HT-1..4). No GPU job runs until you say so.
