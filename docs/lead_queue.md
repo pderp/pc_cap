@@ -464,15 +464,16 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 
 | id | question | proposed default | blocked until answered | needed by |
 | --- | --- | --- | --- | --- |
-| Q1 (DEC-042) | CounterFact confirmatory source: the reason-specific exception (12,246 candidates)? Implied by "keep CounterFact" + option C, never stated. | accept the exception | the CounterFact confirmatory draw (R1-58b → draw) | Sep 20 |
-| Q2 (DEC-047) | S1_LM = the lr 1e-8 continuation that passes the fidelity gate, as the informative continuation condition? | yes | the S1_LM cells of the matrix | Sep 20 |
-| Q3 (item 26b) | Add a MQuAKE stream criterion to reader checkpoint selection (one more retrain)? | yes | the primary-condition selection and its freeze binding | Sep 18 |
+| Q1 (DEC-042) | **ANSWERED 2026-09-15: yes** — the reason-specific exception (12,246 candidates). | — | unblocked: the CounterFact confirmatory draw | — |
+| Q2 (DEC-047) | **ANSWERED 2026-09-15: yes** — S1_LM = the lr 1e-8 continuation. | — | unblocked: the S1_LM cells | — |
+| Q3 (item 26b) | **ANSWERED 2026-09-15: yes** (DEC-049) — stream-based checkpoint selection on all three datasets. | — | unblocked: the selection retrain | — |
 | Q4 (counter-review §4) | κ pilot go/no-go (loss-level coupled logarithm, κ ∈ {0, 0.2, 0.5}, 3 seeds, clipped-surprisal control, ≈ 2.5 GPU h); should Matthew review the definition first? | go, after Matthew's review if he wants one | the κ pilot GPU runs (HT-3 manifest can be prepared meanwhile) | Sep 20 |
 | Q5 (counter-review §2/HT-2) | Stress panel go/no-go (6 development cells, 4 GPU h ceiling)? | go, after the confirmatory blocks are safe | the stress-panel runs (contract can be prepared meanwhile) | Sep 20 |
 | Q6 (counter-review §5.1) | Block order for the confirmatory matrix (primary + random + v0-stable on realization 0 first; then matched-update and v0 live; then realizations 1–2; then S1; then the 45-cell extension)? | as listed | scheduling of the first confirmatory block | Sep 20 |
 | Q7 (counter-review §5.3) | If the re-profiled driver does not fit 360 cells into the ≈ 306 usable GPU hours: scope amendment (fewer update orders) vs more capacity vs an accepted incomplete matrix? | your call; I bring measured numbers on Sep 20 | the freeze (R1-41) and the launch | Sep 20 |
-| Q8 (protocol v4 §6) | Confirm the primary-condition selection criterion: one rule for three datasets, chosen on development streams by mean RET-GS subject to zsRE unseen false fires ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | confirm | the selection itself and the freeze binding | Sep 18 |
+| Q8 (protocol v4 §6) | **ANSWERED 2026-09-15: confirmed** (DEC-050) — mean RET-GS s.t. zsRE unseen ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | — | unblocked: the selection and its freeze binding | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
 
+34. (2026-09-15, 17:05 EDT) Q1, Q2, Q3, Q8 answered and recorded (DEC-042 accepted, DEC-047 accepted, DEC-049, DEC-050). Still open: Q4 (κ pilot), Q5 (stress panel), Q6 (block order), Q7 (feasibility) — by September 20.
