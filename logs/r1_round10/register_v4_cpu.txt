@@ -1,0 +1,55 @@
+{
+  "counts": {
+    "zsre": {
+      "source_items": 52498,
+      "source_subjects": 52498,
+      "candidate_items": 52435,
+      "candidate_subjects": 52435,
+      "removed_items": 63,
+      "new_primary_exposure_subject_overlap": 0,
+      "new_locality_exposure_subject_overlap": 41,
+      "new_unrelated_exposure_subject_overlap": 28,
+      "new_exposure_union_subject_overlap": 63,
+      "role_demand_proposal": 4050,
+      "subject_shortfall": 0
+    },
+    "counterfact": {
+      "source_items": 12246,
+      "source_subjects": 12246,
+      "candidate_items": 12246,
+      "candidate_subjects": 12246,
+      "removed_items": 0,
+      "new_primary_exposure_subject_overlap": 0,
+      "new_locality_exposure_subject_overlap": 0,
+      "new_unrelated_exposure_subject_overlap": 0,
+      "new_exposure_union_subject_overlap": 0,
+      "role_demand_proposal": 4050,
+      "subject_shortfall": 0
+    },
+    "mquake": {
+      "source_items": 6043,
+      "source_subjects": 5577,
+      "candidate_items": 3002,
+      "candidate_subjects": 2882,
+      "removed_items": 3041,
+      "new_primary_exposure_subject_overlap": 700,
+      "new_locality_exposure_subject_overlap": 1301,
+      "new_unrelated_exposure_subject_overlap": 990,
+      "new_exposure_union_subject_overlap": 2599,
+      "role_demand_proposal": 4050,
+      "subject_shortfall": 1168
+    }
+  },
+  "new_exposure": {
+    "primary": 700,
+    "locality": 1301,
+    "development_unrelated": 990,
+    "union": 2599
+  },
+  "overlap": {
+    "zsre_mquake_subjects": 159,
+    "mquake_overlap_items": 169,
+    "shared_subjects_lost_from_zsre_due_to_new_query_exposure": 63,
+    "rule": "zsRE priority over MQuAKE; independent exposure exclusions override priority"
+  }
+}

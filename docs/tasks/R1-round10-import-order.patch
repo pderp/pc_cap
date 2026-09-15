@@ -1,0 +1,73 @@
+--- a/scripts/r1_57b_stage4_inventory.py
++++ b/scripts/r1_57b_stage4_inventory.py
+@@ -9,11 +9,11 @@
+ from pathlib import Path
+ 
+ import numpy as np
++from scripts.r1_57_dev_inventory import build as build_previous
+ 
+ from pccap.revision_v1.analysis import validate_inventory
+ from pccap.revision_v1.analysis_stage4 import expected_inventory
+ from pccap.revision_v1.stage4_cell import ROOT, sha, write_json
+-from scripts.r1_57_dev_inventory import build as build_previous
+ 
+ 
+ def build_development():
+--- a/scripts/r1_d1g_mquake_exposure_supplement.py
++++ b/scripts/r1_d1g_mquake_exposure_supplement.py
+@@ -7,9 +7,10 @@
+ from collections import defaultdict
+ from pathlib import Path
+ 
+-from pccap.revision_v1.stage4_cell import write_json
+ from scripts.r1_58_draw_streams import WRAPPER, candidates
+ from scripts.r1_d1g_freeze_register_v4 import ROOT, norm, policy_view, sha, validate
++
++from pccap.revision_v1.stage4_cell import write_json
+ 
+ 
+ def union_training(documents, known, teacher_binding):
+--- a/tests/revision_v1/test_mquake_exposure_supplement.py
++++ b/tests/revision_v1/test_mquake_exposure_supplement.py
+@@ -3,7 +3,6 @@
+ import copy
+ 
+ import pytest
+-
+ from scripts.r1_d1g_mquake_exposure_supplement import union_training
+ 
+ 
+--- a/tests/revision_v1/test_r1_d1g_binding.py
++++ b/tests/revision_v1/test_r1_d1g_binding.py
+@@ -3,7 +3,6 @@
+ from copy import deepcopy
+ 
+ import pytest
+-
+ from scripts.r1_d1g_freeze_register_v4 import policy_view, validate
+ 
+ 
+--- a/tests/revision_v1/test_stage4_cell_cli.py
++++ b/tests/revision_v1/test_stage4_cell_cli.py
+@@ -3,8 +3,8 @@
+ import json
+ 
+ import pytest
++import scripts.r1_61_cell_driver as cli
+ 
+-import scripts.r1_61_cell_driver as cli
+ from pccap.revision_v1.stage4_cell import code_identity, sha, write_json
+ 
+ 
+--- a/tests/revision_v1/test_stage4_dev_inventory.py
++++ b/tests/revision_v1/test_stage4_dev_inventory.py
+@@ -1,7 +1,8 @@
+ """Development inventory is reconstructed from declared sources, not results."""
+ 
++from scripts.r1_57b_stage4_inventory import build_development
++
+ from pccap.revision_v1.analysis import validate_inventory
+-from scripts.r1_57b_stage4_inventory import build_development
+ 
+ 
+ def test_three_dataset_development_inventory_keeps_missing_conditions():

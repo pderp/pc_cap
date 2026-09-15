@@ -1,0 +1,42 @@
+{
+  "cost_policy": "shared ledger deltas and returned counters are separate, never summed together; failed attempts retained",
+  "error": {
+    "message": "resource_failure:capacity",
+    "type": "EndpointResourceFailure"
+  },
+  "learning": true,
+  "ledger_delta": null,
+  "phase": "edit:2",
+  "restore_required": true,
+  "returned_events": [
+    {
+      "code": "acquisition_failure",
+      "codes": [
+        "resource_failure:capacity"
+      ],
+      "item_id": "b",
+      "original_code": "acquisition_failure",
+      "phase": "learning",
+      "returned_cost": {
+        "accel_seconds": 0.0,
+        "full_forwards": 1,
+        "memory_search_seconds": 0.0,
+        "partial_forwards": 0,
+        "peak_mem_mib": 0.0,
+        "phase": "learning",
+        "prefix_microsteps": 0,
+        "reverses": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "settle_iters": 0,
+        "tokens": 0,
+        "wall_seconds": 0.0
+      }
+    }
+  ],
+  "state_after_operation": "2db0d90e03a7901fa59ca0f6b701e0b8aa740f5fd2483c069b500099685281b5",
+  "state_after_restore": "2db0d90e03a7901fa59ca0f6b701e0b8aa740f5fd2483c069b500099685281b5",
+  "state_before": "2db0d90e03a7901fa59ca0f6b701e0b8aa740f5fd2483c069b500099685281b5",
+  "status": "error",
+  "wall_seconds": 9.291793685406446e-05
+}

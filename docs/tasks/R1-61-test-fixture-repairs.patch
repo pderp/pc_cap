@@ -1,0 +1,47 @@
+--- a/tests/revision_v1/test_stage4_cell.py
++++ b/tests/revision_v1/test_stage4_cell.py
+@@ -24,10 +24,33 @@
+     validate_payload,
+     write_json,
+ )
+-from tests.revision_v1.test_endpoints import Cap, Tokenizer, near_row, revision_row
+-from tests.revision_v1.test_endpoints_composition import ComposingCap, case
++from tests.revision_v1.test_endpoints import Cap, near_row, revision_row
++from tests.revision_v1.test_endpoints import Tokenizer as EndpointTokenizer
++from tests.revision_v1.test_endpoints_composition import ComposingCap as CompositionOnlyCap
++from tests.revision_v1.test_endpoints_composition import case
+ from tests.revision_v1.test_learner_cpu import _cfg
+ from tests.revision_v1.tiny_base import TinyBase
++
++
++# A general editing fixture must preserve taught answers in addition to the
++# composition-only behavior of the narrower R1-60 fixture.
++class ComposingCap(CompositionOnlyCap):
++    def predict(self, ids):
++        if int(ids[0]) in {int(self.base.tok.encode(q)[0]) for q in case()["questions"]}:
++            return super().predict(ids)
++        return Cap.predict(self, ids)
++
++
++class Tokenizer(EndpointTokenizer):
++    def token(self, text):
++        if text not in self.ids:
++            i = max((v for v in self.ids.values() if v != 198), default=1) + 1
++            if i == 198:
++                i += 1
++            self.ids[text] = i
++            self.strings[i] = text
++        return self.ids[text]
++
+ 
+ CAL = {"radii": {"1": 0.0, "2": 0.0, "3": 0.0}, "bank_scales": {"1": 1.0, "2": 1.0, "3": 1.0}}
+ 
+@@ -270,7 +293,7 @@
+         validate_payload(m, p)
+ 
+ 
+-class TinyTok(Tokenizer):
++class TinyTok(EndpointTokenizer):
+     def __init__(self):
+         self.strings = {63: "\n"}
+         self.ids = {"\n": 63}

@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "mode": "stage4_sealed_cell",
+  "cell": {
+    "condition": "R1_learned_ff",
+    "dataset": "mquake",
+    "realization": 0,
+    "order": 0
+  },
+  "checkpoints": [
+    100,
+    300,
+    1000
+  ],
+  "max_new": 32,
+  "code_sha256": "BIND_AFTER_FINAL_CODE_FREEZE",
+  "tokenizer_sha256": "BIND_TOKENIZER_FILE_SHA256",
+  "adapter_identity": {
+    "condition": "R1_learned_ff",
+    "class": "pccap.revision_v1.learner.RevisionCap",
+    "config_sha256": "BIND_CONFIG",
+    "rule": null,
+    "budget": {
+      "A": 0.3,
+      "epsilon": 0.01,
+      "R": 5,
+      "tau_edit": 0.1,
+      "search_trials": 4,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06
+    },
+    "base_sha256": "BIND_BASE_PARAMS",
+    "locality_base_sha256": "BIND_ORIGINAL_BASE_PARAMS",
+    "params_sha256": "BIND_READER_PARAMS"
+  },
+  "payload": {
+    "path": "/home/derp/cap/assets/TBD/admitted-cell-payload.json",
+    "sha256": "BIND_EXACT_PAYLOAD_BYTES"
+  },
+  "reservations": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/TBD-reservations.json",
+    "sha256": "BIND_R1_58_RESERVATION"
+  },
+  "protocol": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/TBD-stage4-freeze.json",
+    "sha256": "BIND_PROTOCOL_FREEZE"
+  },
+  "admission": {
+    "lead_approved": false,
+    "protocol_frozen": false,
+    "condition_admitted": false,
+    "launch_authorized": false,
+    "endpoint_bundle_sha256": "BIND_CANONICAL_ENDPOINT_BUNDLE",
+    "ordered_item_ids_sha256": "BIND_ORDERED_IDS"
+  },
+  "construction": {
+    "base": {
+      "path": "/home/derp/cap/assets/models/gpt2",
+      "files": {
+        "config.json": "BIND_CONFIG_BYTES",
+        "model.safetensors": "BIND_BASE_WEIGHT_BYTES"
+      }
+    },
+    "weights": {
+      "path": "/home/derp/cap/assets/TBD/reader.npz",
+      "sha256": "BIND_READER_FILE_BYTES"
+    },
+    "stop_tokens": {
+      "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+      "sha256": "BIND_STOP_LIST"
+    },
+    "seed": 0,
+    "calibration": {
+      "bank_scales": {
+        "1": "ADMITTED_SCALE",
+        "2": "ADMITTED_SCALE",
+        "3": "ADMITTED_SCALE"
+      },
+      "radii": {
+        "1": "ADMITTED_RADIUS",
+        "2": "ADMITTED_RADIUS",
+        "3": "ADMITTED_RADIUS"
+      }
+    },
+    "budget": {
+      "A": 0.3,
+      "epsilon": 0.01,
+      "R": 5,
+      "tau_edit": 0.1,
+      "search_trials": 4,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06
+    }
+  }
+}

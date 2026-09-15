@@ -1,0 +1,55 @@
+{
+  "assignment_rule": "Attach a source case to a realization only when every dependency item is in that realization; use the same case IDs across its conditions/orders. Keep attached source-conflict cases unavailable.",
+  "dependence_note": "Cases sharing dependency edits are correlated; expected_case_counts computes a design mean, not variance or an IID confidence interval.",
+  "draws_emitted": 0,
+  "expected_count_formula": "E[C_r] = sum_c product_s comb(q_rs,k_cs)/comb(N_s,k_cs), for admitted fixed stratum quotas and a unique-subject item population; E[paraphrases_r] = 3 E[C_r].",
+  "gpu_seconds": 0,
+  "mode": "count_only_no_draw",
+  "rng_used": false,
+  "sealed_payloads_opened": 0,
+  "source_bindings_sha256": {
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/composition.jsonl": "5bad38276be292cbd9aa27eca93419f56a371b3bfd60cc63c1da6d80d7c04865",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4.json": "01b72fd2b8de0750f839cbb5fc4164054656f92cf46bd4e3abc1e061bb78c5ec",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4_supplement_v1.json": "1d4302542de5a53dbcb40402f78772151c315850797cbcac2f6a9bd94c017715"
+  },
+  "task": "R1-60",
+  "views": {
+    "exclusions_frozen_v4": {
+      "candidate_dependency_count_distribution": {
+        "1": 1385,
+        "2": 464,
+        "3": 32,
+        "4": 1
+      },
+      "candidate_items": 3002,
+      "candidate_subjects": 2882,
+      "count_interpretation": "Candidate graph ceiling only; dependency membership within an eventual realization can only reduce attached cases.",
+      "expected_attached_cases_for_registered_draw": null,
+      "reason": "Full three-realization role demand exceeds distinct-subject capacity; representative fact per subject and stratum quotas are not admitted.",
+      "source_cases": 9218,
+      "status_counts": {
+        "all_dependencies_current_candidates": 1882,
+        "dependency_excluded": 3099,
+        "source_unavailable": 4237
+      }
+    },
+    "exclusions_frozen_v4_supplement_v1": {
+      "candidate_dependency_count_distribution": {
+        "1": 832,
+        "2": 244,
+        "3": 11
+      },
+      "candidate_items": 2171,
+      "candidate_subjects": 2100,
+      "count_interpretation": "Candidate graph ceiling only; dependency membership within an eventual realization can only reduce attached cases.",
+      "expected_attached_cases_for_registered_draw": null,
+      "reason": "Full three-realization role demand exceeds distinct-subject capacity; representative fact per subject and stratum quotas are not admitted.",
+      "source_cases": 9218,
+      "status_counts": {
+        "all_dependencies_current_candidates": 1087,
+        "dependency_excluded": 3894,
+        "source_unavailable": 4237
+      }
+    }
+  }
+}

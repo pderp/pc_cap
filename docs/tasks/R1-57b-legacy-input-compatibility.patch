@@ -1,0 +1,15 @@
+--- a/src/pccap/revision_v1/analysis_stage4.py
++++ b/src/pccap/revision_v1/analysis_stage4.py
+@@ -374,6 +374,12 @@
+ def development_dry_run(development_inventory, *, root=ROOT):
+     if development_inventory.get("scope") != "development":
+         raise ValueError("development inventory required")
++    development_inventory = json.loads(json.dumps(development_inventory))
++    # Legacy analysis represents missing cells by an absent declaration. Keep
++    # all expected axes so these cells remain in every planned denominator.
++    development_inventory["cells"] = [
++        c for c in development_inventory["cells"] if c.get("stream_dir")
++    ]
+     legacy = analyze(development_inventory, root=root)
+     return {
+         "banner": "NOT CONFIRMATORY — development outputs only",
