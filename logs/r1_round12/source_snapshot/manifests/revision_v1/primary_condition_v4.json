@@ -1,0 +1,52 @@
+{
+ "name": "primary_condition_v4",
+ "date": "2026-09-14",
+ "status": "proposed development reference for three datasets; not frozen",
+ "condition": "learned reader (tied cosine + pairwise null + lexical overlap, stop list v1), stable observations, per-position delta writes (5 normalized adjoint steps, τ 0.1, A 0.3, v2 b_m), hard top-1 selection, null threshold 0.5, no cosine gate, binary write mass, top-k 4; R1-56 rare-token overlap gate: the query must share ≥ 1 non-stop token with the selected record's support prompt that occurs in ≤ 2 active records (rare_overlap_min=1, rare_df_max=2)",
+ "training": "stream-scale mixed-domain episodes (64-record memories; CounterFact pool v1 + zsRE pool v1 + MQuAKE pool v2, 1,000 items each; 300 steps × 2; lr 1e-3; wd 0.01) plus 8 ordinary-text null queries per episode (512 OpenWebText training-range windows × prefix lengths 16/48/96, cap-off logits kept for the preservation KL; --text-nulls 8 --text-windows 512), scripts/r1_50_stream_train.py",
+ "weights": {
+  "seed0": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s0/theta.npz",
+   "sha256": "d42cd97a761ee7c56c041694f57c0f8ff31798ae45b99cf714728798ebb0f7ce"
+  },
+  "seed1": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s1/theta.npz",
+   "sha256": "c21b2b5ce4105f2be82204d615dc9e5e538a1ecafe9fa60fc6291f257114eb6c"
+  },
+  "seed2": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s2/theta.npz",
+   "sha256": "ec9dacb446a9649470253419a9fdbd49e734a0d49fd4c099a2d8cc69eafed2fc"
+  }
+ },
+ "stop_tokens": {
+  "path": "manifests/revision_v1/stop_tokens_v1.json",
+  "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+ },
+ "pools": {
+  "train_pool_counterfact_v1": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+  "train_pool_zsre_v1": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e",
+  "train_pool_mquake_v2": "1b639bd5d10e0a29ecfe3fe58e22b1654e3c971ab55eedf5990baf4961afff90"
+ },
+ "development_results": {
+  "zsre": "RET-GS 0.98 / 0.96 / 0.95 (seeds 0–2, stream 21), LS 1.00",
+  "counterfact": "RET-GS 0.76 / 0.83 / 0.785, LS 1.00",
+  "mquake": "RET-GS 0.79 / 0.68 / 0.56 (ES 0.92 / 1.00 / 1.00), LS 1.00; unseen false fires 0/100 at 100 records; drift +0.005 nats (pool-v1 reader)",
+  "mquake_transfer_without_training": "0.16 (v2 reader)",
+  "ablations_not_adopted": "MQuAKE pool v1 (500): 0.80 / 0.47 / 0.82; weighted lexical feature (lex_idf): 0.62 / 0.74 / 0.80 with ES 0.85–0.99"
+ },
+ "controls": [
+  "v0 live C1/C2",
+  "v0-stable (DEC-035)",
+  "matched-update (R1-15)",
+  "R1-nonlearned (random tied cosine reader + cosine gate 0.93 + per-position deltas)",
+  "teacher-only continuation (R1-24, pending the lead's variant decision)"
+ ],
+ "open_risks": [
+  "CounterFact selection among near-duplicate candidates at ≥ 1,000 records (fires-own 0.59–0.625 in the bank profile; P1/P3 profiles at 300/1,000 records on the real base in progress)",
+  "residual ordinary-text firing after CounterFact edits (+0.012 nats; the assay's fixed-length probes at 16/48/96 saw none, so the firing is at other prefix lengths)",
+  "unseen-edit-prompt false fires on zsRE 10 % at 1,000 records with the gate (rare relation words and subword fragments); 10–11 % over three seeds",
+  "MQuAKE paraphrase retention varies 0.47–0.82 across reader seeds (question-form paraphrases decided by the lexical feature alone; cosine to same-relation prompts ≈ 0.99); report the seed range and consider checkpoint selection on a MQuAKE stream criterion before the freeze"
+ ],
+ "evidence": "docs/R1_stage2_notes.md (R1-54 and seeds sections); results/R1/stream_eval.md (mixed_text* rows); results/R1/drift_assay_r1_50_stream_mixed_text_*.json; results/R1/endpoints/text_s0_v1*/",
+ "supersedes": "primary_condition_v3 (two training pools); v4 adds the MQuAKE training pool (DEC-045/046)"
+}
