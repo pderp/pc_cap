@@ -30,6 +30,8 @@ def main() -> int:
     ap.add_argument("--n-memory", type=int, default=64)
     ap.add_argument("--n-query-records", type=int, default=8)
     ap.add_argument("--n-out", type=int, default=8)
+    ap.add_argument("--out-para-nulls", action="store_true", help="R1-66: also use the question/paraphrase form of out-of-memory items as null queries")
+    ap.add_argument("--out-para-prob", type=float, default=1.0, help="R1-66: fraction of out-of-memory items that also contribute a paraphrase-form null")
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-decay", type=float, default=0.01)
     ap.add_argument("--dev-every", type=int, default=50)
@@ -143,8 +145,8 @@ def main() -> int:
         log = (OUT / "metrics.jsonl").open("w")
         t0 = time.time()
         for step in range(args.steps):
-            batch = [(stream_episode_mixed(train_by_pool, bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out) if mixed
-                      else stream_episode(bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, pool_indices=train_idx)) for _ in range(args.batch)]
+            batch = [(stream_episode_mixed(train_by_pool, bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, out_paraphrase_nulls=args.out_para_nulls, out_paraphrase_null_prob=args.out_para_prob) if mixed
+                      else stream_episode(bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, pool_indices=train_idx, out_paraphrase_nulls=args.out_para_nulls, out_paraphrase_null_prob=args.out_para_prob)) for _ in range(args.batch)]
             batch = [add_text_nulls(b, text_bank, rng, args.text_nulls) for b in batch]
             theta, st, m = tr.outer_step(theta, st, batch)
             m.update(step=step, wall_s=time.time() - t0)

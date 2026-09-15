@@ -128,7 +128,7 @@ def build_bank(base, enc, rows: list[dict], rc: ReaderConfig, tok: GPT2Tokenizer
 
 
 def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 64, n_query_records: int = 8, n_out: int = 8,
-                   pool_indices: list[int] | None = None, episode_id: str = "") -> EpisodeFeatures:
+                   pool_indices: list[int] | None = None, episode_id: str = "", out_paraphrase_nulls: bool = False, out_paraphrase_null_prob: float = 1.0) -> EpisodeFeatures:
     """Memory of ``n_memory`` items; queries from ``n_query_records`` of them (own prompt, one paraphrase, one locality
     null each) and from ``n_out`` out-of-memory items (prompt as null)."""
     idx = np.asarray(pool_indices if pool_indices is not None else np.arange(len(bank.items)))
@@ -155,6 +155,10 @@ def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 
         # an out-of-memory fact's prompt: nothing in memory applies (L2 null target only; no stored cap-off logits)
         lpf = PrefixFeat(ids=it.own[0].ids, n=it.own[0].n, target=-1, last=it.key_last, span=it.key_span, capoff_logits=None)
         queries.append(QueryFeat(query_id=f"out:{it.item_id}", role="unrelated_no_kl", last=it.key_last, span=it.key_span, prefixes=[lpf], target_record=-1, query_ids=it.prompt_ids))
+        if out_paraphrase_nulls and it.paraphrases and rng.random() < out_paraphrase_null_prob:  # R1-66: the question form of an absent fact is also a null (unseen edit-prompt population)
+            p_last, p_span, prefs = it.paraphrases[int(rng.integers(len(it.paraphrases)))]
+            ppf = PrefixFeat(ids=prefs[0].ids, n=prefs[0].n, target=-1, last=p_last, span=p_span, capoff_logits=None)
+            queries.append(QueryFeat(query_id=f"outpara:{it.item_id}", role="unrelated_no_kl", last=p_last, span=p_span, prefixes=[ppf], target_record=-1, query_ids=prefs[0].ids[: prefs[0].n]))
     return EpisodeFeatures(episode_id=episode_id or f"stream-{rng.integers(1 << 31)}", supports=supports, queries=queries)
 
 
@@ -179,7 +183,7 @@ def merge_banks(banks: list[FeatureBank]) -> FeatureBank:
 
 
 def stream_episode_mixed(banks_idx: list[list[int]], bank: FeatureBank, rng: np.random.Generator, n_memory: int = 64, n_query_records: int = 8, n_out: int = 8,
-                         episode_id: str = "") -> EpisodeFeatures:
+                         episode_id: str = "", out_paraphrase_nulls: bool = False, out_paraphrase_null_prob: float = 1.0) -> EpisodeFeatures:
     """Memory drawn from every pool in proportion to its size (so each domain's own prompts, paraphrases, locality nulls and
     out-of-memory nulls appear in every episode); queries as in ``stream_episode``."""
     sizes = np.asarray([len(ix) for ix in banks_idx], float)
@@ -194,7 +198,7 @@ def stream_episode_mixed(banks_idx: list[list[int]], bank: FeatureBank, rng: np.
     for ix, k in zip(banks_idx, counts):
         picked.extend(rng.permutation(np.asarray(ix))[:k].tolist())
     picked = rng.permutation(np.asarray(picked)).tolist()
-    ep = stream_episode(bank, rng, n_memory=n_memory, n_query_records=n_query_records, n_out=n_out, pool_indices=picked, episode_id=episode_id)
+    ep = stream_episode(bank, rng, n_memory=n_memory, n_query_records=n_query_records, n_out=n_out, pool_indices=picked, episode_id=episode_id, out_paraphrase_nulls=out_paraphrase_nulls, out_paraphrase_null_prob=out_paraphrase_null_prob)
     # R50-04: guarantee every domain contributes at least one query record (own prompt + paraphrase + locality null)
     mem_ids = {s_.record_id for s_ in ep.supports}
     queried = {q.query_id.split(":", 1)[1] for q in ep.queries if q.role in ("own_prompt",)}

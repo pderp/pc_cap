@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py", line 64, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py", line 28, in main
+    m, p = load_development_cell(a.manifest, a.manifest_sha256)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/src/pccap/revision_v1/development_cell.py", line 116, in load_development_cell
+    raise ValueError("installed development code identity mismatch")
+ValueError: installed development code identity mismatch
