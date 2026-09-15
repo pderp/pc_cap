@@ -681,3 +681,23 @@ remains an implemented, tested ablation (off by default). MQuAKE paraphrase rete
 therefore reported as it is: 0.47–0.82 over the six plain-lexical reader instances, with one rule for three datasets.
 Proposed primary condition v4 = three-pool reader (MQuAKE pool v2), plain lexical, gate
 (`manifests/revision_v1/primary_condition_v4.json`); v3 stays the two-dataset fallback.
+
+## R1-60 composition endpoint on the real base — development floor (2026-09-15, 00:30 EDT)
+
+`scripts/r1_60_composition_run.py`, v4 reader seed 0, gate on, 300 MQuAKE composition cases whose dependency edits all
+lie in the MQuAKE training pool v2 (484 attach to it; exposed, development only): each case restores an empty memory,
+teaches its 1–2 dependency edits, and asks the three multi-hop paraphrases (`results/R1/endpoints/v4_s0_dev300_composition/`).
+
+| quantity | value |
+| --- | ---: |
+| cases evaluated / unavailable | 299 / 1 |
+| composition success (all three paraphrases) | 1 / 299 |
+| paraphrase-level post-edit exact | 8 / 897 |
+| cap-off base exact on the pre-edit answer / post-edit answer | 0 / 897, 0 / 897 |
+| pre-edit answer reappearing after the edit | 0 |
+| wall | 195 s (0.65 s per case) |
+
+The base itself answers none of the multi-hop questions before or after editing, so the endpoint has no headroom for
+GPT-2 small: a memory cap that fires on the bridge entity's single-hop prompt cannot make the base compose two hops it
+cannot compose unedited. The endpoint is kept as a descriptive secondary outcome (protocol U14) with this floor
+recorded; it is not evidence about the reader. Firing statistics are in the report rows.

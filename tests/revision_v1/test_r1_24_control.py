@@ -15,7 +15,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 import r1_24_control as control  # noqa: E402
-import r1_24_runtime as runtime
+import r1_24_runtime as runtime  # noqa: E402
 
 
 @pytest.mark.parametrize("tokens,seq,source,tail,unused", [(2,128,1,1,0), (3,128,1,1,1), (512,128,256,0,0), (493752,128,246876,92,0)])
