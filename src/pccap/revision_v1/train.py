@@ -44,8 +44,12 @@ class LossConfig:
     w_code_norm: float = 0.0
     fast_steps: int = 0  # 0 = reference (initial codes from prompt+answer); >0 is NOT implemented in the outer loop (rejected at construction)
     balance_null: bool = True  # L2: null-target and record-target queries carry equal total weight per episode
+    kappa: float = 0.0  # HT-3: coupled logarithm ln_k(p) = (p^k - 1)/k in the answer surprisal and the preservation divergence (k = 0: ordinary log)
+    clip_surprisal: float | None = None  # HT-3 comparator: min(-ln p, c) in the answer term (an ordinary robust loss; None = off)
 
     def __post_init__(self):
+        if self.kappa < 0 or (self.clip_surprisal is not None and self.clip_surprisal <= 0) or (self.kappa > 0 and self.clip_surprisal is not None):
+            raise ValueError("kappa must be >= 0, clip_surprisal > 0, and the two are alternatives")
         if self.fast_steps != 0:
             raise NotImplementedError("fast steps inside the outer loop are not implemented; run with fast_steps = 0 (R23-02)")
 

@@ -30,6 +30,8 @@ def main() -> int:
     ap.add_argument("--n-memory", type=int, default=64)
     ap.add_argument("--n-query-records", type=int, default=8)
     ap.add_argument("--n-out", type=int, default=8)
+    ap.add_argument("--kappa", type=float, default=0.0, help="HT-3: coupled-logarithm kappa in the answer and preservation terms (0 = current objective)")
+    ap.add_argument("--clip-surprisal", type=float, default=None, help="HT-3 comparator: clip the answer surprisal at this value")
     ap.add_argument("--min-mem-mb", type=int, default=4096, help="R1-69 memory guard: stop (keeping the best checkpoint) when MemAvailable drops below this")
     ap.add_argument("--clear-caches-every", type=int, default=50, help="R1-69: jax.clear_caches() every N steps to bound resident executables")
     ap.add_argument("--out-para-nulls", action="store_true", help="R1-66: also use the question/paraphrase form of out-of-memory items as null queries")
@@ -131,7 +133,7 @@ def main() -> int:
         dev_eps = [add_text_nulls(e, text_bank, dev_rng, args.text_nulls) for e in dev_eps]
         k1, k2 = jax.random.split(jax.random.PRNGKey(args.seed))
         theta = {"reader": init_reader(k1, rc), "controller": init_controller(k2, cc)}
-        tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(), lr=args.lr, weight_decay=args.weight_decay, ledger=ledger)
+        tr = FastTrainer(rc, cc, base.params, base.cfg, LossConfig(kappa=args.kappa, clip_surprisal=args.clip_surprisal), lr=args.lr, weight_decay=args.weight_decay, ledger=ledger)
         st = tr.init(theta)
 
         def evaluate(th):

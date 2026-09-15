@@ -143,9 +143,18 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
             W, _ = writes(theta["controller"], cc, q_t, code_mix, 1.0 - null)
             logits, _, _ = g.forward_jit(base_params, ids, n, W, base_cfg, False, True)
             if kind == "answer":
-                return jax.nn.logsumexp(logits) - logits[target]
+                surprisal = jax.nn.logsumexp(logits) - logits[target]
+                if lc.kappa > 0:  # HT-3 coupled surprisal: -ln_k p = (1 - p^k) / k, bounded by 1/k
+                    return (1.0 - jnp.exp(-lc.kappa * surprisal)) / lc.kappa
+                if lc.clip_surprisal is not None:
+                    return jnp.minimum(surprisal, lc.clip_surprisal)
+                return surprisal
             p_off = jax.nn.softmax(capoff_row)
-            return jnp.sum(p_off * (jnp.log(p_off + 1e-30) - jax.nn.log_softmax(logits)))
+            log_on = jax.nn.log_softmax(logits)
+            if lc.kappa > 0:  # HT-3 coupled divergence: sum p_off (ln_k p_off - ln_k p_on)
+                lnk = lambda lp: (jnp.exp(lc.kappa * lp) - 1.0) / lc.kappa  # noqa: E731  (ln_k of p from log p)
+                return jnp.sum(p_off * (lnk(jnp.log(p_off + 1e-30)) - lnk(log_on)))
+            return jnp.sum(p_off * (jnp.log(p_off + 1e-30) - log_on))
 
         per = jax.vmap(one)(grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff) * grp_weight  # padded rows weigh 0
         weight = lc.w_answer if kind == "answer" else lc.w_preserve
