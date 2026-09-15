@@ -445,3 +445,34 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     usable GPU hours before October 9. Decisions by September 20: the block order (§5.1), the κ go/no-go, and — if the
     re-profiled driver does not close the gap — scope amendment vs more capacity vs an accepted incomplete matrix.
     Codex has four additive CPU lanes (HT-1..4). No GPU job runs until you say so.
+
+33. (2026-09-15, 16:45 EDT) **Memory rules for every future GPU run** (cause of the three hangs: my stream-training runs, host RAM,
+    not the GPU — per-shape XLA recompilation grew resident memory +1.1 GB/min; Codex's work is CPU-only and was not involved):
+    1. Input shapes are padded to fixed buckets (prefix length ×16, group rows 1/2/4/8/×8, query count ×8, zero-weight pads) so
+       the compiled-executable set is bounded — validated: resident memory plateaus at ≈ 6 GB (old code: 23 GB), steps ≈ 20× faster.
+    2. `jax.clear_caches()` every 50 training steps.
+    3. Memory guard: MemAvailable checked every 10 steps; below 4 GB the run saves its best checkpoint and exits.
+    4. One GPU job at a time; no overlapping trainings or evaluations; chains are sequential.
+    5. Two boot-time monitors watch every run (`pccap-sysmon`: GPU/memory/swap/pressure/kernel clues; `pccap-process-memory`:
+       per-process RSS history); the first full 1,000-edit driver cell will be watched for resident-memory growth before any
+       unattended use.
+
+## Open decisions ledger (2026-09-15, 16:45 EDT) — nothing below starts until you answer
+
+Rule you asked for: a task that depends on one of these answers does not commence until the answer is recorded here and in
+`docs/decisions.md`; defaults are stated but are NOT applied to these items without your word.
+
+| id | question | proposed default | blocked until answered | needed by |
+| --- | --- | --- | --- | --- |
+| Q1 (DEC-042) | CounterFact confirmatory source: the reason-specific exception (12,246 candidates)? Implied by "keep CounterFact" + option C, never stated. | accept the exception | the CounterFact confirmatory draw (R1-58b → draw) | Sep 20 |
+| Q2 (DEC-047) | S1_LM = the lr 1e-8 continuation that passes the fidelity gate, as the informative continuation condition? | yes | the S1_LM cells of the matrix | Sep 20 |
+| Q3 (item 26b) | Add a MQuAKE stream criterion to reader checkpoint selection (one more retrain)? | yes | the primary-condition selection and its freeze binding | Sep 18 |
+| Q4 (counter-review §4) | κ pilot go/no-go (loss-level coupled logarithm, κ ∈ {0, 0.2, 0.5}, 3 seeds, clipped-surprisal control, ≈ 2.5 GPU h); should Matthew review the definition first? | go, after Matthew's review if he wants one | the κ pilot GPU runs (HT-3 manifest can be prepared meanwhile) | Sep 20 |
+| Q5 (counter-review §2/HT-2) | Stress panel go/no-go (6 development cells, 4 GPU h ceiling)? | go, after the confirmatory blocks are safe | the stress-panel runs (contract can be prepared meanwhile) | Sep 20 |
+| Q6 (counter-review §5.1) | Block order for the confirmatory matrix (primary + random + v0-stable on realization 0 first; then matched-update and v0 live; then realizations 1–2; then S1; then the 45-cell extension)? | as listed | scheduling of the first confirmatory block | Sep 20 |
+| Q7 (counter-review §5.3) | If the re-profiled driver does not fit 360 cells into the ≈ 306 usable GPU hours: scope amendment (fewer update orders) vs more capacity vs an accepted incomplete matrix? | your call; I bring measured numbers on Sep 20 | the freeze (R1-41) and the launch | Sep 20 |
+| Q8 (protocol v4 §6) | Confirm the primary-condition selection criterion: one rule for three datasets, chosen on development streams by mean RET-GS subject to zsRE unseen false fires ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | confirm | the selection itself and the freeze binding | Sep 18 |
+
+Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
+transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
+
