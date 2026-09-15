@@ -277,6 +277,17 @@ def identity_key(value) -> tuple[int, int]:
     return value["pid"], value["start_ticks"]
 
 
+def log_bytes(directory: Path) -> int:
+    total = 0
+    for path in directory.glob("memory-*.jsonl"):
+        try:
+            total += path.stat().st_size
+        except FileNotFoundError:
+            # The retention service can delete a closed segment during this scan.
+            continue
+    return total
+
+
 class Recorder:
     def __init__(
         self, directory: Path, header: dict, segment_bytes: int, max_bytes: int, min_free_bytes: int
@@ -296,7 +307,7 @@ class Recorder:
         except OSError:
             self.lock.close()
             raise
-        self.total = sum(path.stat().st_size for path in directory.glob("memory-*.jsonl"))
+        self.total = log_bytes(directory)
         self.stream, self.known = None, {}
         self.segment_size, self.segment_index = 0, 0
 
@@ -319,6 +330,7 @@ class Recorder:
     def open_segment(self):
         if self.stream is not None:
             self.stream.close()
+        self.total = log_bytes(self.directory)
         self.known = {}
         self.segment_index += 1
         header = dict(

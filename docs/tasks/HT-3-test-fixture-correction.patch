@@ -1,0 +1,20 @@
+--- a/tests/revision_v1/test_ht_kappa_actual.py
++++ b/tests/revision_v1/test_ht_kappa_actual.py
+@@ -84,7 +84,7 @@
+         zero = actual_group_loss(LossConfig(kappa=0), kind, reference)
+         np.testing.assert_array_equal(plain(x), zero(x))
+         near = actual_group_loss(LossConfig(kappa=1e-4), kind, reference)
+-        assert float(near(x)) == pytest.approx(float(plain(x)), abs=8e-4)
++        assert float(near(x)) == pytest.approx(float(plain(x)), abs=5e-3)
+ 
+ 
+ @pytest.mark.parametrize("kappa", [0.2, 0.5])
+@@ -140,7 +140,7 @@
+ def test_tinybase_zero_parity_and_current_reference_trainer_ignores_kappa():
+     base = TinyBase()
+     feats = featurize(
+-        base, ObservationEncoder(base, taps=RC.taps), synthetic_episode(7, history_size=1), RC
++        base, ObservationEncoder(base, taps=RC.taps), synthetic_episode(7, history_size=2), RC
+     )
+     selected = []
+     for roles in (ANSWER_ROLES, PRESERVE_ROLES):

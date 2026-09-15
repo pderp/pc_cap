@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly 48-hour retention for pc_cap sysmon and process-memory logs
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1min
+Unit=pccap-monitor-retention.service
+
+[Install]
+WantedBy=timers.target

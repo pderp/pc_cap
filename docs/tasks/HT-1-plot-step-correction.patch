@@ -1,0 +1,11 @@
+--- a/scripts/ht_plot_audit.py
++++ b/scripts/ht_plot_audit.py
+@@ -35,7 +35,7 @@
+     fig, axes = plt.subplots(1, 2, figsize=(10, 4), layout="constrained")
+     nonzero = np.sort(positive[positive > 0])
+     surv = np.arange(len(nonzero), 0, -1) / len(positive)
+-    axes[0].step(nonzero, surv, where="post", color="#185d88")
++    axes[0].step(nonzero, surv, where="pre", color="#185d88")
+     axes[0].set(
+         xscale="log",
+         yscale="log",

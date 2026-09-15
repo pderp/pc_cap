@@ -1,0 +1,84 @@
+{
+  "bindings_sha256": {
+    "docs/heavy_tail_counter_review.md": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91",
+    "logs/heavy_tail/kappa_definition_review.json": "d1756360fca9cd52976fa5828a42aeef328c027eb971774722591711fa5efa3b",
+    "src/pccap/revision_v1/train.py": "8d1f7971b5ef65f64afff6a2b26958548784640d25653c2111869e7d2153f43a",
+    "src/pccap/revision_v1/train_fast.py": "ff9bd7aefd8d2d7f9936681fd7c59d442c3942f7011524208d95303eb4961b61",
+    "tests/revision_v1/test_ht_kappa_actual.py": "26ddfd88a7333ccebcd6446ce3fef87d540c881a7d02c8559196375ff2c9b0ac"
+  },
+  "blockers": [
+    "proposed preservation is negative for a valid p,q pair and is not stationary at q=p",
+    "reference trainer ignores kappa and clipping",
+    "float32 near-zero cancellation in current positive-kappa branch",
+    "LossConfig admits NaN/infinity",
+    "exact paper convention and matched clipping scope require review",
+    "selected primary identity and explicit decision aggregation rule not yet bound",
+    "lead GPU/scheduling admission absent"
+  ],
+  "budget": {
+    "gpu_seconds_ceiling": 10800,
+    "model_experiment_deadline": "2026-10-09",
+    "training_or_evaluation_performed_here": false
+  },
+  "decision_rule_original": "Enters Stage4 as a declared secondary condition only if mean RET-GS declines by no more than .02, unseen false fires do not increase, and at least one preregistered tail statistic changes by more than its seed spread; otherwise report a null result.",
+  "decision_rule_proposal_requiring_owner_acceptance": {
+    "interpretation": "a changed tail is not necessarily an improvement; multiple diagnostics are descriptive and do not establish confirmatory significance",
+    "missing": "any missing, failed or nonfinite assay makes the decision unavailable; do not silently exclude seeds",
+    "ret_gs": "equal-weight mean across 3 datasets and 3 seeds >= kappa0 mean - .02",
+    "seed_spread": "for each statistic, use max(range across kappa seeds, range across kappa0 seeds) on equal-weight per-dataset means; absolute difference of means must exceed it; print direction and all tested statistics",
+    "tail_statistics": [
+      "ES95 positive preservation harm",
+      "maximum positive preservation harm"
+    ],
+    "unseen": "per dataset, mean across 3 seeds at 100 records <= same-dataset kappa0; report counts and denominators"
+  },
+  "definition": {
+    "answer": "(1 - p_target**kappa)/kappa",
+    "clip": "min(-ln p_target,c), answer only; preserve ordinary KL",
+    "log_kappa": "(p**kappa - 1)/kappa; ordinary log at kappa=0",
+    "numerical_requirement": "explicit kappa=0 branch; -expm1(-kappa*surprisal)/kappa for positive kappa; finite nonnegative configuration; current code does not meet all these gates",
+    "preserve_proposed": "sum_i p_off_i * (log_kappa(p_off_i) - log_kappa(p_on_i))",
+    "retrieval": "ordinary categorical CE unchanged in form; shared reader weights can still change boundary behavior"
+  },
+  "design": {
+    "clipped_control_c": 2,
+    "clipping_match": "c=2 matches kappa=.5 ceiling; kappa=.2 has ceiling5 and is NOT ceiling-matched by this control. A second c=5 control would change the 12-training design and budget; owner must resolve before execution.",
+    "fixed": "selected-primary pools, episodes, nulls, gate, threshold, optimizer, steps, populations; identical evaluation rows and update order across conditions",
+    "kappa": [
+      0,
+      0.2,
+      0.5
+    ],
+    "training_conditions": 4,
+    "training_seeds": [
+      0,
+      1,
+      2
+    ],
+    "trainings": 12
+  },
+  "execution_authorized": false,
+  "gpu_seconds": 0,
+  "reference_version": {
+    "ambiguous_reference": "Abstract reference Nelson (2023/2024), Coupled entropy for complex systems is not an unambiguous version; owner/author clarification still needed.",
+    "arxiv": "0912.0748v1",
+    "authors": "Nelson and Umarov",
+    "doi": "10.1016/j.physa.2010.01.044",
+    "journal": "Physica A 389 (2010), 2157\u20132163",
+    "mapping": "The paper defines log_Q(x)=(x^Q-1)/Q, but its Eq.(3) surprisal is log_Q(1/p)=-log_-Q(p). Our bounded -log_kappa(p) corresponds to Q=-kappa for that surprisal, not identical positive-Q convention. Ordinary expectation here is not the complete coupled-entropy construction.",
+    "title": "Nonlinear statistical coupling",
+    "url": "https://arxiv.org/abs/0912.0748v1"
+  },
+  "schema_version": 1,
+  "selected_primary": {
+    "path": null,
+    "sha256": null,
+    "weights": null
+  },
+  "status": "BLOCKED_objective_and_implementation_review",
+  "suggestions_requiring_scientific_decision": [
+    "Keep preservation KL unchanged and label answer-only robust-surprisal pilot, or derive and validate a proper reference-minimized preservation objective. Neither change is applied here."
+  ],
+  "task": "HT-3",
+  "test_binding_note": "Test source hash records the initially written fixture. The two tested fixture-only corrections are proposed separately; this manifest is blocked and must be versioned before any pilot execution."
+}

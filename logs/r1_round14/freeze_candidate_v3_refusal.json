@@ -1,0 +1,330 @@
+{
+  "admitted": false,
+  "binding_errors": [
+    {
+      "expected": "e0e90771bc4cd6bcd02c827acefa05688aad1fb1eedb182aea1815781539257a",
+      "observed": "f596d3960c6bfce721064091f73333dde7674fcbae71308b11d80c9f2a9f2d58",
+      "path": "/home/derp/cap/pc_cap/docs/decisions.md"
+    }
+  ],
+  "bindings_sha256": {
+    "docs/R1_stage4_protocol_draft_v4.md": "26165b73630eac284d7ea8ea1df823195612f350453d4b54fe3b58cb6b2b27ec",
+    "docs/decisions.md": "f596d3960c6bfce721064091f73333dde7674fcbae71308b11d80c9f2a9f2d58",
+    "docs/environment.md": "2808340923bab47e0c83a71ecaf4a7aa33146291f2cee73ecae758033331ea68",
+    "manifests/datasets.json": "f0b80aa9a97643752f57d7f79d9ed69c8d45523bf3e6862b2c060caec6b380e0",
+    "manifests/revision_v1/exclusions_frozen_v5.json": "107ded20143558692bc64135d81695398b18b66d39f2dc065589ece678c8b231",
+    "manifests/revision_v1/run_matrix_draft_v4.json": "924bf4b42453e1dc9a603b1e47e22dce2790b3d7168df3aa29f715a9cdc55526",
+    "requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "scripts/pccap-monitor-retention.timer": "08758b3b9d9343865256e6c532e59948d706d367de59958896fea2488f5e4045",
+    "scripts/pccap-process-memory.service": "5eab01e115a4b37bb389567fb9d335e875bdfec36e2698f28bb788ca59a4ddbb",
+    "scripts/process_memory_monitor.py": "c5043e77f0258f92fcc18643305c7795eeb9817aa8bcee596e60328c0164acf8",
+    "scripts/r1_68b_dev_cell.py": "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5",
+    "scripts/r1_68b_integrity_runtime.py": "ae66b70ddbef67d45dd590a8d73d763f976ef51f5c8cfd468849e30b6468d1d1",
+    "scripts/r1_round14_admission_audit.py": "d083970312674dd404bdda7f1c3581acd1fdfbce467345d072a9d6fc83873b08",
+    "scripts/sysmon.sh": "1c373e0063a061c53fd7bc8c10b3d91eb2136382549f6ca95ac5b9a8446195fd"
+  },
+  "decisions_043_048": [
+    {
+      "row": "| DEC-043 (accepted 2026-09-14, 17:30 EDT: \"DEC-043 default is fine\") | 2026-09-14 | **Primary condition v3 = v2 reader + R1-56 rare-token overlap gate** (`rare_overlap_min=1`, `rare_df_max=2`): a non-learned deployment rule fixed on development streams before the freeze; removes the growth of zsRE unseen-prompt false fires with memory size (45 % \u2192 10 % at 1,000 records) at \u2264 0.01 RET-GS. Applies if the lead says nothing before the freeze. | `docs/R1_stage2_notes.md` (R1-56); `manifests/revision_v1/primary_condition_v3.json`. | Proposed by the orchestrator; the lead may keep v2. |",
+      "sha256": "416a8a08074a33ce592d25c4fd25f1fa2fc4332365417edba2ef508827635caf"
+    },
+    {
+      "row": "| DEC-044 | 2026-09-14 | **Run-matrix scope is not cut**: the lead keeps the full 240-cell v3 matrix (8 conditions \u00d7 2 datasets \u00d7 3 realizations \u00d7 5 orders, checkpoints 100/300/1,000). At measured costs this is \u2248 92 h of accelerator wall time against the 54,000 s envelope of plan 9; the envelope is therefore superseded by this decision and the ceilings are set from the measured components (R1-55, endpoint runs). The orchestrator's 48-cell proposal (lead queue 20) is withdrawn. | `docs/lead_queue.md` items 20, 22. | Lead: \"don't cut the scope please\". |",
+      "sha256": "8379f07f832c51a421578205477795a45c726dd1c63f7fe6b085c9a330f155e8"
+    },
+    {
+      "row": "| DEC-045 | 2026-09-14 | **MQuAKE-CF is the third confirmatory dataset** (lead: \"i approve MQuAKE-CF -- please download -- i would also rather keep CounterFact and add MQuAKE as a third dataset\"). Downloaded to `assets/data/raw/mquake/` (MIT; upstream commit `a4f38bb`; hashes in `manifests/datasets.json`). Single-hop rewrites become edit items (cloze prompt, question-form paraphrase, aliases from `new_single_hops`); the multi-hop questions become the verified composition inventory. 6,043 unique rewrites on subjects outside register v3. CounterFact stays in the matrix, which requires the DEC-042 exception (strict v3 leaves no CounterFact items); the run matrix gains a dataset axis value (360 cells). | `manifests/datasets.json`; `docs/ongoing.md` lane R1-D4. | Lead decision. |",
+      "sha256": "4312cfa4e762b2d033126869f6f4d1c0edfc1e43ca7a67c93489e92795516e07"
+    },
+    {
+      "row": "| DEC-046 (proposed default) | 2026-09-14 | **MQuAKE development slice and training pool**: from the 6,043 teacher-eligible items (`mquake_pool_v1.json`; 0 teacher-correct, as expected for counterfactual targets) a 200-item development slice (`manifests/dev/mquake_dev.json`) and a 500-item training pool (`train_pool_mquake_v1.json`), seed 46, one item per subject, disjoint, with the 159 zsRE-overlap subjects left to the zsRE side; the reader is retrained on three pools (CounterFact 1,000 + zsRE 1,000 + MQuAKE 500) so the MQuAKE claim has the same same-source form as the other two datasets. Sizes chosen for yield: \u2248 5,150 items remain for the confirmatory reservations (\u2248 4,050 needed). The lead may choose transfer-only (no MQuAKE training) instead. | `scripts/r1_d5_mquake_teacher.py`, `scripts/r1_d6_mquake_split.py`. | Proposed by the orchestrator under DEC-045. |",
+      "sha256": "54e0a2bc07cbb6bf2df8159e4538a44204334cb2182335364ae0390ab0b543b7"
+    },
+    {
+      "row": "| DEC-047 (accepted 2026-09-15: lead \"Q2 yes\") | 2026-09-14 | **S1_LM certified**: the informative LM continuation at weight lr 1e-8 (`r1_24_control_lm_v3_lr1e-8`) passes the pre-registered fidelity gate (KL 0.0005 nats \u2264 0.001; NLL \u22120.009) and is the S1_LM base for the matrix; lr 1e-6 (v2) stays on record as the failed-gate run. U03 closes by data; no scope amendment needed. | `docs/R1_stage2_notes.md` (R1-24 follow-up); `results/R1/r1_24/r1_24_lm_v3_lr1e-8/`. | Orchestrator under DEC-040; the lead may prefer the failed-gate labelling instead. |",
+      "sha256": "6ce251695a08bf4084414db94938cd83e1175852582b2a6cd025868ad2798e42"
+    },
+    {
+      "row": "| DEC-048 | 2026-09-15 | **MQuAKE population: option C** (lead: \"option C please instead of your default choice of A\"): a locality or unrelated-query presentation of a subject's TRUE fact during reader training or development evaluation is not exposure for a later COUNTERFACTUAL edit of that subject. The exclusion register's query-role reasons are waived for MQuAKE (primary training/development items, sealed/drawn items and every other reason stay); capacity 4,218 distinct subjects against 4,050 needed (R1-D7 option C count) before alias/context clearance \u2014 the draw must abort if clearance drops it below demand. The 360-cell matrix at 1,000 edits stands. | `docs/tasks/R1-D7.md` \u00a7Option C; `docs/lead_queue.md` 27\u201328. | Lead decision; recorded as the register policy v5 (lane R1-D1h). The report must state the reading explicitly. |",
+      "sha256": "c03c5b0b26ec053eaddc09bd7941bb5cbaf64b990f22cf24ee31c6a194f7faa2"
+    }
+  ],
+  "draw_authorized": false,
+  "freeze_written": false,
+  "gates": [
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U01",
+      "protocol_status": "360 core retained; declare deferred plan-9 branches and package-comparison claims",
+      "title": "scientific comparisons"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U02",
+      "protocol_status": "OPEN: \u00a72 common-population constrained development selection, then exact reader identity and assays",
+      "title": "reference"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U03",
+      "protocol_status": "Fidelity component supported; final-reference budget/config/profile match remains",
+      "title": "continuation"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U04",
+      "protocol_status": "52,411 candidates; final alias/context/teacher and later-exposure clearance pending",
+      "title": "zsRE freshness"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U05",
+      "protocol_status": "12,246 under DEC-042 exception; final source receipt pending; strict zero retained",
+      "title": "CounterFact source"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U06",
+      "protocol_status": "DEC-048 accepted and v5 written; MQ 4,218 nominal; usable clearance, joint feasibility and RNG receipt pending",
+      "title": "draw/RNG/splits"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U07",
+      "protocol_status": "Development builder exists; final role payloads and seals unwritten",
+      "title": "payload/seal"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U08",
+      "protocol_status": "100/300/1,000 attempted edits retained; full-validation/tail and challenge cadence must bind",
+      "title": "endpoint cadence"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U09",
+      "protocol_status": "Modules exist; compatible aliases, dependencies and independent inventories remain",
+      "title": "challenge semantics"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U10",
+      "protocol_status": "\u00a72 development criterion declared; final bounded/termination-qualified primary convention and references pending",
+      "title": "LS convention"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U11",
+      "protocol_status": "R1-67 new loader/trace delivered; owner wiring outstanding. R1-68 components and broader integration gates remain",
+      "title": "implementation"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U12",
+      "protocol_status": "Lead family across three datasets/eight conditions open; separate 45-cell extension interpretation pending",
+      "title": "contrasts/multiplicity"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U13",
+      "protocol_status": "Existing .05/\u2212.02/\u2212.01 CPU machinery; final applicability, inequalities and fidelity/drift binding pending",
+      "title": "classifier/fidelity"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U14",
+      "protocol_status": "Composition descriptive; no numeric success margin; unseen/revision/scale decision rules need final binding",
+      "title": "secondary thresholds"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U15",
+      "protocol_status": "CPU inventory machinery complete; independent final expected IDs and admission pending",
+      "title": "analysis adapter"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U16",
+      "protocol_status": "Historical zsRE clean profile complete; final all-condition/dataset/checkpoint ceilings remain unadmitted",
+      "title": "budget"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U17",
+      "protocol_status": "Matrix v4 and dry freeze are stale for final reference/v5/code; versioned queue/retry/resume/environment binding required",
+      "title": "execution controls"
+    },
+    {
+      "admission": "open; independent closure receipt required",
+      "gate": "U18",
+      "protocol_status": "Refresh actual spend and critical path; no admitted calendar promise",
+      "title": "schedule"
+    }
+  ],
+  "generated_utc": "2026-09-15T23:00:55.043501+00:00",
+  "gpu_seconds": 0,
+  "matrix": {
+    "core_cells": 360,
+    "extension_cells": 45,
+    "status": "v4 binds historical v4 reader/register; owner must issue final selected-reference matrix"
+  },
+  "operational_note": "sysmon and per-process memory services active at host verification; hourly 48-hour closed-file retention. This is not a scientific admission gate closure.",
+  "primary_condition": {
+    "expected_version": 5,
+    "path": null,
+    "sha256": null,
+    "status": "open pending common-population selection"
+  },
+  "src_pccap_files": {
+    "src/pccap/__init__.py": "376424fe07837e0a30c32109587a702fba9b7949320b2818b8ac33b3a9f40c47",
+    "src/pccap/analysis/__init__.py": "f5ec09ba1c581d50683b03e8ae9f313e298930dfb5831654a1f69b32390afb88",
+    "src/pccap/analysis/bootstrap.py": "907842ca98f568d2bbbbe63d31ae6524560341c6d10cf0cda6dc20c274883d20",
+    "src/pccap/analysis/budget.py": "19a643d24c0e7758425318ebde08ced1f85931993e4ae18eca0a73c1454ff9b0",
+    "src/pccap/analysis/d1.py": "7764c500602ee065725cf5b01da661fadf2a5ebe6cd816b628192645005c974b",
+    "src/pccap/analysis/frontier.py": "f03f38db35dbc0e5d921dbb45b952646fa6c94ed12b76d286fe1db8ac9cca39e",
+    "src/pccap/analysis/paired.py": "b4bf5e955da84ef9f3121183bafe78b84d0ec9db43fb12ad02e98783e05d1014",
+    "src/pccap/analysis/report.py": "994aed36d862ef6a9684ec6a8e42400d826ff957d1b2c4ef8681d7ce331d032f",
+    "src/pccap/analysis/s1_p1.py": "2bdea44ce51a33d87acd8523ad867560e539bdbeab5e12d53edf3c3dc06dddeb",
+    "src/pccap/analysis/s1_p2.py": "82be378f27f8d57cb7df42ee9723545d5928583cfc282d9b99a7f3b1243c19d2",
+    "src/pccap/analysis/s1_p3.py": "a7945bc5942be923f488eb737c0e6a659902ddd1a23a694627fba05bbd96b5f4",
+    "src/pccap/analysis/s1_p4.py": "97c363396769a9bd34ca233c82aa6022f3e8a06dd1e8647421668db3704c5c38",
+    "src/pccap/analysis/s1_p5.py": "6a44956f6371c37228a5491a85c426b97a9e153883ed2960243c9923e7a14fdb",
+    "src/pccap/analysis/s1_p6.py": "4995e61bc53f2f2eb722abf426cca989d5689ebe3a82e5d54b64be5109c6002b",
+    "src/pccap/analysis/s3_03.py": "475b4cf4f50678feb24fb6cd3397ad6f9e54fdde8b6d25e6c135ed5e35c31be5",
+    "src/pccap/analysis/s3_04.py": "e7df55d2d2290f5403305451c5bc43b6f33215e140c17b73dcada103235c7438",
+    "src/pccap/analysis/s3_05.py": "201167e0f1a264bb24ac48db2ec6696b6f21207b3a35f95c4301f8a40570a4d6",
+    "src/pccap/analysis/s3_06.py": "149afcde7e4bdd373e5f3da7618d710d939e5774eb193fa8c8efc3902604f1ae",
+    "src/pccap/analysis/s4_05.py": "62729151ff6095c9890324ffe29b6bb0ef031725c38c78522b17e90e95b58fde",
+    "src/pccap/analysis/s4_06.py": "8dd166a7afa112ef4a531c7042269d5f34ebb11362cf65c48df2feea37dbc859",
+    "src/pccap/analysis/s7_01.py": "06cae113f752bae28d42cbd9154e12c9093355a2649fbd9e4cb3f00f134757ab",
+    "src/pccap/analysis/s7_03.py": "7e8f6ef3ac06dbb5883196598ce99f17ae9c598859970172f3d0698f39682448",
+    "src/pccap/baselines/__init__.py": "f5a9afd9988d591d3fc02270106c2d267bf6ef8333d3ba1587a33c93c2054bb3",
+    "src/pccap/baselines/b0.py": "c4541c61e968e464c9a8c36795a0e6401c9aa4083593374313fbf9de8bdd8607",
+    "src/pccap/baselines/grace_adapter.py": "0be3e9621fd3d68c5e1c21a3ac2a85ffd9697bb88852ec52d8b6f32559dd2c0f",
+    "src/pccap/baselines/grace_batch.py": "fe7f95acbc82f7c1f59f755dd0181f6270724adf5834ba211281fa092fe7068b",
+    "src/pccap/baselines/grace_jax.py": "a9d7641af65284c4ff4d59c1a5a3dd4bd2c033c910c25acf4171d9ea11f44c24",
+    "src/pccap/baselines/grace_parity.py": "350b203eb010df7b9710b910f54560c70988c82a5bf8461404dfc932b9b163a0",
+    "src/pccap/baselines/lora.py": "90a621deb79e525bbd204344859e473d7d6db688512e967bc671b209dcf44434",
+    "src/pccap/baselines/lora_forward.py": "854a51a4cea8b880adeb1a9836bfe341354f8693ddda8cb2540f6de2fc8570c4",
+    "src/pccap/baselines/replay.py": "836e229f2cc2d517222e5dcaf0df92e12a86f0820f4b43477c11c7afc9633463",
+    "src/pccap/bases/__init__.py": "2caef19075e7ad383818d8e3899aa46a0e207209d33c812d0986240df6e25e56",
+    "src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "src/pccap/bases/checksum.py": "5c5498ca24f4598f11696b4640e138ca72200ae0b9a675ba2b5be9d7c98db0db",
+    "src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "src/pccap/bases/hooks.py": "96225226c41a068b2d61ace3c747b257f9a006aab6e8d127267f15711fad9f50",
+    "src/pccap/cap/__init__.py": "8ffb2244bb60362bead74e74aac980b5d1c4f6f0cc10f58a7917baa3f8a517ee",
+    "src/pccap/cap/bank.py": "d470e8f8b923e46edbe30ded9fcd6befcedd9a9ea45644649bbcab378b7b9727",
+    "src/pccap/cap/calibrate.py": "b5fd62a44526d4e0a891a38b1467283302b7bdf012cba63530b69227a0eebfcf",
+    "src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "src/pccap/cap/features.py": "a89c71cf027a9952dd16e17c56933ae7a44451ab2f7a085c0ba8ac1dc1e305f3",
+    "src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "src/pccap/cap/memory.py": "d38ec41647e96cc9f66ee5b2c179867ffd8f69ae9d4b726ac8de812bdab36b71",
+    "src/pccap/cap/metadata.py": "966343426e59500cf69cb34e0c79ddc9fe5916d6b0d69e2a5305d1442127c5fa",
+    "src/pccap/cap/transaction.py": "d12738bcb680271f020f33cb23320be0334041926bd8c20b275ae16cad3e6601",
+    "src/pccap/cli.py": "15b58f71cfe5ab5b780a8de7b74951c6db304c9cf8fce99fab7aa3dc25df1bc7",
+    "src/pccap/contracts.py": "daa7f294e00cc73d08436c4e165b96f5763706f566ed974586e5b3100f352390",
+    "src/pccap/data/__init__.py": "3f9cbd65ed69bc530b9805e1b89c4bb28079eba8c08ba446f77d33d9e36d870f",
+    "src/pccap/data/challenges.py": "9dd8c53e33044595af44d2a3a36903401557089fe6b0c7a3a047b88337e65f83",
+    "src/pccap/data/confirm.py": "23cce559bad48daa0f81c51a92ac91358a804389aef9008b1e016f57668465e6",
+    "src/pccap/data/confirmation_integrity.py": "74cefd84c204e93465179f57896aa9b818158c1d37b1711a6a93618d07b5fa26",
+    "src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "src/pccap/data/fetch.py": "bf40977d05f882d90949bf16ad3f5f67d9e8ad5d1ccb476179e8ab40427915b3",
+    "src/pccap/data/grammar_streams.py": "9bc6ab33dae8c8c40de8780206a77a383d5967ae3c1df0a06a380676823c727a",
+    "src/pccap/data/lm_sets.py": "badcbd8adf0158eaf783645cbd04350b06126d193eada431a7d76a33cbf0b039",
+    "src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "src/pccap/data/splits.py": "66b00cf7514cf7c0016e945140f1d9ca717abab1e3a1441bd887b7e26d4e8530",
+    "src/pccap/data/streams.py": "1e106f6ea4170211ebc2a3d4ccedb8862fed8d0b0cbbcbea2c87663169d006cc",
+    "src/pccap/data/tokenize.py": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+    "src/pccap/distill/__init__.py": "c3ffe923d5a0ce369e1ea224372d64c25499d2216dfc53fe8e2c328ab5a22f68",
+    "src/pccap/distill/data.py": "fe8be45c7e4560ff863d3fe394f1b31774287f87eaa6abb621bd35a1c8d500df",
+    "src/pccap/distill/preflight.py": "6d60df743d9798c9c6f64ebcfbf0c31bc193f8a491fe2d1b8fa1ba2f18361e34",
+    "src/pccap/distill/recipe.py": "94acc478e444aec3a1c93a18b898c6a595c61a4dce6b1bb6c7b3c4fdeb9cb9d1",
+    "src/pccap/distill/schedule.py": "ccd15fa573606e5458e7a55571255aaa8667b500edfb24b46ae7150b6051e7db",
+    "src/pccap/distill/train.py": "b8b0252b8103bd71c21424b81a0808a2442ece77a5048f0ca38a6d52d2dd324f",
+    "src/pccap/fixtures/__init__.py": "00b24d3238c92f7a80b9cade6437a7db14cf54e2fd1a2705db7dd57e1f695faa",
+    "src/pccap/fixtures/grammar_eval.py": "24ca8eaeb40798b485eb88aaf43fc26a50606074a31cf882a0e1f04616def709",
+    "src/pccap/fixtures/grammar_generator.py": "7065a66f31ab76b4b52b93263543670dc20a9997975dbaf9bbcdef9057843c95",
+    "src/pccap/fixtures/grammar_model.py": "19c99d0c5359bb842c5be6c8cf31c73ee6d380c85c7776f9fb8fe35fe7937249",
+    "src/pccap/fixtures/modular_control.py": "67f69900f58d898f22a57cc217d0d744cf091642f0b0fa47654057f54cb2d811",
+    "src/pccap/fixtures/tracing.py": "69458aa762ee0f41de7233c9a53a216781c0545a7a61357b097dafad16a94b6b",
+    "src/pccap/harness/__init__.py": "d604753027506b7435a8df1b8af167c9f5cc5b0e427638d1be64bf8df697b2c5",
+    "src/pccap/harness/arms.py": "1e5442b558ecc8cbd54c5d5e43473a90dfe8079efca6e7aacffbeafe380061a0",
+    "src/pccap/harness/determinism_probe.py": "fb5a0081011eda5c2c4fe64555cc505ca92c7ee9a97c0c141174d9c78136f727",
+    "src/pccap/harness/execute.py": "d8d6a66bf2ecffee7e73f19545cd3197010397d52b891d6b0d17ffd7af84fdd6",
+    "src/pccap/harness/freeze.py": "d6bade515e1af22c65bcd3b196b731419172f5a7c73b79de7415e6f9a2987d9f",
+    "src/pccap/harness/identity.py": "854a7420ed7f048702c447a292f6e7ceb9966829d5a64b139609edb24abc602b",
+    "src/pccap/harness/lease.py": "3bf728cd93a072780b52201f845cf87fa760a0efc28068aefcfa9d79cd6b2d82",
+    "src/pccap/harness/ledger.py": "0d7b5a2be60739414122b6ff5af78c71a6e13605b01d3365a62f70a90c304ca3",
+    "src/pccap/harness/records.py": "01584e9477bb30580cf5bc4eb681c97bad0be68b1d25894ac7f66db824d55234",
+    "src/pccap/harness/runner.py": "10e3fe5eb622522ab65fa4ec2d90ea41e14afcaf2a5708c61d8e62c62a9d1b71",
+    "src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "src/pccap/harness/schedule.py": "a3bba5c94899aa232fcfc7636d8bac9f53ec8a98f3a70a496e58d59a80b8981d",
+    "src/pccap/harness/schema.py": "3ab1b19f1f5f7d60bbd5382b9060a88614360faa818c98bef747ec8986f559bd",
+    "src/pccap/harness/snapshot.py": "0597be625a5a6a95e0215e5a2b2cded90ce49b7c6c2837b7729d229664e0dd9e",
+    "src/pccap/harness/stage_s0.py": "892af30fad8daf5913c300f43e4aea73ae55e1d70568981ef7172933bc8fb134",
+    "src/pccap/harness/stage_s2.py": "d3870ef7f680ed79b7d1ed8d709ded2bfeba677fee3995ddd12f54db3c6dda2b",
+    "src/pccap/harness/stage_s2_throughput.py": "342877049b142fd7baab2a06f2841aceacbc5916df16a872d92627e447039ecc",
+    "src/pccap/harness/stage_s3.py": "12c466c72b5ae5be574ff3d02a3c46b0faf743eb538f76ba2bfd454f0004f18c",
+    "src/pccap/harness/stage_s3_fixture.py": "396958f22408576f6189442f30023cf71edbb3de090cba913e139a7f7384ed23",
+    "src/pccap/harness/stage_s4.py": "a263cc82975f6d62582cc281e546d85f0362a7b95ccc2dbbe1d5a45387ed04d0",
+    "src/pccap/harness/stage_s5.py": "38d0e22f2987eed91c561c4721b1301d074561852dec1b9dd8f6c00d4997edb2",
+    "src/pccap/harness/status.py": "bc8184d6c62ee5fdbcc3c045818461b3567a7abedca2122d7ef26aee4b375aac",
+    "src/pccap/metrics/__init__.py": "16c599cba5b4dd05aa1de495baec611e9b8fa776e275e0853b0a52c9aa814863",
+    "src/pccap/metrics/cl_matrix.py": "ce8101d21b83deec625d200f44dd4c8fd4e6a8f4d9db3387e0447471a5f6be0d",
+    "src/pccap/metrics/divergence.py": "6793233c1781d8509a024da96f8f00b2c2152a5eeabf7ce89bf8c93943ee8eea",
+    "src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+    "src/pccap/metrics/hvp.py": "97b7d468af942dde818fc7ef33b3e98e6a4fd1706bc29678ff5759a5ac4e2001",
+    "src/pccap/metrics/order.py": "f0e999bffdbea986ba7014db8712c106bd553c751f5deea94238891718f3448f",
+    "src/pccap/metrics/overlap.py": "31fd906b176b9b2a2fd84494e6336afcddc7041bc180c02454b79858087c7da2",
+    "src/pccap/metrics/participation.py": "d581d809b8d0aa61a2122464b6827c381e1ea2e0dfd8b0222c9840a39200850b",
+    "src/pccap/metrics/rank.py": "aaeafefaf4592b7358b41d789457b21d4497f995de4cba69dbcf0b7f0b9fa15c",
+    "src/pccap/pc/__init__.py": "fd01da3d0966a4dcd7575f78226f9c9ba6b53adfb50554c005c627c48147ab4a",
+    "src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "src/pccap/pc/kd_energy.py": "bb405dfcd7a3027e7839610ea5f322276b2f4740bd1182870575ff17f5b024c9",
+    "src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "src/pccap/pc/weight_phase.py": "ff7c03b11883dd41c5b6d157cd4f9557f4be3b9e5fd5cde5f9a489b1a81f8600",
+    "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "src/pccap/revision_v1/adapt.py": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793",
+    "src/pccap/revision_v1/analysis.py": "b9a40ac1081f1eee28e941d341d1adb91f304654e327bb2e1ce639450006bff2",
+    "src/pccap/revision_v1/analysis_stage4.py": "dd459f706afb04f578361f43163a86d9ac24c93b434e71669b60cf3c8ed1da8a",
+    "src/pccap/revision_v1/checkpoint_identity.py": "084b018eb606bd74893ab82ccb648d52827d8524eb62bf1add461c01fc550775",
+    "src/pccap/revision_v1/contracts.py": "01f55b4c70d1ffa36db8404e76d060c04741fe5992f3e7a118d59272c1a5993e",
+    "src/pccap/revision_v1/controller.py": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+    "src/pccap/revision_v1/dev_loader.py": "363ba12f790c8cfb973439d6ebb83e2b14352487400c1f6bb664801cb09b26b1",
+    "src/pccap/revision_v1/development_cell.py": "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da",
+    "src/pccap/revision_v1/endpoints.py": "60ce20ac934aa09d5dca1a88f957925dcc06b4c446d601b11f47e711c1f6e840",
+    "src/pccap/revision_v1/endpoints_composition.py": "ea7b1aa6d15a5821275eb4caa5207f612851d14cd3e3fa203d89da58cc889ff1",
+    "src/pccap/revision_v1/endpoints_unseen.py": "62193770bc3f898dedfdfaed820bf0660d795192f60c254d7c54e91859585d3c",
+    "src/pccap/revision_v1/epc_train.py": "38a6620e4dc513d12a22f9a189c59daf6701ddab548b5c10e7709aae31117e5f",
+    "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "src/pccap/revision_v1/final_namespace.py": "8f028c96320ba455c3d39537e21788e090de94e91825122769da2d47e6812df7",
+    "src/pccap/revision_v1/incremental_integrity.py": "4eb79988a2b9ccd685cd8adeae3b0f95bd38aada3be330c7a28b20adecdf8652",
+    "src/pccap/revision_v1/learner.py": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117",
+    "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "src/pccap/revision_v1/memory.py": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54",
+    "src/pccap/revision_v1/observations.py": "eae45d586303bdb7e8dc16cd965922c2af0666f12c528b51eaaa4c618d75b150",
+    "src/pccap/revision_v1/reader.py": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018",
+    "src/pccap/revision_v1/selection_trace.py": "5024d9134c40f306d7eefd8f87a922de42fb3acd87b0be7299657f8f393381a2",
+    "src/pccap/revision_v1/stage4_adapters.py": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37",
+    "src/pccap/revision_v1/stage4_assays.py": "6f30a472b77b835bb75745ba23dd11bb1903966e49473003b96722e67aa3e315",
+    "src/pccap/revision_v1/stage4_cell.py": "164638b177a408fd9753690efd919960c41d2b3595934425189a1d4213eb5b63",
+    "src/pccap/revision_v1/stream_train.py": "6b392f94a1d3d80c9ff81286031aa951c69d5558dad106fcbd6a99112335473f",
+    "src/pccap/revision_v1/train.py": "8d1f7971b5ef65f64afff6a2b26958548784640d25653c2111869e7d2153f43a",
+    "src/pccap/revision_v1/train_fast.py": "ff9bd7aefd8d2d7f9936681fd7c59d442c3942f7011524208d95303eb4961b61",
+    "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76",
+    "src/pccap/routers/__init__.py": "8813cc6cd9b7a4a67903312eee4003ccf411f167611e7e3fa9d7c341810894c0",
+    "src/pccap/routers/_common.py": "fd5c0485297a4b416638396980952fad2cf05d36bf27033ffc7cd962081e37e4",
+    "src/pccap/routers/full.py": "02c0582120bfad912a4c3b07e50e62931e5b136204aa8c023ee24da120d48872",
+    "src/pccap/routers/last.py": "3f819a6329113a9543a3bc07b6334ce6b2708ca238eaacdb9123c9b2da8d3bcd",
+    "src/pccap/routers/measured.py": "45844c0394a1601465b53d1a86589a7e53d4247c23b32e4ead78d3bc2d0813f6",
+    "src/pccap/routers/random_.py": "d77160a6825fff9312584c526336a1160961c6236bb1a50235bb9a10f8197400",
+    "src/pccap/routers/supplied.py": "91517053aa3fb4ed44419612befa3e7b9ae89c86ba7a8a5ed2b9aa204d4ab89f",
+    "src/pccap/transport/__init__.py": "49e7009fe1871a598da30d04e74440c67bbedfa477a93b416d6cfcab2aa24c47",
+    "src/pccap/transport/transport.py": "1db88fd6394ed847d2bff5e628586b51772d350d61ed85dbe83047fb436a8a9c",
+    "src/pccap/vendor_hdpc.py": "6bad20996a750247f2723cabc98e60ebab08cff72d0a36cd1895449e981fa8a0"
+  },
+  "src_pccap_tree_sha256": "ee0c988169565658687e6cbf3b0f6b0280797cd0a6ff54a319f46e9e5d0014f6",
+  "status": "refused_hash_mismatch",
+  "task": "R1-63b"
+}
