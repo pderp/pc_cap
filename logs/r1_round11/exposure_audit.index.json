@@ -1,0 +1,54 @@
+{
+ "name": "exposure_audit split index",
+ "reason": "GitHub warns above 50 MB per file (the original was 65.9 MB); split by top-level key on 2026-09-15 by the orchestrator, content unchanged",
+ "original": {
+  "path": "logs/r1_round11/exposure_audit.json",
+  "sha256": "3667395a937de5869d8161ff350f04aaaf0e4183a1636e70b61dd6e78cbf63bd",
+  "bytes": 69135106,
+  "keys": [
+   "banks",
+   "bindings_sha256",
+   "counts",
+   "gaps",
+   "gpu_seconds",
+   "limits",
+   "queries",
+   "released_subjects",
+   "sessions",
+   "status",
+   "streams",
+   "subjects",
+   "supplement_subjects_without_matched_evidence",
+   "task"
+  ]
+ },
+ "parts": {
+  "logs/r1_round11/exposure_audit.part1.json": {
+   "sha256": "faf8e23053dc2f0ef69d2f0a02e029bb3f68d7a97456d89033979cbbb8be689b",
+   "bytes": 4903201,
+   "keys": [
+    "banks",
+    "bindings_sha256",
+    "counts",
+    "gaps",
+    "gpu_seconds",
+    "limits",
+    "released_subjects",
+    "sessions",
+    "status",
+    "streams",
+    "subjects",
+    "supplement_subjects_without_matched_evidence",
+    "task"
+   ]
+  },
+  "logs/r1_round11/exposure_audit.part2_queries.json": {
+   "sha256": "3e52137d5268be5deb1ff128d83408ec7ba273aaf9c82183717c1e7981d0dd58",
+   "bytes": 46528440,
+   "keys": [
+    "queries"
+   ]
+  }
+ },
+ "reconstruction": "load both parts; the original object = part1 \u222a {'queries': part2['queries']} (the original file's byte-level sha256 depends on its indentation and is recorded above for reference only)"
+}

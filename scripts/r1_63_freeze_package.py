@@ -150,7 +150,9 @@ def build():
         "scripts/r1_64_dev_payload.py",
         "scripts/r1_57b_stage4_inventory.py",
         "scripts/r1_58_draw_streams.py",
-        "logs/r1_round11/exposure_audit.json",
+        "logs/r1_round11/exposure_audit.index.json",
+        "logs/r1_round11/exposure_audit.part1.json",
+        "logs/r1_round11/exposure_audit.part2_queries.json",
         __file__,
     ):
         bind(name)
@@ -225,7 +227,9 @@ def build():
             "historical_pools": historical_training,
             "proposed_mquake_pool": proposed,
             "reader_bound_pools": primary["pools"],
-            "audit": bind("logs/r1_round11/exposure_audit.json"),
+            "audit": {"index": bind("logs/r1_round11/exposure_audit.index.json"), "part1": bind("logs/r1_round11/exposure_audit.part1.json"),
+                      "part2_queries": bind("logs/r1_round11/exposure_audit.part2_queries.json"),
+                      "note": "the 65.9 MB audit was split by top-level key on 2026-09-15 (GitHub size limit); the index records the original sha256"},
             "status": "new slices are prospective; historical exclusions persist",
         },
         "endpoint_denominators_and_references": {
