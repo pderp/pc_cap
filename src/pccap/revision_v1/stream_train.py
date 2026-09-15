@@ -138,6 +138,7 @@ def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 
     for i in mem:
         it = bank.items[int(i)]
         supports.append(SupportFeat(record_id=it.item_id, fact_id=it.fact_id, last=it.key_last, span=it.key_span, code_last=it.code_last, code_span=it.code_span, prompt_ids=it.prompt_ids))
+    mem_prompts = {tuple(int(t) for t in np.asarray(bank.items[int(i)].prompt_ids).reshape(-1)) for i in mem}
     q_records = rng.choice(len(mem), size=min(n_query_records, len(mem)), replace=False)
     for j in q_records:
         it = bank.items[int(mem[j])]
@@ -145,8 +146,9 @@ def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 
         if it.paraphrases:
             p_last, p_span, prefs = it.paraphrases[int(rng.integers(len(it.paraphrases)))]
             queries.append(QueryFeat(query_id=f"para:{it.item_id}", role="new_paraphrase", last=p_last, span=p_span, prefixes=prefs, target_record=int(j), query_ids=prefs[0].ids[: prefs[0].n]))
-        if it.locality:
-            l_last, l_span, lpf = it.locality[int(rng.integers(len(it.locality)))]
+        loc_ok = _locality_choices(it, mem_prompts, rng)
+        if loc_ok:
+            l_last, l_span, lpf = loc_ok[0]
             queries.append(QueryFeat(query_id=f"loc:{it.item_id}", role="unrelated", last=l_last, span=l_span, prefixes=[lpf], target_record=-1, query_ids=lpf.ids[: lpf.n]))
     for i in out:
         it = bank.items[int(i)]
@@ -154,6 +156,17 @@ def stream_episode(bank: FeatureBank, rng: np.random.Generator, n_memory: int = 
         lpf = PrefixFeat(ids=it.own[0].ids, n=it.own[0].n, target=-1, last=it.key_last, span=it.key_span, capoff_logits=None)
         queries.append(QueryFeat(query_id=f"out:{it.item_id}", role="unrelated_no_kl", last=it.key_last, span=it.key_span, prefixes=[lpf], target_record=-1, query_ids=it.prompt_ids))
     return EpisodeFeatures(episode_id=episode_id or f"stream-{rng.integers(1 << 31)}", supports=supports, queries=queries)
+
+
+def _locality_choices(it, mem_prompts: set[tuple[int, ...]], rng):
+    """Locality entries of ``it`` whose prompt is not the own prompt of an in-memory record (R1-65): with self-contained pools a
+    locality prompt can be another memory item's own prompt, and labelling it a null would contradict that record's own-prompt
+    target. Returns the admissible entries in random order (empty when none)."""
+    ok = [(l_last, l_span, lpf) for (l_last, l_span, lpf) in it.locality if tuple(int(t) for t in np.asarray(lpf.ids[: lpf.n]).reshape(-1)) not in mem_prompts]
+    if not ok:
+        return []
+    order = rng.permutation(len(ok))
+    return [ok[int(k)] for k in order]
 
 
 def merge_banks(banks: list[FeatureBank]) -> FeatureBank:
@@ -194,8 +207,10 @@ def stream_episode_mixed(banks_idx: list[list[int]], bank: FeatureBank, rng: np.
             if it.paraphrases:
                 p_last, p_span, prefs = it.paraphrases[0]
                 ep.queries.append(QueryFeat(query_id=f"para:{it.item_id}", role="new_paraphrase", last=p_last, span=p_span, prefixes=prefs, target_record=j, query_ids=prefs[0].ids[: prefs[0].n]))
-            if it.locality:
-                l_last, l_span, lpf = it.locality[0]
+            mem_prompts = {tuple(int(t) for t in np.asarray(s_.prompt_ids).reshape(-1)) for s_ in ep.supports if s_.prompt_ids is not None}
+            loc_ok = _locality_choices(it, mem_prompts, rng)
+            if loc_ok:
+                l_last, l_span, lpf = loc_ok[0]
                 ep.queries.append(QueryFeat(query_id=f"loc:{it.item_id}", role="unrelated", last=l_last, span=l_span, prefixes=[lpf], target_record=-1, query_ids=lpf.ids[: lpf.n]))
     return ep
 

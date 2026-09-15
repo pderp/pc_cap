@@ -722,3 +722,16 @@ v4 seed-0 reader is 25 % / 16 % at 100 / 300 records, and my runner confirms v4 
 (pool / dev sources), versus 5–12 % for the two-pool v3 reader — adding the MQuAKE pool worsened zsRE unseen rejection
 for this seed (the v3-slice readers are being measured); (2) the full 128-window drift assay under the gated reader
 after 300 edits is +0.0002 nats, i.e. the gate removes the residual seen in the 32-window assay.
+
+## R1-65: locality nulls that collide with in-memory own prompts (2026-09-15, 13:20 EDT)
+
+The v3-slice readers keep their stream results (MQuAKE 0.79 / 0.76 / 0.76 with the exposure-neutral locality set,
+zsRE 0.97–0.98, CounterFact 0.72–0.88) but their zsRE unseen false fires jump to 38–39 % at 100 records (dev prompts;
+two-pool v3 reader: 5 %; v4 seed 0: 25 %) and 19 % at 1,000 (pool prompts; 10 %). Cause: stream training labels every
+locality prompt a null (`role="unrelated"`, target −1) even when that prompt is the own prompt of a record in the same
+64-record memory. With self-contained pools (v3) a locality prompt is another training item's own prompt, so ≈ 13 % of
+the locality nulls contradict an own-prompt target; the v2 pool had the same collision at a lower rate (its locality
+candidates were drawn from the whole inventory, which includes pool items), which fits v4's 21–25 %. Fix
+(`stream_train._locality_choices`): a locality entry whose prompt equals an in-memory record's own prompt is never used
+as a null query; the record's paraphrase and own-prompt targets stand. Retrain on the v3 slices (`tri4`) with this fix
+follows the clean driver profile.

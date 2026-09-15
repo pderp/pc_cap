@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py", line 64, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py", line 50, in main
+    result = run_development_cell(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/src/pccap/revision_v1/development_cell.py", line 215, in run_development_cell
+    run.mkdir(parents=True, exist_ok=False)
+  File "/usr/lib64/python3.12/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+FileExistsError: [Errno 17] File exists: '/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-9084e84fc6dd00038904'
