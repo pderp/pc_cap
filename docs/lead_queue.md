@@ -411,3 +411,10 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     stays at 360 cells × 1,000 edits; the protocol gets a v4 stating the reading in its exposure section so a reviewer sees
     it declared rather than discovered. Margin is thin (4,218 vs 4,050 before alias/context clearance), so R1-D1h also
     reports what clearance removes; if it falls below demand you will get the numbers, not a silent cut.
+
+29. (2026-09-15, 18:45 EDT) **Measured cell cost.** The Stage 4 driver, run clean on the real base for a 300-edit zsRE
+    development cell, costs 1,252 s; extrapolated to a 1,000-edit learned cell ≈ 49–66 min (59–79 min with reserve), so
+    the 360-cell matrix is ≈ 350–475 h of accelerator wall time as the driver stands. About two thirds of that is the
+    driver's own per-phase overhead (1.0 s per edit and per immediate check versus 0.13 s of model work). I have posted a
+    driver-performance lane for Codex (R1-68) that should roughly halve it while keeping every integrity guarantee; the
+    ceilings in the matrix will be set from the re-profiled driver. No scope change is proposed (DEC-044).

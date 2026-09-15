@@ -741,3 +741,31 @@ candidates were drawn from the whole inventory, which includes pool items), whic
 (`stream_train._locality_choices`): a locality entry whose prompt equals an in-memory record's own prompt is never used
 as a null query; the record's paraphrase and own-prompt targets stand. Retrain on the v3 slices (`tri4`) with this fix
 follows the clean driver profile.
+
+## Clean driver profile of a development cell (2026-09-15, 18:40 EDT)
+
+Same zsRE development recipe as the validation run (v4 seed 0, gate on, 300 edits, checkpoints 100/300, every
+endpoint), rebuilt against the current code tree and run with the GPU otherwise idle
+(`results/R1/stage4_dev_cells/R1_learned_ff-zsre-development_profile-*/`): 1,252 s total, 255 s to checkpoint 100,
+997 s from 100 to 300. Results identical to the validation run (ES 0.997 / RET-GS 0.987 at 300, LS 50/50, unseen 16 %,
+drift +0.0002 nats).
+
+| phase kind | count | seconds each | subtotal |
+| --- | ---: | ---: | ---: |
+| edit (teach one item, immutable phase record, state hashes) | 300 | 1.03 | 309 |
+| immediate acquisition check after each edit | 300 | 0.97 | 292 |
+| full drift assay (128 windows, 16,256 positions; final checkpoint only) | 1 | 509 | 509 |
+| unseen endpoint (100 pairs) | 2 | 50 | 100 |
+| retention (all edited items) | 2 | 15 | 31 |
+| locality (50 pairs) | 2 | 3.6 | 7 |
+| near-miss / revision / composition (0 available rows here) | 3 | 0.9 | 3 |
+
+Per-edit cost is flat from 1 to 300 records (1.02 / 1.04 / 1.03 s for edits; 0.95 / 0.97 / 1.00 s for the immediate
+check), so the driver's fixed per-phase overhead (integrity hashes, restore checks, immutable writes) dominates: the raw
+edit costs 0.11 s and the immediate decode ≈ 0.02 s. Extrapolation for one learned 1,000-edit cell with checkpoints
+100/300/1,000: edits + immediate ≈ 2,000 s, retention ≈ 70 s, unseen ≈ 150 s, locality ≈ 12 s, drift 509 s (final
+checkpoint only; 1,527 s if at every checkpoint), near-miss + revision ≈ 150 s, composition ≈ 0.65 s per attached case
+— ≈ 2,950–3,970 s ≈ 49–66 min, ≈ 59–79 min with the 0.2 reserve. 360 cells ≈ 350–475 h of accelerator wall time under
+this driver; roughly two thirds of it is driver overhead, which a batched/incremental-hash implementation could cut by
+half or more without changing the audit guarantees (lane R1-68). Control conditions (v0 live caps) have not been
+profiled through the driver.

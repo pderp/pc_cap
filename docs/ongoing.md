@@ -106,6 +106,19 @@ a helper that renders a `Selection` into the endpoint trace with `hard_null`, se
 score, null mass and the rare-gate verdict, preserving the old fields — the orchestrator wires it into
 `endpoints.py`'s `_read`. TinyBase tests for both, including the refusal cases ER-01 lists.
 
+### Lane R1-68 — driver performance without losing the audit guarantees
+
+The clean profile (`docs/R1_stage2_notes.md` §"Clean driver profile") shows 1.0 s per edit phase and 1.0 s per
+immediate-check phase against 0.13 s of model work, flat in memory size up to 300 records: the per-phase integrity
+hashes, restore checks and immutable file writes dominate, and a 1,000-edit cell extrapolates to 49–66 min. Propose
+and implement, as new modules the orchestrator can switch on by recipe flag (`"integrity_profile": "incremental"`),
+a cheaper equivalent: incremental state hashing (hash of record-level hashes updated per mutation, with the full
+hash recomputed at checkpoints and on restore), one phase file per N edits with per-edit records inside, and the
+immediate check batched per edit without a clone/restore when the cap's own contract already guarantees read-only
+queries (cite the gate/test that guarantees it). Keep: receipts, resume, refusal gates, restore equality at every
+checkpoint. TinyBase tests proving the two profiles produce identical checkpoint reports; the orchestrator re-profiles
+on the real base.
+
 ### Lane R1-X11 — counter-review of R1-65/R1-66 and the primary-condition selection
 
 Review `stream_train._locality_choices` (R1-65: locality nulls equal to an in-memory own prompt are excluded) and the
