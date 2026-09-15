@@ -384,3 +384,13 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     1,000-item MQuAKE pool (v2, superset of v1; 4,489 items left for the confirmatory draw against ≈ 4,050 needed) is
     being retrained now. MQuAKE unseen-prompt false fires 0/100 at 100 records; ordinary-text drift +0.005 nats.
     R1-24: a fidelity-valid informative continuation exists at lr 1e-8 (DEC-047); same verdict as the literal control.
+
+26. (2026-09-14, 22:25 EDT) **MQuAKE status at the end of the day.** Reader retrained on three pools (proposed primary v4,
+    `primary_condition_v4.json`, MQuAKE pool 1,000): zsRE 0.95–0.98, CounterFact 0.76–0.83, MQuAKE 0.56–0.79 across seeds,
+    LS 1.00; MQuAKE unseen false fires 0 %, drift +0.005 nats. MQuAKE's paraphrase retention is seed-sensitive
+    (0.47–0.82 over six readers) because its question-form paraphrases are decided by the lexical feature alone; a
+    memory-rarity-weighted lexical feature was implemented and tested (R1-57c) and not adopted (it costs own-prompt
+    acceptance). Decisions for you, defaults stated: (a) MQuAKE pool size 1,000 (DEC-046 v2 sizes; 4,489 items left
+    for the confirmatory draw against ≈ 4,050 needed) — default yes; (b) checkpoint selection on a MQuAKE stream
+    criterion before the freeze — I propose to add it (one more retrain) unless you say no; (c) DEC-047 S1_LM at
+    lr 1e-8 as the certified informative continuation — default yes. GPU work is paused until Codex's round 10 lands.

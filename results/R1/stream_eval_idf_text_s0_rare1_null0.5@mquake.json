@@ -1,0 +1,124 @@
+{
+ "tag": "idf_text_s0_rare1_null0.5@mquake",
+ "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_idf_text_s0/theta.npz",
+ "theta_hash": "1158f3ff48e4ab5e854198bbab6a219744c2fed38c75fccf38ee70d583bfc7e9",
+ "args": {
+  "theta": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_idf_text_s0/theta.npz",
+  "tag": "idf_text_s0_rare1_null0.5",
+  "n": 100,
+  "dataset": "mquake",
+  "stream_seed": 21,
+  "fast_steps": 0,
+  "fast_lr": 0.01,
+  "delta_steps": 5,
+  "delta_lr": 0.1,
+  "null_threshold": 0.5,
+  "no_lease": true,
+  "stop_tokens": "manifests/revision_v1/stop_tokens_v1.json",
+  "no_query_null": false,
+  "lex_idf": true,
+  "min_score": null,
+  "rare_overlap": 1,
+  "no_pairwise_null": false
+ },
+ "stream_metrics": {
+  "es_immediate": 0.85,
+  "ret_es_end": 0.86,
+  "ret_gs_end": 0.62,
+  "ls_complete_answer_end": 1.0
+ },
+ "records": 100,
+ "bytes": {
+  "keys": 102400,
+  "codes": 102400,
+  "deltas": 3115008,
+  "metadata": 12800,
+  "tokens": 3568,
+  "index": 0,
+  "weights": 13392912,
+  "total": 16729088
+ },
+ "null_mass": {
+  "prompt_mean": 0.2615553198568523,
+  "paraphrase_mean": 0.3138128084631171,
+  "unrelated_mean": 0.9839918969199062,
+  "prompt_hard_null_rate": 0.14,
+  "paraphrase_hard_null_rate": 0.27,
+  "unrelated_hard_null_rate": 0.985
+ },
+ "best_scores": {
+  "prompt": {
+   "mean": 1.000000005364418,
+   "p10": 0.9999998807907104,
+   "p90": 1.0000001192092896
+  },
+  "paraphrase": {
+   "mean": 0.8581179523468018,
+   "p10": 0.8161031663417816,
+   "p90": 0.8899588167667389
+  },
+  "unrelated": {
+   "mean": 0.9951343953609466,
+   "p10": 0.987333881855011,
+   "p90": 0.9995422840118409
+  }
+ },
+ "read_counters": {
+  "selection_passes": 845,
+  "cached_prompt_reads": 700,
+  "corrected_partial_passes": 1483
+ },
+ "wall_seconds": 29.45138645172119,
+ "ledger": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 4901,
+   "partial_forwards": 1483,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 23.721863426733762,
+   "accel_seconds": 23.721863426733762,
+   "peak_mem_mib": 755.903564453125,
+   "tokens": 102426
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 1938,
+   "partial_forwards": 0,
+   "reverses": 700,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 7.993140542181209,
+   "accel_seconds": 7.993140542181209,
+   "peak_mem_mib": 755.903564453125,
+   "tokens": 20803
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 6839,
+   "partial_forwards": 1483,
+   "reverses": 700,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 31.71500396891497,
+   "accel_seconds": 31.71500396891497,
+   "peak_mem_mib": 755.903564453125,
+   "tokens": 123229
+  },
+  "events": 7129,
+  "elapsed_wall_seconds": 47.60032033920288,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "dataset": "mquake",
+ "stream_seed": 21
+}

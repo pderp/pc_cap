@@ -670,3 +670,14 @@ Fix under test (R1-57c, `ReaderConfig.lex_idf`): weight the lexical overlap by m
 / log(N+1) over the current memory (the episode's records in training, the store's active records at deployment), so
 template words weigh ≈ 0 and subject tokens ≈ 1 — the continuous form of the R1-56 gate, learned into the null.
 Unit test in `tests/revision_v1/test_r1_45_lexical.py`; retrain with pool v2 over three seeds running.
+
+### R1-57c result: the weighted lexical feature is not adopted (2026-09-14, 22:20 EDT)
+
+Three seeds with pool v2 and `lex_idf` (gate on): MQuAKE 0.62 / 0.74 / 0.80 (ES 0.85 / 0.99 / 0.99), zsRE 0.98 / 0.98 / 0.99,
+CounterFact 0.76 / 0.83 / 0.71 (ES 0.96 / 0.99 / 0.99); zsRE unseen false fires at 1,000 records 12 % (v3 reader:
+10–11 %); MQuAKE unseen 0 %. The weighting narrows the MQuAKE spread slightly but introduces own-prompt rejections
+(ES < 1) on all three datasets and does not improve the unseen endpoint, so the plain lexical feature stays; `lex_idf`
+remains an implemented, tested ablation (off by default). MQuAKE paraphrase retention on the development stream is
+therefore reported as it is: 0.47–0.82 over the six plain-lexical reader instances, with one rule for three datasets.
+Proposed primary condition v4 = three-pool reader (MQuAKE pool v2), plain lexical, gate
+(`manifests/revision_v1/primary_condition_v4.json`); v3 stays the two-dataset fallback.
