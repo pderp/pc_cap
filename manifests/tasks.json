@@ -3578,16 +3578,19 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T19:31:57+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "manifests/revision_v1/exclusions_frozen_v5.json",
+    "docs/tasks/R1-D1h.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 13; spec in docs/ongoing.md §3"
+   "note": "register policy v5 (DEC-048): query-role exposure waived for MQuAKE; 4,489 items / 4,218 subjects; abort rule for the draw; clearance pending"
   },
   {
    "id": "R1-49d",
@@ -3599,16 +3602,19 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T19:31:58+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/R1_stage4_protocol_draft_v4.md",
+    "docs/tasks/R1-49d.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 13; spec in docs/ongoing.md §3"
+   "note": "protocol v4: DEC-048 declared with the reviewer objection, primary-condition selection rule open (common populations required), profile placeholders"
   },
   {
    "id": "R1-67",
@@ -3620,16 +3626,20 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T19:31:58+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "src/pccap/revision_v1/dev_loader.py",
+    "src/pccap/revision_v1/selection_trace.py",
+    "docs/tasks/R1-67.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 13; spec in docs/ongoing.md §3"
+   "note": "dev_loader and selection_trace modules with TinyBase tests; orchestrator wires them into r1_13_stream_eval.py and endpoints.py"
   },
   {
    "id": "R1-X11",
@@ -3641,16 +3651,19 @@
    ],
    "gpu": "none",
    "review": true,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T19:31:58+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "logs/review_r1_65_66.md",
+    "docs/tasks/R1-X11.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 13; spec in docs/ongoing.md §3"
+   "note": "collision rate 2.1-2.3 % (not 13 %); R1-66 keeps L2 balance; final-reader selection needs common populations (historical v4 and recent MQuAKE streams share 47/100 items); notes corrected"
   },
   {
    "id": "R1-68",
@@ -3663,6 +3676,30 @@
    ],
    "gpu": "none",
    "review": false,
+   "status": "partial",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": "2026-09-15T19:31:59+00:00",
+   "commit": null,
+   "evidence": [
+    "src/pccap/revision_v1/",
+    "docs/tasks/R1-68.md"
+   ],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "integrity components delivered (record-digest index, batched journal, clone-free immediate helper); not a complete alternate driver — R1-68b continues"
+  },
+  {
+   "id": "R1-68b",
+   "title": "Complete the incremental driver profile: mutation inventory, crash accounting, wiring, resume parity, phase timers",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-68"
+   ],
+   "gpu": "none",
+   "review": false,
    "status": "ready",
    "agent": "codex",
    "worktree": null,
@@ -3672,7 +3709,73 @@
    "evidence": [],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 13; clean profile: 1.0 s per edit phase vs 0.13 s model work; spec in docs/ongoing.md §3"
+   "note": "round 14; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "R1-58b",
+   "title": "Draw plan under register v5 (dry run): counts, allocation, headroom, abort verdict; no draw",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-D1h",
+    "R1-58"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 14; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "R1-63b",
+   "title": "Freeze candidate v3 against the current tree (primary slot open)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-63",
+    "R1-D1h",
+    "R1-49d"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 14; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "R1-X12",
+   "title": "Counter-review of the primary-condition selection and the re-profiled driver (held)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-68b"
+   ],
+   "gpu": "none",
+   "review": true,
+   "status": "blocked",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 14; spec in docs/ongoing.md §3"
   }
  ]
 }
