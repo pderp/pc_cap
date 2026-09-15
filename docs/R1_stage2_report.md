@@ -138,7 +138,9 @@ Per-position selection on 32 windows × 128 positions after 100 edits ([drift_as
 | **v2** | 0.000 / 0.000 / 1.000 | 0.000 at probe lengths / +0.012 / 1.012 |
 
 v0's ratios were 1.001–1.004. The +0.012 after CounterFact edits is residual firing at prefix lengths the fixed probes
-did not sample: 14 of 4,064 scored positions (0.34 %) fire on the recount that counts every position. Codex's addendum measured the v1
+did not sample: 14 of 4,064 scored positions (0.34 %) fire on the recount that counts every position. It exceeds the
+protocol draft's provisional 0.01-nat ceiling, and the gated v3 reader's own drift has not been measured on the full
+validation subset; both are open before the freeze. Codex's addendum measured the v1
 drift on the full 16,256-position subset (+0.60 / +0.39); the figures agree in kind.
 
 ### 5.2 Endpoints (R1-43, R1-44; v2 reader; [results/R1/endpoints/](../results/R1/endpoints/))
@@ -149,7 +151,7 @@ drift on the full 16,256-position subset (+0.60 / +0.39); the figures agree in k
 | revision (v1 then v2 of a fact) | 100 | 100/100 (old record retired, new active, latest answer exact); old answer reappeared 0/300; new-answer paraphrase exactness 0.79 |
 | composition | 0 | unreachable: no verified direct composition questions (54 two-hop chains are diagnostic only) |
 | unseen edit-prompt, zsRE, after 100 edits (dev-remainder prompts) | 100 | false fires 7 %, all with answer changes |
-| unseen edit-prompt, CounterFact, after 100 edits | 100 | 0 false fires, 0 answer changes (33 pairs untruncated at 32 tokens in both decodes) |
+| unseen edit-prompt, CounterFact, after 100 edits | 100 | 0 false fires, 0 answer changes; 67 answer pairs complete, 33 truncated at the 32-token limit in both decodes (the strict complete-preservation rate is 0.67 on the full inventory) |
 | unseen edit-prompt at 300 / 1,000 records (pool-sourced prompts and fillers) | 100 each | zsRE 25 % / 45 % false fires (every one changes the answer); CounterFact 2 % / 5 % |
 
 The zsRE unseen rate is the main scale risk: plausible edit-style prompts about facts not in memory are accepted more
@@ -183,8 +185,9 @@ near-miss and revision endpoints are unchanged.
 
 The 1,000-edit endpoint is admissible on both datasets without eviction. Edit cost scales with answer length, not
 occupancy; query cost grows slowly through the lexical term. CounterFact locality firing at 300–1,000 records is the
-near-duplicate failure already seen in the bank profile (own-record firing 0.59 at 1,000), now measured with decoding:
-LS at 1,000 CounterFact records will fall below 1.00.
+near-duplicate failure already seen in the bank profile (own-record firing 0.59 at 1,000), now measured with decoding.
+Firing is not a measured LS loss (a firing can leave the decoded answer unchanged); the LS at 1,000 records is a Stage 4
+measurement. The profile measured the ungated v2 reader and a random-reader surrogate, not the adopted v3 configuration.
 
 ## 6. Continuation and fidelity controls; predictive coding
 
@@ -192,7 +195,10 @@ R1-24 (DEC-040) ran both treatments on the matched budget of 771,581 forward-pas
 313,579 bank-construction positions): literal self-distillation (a numerical no-op; passes fidelity) and continued
 language-model training (fails its fidelity gate: the base's held-out distribution moved 0.095 nats at lr 1e-6). S1−S0
 stays within ±0.05 RET-GS and R0−S1 is +0.49 to +0.59 (zsRE) and +0.78 to +0.80 (CounterFact): continued base training
-does not explain the revision's gain. The LM treatment's LS collapse (0.86 / 0.28) is the changed base answering its
+does not explain the revision's gain. Qualifications from Codex's review (R1-X7): the S1 cells carry an active v0-stable cap,
+so S1−S0 is measured under that cap; the literal run changes parameters by floating-point residuals (a near-no-op, not
+an identity); the lr 1e-6 fidelity gate remains failed regardless of its improved NLL. A KL-bounded sweep (lr 1e-7,
+3e-8, 1e-8) later found a fidelity-valid informative continuation at lr 1e-8 (DEC-047) with the same verdict. The LM treatment's LS collapse (0.86 / 0.28) is the changed base answering its
 own locality prompts differently, present with no cap writes; a KL-bounded continuation would be needed to certify an
 informative control. Side finding: the v1 reader keeps its retention on the changed base (0.97 / 0.775).
 

@@ -701,3 +701,5 @@ The base itself answers none of the multi-hop questions before or after editing,
 GPT-2 small: a memory cap that fires on the bridge entity's single-hop prompt cannot make the base compose two hops it
 cannot compose unedited. The endpoint is kept as a descriptive secondary outcome (protocol U14) with this floor
 recorded; it is not evidence about the reader. Firing statistics are in the report rows.
+The cap fired (null mass < 0.5) on 369 of the 897 multi-hop questions — those that name the edited subject directly —
+and 8 of those decodes were exact; the remaining firings changed nothing the base could compose.
