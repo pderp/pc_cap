@@ -818,3 +818,24 @@ LS 1.00, retention in range), so the bounded-shape trainer is not changing what 
 middle (worse unseen than 100 % and worse acquisition than 0 %), so the DEC-049/050 selection (chain B) compares the
 plain family against the 100 % question-null family, six seeds × six checkpoints, on common populations. Under the
 confirmed rule only the 100 % family currently satisfies the unseen constraint (5 %), at mean RET-GS 0.757.
+
+### The null boundary oscillates between checkpoints (2026-09-15, 18:40 EDT; DEC-049 selection, first candidate)
+
+Plain family, seed 0, checkpoints every 50 steps, evaluated on the common populations (MQuAKE / zsRE / CounterFact
+RET-GS; zsRE unseen false fires at 100 records):
+
+| step | RET-GS | ES (MQuAKE / CounterFact) | unseen |
+| ---: | --- | --- | ---: |
+| 50 | 0.38 / 0.98 / 0.355 | 1.00 / 1.00 | 57 % |
+| 100 | 0.30 / 0.94 / 0.655 | 0.96 / 0.99 | 6 % |
+| 150 | 0.71 / 0.98 / 0.75 | 1.00 / 1.00 | 40 % |
+| 200 | 0.79 / 0.98 / 0.78 | 0.95 / 0.99 | 51 % |
+| 250 | 0.55 / 0.93 / 0.73 | 0.96 / 0.99 | 8 % |
+| 300 | 0.64 / 0.94 / 0.765 | 0.84 / 1.00 | 19 % |
+
+The unseen rate swings from 6 % to 57 % between neighbouring checkpoints while zsRE retention hardly moves: the null
+decision boundary for question-form prompts oscillates during training, which is why single-checkpoint seeds looked
+so different (R1-56/R1-66). Consequences: (1) checkpoint selection on the stream criterion (DEC-049/050) is
+necessary, not optional; (2) a weight average of the late checkpoints is added as one more candidate per run
+(`scripts/r1_71_average_checkpoints.py`, steps 150–300), evaluated on the same populations (chain C, selection v2);
+(3) a lower learning rate or averaging inside training is the next lever if the averaged candidates do not stabilise.

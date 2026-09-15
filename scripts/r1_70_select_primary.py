@@ -40,7 +40,7 @@ def main() -> int:
         raise SystemExit(f"{out} exists; selections are versioned")
     cands = []
     for run in a.runs.split(","):
-        for step in [int(x) for x in a.steps.split(",")]:
+        for step in [x if x == "avg" else int(x) for x in a.steps.split(",")]:
             tag = f"{run}_step{step}_rare1_null0.5"
             row = {"run": run, "step": step, "tag": tag, "metrics": {}, "sources": {}}
             complete = True
