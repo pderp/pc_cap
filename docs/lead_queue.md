@@ -405,3 +405,9 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     it (96 distinct edits). My view: (A) is defensible and honest; (C) is scientifically reasonable — the reader saw
     those subjects' TRUE facts as null queries, never the counterfactual edits — but a reviewer may call it
     self-serving. Default if you say nothing: (A). Either way the matrix and protocol get a new version.
+
+28. (2026-09-15, 18:05 EDT) Recorded DEC-048 (option C). Consequences now in motion: Codex lane R1-D1h writes register policy v5
+    (query-role exposure waived for MQuAKE, everything else retained) with the capacity table and the abort rule; the matrix
+    stays at 360 cells × 1,000 edits; the protocol gets a v4 stating the reading in its exposure section so a reviewer sees
+    it declared rather than discovered. Margin is thin (4,218 vs 4,050 before alias/context clearance), so R1-D1h also
+    reports what clearance removes; if it falls below demand you will get the numbers, not a silent cut.
