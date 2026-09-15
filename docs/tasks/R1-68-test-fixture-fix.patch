@@ -1,0 +1,11 @@
+diff --git a/tests/revision_v1/test_r1_68_integrity_components.py b/tests/revision_v1/test_r1_68_integrity_components.py
+--- a/tests/revision_v1/test_r1_68_integrity_components.py
++++ b/tests/revision_v1/test_r1_68_integrity_components.py
+@@ -203,7 +203,7 @@
+ 
+ @pytest.mark.parametrize("minimum,verdict", [(1, "not_evaluated_empty_memory"), (None, "disabled")])
+ def test_empty_selection_cosine_gate(minimum, verdict):
+-    sel = Selection((), np.array([]), 1.0, None, True, 3)
++    sel = Selection(prompt_len=3, record_ids=[], weights=np.array([]), null_mass=1.0, code=None, hard_null=True)
+     cfg = SimpleNamespace(rare_overlap_min=minimum, null_threshold=0.5, min_score=0.93)
+     assert selection_trace(sel, config=cfg)["rare_gate_verdict"] == verdict

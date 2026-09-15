@@ -1,0 +1,73 @@
+........................................................................ [ 12%]
+........................................................................ [ 25%]
+........................................................................ [ 38%]
+......................ssssssss................................FF........ [ 51%]
+........................................................................ [ 64%]
+........................................................................ [ 76%]
+........................................................................ [ 89%]
+..........................................................               [100%]
+=================================== FAILURES ===================================
+________ test_empty_selection_cosine_gate[1-not_evaluated_empty_memory] ________
+
+minimum = 1, verdict = 'not_evaluated_empty_memory'
+
+    @pytest.mark.parametrize("minimum,verdict", [(1, "not_evaluated_empty_memory"), (None, "disabled")])
+    def test_empty_selection_cosine_gate(minimum, verdict):
+        sel = Selection((), np.array([]), 1.0, None, True, 3)
+        cfg = SimpleNamespace(rare_overlap_min=minimum, null_threshold=0.5, min_score=0.93)
+>       assert selection_trace(sel, config=cfg)["rare_gate_verdict"] == verdict
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_68_integrity_components.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selection = Selection(prompt_len=(), record_ids=array([], dtype=float64), weights=1.0, null_mass=None, code=True, hard_null=3, prompt_pass=None, best_score=None, pending_cost=None, delta=None)
+config = namespace(rare_overlap_min=1, null_threshold=0.5, min_score=0.93)
+
+    def selection_trace(selection, *, config=None):
+        """Preserve legacy candidate fields and disclose the final hard gate.
+        With RevisionConfig, infer the rare-gate verdict from the registered ordering:
+        empty -> null/cosine thresholds -> rare-token gate. No DF or selection recomputation.
+        Without config the rare-gate cause is unavailable, even when hard_null is known.
+        """
+        ids = list(selection.record_ids)
+        weights = np.asarray(selection.weights)
+        if weights.ndim != 1 or len(weights) != len(ids) or len(set(ids)) != len(ids):
+>           raise ValueError("candidate/weight inventory mismatch")
+E           ValueError: candidate/weight inventory mismatch
+
+src/pccap/revision_v1/selection_trace.py:19: ValueError
+_______________ test_empty_selection_cosine_gate[None-disabled] ________________
+
+minimum = None, verdict = 'disabled'
+
+    @pytest.mark.parametrize("minimum,verdict", [(1, "not_evaluated_empty_memory"), (None, "disabled")])
+    def test_empty_selection_cosine_gate(minimum, verdict):
+        sel = Selection((), np.array([]), 1.0, None, True, 3)
+        cfg = SimpleNamespace(rare_overlap_min=minimum, null_threshold=0.5, min_score=0.93)
+>       assert selection_trace(sel, config=cfg)["rare_gate_verdict"] == verdict
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_68_integrity_components.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+selection = Selection(prompt_len=(), record_ids=array([], dtype=float64), weights=1.0, null_mass=None, code=True, hard_null=3, prompt_pass=None, best_score=None, pending_cost=None, delta=None)
+config = namespace(rare_overlap_min=None, null_threshold=0.5, min_score=0.93)
+
+    def selection_trace(selection, *, config=None):
+        """Preserve legacy candidate fields and disclose the final hard gate.
+        With RevisionConfig, infer the rare-gate verdict from the registered ordering:
+        empty -> null/cosine thresholds -> rare-token gate. No DF or selection recomputation.
+        Without config the rare-gate cause is unavailable, even when hard_null is known.
+        """
+        ids = list(selection.record_ids)
+        weights = np.asarray(selection.weights)
+        if weights.ndim != 1 or len(weights) != len(ids) or len(set(ids)) != len(ids):
+>           raise ValueError("candidate/weight inventory mismatch")
+E           ValueError: candidate/weight inventory mismatch
+
+src/pccap/revision_v1/selection_trace.py:19: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_68_integrity_components.py::test_empty_selection_cosine_gate[1-not_evaluated_empty_memory]
+FAILED tests/revision_v1/test_r1_68_integrity_components.py::test_empty_selection_cosine_gate[None-disabled]
+2 failed, 552 passed, 8 skipped in 70.97s (0:01:10)

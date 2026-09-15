@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-15",
+  "supersedes_claim": "docs/tasks/CODEX-R1-round13.claim.json",
+  "lanes": {
+    "R1-D1h": "artifact_complete_clearance_pending",
+    "R1-49d": "draft_complete_admission_pending",
+    "R1-67": "modules_complete_owner_wiring_pending",
+    "R1-X11": "review_complete_owner_edits_pending",
+    "R1-68": "components_complete_driver_integration_and_whole_cell_parity_pending"
+  },
+  "validation": {
+    "cpu_passed": 552,
+    "cpu_skipped": 8,
+    "cpu_failed": 2,
+    "failure_cause": "two malformed constructor fixtures in new R1-68 test file",
+    "corrected_cases_passed_in_memory": 2,
+    "ruff": "7 files passed",
+    "register_bindings_match": 43
+  },
+  "permission_pending": {
+    "patch": "docs/tasks/R1-68-test-fixture-fix-v2.patch",
+    "action": "Correct one Selection constructor in existing test file",
+    "received": false
+  },
+  "existing_tracked_files_edited": 0,
+  "commits": 0,
+  "gpu_executions": 0,
+  "base_executions": 0,
+  "draws": 0,
+  "seals": 0,
+  "handoff": "docs/tasks/CODEX-R1-round13.handoff.md"
+}
