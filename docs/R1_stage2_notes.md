@@ -804,3 +804,17 @@ carry no loss weight) the compiled-executable set is bounded (15 group shapes ×
 plateaus after the first compilations; steps run ≈ 20× faster than in the crashed run because compilation stops. The
 memory guard (MemAvailable < 4 GB → save best checkpoint and exit) did not trigger. GPU work may resume one job at a
 time.
+
+## Candidate readers after the memory fix (2026-09-15, 17:40 EDT; rebuilt trainer, one job at a time)
+
+| reader (three pools, v3 slices, gate on) | MQuAKE ES / RET-GS / LS | zsRE | CounterFact | zsRE unseen at 100 |
+| --- | --- | --- | --- | ---: |
+| fixed locality (tri4) seed 0 / 1 / 2 | 1.00 / 0.79 / 0.98; 1.00 / 0.71 / 1.00; 1.00 / 0.79 / 1.00 | 0.98 / 0.98 / 0.98 | 0.86 / 0.795 / 0.86 | 30 % / 29 % / 52 % |
+| + question-form nulls 100 % (tri5) seed 0 | 0.99 / 0.55 / 1.00 | 0.91 | 0.81 | 5 % |
+| + question-form nulls 35 % (tri6) seed 0 | 0.81 / 0.68 / 1.00 | 0.96 | 0.76 (ES 0.76) | 19 % |
+
+Seed 1 of the fixed-locality family was retrained on the rebuilt trainer and reproduces the family's pattern (ES 1.00,
+LS 1.00, retention in range), so the bounded-shape trainer is not changing what is learned; the 35 % variant is a poor
+middle (worse unseen than 100 % and worse acquisition than 0 %), so the DEC-049/050 selection (chain B) compares the
+plain family against the 100 % question-null family, six seeds × six checkpoints, on common populations. Under the
+confirmed rule only the 100 % family currently satisfies the unseen constraint (5 %), at mean RET-GS 0.757.
