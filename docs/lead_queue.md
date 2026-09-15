@@ -477,3 +477,12 @@ Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE t
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
 
 34. (2026-09-15, 17:05 EDT) Q1, Q2, Q3, Q8 answered and recorded (DEC-042 accepted, DEC-047 accepted, DEC-049, DEC-050). Still open: Q4 (κ pilot), Q5 (stress panel), Q6 (block order), Q7 (feasibility) — by September 20.
+
+35. (2026-09-15, 20:05 EDT) Codex's round 14 and heavy-tail lanes are committed (`9038b9a`). Two things it found that matter:
+    (a) my first κ preservation term was not a proper divergence — repaired (f-divergence form, tests rewritten; details in the
+    notes); the κ pilot manifest goes to v2 after Codex re-reviews (HT-3b) and then needs your Q4. (b) The draw plan and the
+    freeze candidate refused because register v5 binds the live decisions file, which every accepted decision changes;
+    Codex rebinds to a frozen snapshot (R1-D1i). Also delivered: the incremental driver profile (I re-profile it next), the
+    stored-results tail audit (the +3.79-nat outlier reproduces; the two full drift sets are identical runs, not
+    replications), the six-cell stress contract, and an 18-row claim–evidence ledger for the talk.
+

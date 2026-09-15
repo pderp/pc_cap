@@ -48,8 +48,9 @@ class LossConfig:
     clip_surprisal: float | None = None  # HT-3 comparator: min(-ln p, c) in the answer term (an ordinary robust loss; None = off)
 
     def __post_init__(self):
-        if self.kappa < 0 or (self.clip_surprisal is not None and self.clip_surprisal <= 0) or (self.kappa > 0 and self.clip_surprisal is not None):
-            raise ValueError("kappa must be >= 0, clip_surprisal > 0, and the two are alternatives")
+        import math
+        if not math.isfinite(self.kappa) or self.kappa < 0 or (self.clip_surprisal is not None and not (math.isfinite(self.clip_surprisal) and self.clip_surprisal > 0)) or (self.kappa > 0 and self.clip_surprisal is not None):
+            raise ValueError("kappa must be finite and >= 0, clip_surprisal finite and > 0, and the two are alternatives")
         if self.fast_steps != 0:
             raise NotImplementedError("fast steps inside the outer loop are not implemented; run with fast_steps = 0 (R23-02)")
 
@@ -94,6 +95,31 @@ class EpisodeFeatures:
     queries: list[QueryFeat]
     skipped: dict[str, int] = field(default_factory=dict)
     cost: RevisionCost = field(default_factory=lambda: RevisionCost(phase="learning"))
+
+
+def _answer_term(surprisal, lc: "LossConfig"):
+    if lc.kappa > 0:
+        return coupled_surprisal(surprisal, lc.kappa)
+    if lc.clip_surprisal is not None:
+        return jnp.minimum(surprisal, lc.clip_surprisal)
+    return surprisal
+
+
+def coupled_surprisal(surprisal, kappa: float):
+    """HT-3: -ln_k p = (1 - p^k)/k = -expm1(-k s)/k for surprisal s = -ln p (bounded by 1/k); k = 0 is the ordinary surprisal."""
+    if kappa == 0:
+        return surprisal
+    return -jnp.expm1(-kappa * surprisal) / kappa
+
+
+def coupled_divergence(log_p, log_q, kappa: float):
+    """HT-3 (corrected after Codex's HT-3 review): D_k(p||q) = sum_i p_i ln_k(p_i/q_i) with ln_k(x) = (x^k - 1)/k. For k > 0 this
+    is the Csiszar f-divergence with f(t) = (t^(1+k) - t)/k (f'' > 0), hence >= 0 with equality iff q = p, and stationary at
+    q = p; k -> 0 recovers KL(p||q). Inputs are log-probabilities; p is the (stop-gradient) reference."""
+    p = jnp.exp(log_p)
+    if kappa == 0:
+        return jnp.sum(p * (log_p - log_q))
+    return jnp.sum(p * jnp.expm1(kappa * (log_p - log_q))) / kappa
 
 
 def featurize(base, enc, episode: LabeledEpisode, rc: ReaderConfig, include_own_prompt: bool = True, own_prompt_history: bool = False) -> EpisodeFeatures:
@@ -217,8 +243,9 @@ def retrieval_loss(theta, rc: ReaderConfig, feats: EpisodeFeatures, balance_null
     return total
 
 
-def prefix_loss(theta, rc: ReaderConfig, cc: ControllerConfig, base_params, base_cfg, feats: EpisodeFeatures, qi: int, ti: int):
+def prefix_loss(theta, rc: ReaderConfig, cc: ControllerConfig, base_params, base_cfg, feats: EpisodeFeatures, qi: int, ti: int, lc: "LossConfig | None" = None):
     """L1 or L3 for one query prefix: corrected logits from the base with the controller's writes."""
+    lc = lc or LossConfig()
     keys, codes = _records(theta, rc, feats)
     q = feats.queries[qi]
     pf = q.prefixes[ti]
@@ -229,9 +256,9 @@ def prefix_loss(theta, rc: ReaderConfig, cc: ControllerConfig, base_params, base
     W, _ = writes(theta["controller"], cc, q_t, code_mix, 1.0 - null)
     logits, _, _ = g.forward_jit(base_params, jnp.asarray(pf.ids), jnp.int32(pf.n), W, base_cfg, False, True)
     if q.role in ANSWER_ROLES:
-        return jax.nn.logsumexp(logits) - logits[pf.target], "answer"
+        return _answer_term(jax.nn.logsumexp(logits) - logits[pf.target], lc), "answer"
     p_off = jax.nn.softmax(jnp.asarray(pf.capoff_logits))
-    return jnp.sum(p_off * (jnp.log(p_off + 1e-30) - jax.nn.log_softmax(logits))), "preserve"
+    return coupled_divergence(jnp.log(p_off + 1e-30), jax.nn.log_softmax(logits), lc.kappa), "preserve"
 
 
 def episode_grads(theta, rc, cc, base_params, base_cfg, feats: EpisodeFeatures, lc: LossConfig):
@@ -250,7 +277,7 @@ def episode_grads(theta, rc, cc, base_params, base_cfg, feats: EpisodeFeatures, 
         if q.role in NULL_ONLY_ROLES:
             continue
         for ti in range(len(q.prefixes)):
-            (l, kind), gr = jax.value_and_grad(prefix_loss, has_aux=True)(theta, rc, cc, base_params, base_cfg, feats, qi, ti)
+            (l, kind), gr = jax.value_and_grad(prefix_loss, has_aux=True)(theta, rc, cc, base_params, base_cfg, feats, qi, ti, lc)
             metrics[kind] += float(l)
             metrics[f"{kind}_n"] += 1
             grads = acc(gr, lc.w_answer if kind == "answer" else lc.w_preserve)

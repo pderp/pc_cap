@@ -3700,16 +3700,20 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:05+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/R1-68b.md",
+    "docs/tasks/R1-68b-zsre-v4-incremental.recipe.json",
+    "results/R1/stage4_dev_cells/r1_68b_cpu_tests"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 14; spec in docs/ongoing.md §3"
+   "note": "incremental integrity profile implemented and CPU-tested (result.json phase timers); orchestrator re-profiles on the real base"
   },
   {
    "id": "R1-58b",
@@ -3722,16 +3726,19 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "partial",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:06+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/R1-58b.md",
+    "logs/r1_round14/draw_plan_v5.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 14; spec in docs/ongoing.md §3"
+   "note": "count-only dry run complete; draw blocked by final clearance and a stale register binding (register v5 binds a pre-DEC-049/050 decisions.md hash)"
   },
   {
    "id": "R1-63b",
@@ -3745,16 +3752,19 @@
    ],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "partial",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:06+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/R1-63b.md",
+    "logs/r1_round14/freeze_candidate_v3_refusal.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "round 14; spec in docs/ongoing.md §3"
+   "note": "strict audit: candidate emission refused on the decisions.md hash mismatch; rebind needed (R1-D1i)"
   },
   {
    "id": "R1-X12",
@@ -3785,16 +3795,20 @@
    "deps": [],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:06+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "scripts/ht_audit_existing.py",
+    "logs/heavy_tail",
+    "docs/tasks/HT-1.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "heavy-tail additions; docs/heavy_tail_counter_review.md; spec in docs/ongoing.md §3"
+   "note": "stored-results tail audit (788 files, 1,346 series); +3.79-nat outlier reproduced; repeat on the final primary before freeze"
   },
   {
    "id": "HT-2",
@@ -3804,16 +3818,19 @@
    "deps": [],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:07+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/HT-evaluation-contract.md",
+    "manifests/revision_v1/ht_development_panel_v1.json"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "heavy-tail additions; docs/heavy_tail_counter_review.md; spec in docs/ongoing.md §3"
+   "note": "six-cell stress contract and manifest; execution awaits reader selection, stress driver and lead scheduling"
   },
   {
    "id": "HT-3",
@@ -3823,16 +3840,20 @@
    "deps": [],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "partial",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:07+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/tasks/HT-3.md",
+    "manifests/revision_v1/kappa_pilot_v1.json",
+    "tests/revision_v1/test_ht_kappa_actual.py"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "heavy-tail additions; docs/heavy_tail_counter_review.md; spec in docs/ongoing.md §3"
+   "note": "review found the coupled preservation term not stationary at q=p (orchestrator fixing: f-divergence form), small-kappa arithmetic, config validation; pilot manifest blocked until fixed and re-reviewed"
   },
   {
    "id": "HT-4",
@@ -3842,16 +3863,18 @@
    "deps": [],
    "gpu": "none",
    "review": false,
-   "status": "ready",
+   "status": "done",
    "agent": "codex",
    "worktree": null,
    "started": null,
-   "finished": null,
+   "finished": "2026-09-15T23:26:07+00:00",
    "commit": null,
-   "evidence": [],
+   "evidence": [
+    "docs/talk_claim_ledger.md"
+   ],
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
-   "note": "heavy-tail additions; docs/heavy_tail_counter_review.md; spec in docs/ongoing.md §3"
+   "note": "18-row claim-evidence ledger for the talk"
   },
   {
    "id": "OPS-1",
@@ -3876,6 +3899,72 @@
    "gpu_seconds": 0.0,
    "wall_seconds": 0.0,
    "note": "installed and running (pccap-process-memory.service); command-label patch applied by the orchestrator"
+  },
+  {
+   "id": "R1-D1i",
+   "title": "Register v6: rebind to a frozen decisions snapshot; rerun draw plan and freeze candidate",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "R1-D1h",
+    "R1-58b",
+    "R1-63b"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 15; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "HT-3b",
+   "title": "Re-review of the repaired kappa objective; kappa pilot manifest v2",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "HT-3"
+   ],
+   "gpu": "none",
+   "review": true,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 15; spec in docs/ongoing.md §3"
+  },
+  {
+   "id": "HT-5",
+   "title": "Stress-panel driver in development mode (six-cell contract)",
+   "stage": "R1",
+   "role": "BASE",
+   "deps": [
+    "HT-2",
+    "R1-64"
+   ],
+   "gpu": "none",
+   "review": false,
+   "status": "ready",
+   "agent": "codex",
+   "worktree": null,
+   "started": null,
+   "finished": null,
+   "commit": null,
+   "evidence": [],
+   "gpu_seconds": 0.0,
+   "wall_seconds": 0.0,
+   "note": "round 15; spec in docs/ongoing.md §3"
   }
  ]
 }

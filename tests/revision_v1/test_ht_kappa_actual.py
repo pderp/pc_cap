@@ -114,30 +114,33 @@ def test_actual_clip_comparator_bound_gradient_and_unchanged_preservation():
     )
 
 
-def test_current_coupled_preservation_has_negative_values_and_nonstationary_match():
-    # p=(.9,.1) embedded in the 64-token vocabulary with negligible remaining mass.
+def test_repaired_coupled_preservation_is_nonnegative_and_stationary_at_match():
+    """Repaired after the HT-3 review: the preservation term is the f-divergence sum p ln_k(p/q) (Codex's counterexample
+    p=(.9,.1), q=(.99,.01), k=.5 was -0.0401 under the first form); it is >= 0, zero at q = p, with zero gradient there."""
     p = jnp.full(CFG.vocab, 1e-30).at[0].set(0.9).at[1].set(0.1)
     q = jnp.full(CFG.vocab, 1e-30).at[0].set(0.99).at[1].set(0.01)
     fn = actual_group_loss(LossConfig(kappa=0.5), "preserve", jnp.log(p))
-    assert float(fn(jnp.log(q))) < -0.03
+    assert float(fn(jnp.log(q))) > 0.0
     value, grad = jax.value_and_grad(fn)(jnp.log(p))
     assert abs(float(value)) < 1e-6
-    assert float(jnp.linalg.norm(grad)) > 0.05
+    assert float(jnp.linalg.norm(grad)) < 1e-4
 
 
-def test_current_float32_small_kappa_cancellation_is_visible():
+def test_repaired_small_kappa_is_stable():
     x = jnp.zeros(CFG.vocab)
     normal = float(actual_group_loss(LossConfig())(x))
     near = float(actual_group_loss(LossConfig(kappa=1e-10))(x))
-    assert normal > 4 and near == 0  # known defect: (1-exp(-k*s))/k needs expm1
+    assert normal > 4 and near == pytest.approx(normal, rel=1e-4)  # expm1-based positive branch
 
 
-def test_current_config_accepts_nonfinite_values_requires_repair():
-    assert np.isnan(LossConfig(kappa=float("nan")).kappa)
-    assert np.isinf(LossConfig(clip_surprisal=float("inf")).clip_surprisal)
+def test_repaired_config_rejects_nonfinite_values():
+    with pytest.raises(ValueError):
+        LossConfig(kappa=float("nan"))
+    with pytest.raises(ValueError):
+        LossConfig(clip_surprisal=float("inf"))
 
 
-def test_tinybase_zero_parity_and_current_reference_trainer_ignores_kappa():
+def test_tinybase_parity_at_zero_and_positive_kappa():
     base = TinyBase()
     feats = featurize(
         base, ObservationEncoder(base, taps=RC.taps), synthetic_episode(7, history_size=2), RC
@@ -148,27 +151,12 @@ def test_tinybase_zero_parity_and_current_reference_trainer_ignores_kappa():
         selected.append(replace(q, prefixes=q.prefixes[:1]))
     feats = replace(feats, queries=selected)
     th = theta()
-    ref, mref = episode_grads(th, RC, CC, base.params, base.cfg, feats, LossConfig())
-    fast, mfast = FastTrainer(RC, CC, base.params, base.cfg, LossConfig(kappa=0)).episode_grads(
-        th, feats
-    )
-    for a, b in zip(jax.tree_util.tree_leaves(ref), jax.tree_util.tree_leaves(fast), strict=True):
-        np.testing.assert_allclose(a, b, atol=2e-4, rtol=2e-3)
-    assert mfast["answer"] == pytest.approx(mref["answer"], abs=1e-3)
-    ignored, mignored = episode_grads(
-        th, RC, CC, base.params, base.cfg, feats, LossConfig(kappa=0.5)
-    )
-    for a, b in zip(
-        jax.tree_util.tree_leaves(ref), jax.tree_util.tree_leaves(ignored), strict=True
-    ):
-        np.testing.assert_array_equal(a, b)
-    _, coupled = FastTrainer(RC, CC, base.params, base.cfg, LossConfig(kappa=0.5)).episode_grads(
-        th, feats
-    )
-    assert mignored["answer"] == mref["answer"] and coupled["answer"] < mref["answer"]
-
-
-@pytest.fixture(autouse=True)
-def release_jax_compilations():
-    yield
-    jax.clear_caches()
+    for lc in (LossConfig(), LossConfig(kappa=0.5)):
+        ref, mref = episode_grads(th, RC, CC, base.params, base.cfg, feats, lc)
+        fast, mfast = FastTrainer(RC, CC, base.params, base.cfg, lc).episode_grads(th, feats)
+        for a, b in zip(jax.tree_util.tree_leaves(ref), jax.tree_util.tree_leaves(fast), strict=True):
+            np.testing.assert_allclose(a, b, atol=2e-4, rtol=2e-3)
+        assert mfast["answer"] == pytest.approx(mref["answer"], abs=1e-3)
+    _, plain = episode_grads(th, RC, CC, base.params, base.cfg, feats, LossConfig())
+    _, coupled = episode_grads(th, RC, CC, base.params, base.cfg, feats, LossConfig(kappa=0.5))
+    assert coupled["answer"] < plain["answer"]  # the coupled surprisal is below the ordinary one

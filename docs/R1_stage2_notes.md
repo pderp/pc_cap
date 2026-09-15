@@ -839,3 +839,15 @@ so different (R1-56/R1-66). Consequences: (1) checkpoint selection on the stream
 necessary, not optional; (2) a weight average of the late checkpoints is added as one more candidate per run
 (`scripts/r1_71_average_checkpoints.py`, steps 150–300), evaluated on the same populations (chain C, selection v2);
 (3) a lower learning rate or averaging inside training is the next lever if the averaged candidates do not stabilise.
+
+### HT-3: the coupled preservation term repaired after Codex's review (2026-09-15, 20:05 EDT)
+
+Codex showed that the first coupled preservation term, Σ p (ln_κ p − ln_κ q), is not a divergence: at κ = 0.5 with
+p = (0.9, 0.1) and q = (0.99, 0.01) it is −0.040, and its gradient at q = p is nonzero, so minimising it can move a
+matching model away from its reference. Replaced by the coupled relative entropy D_κ(p‖q) = Σ p ln_κ(p/q), the Csiszár
+f-divergence with f(t) = (t^{1+κ} − t)/κ (f'' > 0): non-negative, zero only at q = p, stationary there, and equal to
+KL(p‖q) as κ → 0 (`train.py::coupled_divergence`; the answer term keeps the bounded coupled surprisal −ln_κ p =
+−expm1(−κ s)/κ with an explicit κ = 0 branch). LossConfig rejects non-finite κ and clipping thresholds; the reference
+trainer applies κ and clipping so the TinyBase parity test now holds at κ = 0 and κ = 0.5. Codex's diagnostic tests
+became invariant tests. Codex's mapping note stands: the bounded surprisal corresponds to Q = −κ in the Nelson–Umarov
+convention; the pilot is a loss-level coupling, not the coupled-entropy construction.
