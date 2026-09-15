@@ -61,7 +61,7 @@ def main() -> int:
         print("  " + line[:400])
     if rows:
         last = rows[-1]
-        g = re.search(r"gpu\[[^\]]*\]=(\S+)", last)
+        g = re.search(r"gpu\[[^\]]*\]=(.*?) gpu_procs=", last)
         print("\nverdict: last sample", last[:19], "| gpu(util%,memMB,totMB,C,W,MHz,throttle,pstate)=", g.group(1) if g else "?",
               "| gpu procs:", re.search(r"gpu_procs=(\S*)", last).group(1) if re.search(r"gpu_procs=(\S*)", last) else "?",
               "| top cpu:", re.search(r"top_cpu=(\S*)", last).group(1) if re.search(r"top_cpu=(\S*)", last) else "?",
