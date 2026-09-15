@@ -735,9 +735,11 @@ The v3-slice readers keep their stream results (MQuAKE 0.79 / 0.76 / 0.76 with t
 zsRE 0.97–0.98, CounterFact 0.72–0.88) but their zsRE unseen false fires jump to 38–39 % at 100 records (dev prompts;
 two-pool v3 reader: 5 %; v4 seed 0: 25 %) and 19 % at 1,000 (pool prompts; 10 %). Cause: stream training labels every
 locality prompt a null (`role="unrelated"`, target −1) even when that prompt is the own prompt of a record in the same
-64-record memory. With self-contained pools (v3) a locality prompt is another training item's own prompt, so ≈ 13 % of
-the locality nulls contradict an own-prompt target; the v2 pool had the same collision at a lower rate (its locality
-candidates were drawn from the whole inventory, which includes pool items), which fits v4's 21–25 %. Fix
+64-record memory. With self-contained pools (v3) a locality prompt is another training item's own prompt, so some locality nulls
+contradict an own-prompt target. Codex's source-bound rehearsal (R1-X11) measured the actual collision rate of the
+mixed recipe at 2.1–2.3 % of MQuAKE locality nulls (0.43–0.47 % of all locality queries), not the ≈ 13 % I first
+estimated from a homogeneous pool, and found zero collisions with the fixed builder — while the fixed builder's zsRE
+unseen false fires stay at 30–52 %. The collision was real but small; it is not the cause of the zsRE unseen regression. Fix
 (`stream_train._locality_choices`): a locality entry whose prompt equals an in-memory record's own prompt is never used
 as a null query; the record's paraphrase and own-prompt targets stand. Retrain on the v3 slices (`tri4`) with this fix
 follows the clean driver profile.
@@ -760,6 +762,8 @@ drift +0.0002 nats).
 | locality (50 pairs) | 2 | 3.6 | 7 |
 | near-miss / revision / composition (0 available rows here) | 3 | 0.9 | 3 |
 
+(Codex's recount: 976 s inside the driver's own phase timers; the 1,252 s above is wall time between the first phase
+file and the last receipt, which includes setup, checkpoint writing and snapshots — both boundaries are stated.)
 Per-edit cost is flat from 1 to 300 records (1.02 / 1.04 / 1.03 s for edits; 0.95 / 0.97 / 1.00 s for the immediate
 check), so the driver's fixed per-phase overhead (integrity hashes, restore checks, immutable writes) dominates: the raw
 edit costs 0.11 s and the immediate decode ≈ 0.02 s. Extrapolation for one learned 1,000-edit cell with checkpoints

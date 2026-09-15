@@ -418,3 +418,14 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     driver's own per-phase overhead (1.0 s per edit and per immediate check versus 0.13 s of model work). I have posted a
     driver-performance lane for Codex (R1-68) that should roughly halve it while keeping every integrity guarantee; the
     ceilings in the matrix will be set from the re-profiled driver. No scope change is proposed (DEC-044).
+
+30. (2026-09-15, 15:30 EDT) **Lockup forensics installed.** Two hard hangs today (journal boots −2 and −1 end at 14:19:58 and
+    15:16:34 with no kernel message at all — no OOM, Xid, hung-task or thermal line — which is the signature of a hard
+    GPU/driver or platform hang rather than a memory kill). `scripts/sysmon.sh` now runs as the user service
+    `pccap-sysmon` (enabled at boot; linger is on): every 10 s it appends GPU util/memory/temperature/power/clock/throttle
+    reasons, GPU processes, load, memory, swap, PSI stalls, top CPU/RSS processes and any new kernel GPU/OOM/lockup lines to
+    `logs/sysmon/sysmon-<date>.log`, flushed to disk. After the next hang run
+    `python scripts/sysmon_report.py --before-boot -1 --window 180`. What was on the GPU during both hangs: my reader
+    training (2.4 GB) plus, in the first, two more of my jobs overlapping, and always the PeTTa `swipl` agent (1.45 GB GPU,
+    1.2 GB RSS) and Chrome's GPU process. I now run my GPU jobs strictly one at a time. Root-level options only you can
+    enable if you want kernel-side evidence: `sudo sysctl -w kernel.nmi_watchdog=1 kernel.hung_task_panic=1` and kdump.

@@ -1,0 +1,13 @@
+[Unit]
+Description=pc_cap OS-level lockup forensics logger (GPU/memory/load every 10 s, flushed to disk)
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/home/derp/cap/pc_cap/scripts/sysmon.sh
+Restart=always
+RestartSec=5
+Nice=10
+
+[Install]
+WantedBy=default.target
