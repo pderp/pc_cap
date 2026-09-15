@@ -1,0 +1,38 @@
+{
+  "status": "prepared only, not applied",
+  "edits": [
+    {
+      "path": "scripts/r1_64_dev_cell.py",
+      "before_sha256": "4fc7225b2f73c7ef46aa2e40564b168479427d474591d923a0fcd0006b34e399",
+      "after_sha256": "1566a6ac8d3a9932ae95abc6463c9d8af5de97d05279577b7b6ac97cd8865536"
+    },
+    {
+      "path": "scripts/r1_64_dev_payload.py",
+      "before_sha256": "c388199bd5ed03e9df9f464a143f7c1715946bde18e7753a1a4dda39d48e8127",
+      "after_sha256": "c4f629a130ac3f005c60858e7581d9bc65f1500edfd3aa014d986b614c24b6da"
+    },
+    {
+      "path": "docs/tasks/R1-64-zsre-v4.recipe.json",
+      "before_sha256": "d0f5cb4842e9edb738dd1b3b112c7eb3254ff55782649efca6b2fc89970dfd1d",
+      "after_sha256": "dc7df05f7555d7f76a3d1a9df8e23656376adbb1b07fd37593b8449478e55f31"
+    },
+    {
+      "path": "manifests/revision_v1/freeze_candidate_v1.json",
+      "before_sha256": "5d36c793f802a7654302fe24b7c6ac675db3ea6d95fe2029e971c61d56b35ad8",
+      "after_sha256": "d171bdbdae54262dc6552dd998db716ed5959189329e268bc9a158d266231950"
+    }
+  ],
+  "validation": [
+    {
+      "file": "scripts/r1_64_dev_cell.py",
+      "semantic_change": false,
+      "ruff_preview_exit": 0
+    },
+    {
+      "file": "scripts/r1_64_dev_payload.py",
+      "semantic_change": false,
+      "ruff_preview_exit": 0
+    }
+  ],
+  "reason": "Installed Ruff resolves the new module as first-party after file creation; two import groups require reordering. Recipe and candidate hashes must follow those source bytes."
+}

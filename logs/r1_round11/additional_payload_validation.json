@@ -1,0 +1,44 @@
+{
+  "banner": "development, not confirmatory",
+  "checks": [
+    {
+      "composition_cases": 0,
+      "dataset": "counterfact",
+      "items": 1000,
+      "model_executed": false,
+      "outside": 100,
+      "payload_validated": true,
+      "summary": {
+        "challenge_shortfalls": {
+          "near_miss": 0,
+          "revision": 0
+        },
+        "dev_items": 300,
+        "locality_note": "MQuAKE v3 probes are in the edited slice; report interference, not independent outside locality",
+        "source_order": "manifest order; no outcome-based selection",
+        "training_pool_fillers": 700,
+        "training_pool_note": "Pool fillers/outside prompts are development data; no claim of reader-training independence"
+      }
+    },
+    {
+      "composition_cases": 48,
+      "dataset": "mquake",
+      "items": 100,
+      "model_executed": false,
+      "outside": 100,
+      "payload_validated": true,
+      "summary": {
+        "challenge_shortfalls": {
+          "near_miss": 100,
+          "revision": 50
+        },
+        "dev_items": 100,
+        "locality_note": "MQuAKE v3 probes are in the edited slice; report interference, not independent outside locality",
+        "source_order": "manifest order; no outcome-based selection",
+        "training_pool_fillers": 0,
+        "training_pool_note": "Pool fillers/outside prompts are development data; no claim of reader-training independence"
+      }
+    }
+  ],
+  "mode": "stage4_development_cell"
+}

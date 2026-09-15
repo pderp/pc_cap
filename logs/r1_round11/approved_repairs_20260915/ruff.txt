@@ -1,0 +1,26 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/revision_v1/test_checkpoint_identity.py:3:1
+   |
+ 1 |   """The reader's MLP layers are list-indexed; hashing must preserve every layer."""
+ 2 |
+ 3 | / import tempfile
+ 4 | | import unittest
+ 5 | | from pathlib import Path
+ 6 | |
+ 7 | | import numpy as np
+ 8 | | from pccap.revision_v1.checkpoint_identity import checkpoint_tree
+ 9 | |
+10 | | from pccap.revision_v1.reader import params_hash
+11 | | from pccap.revision_v1.stage4_cell import ROOT
+   | |______________________________________________^
+help: Organize imports
+   |
+7  | import numpy as np
+8  +
+9  | from pccap.revision_v1.checkpoint_identity import checkpoint_tree
+   -
+10 | from pccap.revision_v1.reader import params_hash
+   |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

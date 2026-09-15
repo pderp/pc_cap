@@ -1,0 +1,819 @@
+{
+  "bindings_sha256": {
+    "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/clear_candidates.jsonl": "c2e01edcd2506c0bae9240e52a6742f8183a2860560c4cbb332c4ef7a980b296",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/flagged_candidates.jsonl": "490220628dd298dadbf9725161afd92beab4854bbaceefea7898c96542093f73",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/ordered_candidates.jsonl": "1d144e9937fb07d1c68b7737db014985f291da4952c91761b7a8bab5288a3a4d",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1c_v1/record_review.jsonl": "30c9b1d3aa602d9030c60d0f7e8b601e4efbd48427181e160414f4ed5a6d1469",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1e_v3/mend_candidate_subjects.jsonl": "6a9aefc1a1f506973fe5a8db783b427849e70b578ca3f2665fc8815258b7ceb8",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d1e_v3/prior_clear_subject_survivors.jsonl": "b43a5f4ce17736ef44bcbfd2154168d13efd45d85077a00ef1a31570057cf4a4",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d2_v1/counterfact_remainder_candidates.jsonl": "68c96577e15d31f6c49f87afc840e0d5b176c6fee2e089e222b556a55039acaf",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d2_v1/v3_additional_exclusions.jsonl": "784b0ea0ecfe985bc33746d9f1143ec8c00af3fa9b4059a1c76627711010b9ef",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/composition.jsonl": "5bad38276be292cbd9aa27eca93419f56a371b3bfd60cc63c1da6d80d7c04865",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/conflicts.jsonl": "12153ccaf06dec8065a7b13a815fb64bf1310aea99fd56055f1714da2fff4ae9",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/excluded_items.jsonl": "1659f25b77991a7f2f7a5b8f513122474a9b8dbb4003ca570ce72cf156bba5e0",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/excluded_subjects.jsonl": "59ec93094a4b8a4221d4d03f959ede24a9ef1ffb9bbde3348ab4f8a1d37f29e1",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/items.jsonl": "21ea95de7978613d502248735cedeaaefaf36e9b21c2113a37bd6866f00688d9",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/subjects.jsonl": "f25c220394808e69af41c1c249a09552359a63ca73cdef900ea5cb6c78ab2470",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/token_ineligible.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/zsre_overlap_subjects.jsonl": "9c2b8bcd63ebd7e982baecf330d2813ad86deae782bc8bb5a749facc54acc74f",
+    "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/10c66461e4c109db5a2196bff4bb59be30396ed8": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+    "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+    "/home/derp/cap/assets/hf_cache/hub/models--openai-community--gpt2/blobs/4b988bccc9dc5adacd403c00b4704976196548f8": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+    "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s0/theta.npz": "d42cd97a761ee7c56c041694f57c0f8ff31798ae45b99cf714728798ebb0f7ce",
+    "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s1/theta.npz": "c21b2b5ce4105f2be82204d615dc9e5e538a1ecafe9fa60fc6291f257114eb6c",
+    "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s2/theta.npz": "ec9dacb446a9649470253419a9fdbd49e734a0d49fd4c099a2d8cc69eafed2fc",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_24/r1_24_literal_v3b/continued_params.npz": "7591cfd1209f01c1d9877be6b596da56e3a3b45c2fa3e693cdb31407bbf59ef5",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_24/r1_24_lm_v3_lr1e-8/continued_params.npz": "6ef32487c4f4e2641ee0b5aba966651741788a98549c27292e6d40fa583992c6",
+    "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189/config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+    "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189/model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+    "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189/tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+    "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r11_zsre_v4_s0_300/payload.json": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167",
+    "/home/derp/cap/pc_cap/docs/R1_stage2_notes.md": "e154673ef4b6314c3ab40740f11ed5f78573da3fe061c0c164fb37f593fa0d85",
+    "/home/derp/cap/pc_cap/docs/R1_stage2_report.md": "b370a02d9b74f8bd616b28c01e080d35ac35016784ee72512090a989279c6569",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_draft_v2.md": "0f286b905baf910a418c21a4906560b98049c8a40e1ae6cc462551c5b8a86f2a",
+    "/home/derp/cap/pc_cap/docs/decisions.md": "eca9e6dab273ffa35cca07ec46aa8b33eecafee200a72f68ce57a7af57de4898",
+    "/home/derp/cap/pc_cap/docs/environment.md": "2808340923bab47e0c83a71ecaf4a7aa33146291f2cee73ecae758033331ea68",
+    "/home/derp/cap/pc_cap/docs/lead_queue.md": "b41170324590fcd297d0bc10c2ffac6f448eb538529c5891ad7879d7097558e4",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-64-zsre-v4.recipe.json": "5b9bca5dc360effafadee9a858dd3c1ebc540372f7c763ab33145d570573eb56",
+    "/home/derp/cap/pc_cap/logs/r1_round11/exposure_audit.json": "3667395a937de5869d8161ff350f04aaaf0e4183a1636e70b61dd6e78cbf63bd",
+    "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "/home/derp/cap/pc_cap/manifests/dev/challenges.json": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+    "/home/derp/cap/pc_cap/manifests/dev/counterfact_dev.json": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+    "/home/derp/cap/pc_cap/manifests/dev/mquake_dev.json": "7aa9f64b9f52cda882ecee234d76a8f6fed2890d09fda0d20fce57c999207089",
+    "/home/derp/cap/pc_cap/manifests/dev/mquake_dev_v3.json": "e1031f79a967d8831c9a328bcef188447d0acf30945adfc7834b0a3a3f485f4f",
+    "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/counterfact_fresh_candidates_v1.json": "0d1ac13607ea5d2a3082dece3de01cc6a1943957b3ceb355382d5636cbccfe44",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v3.json": "d3549f43327ec80f497cfd71df82494c7c0bded02c8e6f5c2c333800b2489805",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4.json": "01b72fd2b8de0750f839cbb5fc4164054656f92cf46bd4e3abc1e061bb78c5ec",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4_supplement_v1.json": "1d4302542de5a53dbcb40402f78772151c315850797cbcac2f6a9bd94c017715",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4_supplement_v1_rebound.json": "839fd1a496dfbba4a0c087edc83c197307277366bcf4b9f06fdbc54393bec3bb",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4_supplement_v2.json": "740e3093981d8ce0e0bda10ffcc535a2898dd4a43195c255afbd3aea1d2963af",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v2.json": "481e04c3eba70ea2f85aada9c0599c4f44031ea6cd7c75cf6c03cadec2c369a8",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_v3.json": "e214de7d048c6b104fc62c75757eed01f12b47fb330eaeeb58c1a2bec8fbbd4a",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/mquake_items_v1.json": "2cfaea61c1631b06a5036c298d4ecf5bb6c8b581d8560e32bcf55076430c9a25",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/mquake_pool_v1.json": "5105a074c9eefa86d18e51345fe09c90858716354e3247c7851fbbb9dc2e8e0e",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/primary_condition_v4.json": "6e5d88fe764941b7b72609dc9d6ae4600140c57a871733f8100fae4a54f9ece6",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_budget_reconciliation_v1.json": "93bfdd619187a2df748d9cbbfa8f6206d011d09ce63f096184249a14d4fa419b",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_control_lm_v3_lr1e-8.json": "0761dd4bb2ca09be3773d2beb7c7febd2e15decf0c52ae3b47c8e2f8aeb5588e",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_control_v3.json": "82745f183ed70120529289afec5cded121e220d0c0268e8a0f5fcec46b84958f",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_draft_v3.json": "43618eabfb147d31e41229bb82b09b7f0387cb4d52e9901dec7ac462158b520c",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v1.json": "32954cbe50b07140e73ffbf12c16c871ea243fc373f2952e98f329e207ef1b60",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v2.json": "1b639bd5d10e0a29ecfe3fe58e22b1654e3c971ab55eedf5990baf4961afff90",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_candidates_v1.json": "540ccf1448c5299d2b4861f85720a59f841ba2354aac18c1bc7ef72360b7f2ad",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/zsre_fresh_candidates_v1.json": "840f77494b7d747b92eadea88ecee2f6a12e59947a0ea8cc1dc0c51b92db78d7",
+    "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "/home/derp/cap/pc_cap/results/R1/r1_24/r1_24_literal_v3b/summary.json": "8574c3767dc5b47513371f52012de5ffbf1d3b9b3aa88fd3b87a22fdffcbe53d",
+    "/home/derp/cap/pc_cap/results/R1/r1_24/r1_24_lm_v3_lr1e-8/summary.json": "1a3674849fadbdb9e67ea50121e3103de13eafdcd4f25f9e94f164258d38ab8e",
+    "/home/derp/cap/pc_cap/results/S2/radius_calibration.json": "5be5f371cb47990256331991a46e8639a2db4c675893688ac7d671dd19d88551",
+    "/home/derp/cap/pc_cap/results/S2/residual_scales.json": "b901d4c02a076b00f4fa036dac2356e6015192cebf2dcfed6a483a64ddcd735c",
+    "/home/derp/cap/pc_cap/scripts/r1_57b_stage4_inventory.py": "7678d4958ff883484cfb30a0c005af004fb91c164382d19b183ee74301c8097d",
+    "/home/derp/cap/pc_cap/scripts/r1_58_draw_streams.py": "7bb071066f69058da4f2de53c9ba01b69e7d317cf33ddc28dfe3fe66ab11db17",
+    "/home/derp/cap/pc_cap/scripts/r1_61_cell_driver.py": "ed1b96147cf40fe1d0571815d819b7b2292cb39915045bd2e288ec8633d0dc22",
+    "/home/derp/cap/pc_cap/scripts/r1_63_freeze_package.py": "5306e8a4f1b9f95ffad29042c005bd63bfbaf889ebe12eef38824c558a591a2f",
+    "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py": "1566a6ac8d3a9932ae95abc6463c9d8af5de97d05279577b7b6ac97cd8865536",
+    "/home/derp/cap/pc_cap/scripts/r1_64_dev_payload.py": "d4a24b14229403cea09fc7da8a6052d51e2df2e0636112eaf8db68e238f8cba0",
+    "/home/derp/cap/pc_cap/scripts/r1_64_materialize_base.py": "f47ae80e8b9ee3c16e346b9cb2343268b81e103b63b2deaaed580fc83e7ab3bc",
+    "/home/derp/cap/pc_cap/scripts/r1_d1g_freeze_register_v4.py": "ae4f2a15f4fc577cbf651123cb4fa6d93fd199143990d5e96de655058e3e594b",
+    "/home/derp/cap/pc_cap/scripts/r1_d1g_mquake_exposure_supplement.py": "aab9fd5ed627fa4d70498af69042e8701185fc786adc229c85c1d55232ac13f4",
+    "/home/derp/cap/pc_cap/scripts/r1_d4b_self_contained.py": "6e7efc8c56756b15fa8cbfcb3c4a0939a0f76ab16deff3120ee1b4e36ff638b4",
+    "/home/derp/cap/pc_cap/src/pccap/__init__.py": "376424fe07837e0a30c32109587a702fba9b7949320b2818b8ac33b3a9f40c47",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/__init__.py": "f5ec09ba1c581d50683b03e8ae9f313e298930dfb5831654a1f69b32390afb88",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/bootstrap.py": "907842ca98f568d2bbbbe63d31ae6524560341c6d10cf0cda6dc20c274883d20",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/budget.py": "19a643d24c0e7758425318ebde08ced1f85931993e4ae18eca0a73c1454ff9b0",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/d1.py": "7764c500602ee065725cf5b01da661fadf2a5ebe6cd816b628192645005c974b",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/frontier.py": "f03f38db35dbc0e5d921dbb45b952646fa6c94ed12b76d286fe1db8ac9cca39e",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/paired.py": "b4bf5e955da84ef9f3121183bafe78b84d0ec9db43fb12ad02e98783e05d1014",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/report.py": "994aed36d862ef6a9684ec6a8e42400d826ff957d1b2c4ef8681d7ce331d032f",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s1_p1.py": "2bdea44ce51a33d87acd8523ad867560e539bdbeab5e12d53edf3c3dc06dddeb",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s1_p2.py": "82be378f27f8d57cb7df42ee9723545d5928583cfc282d9b99a7f3b1243c19d2",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s1_p3.py": "a7945bc5942be923f488eb737c0e6a659902ddd1a23a694627fba05bbd96b5f4",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s1_p4.py": "97c363396769a9bd34ca233c82aa6022f3e8a06dd1e8647421668db3704c5c38",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s1_p5.py": "6a44956f6371c37228a5491a85c426b97a9e153883ed2960243c9923e7a14fdb",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s1_p6.py": "4995e61bc53f2f2eb722abf426cca989d5689ebe3a82e5d54b64be5109c6002b",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s3_03.py": "475b4cf4f50678feb24fb6cd3397ad6f9e54fdde8b6d25e6c135ed5e35c31be5",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s3_04.py": "e7df55d2d2290f5403305451c5bc43b6f33215e140c17b73dcada103235c7438",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s3_05.py": "201167e0f1a264bb24ac48db2ec6696b6f21207b3a35f95c4301f8a40570a4d6",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s3_06.py": "149afcde7e4bdd373e5f3da7618d710d939e5774eb193fa8c8efc3902604f1ae",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s4_05.py": "62729151ff6095c9890324ffe29b6bb0ef031725c38c78522b17e90e95b58fde",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s4_06.py": "8dd166a7afa112ef4a531c7042269d5f34ebb11362cf65c48df2feea37dbc859",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s7_01.py": "06cae113f752bae28d42cbd9154e12c9093355a2649fbd9e4cb3f00f134757ab",
+    "/home/derp/cap/pc_cap/src/pccap/analysis/s7_03.py": "7e8f6ef3ac06dbb5883196598ce99f17ae9c598859970172f3d0698f39682448",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/__init__.py": "f5a9afd9988d591d3fc02270106c2d267bf6ef8333d3ba1587a33c93c2054bb3",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/b0.py": "c4541c61e968e464c9a8c36795a0e6401c9aa4083593374313fbf9de8bdd8607",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/grace_adapter.py": "0be3e9621fd3d68c5e1c21a3ac2a85ffd9697bb88852ec52d8b6f32559dd2c0f",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/grace_batch.py": "fe7f95acbc82f7c1f59f755dd0181f6270724adf5834ba211281fa092fe7068b",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/grace_jax.py": "a9d7641af65284c4ff4d59c1a5a3dd4bd2c033c910c25acf4171d9ea11f44c24",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/grace_parity.py": "350b203eb010df7b9710b910f54560c70988c82a5bf8461404dfc932b9b163a0",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/lora.py": "90a621deb79e525bbd204344859e473d7d6db688512e967bc671b209dcf44434",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/lora_forward.py": "854a51a4cea8b880adeb1a9836bfe341354f8693ddda8cb2540f6de2fc8570c4",
+    "/home/derp/cap/pc_cap/src/pccap/baselines/replay.py": "836e229f2cc2d517222e5dcaf0df92e12a86f0820f4b43477c11c7afc9633463",
+    "/home/derp/cap/pc_cap/src/pccap/bases/__init__.py": "2caef19075e7ad383818d8e3899aa46a0e207209d33c812d0986240df6e25e56",
+    "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "/home/derp/cap/pc_cap/src/pccap/bases/checksum.py": "5c5498ca24f4598f11696b4640e138ca72200ae0b9a675ba2b5be9d7c98db0db",
+    "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "/home/derp/cap/pc_cap/src/pccap/bases/hooks.py": "96225226c41a068b2d61ace3c747b257f9a006aab6e8d127267f15711fad9f50",
+    "/home/derp/cap/pc_cap/src/pccap/cap/__init__.py": "8ffb2244bb60362bead74e74aac980b5d1c4f6f0cc10f58a7917baa3f8a517ee",
+    "/home/derp/cap/pc_cap/src/pccap/cap/bank.py": "d470e8f8b923e46edbe30ded9fcd6befcedd9a9ea45644649bbcab378b7b9727",
+    "/home/derp/cap/pc_cap/src/pccap/cap/calibrate.py": "b5fd62a44526d4e0a891a38b1467283302b7bdf012cba63530b69227a0eebfcf",
+    "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "/home/derp/cap/pc_cap/src/pccap/cap/features.py": "a89c71cf027a9952dd16e17c56933ae7a44451ab2f7a085c0ba8ac1dc1e305f3",
+    "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "/home/derp/cap/pc_cap/src/pccap/cap/memory.py": "d38ec41647e96cc9f66ee5b2c179867ffd8f69ae9d4b726ac8de812bdab36b71",
+    "/home/derp/cap/pc_cap/src/pccap/cap/metadata.py": "966343426e59500cf69cb34e0c79ddc9fe5916d6b0d69e2a5305d1442127c5fa",
+    "/home/derp/cap/pc_cap/src/pccap/cap/transaction.py": "d12738bcb680271f020f33cb23320be0334041926bd8c20b275ae16cad3e6601",
+    "/home/derp/cap/pc_cap/src/pccap/cli.py": "15b58f71cfe5ab5b780a8de7b74951c6db304c9cf8fce99fab7aa3dc25df1bc7",
+    "/home/derp/cap/pc_cap/src/pccap/contracts.py": "daa7f294e00cc73d08436c4e165b96f5763706f566ed974586e5b3100f352390",
+    "/home/derp/cap/pc_cap/src/pccap/data/__init__.py": "3f9cbd65ed69bc530b9805e1b89c4bb28079eba8c08ba446f77d33d9e36d870f",
+    "/home/derp/cap/pc_cap/src/pccap/data/challenges.py": "9dd8c53e33044595af44d2a3a36903401557089fe6b0c7a3a047b88337e65f83",
+    "/home/derp/cap/pc_cap/src/pccap/data/confirm.py": "23cce559bad48daa0f81c51a92ac91358a804389aef9008b1e016f57668465e6",
+    "/home/derp/cap/pc_cap/src/pccap/data/confirmation_integrity.py": "74cefd84c204e93465179f57896aa9b818158c1d37b1711a6a93618d07b5fa26",
+    "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "/home/derp/cap/pc_cap/src/pccap/data/fetch.py": "bf40977d05f882d90949bf16ad3f5f67d9e8ad5d1ccb476179e8ab40427915b3",
+    "/home/derp/cap/pc_cap/src/pccap/data/grammar_streams.py": "9bc6ab33dae8c8c40de8780206a77a383d5967ae3c1df0a06a380676823c727a",
+    "/home/derp/cap/pc_cap/src/pccap/data/lm_sets.py": "badcbd8adf0158eaf783645cbd04350b06126d193eada431a7d76a33cbf0b039",
+    "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "/home/derp/cap/pc_cap/src/pccap/data/splits.py": "66b00cf7514cf7c0016e945140f1d9ca717abab1e3a1441bd887b7e26d4e8530",
+    "/home/derp/cap/pc_cap/src/pccap/data/streams.py": "1e106f6ea4170211ebc2a3d4ccedb8862fed8d0b0cbbcbea2c87663169d006cc",
+    "/home/derp/cap/pc_cap/src/pccap/data/tokenize.py": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+    "/home/derp/cap/pc_cap/src/pccap/distill/__init__.py": "c3ffe923d5a0ce369e1ea224372d64c25499d2216dfc53fe8e2c328ab5a22f68",
+    "/home/derp/cap/pc_cap/src/pccap/distill/data.py": "fe8be45c7e4560ff863d3fe394f1b31774287f87eaa6abb621bd35a1c8d500df",
+    "/home/derp/cap/pc_cap/src/pccap/distill/preflight.py": "6d60df743d9798c9c6f64ebcfbf0c31bc193f8a491fe2d1b8fa1ba2f18361e34",
+    "/home/derp/cap/pc_cap/src/pccap/distill/recipe.py": "94acc478e444aec3a1c93a18b898c6a595c61a4dce6b1bb6c7b3c4fdeb9cb9d1",
+    "/home/derp/cap/pc_cap/src/pccap/distill/schedule.py": "ccd15fa573606e5458e7a55571255aaa8667b500edfb24b46ae7150b6051e7db",
+    "/home/derp/cap/pc_cap/src/pccap/distill/train.py": "b8b0252b8103bd71c21424b81a0808a2442ece77a5048f0ca38a6d52d2dd324f",
+    "/home/derp/cap/pc_cap/src/pccap/fixtures/__init__.py": "00b24d3238c92f7a80b9cade6437a7db14cf54e2fd1a2705db7dd57e1f695faa",
+    "/home/derp/cap/pc_cap/src/pccap/fixtures/grammar_eval.py": "24ca8eaeb40798b485eb88aaf43fc26a50606074a31cf882a0e1f04616def709",
+    "/home/derp/cap/pc_cap/src/pccap/fixtures/grammar_generator.py": "7065a66f31ab76b4b52b93263543670dc20a9997975dbaf9bbcdef9057843c95",
+    "/home/derp/cap/pc_cap/src/pccap/fixtures/grammar_model.py": "19c99d0c5359bb842c5be6c8cf31c73ee6d380c85c7776f9fb8fe35fe7937249",
+    "/home/derp/cap/pc_cap/src/pccap/fixtures/modular_control.py": "67f69900f58d898f22a57cc217d0d744cf091642f0b0fa47654057f54cb2d811",
+    "/home/derp/cap/pc_cap/src/pccap/fixtures/tracing.py": "69458aa762ee0f41de7233c9a53a216781c0545a7a61357b097dafad16a94b6b",
+    "/home/derp/cap/pc_cap/src/pccap/harness/__init__.py": "d604753027506b7435a8df1b8af167c9f5cc5b0e427638d1be64bf8df697b2c5",
+    "/home/derp/cap/pc_cap/src/pccap/harness/arms.py": "1e5442b558ecc8cbd54c5d5e43473a90dfe8079efca6e7aacffbeafe380061a0",
+    "/home/derp/cap/pc_cap/src/pccap/harness/determinism_probe.py": "fb5a0081011eda5c2c4fe64555cc505ca92c7ee9a97c0c141174d9c78136f727",
+    "/home/derp/cap/pc_cap/src/pccap/harness/execute.py": "d8d6a66bf2ecffee7e73f19545cd3197010397d52b891d6b0d17ffd7af84fdd6",
+    "/home/derp/cap/pc_cap/src/pccap/harness/freeze.py": "d6bade515e1af22c65bcd3b196b731419172f5a7c73b79de7415e6f9a2987d9f",
+    "/home/derp/cap/pc_cap/src/pccap/harness/identity.py": "854a7420ed7f048702c447a292f6e7ceb9966829d5a64b139609edb24abc602b",
+    "/home/derp/cap/pc_cap/src/pccap/harness/lease.py": "3bf728cd93a072780b52201f845cf87fa760a0efc28068aefcfa9d79cd6b2d82",
+    "/home/derp/cap/pc_cap/src/pccap/harness/ledger.py": "0d7b5a2be60739414122b6ff5af78c71a6e13605b01d3365a62f70a90c304ca3",
+    "/home/derp/cap/pc_cap/src/pccap/harness/records.py": "01584e9477bb30580cf5bc4eb681c97bad0be68b1d25894ac7f66db824d55234",
+    "/home/derp/cap/pc_cap/src/pccap/harness/runner.py": "10e3fe5eb622522ab65fa4ec2d90ea41e14afcaf2a5708c61d8e62c62a9d1b71",
+    "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "/home/derp/cap/pc_cap/src/pccap/harness/schedule.py": "a3bba5c94899aa232fcfc7636d8bac9f53ec8a98f3a70a496e58d59a80b8981d",
+    "/home/derp/cap/pc_cap/src/pccap/harness/schema.py": "3ab1b19f1f5f7d60bbd5382b9060a88614360faa818c98bef747ec8986f559bd",
+    "/home/derp/cap/pc_cap/src/pccap/harness/snapshot.py": "0597be625a5a6a95e0215e5a2b2cded90ce49b7c6c2837b7729d229664e0dd9e",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s0.py": "892af30fad8daf5913c300f43e4aea73ae55e1d70568981ef7172933bc8fb134",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s2.py": "d3870ef7f680ed79b7d1ed8d709ded2bfeba677fee3995ddd12f54db3c6dda2b",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s2_throughput.py": "342877049b142fd7baab2a06f2841aceacbc5916df16a872d92627e447039ecc",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s3.py": "12c466c72b5ae5be574ff3d02a3c46b0faf743eb538f76ba2bfd454f0004f18c",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s3_fixture.py": "396958f22408576f6189442f30023cf71edbb3de090cba913e139a7f7384ed23",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s4.py": "a263cc82975f6d62582cc281e546d85f0362a7b95ccc2dbbe1d5a45387ed04d0",
+    "/home/derp/cap/pc_cap/src/pccap/harness/stage_s5.py": "38d0e22f2987eed91c561c4721b1301d074561852dec1b9dd8f6c00d4997edb2",
+    "/home/derp/cap/pc_cap/src/pccap/harness/status.py": "bc8184d6c62ee5fdbcc3c045818461b3567a7abedca2122d7ef26aee4b375aac",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/__init__.py": "16c599cba5b4dd05aa1de495baec611e9b8fa776e275e0853b0a52c9aa814863",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/cl_matrix.py": "ce8101d21b83deec625d200f44dd4c8fd4e6a8f4d9db3387e0447471a5f6be0d",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/divergence.py": "6793233c1781d8509a024da96f8f00b2c2152a5eeabf7ce89bf8c93943ee8eea",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/hvp.py": "97b7d468af942dde818fc7ef33b3e98e6a4fd1706bc29678ff5759a5ac4e2001",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/order.py": "f0e999bffdbea986ba7014db8712c106bd553c751f5deea94238891718f3448f",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/overlap.py": "31fd906b176b9b2a2fd84494e6336afcddc7041bc180c02454b79858087c7da2",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/participation.py": "d581d809b8d0aa61a2122464b6827c381e1ea2e0dfd8b0222c9840a39200850b",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/rank.py": "aaeafefaf4592b7358b41d789457b21d4497f995de4cba69dbcf0b7f0b9fa15c",
+    "/home/derp/cap/pc_cap/src/pccap/pc/__init__.py": "fd01da3d0966a4dcd7575f78226f9c9ba6b53adfb50554c005c627c48147ab4a",
+    "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "/home/derp/cap/pc_cap/src/pccap/pc/kd_energy.py": "bb405dfcd7a3027e7839610ea5f322276b2f4740bd1182870575ff17f5b024c9",
+    "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "/home/derp/cap/pc_cap/src/pccap/pc/weight_phase.py": "ff7c03b11883dd41c5b6d157cd4f9557f4be3b9e5fd5cde5f9a489b1a81f8600",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/adapt.py": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/analysis.py": "b9a40ac1081f1eee28e941d341d1adb91f304654e327bb2e1ce639450006bff2",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/analysis_stage4.py": "dd459f706afb04f578361f43163a86d9ac24c93b434e71669b60cf3c8ed1da8a",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/checkpoint_identity.py": "084b018eb606bd74893ab82ccb648d52827d8524eb62bf1add461c01fc550775",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/contracts.py": "01f55b4c70d1ffa36db8404e76d060c04741fe5992f3e7a118d59272c1a5993e",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/controller.py": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/development_cell.py": "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/endpoints.py": "4053ac0ba3fd8de5aea0c04fc289f673144d03141ddd5e0b508610b7cf4bdc54",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/endpoints_composition.py": "ea7b1aa6d15a5821275eb4caa5207f612851d14cd3e3fa203d89da58cc889ff1",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/endpoints_unseen.py": "62193770bc3f898dedfdfaed820bf0660d795192f60c254d7c54e91859585d3c",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/epc_train.py": "38a6620e4dc513d12a22f9a189c59daf6701ddab548b5c10e7709aae31117e5f",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/final_namespace.py": "8f028c96320ba455c3d39537e21788e090de94e91825122769da2d47e6812df7",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/learner.py": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/memory.py": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/observations.py": "eae45d586303bdb7e8dc16cd965922c2af0666f12c528b51eaaa4c618d75b150",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/reader.py": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_adapters.py": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_assays.py": "6f30a472b77b835bb75745ba23dd11bb1903966e49473003b96722e67aa3e315",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_cell.py": "164638b177a408fd9753690efd919960c41d2b3595934425189a1d4213eb5b63",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/stream_train.py": "d679a22720dd7034d16451d9d90cf6e93c2d684b29abab6e8e670f2d9fcd5b18",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/train.py": "22a5754e6fc752076c4a8a6ff6670d2c9a519a14752c8e75ade3c12fb3dc74aa",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/train_fast.py": "98c6011e6e423b26ebb3434de412da1d1e2b2e21ab968c1adc6ba4abe45b7390",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76",
+    "/home/derp/cap/pc_cap/src/pccap/routers/__init__.py": "8813cc6cd9b7a4a67903312eee4003ccf411f167611e7e3fa9d7c341810894c0",
+    "/home/derp/cap/pc_cap/src/pccap/routers/_common.py": "fd5c0485297a4b416638396980952fad2cf05d36bf27033ffc7cd962081e37e4",
+    "/home/derp/cap/pc_cap/src/pccap/routers/full.py": "02c0582120bfad912a4c3b07e50e62931e5b136204aa8c023ee24da120d48872",
+    "/home/derp/cap/pc_cap/src/pccap/routers/last.py": "3f819a6329113a9543a3bc07b6334ce6b2708ca238eaacdb9123c9b2da8d3bcd",
+    "/home/derp/cap/pc_cap/src/pccap/routers/measured.py": "45844c0394a1601465b53d1a86589a7e53d4247c23b32e4ead78d3bc2d0813f6",
+    "/home/derp/cap/pc_cap/src/pccap/routers/random_.py": "d77160a6825fff9312584c526336a1160961c6236bb1a50235bb9a10f8197400",
+    "/home/derp/cap/pc_cap/src/pccap/routers/supplied.py": "91517053aa3fb4ed44419612befa3e7b9ae89c86ba7a8a5ed2b9aa204d4ab89f",
+    "/home/derp/cap/pc_cap/src/pccap/transport/__init__.py": "49e7009fe1871a598da30d04e74440c67bbedfa477a93b416d6cfcab2aa24c47",
+    "/home/derp/cap/pc_cap/src/pccap/transport/transport.py": "1db88fd6394ed847d2bff5e628586b51772d350d61ed85dbe83047fb436a8a9c",
+    "/home/derp/cap/pc_cap/src/pccap/vendor_hdpc.py": "6bad20996a750247f2723cabc98e60ebab08cff72d0a36cd1895449e981fa8a0"
+  },
+  "draw_authorized": false,
+  "draws_emitted": 0,
+  "freeze_ready": false,
+  "gpu_seconds": 0,
+  "launch_authorized": false,
+  "mode": "dry_freeze_candidate",
+  "name": "freeze_candidate_v1",
+  "open_gates": [
+    {
+      "gate": "U01",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: retain all eight controls and three datasets; specify plan-9 deferred branches and primary stronger-control claims",
+      "status": "open_admission",
+      "title": "scientific comparisons"
+    },
+    {
+      "gate": "U02",
+      "lead_closure_receipt": null,
+      "protocol_status": "Gate choice accepted (DEC-043), three development seeds recounted; cache repair, exact v3 drift/profile and MQuAKE training/transfer identity remain",
+      "status": "open_admission",
+      "title": "reference"
+    },
+    {
+      "gate": "U03",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: literal qualified; executed LM fails fidelity; obtain admitted LM checkpoint and refreshed budget",
+      "status": "open_admission",
+      "title": "continuation"
+    },
+    {
+      "gate": "U04",
+      "lead_closure_receipt": null,
+      "protocol_status": "Partial: 52,498 bound candidates; post-register exposure, aliases/context and teacher yield pending",
+      "status": "open_admission",
+      "title": "zsRE freshness"
+    },
+    {
+      "gate": "U05",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open receipt: strict zero; retained dataset needs explicit reason-specific exception under DEC-042",
+      "status": "open_admission",
+      "title": "CounterFact source"
+    },
+    {
+      "gate": "U06",
+      "lead_closure_receipt": null,
+      "protocol_status": "Partial: tested count-only recipe and all-three counts; lead approves strata, source precedence, training reservation, seeds and joint capacity",
+      "status": "open_admission",
+      "title": "draw/RNG/splits"
+    },
+    {
+      "gate": "U07",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: MQuAKE source schema prepared, no final payloads/seals; construct challenges and validate final three-dataset loaders",
+      "status": "open_admission",
+      "title": "payload/seal"
+    },
+    {
+      "gate": "U08",
+      "lead_closure_receipt": null,
+      "protocol_status": "100/300/1,000 retained by scope decision; full-validation windows/tail/reference and detailed challenge cadence still need binding",
+      "status": "open_admission",
+      "title": "endpoint cadence"
+    },
+    {
+      "gate": "U09",
+      "lead_closure_receipt": null,
+      "protocol_status": "Partial: MQuAKE direct source questions/dependencies now available; final compatible composition and near/revision reservation/cadence not admitted",
+      "status": "open_admission",
+      "title": "challenge semantics"
+    },
+    {
+      "gate": "U10",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: freeze bounded-versus-termination-qualified primary and all decode settings",
+      "status": "open_admission",
+      "title": "LS convention"
+    },
+    {
+      "gate": "U11",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: rarity-cache defects reproduced; exact comparator observers, final challenge loader and replay/cache identity checks needed",
+      "status": "open_admission",
+      "title": "implementation"
+    },
+    {
+      "gate": "U12",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: freeze family across three datasets, strong controls, v2 allocation and conjunctive claims",
+      "status": "open_admission",
+      "title": "contrasts/multiplicity"
+    },
+    {
+      "gate": "U13",
+      "lead_closure_receipt": null,
+      "protocol_status": "Partial: .05/\u2212.02/\u2212.01 CPU adapter tested; lead freezes inequalities/applicability and fidelity/drift admission",
+      "status": "open_admission",
+      "title": "classifier/fidelity"
+    },
+    {
+      "gate": "U14",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: no accepted numerical pass rule for unseen, composition, revision or size",
+      "status": "open_admission",
+      "title": "secondary thresholds"
+    },
+    {
+      "gate": "U15",
+      "lead_closure_receipt": null,
+      "protocol_status": "CPU implementation/dry run complete; final independent LS/case identities and confirm-mode admission remain",
+      "status": "open_admission",
+      "title": "analysis adapter"
+    },
+    {
+      "gate": "U16",
+      "lead_closure_receipt": null,
+      "protocol_status": "Full scope accepted, old envelope superseded; v2 P1 measured only; exact all-condition/all-dataset profiles, shared costs and ceilings remain open",
+      "status": "open_admission",
+      "title": "budget"
+    },
+    {
+      "gate": "U17",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: final matrix/code hashes, queue RNG, bounded retry/resume and failure accounting",
+      "status": "open_admission",
+      "title": "execution controls"
+    },
+    {
+      "gate": "U18",
+      "lead_closure_receipt": null,
+      "protocol_status": "Open: charged-spend ledger/calendar anchor and measured 360-cell critical-path forecast needed",
+      "status": "open_admission",
+      "title": "schedule"
+    }
+  ],
+  "schema_version": 1,
+  "sealed_payloads_opened": 0,
+  "seals_emitted": 0,
+  "sections": {
+    "analysis_inventory_bootstrap_margins": {
+      "adapter": {
+        "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/analysis_stage4.py",
+        "sha256": "dd459f706afb04f578361f43163a86d9ac24c93b434e71669b60cf3c8ed1da8a"
+      },
+      "implementation": {
+        "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/analysis.py",
+        "sha256": "b9a40ac1081f1eee28e941d341d1adb91f304654e327bb2e1ce639450006bff2"
+      },
+      "multiplicity_admitted": false,
+      "registered_inventory": null,
+      "status": "CPU implementation bound; statistical admission pending"
+    },
+    "base_reader_and_continuation": {
+      "continued_controls": [
+        {
+          "checkpoint": {
+            "continued_tensor_digest": "5e6dc3bd240f1e8032e6aac9775c087f8742d63a597c4712ee247403850e604d",
+            "original_tensor_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_24/r1_24_literal_v3b/continued_params.npz",
+            "sha256": "7591cfd1209f01c1d9877be6b596da56e3a3b45c2fa3e693cdb31407bbf59ef5"
+          },
+          "status": "development checkpoint; final v4 compute/admission pending",
+          "summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/r1_24/r1_24_literal_v3b/summary.json",
+            "sha256": "8574c3767dc5b47513371f52012de5ffbf1d3b9b3aa88fd3b87a22fdffcbe53d"
+          }
+        },
+        {
+          "checkpoint": {
+            "continued_tensor_digest": "834da388b75ab8deb8de15d01f9864228e6e6e6f8673ad396c236ea157f2ece4",
+            "original_tensor_digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_24/r1_24_lm_v3_lr1e-8/continued_params.npz",
+            "sha256": "6ef32487c4f4e2641ee0b5aba966651741788a98549c27292e6d40fa583992c6"
+          },
+          "status": "development checkpoint; final v4 compute/admission pending",
+          "summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/r1_24/r1_24_lm_v3_lr1e-8/summary.json",
+            "sha256": "1a3674849fadbdb9e67ea50121e3103de13eafdcd4f25f9e94f164258d38ab8e"
+          }
+        }
+      ],
+      "matrix_model_seed": 0,
+      "original_base": {
+        "files": {
+          "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+          "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+          "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+        },
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+      },
+      "reader_manifest": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/primary_condition_v4.json",
+        "sha256": "6e5d88fe764941b7b72609dc9d6ae4600140c57a871733f8100fae4a54f9ece6"
+      },
+      "reader_seeds": [
+        0,
+        1,
+        2
+      ],
+      "status": "v4 is trained on MQuAKE v2; proposed v3 slice retraining will require new weights/version",
+      "weights": {
+        "seed0": {
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s0/theta.npz",
+          "sha256": "d42cd97a761ee7c56c041694f57c0f8ff31798ae45b99cf714728798ebb0f7ce"
+        },
+        "seed1": {
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s1/theta.npz",
+          "sha256": "c21b2b5ce4105f2be82204d615dc9e5e538a1ecafe9fa60fc6291f257114eb6c"
+        },
+        "seed2": {
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_tri2_text_s2/theta.npz",
+          "sha256": "ec9dacb446a9649470253419a9fdbd49e734a0d49fd4c099a2d8cc69eafed2fc"
+        }
+      }
+    },
+    "bytes_eviction_restore": {
+      "implementation": {
+        "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_cell.py",
+        "sha256": "164638b177a408fd9753690efd919960c41d2b3595934425189a1d4213eb5b63"
+      },
+      "status": "CPU receipts/restore implemented; all-condition physical/profile admission pending"
+    },
+    "calibration_tokenizer_masks_stop_null_rarity": {
+      "calibration": {
+        "bank_scales": {
+          "1": 70.70187377929688,
+          "2": 106.5766658782959,
+          "3": 425.5740661621094
+        },
+        "radii": {
+          "1": 0.2808128833770752,
+          "2": 0.4143741011619568,
+          "3": 0.18857809603214265
+        }
+      },
+      "calibration_source": {
+        "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+        "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+      },
+      "masks": "bound installed observations.py; final all-dataset calibration admission pending",
+      "rules": {
+        "binary_write_mass": true,
+        "hard_top1": true,
+        "lex_idf": false,
+        "min_score": null,
+        "null_threshold": 0.5,
+        "rare_df_max": 2,
+        "rare_overlap_min": 1,
+        "top_k": 4
+      },
+      "stop_tokens": {
+        "path": "manifests/revision_v1/stop_tokens_v1.json",
+        "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+      },
+      "tokenizer_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+    },
+    "ceilings_cost_ownership_retry": {
+      "accepted_ceilings": null,
+      "matrix_budget": {
+        "confirmatory_envelope_seconds": 54000,
+        "evaluation_cells": 240,
+        "expanded_full_matrix_ceiling_seconds": null,
+        "full_budget_fit": "undetermined until profiling; existing proxies already exceed envelope",
+        "interpretation": "legacy proxies are not measured lower bounds or new limits; expanded costs are explicitly unpriced",
+        "legacy_P1_P2_allowances_seconds": 5400,
+        "legacy_endpoint_proxy_subtotal_seconds": 802440,
+        "legacy_proxy_alone_exceeds_15h": true,
+        "new_S1_borrowed_stable_proxy_seconds": 263520,
+        "new_unseen_greedy_decodes": 144000,
+        "new_unseen_prompt_pairs": 72000,
+        "previous_180_cell_legacy_proxy_seconds": 538920,
+        "profile_full_scope_seconds": null,
+        "shared_training_charge_once": true
+      },
+      "shared_cost_reconciliation": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/r1_24_budget_reconciliation_v1.json",
+        "sha256": "93bfdd619187a2df748d9cbbfa8f6206d011d09ce63f096184249a14d4fa419b"
+      },
+      "status": "legacy 15h/240-cell matrix is stale; 360-cell measured ceilings and retry policy pending"
+    },
+    "eligible_ordered_payloads_challenge_dependencies": {
+      "development_manifests": [
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json",
+          "sha256": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/counterfact_dev.json",
+          "sha256": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/mquake_dev.json",
+          "sha256": "7aa9f64b9f52cda882ecee234d76a8f6fed2890d09fda0d20fce57c999207089"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/mquake_dev_v3.json",
+          "sha256": "e1031f79a967d8831c9a328bcef188447d0acf30945adfc7834b0a3a3f485f4f"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/challenges.json",
+          "sha256": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b"
+        }
+      ],
+      "final_orders": null,
+      "final_realizations": null,
+      "final_roles": null,
+      "final_seals": null,
+      "prepared_mquake": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/mquake_items_v1.json",
+        "sha256": "2cfaea61c1631b06a5036c298d4ecf5bb6c8b581d8560e32bcf55076430c9a25"
+      },
+      "status": "not drawn, not sealed, not admitted"
+    },
+    "endpoint_denominators_and_references": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "development_example": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64-zsre-v4.recipe.json",
+        "sha256": "5b9bca5dc360effafadee9a858dd3c1ebc540372f7c763ab33145d570573eb56"
+      },
+      "final_independent_inventory": null,
+      "full_validation_window_binding": null,
+      "max_new": 32,
+      "status": "final denominators, LS convention and reference policy require lead admission"
+    },
+    "exclusions_and_exposure": {
+      "counts": {
+        "counterfact": {
+          "candidate_items": 12246,
+          "candidate_subjects": 12246,
+          "new_exposure_union_subject_overlap": 0,
+          "new_locality_exposure_subject_overlap": 0,
+          "new_primary_exposure_subject_overlap": 0,
+          "new_unrelated_exposure_subject_overlap": 0,
+          "removed_items": 0,
+          "role_demand_proposal": 4050,
+          "source_items": 12246,
+          "source_subjects": 12246,
+          "subject_shortfall": 0
+        },
+        "mquake": {
+          "candidate_items": 2171,
+          "candidate_subjects": 2100,
+          "new_exposure_union_subject_overlap": 600,
+          "new_locality_exposure_subject_overlap": 144,
+          "new_primary_exposure_subject_overlap": 600,
+          "new_unrelated_exposure_subject_overlap": 52,
+          "removed_items": 3872,
+          "role_demand_proposal": 4050,
+          "source_items": 6043,
+          "source_subjects": 5577,
+          "subject_shortfall": 1950
+        },
+        "zsre": {
+          "candidate_items": 52411,
+          "candidate_subjects": 52411,
+          "new_exposure_union_subject_overlap": 0,
+          "new_locality_exposure_subject_overlap": 0,
+          "new_primary_exposure_subject_overlap": 0,
+          "new_unrelated_exposure_subject_overlap": 0,
+          "removed_items": 87,
+          "role_demand_proposal": 4050,
+          "source_items": 52498,
+          "source_subjects": 52498,
+          "subject_shortfall": 0
+        }
+      },
+      "effective_supplement": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4_supplement_v2.json",
+        "sha256": "740e3093981d8ce0e0bda10ffcc535a2898dd4a43195c255afbd3aea1d2963af"
+      },
+      "register": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v4.json",
+        "sha256": "01b72fd2b8de0750f839cbb5fc4164054656f92cf46bd4e3abc1e061bb78c5ec"
+      },
+      "released_subjects": 0,
+      "superseded_binding_policy": "v1 and rebound are historical provenance; v2 is effective. Historical embedded producer hashes are not current-code claims."
+    },
+    "executable_environment_hardware": {
+      "environment": {
+        "path": "/home/derp/cap/pc_cap/requirements.lock",
+        "sha256": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb"
+      },
+      "hardware_runtime_identity": "pending owner capture; no GPU queried",
+      "hash_convention": "analysis.digest(relative POSIX .py paths -> file SHA256)",
+      "src_pccap_files": {
+        "src/pccap/__init__.py": "376424fe07837e0a30c32109587a702fba9b7949320b2818b8ac33b3a9f40c47",
+        "src/pccap/analysis/__init__.py": "f5ec09ba1c581d50683b03e8ae9f313e298930dfb5831654a1f69b32390afb88",
+        "src/pccap/analysis/bootstrap.py": "907842ca98f568d2bbbbe63d31ae6524560341c6d10cf0cda6dc20c274883d20",
+        "src/pccap/analysis/budget.py": "19a643d24c0e7758425318ebde08ced1f85931993e4ae18eca0a73c1454ff9b0",
+        "src/pccap/analysis/d1.py": "7764c500602ee065725cf5b01da661fadf2a5ebe6cd816b628192645005c974b",
+        "src/pccap/analysis/frontier.py": "f03f38db35dbc0e5d921dbb45b952646fa6c94ed12b76d286fe1db8ac9cca39e",
+        "src/pccap/analysis/paired.py": "b4bf5e955da84ef9f3121183bafe78b84d0ec9db43fb12ad02e98783e05d1014",
+        "src/pccap/analysis/report.py": "994aed36d862ef6a9684ec6a8e42400d826ff957d1b2c4ef8681d7ce331d032f",
+        "src/pccap/analysis/s1_p1.py": "2bdea44ce51a33d87acd8523ad867560e539bdbeab5e12d53edf3c3dc06dddeb",
+        "src/pccap/analysis/s1_p2.py": "82be378f27f8d57cb7df42ee9723545d5928583cfc282d9b99a7f3b1243c19d2",
+        "src/pccap/analysis/s1_p3.py": "a7945bc5942be923f488eb737c0e6a659902ddd1a23a694627fba05bbd96b5f4",
+        "src/pccap/analysis/s1_p4.py": "97c363396769a9bd34ca233c82aa6022f3e8a06dd1e8647421668db3704c5c38",
+        "src/pccap/analysis/s1_p5.py": "6a44956f6371c37228a5491a85c426b97a9e153883ed2960243c9923e7a14fdb",
+        "src/pccap/analysis/s1_p6.py": "4995e61bc53f2f2eb722abf426cca989d5689ebe3a82e5d54b64be5109c6002b",
+        "src/pccap/analysis/s3_03.py": "475b4cf4f50678feb24fb6cd3397ad6f9e54fdde8b6d25e6c135ed5e35c31be5",
+        "src/pccap/analysis/s3_04.py": "e7df55d2d2290f5403305451c5bc43b6f33215e140c17b73dcada103235c7438",
+        "src/pccap/analysis/s3_05.py": "201167e0f1a264bb24ac48db2ec6696b6f21207b3a35f95c4301f8a40570a4d6",
+        "src/pccap/analysis/s3_06.py": "149afcde7e4bdd373e5f3da7618d710d939e5774eb193fa8c8efc3902604f1ae",
+        "src/pccap/analysis/s4_05.py": "62729151ff6095c9890324ffe29b6bb0ef031725c38c78522b17e90e95b58fde",
+        "src/pccap/analysis/s4_06.py": "8dd166a7afa112ef4a531c7042269d5f34ebb11362cf65c48df2feea37dbc859",
+        "src/pccap/analysis/s7_01.py": "06cae113f752bae28d42cbd9154e12c9093355a2649fbd9e4cb3f00f134757ab",
+        "src/pccap/analysis/s7_03.py": "7e8f6ef3ac06dbb5883196598ce99f17ae9c598859970172f3d0698f39682448",
+        "src/pccap/baselines/__init__.py": "f5a9afd9988d591d3fc02270106c2d267bf6ef8333d3ba1587a33c93c2054bb3",
+        "src/pccap/baselines/b0.py": "c4541c61e968e464c9a8c36795a0e6401c9aa4083593374313fbf9de8bdd8607",
+        "src/pccap/baselines/grace_adapter.py": "0be3e9621fd3d68c5e1c21a3ac2a85ffd9697bb88852ec52d8b6f32559dd2c0f",
+        "src/pccap/baselines/grace_batch.py": "fe7f95acbc82f7c1f59f755dd0181f6270724adf5834ba211281fa092fe7068b",
+        "src/pccap/baselines/grace_jax.py": "a9d7641af65284c4ff4d59c1a5a3dd4bd2c033c910c25acf4171d9ea11f44c24",
+        "src/pccap/baselines/grace_parity.py": "350b203eb010df7b9710b910f54560c70988c82a5bf8461404dfc932b9b163a0",
+        "src/pccap/baselines/lora.py": "90a621deb79e525bbd204344859e473d7d6db688512e967bc671b209dcf44434",
+        "src/pccap/baselines/lora_forward.py": "854a51a4cea8b880adeb1a9836bfe341354f8693ddda8cb2540f6de2fc8570c4",
+        "src/pccap/baselines/replay.py": "836e229f2cc2d517222e5dcaf0df92e12a86f0820f4b43477c11c7afc9633463",
+        "src/pccap/bases/__init__.py": "2caef19075e7ad383818d8e3899aa46a0e207209d33c812d0986240df6e25e56",
+        "src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+        "src/pccap/bases/checksum.py": "5c5498ca24f4598f11696b4640e138ca72200ae0b9a675ba2b5be9d7c98db0db",
+        "src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+        "src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+        "src/pccap/bases/hooks.py": "96225226c41a068b2d61ace3c747b257f9a006aab6e8d127267f15711fad9f50",
+        "src/pccap/cap/__init__.py": "8ffb2244bb60362bead74e74aac980b5d1c4f6f0cc10f58a7917baa3f8a517ee",
+        "src/pccap/cap/bank.py": "d470e8f8b923e46edbe30ded9fcd6befcedd9a9ea45644649bbcab378b7b9727",
+        "src/pccap/cap/calibrate.py": "b5fd62a44526d4e0a891a38b1467283302b7bdf012cba63530b69227a0eebfcf",
+        "src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+        "src/pccap/cap/features.py": "a89c71cf027a9952dd16e17c56933ae7a44451ab2f7a085c0ba8ac1dc1e305f3",
+        "src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+        "src/pccap/cap/memory.py": "d38ec41647e96cc9f66ee5b2c179867ffd8f69ae9d4b726ac8de812bdab36b71",
+        "src/pccap/cap/metadata.py": "966343426e59500cf69cb34e0c79ddc9fe5916d6b0d69e2a5305d1442127c5fa",
+        "src/pccap/cap/transaction.py": "d12738bcb680271f020f33cb23320be0334041926bd8c20b275ae16cad3e6601",
+        "src/pccap/cli.py": "15b58f71cfe5ab5b780a8de7b74951c6db304c9cf8fce99fab7aa3dc25df1bc7",
+        "src/pccap/contracts.py": "daa7f294e00cc73d08436c4e165b96f5763706f566ed974586e5b3100f352390",
+        "src/pccap/data/__init__.py": "3f9cbd65ed69bc530b9805e1b89c4bb28079eba8c08ba446f77d33d9e36d870f",
+        "src/pccap/data/challenges.py": "9dd8c53e33044595af44d2a3a36903401557089fe6b0c7a3a047b88337e65f83",
+        "src/pccap/data/confirm.py": "23cce559bad48daa0f81c51a92ac91358a804389aef9008b1e016f57668465e6",
+        "src/pccap/data/confirmation_integrity.py": "74cefd84c204e93465179f57896aa9b818158c1d37b1711a6a93618d07b5fa26",
+        "src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+        "src/pccap/data/fetch.py": "bf40977d05f882d90949bf16ad3f5f67d9e8ad5d1ccb476179e8ab40427915b3",
+        "src/pccap/data/grammar_streams.py": "9bc6ab33dae8c8c40de8780206a77a383d5967ae3c1df0a06a380676823c727a",
+        "src/pccap/data/lm_sets.py": "badcbd8adf0158eaf783645cbd04350b06126d193eada431a7d76a33cbf0b039",
+        "src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+        "src/pccap/data/splits.py": "66b00cf7514cf7c0016e945140f1d9ca717abab1e3a1441bd887b7e26d4e8530",
+        "src/pccap/data/streams.py": "1e106f6ea4170211ebc2a3d4ccedb8862fed8d0b0cbbcbea2c87663169d006cc",
+        "src/pccap/data/tokenize.py": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+        "src/pccap/distill/__init__.py": "c3ffe923d5a0ce369e1ea224372d64c25499d2216dfc53fe8e2c328ab5a22f68",
+        "src/pccap/distill/data.py": "fe8be45c7e4560ff863d3fe394f1b31774287f87eaa6abb621bd35a1c8d500df",
+        "src/pccap/distill/preflight.py": "6d60df743d9798c9c6f64ebcfbf0c31bc193f8a491fe2d1b8fa1ba2f18361e34",
+        "src/pccap/distill/recipe.py": "94acc478e444aec3a1c93a18b898c6a595c61a4dce6b1bb6c7b3c4fdeb9cb9d1",
+        "src/pccap/distill/schedule.py": "ccd15fa573606e5458e7a55571255aaa8667b500edfb24b46ae7150b6051e7db",
+        "src/pccap/distill/train.py": "b8b0252b8103bd71c21424b81a0808a2442ece77a5048f0ca38a6d52d2dd324f",
+        "src/pccap/fixtures/__init__.py": "00b24d3238c92f7a80b9cade6437a7db14cf54e2fd1a2705db7dd57e1f695faa",
+        "src/pccap/fixtures/grammar_eval.py": "24ca8eaeb40798b485eb88aaf43fc26a50606074a31cf882a0e1f04616def709",
+        "src/pccap/fixtures/grammar_generator.py": "7065a66f31ab76b4b52b93263543670dc20a9997975dbaf9bbcdef9057843c95",
+        "src/pccap/fixtures/grammar_model.py": "19c99d0c5359bb842c5be6c8cf31c73ee6d380c85c7776f9fb8fe35fe7937249",
+        "src/pccap/fixtures/modular_control.py": "67f69900f58d898f22a57cc217d0d744cf091642f0b0fa47654057f54cb2d811",
+        "src/pccap/fixtures/tracing.py": "69458aa762ee0f41de7233c9a53a216781c0545a7a61357b097dafad16a94b6b",
+        "src/pccap/harness/__init__.py": "d604753027506b7435a8df1b8af167c9f5cc5b0e427638d1be64bf8df697b2c5",
+        "src/pccap/harness/arms.py": "1e5442b558ecc8cbd54c5d5e43473a90dfe8079efca6e7aacffbeafe380061a0",
+        "src/pccap/harness/determinism_probe.py": "fb5a0081011eda5c2c4fe64555cc505ca92c7ee9a97c0c141174d9c78136f727",
+        "src/pccap/harness/execute.py": "d8d6a66bf2ecffee7e73f19545cd3197010397d52b891d6b0d17ffd7af84fdd6",
+        "src/pccap/harness/freeze.py": "d6bade515e1af22c65bcd3b196b731419172f5a7c73b79de7415e6f9a2987d9f",
+        "src/pccap/harness/identity.py": "854a7420ed7f048702c447a292f6e7ceb9966829d5a64b139609edb24abc602b",
+        "src/pccap/harness/lease.py": "3bf728cd93a072780b52201f845cf87fa760a0efc28068aefcfa9d79cd6b2d82",
+        "src/pccap/harness/ledger.py": "0d7b5a2be60739414122b6ff5af78c71a6e13605b01d3365a62f70a90c304ca3",
+        "src/pccap/harness/records.py": "01584e9477bb30580cf5bc4eb681c97bad0be68b1d25894ac7f66db824d55234",
+        "src/pccap/harness/runner.py": "10e3fe5eb622522ab65fa4ec2d90ea41e14afcaf2a5708c61d8e62c62a9d1b71",
+        "src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+        "src/pccap/harness/schedule.py": "a3bba5c94899aa232fcfc7636d8bac9f53ec8a98f3a70a496e58d59a80b8981d",
+        "src/pccap/harness/schema.py": "3ab1b19f1f5f7d60bbd5382b9060a88614360faa818c98bef747ec8986f559bd",
+        "src/pccap/harness/snapshot.py": "0597be625a5a6a95e0215e5a2b2cded90ce49b7c6c2837b7729d229664e0dd9e",
+        "src/pccap/harness/stage_s0.py": "892af30fad8daf5913c300f43e4aea73ae55e1d70568981ef7172933bc8fb134",
+        "src/pccap/harness/stage_s2.py": "d3870ef7f680ed79b7d1ed8d709ded2bfeba677fee3995ddd12f54db3c6dda2b",
+        "src/pccap/harness/stage_s2_throughput.py": "342877049b142fd7baab2a06f2841aceacbc5916df16a872d92627e447039ecc",
+        "src/pccap/harness/stage_s3.py": "12c466c72b5ae5be574ff3d02a3c46b0faf743eb538f76ba2bfd454f0004f18c",
+        "src/pccap/harness/stage_s3_fixture.py": "396958f22408576f6189442f30023cf71edbb3de090cba913e139a7f7384ed23",
+        "src/pccap/harness/stage_s4.py": "a263cc82975f6d62582cc281e546d85f0362a7b95ccc2dbbe1d5a45387ed04d0",
+        "src/pccap/harness/stage_s5.py": "38d0e22f2987eed91c561c4721b1301d074561852dec1b9dd8f6c00d4997edb2",
+        "src/pccap/harness/status.py": "bc8184d6c62ee5fdbcc3c045818461b3567a7abedca2122d7ef26aee4b375aac",
+        "src/pccap/metrics/__init__.py": "16c599cba5b4dd05aa1de495baec611e9b8fa776e275e0853b0a52c9aa814863",
+        "src/pccap/metrics/cl_matrix.py": "ce8101d21b83deec625d200f44dd4c8fd4e6a8f4d9db3387e0447471a5f6be0d",
+        "src/pccap/metrics/divergence.py": "6793233c1781d8509a024da96f8f00b2c2152a5eeabf7ce89bf8c93943ee8eea",
+        "src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+        "src/pccap/metrics/hvp.py": "97b7d468af942dde818fc7ef33b3e98e6a4fd1706bc29678ff5759a5ac4e2001",
+        "src/pccap/metrics/order.py": "f0e999bffdbea986ba7014db8712c106bd553c751f5deea94238891718f3448f",
+        "src/pccap/metrics/overlap.py": "31fd906b176b9b2a2fd84494e6336afcddc7041bc180c02454b79858087c7da2",
+        "src/pccap/metrics/participation.py": "d581d809b8d0aa61a2122464b6827c381e1ea2e0dfd8b0222c9840a39200850b",
+        "src/pccap/metrics/rank.py": "aaeafefaf4592b7358b41d789457b21d4497f995de4cba69dbcf0b7f0b9fa15c",
+        "src/pccap/pc/__init__.py": "fd01da3d0966a4dcd7575f78226f9c9ba6b53adfb50554c005c627c48147ab4a",
+        "src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+        "src/pccap/pc/kd_energy.py": "bb405dfcd7a3027e7839610ea5f322276b2f4740bd1182870575ff17f5b024c9",
+        "src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+        "src/pccap/pc/weight_phase.py": "ff7c03b11883dd41c5b6d157cd4f9557f4be3b9e5fd5cde5f9a489b1a81f8600",
+        "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+        "src/pccap/revision_v1/adapt.py": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793",
+        "src/pccap/revision_v1/analysis.py": "b9a40ac1081f1eee28e941d341d1adb91f304654e327bb2e1ce639450006bff2",
+        "src/pccap/revision_v1/analysis_stage4.py": "dd459f706afb04f578361f43163a86d9ac24c93b434e71669b60cf3c8ed1da8a",
+        "src/pccap/revision_v1/checkpoint_identity.py": "084b018eb606bd74893ab82ccb648d52827d8524eb62bf1add461c01fc550775",
+        "src/pccap/revision_v1/contracts.py": "01f55b4c70d1ffa36db8404e76d060c04741fe5992f3e7a118d59272c1a5993e",
+        "src/pccap/revision_v1/controller.py": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+        "src/pccap/revision_v1/development_cell.py": "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da",
+        "src/pccap/revision_v1/endpoints.py": "4053ac0ba3fd8de5aea0c04fc289f673144d03141ddd5e0b508610b7cf4bdc54",
+        "src/pccap/revision_v1/endpoints_composition.py": "ea7b1aa6d15a5821275eb4caa5207f612851d14cd3e3fa203d89da58cc889ff1",
+        "src/pccap/revision_v1/endpoints_unseen.py": "62193770bc3f898dedfdfaed820bf0660d795192f60c254d7c54e91859585d3c",
+        "src/pccap/revision_v1/epc_train.py": "38a6620e4dc513d12a22f9a189c59daf6701ddab548b5c10e7709aae31117e5f",
+        "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+        "src/pccap/revision_v1/final_namespace.py": "8f028c96320ba455c3d39537e21788e090de94e91825122769da2d47e6812df7",
+        "src/pccap/revision_v1/learner.py": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117",
+        "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+        "src/pccap/revision_v1/memory.py": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54",
+        "src/pccap/revision_v1/observations.py": "eae45d586303bdb7e8dc16cd965922c2af0666f12c528b51eaaa4c618d75b150",
+        "src/pccap/revision_v1/reader.py": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018",
+        "src/pccap/revision_v1/stage4_adapters.py": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37",
+        "src/pccap/revision_v1/stage4_assays.py": "6f30a472b77b835bb75745ba23dd11bb1903966e49473003b96722e67aa3e315",
+        "src/pccap/revision_v1/stage4_cell.py": "164638b177a408fd9753690efd919960c41d2b3595934425189a1d4213eb5b63",
+        "src/pccap/revision_v1/stream_train.py": "d679a22720dd7034d16451d9d90cf6e93c2d684b29abab6e8e670f2d9fcd5b18",
+        "src/pccap/revision_v1/train.py": "22a5754e6fc752076c4a8a6ff6670d2c9a519a14752c8e75ade3c12fb3dc74aa",
+        "src/pccap/revision_v1/train_fast.py": "98c6011e6e423b26ebb3434de412da1d1e2b2e21ab968c1adc6ba4abe45b7390",
+        "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76",
+        "src/pccap/routers/__init__.py": "8813cc6cd9b7a4a67903312eee4003ccf411f167611e7e3fa9d7c341810894c0",
+        "src/pccap/routers/_common.py": "fd5c0485297a4b416638396980952fad2cf05d36bf27033ffc7cd962081e37e4",
+        "src/pccap/routers/full.py": "02c0582120bfad912a4c3b07e50e62931e5b136204aa8c023ee24da120d48872",
+        "src/pccap/routers/last.py": "3f819a6329113a9543a3bc07b6334ce6b2708ca238eaacdb9123c9b2da8d3bcd",
+        "src/pccap/routers/measured.py": "45844c0394a1601465b53d1a86589a7e53d4247c23b32e4ead78d3bc2d0813f6",
+        "src/pccap/routers/random_.py": "d77160a6825fff9312584c526336a1160961c6236bb1a50235bb9a10f8197400",
+        "src/pccap/routers/supplied.py": "91517053aa3fb4ed44419612befa3e7b9ae89c86ba7a8a5ed2b9aa204d4ab89f",
+        "src/pccap/transport/__init__.py": "49e7009fe1871a598da30d04e74440c67bbedfa477a93b416d6cfcab2aa24c47",
+        "src/pccap/transport/transport.py": "1db88fd6394ed847d2bff5e628586b51772d350d61ed85dbe83047fb436a8a9c",
+        "src/pccap/vendor_hdpc.py": "6bad20996a750247f2723cabc98e60ebab08cff72d0a36cd1895449e981fa8a0"
+      },
+      "src_pccap_tree_sha256": "8f8aba6d0ae8c5a02d6281609dd2009fd5c6cb67bac27f789de2f75d9b12cce8"
+    },
+    "lead_approval": {
+      "draw_authorized": false,
+      "identity": null,
+      "launch_authorized": false,
+      "protocol_frozen": false
+    },
+    "protocol_decisions_matrix_contrasts": {
+      "declared_cells": 240,
+      "matrix": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_draft_v3.json",
+        "sha256": "43618eabfb147d31e41229bb82b09b7f0387cb4d52e9901dec7ac462158b520c"
+      },
+      "primary_contrasts_and_multiplicity": "lead decision required",
+      "protocol": {
+        "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_draft_v2.md",
+        "sha256": "0f286b905baf910a418c21a4906560b98049c8a40e1ae6cc462551c5b8a86f2a"
+      },
+      "protocol_cells": 360,
+      "status": "BLOCKED: matrix v3 still contains 240 cells and two datasets"
+    },
+    "training_validation_and_caches": {
+      "audit": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round11/exposure_audit.json",
+        "sha256": "3667395a937de5869d8161ff350f04aaaf0e4183a1636e70b61dd6e78cbf63bd"
+      },
+      "historical_pools": [
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+          "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+          "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v1.json",
+          "sha256": "32954cbe50b07140e73ffbf12c16c871ea243fc373f2952e98f329e207ef1b60"
+        }
+      ],
+      "proposed_mquake_pool": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+        "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+      },
+      "reader_bound_pools": {
+        "train_pool_counterfact_v1": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+        "train_pool_mquake_v2": "1b639bd5d10e0a29ecfe3fe58e22b1654e3c971ab55eedf5990baf4961afff90",
+        "train_pool_zsre_v1": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+      },
+      "status": "new slices are prospective; historical exclusions persist"
+    }
+  },
+  "status": "incomplete candidate; not a protocol freeze",
+  "task": "R1-63",
+  "verification_scope": "Every file in bindings_sha256 is checked. Historical prose/embedded legacy references are provenance only, not recursively promoted to live requirements."
+}

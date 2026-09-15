@@ -1,0 +1,87 @@
+--- a/scripts/r1_64_dev_cell.py
++++ b/scripts/r1_64_dev_cell.py
+@@ -5,6 +5,8 @@
+ import argparse
+ import json
+ from pathlib import Path
++
++from scripts.r1_61_cell_driver import construct_owner_adapter
+ 
+ from pccap.revision_v1.development_cell import (
+     BANNER,
+@@ -14,7 +16,6 @@
+     load_development_cell,
+     run_development_cell,
+ )
+-from scripts.r1_61_cell_driver import construct_owner_adapter
+ 
+ 
+ def main(argv=None):
+--- a/scripts/r1_64_dev_payload.py
++++ b/scripts/r1_64_dev_payload.py
+@@ -9,6 +9,11 @@
+ from pathlib import Path
+ 
+ import numpy as np
++
++from pccap.contracts import Budget
++from pccap.revision_v1.adapt import FastConfig
++from pccap.revision_v1.analysis import digest
++from pccap.revision_v1.controller import ControllerConfig
+ from pccap.revision_v1.development_cell import (
+     BANNER,
+     MODE,
+@@ -16,11 +21,6 @@
+     code_identity,
+     validate_development_payload,
+ )
+-
+-from pccap.contracts import Budget
+-from pccap.revision_v1.adapt import FastConfig
+-from pccap.revision_v1.analysis import digest
+-from pccap.revision_v1.controller import ControllerConfig
+ from pccap.revision_v1.endpoints_composition import dependency_ids
+ from pccap.revision_v1.learner import RevisionConfig
+ from pccap.revision_v1.reader import ReaderConfig, params_hash
+--- a/docs/tasks/R1-64-zsre-v4.recipe.json
++++ b/docs/tasks/R1-64-zsre-v4.recipe.json
+@@ -34,7 +34,7 @@
+     100,
+     300
+   ],
+-  "code_sha256": "1bc64fc31b6bc3aac81d827242a9f2a0158ab9f9cb57ab1cc8e993d3e66f7055",
++  "code_sha256": "9a99fa6c240830dd15be70512e6c6dd4bb1d5e6771efbb683c891efe84947ba7",
+   "construction": {
+     "base": {
+       "files": {
+--- a/manifests/revision_v1/freeze_candidate_v1.json
++++ b/manifests/revision_v1/freeze_candidate_v1.json
+@@ -32,7 +32,7 @@
+     "/home/derp/cap/pc_cap/docs/decisions.md": "eca9e6dab273ffa35cca07ec46aa8b33eecafee200a72f68ce57a7af57de4898",
+     "/home/derp/cap/pc_cap/docs/environment.md": "2808340923bab47e0c83a71ecaf4a7aa33146291f2cee73ecae758033331ea68",
+     "/home/derp/cap/pc_cap/docs/lead_queue.md": "b41170324590fcd297d0bc10c2ffac6f448eb538529c5891ad7879d7097558e4",
+-    "/home/derp/cap/pc_cap/docs/tasks/R1-64-zsre-v4.recipe.json": "d0f5cb4842e9edb738dd1b3b112c7eb3254ff55782649efca6b2fc89970dfd1d",
++    "/home/derp/cap/pc_cap/docs/tasks/R1-64-zsre-v4.recipe.json": "dc7df05f7555d7f76a3d1a9df8e23656376adbb1b07fd37593b8449478e55f31",
+     "/home/derp/cap/pc_cap/logs/r1_round11/exposure_audit.json": "3667395a937de5869d8161ff350f04aaaf0e4183a1636e70b61dd6e78cbf63bd",
+     "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+     "/home/derp/cap/pc_cap/manifests/dev/challenges.json": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+@@ -72,8 +72,8 @@
+     "/home/derp/cap/pc_cap/scripts/r1_58_draw_streams.py": "7bb071066f69058da4f2de53c9ba01b69e7d317cf33ddc28dfe3fe66ab11db17",
+     "/home/derp/cap/pc_cap/scripts/r1_61_cell_driver.py": "ed1b96147cf40fe1d0571815d819b7b2292cb39915045bd2e288ec8633d0dc22",
+     "/home/derp/cap/pc_cap/scripts/r1_63_freeze_package.py": "5306e8a4f1b9f95ffad29042c005bd63bfbaf889ebe12eef38824c558a591a2f",
+-    "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py": "4fc7225b2f73c7ef46aa2e40564b168479427d474591d923a0fcd0006b34e399",
+-    "/home/derp/cap/pc_cap/scripts/r1_64_dev_payload.py": "c388199bd5ed03e9df9f464a143f7c1715946bde18e7753a1a4dda39d48e8127",
++    "/home/derp/cap/pc_cap/scripts/r1_64_dev_cell.py": "1566a6ac8d3a9932ae95abc6463c9d8af5de97d05279577b7b6ac97cd8865536",
++    "/home/derp/cap/pc_cap/scripts/r1_64_dev_payload.py": "c4f629a130ac3f005c60858e7581d9bc65f1500edfd3aa014d986b614c24b6da",
+     "/home/derp/cap/pc_cap/scripts/r1_d1g_freeze_register_v4.py": "ae4f2a15f4fc577cbf651123cb4fa6d93fd199143990d5e96de655058e3e594b",
+     "/home/derp/cap/pc_cap/scripts/r1_d1g_mquake_exposure_supplement.py": "aab9fd5ed627fa4d70498af69042e8701185fc786adc229c85c1d55232ac13f4",
+     "/home/derp/cap/pc_cap/scripts/r1_d4b_self_contained.py": "6e7efc8c56756b15fa8cbfcb3c4a0939a0f76ab16deff3120ee1b4e36ff638b4",
+@@ -542,7 +542,7 @@
+       ],
+       "development_example": {
+         "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64-zsre-v4.recipe.json",
+-        "sha256": "d0f5cb4842e9edb738dd1b3b112c7eb3254ff55782649efca6b2fc89970dfd1d"
++        "sha256": "dc7df05f7555d7f76a3d1a9df8e23656376adbb1b07fd37593b8449478e55f31"
+       },
+       "final_independent_inventory": null,
+       "full_validation_window_binding": null,
