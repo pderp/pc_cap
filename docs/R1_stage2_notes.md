@@ -703,3 +703,22 @@ cannot compose unedited. The endpoint is kept as a descriptive secondary outcome
 recorded; it is not evidence about the reader. Firing statistics are in the report rows.
 The cap fired (null mass < 0.5) on 369 of the 897 multi-hop questions — those that name the edited subject directly —
 and 8 of those decodes were exact; the remaining firings changed nothing the base could compose.
+
+## Stage 4 cell driver validated on the real base (development cell; 2026-09-15, 12:40 EDT)
+
+Codex's driver (R1-61/R1-64) ran end to end on the real base in development mode: `R1_learned_ff` (v4 seed 0, gate on)
+× zsRE, 300 development edits in source order, checkpoints 100 and 300, every endpoint, immutable phase records (610),
+receipts and a complete result (`results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-9084e84fc6dd00038904/`;
+recipe `docs/tasks/R1-64-zsre-v4.recipe.json`, sha `5b9bca5d…`).
+
+| checkpoint | retention ES / RET-GS (all edited items) | LS (50 original-base references) | unseen false fires (100 pool prompts) | near-miss / revision | composition | drift (16,256 positions) |
+| ---: | --- | --- | ---: | --- | --- | --- |
+| 100 | 1.000 / 0.990 | 50/50 | 25 | — | — | — |
+| 300 | 0.997 / 0.987 | 50/50 | 16 | planned 100 each, available 0 (no zsRE development challenge rows; missing cases retained) | planned 0 (not applicable) | +0.0002 nats |
+
+Wall: 277 s to checkpoint 100 and 1,126 s from 100 to 300 (1,403 s total) while a reader retrain shared the GPU;
+the clean profile is rerun separately. Two observations for the protocol: (1) the driver's zsRE unseen rate with the
+v4 seed-0 reader is 25 % / 16 % at 100 / 300 records, and my runner confirms v4 seed 0 at 21–25 % at 100 records
+(pool / dev sources), versus 5–12 % for the two-pool v3 reader — adding the MQuAKE pool worsened zsRE unseen rejection
+for this seed (the v3-slice readers are being measured); (2) the full 128-window drift assay under the gated reader
+after 300 edits is +0.0002 nats, i.e. the gate removes the residual seen in the 32-window assay.
