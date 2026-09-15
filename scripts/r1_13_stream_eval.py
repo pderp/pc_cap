@@ -39,6 +39,7 @@ def main() -> int:
     ap.add_argument("--tag", default=None)
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--dataset", default="zsre", choices=("zsre", "counterfact", "mquake"))
+    ap.add_argument("--dev-manifest", default=None, help="development manifest path overriding manifests/dev/<dataset>_dev.json (e.g. the self-contained MQuAKE v3 slice)")
     ap.add_argument("--stream-seed", type=int, default=21, help="which 100 development items form the stream (21 = the Stage 0 stream)")
     ap.add_argument("--fast-steps", type=int, default=0)
     ap.add_argument("--fast-lr", type=float, default=1e-2)
@@ -82,7 +83,19 @@ def main() -> int:
     taken = [str(d) for d in destinations if d.exists()]
     if taken:
         raise SystemExit(f"run identity {tag!r} already has artifacts (never overwritten; choose a new tag): {taken}")  # X26-03: before any setup
-    items, unrelated = load_dev_items(args.dataset, args.n, seed=args.stream_seed)
+    if args.dev_manifest:
+        import numpy as _np
+
+        from pccap.contracts import EditItem as _EditItem
+        _man = json.loads((ROOT / args.dev_manifest).read_text())
+        _rng = _np.random.default_rng(args.stream_seed)
+        _idx = sorted(_rng.permutation(len(_man["items"]))[: args.n])
+        items = [_EditItem(item_id=it["item_id"], digest=bytes.fromhex(it["digest"]), prompt=it["prompt"], answer=it["answer"], aliases=it["aliases"], paraphrases=it["paraphrases"],
+                           locality_prompts=it["locality_prompts"], prompt_ids=_np.asarray(it["prompt_ids"], _np.int32), answer_ids=_np.asarray(it["answer_ids"], _np.int32), dataset=args.dataset, fact_id=it["fact_id"])
+                 for it in (_man["items"][i] for i in _idx)]
+        unrelated = _man["unrelated_prompts"]
+    else:
+        items, unrelated = load_dev_items(args.dataset, args.n, seed=args.stream_seed)
     with (contextlib.nullcontext() if args.no_lease else gpu_lease("R1:stream_eval", stage="R1", projected_seconds=3600.0)):
         ledger = Ledger()
         base, tok = BPBase(ledger=ledger), GPT2Tokenizer()
