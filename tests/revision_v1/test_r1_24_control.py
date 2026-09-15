@@ -14,7 +14,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
-import r1_24_control as control
+import r1_24_control as control  # noqa: E402
 import r1_24_runtime as runtime
 
 
