@@ -394,3 +394,14 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     for the confirmatory draw against ≈ 4,050 needed) — default yes; (b) checkpoint selection on a MQuAKE stream
     criterion before the freeze — I propose to add it (one more retrain) unless you say no; (c) DEC-047 S1_LM at
     lr 1e-8 as the certified informative continuation — default yes. GPU work is paused until Codex's round 10 lands.
+
+27. (2026-09-15, 17:30 EDT) **MQuAKE population — your decision (Codex R1-D7, `docs/tasks/R1-D7.md`).** Under the cumulative
+    exposure reading MQuAKE has 2,100 distinct candidate subjects; three realizations of 1,000 edits plus the 350-subject
+    endpoint reserves each need 4,050. Options with counts: (A) keep the exclusions and amend MQuAKE to 3 × 300 edits
+    (demand 1,950; Codex's recommended default; the 100/300 checkpoints survive, the 1,000-edit claim is dropped for
+    MQuAKE only); (B) executed-only reading: at most 2,829 subjects even if every review candidate clears — still short;
+    (C) exempt true-fact locality/unrelated presentations from counterfactual-edit exposure: 4,218 subjects, enough for
+    the full scope, but a policy change Codex does not recommend purely to recover sample size; (D) MQuAKE-T cannot fill
+    it (96 distinct edits). My view: (A) is defensible and honest; (C) is scientifically reasonable — the reader saw
+    those subjects' TRUE facts as null queries, never the counterfactual edits — but a reviewer may call it
+    self-serving. Default if you say nothing: (A). Either way the matrix and protocol get a new version.

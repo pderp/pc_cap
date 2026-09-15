@@ -655,12 +655,14 @@ nulls; gate on; 100-edit development streams, stream 21; ES / RET-ES / RET-GS / 
 | three pools, MQuAKE 500, seed 0 / 1 / 2 | 0.80 / 1.00; 0.47 / 0.98; 0.82 / 0.98 | 0.98; 0.97; 0.98 (LS 1.00) | 0.66; 0.85; 0.83 (LS 1.00 / 0.98 / 1.00) |
 | three pools, MQuAKE 1,000, seed 0 / 1 / 2 | 0.79 / 1.00 (ES 0.92); 0.68 / 1.00; 0.56 / 1.00 | 0.98; 0.96; 0.95 | 0.76; 0.83; 0.785 |
 
-(RET-GS / LS shown for MQuAKE; ES and RET-ES are 1.00 unless stated.) MQuAKE unseen-prompt false fires 0/100 at 100
-records; ordinary-text drift after MQuAKE edits +0.005 nats (0.39 % of positions fire). Training on MQuAKE is
-necessary (0.16 → 0.80) and the DEC-046 default stands. The MQuAKE paraphrase result varies 0.47–0.82 across six
-reader instances while zsRE and CounterFact hold their ranges. Cause: the MQuAKE paraphrase is the question form of a
+(RET-GS / LS shown for MQuAKE; ES and RET-ES are 1.00 unless stated; pool-v2 seed 0 has ES and RET-ES 0.92.) MQuAKE
+unseen-prompt false fires 0/100 at 100 records; ordinary-text drift after MQuAKE edits +0.005 nats (0.39 % of
+positions fire) — both measured with the pool-v1 reader, not a v4 certificate. The transfer-vs-three-pool difference
+(0.16 → 0.80) supports same-source training; it does not establish universal necessity. The MQuAKE paraphrase result
+varies 0.47–0.82 across six reader instances over two pool sizes (v4 alone 0.56–0.79) while zsRE and CounterFact hold
+their ranges. A likely contributor (R1-X10: not isolated as the sole cause): the MQuAKE paraphrase is the question form of a
 cloze support ("Who is the employer of Carl Sagan?" vs "Carl Sagan is employed by"), and the same-relation locality
-prompts have cosine 0.99 to the best record, so the null decision rests on the lexical-overlap feature alone; failing
+prompts have cosine 0.99 to the best record, so the null decision leans on the lexical-overlap feature; failing
 paraphrases have lower plain overlap (0.54–0.56 vs 0.74–0.82 for successes) because the question form adds template
 words that count as non-overlap. For seed 1 (pool v1) the loss is null over-rejection: raising the threshold to 0.9 /
 0.97 recovers 0.76 / 0.81 at LS 0.92 / 0.90; the gate is not involved (0.47 without it). The larger pool does not
@@ -675,8 +677,10 @@ Unit test in `tests/revision_v1/test_r1_45_lexical.py`; retrain with pool v2 ove
 
 Three seeds with pool v2 and `lex_idf` (gate on): MQuAKE 0.62 / 0.74 / 0.80 (ES 0.85 / 0.99 / 0.99), zsRE 0.98 / 0.98 / 0.99,
 CounterFact 0.76 / 0.83 / 0.71 (ES 0.96 / 0.99 / 0.99); zsRE unseen false fires at 1,000 records 12 % (v3 reader:
-10–11 %); MQuAKE unseen 0 %. The weighting narrows the MQuAKE spread slightly but introduces own-prompt rejections
-(ES < 1) on all three datasets and does not improve the unseen endpoint, so the plain lexical feature stays; `lex_idf`
+10–11 %, a different training identity); MQuAKE unseen 0 %. The weighting narrows the MQuAKE spread slightly and has
+own-prompt rejections (ES < 1) on all three datasets (plain v4 already has MQuAKE seed-0 ES/RET-ES 0.92; IDF seed-0
+ES/RET-ES 0.85/0.86 MQuAKE and 0.96/0.97 CounterFact; zsRE immediate ES 0.99 on all three seeds with retained ES 1.00)
+and does not establish an unseen-endpoint improvement, so the plain lexical feature stays; `lex_idf`
 remains an implemented, tested ablation (off by default). MQuAKE paraphrase retention on the development stream is
 therefore reported as it is: 0.47–0.82 over the six plain-lexical reader instances, with one rule for three datasets.
 Proposed primary condition v4 = three-pool reader (MQuAKE pool v2), plain lexical, gate
@@ -690,19 +694,21 @@ teaches its 1–2 dependency edits, and asks the three multi-hop paraphrases (`r
 
 | quantity | value |
 | --- | ---: |
-| cases evaluated / unavailable | 299 / 1 |
-| composition success (all three paraphrases) | 1 / 299 |
+| cases planned / scored / unavailable | 300 / 299 / 1 |
+| composition success (all three paraphrases; scored only) | 1 / 299 |
 | paraphrase-level post-edit exact | 8 / 897 |
 | cap-off base exact on the pre-edit answer / post-edit answer | 0 / 897, 0 / 897 |
 | pre-edit answer reappearing after the edit | 0 |
 | wall | 195 s (0.65 s per case) |
 
-The base itself answers none of the multi-hop questions before or after editing, so the endpoint has no headroom for
-GPT-2 small: a memory cap that fires on the bridge entity's single-hop prompt cannot make the base compose two hops it
-cannot compose unedited. The endpoint is kept as a descriptive secondary outcome (protocol U14) with this floor
-recorded; it is not evidence about the reader. Firing statistics are in the report rows.
-The cap fired (null mass < 0.5) on 369 of the 897 multi-hop questions — those that name the edited subject directly —
-and 8 of those decodes were exact; the remaining firings changed nothing the base could compose.
+The cap-off generation matches neither the old nor the new answer aliases on the 897 scored questions under this
+prompting/decoding convention: a development floor, not a demonstrated capability ceiling (R1-X10). The endpoint
+stays descriptive (U14); cap-on yields eight exact questions and one all-three success; the unavailable case
+(mquake:case:2011) has overlapping pre/post aliases; full planned-inventory fractions remain null for 300 cases /
+900 questions; seven reference and seven cap outputs hit the decode bound and count as non-exact. Null mass is below
+0.5 on 369/897 queries, but actual post-gate firing is unavailable in these traces (they omit hard_null and the gate
+result), so that count does not say which queries named the subject or changed the answer; see
+`logs/review_r1_mquake.md` for the source-bound recount.
 
 ## Stage 4 cell driver validated on the real base (development cell; 2026-09-15, 12:40 EDT)
 
