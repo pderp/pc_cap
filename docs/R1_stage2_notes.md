@@ -788,3 +788,19 @@ every new length triggers a fresh XLA compilation (the tri6 run took 757 s for i
 two-pool runs) and each executable stays resident. Fix: pad prefix lengths to buckets (multiples of 16 up to the
 sequence limit) so the executable set is bounded, and a memory guard in the training loop that saves the best
 checkpoint and exits before MemAvailable drops below 3 GB. No GPU job is started until the lead lifts the hold.
+
+### R1-69 validated (2026-09-15, 16:16 EDT): the trainer's host memory is bounded
+
+Two guarded validation runs of the configuration that crashed (three pools, text and question-form nulls at 35 %),
+one job at a time, forensics logging on:
+
+| run | code | steps | resident memory | wall |
+| --- | --- | ---: | --- | ---: |
+| memcheck (prefix/row buckets only) | 8f04f24 | 50 | 5.6 GB at step 0 → 10.8 GB at step 40, still +85 MB per step | 367 s |
+| memcheck2 (+ query-count buckets) | this commit | 80 | 5.7 GB at step 10 → 6.0 GB at step 50 → 6.0 GB at step 70 | ≈ 150 s |
+
+The crashed run had reached 22.7 GB. With the query count padded to a multiple of 8 (validity mask; padded queries
+carry no loss weight) the compiled-executable set is bounded (15 group shapes × ≤ 2 query buckets) and the memory
+plateaus after the first compilations; steps run ≈ 20× faster than in the crashed run because compilation stops. The
+memory guard (MemAvailable < 4 GB → save best checkpoint and exit) did not trigger. GPU work may resume one job at a
+time.

@@ -46,6 +46,7 @@ class PackedEpisode:
     q_span: np.ndarray
     q_target: np.ndarray  # [Q] int; R for null
     q_is_null: np.ndarray  # [Q] bool
+    q_valid: np.ndarray  # [Q] bool (R1-69: padded query rows are False and carry no loss weight)
     lex: np.ndarray  # [Q, R] lexical overlap features
     groups: list[dict]  # each: kind, ids [P,T], n [P], target [P], last/span [P,taps,d], q_index [P], capoff [P,V] (preserve only)
 
@@ -60,6 +61,10 @@ def _bucket_rows(p: int) -> int:
     return p if p <= 2 else (4 if p <= 4 else int(-(-p // 8) * 8))
 
 
+def _pad_rows(a: np.ndarray, rows: int) -> np.ndarray:
+    return a if a.shape[0] >= rows else np.concatenate([a, np.zeros((rows - a.shape[0],) + a.shape[1:], a.dtype)])
+
+
 def pack_episode(feats: EpisodeFeatures, vocab: int, rc_for_lex: ReaderConfig | None = None) -> PackedEpisode:
     R = len(feats.supports)
     sup_last = np.stack([s.last for s in feats.supports]).astype(np.float32)
@@ -70,6 +75,14 @@ def pack_episode(feats: EpisodeFeatures, vocab: int, rc_for_lex: ReaderConfig | 
     q_span = np.stack([q.span for q in feats.queries]).astype(np.float32)
     q_target = np.asarray([R if q.target_record < 0 else q.target_record for q in feats.queries], np.int32)
     q_is_null = np.asarray([q.target_record < 0 for q in feats.queries], bool)
+    Q = len(feats.queries)
+    Qp = max(8, int(-(-Q // 8) * 8))  # R1-69: pad the query count to a multiple of 8 so the compiled shape set stays bounded
+    q_valid = np.asarray([True] * Q + [False] * (Qp - Q), bool)
+    if Qp > Q:
+        q_last = np.concatenate([q_last, np.zeros((Qp - Q,) + q_last.shape[1:], q_last.dtype)])
+        q_span = np.concatenate([q_span, np.zeros((Qp - Q,) + q_span.shape[1:], q_span.dtype)])
+        q_target = np.concatenate([q_target, np.full(Qp - Q, R, np.int32)])
+        q_is_null = np.concatenate([q_is_null, np.ones(Qp - Q, bool)])
     buckets: dict[tuple[int, str], list] = {}
     for qi, q in enumerate(feats.queries):
         if q.role in NULL_ONLY_ROLES:
@@ -95,7 +108,7 @@ def pack_episode(feats: EpisodeFeatures, vocab: int, rc_for_lex: ReaderConfig | 
         if kind == "preserve":
             grp["capoff"] = padded([np.asarray(pf.capoff_logits, np.float32) for _, pf in rows], 0.0)
         groups.append(grp)
-    return PackedEpisode(sup_last, sup_span, code_last, code_span, q_last, q_span, q_target, q_is_null, lex_matrix(rc_for_lex, feats) if rc_for_lex is not None else np.zeros((len(feats.queries), R), np.float32), groups)
+    return PackedEpisode(sup_last, sup_span, code_last, code_span, q_last, q_span, q_target, q_is_null, q_valid, _pad_rows(lex_matrix(rc_for_lex, feats) if rc_for_lex is not None else np.zeros((len(feats.queries), R), np.float32), Qp), groups)
 
 
 def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
@@ -115,26 +128,28 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
         probs = jax.nn.softmax(logits)
         return logits, probs[:-1], probs[-1]
 
-    def retrieval(theta, keys, q_emb, q_target, q_is_null, lex):
+    def retrieval(theta, keys, q_emb, q_target, q_is_null, lex, q_valid=None):
         logits = jax.vmap(lambda q, lr: selection(theta, keys, q, lr)[0])(q_emb, lex)  # [Q, R+1]
         ce = jax.vmap(lambda lg, t: jax.nn.logsumexp(lg) - lg[t])(logits, q_target)
-        n_null = jnp.sum(q_is_null)
-        n_rec = q_is_null.shape[0] - n_null
+        valid = jnp.ones(q_is_null.shape, bool) if q_valid is None else q_valid
+        n_valid = jnp.maximum(jnp.sum(valid), 1)
+        n_null = jnp.sum(q_is_null & valid)
+        n_rec = n_valid - n_null
         if lc.balance_null:
             w = jnp.where(q_is_null, 0.5 / jnp.maximum(n_null, 1), 0.5 / jnp.maximum(n_rec, 1))
-            w = jnp.where((n_null > 0) & (n_rec > 0), w, 1.0 / q_is_null.shape[0])
+            w = jnp.where((n_null > 0) & (n_rec > 0), w, 1.0 / n_valid)
         else:
-            w = jnp.full(q_is_null.shape, 1.0 / q_is_null.shape[0])
-        return jnp.sum(w * ce)
+            w = jnp.full(q_is_null.shape, 1.0 / n_valid)
+        return jnp.sum(jnp.where(valid, w, 0.0) * ce)
 
-    def group_loss(theta, base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff, grp_weight, kind: str, with_retrieval: bool):
+    def group_loss(theta, base_params, packed_sup, q_last, q_span, q_target, q_is_null, q_valid, lex, grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff, grp_weight, kind: str, with_retrieval: bool):
         sup_last, sup_span, code_last, code_span = packed_sup
         keys = v_key(theta["reader"], sup_last, sup_span)
         codes = v_code(theta["reader"], code_last, code_span)
         q_emb = v_query(theta["reader"], q_last, q_span)
         total = 0.0
         if with_retrieval and lc.w_retrieval:
-            total = total + lc.w_retrieval * retrieval(theta, keys, q_emb, q_target, q_is_null, lex)
+            total = total + lc.w_retrieval * retrieval(theta, keys, q_emb, q_target, q_is_null, lex, q_valid)
 
         def one(ids, n, target, last, span, qi, capoff_row):
             _, w, null = selection(theta, keys, q_emb[qi], lex[qi])
@@ -180,7 +195,7 @@ class FastTrainer:
         self.vocab = int(base_cfg.vocab)
         self.get, self._retrieval, self._v_key, self._v_query = _make_fns(rc, cc, base_cfg, self.lc)
         self.opt = optax.chain(optax.clip_by_global_norm(clip), optax.adamw(lr, weight_decay=weight_decay))
-        self._jit_retrieval = jax.jit(jax.value_and_grad(lambda th, sl, ss, ql, qs, qt, qn, lx: self.lc.w_retrieval * self._retrieval(th, self._v_key(th["reader"], sl, ss), self._v_query(th["reader"], ql, qs), qt, qn, lx)))
+        self._jit_retrieval = jax.jit(jax.value_and_grad(lambda th, sl, ss, ql, qs, qt, qn, lx, qv: self.lc.w_retrieval * self._retrieval(th, self._v_key(th["reader"], sl, ss), self._v_query(th["reader"], ql, qs), qt, qn, lx, qv)))
 
     def init(self, theta):
         return self.opt.init(theta)
@@ -189,18 +204,19 @@ class FastTrainer:
         pe = pack_episode(feats, self.vocab, self.rc)
         packed_sup = (jnp.asarray(pe.sup_last), jnp.asarray(pe.sup_span), jnp.asarray(pe.code_last), jnp.asarray(pe.code_span))
         q_last, q_span, q_target, q_is_null = (jnp.asarray(pe.q_last), jnp.asarray(pe.q_span), jnp.asarray(pe.q_target), jnp.asarray(pe.q_is_null))
+        q_valid = jnp.asarray(pe.q_valid)
         lex = jnp.asarray(pe.lex)
         metrics = {"answer": 0.0, "answer_n": 0, "preserve": 0.0, "preserve_n": 0, "retrieval": 0.0, "code_norm": 0.0}
         grads = jax.tree_util.tree_map(jnp.zeros_like, theta)
         with_ret = bool(self.lc.w_retrieval)
         if not pe.groups and with_ret:
-            l, gr = self._jit_retrieval(theta, packed_sup[0], packed_sup[1], q_last, q_span, q_target, q_is_null, lex)
+            l, gr = self._jit_retrieval(theta, packed_sup[0], packed_sup[1], q_last, q_span, q_target, q_is_null, lex, q_valid)
             metrics["retrieval"] = float(l) / max(self.lc.w_retrieval, 1e-12)
             return gr, metrics
         for gi, grp in enumerate(pe.groups):
             capoff = jnp.asarray(grp["capoff"]) if grp["kind"] == "preserve" else jnp.zeros((grp["ids"].shape[0], 1), jnp.float32)
             fn = self.get(grp["kind"], with_ret and gi == 0)
-            (l, per_sum), gr = fn(theta, self.base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, jnp.asarray(grp["ids"]), jnp.asarray(grp["n"]), jnp.asarray(grp["target"]),
+            (l, per_sum), gr = fn(theta, self.base_params, packed_sup, q_last, q_span, q_target, q_is_null, q_valid, lex, jnp.asarray(grp["ids"]), jnp.asarray(grp["n"]), jnp.asarray(grp["target"]),
                                   jnp.asarray(grp["last"]), jnp.asarray(grp["span"]), jnp.asarray(grp["q_index"]), capoff, jnp.asarray(grp["weight"]))
             grads = jax.tree_util.tree_map(jnp.add, grads, gr)
             if self.ledger is not None:
