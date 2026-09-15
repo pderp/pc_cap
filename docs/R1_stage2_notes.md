@@ -773,3 +773,18 @@ checkpoint only; 1,527 s if at every checkpoint), near-miss + revision ≈ 150 s
 this driver; roughly two thirds of it is driver overhead, which a batched/incremental-hash implementation could cut by
 half or more without changing the audit guarantees (lane R1-68). Control conditions (v0 live caps) have not been
 profiled through the driver.
+
+## The hangs were host-memory exhaustion by the stream trainer (2026-09-15, 15:55 EDT; forensics from `scripts/sysmon.sh`)
+
+The third hang (boot −1, journal ends 15:45:25) was caught by the 10-s forensics log. The GPU was idle (0 % util,
+5.3 GB of 12 GB used, 48 °C, no throttle reason until the last sample). Host memory was the failure: the stream trainer
+(`r1_50_stream_train.py`, tri6 run) grew from 6.8 GB RSS at 15:22 to 22.7 GB at 15:43 — +1.1 GB per minute, linear in
+steps — until MemAvailable fell to 0.4 GB with the 8 GB swap full; PSI memory-full pressure rose to 7.7 % and IO-full
+to 70 %, load to 18, and the machine thrashed until it was rebooted. No kernel message could be written. The earlier
+two hangs had the same actor (a stream training in flight each time; during the first two overlapping trainings). Cause
+in the trainer: `FastTrainer` compiles one jitted executable per (prefix length, kind) bucket (`train_fast.py` line
+141) — with three pools, ordinary-text and question-form nulls, the number of distinct prefix lengths keeps growing, so
+every new length triggers a fresh XLA compilation (the tri6 run took 757 s for its first 50 steps against 60 s in the
+two-pool runs) and each executable stays resident. Fix: pad prefix lengths to buckets (multiples of 16 up to the
+sequence limit) so the executable set is bounded, and a memory guard in the training loop that saves the best
+checkpoint and exits before MemAvailable drops below 3 GB. No GPU job is started until the lead lifts the hold.

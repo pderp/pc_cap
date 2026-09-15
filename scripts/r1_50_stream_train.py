@@ -30,6 +30,8 @@ def main() -> int:
     ap.add_argument("--n-memory", type=int, default=64)
     ap.add_argument("--n-query-records", type=int, default=8)
     ap.add_argument("--n-out", type=int, default=8)
+    ap.add_argument("--min-mem-mb", type=int, default=4096, help="R1-69 memory guard: stop (keeping the best checkpoint) when MemAvailable drops below this")
+    ap.add_argument("--clear-caches-every", type=int, default=50, help="R1-69: jax.clear_caches() every N steps to bound resident executables")
     ap.add_argument("--out-para-nulls", action="store_true", help="R1-66: also use the question/paraphrase form of out-of-memory items as null queries")
     ap.add_argument("--out-para-prob", type=float, default=1.0, help="R1-66: fraction of out-of-memory items that also contribute a paraphrase-form null")
     ap.add_argument("--lr", type=float, default=1e-3)
@@ -144,7 +146,22 @@ def main() -> int:
         best = {"dev_retrieval": float("inf"), "step": -1, "theta": None}
         log = (OUT / "metrics.jsonl").open("w")
         t0 = time.time()
+        def mem_available_mb() -> float:
+            for line in Path("/proc/meminfo").read_text().splitlines():
+                if line.startswith("MemAvailable:"):
+                    return int(line.split()[1]) / 1024
+            return float("inf")
+
+        aborted = None
         for step in range(args.steps):
+            if step % 10 == 0:  # R1-69 memory guard: three machine hangs on 2026-09-15 were this trainer exhausting host RAM
+                avail = mem_available_mb()
+                if avail < args.min_mem_mb:
+                    aborted = {"step": step, "mem_available_mb": avail, "reason": f"MemAvailable below {args.min_mem_mb} MB; saved the best checkpoint so far and stopped before the machine thrashed"}
+                    print(json.dumps({"memory_guard": aborted}), flush=True)
+                    break
+            if step and step % args.clear_caches_every == 0:
+                jax.clear_caches()  # R1-69: bound the resident compiled-executable set
             batch = [(stream_episode_mixed(train_by_pool, bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, out_paraphrase_nulls=args.out_para_nulls, out_paraphrase_null_prob=args.out_para_prob) if mixed
                       else stream_episode(bank, rng, n_memory=args.n_memory, n_query_records=args.n_query_records, n_out=args.n_out, pool_indices=train_idx, out_paraphrase_nulls=args.out_para_nulls, out_paraphrase_null_prob=args.out_para_prob)) for _ in range(args.batch)]
             batch = [add_text_nulls(b, text_bank, rng, args.text_nulls) for b in batch]
@@ -169,7 +186,7 @@ def main() -> int:
             raise SystemExit(f"{wdir} exists: weights are never overwritten — choose a new tag")
         wdir.mkdir(parents=True)
         np.savez(wdir / "theta.npz", **{jax.tree_util.keystr(path): np.asarray(x) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0]})
-        summary = {"args": vars(args), "bank_wall_s": bank_s, "train_wall_s": train_s,
+        summary = {"args": vars(args), "bank_wall_s": bank_s, "train_wall_s": train_s, "memory_guard_abort": aborted,
                    "banks": [{"pool": pool, "sha256": b.content_hash(), "identity": b.identity, "construction_cost": {"full_forwards": b.cost.full_forwards, "tokens": b.cost.tokens, "accel_seconds": b.cost.accel_seconds}, "shared_cost_policy": "charged once at construction; reuse charges nothing (R50-09)"} for pool, b in zip(pools, banks)], "dev_before": before, "dev_after_best": after, "dev_after_final": evaluate(final_theta),
                    "best_step": best["step"], "theta_hash": params_hash(theta), "theta_path": str(wdir / "theta.npz"), "ledger": ledger.totals(), "total_wall_s": time.time() - t_start}
         (OUT / "summary.json").write_text(json.dumps(summary, indent=1, default=float))

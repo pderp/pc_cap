@@ -50,6 +50,16 @@ class PackedEpisode:
     groups: list[dict]  # each: kind, ids [P,T], n [P], target [P], last/span [P,taps,d], q_index [P], capoff [P,V] (preserve only)
 
 
+def _bucket_len(t: int, step: int = 16) -> int:
+    """Prefix-length bucket (R1-69): lengths are padded up to a multiple of ``step`` so at most ~64 distinct shapes exist."""
+    return int(-(-t // step) * step)
+
+
+def _bucket_rows(p: int) -> int:
+    """Row-count bucket (R1-69): 1, 2, 4, 8, then multiples of 8."""
+    return p if p <= 2 else (4 if p <= 4 else int(-(-p // 8) * 8))
+
+
 def pack_episode(feats: EpisodeFeatures, vocab: int, rc_for_lex: ReaderConfig | None = None) -> PackedEpisode:
     R = len(feats.supports)
     sup_last = np.stack([s.last for s in feats.supports]).astype(np.float32)
@@ -68,14 +78,22 @@ def pack_episode(feats: EpisodeFeatures, vocab: int, rc_for_lex: ReaderConfig | 
         if kind is None:
             continue
         for pf in q.prefixes:
-            buckets.setdefault((int(pf.ids.shape[0]), kind), []).append((qi, pf))
+            buckets.setdefault((_bucket_len(int(pf.ids.shape[0])), kind), []).append((qi, pf))
     groups = []
     for (T, kind), rows in sorted(buckets.items()):
-        grp = {"kind": kind, "T": T, "ids": np.stack([pf.ids for _, pf in rows]).astype(np.int32), "n": np.asarray([pf.n for _, pf in rows], np.int32),
-               "target": np.asarray([max(pf.target, 0) for _, pf in rows], np.int32), "last": np.stack([pf.last for _, pf in rows]).astype(np.float32),
-               "span": np.stack([pf.span for _, pf in rows]).astype(np.float32), "q_index": np.asarray([qi for qi, _ in rows], np.int32)}
+        P = _bucket_rows(len(rows))  # R1-69: pad rows to a bucket so the jitted executable set stays bounded (host memory)
+        def padded(arr_list, fill, P=P):
+            a = np.stack(arr_list)
+            if P > a.shape[0]:
+                a = np.concatenate([a, np.full((P - a.shape[0],) + a.shape[1:], fill, a.dtype)], axis=0)
+            return a
+        ids = np.stack([np.pad(np.asarray(pf.ids, np.int32), (0, T - int(pf.ids.shape[0]))) for _, pf in rows])  # pad token 0; n keeps the valid length
+        grp = {"kind": kind, "T": T, "ids": padded(list(ids), 0).astype(np.int32), "n": padded([np.int32(pf.n) for _, pf in rows], 1).astype(np.int32),
+               "target": padded([np.int32(max(pf.target, 0)) for _, pf in rows], 0).astype(np.int32), "last": padded([pf.last for _, pf in rows], 0.0).astype(np.float32),
+               "span": padded([pf.span for _, pf in rows], 0.0).astype(np.float32), "q_index": padded([np.int32(qi) for qi, _ in rows], 0).astype(np.int32),
+               "weight": np.asarray([1.0] * len(rows) + [0.0] * (P - len(rows)), np.float32), "rows_valid": len(rows)}
         if kind == "preserve":
-            grp["capoff"] = np.stack([np.asarray(pf.capoff_logits, np.float32) for _, pf in rows])
+            grp["capoff"] = padded([np.asarray(pf.capoff_logits, np.float32) for _, pf in rows], 0.0)
         groups.append(grp)
     return PackedEpisode(sup_last, sup_span, code_last, code_span, q_last, q_span, q_target, q_is_null, lex_matrix(rc_for_lex, feats) if rc_for_lex is not None else np.zeros((len(feats.queries), R), np.float32), groups)
 
@@ -109,7 +127,7 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
             w = jnp.full(q_is_null.shape, 1.0 / q_is_null.shape[0])
         return jnp.sum(w * ce)
 
-    def group_loss(theta, base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff, kind: str, with_retrieval: bool):
+    def group_loss(theta, base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff, grp_weight, kind: str, with_retrieval: bool):
         sup_last, sup_span, code_last, code_span = packed_sup
         keys = v_key(theta["reader"], sup_last, sup_span)
         codes = v_code(theta["reader"], code_last, code_span)
@@ -129,7 +147,7 @@ def _make_fns(rc: ReaderConfig, cc: ControllerConfig, base_cfg, lc: LossConfig):
             p_off = jax.nn.softmax(capoff_row)
             return jnp.sum(p_off * (jnp.log(p_off + 1e-30) - jax.nn.log_softmax(logits)))
 
-        per = jax.vmap(one)(grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff)
+        per = jax.vmap(one)(grp_ids, grp_n, grp_target, grp_last, grp_span, grp_q_index, grp_capoff) * grp_weight  # padded rows weigh 0
         weight = lc.w_answer if kind == "answer" else lc.w_preserve
         return total + weight * jnp.sum(per), jnp.sum(per)
 
@@ -174,14 +192,14 @@ class FastTrainer:
             capoff = jnp.asarray(grp["capoff"]) if grp["kind"] == "preserve" else jnp.zeros((grp["ids"].shape[0], 1), jnp.float32)
             fn = self.get(grp["kind"], with_ret and gi == 0)
             (l, per_sum), gr = fn(theta, self.base_params, packed_sup, q_last, q_span, q_target, q_is_null, lex, jnp.asarray(grp["ids"]), jnp.asarray(grp["n"]), jnp.asarray(grp["target"]),
-                                  jnp.asarray(grp["last"]), jnp.asarray(grp["span"]), jnp.asarray(grp["q_index"]), capoff)
+                                  jnp.asarray(grp["last"]), jnp.asarray(grp["span"]), jnp.asarray(grp["q_index"]), capoff, jnp.asarray(grp["weight"]))
             grads = jax.tree_util.tree_map(jnp.add, grads, gr)
             if self.ledger is not None:
                 from pccap.contracts import CostRecord
-                P = int(grp["ids"].shape[0])
-                self.ledger.charge(CostRecord(phase="learning", full_forwards=P, reverses=P, tokens=int(np.sum(grp["n"]))))
+                P = int(grp.get("rows_valid", grp["ids"].shape[0]))  # padded rows are not charged (they are computed but carry no information)
+                self.ledger.charge(CostRecord(phase="learning", full_forwards=P, reverses=P, tokens=int(np.sum(grp["n"][:P]))))
             metrics[grp["kind"]] += float(per_sum)
-            metrics[f"{grp['kind']}_n"] += int(grp["ids"].shape[0])
+            metrics[f"{grp['kind']}_n"] += int(grp.get("rows_valid", grp["ids"].shape[0]))
             if gi == 0 and with_ret:
                 metrics["retrieval"] = float(l - (self.lc.w_answer if grp["kind"] == "answer" else self.lc.w_preserve) * per_sum) / self.lc.w_retrieval
         metrics["answer"] /= max(1, metrics["answer_n"])

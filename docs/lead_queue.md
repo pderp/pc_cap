@@ -429,3 +429,11 @@ Still outstanding from v0: your T4 review of `docs/report.md` and `docs/D3_decis
     training (2.4 GB) plus, in the first, two more of my jobs overlapping, and always the PeTTa `swipl` agent (1.45 GB GPU,
     1.2 GB RSS) and Chrome's GPU process. I now run my GPU jobs strictly one at a time. Root-level options only you can
     enable if you want kernel-side evidence: `sudo sysctl -w kernel.nmi_watchdog=1 kernel.hung_task_panic=1` and kdump.
+
+31. (2026-09-15, 15:55 EDT) **Cause of the hangs found: host memory, not the GPU.** The forensics log caught the third hang:
+    my stream trainer grew from 6.8 GB to 22.7 GB RSS in 21 minutes (+1.1 GB/min), swap filled, the machine thrashed and
+    stopped responding. The GPU was idle and cool. Mechanism: the trainer compiles a separate XLA executable for every
+    distinct prompt-prefix length, and the three-pool runs with text and question nulls keep producing new lengths, so
+    compilations never stop and each executable stays resident. Fix in progress (CPU only): bucketed prefix padding so
+    the executable set is bounded, plus a memory guard that saves the best checkpoint and exits before RAM runs out. I will
+    not start any GPU job until you say so; when you do, the first run will be watched by the forensics log.
