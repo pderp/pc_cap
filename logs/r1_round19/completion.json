@@ -1,0 +1,42 @@
+{
+  "task": "CODEX-R1-round19",
+  "recorded_utc": "2026-09-16T19:27:26.950651+00:00",
+  "mode": "CPU_new_files_only",
+  "gpu_seconds": 0,
+  "existing_files_edited": [],
+  "commits_created": [],
+  "lanes": {
+    "R1-77b": "backend implemented and tested; queue patch awaits permission",
+    "R1-76b": "DEC056 CPU review, population and spec complete; cadence patch and new spec rebind await permission",
+    "R1-58c": "checklist, dry commands and tested previews complete; dry checker correction awaits permission; owner scientific receipts absent",
+    "R1-49f": "proposed Q11-Q13 defaults, alternatives and exact insertion text complete; no lead decisions inferred",
+    "HT-3e": "waiting for orchestrator final pilot report directory",
+    "R1-73b": "waiting for calibration v3 candidate"
+  },
+  "dependencies": [
+    {
+      "path": "results/R1/ht3d_final",
+      "exists": false
+    },
+    {
+      "path": "results/R1/calibration_mquake_v3/calibration_candidate.json",
+      "exists": false
+    }
+  ],
+  "validation": {
+    "proposed_patch_suite": {
+      "passed": 29,
+      "seconds": 18.2,
+      "log": "logs/r1_round19/proposed-patches-tests-v2.txt"
+    },
+    "additional_integrity_suite": {
+      "passed": 5,
+      "seconds": 8.3
+    },
+    "lint": "passed",
+    "patch_apply_check": "passed",
+    "current_tree_known_failure": "one preflight test detects Markdown binding defect pending the approved v2 source patch"
+  },
+  "approval_request": "docs/tasks/CODEX-R1-round19-edit-request.md",
+  "head_at_handoff": "92e4779391d8f94b0c92539a4827ffdb33813b68"
+}

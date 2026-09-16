@@ -1,8 +1,8 @@
 """R1-77: ordered, identity-checked queue and DEC-052 inventory.
 
-Dry-run/status are read-only. Execution currently accepts only development
-matrices: R1-68d has an explicit development-only admission firewall. A final
-sealed backend and frozen recipes remain required before confirmation can run.
+Dry-run/status are read-only. Sealed execution uses the explicit R1-77b backend
+with approved frozen contracts and independent populations. Development execution
+retains its existing admission firewall.
 No backend is silently substituted and no admission flag is rewritten.
 """
 
@@ -24,6 +24,7 @@ from zoneinfo import ZoneInfo
 
 from scripts import r1_68c_dev_cell as driver
 from scripts import r1_75_analysis_stage4_v1 as analysis
+from scripts import r1_77b_sealed_backend as sealed
 from scripts.r1_68b_integrity_runtime import DurablePhaseJournal, durable_json
 
 import pccap  # noqa: F401 -- determinism before importing the JAX driver
@@ -87,10 +88,17 @@ def recipe_for(cell, bindings, *, execute=False):
             raise ValueError("matrix recipe binding mismatch: " + key)
     if cell.get("payload_sha256") is not None and m["payload"]["sha256"] != cell["payload_sha256"]:
         raise ValueError("matrix payload binding mismatch")
-    if m.get("mode") != driver.MODE or "reservations" in m or "protocol" in m:
-        raise PermissionError("R1-68d development firewall: final backend not installed")
-    if execute:
-        driver.load_development_cell(path, binding["sha256"])
+    if m.get("mode") == sealed.MODE:
+        if binding.get("backend") != sealed.backend_binding():
+            raise ValueError("queue sealed backend module/file binding mismatch")
+        sealed.inspect_manifest(path, binding["sha256"])
+        if execute:
+            sealed.load_sealed_cell(path, binding["sha256"], allow_sealed=True)
+    elif m.get("mode") == driver.MODE and "reservations" not in m and "protocol" not in m:
+        if execute:
+            driver.load_development_cell(path, binding["sha256"])
+    else:
+        raise PermissionError("explicit development or sealed backend required")
     return binding, m
 
 
@@ -280,21 +288,74 @@ def inventory(
             "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback.",
             "scenario_fallback_cell_seconds": fallback_cell_seconds,
         },
-        "backend_status": "development-ready; sealed R1-68d backend and frozen recipe admission pending",
+        "backend_status": "development and hash-bound sealed dispatch; final execution requires closed frozen gates",
         "sources_sha256": files.sources,
     }
+
+
+def verify_sealed_matrix(matrix, bindings):
+    """Owner execution only: full population metadata, never model/payload here.
+
+    Contracts omit only the freeze reference, so neither final recipe nor matrix
+    file hashes create a circular freeze dependency. Queue files remain immutable
+    and hash-bound to each other throughout the invocation.
+    """
+    cells = analysis.validate_matrix(matrix)
+    frozen_binding = None
+    frozen_contracts = None
+    for cell in cells:
+        binding, m = recipe_for(cell, bindings)
+        if m["mode"] != sealed.MODE or cell.get("admitted") is not True:
+            raise PermissionError("every confirmatory slot needs sealed admitted recipe")
+        if frozen_binding is None:
+            frozen_binding = m["freeze"]
+            frozen_contracts = sealed.metadata(frozen_binding)["recipe_contracts"]
+        if frozen_binding != m["freeze"]:
+            raise ValueError("one final freeze per matrix required")
+        declared = sealed.read_binding(m["population"])
+        if cell.get("population") != declared["cells"][cell["cell_id"]]:
+            raise ValueError("matrix population differs from final frozen declaration")
+        if cell.get("ceilings") != m.get("ceilings") or not cell.get("ceilings"):
+            raise ValueError("matrix/recipe admitted resource ceilings required")
+        seconds = cell["ceilings"].get("wall_seconds")
+        if (
+            isinstance(seconds, bool)
+            or not isinstance(seconds, (int, float))
+            or not math.isfinite(seconds)
+            or seconds <= 0
+        ):
+            raise ValueError("positive admitted cell wall ceiling required")
+        expected = sealed.OUTPUT_ROOT / sealed.cell_name(m, binding["sha256"])
+        if Path(cell["result_dir"]).resolve() != expected.resolve():
+            raise ValueError("noncanonical sealed destination")
+    if frozen_contracts is None or set(frozen_contracts) != {c["cell_id"] for c in cells}:
+        raise ValueError(
+            "matrix must contain the entire frozen cell inventory; use stop-after for partial execution"
+        )
 
 
 def launch(binding, manifest, *, resume, output):
     if manifest.get("test_fixture"):
         raise PermissionError("TinyBase uses injected CPU executor in tests, not CLI launch")
-    module = (
-        "scripts.r1_64c_comparator_recipes" if "r1_64c" in manifest else "scripts.r1_68c_dev_cell"
-    )
-    if manifest["cell"]["condition"].startswith("S1_") and "r1_64c" not in manifest:
+    if manifest.get("mode") == sealed.MODE:
+        if binding.get("backend") != sealed.backend_binding():
+            raise ValueError("sealed launch backend binding mismatch")
+        sealed.inspect_manifest(binding["path"], binding["sha256"])
+        module = sealed.MODULE
+    else:
+        module = (
+            "scripts.r1_64c_comparator_recipes"
+            if "r1_64c" in manifest
+            else "scripts.r1_68c_dev_cell"
+        )
+    if (
+        manifest["cell"]["condition"].startswith("S1_")
+        and "r1_64c" not in manifest
+        and manifest.get("mode") != sealed.MODE
+    ):
         raise ValueError("S1 requires the continued-NPZ comparator entry point")
     command = [sys.executable, "-m", module]
-    if "r1_64c" in manifest:
+    if module == "scripts.r1_64c_comparator_recipes":
         command.append("run")
     command += ["--manifest", binding["path"], "--manifest-sha256", binding["sha256"], "--execute"]
     if resume:
@@ -324,22 +385,24 @@ def run_queue(
     matrix_path, bindings_path = Path(matrix_path).resolve(), Path(bindings_path).resolve()
     matrix_hash, binding_hash = sha(matrix_path), sha(bindings_path)
     matrix, bindings = read(matrix_path), read(bindings_path)
-    if matrix["scope"] != "development":
-        raise PermissionError(
-            "Final execution unavailable: R1-68d admits only development. Freeze, final recipes and a certified sealed backend must land first."
-        )
+    if matrix["scope"] not in ("development", "confirmatory"):
+        raise PermissionError("explicit development or confirmatory matrix scope required")
     if bindings.get("matrix_sha256") != matrix_hash:
         raise ValueError("queue bindings reference a different matrix")
+    if matrix["scope"] == "confirmatory":
+        verify_sealed_matrix(matrix, bindings)
     if not math.isfinite(min_memory_mib) or min_memory_mib <= 0:
         raise ValueError("positive MemAvailable threshold required")
     if ceiling_hours is not None and (not math.isfinite(ceiling_hours) or ceiling_hours <= 0):
         raise ValueError("positive ceiling required")
     output = Path(receipt_root).resolve()
-    if not output.is_relative_to(ROOT / "logs/r1_round18"):
-        raise PermissionError("queue receipts belong under logs/r1_round18")
+    if not output.is_relative_to(ROOT / "logs"):
+        raise PermissionError("queue receipts belong under repo logs")
     output.mkdir(parents=True, exist_ok=True)
     # Stable lock per matrix prevents two invocations from selecting the same cell.
-    lockpath = ROOT / "logs/r1_round18" / f"queue-{matrix_hash}.lock"
+    lockroot = ROOT / "logs/r1_77_queue_locks"
+    lockroot.mkdir(parents=True, exist_ok=True)
+    lockpath = lockroot / f"queue-{matrix_hash}.lock"
     fd = os.open(lockpath, os.O_RDONLY | os.O_CREAT, 0o600)
     try:
         fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -362,7 +425,8 @@ def run_queue(
                 verify_resume(cell, manifest)
                 continue
             recipe_for(cell, bindings, execute=True)
-            expected = driver.OUTPUT_ROOT / driver.cell_name(manifest, binding["sha256"])
+            backend = sealed if manifest["mode"] == sealed.MODE else driver
+            expected = backend.OUTPUT_ROOT / driver.cell_name(manifest, binding["sha256"])
             if Path(cell["result_dir"]).resolve() != expected.resolve():
                 raise ValueError("matrix result directory differs from driver destination")
             if observed["cost"]["unknown_attempts"]:

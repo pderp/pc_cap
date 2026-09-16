@@ -1,0 +1,24 @@
+........F..                                                              [100%]
+=================================== FAILURES ===================================
+______________ test_final_draft_inventory_and_execution_firewall _______________
+
+tmp_path = PosixPath('/home/derp/cap/pc_cap/logs/r1_round19/pytest-approved-queue-legacy/test_final_draft_inventory_and0')
+
+    def test_final_draft_inventory_and_execution_firewall(tmp_path):
+        m = q.read(q.ROOT / "manifests/revision_v1/run_matrix_v5.json")
+        report = q.inventory(m)
+        assert len(report["incomplete_cells"]) == 405 and report["complete_blocks"] == []
+        assert report["cost"]["projected_total_hours"] is None
+        scenario = q.inventory(m, fallback_cell_seconds=1000, ceiling_hours=306)
+        assert scenario["cost"]["projected_total_hours"] == 112.5
+        bindings = put(tmp_path / "final-bindings.json", {})
+>       with pytest.raises(PermissionError, match="Final execution unavailable"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'Final execution unavailable'
+E         Actual message: 'explicit development or confirmatory matrix scope required'
+
+tests/revision_v1/test_r1_77_queue.py:213: AssertionError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_77_queue.py::test_final_draft_inventory_and_execution_firewall
+1 failed, 10 passed in 5.19s

@@ -1,0 +1,26 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> logs/r1_round19/test_queue_legacy_proposed_message.py:3:1
+   |
+ 1 |   """CPU queue checks; all test logs live under logs/r1_round18, never results/R1."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import copy
+ 6 | | import json
+ 7 | | from pathlib import Path
+ 8 | |
+ 9 | | import pytest
+10 | | from scripts import r1_77_queue as q
+11 | | from scripts.r1_75_development_matrix import population
+12 | |
+13 | | from tests.revision_v1 import test_r1_68c_driver as driver_cases
+   | |________________________________________________________________^
+help: Organize imports
+   |
+11 | from scripts.r1_75_development_matrix import population
+   -
+12 | from tests.revision_v1 import test_r1_68c_driver as driver_cases
+   |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

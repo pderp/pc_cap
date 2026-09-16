@@ -1,0 +1,29 @@
+--- a/scripts/r1_58c_draw_seal_preflight.py
++++ b/scripts/r1_58c_draw_seal_preflight.py
+@@ -55,7 +55,7 @@
+         return hashlib.file_digest(f, "sha256").hexdigest()
+ 
+ 
+-def read_metadata(binding):
++def read_metadata(binding, *, parse=True):
+     p = Path(binding["path"]).resolve()
+     if "confirm" in p.parts or not any(
+         p.is_relative_to(ROOT / n) for n in ("docs/tasks", "manifests/revision_v1", "logs")
+@@ -64,7 +64,7 @@
+     raw = p.read_bytes()
+     if hashlib.sha256(raw).hexdigest() != binding["sha256"]:
+         raise ValueError("metadata identity mismatch")
+-    return json.loads(raw)
++    return json.loads(raw) if parse else None
+ 
+ 
+ def check_receipt(name, r, spec):
+@@ -147,7 +147,7 @@
+     checked = {}
+     for key in ("register", "matrix", "protocol", "freeze_candidate"):
+         try:
+-            read_metadata(spec[key])
++            read_metadata(spec[key], parse=key != "protocol")
+         except (OSError, KeyError, TypeError, ValueError) as e:
+             blocked.append({"gate": key, "reason": str(e)})
+     for name in REQUIRED[stage]:

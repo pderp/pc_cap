@@ -1,0 +1,72 @@
+{
+  "task": "R1-58c",
+  "stage": "freeze",
+  "dry_run": true,
+  "would_write": [
+    "manifests/revision_v1/frozen_stage4.json",
+    "docs/tasks/R1-final-cell-recipes/",
+    "manifests/revision_v1/run_matrix_final.json",
+    "docs/tasks/R1-final-queue-bindings.json"
+  ],
+  "ready_for_owner_review": false,
+  "blocked": [
+    {
+      "gate": "joint_clearance",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "protocol_admission",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "rng_admission",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "draw_receipt",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "endpoint_construction",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "seal_receipt",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "chain_i_cell_ceilings",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "september20_admission",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "closed_gate_receipts",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "freeze_authorization",
+      "reason": "named owner receipt is not supplied"
+    }
+  ],
+  "checked_receipts": {},
+  "demand": {
+    "datasets": 3,
+    "realizations_per_dataset": 3,
+    "roles_per_realization": {
+      "edits": 1000,
+      "outside": 100,
+      "near_miss_support": 100,
+      "near_miss_neighbour": 100,
+      "revision": 50
+    },
+    "distinct_subjects_per_dataset": 4050
+  },
+  "draws_emitted": 0,
+  "seals_emitted": 0,
+  "freeze_written": false,
+  "launch_authorized": false,
+  "note": "Readiness is a metadata check only. The lead performs construction, draw, seal and freeze after review; this command has no mutation mode."
+}

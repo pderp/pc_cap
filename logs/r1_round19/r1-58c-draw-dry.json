@@ -1,0 +1,54 @@
+{
+  "task": "R1-58c",
+  "stage": "draw",
+  "dry_run": true,
+  "would_write": [
+    "docs/tasks/R1-final-draw.receipt.json",
+    "/home/derp/cap/assets/runs/pc_cap/R1/stage4_sealed_payloads/reservations-unsealed.json"
+  ],
+  "ready_for_owner_review": false,
+  "blocked": [
+    {
+      "gate": "protocol",
+      "reason": "repo admission metadata only; no payload access"
+    },
+    {
+      "gate": "clearance_authorization",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "joint_clearance",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "protocol_admission",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "rng_admission",
+      "reason": "named owner receipt is not supplied"
+    },
+    {
+      "gate": "draw_authorization",
+      "reason": "named owner receipt is not supplied"
+    }
+  ],
+  "checked_receipts": {},
+  "demand": {
+    "datasets": 3,
+    "realizations_per_dataset": 3,
+    "roles_per_realization": {
+      "edits": 1000,
+      "outside": 100,
+      "near_miss_support": 100,
+      "near_miss_neighbour": 100,
+      "revision": 50
+    },
+    "distinct_subjects_per_dataset": 4050
+  },
+  "draws_emitted": 0,
+  "seals_emitted": 0,
+  "freeze_written": false,
+  "launch_authorized": false,
+  "note": "Readiness is a metadata check only. The lead performs construction, draw, seal and freeze after review; this command has no mutation mode."
+}

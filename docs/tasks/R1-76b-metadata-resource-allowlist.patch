@@ -1,0 +1,24 @@
+--- a/scripts/r1_76_unseen_common.py
++++ b/scripts/r1_76_unseen_common.py
+@@ -238,9 +238,20 @@
+         or p["primary_reference"] != spec["primary_reference"]
+     ):
+         raise ValueError("population spec identity mismatch")
++    allowed_metadata_resources = set()
++    if p.get("decision") == "DEC-056" and p.get("dataset") == "mquake":
++        from pccap.bases.gpt2_jax import DEFAULT_SNAPSHOT
++
++        allowed_metadata_resources = {
++            (ROOT.parent / "assets/data/prepared/revision_v1/r1_d4_v1/items.jsonl").resolve(),
++            (DEFAULT_SNAPSHOT / "tokenizer.json").resolve(),
++            (DEFAULT_SNAPSHOT / "config.json").resolve(),
++        }
+     for source, h in p["sources_sha256"].items():
+         source = Path(source).resolve()
+-        if not source.is_relative_to(ROOT) or "confirm" in source.parts:
++        if "confirm" in source.parts or (
++            not source.is_relative_to(ROOT) and source not in allowed_metadata_resources
++        ):
+             raise PermissionError("development metadata source required")
+         if sha(source) != h:
+             raise ValueError("training/development source changed")

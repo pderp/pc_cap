@@ -1,0 +1,24 @@
+--- a/scripts/r1_76_unseen_common.py
++++ b/scripts/r1_76_unseen_common.py
+@@ -135,8 +135,19 @@
+     cp = p["checkpoints"]
+     if not cp or cp != sorted(set(cp)) or any(type(n) is not int or n < 1 for n in cp):
+         raise ValueError("invalid checkpoint schedule")
+-    if not test_fixture and (cp != CHECKPOINTS or p["outside_n"] != 100):
+-        raise ValueError("production occupancy100/300/1000 and outside100 required")
++    partial_mquake = (
++        p.get("decision") == "DEC-056"
++        and p.get("dataset") == "mquake"
++        and cp == [100, 300]
++        and p.get("missing_checkpoints") == [1000]
++        and all(
++            r.get("exposure_label")
++            == "new to the selected reader's training; historically exposed elsewhere"
++            for r in p["edits"] + p["outside"]
++        )
++    )
++    if not test_fixture and ((cp != CHECKPOINTS and not partial_mquake) or p["outside_n"] != 100):
++        raise ValueError("production full cadence or labelled DEC-056 MQuAKE100/300 required")
+     if len(p["edits"]) != max(cp) or len(p["outside"]) != p["outside_n"]:
+         raise ValueError("complete largest edit/outside population required")
+     rows = p["edits"] + p["outside"]

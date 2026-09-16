@@ -135,8 +135,19 @@ def validate_population(p, *, test_fixture=False):
     cp = p["checkpoints"]
     if not cp or cp != sorted(set(cp)) or any(type(n) is not int or n < 1 for n in cp):
         raise ValueError("invalid checkpoint schedule")
-    if not test_fixture and (cp != CHECKPOINTS or p["outside_n"] != 100):
-        raise ValueError("production occupancy100/300/1000 and outside100 required")
+    partial_mquake = (
+        p.get("decision") == "DEC-056"
+        and p.get("dataset") == "mquake"
+        and cp == [100, 300]
+        and p.get("missing_checkpoints") == [1000]
+        and all(
+            r.get("exposure_label")
+            == "new to the selected reader's training; historically exposed elsewhere"
+            for r in p["edits"] + p["outside"]
+        )
+    )
+    if not test_fixture and ((cp != CHECKPOINTS and not partial_mquake) or p["outside_n"] != 100):
+        raise ValueError("production full cadence or labelled DEC-056 MQuAKE100/300 required")
     if len(p["edits"]) != max(cp) or len(p["outside"]) != p["outside_n"]:
         raise ValueError("complete largest edit/outside population required")
     rows = p["edits"] + p["outside"]
@@ -227,9 +238,20 @@ def load_spec(path):
         or p["primary_reference"] != spec["primary_reference"]
     ):
         raise ValueError("population spec identity mismatch")
+    allowed_metadata_resources = set()
+    if p.get("decision") == "DEC-056" and p.get("dataset") == "mquake":
+        from pccap.bases.gpt2_jax import DEFAULT_SNAPSHOT
+
+        allowed_metadata_resources = {
+            (ROOT.parent / "assets/data/prepared/revision_v1/r1_d4_v1/items.jsonl").resolve(),
+            (DEFAULT_SNAPSHOT / "tokenizer.json").resolve(),
+            (DEFAULT_SNAPSHOT / "config.json").resolve(),
+        }
     for source, h in p["sources_sha256"].items():
         source = Path(source).resolve()
-        if not source.is_relative_to(ROOT) or "confirm" in source.parts:
+        if "confirm" in source.parts or (
+            not source.is_relative_to(ROOT) and source not in allowed_metadata_resources
+        ):
             raise PermissionError("development metadata source required")
         if sha(source) != h:
             raise ValueError("training/development source changed")

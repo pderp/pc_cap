@@ -210,7 +210,9 @@ def test_final_draft_inventory_and_execution_firewall(tmp_path):
     scenario = q.inventory(m, fallback_cell_seconds=1000, ceiling_hours=306)
     assert scenario["cost"]["projected_total_hours"] == 112.5
     bindings = put(tmp_path / "final-bindings.json", {})
-    with pytest.raises(PermissionError, match="Final execution unavailable"):
+    with pytest.raises(
+        PermissionError, match="explicit development or confirmatory matrix scope required"
+    ):
         q.run_queue(
             q.ROOT / "manifests/revision_v1/run_matrix_v5.json",
             bindings,
