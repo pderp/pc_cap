@@ -918,3 +918,51 @@ prefix at a time with a selection each). A 1,000-edit cell therefore still extra
 final checkpoint only) — Q7 stands as stated. Two concrete reductions for Codex (R1-68c): find and remove the
 per-phase clone/restore cost for read-only phases (the cap's read-only contract is already gate-tested), and batch the
 drift assay's prefixes (`last_logits_batch`) with per-position selection kept — together plausibly 1,262 → ≈ 500 s.
+
+## v5 CounterFact development cell through the driver, and the last unseen points (2026-09-16, 07:20 EDT)
+
+The v5 reader ran the 300-edit CounterFact development cell through Codex's driver
+(`docs/tasks/R1-64-counterfact-v5.recipe.json`, source order, checkpoints 100 / 300; run directory
+`results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69…`, status complete, exit 0).
+
+| phase (300-edit cell) | zsRE full (s) | CounterFact (s) |
+| --- | --- | --- |
+| edit (300) | 160 | 160 |
+| immediate (300) | 156 | 156 |
+| drift (1) | 506 | 379 |
+| unseen (2) | 110 | 111 |
+| near-miss (1) | 66 | 66 |
+| revision (1) | 37 | 36 |
+| retention (2) | 31 | 34 |
+| locality (2) | 11 | 11 |
+| phase-timer total | 1,077 | 954 |
+| attempt wall (first → last phase file) | 1,262 | 1,234 |
+
+Per-dataset cost is flat: CounterFact costs the same as zsRE to within the drift assay (its ordinary-text prefixes
+are shorter). The schedule memo (R1-72) can use one cost per cell, ≈ 21 min per 300 edits and ≈ 48 min per 1,000
+edits, for every dataset — MQuAKE differs only in edit count.
+
+Scientific results at checkpoint 300 (development, not confirmatory): ES 300/300, RET-GS 0.753 (0.765 at 100),
+unseen false fires 0/100 (checkpoint 100 and 300), drift +0.0063 nats (16,256 positions), revision 50/50 with the new
+record active, near-miss edit-exact 100/100. Retention agrees with the standalone stream (0.745 / 0.82 across streams).
+
+**Locality and near-miss under the driver's termination-qualified criterion.** The driver reports LS 36/50 and
+near-miss preserved 63/100 for CounterFact, against 50/50 and 100/100 for zsRE. Every one of those failures but one
+is a pair of byte-identical 32-token generations that both hit the token cap: the driver (`stage4_assays.py`,
+`_Challenges.near_miss` and `locality`) requires both continuations to terminate before it will call them preserved,
+which is the "termination-qualified equality" convention that protocol v4 §6 leaves as an explicit lead binding
+(bounded normalized text equality versus termination-qualified equality). Under bounded text equality — the criterion
+behind every LS number in these notes and the v5 endpoint battery — the same rows give LS 49/50 and near-miss 100/100.
+zsRE is unaffected (0/50 locality continuations truncate) because its prompts are questions whose answers terminate;
+CounterFact locality prompts are sentence stems that run to the cap (13/50 locality, 37/100 near-miss). This is a
+property of the prompt family, not of the cap: the reference (cap-off) generation truncates identically. Raised to the
+lead as Q9 with the recommendation to bind bounded text equality as primary and report termination-qualified alongside,
+so that the LS ≥ 0.98 selection rule (DEC-050) and the confirmatory LS margins mean the same thing on all three datasets.
+
+**Unseen points.** CounterFact at 300 records with pool-remainder outside prompts: 1/100 false fires (matches the
+≤ 1 % of the 100-record point). The MQuAKE 300- and 1,000-record points cannot be run by `r1_44_unseen_run.py`:
+its fillers come from `train_pool_mquake_v1.json[1000:]`, and the MQuAKE pool holds 500 items (the dev slice 200),
+so there is no reader-unseen filler beyond 200 edits; the runs stopped at the filler draw (`StopIteration`, no GPU
+time lost). MQuAKE unseen therefore stands at the 100-record point (≤ 1 %); a larger-memory MQuAKE point would need a
+held-out MQuAKE slice that the reader never trained on, which the v3 self-contained slices do not leave over. Recorded
+as a limitation, not pursued: the unseen-growth question was answered on zsRE (10 / 12 / 9 % at 100 / 300 / 1,000).
