@@ -78,10 +78,25 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 Round 16 is committed (`2e7ac38`) and mirrored (all eight lanes done). The R1-68c re-profile is running on the GPU
 (orchestrator); R1-64b comparator profiles and the R1-73 calibration run follow it. Priority order:
-R1-74 → R1-75 → R1-40c → R1-49e → R1-76. Rules as before (new files only; CPU only; edit requests as patches under
+R1-68d → R1-74 → R1-75 → R1-40c → R1-49e → R1-76. Rules as before (new files only; CPU only; edit requests as patches under
 `docs/tasks/`; tests under `tests/revision_v1/` must pass; no draw, seal, freeze, launch or commit).
 
-### Lane R1-74 — locality / near-miss scoring under DEC-053 (edit request; first)
+### Lane R1-68d — identity verification once per checkpoint, not once per phase (first; your own driver file)
+
+The R1-68c incremental re-profile (notes §"R1-68c re-profile") measured 837 s for the 300-edit zsRE v5 cell, of which
+534 s is `identity_verification_seconds`: 0.87 s of `adapter.identity()` in each of the 600 edit / immediate phases,
+re-hashing the base weights, reader parameters and installed inputs; model operation is 279 s and batched drift is
+83 s (was 506). A 1,000-edit cell therefore spends ≈ 29 min in identity checks against ≈ 15–17 min of model time.
+Change `scripts/r1_68c_dev_cell.py` (your new file; permission granted for this one file and its tests) so that the
+full immutable-identity rehash runs at attempt start, at every checkpoint before its receipt, on resume and at
+completion, while every phase keeps a cheap check — e.g. object identity / a small fingerprint of the parameter
+containers held in memory, or the existing `state_hash` for the mutable state — recorded per phase as
+`identity_check_seconds` and `identity_check_kind`. Any mismatch at a checkpoint still aborts without a receipt. Rebuild
+the two v5 recipes (`R1-68d-zsre-v5-{full,incremental}.recipe.json`) since the driver source is recipe-bound, and land
+the R1-74 scoring change in the same rebinding. TinyBase tests: timing fields present, identical results and checkpoint
+chain to R1-68c, abort on a checkpoint identity mismatch. The orchestrator re-profiles on the real base immediately.
+
+### Lane R1-74 — locality / near-miss scoring under DEC-053 (edit request; with R1-68d)
 
 DEC-053 binds bounded text equality as the primary locality and near-miss convention: a pair is preserved when the
 cap-on and cap-off 32-token greedy continuations are identical, terminated or not. The driver's `_Challenges.near_miss`

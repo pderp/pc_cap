@@ -535,3 +535,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     "shorter prefixes" explanation of the CounterFact drift-assay time. Nothing new needs a decision from you now;
     Q4 and Q5 stand. Q10 (MQuAKE occupancy population) will follow when Codex's memo lands.
 
+44. (2026-09-16, 08:25 EDT) **The time-budget overage has a measured cause and a fix.** Codex's R1-68c instrumented
+    driver ran the 300-edit zsRE cell in 837 s (was 1,246 s) with identical results; its timers show 534 s of that is
+    the immutable-identity check (re-hashing base weights before every one of 600 phases), 279 s is model work, and the
+    drift assay is now 83 s (was 506). Without the per-phase rehash a 1,000-edit cell is ≈ 15–17 min → ≈ 115 h for
+    all 405 cells against 306 available; with it, ≈ 45 min → ≈ 330 h. Lane R1-68d (Codex, first) moves the full
+    check to checkpoints; I re-profile the moment it lands and re-price on September 20 as DEC-052 says. No scope
+    change needed. Presentation record of the drift tail written to `assets/presentation-materials/tail_drift_v5.md`
+    with the figure.
+

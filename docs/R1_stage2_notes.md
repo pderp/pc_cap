@@ -925,18 +925,21 @@ The v5 reader ran the 300-edit CounterFact development cell through Codex's driv
 (`docs/tasks/R1-64-counterfact-v5.recipe.json`, source order, checkpoints 100 / 300; run directory
 `results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69…`, status complete, exit 0).
 
-| phase (300-edit cell) | zsRE full (s) | CounterFact (s) |
+| phase (300-edit cell; per-phase wall) | zsRE full (s) | CounterFact (s) |
 | --- | --- | --- |
-| edit (300) | 160 | 160 |
-| immediate (300) | 156 | 156 |
-| drift (1) | 506 | 379 |
-| unseen (2) | 110 | 111 |
-| near-miss (1) | 66 | 66 |
-| revision (1) | 37 | 36 |
+| edit (300) | 315 | 160 |
+| immediate (300) | 291 | 156 |
+| drift (1) | 508 | 379 |
+| unseen (2) | 100 | 111 |
+| near-miss (1) | — (none planned for zsRE) | 66 |
+| revision (1) | — (none planned for zsRE) | 36 |
 | retention (2) | 31 | 34 |
 | locality (2) | 11 | 11 |
-| phase-timer total | 1,077 | 954 |
 | attempt wall (first → last phase file) | 1,262 | 1,234 |
+
+(Corrected 08:20 EDT: the zsRE column first shown here duplicated the CounterFact per-edit numbers; the zsRE values are
+the measured full profile above. The per-edit wall differs between the two cells — 1.05 s zsRE vs 0.53 s CounterFact —
+which the R1-68c component timers attribute to identity verification, see the next entry.)
 
 The two measured learned-reader cells cost the same to within the drift assay (379 vs 506 s). Codex's late review
 (`logs/r1_round16/late_owner_results_review.md`) checked that both assays score the same 128 windows, 127 positions
@@ -968,3 +971,33 @@ so there is no reader-unseen filler beyond 200 edits; the runs stopped at the fi
 time lost). MQuAKE unseen therefore stands at the 100-record point (≤ 1 %); a larger-memory MQuAKE point would need a
 held-out MQuAKE slice that the reader never trained on, which the v3 self-contained slices do not leave over. Recorded
 as a limitation, not pursued: the unseen-growth question was answered on zsRE (10 / 12 / 9 % at 100 / 300 / 1,000).
+
+## R1-68c re-profile, incremental integrity profile (2026-09-16, 07:48 EDT)
+
+Codex's instrumented driver (`scripts/r1_68c_dev_cell.py`, recipe `docs/tasks/R1-68c-zsre-v5-incremental.recipe.json`,
+sha `0972f606…`) ran the same 300-edit zsRE v5 cell: **837 s** attempt wall (was 1,246 s), with byte-identical
+scientific results (state `b296c15d…`, ES 0.997, RET-GS 0.987, LS 50/50, unseen 8/100, drift +0.002198 nats). Run
+directory `results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-6e18a1e1…`. The new per-phase component
+timers (`phase-timings/`) split the 829 s of phase time as:
+
+| component | seconds | where |
+| --- | ---: | --- |
+| identity verification (`adapter.identity()` rehash of installed inputs, reader parameters and base weights) | 534 | 0.87 s in every one of the 600 edit / immediate phases; ≈ 1 s per read-only phase |
+| model operation | 279 | edit 44, immediate 18, unseen 100, drift 83, retention 29, locality 5 |
+| recipe verification | 11 | edit / immediate |
+| state hashing | 4 | immediate |
+| clone / restore / file writes | < 1 | read-only phases are clone-free, as designed |
+
+So Codex's caution was right: the ≈ 545 s "clone/restore" of the earlier attribution was never clone/restore — the
+R1-68b driver already ran edit and immediate phases without outer clones. It is the immutable-identity check,
+re-hashing the base weights before every phase. The batched drift assay works: 506 → 83 s for the same 16,256
+positions with a fresh selection per prefix (per-position NLLs identical to the stored v5 vector, mean
++0.002198 nats in both). The model itself needs 0.15 s per edit and 0.06 s per immediate check.
+
+Extrapolation to a 1,000-edit cell with three checkpoints: model operation ≈ 210 s (edits) + 300 s (unseen ×3) +
+250 s (drift ×3) + 100 s (retention ×3) + challenges ≈ 15 min for a zsRE cell, ≈ 17 min with CounterFact / MQuAKE
+challenges — if identity verification runs once per checkpoint instead of once per phase (2,000 × 0.87 s = 29 min
+otherwise). That is the whole difference between "does not fit" (48 min per cell, ≈ 330 h) and "fits with margin"
+(≈ 17 min, ≈ 115 h for 405 cells). Lane R1-68d asks Codex for exactly that change, with the per-phase check
+replaced by a cheap in-memory fingerprint and the full rehash kept at checkpoints, resume and completion. The full
+integrity profile re-run is in progress for the parity comparison.
