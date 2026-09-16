@@ -1001,3 +1001,30 @@ otherwise). That is the whole difference between "does not fit" (48 min per cell
 (≈ 17 min, ≈ 115 h for 405 cells). Lane R1-68d asks Codex for exactly that change, with the per-phase check
 replaced by a cheap in-memory fingerprint and the full rehash kept at checkpoints, resume and completion. The full
 integrity profile re-run is in progress for the parity comparison.
+
+## R1-68c re-profile, full integrity profile, and scalar-vs-batched drift parity (2026-09-16, 08:10 EDT)
+
+The full profile (`R1-68c-zsre-v5-full.recipe.json`, sha `f39fe5a3…`; run directory
+`…-zsre-development-source-cf378e3a…`) took **1,274 s**: identity verification 534 s (the same 0.87 s per phase),
+scalar one-prefix-at-a-time drift 516 s, other model operation 194 s, state hashing 8 s, clone / restore < 1 s.
+Same final state (`b296c15d…`), ES 0.997, RET-GS 0.987, LS 50/50, unseen 8/100. The full profile therefore isolates
+the two costs cleanly: the per-phase identity rehash (534 s in both profiles → R1-68d) and the scalar drift path
+(516 vs 83 s batched).
+
+Real-base parity of the batched drift assay against the scalar one, position by position (16,256 rows, same ids):
+
+| quantity | scalar (full) | batched (incremental) |
+| --- | ---: | ---: |
+| mean drift, nats | +0.002197557 | +0.002197529 |
+| maximum, nats | 8.685941 | 8.685958 |
+| positions > 0.1 / > 1 nat | 17 / 10 | 17 / 10 |
+| per-position \|Δ\| of the cap NLL: max / mean | 1.3e-4 / 2.9e-6 nats | |
+| positions with \|Δ\| > 1e-4 | 4 of 16,256 | |
+
+The reference (original-base and cap-off) NLL vectors also differ at the same roundoff level, since the batched path
+runs padded batch forwards. The TinyBase tolerance Codex tested (2e-5 absolute) is exceeded on the real base by a
+factor of six at the worst position, so admission of the batched path for confirmatory cells needs a stated real-base
+tolerance: I record **1e-3 nats per position, with identical exceedance counts at 0.01 / 0.1 / 1 nat**, satisfied
+here with a ten-fold margin, and ask that protocol v5 (R1-49e) state it under U11. Every tail statistic in the
+presentation record is unchanged under either path.
+

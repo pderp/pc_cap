@@ -544,3 +544,8 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     change needed. Presentation record of the drift tail written to `assets/presentation-materials/tail_drift_v5.md`
     with the figure.
 
+45. (2026-09-16, 08:35 EDT) R1-68c full profile: 1,274 s, confirming the split (identity rehash 534 s, scalar drift
+    516 s vs 83 s batched). Batched drift agrees with the scalar assay to 1.3e-4 nats at the worst position with
+    identical tail counts; I set the real-base admission tolerance at 1e-3 nats per position plus identical exceedance
+    counts (protocol v5 will state it). No decision needed. Codex has started round 17 (R1-74 files arriving).
+
