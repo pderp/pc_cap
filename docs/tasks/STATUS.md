@@ -1,6 +1,6 @@
 # Task status board
 
-Regenerated 2026-09-16 02:21 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
+Regenerated 2026-09-16 10:52 UTC from `manifests/tasks.json` by `python -m pccap.harness.status`.
 Do not edit by hand.
 
 | status | count |
@@ -8,7 +8,7 @@ Do not edit by hand.
 | done | 141 |
 | in_progress | 1 |
 | partial | 18 |
-| ready | 7 |
+| ready | 9 |
 | pending | 8 |
 
 GPU seconds charged to tasks so far: 118743
