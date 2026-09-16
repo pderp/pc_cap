@@ -105,9 +105,18 @@ driver: clustered vs shuffled schedules from the manifest, probes at the 20/60/7
 probe set, recovery band and censoring rule, outputs under `results/R1/stage4_dev_cells/ht_panel/`. TinyBase tests; the
 orchestrator runs it after the primary is selected and Q5 is answered.
 
-### Lane R1-X12 — still held until the selection manifest exists
+### Lane R1-X12 — RELEASED: counter-review of the primary selection
 
-(Do not start.) Counter-review of `manifests/revision_v1/primary_selection_v{1,2}.json` and the re-profiled driver.
+`manifests/revision_v1/primary_selection_v2.json` and `primary_condition_v5.json` exist. Review: the populations are
+common across candidates; the rule was applied as confirmed (DEC-050); the winner's admissibility sits at the 10 % limit
+with n = 100 (state the uncertainty honestly: binomial interval, and what a 300-record or pool-source population would
+show — those runs are the orchestrator's next GPU work); checkpoint averaging is a legitimate candidate (uniform weights,
+steps 150–300) and its identity is bound; the retention–rejection curve as the talk's central figure. Output
+`logs/review_r1_selection.md` with edit requests.
+
+### Lane R1-63c — freeze candidate v4 (after R1-X12)
+
+Rebind the freeze candidate to primary_condition_v5, register v6, matrix v4 and the selection manifest; print the open gates.
 
 ## 4. Interfaces and coordination
 

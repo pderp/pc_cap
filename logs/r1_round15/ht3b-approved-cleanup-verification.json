@@ -1,0 +1,50 @@
+{
+  "authorization": "User explicitly approved cleanup in the current turn.",
+  "checks": [
+    {
+      "command": [
+        "../venv/bin/ruff",
+        "check",
+        "--no-cache",
+        "scripts/ht3b_objective_review.py"
+      ],
+      "output": "All checks passed!"
+    },
+    {
+      "command": [
+        "../venv/bin/ruff",
+        "format",
+        "--check",
+        "--no-cache",
+        "scripts/ht3b_objective_review.py"
+      ],
+      "output": "1 file already formatted"
+    }
+  ],
+  "committed": false,
+  "edited_file": "scripts/ht3b_objective_review.py",
+  "edited_file_sha256": "6a9c6cd0931ebbee11cc29b3bffea3b03057178260a11a0894e837e5313e3f46",
+  "gpu_seconds": 0,
+  "import_order": [
+    "pccap",
+    "jax"
+  ],
+  "note": "This receipt closes the pending mechanical cleanup in prior task/handoff records. Those historical records and pilot manifests were not rewritten. Scientific launch gates remain unchanged.",
+  "numerical_results": {
+    "extreme_float32_preservation": "overflow reproduced; positive infinity",
+    "invalid_configs_refused": 11,
+    "kl_limit": 2.2049577236175537,
+    "max_stationary_logit_gradient_norm": 2.3910945401439676e-07,
+    "min_divergence": 3.979865789413452,
+    "random_distribution_pairs": 128,
+    "small_kappa": 1e-10,
+    "small_kappa_divergence": 2.2049574851989746,
+    "status": "mathematical repair passes; runtime finite-value safeguard remains a launch gate"
+  },
+  "numerical_results_exactly_match": "logs/heavy_tail/HT-3b-objective-review.json",
+  "patch_request": "docs/tasks/HT-3b-review-script-cleanup-request-v2.md",
+  "status": "approved_cleanup_applied_and_verified",
+  "task": "HT-3b",
+  "training_runs": 0,
+  "verified_utc": "2026-09-15T23:58:23.919753+00:00"
+}

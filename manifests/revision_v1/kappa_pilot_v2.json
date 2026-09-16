@@ -1,0 +1,141 @@
+{
+  "actual_trainer_validation": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= ../venv/bin/python -m pytest -q -p no:cacheprovider tests/revision_v1/test_ht_kappa_actual.py tests/revision_v1/test_kappa_loss.py",
+    "coverage": "actual fast objective plus TinyBase slow/fast gradients at zero and kappa=.5",
+    "result": "10 passed in 13.59s"
+  },
+  "aggregation_proposal_requires_Q4_acceptance": {
+    "clip_role": "Report kappa05 vs clip2 descriptively on identical metrics. No ceiling-matched claim for kappa02.",
+    "datasets": [
+      "zsre",
+      "counterfact",
+      "mquake"
+    ],
+    "direction": "An increase may meet separation but cannot be described as improved robustness; reduction is required for an improvement claim.",
+    "inferential_scope": "development pilot, no confirmatory p-values or causal heavy-tail claim",
+    "missingness": "Never drop seeds/datasets or select checkpoint by observed tail performance.",
+    "retention": "For each arm compute RET-GS at the predeclared final pilot checkpoint per dataset/seed; equal-weight mean of 9 values. Each coupled candidate must be >= ordinary macro mean minus .02.",
+    "seed_spread_rule": "For each metric average the 3 datasets within each seed. Compare each coupled arm's 3-seed mean with ordinary's; require abs(mean difference) > max(range of coupled seed macros, range of ordinary seed macros). Print the signed difference. This is exploratory separation, not a significance test.",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tail_metrics": [
+      "empirical ES95 of positive harm (fractional boundary weights)",
+      "maximum positive harm"
+    ],
+    "tail_population": "Same frozen ordinary-text windows/positions for all arms and seeds; positive per-token NLL increase relative to original base. Compare only complete identically keyed populations; any missing/nonfinite cell makes the gate unavailable.",
+    "unseen": "For each dataset, arithmetic mean false-fire rate across the same 3 seeds must not exceed ordinary's dataset mean; report every seed as well."
+  },
+  "arms": [
+    {
+      "clip_surprisal": null,
+      "id": "ordinary",
+      "kappa": 0.0,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "answer_ceiling": 5.0,
+      "clip_surprisal": null,
+      "id": "kappa02",
+      "kappa": 0.2,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "answer_ceiling": 2.0,
+      "clip_surprisal": null,
+      "id": "kappa05",
+      "kappa": 0.5,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "answer_ceiling": 2.0,
+      "clip_surprisal": 2.0,
+      "id": "clip2",
+      "kappa": 0.0,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "blockers_cleared": [
+    "negative preservation counterexample",
+    "nonstationarity at equality",
+    "small-kappa cancellation",
+    "nonfinite config acceptance",
+    "missing positive-kappa reference/fast parity"
+  ],
+  "budget_seconds": 10800,
+  "comparator_interpretation": "clip2 ceiling-matches kappa05 only. kappa02 is a secondary unmatched dose. Ceiling-matching both requires clip5 and 15 total trainings, a separate scope/budget amendment.",
+  "design": "9 ordinary/coupled + 3 clipped; shared chosen architecture/training schedule and development evaluation population",
+  "experimental_completion_deadline": "2026-10-09",
+  "gpu_seconds": 0,
+  "launch_authorized": false,
+  "launch_gates_open": [
+    "lead Q4 acceptance including arms/aggregation",
+    "selected primary and all training/evaluation bindings",
+    "finite loss/gradient/parameter abort guard with charged failure receipts (overflow probe demonstrates why)",
+    "GPU lease, memory guard and measured 3h aggregate budget including failures"
+  ],
+  "objective": {
+    "answer": "-expm1(-kappa * surprisal) / kappa; ordinary surprisal at kappa=0",
+    "boundary": "rejection CE formula is unchanged but shared parameters may change its predictions; kappa does not repair the rejection boundary",
+    "citation": {
+      "arxiv": "https://arxiv.org/abs/0912.0748v1",
+      "doi": "10.1016/j.physa.2010.01.044"
+    },
+    "finite_precision": "not uniformly bounded; float32 expm1 overflows near kappa*log(p/q)>88.7",
+    "interpretation": "bounded answer surprisal with convex preservation f-divergence; not a proof that the entire objective equals a published coupled entropy/free energy",
+    "mapping": "Nelson-Umarov ln_Q(x)=(x^Q-1)/Q; ln_Q(1/p)=-ln_{-Q}(p); implemented -ln_kappa(p) maps to Q=-kappa",
+    "preservation": "D_k(p||q) = sum p * expm1(kappa*(log(p)-log(q))) / kappa",
+    "proof": "For normalized positive p,q, D=sum q*f(p/q), f(t)=(t^(1+k)-t)/k; f(1)=0, f''(t)=(1+k)t^(k-1)>0. Jensen gives D>=0; equality and stationary q-logits at q=p.",
+    "reference": "episode-fixed reference; coupled_divergence does not itself detach its first argument",
+    "small_kappa": "expm1 avoids subtraction cancellation",
+    "zero_limit": "KL(p||q)"
+  },
+  "pending_mechanical_cleanup": "docs/tasks/HT-3b-review-script-cleanup-request-v2.md",
+  "review": {
+    "extreme_float32_preservation": "overflow reproduced; positive infinity",
+    "invalid_configs_refused": 11,
+    "kl_limit": 2.2049577236175537,
+    "max_stationary_logit_gradient_norm": 2.3910945401439676e-07,
+    "min_divergence": 3.979865789413452,
+    "random_distribution_pairs": 128,
+    "small_kappa": 1e-10,
+    "small_kappa_divergence": 2.2049574851989746,
+    "status": "mathematical repair passes; runtime finite-value safeguard remains a launch gate"
+  },
+  "review_execution_note": "pccap was imported before loading the review module; the standalone script cleanup is pending. Numerical results use installed trainers.",
+  "review_producer_historical": {
+    "note": "Historical diagnostic source, not a launch-time binding; mechanical import/lint cleanup is pending permission.",
+    "path": "scripts/ht3b_objective_review.py",
+    "sha256": "3bd1de8e114886d0aac4dc5255373aa0b0c622bddb05d9a42e38dc772cba5a19"
+  },
+  "schema_version": 2,
+  "selected_primary": null,
+  "sources_sha256": {
+    "src/pccap/revision_v1/train.py": "edad4388790381d92d14a30802260d1d3a480ffd86c389610c452dfd9c63b911",
+    "src/pccap/revision_v1/train_fast.py": "b37f9512c0da9b305ad750bad61c759524a38e2181b3f6f70b14d258650ec265",
+    "tests/revision_v1/test_ht_kappa_actual.py": "a930471143845e242f37c1c021e5435321d492bb878cce2331a3b7f80eadc896"
+  },
+  "status": "objective_review_passes_pending_Q4",
+  "supersedes": "manifests/revision_v1/kappa_pilot_v1.json",
+  "task": "HT-3b",
+  "training_count": 12,
+  "training_runs_executed": 0
+}

@@ -1,0 +1,807 @@
+{
+  "abort_before_draw": true,
+  "abort_reasons": [
+    "final joint clearance absent"
+  ],
+  "admitted": false,
+  "allocation": {
+    "allocation_order": [
+      "edits",
+      "outside",
+      "near_miss_support",
+      "near_miss_neighbour",
+      "revision"
+    ],
+    "complete_capacity": true,
+    "counts": {
+      "edits": 1000,
+      "near_miss_neighbour": 100,
+      "near_miss_support": 100,
+      "outside": 100,
+      "revision": 50
+    },
+    "datasets": [
+      {
+        "available_candidates": 52411,
+        "dataset": "zsre",
+        "requested_total": 4050,
+        "shortfall": 0
+      },
+      {
+        "available_candidates": 12246,
+        "dataset": "counterfact",
+        "requested_total": 4050,
+        "shortfall": 0
+      },
+      {
+        "available_candidates": 4218,
+        "dataset": "mquake",
+        "requested_total": 4050,
+        "shortfall": 0
+      }
+    ],
+    "note": "capacity quotas do not select candidate IDs; neither eligibility nor near-miss/revision semantics is certified",
+    "realizations": 3,
+    "replacement": false,
+    "roles": [
+      {
+        "capacity": 1000,
+        "dataset": "zsre",
+        "realization": 0,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 327,
+          "3-4": 420,
+          "5-8": 231,
+          "9+": 22
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 0,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 0,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 0,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "zsre",
+        "realization": 0,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 16,
+          "3-4": 21,
+          "5-8": 12,
+          "9+": 1
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "zsre",
+        "realization": 1,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 327,
+          "3-4": 420,
+          "5-8": 231,
+          "9+": 22
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 1,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 1,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 1,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "zsre",
+        "realization": 1,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 16,
+          "3-4": 21,
+          "5-8": 12,
+          "9+": 1
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "zsre",
+        "realization": 2,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 327,
+          "3-4": 420,
+          "5-8": 231,
+          "9+": 22
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 2,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 2,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "zsre",
+        "realization": 2,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 33,
+          "3-4": 42,
+          "5-8": 23,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "zsre",
+        "realization": 2,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 16,
+          "3-4": 21,
+          "5-8": 12,
+          "9+": 1
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "counterfact",
+        "realization": 0,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 1000
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 0,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 0,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 0,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "counterfact",
+        "realization": 0,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 50
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "counterfact",
+        "realization": 1,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 1000
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 1,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 1,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 1,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "counterfact",
+        "realization": 1,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 50
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "counterfact",
+        "realization": 2,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 1000
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 2,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 2,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "counterfact",
+        "realization": 2,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 100
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "counterfact",
+        "realization": 2,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 50
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "mquake",
+        "realization": 0,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 321,
+          "3-4": 460,
+          "5-8": 198,
+          "9+": 21
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 0,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 0,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 0,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "mquake",
+        "realization": 0,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 16,
+          "3-4": 23,
+          "5-8": 10,
+          "9+": 1
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "mquake",
+        "realization": 1,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 321,
+          "3-4": 460,
+          "5-8": 198,
+          "9+": 21
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 1,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 1,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 1,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "mquake",
+        "realization": 1,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 16,
+          "3-4": 23,
+          "5-8": 10,
+          "9+": 1
+        }
+      },
+      {
+        "capacity": 1000,
+        "dataset": "mquake",
+        "realization": 2,
+        "requested": 1000,
+        "role": "edits",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 322,
+          "3-4": 460,
+          "5-8": 197,
+          "9+": 21
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 2,
+        "requested": 100,
+        "role": "outside",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 2,
+        "requested": 100,
+        "role": "near_miss_support",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 100,
+        "dataset": "mquake",
+        "realization": 2,
+        "requested": 100,
+        "role": "near_miss_neighbour",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 32,
+          "3-4": 46,
+          "5-8": 20,
+          "9+": 2
+        }
+      },
+      {
+        "capacity": 50,
+        "dataset": "mquake",
+        "realization": 2,
+        "requested": 50,
+        "role": "revision",
+        "shortfall": 0,
+        "strata": {
+          "1-2": 16,
+          "3-4": 23,
+          "5-8": 10,
+          "9+": 1
+        }
+      }
+    ],
+    "shortfall_rule": "report capacity only; actual draw aborts globally before any selection or write",
+    "stratification": "proportional answer-token-length quotas; bins include terminal tokens; largest remainder with lexical tie-break"
+  },
+  "binding_errors": [],
+  "bindings_verified": 45,
+  "candidate_ids_emitted": false,
+  "datasets": {
+    "counterfact": {
+      "bound_note": "Individual trivial upper bounds overlap; do not sum them. No nonzero guaranteed usable count is certified.",
+      "candidate_item_strata": {
+        "1-2": 12246
+      },
+      "candidate_items": 12246,
+      "candidate_subjects": 12246,
+      "demand_subjects": 4050,
+      "first_subject_loss_count_causing_shortfall": 8197,
+      "guaranteed_cleared_subjects": 0,
+      "headroom_subjects": 8196,
+      "joint_removal_upper_bound": 12246,
+      "maximum_subject_losses_preserving_demand": 8196,
+      "nominal_capacity_sufficient": true,
+      "pending_clearance": [
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 12246,
+          "step": "alias/entity equivalence including cross-dataset collisions"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 12246,
+          "step": "context and cumulative exposure through draw time"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 12246,
+          "step": "final-base E.2 teacher and token/context eligibility"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 12246,
+          "step": "disjoint roles and compatible near-miss/revision cases"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 12246,
+          "step": "composition dependency closure"
+        }
+      ],
+      "pending_clearance_removal_upper_bound_items": 12246,
+      "pending_clearance_removal_upper_bound_subjects": 12246,
+      "representative_subject_strata": {
+        "1-2": 12246
+      }
+    },
+    "mquake": {
+      "bound_note": "Individual trivial upper bounds overlap; do not sum them. No nonzero guaranteed usable count is certified.",
+      "candidate_item_strata": {
+        "1-2": 1451,
+        "3-4": 2049,
+        "5-8": 896,
+        "9+": 93
+      },
+      "candidate_items": 4489,
+      "candidate_subjects": 4218,
+      "demand_subjects": 4050,
+      "first_subject_loss_count_causing_shortfall": 169,
+      "guaranteed_cleared_subjects": 0,
+      "headroom_subjects": 168,
+      "joint_removal_upper_bound": 4218,
+      "maximum_subject_losses_preserving_demand": 168,
+      "nominal_capacity_sufficient": true,
+      "pending_clearance": [
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 4218,
+          "step": "alias/entity equivalence including cross-dataset collisions"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 4218,
+          "step": "context and cumulative exposure through draw time"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 4218,
+          "step": "final-base E.2 teacher and token/context eligibility"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 4218,
+          "step": "disjoint roles and compatible near-miss/revision cases"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 4218,
+          "step": "composition dependency closure"
+        }
+      ],
+      "pending_clearance_removal_upper_bound_items": 4489,
+      "pending_clearance_removal_upper_bound_subjects": 4218,
+      "representative_subject_strata": {
+        "1-2": 1354,
+        "3-4": 1941,
+        "5-8": 835,
+        "9+": 88
+      }
+    },
+    "zsre": {
+      "bound_note": "Individual trivial upper bounds overlap; do not sum them. No nonzero guaranteed usable count is certified.",
+      "candidate_item_strata": {
+        "1-2": 17128,
+        "3-4": 22022,
+        "5-8": 12098,
+        "9+": 1163
+      },
+      "candidate_items": 52411,
+      "candidate_subjects": 52411,
+      "demand_subjects": 4050,
+      "first_subject_loss_count_causing_shortfall": 48362,
+      "guaranteed_cleared_subjects": 0,
+      "headroom_subjects": 48361,
+      "joint_removal_upper_bound": 52411,
+      "maximum_subject_losses_preserving_demand": 48361,
+      "nominal_capacity_sufficient": true,
+      "pending_clearance": [
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 52411,
+          "step": "alias/entity equivalence including cross-dataset collisions"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 52411,
+          "step": "context and cumulative exposure through draw time"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 52411,
+          "step": "final-base E.2 teacher and token/context eligibility"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 52411,
+          "step": "disjoint roles and compatible near-miss/revision cases"
+        },
+        {
+          "certified_removals": null,
+          "maximum_subjects_removed": 52411,
+          "step": "composition dependency closure"
+        }
+      ],
+      "pending_clearance_removal_upper_bound_items": 52411,
+      "pending_clearance_removal_upper_bound_subjects": 52411,
+      "representative_subject_strata": {
+        "1-2": 17128,
+        "3-4": 22022,
+        "5-8": 12098,
+        "9+": 1163
+      }
+    }
+  },
+  "demand_note": "3 x (1000 edits +100 outside +100 near supports +100 near neighbours +50 revision) =4050 distinct subjects per dataset.",
+  "draw_authorized": false,
+  "draws_emitted": 0,
+  "gpu_seconds": 0,
+  "mode": "strict_count_only_no_draw",
+  "register": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v6.json",
+    "sha256": "0ad06b24d727e00c22fd70d669d0e1b6625ecfa5a4578d070cc248ac3f90ad65"
+  },
+  "representative_policy": "First v6 candidate in bound-register order per subject; count-only prospective stratum convention, not an admitted draw.",
+  "rng_used": false,
+  "seals_emitted": 0,
+  "task": "R1-D1i"
+}

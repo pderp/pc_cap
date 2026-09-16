@@ -1,0 +1,60 @@
+{
+ "name": "primary_condition_v5",
+ "date": "2026-09-15",
+ "status": "development reference selected under DEC-049/DEC-050; not frozen",
+ "supersedes": "primary_condition_v4 (three pools, single final checkpoint); v3 stays the two-dataset fallback",
+ "condition": "learned reader (tied cosine + pairwise null + lexical overlap, stop list v1), stable observations, per-position delta writes (5 normalized adjoint steps, tau 0.1, A 0.3, v2 b_m), hard top-1, null threshold 0.5, binary mass, top-k 4, R1-56 rare-token overlap gate (rare_overlap_min=1, rare_df_max=2); weights = uniform average of the step-150/200/250/300 checkpoints of one training run (R1-71)",
+ "training": "stream-scale mixed-domain episodes over three pools (CounterFact v1 1,000; zsRE v1 1,000; MQuAKE v3 self-contained 500; 64-record memories; ordinary-text nulls 8/episode; question-form out-of-memory nulls at rate 1.0 (R1-66); locality nulls never equal to an in-memory own prompt (R1-65)); 300 steps x 2; lr 1e-3; wd 0.01; seed 2; bounded-shape trainer (R1-69); scripts/r1_50_stream_train.py --save-every 50",
+ "weights": {
+  "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_avg150-300.npz",
+  "sha256": "b38fb851e5ebf66de6700aa2a68dbdee23bf093f56f2c0897e3bb275b5af19e6",
+  "run": "r1_50_stream_sel6_text_s2",
+  "checkpoint": "avg150-300",
+  "sources": [
+   "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step150.npz",
+   "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step200.npz",
+   "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step250.npz",
+   "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step300.npz"
+  ]
+ },
+ "selection": {
+  "manifest": "manifests/revision_v1/primary_selection_v2.json",
+  "sha256": "93cad8d0274dbf2d9ee2a7da6fa2ebcf58900d2bb7b902558bdfaad43ffa5816",
+  "rule": "DEC-050: max mean RET-GS over zsRE/CounterFact/MQuAKE development streams (stream seed 21; MQuAKE dev v3b) subject to zsRE unseen false fires <= 10 % at 100 records (dev prompts) and LS >= 0.98 on every dataset; candidates = (run, checkpoint) pairs (DEC-049)",
+  "candidates_complete": 42,
+  "admissible": 15,
+  "winner_mean_ret_gs": 0.8033333333333333
+ },
+ "development_results": {
+  "zsre": {
+   "es_immediate": 1.0,
+   "ret_es_end": 1.0,
+   "ret_gs_end": 0.98,
+   "ls_complete_answer_end": 1.0
+  },
+  "counterfact": {
+   "es_immediate": 1.0,
+   "ret_es_end": 1.0,
+   "ret_gs_end": 0.82,
+   "ls_complete_answer_end": 0.98
+  },
+  "mquake": {
+   "es_immediate": 1.0,
+   "ret_es_end": 1.0,
+   "ret_gs_end": 0.61,
+   "ls_complete_answer_end": 1.0
+  },
+  "unseen_zsre_100": 0.1
+ },
+ "trade_off": "unconstrained best candidates reach mean RET-GS 0.85-0.87 with 19-55 % zsRE unseen false fires at 100 records; the constrained winner sits at the 10 % limit (n = 100 prompts), so its admissibility is a point estimate at the boundary (R1-X12 review requested)",
+ "pools": {
+  "train_pool_counterfact_v1": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+  "train_pool_zsre_v1": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e",
+  "train_pool_mquake_v3": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+ },
+ "stop_tokens": {
+  "path": "manifests/revision_v1/stop_tokens_v1.json",
+  "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+ },
+ "evidence": "docs/R1_stage2_notes.md (selection section); results/R1/stream_eval.md (sel* tags); results/R1/endpoints/r1_50_stream_sel*_unseen_zsre/"
+}

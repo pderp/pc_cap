@@ -486,3 +486,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     stored-results tail audit (the +3.79-nat outlier reproduces; the two full drift sets are identical runs, not
     replications), the six-cell stress contract, and an 18-row claim–evidence ledger for the talk.
 
+36. (2026-09-15, 22:10 EDT) **Primary condition v5 selected under your rule (DEC-049/050).** Winner: question-null family,
+    seed 2, average of checkpoints 150–300 — mean RET-GS 0.803 (zsRE 0.98, CounterFact 0.82, MQuAKE 0.61), ES 1.00, LS ≥ 0.98,
+    zsRE unseen false fires exactly 10 % (the limit; 10 of 100 prompts). The unconstrained best readers reach 0.85–0.87 mean
+    RET-GS but fire on 19–55 % of unseen prompts, so the constraint is doing real work; checkpoint averaging removed the
+    seed lottery on retention but not on rejection. R1-X12 (Codex) now reviews the selection. Codex's round 15 also landed:
+    register v6 bound to a frozen decisions snapshot (draw plan and freeze candidate v3 now emit), κ pilot manifest v2
+    (objective passes its re-review; Q4 still yours), and the stress-panel driver (Q5 still yours).
+

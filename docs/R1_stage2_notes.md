@@ -851,3 +851,29 @@ KL(p‖q) as κ → 0 (`train.py::coupled_divergence`; the answer term keeps the
 trainer applies κ and clipping so the TinyBase parity test now holds at κ = 0 and κ = 0.5. Codex's diagnostic tests
 became invariant tests. Codex's mapping note stands: the bounded surprisal corresponds to Q = −κ in the Nelson–Umarov
 convention; the pilot is a loss-level coupling, not the coupled-entropy construction.
+
+## DEC-049/050 selection: primary condition v5 (2026-09-15, 22:10 EDT)
+
+42 candidates = 6 training runs (plain family `sel4` and question-null family `sel6`, seeds 0–2, three pools with the
+v3 MQuAKE slices, bounded-shape trainer) × (checkpoints 50…300 and the uniform average of steps 150–300), each
+evaluated on the same populations (streams seed 21; MQuAKE dev v3b; zsRE unseen 100 dev prompts after 100 edits).
+Rule (DEC-050): max mean RET-GS subject to zsRE unseen false fires ≤ 10 % and LS ≥ 0.98 on every dataset
+(`manifests/revision_v1/primary_selection_v{1,2}.json`).
+
+| candidate | zsRE / CounterFact / MQuAKE RET-GS | mean | ES (MQ / CF) | zsRE unseen | LS min | admissible |
+| --- | --- | ---: | --- | ---: | ---: | --- |
+| **sel6 s2 avg150–300 (winner, v5)** | 0.98 / 0.82 / 0.61 | **0.803** | 1.00 / 1.00 | 10 % | 0.98 | yes |
+| sel6 s1 avg | 0.94 / 0.72 / 0.56 | 0.740 | 0.87 / 0.95 | 6 % | 1.00 | yes |
+| sel4 s0 step 250 (v1 winner) | 0.93 / 0.73 / 0.55 | 0.737 | 0.96 / 0.99 | 8 % | 1.00 | yes |
+| sel4 s0 avg | 0.97 / 0.82 / 0.75 | 0.847 | 1.00 / 1.00 | 19 % | 1.00 | no |
+| sel6 s0 avg | 0.98 / 0.785 / 0.77 | 0.845 | 1.00 / 1.00 | 19 % | 0.98 | no |
+| sel4 s1 avg | 0.98 / 0.78 / 0.77 | 0.843 | 1.00 / 1.00 | 42 % | 1.00 | no |
+| sel4 s1 step 250 | — | 0.867 | — | 55 % | 1.00 | no |
+
+Checkpoint averaging stabilises retention (four of six averaged readers at 0.82–0.85 with ES 1.00, against single
+checkpoints that swing between 0.44 and 0.87) but not the unseen rate, which is the binding constraint: every
+candidate above 0.81 mean fires on 17–55 % of unseen zsRE prompts. The winner is the question-null family, seed 2,
+averaged — mean 0.803 at exactly the 10 % limit (10 of 100 prompts; a point estimate at the boundary, flagged for
+R1-X12). The retention–rejection trade-off is now a measured curve rather than a seed accident, which is the fact
+the October talk should show. `manifests/revision_v1/primary_condition_v5.json` binds the winner; v3 stays the
+two-dataset fallback.
