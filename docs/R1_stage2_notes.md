@@ -1028,3 +1028,26 @@ tolerance: I record **1e-3 nats per position, with identical exceedance counts a
 here with a ten-fold margin, and ask that protocol v5 (R1-49e) state it under U11. Every tail statistic in the
 presentation record is unchanged under either path.
 
+## R1-68d re-profile: 288 s per 300-edit cell (2026-09-16, 10:35 EDT)
+
+Codex's R1-68d driver (identity rehash at attempt start, every checkpoint and completion; a cheap in-memory
+structure check per phase) with the DEC-053 scoring patch installed, incremental integrity profile, recipe
+`docs/tasks/R1-68d-zsre-v5-incremental.recipe.json` (sha `fceb3d29…`): **288 s** for the same 300-edit zsRE v5 cell
+(run `…-zsre-development-source-6e8c802c…`). Results unchanged for the fourth time (state `b296c15d…`, ES 0.997,
+RET-GS 0.987, LS 50/50, unseen 8/100, drift +0.002197529 = the batched value). The locality rows now carry
+`preserved` (bounded equality), `preserved_terminated`, and per-side truncation flags.
+
+| driver | 300-edit zsRE cell (s) | of which model operation |
+| --- | ---: | ---: |
+| R1-68b incremental (Sept 15) | 1,246 | ≈ 700 |
+| R1-68c incremental (batched drift) | 837 | 279 |
+| R1-68d incremental (boundary identity) | 288 | 278 |
+
+Per-phase identity checks total 1.1 s over 610 phases; the four full rehashes total 1.8 s. The cell is now 98 %
+model time: edits 0.14 s, immediate checks 0.06 s, unseen 50 s per checkpoint, drift 83 s, retention ≈ 15 s per
+checkpoint. A 1,000-edit cell with three checkpoints extrapolates to ≈ 14 min for zsRE and ≈ 16 min with the
+CounterFact / MQuAKE challenge sets (≈ 100 s), i.e. ≈ 110 h for all 405 cells against 306 usable hours — the
+matrix fits with margin under DEC-052, subject to the comparator-condition profiles (R1-64b recipes need
+rebinding to this tree) and the September 20 re-measurement. The full-integrity R1-68d profile runs at the end of
+the pilot chain for the record.
+

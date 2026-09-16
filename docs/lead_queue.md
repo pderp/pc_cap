@@ -563,3 +563,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 47. (2026-09-16, 10:35 EDT) **Q10 posted** (MQuAKE occupancy population; my default A). Codex's arithmetic: 700 historically exposed rows could support a 300-record point after review, never the 1,000-record one; the register's 168-subject headroom cannot close the gap and must not be spent on development. zsRE and CounterFact get the proper common-population occupancy curve from the R1-76 runner (its populations are prepared; it runs after the pilot).
 
+48. (2026-09-16, 10:40 EDT) **The budget problem is solved on the measured number**: the R1-68d driver runs the 300-edit
+    zsRE cell in 288 s (was 1,246 s on September 15) with identical results; 98 % of it is now model time. A 1,000-edit
+    cell extrapolates to ≈ 14–16 min, ≈ 110 GPU h for all 405 cells against 306 available. Remaining before the
+    September 20 re-pricing: profile the comparator conditions (R1-64b recipes, rebound to this tree) and one MQuAKE
+    cell after the R1-73 calibration; both run after the κ pilot finishes this afternoon.
+
