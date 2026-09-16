@@ -70,84 +70,18 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 - Rules unchanged (§ top); Codex: new files only, CPU only, no sealed payloads, no real-base execution; edit requests
   as patches under `docs/tasks/`. Tests under `tests/revision_v1/` (CPU) must pass.
 
-## 2. Orchestrator lane (do not touch)
+- **Round 16 committed** (`2e7ac38`, 2026-09-16): R1-X12 selection review (42 candidates, 15 admissible, unique winner;
+  zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
+  instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
+  available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
+  +0.006## 3. Lanes for Codex — round 17 (CPU; open now; posted 2026-09-16 08:05 EDT)
 
-v0 close-out (tonight) → R1-01/02/03 diagnostics (GPU, ≈ 2 h) → `docs/R1_diagnosis.md` → Stage 1 core modules
-(`revision_v1/{contracts,observations,memory,reader,controller,adapt,evaluate}.py`) with the gates → Stage 2 reference and
-surrogates → Stage 4 runs and the revision freeze support. Owned: `src/pccap/revision_v1/` except the files named in §3,
-`results/R1/`, `manifests/revision_v1/`, the registers, `docs/lead_queue.md`.
+Round 16 is committed (`2e7ac38`) and mirrored (all eight lanes done). The R1-68c re-profile is running on the GPU
+(orchestrator); R1-64b comparator profiles and the R1-73 calibration run follow it. Priority order:
+R1-74 → R1-75 → R1-40c → R1-49e → R1-76. Rules as before (new files only; CPU only; edit requests as patches under
+`docs/tasks/`; tests under `tests/revision_v1/` must pass; no draw, seal, freeze, launch or commit).
 
-## 3. Lanes for Codex — round 16 (CPU; open now; posted 2026-09-16 09:00 EDT)
-
-Round 15 is committed (`f332800`) and mirrored (R1-D1i, HT-3b, HT-5 done). Primary condition v5 is selected and
-characterised; the v5 driver profiles are measured (notes §"Driver profiles on the primary v5 reader"). Priority order:
-R1-X12 → R1-68c → R1-72 → HT-1b → HT-4b → R1-63c. Rules as before.
-
-### Lane R1-X12 — counter-review of the primary selection (first)
-
-`manifests/revision_v1/primary_selection_v2.json` and `primary_condition_v5.json` exist. Review: the populations are
-common across candidates; the rule was applied as confirmed (DEC-050); the winner's admissibility sits at the 10 % limit
-with n = 100 (state the uncertainty honestly: binomial interval, and what a 300-record or pool-source population would
-show — those runs are the orchestrator's next GPU work); checkpoint averaging is a legitimate candidate (uniform weights,
-steps 150–300) and its identity is bound; the retention–rejection curve as the talk's central figure. Output
-`logs/review_r1_selection.md` with edit requests.
-
-### Lane R1-68c — remove the per-phase clone/restore cost and batch the drift assay
-
-Measured on v5 (notes §"Driver profiles on the primary v5 reader"): the incremental integrity profile is byte-identical
-and only 16 s faster than the full profile (1,246 vs 1,262 s), so the ≈ 0.9 s of non-model time per edit and per
-immediate phase is the clone/restore/verification around each phase, not the hashing. (1) Instrument the phase wrapper
-to split verification / clone / restore / file-write time, then remove clone+restore for phases that the cap's
-read-only contract already guarantees (immediate check, retention, locality, unseen, drift: `predict` is gate-tested
-not to mutate state; keep a state-hash compare before/after instead of a clone). (2) Batch the drift assay:
-`stage4_assays.py` decodes 16,256 prefixes one at a time (31 ms each, 506 s); use the learner's `last_logits_batch`
-with per-position selection preserved (one `selection_for` per prefix, batched forwards), and prove equality of the
-per-position NLLs against the current assay on TinyBase. Both changes behind the recipe's `integrity_profile`
-switch so the full profile stays available; TinyBase parity tests; the orchestrator re-profiles.
-
-### Lane R1-72 — execution schedule options for the lead's Q6/Q7 (CPU memo + table)
-
-`docs/tasks/R1-72.md` + `logs/r1_round16/schedule_options.json`: from the measured v5 profile (1,262 s per 300-edit cell;
-phase timers in the notes) and its 1,000-edit extrapolation (≈ 48 min with drift at the final checkpoint only; ≈ 66 min
-with drift at every checkpoint), price the block order proposed in the counter-review §5.1 for the 360-cell matrix +
-45-cell v2 block: hours per block, cumulative hours, and the calendar date each block would complete starting
-September 21 at 75 % GPU availability, under three cost assumptions — measured (48–66 min), R1-68c target (≈ 20 min,
-unmeasured, labelled), and a pessimistic 80 min for the unprofiled v0-live conditions. State which blocks finish before
-October 8 under each assumption, and the same for the three scope options in Q7 (full; three of five orders; accepted
-incomplete). No recommendation beyond the arithmetic; the lead decides.
-
-### Lane HT-1b — tail audit on the primary v5 cells
-
-Run `scripts/ht_audit_existing.py` over the two v5 driver cells (full and incremental, identical rows) and the v5
-endpoint files (`results/R1/endpoints/v5_rare1*`, `unseen_v5_rare1_*`, `drift_assay_v5_*`); report the same
-statistics as HT-1 and the comparison with the v4 cell; mark which populations are shared.
-
-### Lane HT-4b — claim–evidence ledger update for v5
-
-Update `docs/talk_claim_ledger.md` (new version, `docs/talk_claim_ledger_v2.md`) with the v5 evidence: the selection
-manifests, the retention–rejection curve (selection v2 table), the unseen flatness across 100/300/1,000, the full-assay
-drift +0.0022, the near-miss/revision endpoints, and the driver profile; mark every row implemented / proposed /
-hypothesis / null; keep the empty rows for the κ pilot and the stress panel with their lanes and the lead's Q4/Q5.
-
-### Lane R1-64b — development recipes for every comparator condition (needed for block 1 and R1-72)
-
-The payload builder only emits `R1_learned_ff` recipes; the driver checks `adapter.identity()` against the recipe, so
-comparator recipes cannot be hand-edited. Extend the builder (new module or `--condition` in a new script) to emit
-development recipes for `R1_nonlearned`, `v0_stable`, `matched_update`, `v0_live_C1`, `v0_live_C2`, `S1_literal`,
-`S1_LM` and `R1_learned_ff_v2` on zsRE and CounterFact (300 edits, checkpoints 100/300), computing each identity the
-way `build_adapter` does (metadata only, no base execution), binding the S1 continued bases from
-`r1_24_control_v3` / `r1_24_control_lm_v3_lr1e-8`. TinyBase tests that the emitted identity matches a built adapter.
-The orchestrator profiles each through the driver (the per-condition costs R1-72 lacks).
-
-### Lane R1-73 — MQuAKE calibration for the v0-style conditions (spec; the run is the orchestrator's)
-
-The frozen calibration manifest has bank radii only for zsRE and CounterFact, so no MQuAKE recipe can be built (the
-builder refuses: "no dataset calibration"). Write the calibration procedure as v0 did it (`manifests/archive/frozen-
-confirmatory-v2-*.json` records the recipe: radii per bank from development-stream key displacements) as a script
-over the MQuAKE development slice v3b, with the exact inputs, outputs and admission fields, and the protocol text for
-U08; no execution. The orchestrator runs it and binds the result into calibration v3.
-
-### Lane R1-74 — locality / near-miss scoring under DEC-053 (edit request; after R1-68c)
+### Lane R1-74 — locality / near-miss scoring under DEC-053 (edit request; first)
 
 DEC-053 binds bounded text equality as the primary locality and near-miss convention: a pair is preserved when the
 cap-on and cap-off 32-token greedy continuations are identical, terminated or not. The driver's `_Challenges.near_miss`
@@ -155,6 +89,63 @@ and `locality` in `src/pccap/revision_v1/stage4_assays.py` currently require ter
 turns 13/50 identical truncated locality pairs and 37/100 near-miss pairs into failures (v5 CounterFact development
 cell, `results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69…`). Deliver an edit request
 (patch, new file under `docs/tasks/`) that makes `preserved` the bounded-equality verdict and adds
+`preserved_terminated` (the current rule) plus `truncated_pair` / per-side truncation flags to every row and both
+counts to the checkpoint summaries; the stored rows already carry both generations, so a rescoring helper over
+existing checkpoint files (new script) should reproduce 49/50 and 100/100 on that cell and 50/50 / 100/100 on the
+zsRE cells. Because every src edit invalidates the identity-bound recipes, land it together with the R1-68c rebinding
+step so the recipes are rebuilt once. Tests: TinyBase, both conventions.
+
+### Lane R1-75 — stage-4 analysis tree v1 over cell directories (CPU; new files)
+
+The confirmatory matrix will be a set of driver cell directories (`results/R1/stage4_dev_cells/<cell>/attempt-*/`
+today; the confirmatory root will differ only by path) with `checkpoint-{100,300,1000}.json`, receipts, `phases/` and
+`result.json`. Build `src/pccap/revision_v1/analysis_stage4_v1.py` (or extend under a new module name; the existing
+`analysis_stage4.py` is Codex's R1-57 adapter and may be reused, not edited) plus `scripts/r1_75_analyze_cells.py` that:
+(a) inventories cells by identity (condition, dataset, realization, order, checkpoint) against a matrix file and
+reports complete blocks and the explicit incomplete-cell list in the DEC-051 block order (DEC-052 reporting);
+(b) computes per cell and checkpoint ES, RET-GS, LS under both conventions (DEC-053 primary = bounded text equality;
+termination-qualified and truncation counts alongside), unseen false-fire rate with Wilson intervals, near-miss and
+revision counts, drift mean and tail (max, count > 0.1 nats, expected shortfall over the top 1 %) from the stored rows;
+(c) forms the pre-registered paired contrasts against the controls with the DEC-033 margins (RET-GS +0.05, ES −0.02,
+LS −0.01) per dataset, with the multiplicity structure of protocol v4 §U12, missing pairs never imputed;
+(d) writes one JSON and one Markdown table per matrix, reproducible from the cell files alone. Validate on the
+existing v5 zsRE and CounterFact development cells (expected: CounterFact LS 49/50 bounded / 36/50 terminated,
+near-miss 100/100 / 63/100) and on TinyBase cells from the driver tests. Done-when: tests pass; the two development
+cells reproduce the numbers in `docs/R1_stage2_notes.md`.
+
+### Lane R1-40c — successor run matrix v5 and execution binding (CPU; new files)
+
+Freeze gate U17: matrix v4 predates primary v5. Write `manifests/revision_v1/run_matrix_v5.json` and its generator:
+360 core cells (8 conditions × 3 datasets × 3 realizations × 5 orders; checkpoints 100/300/1,000) plus the 45-cell
+no-gate extension, each cell with a stable identity (condition, dataset, realization, order), the recipe family it
+is built from (R1-64 / R1-64b / R1-73-calibrated for the v0-style MQuAKE cells), its DEC-051 block number and
+within-block order, and a placeholder for the measured ceiling. Include the queue/retry/resume rules the driver
+already implements (attempt directories, checkpoint resume, refusal on identity mismatch) as explicit fields, and a
+CPU validator that checks the matrix against the freeze candidate's bindings. No costs are admitted here; the
+orchestrator fills the ceilings after the September 20 re-measurement.
+
+### Lane R1-49e — protocol draft v5 (CPU; new file)
+
+`docs/R1_stage4_protocol_draft_v5.md`: v4 with DEC-050 (selection rule), DEC-051 (block order), DEC-052 (feasibility
+and incomplete reporting), DEC-053 (LS / near-miss convention: bounded text equality primary, termination-qualified and
+truncation alongside) written into §6 and the U10 / U13 / U14 gates; the unseen, revision and scale decision rules
+stated as explicit inequalities with their denominators (U14); the occupancy caveat from R1-X12 (outside populations
+differ across 100 / 300 / 1,000) stated where unseen rates are compared; and a change log against v4. Do not resolve
+open lead items (Q4, Q5); mark them.
+
+### Lane R1-76 — unseen occupancy with a common outside population, and the MQuAKE gap (CPU; new files + memo)
+
+R1-X12 found that the zsRE 100 / 300 / 1,000-record unseen rates use different outside sets, so flatness is unproved;
+and the MQuAKE 300 / 1,000 points cannot be run (no reader-unseen filler beyond the 500-item pool). Deliver
+(a) `scripts/r1_76_unseen_common.py`: a variant of `r1_44_unseen_run.py` (new file; the old runner is untouched) that
+fixes one outside set of 100 prompts per dataset, disjoint from every filler at the largest occupancy, and evaluates
+it after 100, 300 and 1,000 records in one run so the three rates share a population; CPU/TinyBase tests;
+(b) a short memo `docs/tasks/R1-76-mquake-occupancy.md` on where a reader-unseen MQuAKE filler population could come
+from without touching the confirmatory reservation (the 4,218-subject register-v6 clearance leaves ≈ 168 nominal
+slack; the 6,043-item pool minus reservations; or none) with the exposure consequences of each, for the lead
+(question Q10 in `docs/lead_queue.md`, which the orchestrator posts). No execution.
+
+cs/tasks/`) that makes `preserved` the bounded-equality verdict and adds
 `preserved_terminated` (the current rule) plus `truncated_pair` / per-side truncation flags to every row and both
 counts to the checkpoint summaries; the stored rows already carry both generations, so a rescoring helper over
 existing checkpoint files (new script) should reproduce 49/50 and 100/100 on that cell and 50/50 / 100/100 on the

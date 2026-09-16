@@ -524,3 +524,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     runnable (no reader-unseen MQuAKE filler exists); recorded as a limitation.
 
 42. (2026-09-16, 07:45 EDT) Q9 recorded as DEC-053. Open now: only Q4 (κ pilot) and Q5 (stress panel), both by September 20. The driver keeps scoring both ways from its stored rows; Codex gets an edit request to report both counts in `stage4_assays.py`.
+
+43. (2026-09-16, 08:05 EDT) Codex's round 16 committed (`2e7ac38`, all eight lanes) and round 17 posted: R1-74 (DEC-053
+    scoring in the driver), R1-75 (stage-4 analysis tree over cell directories, with DEC-052 block/incomplete reporting),
+    R1-40c (matrix v5 for freeze gate U17), R1-49e (protocol v5 with DEC-050–053), R1-76 (common-population unseen runner
+    and the MQuAKE occupancy memo). Two of Codex's findings you should know: (a) the small mean drift hides local harm —
+    v5 zsRE max 8.7 nats with 17 positions above 0.1 nats (CounterFact 7.3 / 52); this is the tail the talk is about and
+    it goes into the claim ledger as measured; (b) the zsRE unseen "flat at 10 / 12 / 9 %" used different outside prompt
+    sets at each size, so flatness is not established — R1-76 fixes the population. Also withdrawn from my notes: the
+    "shorter prefixes" explanation of the CounterFact drift-assay time. Nothing new needs a decision from you now;
+    Q4 and Q5 stand. Q10 (MQuAKE occupancy population) will follow when Codex's memo lands.
+

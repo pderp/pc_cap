@@ -938,9 +938,11 @@ The v5 reader ran the 300-edit CounterFact development cell through Codex's driv
 | phase-timer total | 1,077 | 954 |
 | attempt wall (first → last phase file) | 1,262 | 1,234 |
 
-Per-dataset cost is flat: CounterFact costs the same as zsRE to within the drift assay (its ordinary-text prefixes
-are shorter). The schedule memo (R1-72) can use one cost per cell, ≈ 21 min per 300 edits and ≈ 48 min per 1,000
-edits, for every dataset — MQuAKE differs only in edit count.
+The two measured learned-reader cells cost the same to within the drift assay (379 vs 506 s). Codex's late review
+(`logs/r1_round16/late_owner_results_review.md`) checked that both assays score the same 128 windows, 127 positions
+each, with identical base-reference NLL vectors, so the difference is not shorter CounterFact prefixes (my first
+explanation, withdrawn) and remains unexplained until the R1-68c timers split it. The equal-cost statement is limited
+to these two cells: MQuAKE and the comparator conditions are unmeasured (R1-64b recipes, R1-73 calibration).
 
 Scientific results at checkpoint 300 (development, not confirmatory): ES 300/300, RET-GS 0.753 (0.765 at 100),
 unseen false fires 0/100 (checkpoint 100 and 300), drift +0.0063 nats (16,256 positions), revision 50/50 with the new
