@@ -1,0 +1,197 @@
+{
+ "stage": "R1",
+ "arm": "R1",
+ "base": "BP",
+ "status": "complete",
+ "items_completed": 100,
+ "items_planned": 100,
+ "metrics": {
+  "es_immediate": {
+   "value": 0.96,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 100,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.3,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 100,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.99,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 100,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 0.97,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 100,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.3,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 100,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 96,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 50,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 50,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 7.786197813705843e-10,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 50,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": null,
+   "status": "unsupported",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 0,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": null,
+   "status": "unsupported",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 0,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 16894952.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 30,
+   "3": 34,
+   "4": 15,
+   "5": 11,
+   "6": 3,
+   "7": 3,
+   "8": 2,
+   "9": 1,
+   "15": 1
+  }
+ },
+ "base_hash_before": null,
+ "base_hash_after": null,
+ "wall_seconds": 28.093327045440674,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 4125,
+   "partial_forwards": 1596,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 22.671542320946173,
+   "accel_seconds": 22.671542320946173,
+   "peak_mem_mib": 778.402587890625,
+   "tokens": 89453
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 2062,
+   "partial_forwards": 0,
+   "reverses": 753,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 8.227898555000138,
+   "accel_seconds": 8.227898555000138,
+   "peak_mem_mib": 778.402587890625,
+   "tokens": 22386
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 6187,
+   "partial_forwards": 1596,
+   "reverses": 753,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 30.89944087594631,
+   "accel_seconds": 30.89944087594631,
+   "peak_mem_mib": 778.402587890625,
+   "tokens": 111839
+  },
+  "events": 6566,
+  "elapsed_wall_seconds": 46.211825370788574,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": null
+}
