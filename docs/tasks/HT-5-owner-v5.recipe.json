@@ -67,11 +67,6 @@
  },
  "tokenizer_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
  "reader_provenance": {
-  "calibration": {
-   "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
-   "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
-  },
-  "identity_method": "NumPy base/checkpoint hashes and registered dataclass configuration; no base execution",
   "primary": {
    "path": "manifests/revision_v1/primary_selection_v2.json",
    "sha256": "93cad8d0274dbf2d9ee2a7da6fa2ebcf58900d2bb7b902558bdfaad43ffa5816"
@@ -84,10 +79,17 @@
  "cell": {
   "condition": "R1_learned_ff"
  },
- "note": "HT-5 owner construction recipe for the stress panel (DEC-055): the selected primary v5 construction as bound in docs/tasks/R1-68d-zsre-v5-incremental.recipe.json (sha fceb3d2986a26b25); development, not confirmatory",
+ "note": "HT-5 owner construction recipe for the stress panel (DEC-055): the selected primary v5 construction as bound in docs/tasks/R1-68d-zsre-v5-incremental.recipe.json (sha fceb3d2986a26b25); development, not confirmatory; reader_provenance reduced to its primary binding because ht5_panel compares the whole dict with the bundle's {primary} (calibration / identity_method kept under reader_provenance_detail)",
  "selected_condition": {
   "path": "manifests/revision_v1/primary_condition_v5.json",
   "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72",
   "note": "the winner named by primary_selection_v2 (DEC-049/050); construction.weights is its averaged checkpoint"
+ },
+ "reader_provenance_detail": {
+  "calibration": {
+   "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+   "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+  },
+  "identity_method": "NumPy base/checkpoint hashes and registered dataclass configuration; no base execution"
  }
 }
