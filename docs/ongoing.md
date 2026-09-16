@@ -114,6 +114,25 @@ show — those runs are the orchestrator's next GPU work); checkpoint averaging 
 steps 150–300) and its identity is bound; the retention–rejection curve as the talk's central figure. Output
 `logs/review_r1_selection.md` with edit requests.
 
+### Lane R1-68c — remove the per-phase clone/restore cost and batch the drift assay
+
+Measured on v5 (notes §"Driver profiles on the primary v5 reader"): the incremental integrity profile is byte-identical
+and only 16 s faster than the full profile (1,246 vs 1,262 s), so the ≈ 0.9 s of non-model time per edit and per
+immediate phase is the clone/restore/verification around each phase, not the hashing. (1) Instrument the phase wrapper
+to split verification / clone / restore / file-write time, then remove clone+restore for phases that the cap's
+read-only contract already guarantees (immediate check, retention, locality, unseen, drift: `predict` is gate-tested
+not to mutate state; keep a state-hash compare before/after instead of a clone). (2) Batch the drift assay:
+`stage4_assays.py` decodes 16,256 prefixes one at a time (31 ms each, 506 s); use the learner's `last_logits_batch`
+with per-position selection preserved (one `selection_for` per prefix, batched forwards), and prove equality of the
+per-position NLLs against the current assay on TinyBase. Both changes behind the recipe's `integrity_profile`
+switch so the full profile stays available; TinyBase parity tests; the orchestrator re-profiles.
+
+### Lane HT-1b — tail audit on the primary v5 cells
+
+Run `scripts/ht_audit_existing.py` over the two v5 driver cells (full and incremental, identical rows) and the v5
+endpoint files (`results/R1/endpoints/v5_rare1*`, `unseen_v5_rare1_*`, `drift_assay_v5_*`); report the same
+statistics as HT-1 and the comparison with the v4 cell; mark which populations are shared.
+
 ### Lane R1-63c — freeze candidate v4 (after R1-X12)
 
 Rebind the freeze candidate to primary_condition_v5, register v6, matrix v4 and the selection manifest; print the open gates.

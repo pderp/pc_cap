@@ -894,3 +894,27 @@ driver cell; v5: 10 → 12 → 9 %), and CounterFact and MQuAKE stay at ≤ 1 %.
 32-window assay) is above the protocol draft's provisional 0.01-nat ceiling; the full 128-window assay under the
 driver will give the number that counts (the v4 cell measured +0.0002 on zsRE at 300 edits). The v5 identities and
 these results are bound in `primary_condition_v5.json`.
+
+## Driver profiles on the primary v5 reader: full vs incremental integrity (2026-09-16, 00:10 EDT)
+
+Same 300-edit zsRE development cell, GPU otherwise idle, Codex's R1-68b incremental profile against the full profile
+(`results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-{d22ce680…, 48f8a79c…}`; driver phase timers):
+
+| phase | full: wall / model-operation s | incremental: wall / model-operation s |
+| --- | --- | --- |
+| edit (300) | 314.5 / 42.5 | 309.7 / 42.6 |
+| immediate check (300) | 291.0 / 18.0 | 285.3 / 18.2 |
+| drift (128 windows, 16,256 positions) | 507.5 / 506.2 | 505.6 / 504.4 |
+| unseen (2 × 100 pairs) | 99.9 / 98.0 | 101.4 / 99.6 |
+| retention (2) | 30.5 / 28.7 | 30.8 / 28.9 |
+| attempt wall | 1,262 | 1,246 |
+
+Both profiles give byte-identical scientific results (state hash `b296c15d…`; ES 0.997, RET-GS 0.987, LS 50/50,
+unseen 8 %, drift +0.0022 nats — the v5 reader on the full-validation assay). The incremental profile changes nothing
+measurable: the ≈ 0.9 s of non-model time per edit phase and per immediate phase (545 s of the 1,262 s) is not the
+state hashing it replaced; per the timer scope it is verification / clone / restore around each phase. The other
+large block is genuine model time in the drift assay: 506 s for 16,256 positions (31 ms per position, decoded one
+prefix at a time with a selection each). A 1,000-edit cell therefore still extrapolates to ≈ 48 min (drift at the
+final checkpoint only) — Q7 stands as stated. Two concrete reductions for Codex (R1-68c): find and remove the
+per-phase clone/restore cost for read-only phases (the cap's read-only contract is already gate-tested), and batch the
+drift assay's prefixes (`last_logits_batch`) with per-position selection kept — together plausibly 1,262 → ≈ 500 s.

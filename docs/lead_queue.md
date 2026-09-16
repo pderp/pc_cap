@@ -499,3 +499,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     with memory is gone), CounterFact and MQuAKE ≤ 1 %, drift +0.005 / +0.014 / +0.004 nats. Next GPU work: re-profile the
     incremental driver (Codex R1-68b) with v5 — the number your Q7 decision needs.
 
+38. (2026-09-16, 00:10 EDT) **Q7 numbers.** The v5 reader through the driver: 1,262 s per 300-edit cell; Codex's incremental
+    integrity profile is byte-identical in results and only 16 s faster, so the overhead is not the hashing — it is the
+    clone/restore around every phase (≈ 545 s) plus the drift assay's one-prefix-at-a-time decoding (506 s). A 1,000-edit
+    cell is still ≈ 48 min → ≈ 290 h for 360 cells; both overheads are removable (lane R1-68c) and could bring a cell
+    to ≈ 20 min (≈ 120 h), but that is unmeasured. Your Q6/Q7 answers by September 20 still decide the plan; I will
+    re-measure as soon as R1-68c lands.
+
