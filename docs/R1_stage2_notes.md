@@ -1051,3 +1051,32 @@ matrix fits with margin under DEC-052, subject to the comparator-condition profi
 rebinding to this tree) and the September 20 re-measurement. The full-integrity R1-68d profile runs at the end of
 the pilot chain for the record.
 
+## κ pilot (DEC-054): complete — a null result under the pre-registered rule (2026-09-16, 15:10 EDT)
+
+Twelve arm-seed readers (9 new trainings, 0 charged failures; ordinary = the v5 family), 36 of 36 rows, aggregated by
+Codex's HT-3d implementation of the `kappa_pilot_v3.json` rule with the verified seed-2 aliases
+(`logs/r1_round18/ht3d-pilot-final-aliases.md`, json sha `c61618b7451d7414`). Macro means over 3 datasets × 3 seeds:
+
+| arm | RET-GS | zsRE unseen FF | ES95 harm (nats) | max harm (nats) | verdict |
+| --- | ---: | ---: | ---: | ---: | --- |
+| ordinary (κ = 0) | 0.796 | 11.7 % | 0.223 | 5.26 | reference |
+| κ = 0.2 | 0.754 | 5.0 % | 0.084 | 2.70 | null result: fails the retention floor (0.776); tail contrasts −0.139 / −2.56 not separated (seed-spread thresholds 0.387 / 4.44) |
+| κ = 0.5 | 0.748 | 4.0 % | 0.063 | 2.60 | null result: fails the floor; −0.159 / −2.66 not separated |
+| clipped surprisal at 2 (control, ceiling-matched to κ = 0.5) | 0.779 | 4.7 % | 0.103 | 3.62 | passes the floor; −0.120 / −1.64 not separated |
+
+Reading. Both coupled arms lower every tail statistic and the zsRE false-fire rate, but (i) mean RET-GS drops
+0.04–0.05, past the pre-registered 0.02 floor, and (ii) the ordinary arm's own seed spread (ES95 0.06–0.45; seed 0
+fires on 19 % of unseen zsRE prompts) is wider than the reduction, so the seed-spread rule does not separate them.
+The clipped control gets most of the tail reduction (ES95 0.22 → 0.10, max 5.3 → 3.6) with retention inside the
+floor; κ = 0.5 minus clip2 is ES95 −0.040, max −1.02 nats, RET-GS −0.031 — the coupled form buys a further, small,
+unseparated tail reduction with retention. Under the counter-review §4 rule neither κ arm enters the Stage 4
+protocol as a declared secondary condition; the result is reported as a null result on the slide, with the DEC-054
+framing (preliminary hints, development streams, three seeds, 32-window tail population) and the "What it is not"
+paragraph. What it does show, descriptively: bounding the answer surprisal — by κ or by a plain clip — moves the
+reader toward rejecting more (lower unseen firing, lower tail harm, lower retention), i.e. it shifts the porosity /
+interference trade-off rather than improving it; that is a κ result worth one slide. Cost: 9 × 1,033 s training +
+evaluation ≈ 4.6 GPU h (chain H, 10:30–15:05 incl. the two R1-68d profiles).
+
+The R1-68d full profile closed the chain: 725 s (scalar drift 516 s of it), state `b296c15d…`, drift +0.002197557 — the
+full-profile identity overhead is gone as in the incremental one (identity checks 1.2 s).
+

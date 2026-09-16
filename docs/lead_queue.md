@@ -587,3 +587,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 51. (2026-09-16, 15:00 EDT) Q5 and Q10 recorded (DEC-055 go, DEC-056 option B). No lead decision is open; Q11–Q13 (multiplicity, fidelity inequalities, secondary thresholds) will follow from Codex's R1-49f. Execution order on the GPU: κ pilot (finishing) → comparator profiles + MQuAKE calibration (chain I, tonight) → stress panel (≤ 4 h) → MQuAKE occupancy diagnostic after Codex's review → September 20 re-pricing.
 
+52. (2026-09-16, 15:15 EDT) **κ pilot complete: a null result under the rule you approved.** Both coupled arms cut the drift
+    tail (ES95 0.22 → 0.08 / 0.06 nats, max 5.3 → 2.7 / 2.6) and zsRE false fires (12 → 5 / 4 %), but retention falls
+    0.04–0.05 (floor 0.02) and the reduction sits inside the ordinary arm's seed spread. The clipped-surprisal control
+    gets most of the tail gain with retention inside the floor. So: no κ secondary condition in Stage 4; one honest slide
+    ("bounding surprisal shifts the porosity / interference trade-off; it does not beat it on this substrate; preliminary,
+    three seeds"). Codex's HT-3e counter-review checks the arithmetic next. Presentation record updated
+    (`assets/presentation-materials/kappa_pilot_v5.md`).
+
