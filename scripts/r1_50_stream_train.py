@@ -8,6 +8,7 @@ import argparse
 import contextlib
 import hashlib
 import json
+import math
 import pickle
 import time
 from pathlib import Path
@@ -170,6 +171,15 @@ def main() -> int:
             batch = [add_text_nulls(b, text_bank, rng, args.text_nulls) for b in batch]
             theta, st, m = tr.outer_step(theta, st, batch)
             m.update(step=step, wall_s=time.time() - t0)
+            nonfinite = [k for k, v in m.items() if isinstance(v, float) and not math.isfinite(v)]
+            if not nonfinite and step % 10 == 0:
+                nonfinite = [jax.tree_util.keystr(path) for path, x in jax.tree_util.tree_flatten_with_path(theta)[0] if not bool(jax.numpy.isfinite(x).all())]
+            if nonfinite:  # HT-3 launch gate: abort on any non-finite loss / metric / parameter, with a charged failure receipt
+                receipt = {"tag": args.tag, "step": step, "nonfinite": nonfinite, "metrics": {k: (v if isinstance(v, (int, str)) else str(v)) for k, v in m.items()}, "kappa": args.kappa, "clip_surprisal": args.clip_surprisal,
+                           "charged_wall_s": round(time.time() - t_start, 1), "ledger": ledger.totals(), "policy": "no weights written; the run counts against the pilot budget"}
+                (OUT / "failure_receipt.json").write_text(json.dumps(receipt, indent=1, default=str))
+                print(json.dumps({"nonfinite_abort": receipt}, default=str), flush=True)
+                raise SystemExit(3)
             if args.dev_every and (step + 1) % args.dev_every == 0:
                 dv = evaluate(theta)
                 m.update({f"dev_{k}": v for k, v in dv.items() if k in ("answer", "retrieval", "preserve")})

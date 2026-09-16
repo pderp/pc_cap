@@ -10,6 +10,7 @@ import copy
 import json
 import os
 import time
+from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
 from scripts.r1_68b_integrity_runtime import (
@@ -54,6 +55,43 @@ DRIVER_FILES = (
 )
 PARENT_DRIVER_SHA256 = "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5"
 UPSTREAM_ENGINE_SHA256 = "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da"
+
+
+def memory_identity(adapter):
+    """Check immutable object structure without transferring or hashing arrays.
+
+    JAX arrays are immutable: replacing a leaf changes its object identity. A
+    mutable NumPy leaf changed in place is caught by the next full boundary
+    rehash, before any checkpoint receipt can be issued.
+    """
+
+    def tree(value):
+        if isinstance(value, dict):
+            return (id(value), tuple((k, tree(v)) for k, v in sorted(value.items())))
+        if isinstance(value, (list, tuple)):
+            return (id(value), tuple(tree(v) for v in value))
+        return (id(value), str(getattr(value, "dtype", "")), getattr(value, "shape", None))
+
+    learner = adapter.learner
+    configurations = [
+        getattr(learner, "cfg", None),
+        getattr(learner, "rule", None),
+        adapter.budget,
+        getattr(adapter.base, "cfg", None),
+        getattr(adapter.locality_base, "cfg", None),
+    ]
+    return (
+        adapter.condition,
+        id(learner),
+        type(learner),
+        id(adapter.base),
+        id(learner.base),
+        id(adapter.locality_base),
+        tree(getattr(learner, "params", None)),
+        tree(getattr(adapter.base, "params", None)),
+        tree(getattr(adapter.locality_base, "params", None)),
+        digest([asdict(c) if is_dataclass(c) else c for c in configurations]),
+    )
 
 
 def driver_bindings(root=ROOT):
@@ -197,6 +235,7 @@ def run_development_cell(
     snapshot. Interrupted work remains in its attempt directory and stays in
     resource accounting. Resume restores only a contiguous verified prefix.
     """
+    admission_started = time.monotonic()
     manifest, payload = load_development_cell(
         manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
     )
@@ -204,6 +243,14 @@ def run_development_cell(
     if profile == "incremental":
         adapter = IndexedAdapter(adapter)
     identity = adapter.identity()
+    boundary_identity_checks = [
+        {
+            "boundary": "attempt_start",
+            "kind": "full_recipe_and_adapter_rehash",
+            "seconds": time.monotonic() - admission_started,
+        }
+    ]
+    memory_fingerprint = memory_identity(adapter)
     if (
         identity != manifest["adapter_identity"]
         or adapter.condition != manifest["cell"]["condition"]
@@ -367,6 +414,23 @@ def run_development_cell(
         )
         if adapter.identity() != identity:
             raise ValueError("immutable adapter identity changed")
+        if memory_identity(adapter) != memory_fingerprint:
+            raise ValueError("immutable in-memory identity changed")
+
+    def verify_boundary(label):
+        started = time.monotonic()
+        verify_inputs()
+        boundary_identity_checks.append(
+            {
+                "boundary": label,
+                "kind": "full_recipe_and_adapter_rehash",
+                "seconds": time.monotonic() - started,
+            }
+        )
+
+    def verify_memory():
+        if memory_identity(adapter) != memory_fingerprint:
+            raise RuntimeError("endpoint/update mutated immutable in-memory parameters")
 
     def phase(label, operation, *, learning=False):
         nonlocal phase_index
@@ -374,6 +438,7 @@ def run_development_cell(
         timers = {
             "recipe_verification_seconds": 0.0,
             "identity_verification_seconds": 0.0,
+            "identity_check_seconds": 0.0,
             "state_hash_seconds": 0.0,
             "clone_seconds": 0.0,
             "restore_seconds": 0.0,
@@ -391,14 +456,7 @@ def run_development_cell(
         led0 = _ledger(adapter)
         if journal is not None:
             timed("file_write_seconds", lambda: journal.before_phase(label, led0))
-        timed(
-            "recipe_verification_seconds",
-            lambda: load_development_cell(
-                manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
-            ),
-        )
-        if timed("identity_verification_seconds", adapter.identity) != identity:
-            raise ValueError("immutable adapter identity changed")
+        timed("identity_check_seconds", verify_memory)
         kind = label.split(":", 1)[0]
         borrowed = profile == "incremental" and kind in (
             "immediate",
@@ -425,8 +483,7 @@ def run_development_cell(
             after = timed("state_hash_seconds", state)
             if not learning and after != before:
                 raise RuntimeError("endpoint mutated checkpoint state")
-            if timed("identity_verification_seconds", adapter.identity) != identity:
-                raise RuntimeError("endpoint/update mutated immutable parameters")
+            timed("identity_check_seconds", verify_memory)
             return result
         except BaseException as exc:
             error = {"type": type(exc).__name__, "message": str(exc)}
@@ -443,6 +500,8 @@ def run_development_cell(
             rec = {
                 "phase": label,
                 "learning": learning,
+                "identity_check_kind": "in_memory_structure_and_configuration",
+                "identity_check_seconds": timers["identity_check_seconds"],
                 "state_before": before,
                 "state_after_operation": observed,
                 "state_after_restore": timed("state_hash_seconds", state),
@@ -472,6 +531,7 @@ def run_development_cell(
             # A separate new file can record the completed phase-file write cost.
             timing = {
                 "phase": label,
+                "identity_check_kind": "in_memory_structure_and_configuration",
                 **timers,
                 "total_phase_seconds": time.monotonic() - phase_started,
                 "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
@@ -504,6 +564,8 @@ def run_development_cell(
         }
 
     try:
+        if resume:
+            verify_boundary("resume_after_restore")
         for n, item in enumerate(items[completed:], start=completed + 1):
             outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
             row = phase(f"immediate:{n}", lambda item=item: assays.item(item))
@@ -550,7 +612,6 @@ def run_development_cell(
                 )
             cp["observation"] = adapter.observe()
             cp["state_sha256"] = adapter.state_hash()
-            verify_inputs()
             if profile == "incremental":
                 cp["integrity_root"] = adapter.verify()
             blob = serialize(adapter.export_state())
@@ -560,6 +621,7 @@ def run_development_cell(
                 raise RuntimeError("checkpoint serialization/restore mismatch")
             if profile == "incremental" and adapter.verify() != cp["integrity_root"]:
                 raise RuntimeError("checkpoint incremental restore mismatch")
+            verify_boundary(f"checkpoint:{n}")
             journal_receipt = journal.receipt() if journal is not None else None
             snapshot = resource_attempt / f"checkpoint-{n}.snapshot"
             with snapshot.open("xb") as f:
@@ -586,6 +648,7 @@ def run_development_cell(
             previous, completed = receipt["receipt_sha256"], n
             if stop_after_checkpoint == n:
                 break
+        verify_boundary("completion" if completed == len(items) else "pause")
         result = {
             "status": "complete" if completed == len(items) else "paused_at_checkpoint",
             "completed_checkpoint": completed,
@@ -601,6 +664,9 @@ def run_development_cell(
             "attempt_wall_seconds": time.monotonic() - attempt_started,
             "prior_attempt_timer_summary": prior_timer_summary(run, exclude=attempt),
             "detailed_phase_timers": detailed_timers,
+            "boundary_identity_checks": boundary_identity_checks,
+            "boundary_identity_seconds": sum(row["seconds"] for row in boundary_identity_checks),
+            "identity_policy": "full rehash at attempt start, resume after restore, every checkpoint before receipt, and completion; cheap immutable memory check each phase",
         }
         write_json(attempt / "result.json", result)
         return result
@@ -618,6 +684,7 @@ def run_development_cell(
                 "attempted_item_ids": [r["item_id"] for r in history],
                 "ledger_at_failure": _ledger(adapter),
                 "integrity_profile": profile,
+                "boundary_identity_checks": boundary_identity_checks,
                 "phase_timer_summary": phase_summary(timed_rows),
                 "attempt_wall_seconds": time.monotonic() - attempt_started,
                 "recovery": "resume from last complete receipt; retain this attempt's charged work",

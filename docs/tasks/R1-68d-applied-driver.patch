@@ -1,0 +1,322 @@
+diff --git a/scripts/r1_68c_dev_cell.py b/scripts/r1_68c_dev_cell.py
+index 7ba1ece..b084b41 100644
+--- a/scripts/r1_68c_dev_cell.py
++++ b/scripts/r1_68c_dev_cell.py
+@@ -10,6 +10,7 @@ import copy
+ import json
+ import os
+ import time
++from dataclasses import asdict, is_dataclass
+ from pathlib import Path
+ 
+ from scripts.r1_68b_integrity_runtime import (
+@@ -56,6 +57,43 @@ PARENT_DRIVER_SHA256 = "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4
+ UPSTREAM_ENGINE_SHA256 = "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da"
+ 
+ 
++def memory_identity(adapter):
++    """Check immutable object structure without transferring or hashing arrays.
++
++    JAX arrays are immutable: replacing a leaf changes its object identity. A
++    mutable NumPy leaf changed in place is caught by the next full boundary
++    rehash, before any checkpoint receipt can be issued.
++    """
++
++    def tree(value):
++        if isinstance(value, dict):
++            return (id(value), tuple((k, tree(v)) for k, v in sorted(value.items())))
++        if isinstance(value, (list, tuple)):
++            return (id(value), tuple(tree(v) for v in value))
++        return (id(value), str(getattr(value, "dtype", "")), getattr(value, "shape", None))
++
++    learner = adapter.learner
++    configurations = [
++        getattr(learner, "cfg", None),
++        getattr(learner, "rule", None),
++        adapter.budget,
++        getattr(adapter.base, "cfg", None),
++        getattr(adapter.locality_base, "cfg", None),
++    ]
++    return (
++        adapter.condition,
++        id(learner),
++        type(learner),
++        id(adapter.base),
++        id(learner.base),
++        id(adapter.locality_base),
++        tree(getattr(learner, "params", None)),
++        tree(getattr(adapter.base, "params", None)),
++        tree(getattr(adapter.locality_base, "params", None)),
++        digest([asdict(c) if is_dataclass(c) else c for c in configurations]),
++    )
++
++
+ def driver_bindings(root=ROOT):
+     return {name: sha(Path(root) / name) for name in DRIVER_FILES}
+ 
+@@ -197,6 +235,7 @@ def run_development_cell(
+     snapshot. Interrupted work remains in its attempt directory and stays in
+     resource accounting. Resume restores only a contiguous verified prefix.
+     """
++    admission_started = time.monotonic()
+     manifest, payload = load_development_cell(
+         manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
+     )
+@@ -204,6 +243,14 @@ def run_development_cell(
+     if profile == "incremental":
+         adapter = IndexedAdapter(adapter)
+     identity = adapter.identity()
++    boundary_identity_checks = [
++        {
++            "boundary": "attempt_start",
++            "kind": "full_recipe_and_adapter_rehash",
++            "seconds": time.monotonic() - admission_started,
++        }
++    ]
++    memory_fingerprint = memory_identity(adapter)
+     if (
+         identity != manifest["adapter_identity"]
+         or adapter.condition != manifest["cell"]["condition"]
+@@ -367,6 +414,23 @@ def run_development_cell(
+         )
+         if adapter.identity() != identity:
+             raise ValueError("immutable adapter identity changed")
++        if memory_identity(adapter) != memory_fingerprint:
++            raise ValueError("immutable in-memory identity changed")
++
++    def verify_boundary(label):
++        started = time.monotonic()
++        verify_inputs()
++        boundary_identity_checks.append(
++            {
++                "boundary": label,
++                "kind": "full_recipe_and_adapter_rehash",
++                "seconds": time.monotonic() - started,
++            }
++        )
++
++    def verify_memory():
++        if memory_identity(adapter) != memory_fingerprint:
++            raise RuntimeError("endpoint/update mutated immutable in-memory parameters")
+ 
+     def phase(label, operation, *, learning=False):
+         nonlocal phase_index
+@@ -374,6 +438,7 @@ def run_development_cell(
+         timers = {
+             "recipe_verification_seconds": 0.0,
+             "identity_verification_seconds": 0.0,
++            "identity_check_seconds": 0.0,
+             "state_hash_seconds": 0.0,
+             "clone_seconds": 0.0,
+             "restore_seconds": 0.0,
+@@ -391,14 +456,7 @@ def run_development_cell(
+         led0 = _ledger(adapter)
+         if journal is not None:
+             timed("file_write_seconds", lambda: journal.before_phase(label, led0))
+-        timed(
+-            "recipe_verification_seconds",
+-            lambda: load_development_cell(
+-                manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
+-            ),
+-        )
+-        if timed("identity_verification_seconds", adapter.identity) != identity:
+-            raise ValueError("immutable adapter identity changed")
++        timed("identity_check_seconds", verify_memory)
+         kind = label.split(":", 1)[0]
+         borrowed = profile == "incremental" and kind in (
+             "immediate",
+@@ -425,8 +483,7 @@ def run_development_cell(
+             after = timed("state_hash_seconds", state)
+             if not learning and after != before:
+                 raise RuntimeError("endpoint mutated checkpoint state")
+-            if timed("identity_verification_seconds", adapter.identity) != identity:
+-                raise RuntimeError("endpoint/update mutated immutable parameters")
++            timed("identity_check_seconds", verify_memory)
+             return result
+         except BaseException as exc:
+             error = {"type": type(exc).__name__, "message": str(exc)}
+@@ -443,6 +500,8 @@ def run_development_cell(
+             rec = {
+                 "phase": label,
+                 "learning": learning,
++                "identity_check_kind": "in_memory_structure_and_configuration",
++                "identity_check_seconds": timers["identity_check_seconds"],
+                 "state_before": before,
+                 "state_after_operation": observed,
+                 "state_after_restore": timed("state_hash_seconds", state),
+@@ -472,6 +531,7 @@ def run_development_cell(
+             # A separate new file can record the completed phase-file write cost.
+             timing = {
+                 "phase": label,
++                "identity_check_kind": "in_memory_structure_and_configuration",
+                 **timers,
+                 "total_phase_seconds": time.monotonic() - phase_started,
+                 "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
+@@ -504,6 +564,8 @@ def run_development_cell(
+         }
+ 
+     try:
++        if resume:
++            verify_boundary("resume_after_restore")
+         for n, item in enumerate(items[completed:], start=completed + 1):
+             outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+             row = phase(f"immediate:{n}", lambda item=item: assays.item(item))
+@@ -550,7 +612,6 @@ def run_development_cell(
+                 )
+             cp["observation"] = adapter.observe()
+             cp["state_sha256"] = adapter.state_hash()
+-            verify_inputs()
+             if profile == "incremental":
+                 cp["integrity_root"] = adapter.verify()
+             blob = serialize(adapter.export_state())
+@@ -560,6 +621,7 @@ def run_development_cell(
+                 raise RuntimeError("checkpoint serialization/restore mismatch")
+             if profile == "incremental" and adapter.verify() != cp["integrity_root"]:
+                 raise RuntimeError("checkpoint incremental restore mismatch")
++            verify_boundary(f"checkpoint:{n}")
+             journal_receipt = journal.receipt() if journal is not None else None
+             snapshot = resource_attempt / f"checkpoint-{n}.snapshot"
+             with snapshot.open("xb") as f:
+@@ -586,6 +648,7 @@ def run_development_cell(
+             previous, completed = receipt["receipt_sha256"], n
+             if stop_after_checkpoint == n:
+                 break
++        verify_boundary("completion" if completed == len(items) else "pause")
+         result = {
+             "status": "complete" if completed == len(items) else "paused_at_checkpoint",
+             "completed_checkpoint": completed,
+@@ -601,6 +664,9 @@ def run_development_cell(
+             "attempt_wall_seconds": time.monotonic() - attempt_started,
+             "prior_attempt_timer_summary": prior_timer_summary(run, exclude=attempt),
+             "detailed_phase_timers": detailed_timers,
++            "boundary_identity_checks": boundary_identity_checks,
++            "boundary_identity_seconds": sum(row["seconds"] for row in boundary_identity_checks),
++            "identity_policy": "full rehash at attempt start, resume after restore, every checkpoint before receipt, and completion; cheap immutable memory check each phase",
+         }
+         write_json(attempt / "result.json", result)
+         return result
+@@ -618,6 +684,7 @@ def run_development_cell(
+                 "attempted_item_ids": [r["item_id"] for r in history],
+                 "ledger_at_failure": _ledger(adapter),
+                 "integrity_profile": profile,
++                "boundary_identity_checks": boundary_identity_checks,
+                 "phase_timer_summary": phase_summary(timed_rows),
+                 "attempt_wall_seconds": time.monotonic() - attempt_started,
+                 "recovery": "resume from last complete receipt; retain this attempt's charged work",
+diff --git a/tests/revision_v1/test_r1_68c_driver.py b/tests/revision_v1/test_r1_68c_driver.py
+index aff8571..2fd8eaa 100644
+--- a/tests/revision_v1/test_r1_68c_driver.py
++++ b/tests/revision_v1/test_r1_68c_driver.py
+@@ -4,6 +4,7 @@ from __future__ import annotations
+ 
+ import json
+ import tempfile
++import types
+ import unittest
+ import uuid
+ from dataclasses import replace
+@@ -212,7 +213,15 @@ class DriverTests(unittest.TestCase):
+         ]
+         self.assertTrue(readonly)
+         self.assertTrue(all(t["clone_seconds"] == t["restore_seconds"] == 0 for t in readonly))
+-        self.assertTrue(all(t["identity_verification_seconds"] > 0 for t in timers))
++        self.assertTrue(all(t["identity_verification_seconds"] == 0 for t in timers))
++        self.assertTrue(all(t["identity_check_seconds"] > 0 for t in timers))
++        self.assertTrue(
++            all(t["identity_check_kind"] == "in_memory_structure_and_configuration" for t in timers)
++        )
++        self.assertEqual(
++            [r["boundary"] for r in inc["boundary_identity_checks"]],
++            ["attempt_start", "resume_after_restore", "checkpoint:2", "completion"],
++        )
+         self.assertTrue(all(t["file_write_seconds"] > 0 for t in timers))
+ 
+     def test_readonly_mutation_aborts_without_checkpoint(self):
+@@ -232,6 +241,87 @@ class DriverTests(unittest.TestCase):
+         self.assertEqual(len(failures), 1)
+         self.assertGreater(json.loads(failures[0].read_text())["attempt_wall_seconds"], 0)
+ 
++    def test_full_identity_only_at_boundaries_and_checkpoint_mismatch_refuses_receipt(self):
++        fixture = self.fixture("incremental")
++        cap = fixture[2]
++        with patch.object(cap, "identity", wraps=cap.identity) as identity:
++            result = self.run_cell(fixture)
++        self.assertEqual(identity.call_count, 4)
++        self.assertEqual(
++            [r["boundary"] for r in result["boundary_identity_checks"]],
++            ["attempt_start", "checkpoint:1", "checkpoint:2", "completion"],
++        )
++        self.assertGreater(result["boundary_identity_seconds"], 0)
++
++        fixture = self.fixture("full")
++        original = fixture[2].identity()
++        changed = {**original, "base_sha256": "changed-in-place"}
++        with patch.object(fixture[2], "identity", side_effect=[original, changed]):
++            with self.assertRaisesRegex(ValueError, "immutable adapter identity changed"):
++                self.run_cell(fixture)
++        failed = [p.parent for p in self.output.glob("*/attempt-*/failure.json")]
++        self.assertEqual(len(failed), 1)
++        self.assertFalse(list(failed[0].glob("checkpoint-*.receipt.json")))
++
++    def test_parameter_replacement_is_detected_within_phase(self):
++        fixture = self.fixture("incremental")
++        original = driver.CellAssays.item
++
++        def corrupt(assays, item):
++            result = original(assays, item)
++            assays.adapter.learner.params = dict(assays.adapter.learner.params)
++            return result
++
++        with patch.object(driver.CellAssays, "item", corrupt):
++            with self.assertRaisesRegex(RuntimeError, "immutable in-memory"):
++                self.run_cell(fixture)
++        self.assertFalse(list(self.output.glob("*/attempt-*/checkpoint-*.receipt.json")))
++
++    def test_original_driver_scientific_results_and_receipt_chain_parity(self):
++        legacy = types.ModuleType("r1_68d_legacy")
++        source = driver.ROOT / "docs/tasks/R1-68d-driver-before.py"
++        exec(compile(source.read_text(), str(source), "exec"), legacy.__dict__)
++        for profile in ("full", "incremental"):
++            with self.subTest(profile=profile):
++                fixture = self.fixture(profile)
++                with (
++                    patch.object(legacy, "code_identity", return_value="a" * 64),
++                    patch.object(legacy, "driver_bindings", return_value={"fixture": "b" * 64}),
++                ):
++                    old = legacy.run_development_cell(
++                        fixture[0],
++                        driver.sha(fixture[0]),
++                        fixture[2],
++                        fixture[1],
++                        output_root=self.output / "before",
++                        resource_root=self.resources / "old",
++                    )
++                new = self.run_cell((fixture[0], fixture[1], self.adapter()))
++                a, b = self.reports(old), self.reports(new)
++                for cp in (1, 2):
++                    for key in (
++                        "state_sha256",
++                        "history",
++                        "retention",
++                        "locality",
++                        "unseen",
++                        "endpoints",
++                    ):
++                        self.assertEqual(scientific(a[cp][key]), scientific(b[cp][key]))
++                for result in (old, new):
++                    previous = None
++                    for p in sorted(
++                        Path(result["run_dir"]).glob("attempt-*/checkpoint-*.receipt.json")
++                    ):
++                        row = json.loads(p.read_text())
++                        self.assertEqual(row["previous_receipt_sha256"], previous)
++                        self.assertEqual(
++                            row["receipt_sha256"],
++                            driver.digest({k: v for k, v in row.items() if k != "receipt_sha256"}),
++                        )
++                        previous = row["receipt_sha256"]
++                    self.assertEqual(result["last_receipt_sha256"], previous)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

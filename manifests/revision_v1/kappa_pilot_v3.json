@@ -1,0 +1,134 @@
+{
+ "schema_version": 3,
+ "task": "HT-3c",
+ "supersedes": "manifests/revision_v1/kappa_pilot_v2.json",
+ "supersedes_sha256": "81a07c899d89024e65f688bb6b0aadecf59918ebb2f6851f41d47b5a4a85a7b6",
+ "status": "launched_development_pilot",
+ "launch_authorized": true,
+ "authorization": {
+  "decision": "DEC-054",
+  "lead": "Q4: go (2026-09-16), relaying Matthew Ikle's review: 'What is being proposed makes a lot of sense ... relatively on the cheap ... We need to be upfront about our conclusion as is mentioned in the counter-review under section 4 What it is not'",
+  "framing_binding": "results are preliminary hints; the counter-review \u00a74 'What it is not' paragraph is reproduced wherever the \u03ba result is reported (slides, notes, report)"
+ },
+ "launch_gates": {
+  "lead_Q4": "accepted, arms and aggregation as in v2",
+  "selected_primary": "primary_condition_v5 (sha 4bca8eb643872fe8); the ordinary arm IS the v5 family: r1_50_stream_sel6_text_s{0,1,2}, identical training command, \u03ba = 0",
+  "finite_abort_guard": "scripts/r1_50_stream_train.py aborts with exit 3 and writes <run>/failure_receipt.json (charged wall, ledger) on any non-finite metric, loss or parameter (parameters checked every 10 steps)",
+  "gpu_lease_memory_budget": "one job at a time; trainer MemAvailable guard 4,096 MB; chain script scratchpad/r1_chain_h.sh; measured budget below"
+ },
+ "arms": [
+  {
+   "clip_surprisal": null,
+   "id": "ordinary",
+   "kappa": 0.0,
+   "seeds": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "answer_ceiling": 5.0,
+   "clip_surprisal": null,
+   "id": "kappa02",
+   "kappa": 0.2,
+   "seeds": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "answer_ceiling": 2.0,
+   "clip_surprisal": null,
+   "id": "kappa05",
+   "kappa": 0.5,
+   "seeds": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "answer_ceiling": 2.0,
+   "clip_surprisal": 2.0,
+   "id": "clip2",
+   "kappa": 0.0,
+   "seeds": [
+    0,
+    1,
+    2
+   ]
+  }
+ ],
+ "design": "9 ordinary/coupled + 3 clipped; shared chosen architecture/training schedule and development evaluation population",
+ "objective": {
+  "answer": "-expm1(-kappa * surprisal) / kappa; ordinary surprisal at kappa=0",
+  "boundary": "rejection CE formula is unchanged but shared parameters may change its predictions; kappa does not repair the rejection boundary",
+  "citation": {
+   "arxiv": "https://arxiv.org/abs/0912.0748v1",
+   "doi": "10.1016/j.physa.2010.01.044"
+  },
+  "finite_precision": "not uniformly bounded; float32 expm1 overflows near kappa*log(p/q)>88.7",
+  "interpretation": "bounded answer surprisal with convex preservation f-divergence; not a proof that the entire objective equals a published coupled entropy/free energy",
+  "mapping": "Nelson-Umarov ln_Q(x)=(x^Q-1)/Q; ln_Q(1/p)=-ln_{-Q}(p); implemented -ln_kappa(p) maps to Q=-kappa",
+  "preservation": "D_k(p||q) = sum p * expm1(kappa*(log(p)-log(q))) / kappa",
+  "proof": "For normalized positive p,q, D=sum q*f(p/q), f(t)=(t^(1+k)-t)/k; f(1)=0, f''(t)=(1+k)t^(k-1)>0. Jensen gives D>=0; equality and stationary q-logits at q=p.",
+  "reference": "episode-fixed reference; coupled_divergence does not itself detach its first argument",
+  "small_kappa": "expm1 avoids subtraction cancellation",
+  "zero_limit": "KL(p||q)"
+ },
+ "aggregation": {
+  "clip_role": "Report kappa05 vs clip2 descriptively on identical metrics. No ceiling-matched claim for kappa02.",
+  "datasets": [
+   "zsre",
+   "counterfact",
+   "mquake"
+  ],
+  "direction": "An increase may meet separation but cannot be described as improved robustness; reduction is required for an improvement claim.",
+  "inferential_scope": "development pilot, no confirmatory p-values or causal heavy-tail claim",
+  "missingness": "Never drop seeds/datasets or select checkpoint by observed tail performance.",
+  "retention": "For each arm compute RET-GS at the predeclared final pilot checkpoint per dataset/seed; equal-weight mean of 9 values. Each coupled candidate must be >= ordinary macro mean minus .02.",
+  "seed_spread_rule": "For each metric average the 3 datasets within each seed. Compare each coupled arm's 3-seed mean with ordinary's; require abs(mean difference) > max(range of coupled seed macros, range of ordinary seed macros). Print the signed difference. This is exploratory separation, not a significance test.",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "tail_metrics": [
+   "empirical ES95 of positive harm (fractional boundary weights)",
+   "maximum positive harm"
+  ],
+  "tail_population": "Same frozen ordinary-text windows/positions for all arms and seeds; positive per-token NLL increase relative to original base. Compare only complete identically keyed populations; any missing/nonfinite cell makes the gate unavailable.",
+  "unseen": "For each dataset, arithmetic mean false-fire rate across the same 3 seeds must not exceed ordinary's dataset mean; report every seed as well."
+ },
+ "comparator_interpretation": "clip2 ceiling-matches kappa05 only. kappa02 is a secondary unmatched dose. Ceiling-matching both requires clip5 and 15 total trainings, a separate scope/budget amendment.",
+ "training": {
+  "command": "scripts/r1_50_stream_train.py --no-lease --pool manifests/revision_v1/train_pool_counterfact_v1.json,manifests/revision_v1/train_pool_zsre_v1.json,manifests/revision_v1/train_pool_mquake_v3.json --pool-items 1000 --steps 300 --batch 2 --n-memory 64 --text-nulls 8 --text-windows 512 --save-every 50 --out-para-nulls --out-para-prob 1.0 --seed <seed> --tag ht3_<arm>_s<seed> [--kappa k | --clip-surprisal 2.0]",
+  "ordinary_arm": "reused, not retrained: r1_50_stream_sel6_text_s{0,1,2} (the v5 candidate family; same command with \u03ba = 0)",
+  "final_checkpoint": "uniform average of steps 150, 200, 250, 300 (scripts/r1_71_average_checkpoints.py), as for primary v5 \u2014 predeclared, never chosen on tail outcomes",
+  "sources_sha256": {
+   "src/pccap/revision_v1/train.py": "edad4388790381d92d14a30802260d1d3a480ffd86c389610c452dfd9c63b911",
+   "src/pccap/revision_v1/train_fast.py": "b37f9512c0da9b305ad750bad61c759524a38e2181b3f6f70b14d258650ec265",
+   "scripts/r1_50_stream_train.py": "6adfbbcdc5ac6ffdbf5d7134486092cd0d6c8e7db20ce829eccbe00d10f9acd6",
+   "scripts/r1_54_drift_assay.py": "e30cef8b88f2c54305d845c09081fe22d79eeb5fd60f8e7110f2f15bb27c55d7",
+   "scripts/r1_13_stream_eval.py": "18622caa11073aee0f4d719402fda073cdac4fa648976402189ed79474766cae",
+   "scripts/r1_44_unseen_run.py": "33c4d52f73b02a18763ea3f57e42483a48585b7d7b38db12831c08fdd414e843",
+   "scripts/r1_71_average_checkpoints.py": "cb1146351a42dcd2f5dadb420dd39848b84bc6ca19216cd8a32fc165ff76f1ed"
+  }
+ },
+ "evaluation": {
+  "retention": "scripts/r1_13_stream_eval.py per dataset (stream seed 21; MQuAKE dev v3b), delta 5 / 0.1, null 0.5, rare-overlap 1 \u2014 RET-GS at the averaged checkpoint",
+  "unseen": "scripts/r1_44_unseen_run.py --n-edits 100 per dataset (dev prompts), rare-overlap 1",
+  "tail": "scripts/r1_54_drift_assay.py --windows 32 --window 128 --rules 0.5:none --rare-overlap 1 --save-positions per dataset: 32 shared windows \u00d7 127 positions = 4,064 positions per dataset, per-position cap-on and cap-off NLL saved; positive harm = max(cap-on \u2212 cap-off, 0); ES95 with fractional boundary weights and maximum per aggregation rule",
+  "population_note": "the 32-window assay population is identical for every arm and seed (deterministic window draw per dataset); it is not the 128-window driver population used in HT-1b"
+ },
+ "budget": {
+  "v2_budget_seconds": 10800,
+  "measured_estimate_seconds": 21600,
+  "basis": "training 1,033 s per run (measured, sel6_text_s2) \u00d7 9 + averaging + retention 3 \u00d7 30 s + unseen 3 \u00d7 90 s + tail 3 \u00d7 ~180 s per arm-seed; ordinary arm needs tail rows and CounterFact/MQuAKE unseen only; the v2 figure of 3 h did not include evaluation",
+  "policy": "failures are charged (failure receipts); no seed or dataset dropped; the chain stops at the first non-finite abort of an arm and reports it"
+ },
+ "deadline": "2026-10-09",
+ "launched_at": "2026-09-16T10:30:03-04:00"
+}

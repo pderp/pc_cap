@@ -467,7 +467,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q1 (DEC-042) | **ANSWERED 2026-09-15: yes** — the reason-specific exception (12,246 candidates). | — | unblocked: the CounterFact confirmatory draw | — |
 | Q2 (DEC-047) | **ANSWERED 2026-09-15: yes** — S1_LM = the lr 1e-8 continuation. | — | unblocked: the S1_LM cells | — |
 | Q3 (item 26b) | **ANSWERED 2026-09-15: yes** (DEC-049) — stream-based checkpoint selection on all three datasets. | — | unblocked: the selection retrain | — |
-| Q4 (counter-review §4) | κ pilot go/no-go (loss-level coupled logarithm, κ ∈ {0, 0.2, 0.5}, 3 seeds, clipped-surprisal control, ≈ 2.5 GPU h); should Matthew review the definition first? | go, after Matthew's review if he wants one | the κ pilot GPU runs (HT-3 manifest can be prepared meanwhile) | Sep 20 |
+| Q4 (counter-review §4) | **ANSWERED 2026-09-16: go** (DEC-054) — Matthew Ikle reviewed the pivot and counter-review and concurs; results to be framed as preliminary hints per §4 "What it is not". | — | unblocked: the κ pilot (launched) | — |
 | Q5 (counter-review §2/HT-2) | Stress panel go/no-go (6 development cells, 4 GPU h ceiling)? | go, after the confirmatory blocks are safe | the stress-panel runs (contract can be prepared meanwhile) | Sep 20 |
 | Q6 (counter-review §5.1) | **ANSWERED 2026-09-16: as proposed** (DEC-051). | — | unblocked: block scheduling | — |
 | Q7 (counter-review §5.3) | **ANSWERED 2026-09-16: as proposed** (DEC-052) — block order, no cut, re-measure Sep 20, accepted-incomplete reporting if needed. | — | unblocked: freeze preparation | — |
@@ -548,4 +548,15 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     516 s vs 83 s batched). Batched drift agrees with the scalar assay to 1.3e-4 nats at the worst position with
     identical tail counts; I set the real-base admission tolerance at 1e-3 nats per position plus identical exceedance
     counts (protocol v5 will state it). No decision needed. Codex has started round 17 (R1-74 files arriving).
+
+46. (2026-09-16, 09:10 EDT) **Q4 recorded as DEC-054 and the κ pilot launched** (`kappa_pilot_v3.json`): nine new trainings
+    (κ 0.2, κ 0.5, clipped-surprisal control; seeds 0–2) with the v5 training command; the ordinary arm is the v5
+    family itself. Each arm is evaluated on retention (three streams), unseen false fires (three datasets, 100
+    records) and the drift tail on 32 shared windows with per-position rows saved, so the pre-registered tail
+    statistics (ES95, maximum) get their seed spread. Measured budget ≈ 6 GPU h (Codex's 3 h did not include
+    evaluation); it runs ahead of the comparator profiles because nothing else is waiting on the GPU. Matthew's
+    framing request is now a binding on every κ report (decisions file). Also this hour: Codex's round 17 landed in
+    full (R1-68d driver fix, R1-74 scoring patch applied, R1-75 analysis tree, R1-40c matrix v5, R1-49e protocol v5,
+    R1-76 fixed-outside runner and MQuAKE memo); the R1-68d re-profile runs first in the same chain. Open: Q5 only,
+    plus Q10 (MQuAKE occupancy population) once I have read Codex's memo.
 

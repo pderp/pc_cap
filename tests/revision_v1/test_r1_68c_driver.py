@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import tempfile
+import types
 import unittest
 import uuid
 from dataclasses import replace
@@ -212,7 +213,15 @@ class DriverTests(unittest.TestCase):
         ]
         self.assertTrue(readonly)
         self.assertTrue(all(t["clone_seconds"] == t["restore_seconds"] == 0 for t in readonly))
-        self.assertTrue(all(t["identity_verification_seconds"] > 0 for t in timers))
+        self.assertTrue(all(t["identity_verification_seconds"] == 0 for t in timers))
+        self.assertTrue(all(t["identity_check_seconds"] > 0 for t in timers))
+        self.assertTrue(
+            all(t["identity_check_kind"] == "in_memory_structure_and_configuration" for t in timers)
+        )
+        self.assertEqual(
+            [r["boundary"] for r in inc["boundary_identity_checks"]],
+            ["attempt_start", "resume_after_restore", "checkpoint:2", "completion"],
+        )
         self.assertTrue(all(t["file_write_seconds"] > 0 for t in timers))
 
     def test_readonly_mutation_aborts_without_checkpoint(self):
@@ -231,6 +240,87 @@ class DriverTests(unittest.TestCase):
         failures = list(self.output.glob("*/attempt-*/failure.json"))
         self.assertEqual(len(failures), 1)
         self.assertGreater(json.loads(failures[0].read_text())["attempt_wall_seconds"], 0)
+
+    def test_full_identity_only_at_boundaries_and_checkpoint_mismatch_refuses_receipt(self):
+        fixture = self.fixture("incremental")
+        cap = fixture[2]
+        with patch.object(cap, "identity", wraps=cap.identity) as identity:
+            result = self.run_cell(fixture)
+        self.assertEqual(identity.call_count, 4)
+        self.assertEqual(
+            [r["boundary"] for r in result["boundary_identity_checks"]],
+            ["attempt_start", "checkpoint:1", "checkpoint:2", "completion"],
+        )
+        self.assertGreater(result["boundary_identity_seconds"], 0)
+
+        fixture = self.fixture("full")
+        original = fixture[2].identity()
+        changed = {**original, "base_sha256": "changed-in-place"}
+        with patch.object(fixture[2], "identity", side_effect=[original, changed]):
+            with self.assertRaisesRegex(ValueError, "immutable adapter identity changed"):
+                self.run_cell(fixture)
+        failed = [p.parent for p in self.output.glob("*/attempt-*/failure.json")]
+        self.assertEqual(len(failed), 1)
+        self.assertFalse(list(failed[0].glob("checkpoint-*.receipt.json")))
+
+    def test_parameter_replacement_is_detected_within_phase(self):
+        fixture = self.fixture("incremental")
+        original = driver.CellAssays.item
+
+        def corrupt(assays, item):
+            result = original(assays, item)
+            assays.adapter.learner.params = dict(assays.adapter.learner.params)
+            return result
+
+        with patch.object(driver.CellAssays, "item", corrupt):
+            with self.assertRaisesRegex(RuntimeError, "immutable in-memory"):
+                self.run_cell(fixture)
+        self.assertFalse(list(self.output.glob("*/attempt-*/checkpoint-*.receipt.json")))
+
+    def test_original_driver_scientific_results_and_receipt_chain_parity(self):
+        legacy = types.ModuleType("r1_68d_legacy")
+        source = driver.ROOT / "docs/tasks/R1-68d-driver-before.py"
+        exec(compile(source.read_text(), str(source), "exec"), legacy.__dict__)
+        for profile in ("full", "incremental"):
+            with self.subTest(profile=profile):
+                fixture = self.fixture(profile)
+                with (
+                    patch.object(legacy, "code_identity", return_value="a" * 64),
+                    patch.object(legacy, "driver_bindings", return_value={"fixture": "b" * 64}),
+                ):
+                    old = legacy.run_development_cell(
+                        fixture[0],
+                        driver.sha(fixture[0]),
+                        fixture[2],
+                        fixture[1],
+                        output_root=self.output / "before",
+                        resource_root=self.resources / "old",
+                    )
+                new = self.run_cell((fixture[0], fixture[1], self.adapter()))
+                a, b = self.reports(old), self.reports(new)
+                for cp in (1, 2):
+                    for key in (
+                        "state_sha256",
+                        "history",
+                        "retention",
+                        "locality",
+                        "unseen",
+                        "endpoints",
+                    ):
+                        self.assertEqual(scientific(a[cp][key]), scientific(b[cp][key]))
+                for result in (old, new):
+                    previous = None
+                    for p in sorted(
+                        Path(result["run_dir"]).glob("attempt-*/checkpoint-*.receipt.json")
+                    ):
+                        row = json.loads(p.read_text())
+                        self.assertEqual(row["previous_receipt_sha256"], previous)
+                        self.assertEqual(
+                            row["receipt_sha256"],
+                            driver.digest({k: v for k, v in row.items() if k != "receipt_sha256"}),
+                        )
+                        previous = row["receipt_sha256"]
+                    self.assertEqual(result["last_receipt_sha256"], previous)
 
 
 if __name__ == "__main__":

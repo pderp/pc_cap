@@ -1,0 +1,123 @@
+--- a/src/pccap/revision_v1/stage4_assays.py
++++ b/src/pccap/revision_v1/stage4_assays.py
+@@ -13,6 +13,71 @@
+ from pccap.revision_v1.endpoints_unseen import UnseenPromptEvaluator, summarize_unseen
+ 
+ 
++def preservation_flags(reference, query, *, status="ok"):
++    fields = (
++        "preserved",
++        "preserved_terminated",
++        "truncated_pair",
++        "reference_truncated",
++        "query_truncated",
++    )
++    if status != "ok":
++        return dict.fromkeys(fields)
++    if not isinstance(reference, dict) or not isinstance(query, dict):
++        raise ValueError("complete generation traces required")
++    if any(
++        not isinstance(x.get("generated"), str) or type(x.get("truncated")) is not bool
++        for x in (reference, query)
++    ):
++        raise ValueError("generated text and explicit boolean truncation flags required")
++    bounded = query["generated"] == reference["generated"]
++    truncated = reference["truncated"] or query["truncated"]
++    return {
++        "preserved": bounded,
++        "preserved_terminated": bounded and not truncated,
++        "truncated_pair": truncated,
++        "reference_truncated": reference["truncated"],
++        "query_truncated": query["truncated"],
++    }
++
++
++def preservation_summary(rows, expected_ids):
++    if len(expected_ids) != len(set(expected_ids)):
++        raise ValueError("unique planned case IDs required")
++    ids = [r["item_id"] for r in rows]
++    if len(ids) != len(set(ids)) or not set(ids) <= set(expected_ids):
++        raise ValueError("duplicate/unexpected preservation row")
++    available = [r for r in rows if r.get("status") == "ok"]
++    fields = (
++        "preserved",
++        "preserved_terminated",
++        "truncated_pair",
++        "reference_truncated",
++        "query_truncated",
++    )
++    if any(type(r.get(k)) is not bool for r in available for k in fields):
++        raise ValueError("available row lacks preservation/truncation verdict")
++    n = len(expected_ids)
++    counts = {k + "_n": sum(r[k] for r in available) for k in fields}
++    return {
++        "expected_n": n,
++        "scored_n": len(available),
++        "unavailable_n": n - len(available),
++        **counts,
++        "preserved_fraction": counts["preserved_n"] / n if n and len(available) == n else None,
++        "preserved_terminated_fraction": counts["preserved_terminated_n"] / n
++        if n and len(available) == n
++        else None,
++        "status": "not_applicable"
++        if not n
++        else "complete"
++        if len(available) == n
++        else "incomplete",
++        "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
++        "secondary_convention": "same decoded text and neither side truncated",
++    }
++
++
+ class _MemoryView:
+     """Audit-only inventory for unseen admission; predictions delegate unchanged."""
+ 
+@@ -38,12 +103,14 @@
+     def near_miss(self, row):
+         out = super().near_miss(row)
+         if out["status"] == "ok":
+-            out["preserved"] = (
+-                out["preserved"]
+-                and not out["reference"]["truncated"]
+-                and not out["neighbour_query"]["truncated"]
++            out["edit_exact"] = out["edit_exact"] and not out["edited_query"]["truncated"]
++        out.update(
++            preservation_flags(
++                out.get("reference"),
++                out.get("neighbour_query"),
++                status=out.get("status", "unavailable"),
+             )
+-            out["edit_exact"] = out["edit_exact"] and not out["edited_query"]["truncated"]
++        )
+         return out
+ 
+     def revision(self, row):
+@@ -159,7 +226,7 @@
+                     {
+                         "item_id": row["item_id"],
+                         "status": "ok",
+-                        "preserved": not off.truncated and not on.truncated and on.text == off.text,
++                        **preservation_flags(ref, query),
+                         "reference": ref,
+                         "query": query,
+                     }
+@@ -169,6 +236,7 @@
+                 "expected_ids": definition["expected_ids"],
+                 "reference_base_sha256": self.adapter.locality_base.checksum(recompute=True),
+                 "reference_policy": "original base for S1 and original-base conditions",
++                "summary": preservation_summary(rows, definition["expected_ids"]),
+             }
+         finally:
+             self.events.extend(ev._events)
+@@ -219,7 +287,10 @@
+             result["item_id"] = source["item_id"]
+             rows.append(result)
+             self.events.extend(result.get("events", []))
+-        return {"rows": rows, "expected_ids": definition["expected_ids"]}
++        out = {"rows": rows, "expected_ids": definition["expected_ids"]}
++        if kind == "near_miss":
++            out["summary"] = preservation_summary(rows, definition["expected_ids"])
++        return out
+ 
+     def composition(self, definition, items, initial_state):
+         ev = CompositionEvaluator(

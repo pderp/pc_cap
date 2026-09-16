@@ -17,6 +17,19 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 
+def drift_matrix(ev, learner_or_predict):
+    """Per-position NLL over the evaluator's drift windows: rows = windows, columns = positions 1..T-1 (mirrors Evaluator._drift_nll)."""
+    from pccap.harness.runs import _last_logits
+    T = len(ev.drift_windows[0])
+    cols = []
+    for t in range(1, T):
+        seqs = [w[:t] for w in ev.drift_windows]
+        tg = np.asarray([int(w[t]) for w in ev.drift_windows])
+        logits = ev._batch_last(learner_or_predict, seqs) if not callable(learner_or_predict) else np.stack([_last_logits(learner_or_predict(x)) for x in seqs])
+        cols.append(np.asarray(ev._nll_rows(logits, tg), np.float64))
+    return np.stack(cols, axis=1)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--theta", required=True)
@@ -29,6 +42,7 @@ def main() -> int:
     ap.add_argument("--stop-tokens", default="manifests/revision_v1/stop_tokens_v1.json")
     ap.add_argument("--no-query-null", action="store_true")
     ap.add_argument("--tag", default=None)
+    ap.add_argument("--save-positions", action="store_true", help="HT-3: write per-position cap-on / cap-off NLLs (windows x positions) next to the summary")
     args = ap.parse_args()
     import pccap  # noqa: F401
     from pccap.bases.bp import BPBase
@@ -85,12 +99,20 @@ def main() -> int:
                 return np.stack([self.predict(s).logits for s in seqs])
 
         ppc = PerPositionCap(cap)
-        nll_on = ev._drift_nll(ppc)
-        nll_off = ev._drift_nll(base)
+        if args.save_positions:
+            mat_on, mat_off = drift_matrix(ev, ppc), drift_matrix(ev, base)
+            nll_on, nll_off = float(mat_on.mean()), float(mat_off.mean())
+            positions = {"rule": rule, "windows": len(windows), "positions_per_window": mat_on.shape[1], "policy": "every scored position is its own query; original-base reference = cap-off column",
+                         "nll_cap_on": mat_on.tolist(), "nll_cap_off": mat_off.tolist()}
+        else:
+            nll_on = ev._drift_nll(ppc)
+            nll_off = ev._drift_nll(base)
         out["rules"][rule] = {"fire_rate_on_ordinary_prefixes": float(np.mean(fired)), "fire_rate_all_scored_positions": ppc.fired / max(1, ppc.n), "scored_positions": ppc.n, "drift_nll_cap_on": nll_on, "drift_nll_cap_off": nll_off, "delta_nats": nll_on - nll_off, "ppl_ratio": float(np.exp(nll_on - nll_off))}
         print(json.dumps({rule: {k: round(v, 4) for k, v in out["rules"][rule].items()}}), flush=True)
     tag = args.tag or Path(args.theta).parent.name
     (ROOT / "results" / "R1" / f"drift_assay_{tag}_{args.dataset}.json").write_text(json.dumps(out, indent=1))
+    if args.save_positions:
+        (ROOT / "results" / "R1" / f"drift_assay_{tag}_{args.dataset}.positions.json").write_text(json.dumps(positions))
     return 0
 
 

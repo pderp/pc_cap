@@ -1,0 +1,776 @@
+{
+  "analysis_source_sha256": {
+    "scripts/ht_audit_existing.py": "5ae93837b7fb6ecaa578ad3a6e56b4c13d8116d50ac145b25398a40f3f9cd3e1",
+    "scripts/r1_74_rescore.py": "67ef181e7be2c28baf76209b6ea7244d56e8fc02cbd7266409f1147a82731431",
+    "scripts/r1_75_analysis_stage4_v1.py": "07172eb7cd719a87e5960f51d88eee39945891aa77ef084c1270ed397dee7b96",
+    "scripts/r1_75_analyze_cells.py": "5932a953f4ac344dac2bd3c3350436c07b40f453ea8310306ec7ed4c5a4028c2",
+    "src/pccap/revision_v1/analysis.py": "b9a40ac1081f1eee28e941d341d1adb91f304654e327bb2e1ce639450006bff2"
+  },
+  "banner": "development/draft observations do not fill confirmation slots",
+  "blocks": [
+    {
+      "artifact_complete": 2,
+      "block_number": 1,
+      "complete": true,
+      "planned": 2,
+      "primary_metrics_complete": 2
+    }
+  ],
+  "cells": [
+    {
+      "artifact_complete": true,
+      "attempts": [
+        "attempt-0000"
+      ],
+      "block_number": 1,
+      "cell": {
+        "condition": "R1_learned_ff",
+        "dataset": "zsre",
+        "order": "source",
+        "realization": "development"
+      },
+      "cell_id": "b4110a42abb8724d1b32d9a6",
+      "checkpoints": {
+        "100": {
+          "edit_n": 100,
+          "population_identity": "6ac4b9fba40530fbcbc797b3c2e92913a88a3b72f189fc03b35df1d7dd715664",
+          "primary": {
+            "ES": {
+              "evaluated_value": 1.0,
+              "numerator": 100.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 1.0
+            },
+            "LS": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "RET-ES": {
+              "evaluated_value": 1.0,
+              "numerator": 100.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 1.0
+            },
+            "RET-GS": {
+              "evaluated_value": 0.99,
+              "numerator": 99.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.99
+            }
+          },
+          "secondary": {
+            "LS_terminated": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "locality": {
+              "expected_n": 50,
+              "preserved_fraction": 1.0,
+              "preserved_n": 50,
+              "preserved_terminated_fraction": 1.0,
+              "preserved_terminated_n": 50,
+              "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
+              "query_truncated_n": 0,
+              "reference_truncated_n": 0,
+              "scored_n": 50,
+              "secondary_convention": "same decoded text and neither side truncated",
+              "status": "complete",
+              "truncated_pair_n": 0,
+              "unavailable_n": 0
+            },
+            "unseen_answer_changed": {
+              "evaluated_value": 0.09,
+              "numerator": 9.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.09
+            },
+            "unseen_false_fire": {
+              "evaluated_value": 0.09,
+              "numerator": 9.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.09,
+              "wilson_evaluated": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 0.04807254000256516,
+                "upper": 0.1622621285271631
+              },
+              "wilson_full_inventory": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 0.04807254000256516,
+                "upper": 0.1622621285271631
+              }
+            }
+          },
+          "status": "complete"
+        },
+        "300": {
+          "edit_n": 300,
+          "population_identity": "6ac4b9fba40530fbcbc797b3c2e92913a88a3b72f189fc03b35df1d7dd715664",
+          "primary": {
+            "ES": {
+              "evaluated_value": 1.0,
+              "numerator": 300.0,
+              "planned": 300,
+              "scored": 300,
+              "status": "complete",
+              "status_counts": {
+                "ok": 300
+              },
+              "value": 1.0
+            },
+            "LS": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "RET-ES": {
+              "evaluated_value": 0.9966666666666667,
+              "numerator": 299.0,
+              "planned": 300,
+              "scored": 300,
+              "status": "complete",
+              "status_counts": {
+                "ok": 300
+              },
+              "value": 0.9966666666666667
+            },
+            "RET-GS": {
+              "evaluated_value": 0.9866666666666667,
+              "numerator": 296.0,
+              "planned": 300,
+              "scored": 300,
+              "status": "complete",
+              "status_counts": {
+                "ok": 300
+              },
+              "value": 0.9866666666666667
+            }
+          },
+          "secondary": {
+            "LS_terminated": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "drift": {
+              "planned_positions": 16256,
+              "references": {
+                "capoff": {
+                  "ES99_positive_nats": 0.21976783947672804,
+                  "count_above_0_1_nats": 17,
+                  "definition": "fractional empirical top1% mean of positive NLL harm; denominator .01*N",
+                  "max_positive_nats": 8.68594104129011,
+                  "maximum_position": "w16:p31",
+                  "mean_positive_nats": 0.00219898203833393,
+                  "mean_signed_nats": 0.0021975574241695347,
+                  "zero_positive_n": 10132
+                },
+                "original": {
+                  "ES99_positive_nats": 0.21976783947672804,
+                  "count_above_0_1_nats": 17,
+                  "definition": "fractional empirical top1% mean of positive NLL harm; denominator .01*N",
+                  "max_positive_nats": 8.68594104129011,
+                  "maximum_position": "w16:p31",
+                  "mean_positive_nats": 0.00219898203833393,
+                  "mean_signed_nats": 0.0021975574241695347,
+                  "zero_positive_n": 10132
+                }
+              },
+              "scored_positions": 16256,
+              "source_sha256": "2e67327e54b5fb83e765c2320affcf8cfc4fc30b3996eea06105c850609ee524",
+              "status": "complete"
+            },
+            "locality": {
+              "expected_n": 50,
+              "preserved_fraction": 1.0,
+              "preserved_n": 50,
+              "preserved_terminated_fraction": 1.0,
+              "preserved_terminated_n": 50,
+              "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
+              "query_truncated_n": 0,
+              "reference_truncated_n": 0,
+              "scored_n": 50,
+              "secondary_convention": "same decoded text and neither side truncated",
+              "status": "complete",
+              "truncated_pair_n": 0,
+              "unavailable_n": 0
+            },
+            "near_miss": {
+              "expected_n": 100,
+              "preserved_fraction": null,
+              "preserved_n": 0,
+              "preserved_terminated_fraction": null,
+              "preserved_terminated_n": 0,
+              "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
+              "query_truncated_n": 0,
+              "reference_truncated_n": 0,
+              "scored_n": 0,
+              "secondary_convention": "same decoded text and neither side truncated",
+              "status": "incomplete",
+              "truncated_pair_n": 0,
+              "unavailable_n": 100
+            },
+            "near_miss_bounded": {
+              "evaluated_value": null,
+              "numerator": 0.0,
+              "planned": 100,
+              "scored": 0,
+              "status": "incomplete",
+              "status_counts": {
+                "missing": 100
+              },
+              "value": null
+            },
+            "near_miss_terminated": {
+              "evaluated_value": null,
+              "numerator": 0.0,
+              "planned": 100,
+              "scored": 0,
+              "status": "incomplete",
+              "status_counts": {
+                "missing": 100
+              },
+              "value": null
+            },
+            "new_record_active": {
+              "evaluated_value": null,
+              "numerator": 0.0,
+              "planned": 50,
+              "scored": 0,
+              "status": "incomplete",
+              "status_counts": {
+                "missing": 50
+              },
+              "value": null
+            },
+            "old_record_retired": {
+              "evaluated_value": null,
+              "numerator": 0.0,
+              "planned": 50,
+              "scored": 0,
+              "status": "incomplete",
+              "status_counts": {
+                "missing": 50
+              },
+              "value": null
+            },
+            "revision_latest": {
+              "evaluated_value": null,
+              "numerator": 0.0,
+              "planned": 50,
+              "scored": 0,
+              "status": "incomplete",
+              "status_counts": {
+                "missing": 50
+              },
+              "value": null
+            },
+            "revision_semantic": {
+              "evaluated_value": null,
+              "numerator": 0.0,
+              "planned": 50,
+              "scored": 0,
+              "status": "incomplete",
+              "status_counts": {
+                "missing": 50
+              },
+              "value": null
+            },
+            "unseen_answer_changed": {
+              "evaluated_value": 0.08,
+              "numerator": 8.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.08
+            },
+            "unseen_false_fire": {
+              "evaluated_value": 0.08,
+              "numerator": 8.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.08,
+              "wilson_evaluated": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 0.041093461484380624,
+                "upper": 0.14998107700948735
+              },
+              "wilson_full_inventory": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 0.041093461484380624,
+                "upper": 0.14998107700948735
+              }
+            }
+          },
+          "status": "complete"
+        }
+      },
+      "missing_checkpoints": [],
+      "mode": "stage4_development_cell",
+      "primary_metrics_complete": true,
+      "receipt_policy": "report digests, recipe/state identities and contiguous chain verified; snapshot payloads are not opened",
+      "scientific_admission": false,
+      "status": "complete_artifacts",
+      "unreceipted_checkpoints": [],
+      "within_block_order": 1
+    },
+    {
+      "artifact_complete": true,
+      "attempts": [
+        "attempt-0000"
+      ],
+      "block_number": 1,
+      "cell": {
+        "condition": "R1_learned_ff",
+        "dataset": "counterfact",
+        "order": "source",
+        "realization": "development"
+      },
+      "cell_id": "26dab92e5e0a766dd9226ce8",
+      "checkpoints": {
+        "100": {
+          "edit_n": 100,
+          "population_identity": "90d3efb77280f30e75b471ba426e77e3945a86a72570acd19c6a197a3d822540",
+          "primary": {
+            "ES": {
+              "evaluated_value": 1.0,
+              "numerator": 100.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 1.0
+            },
+            "LS": {
+              "evaluated_value": 0.98,
+              "numerator": 49.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 0.98
+            },
+            "RET-ES": {
+              "evaluated_value": 1.0,
+              "numerator": 100.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 1.0
+            },
+            "RET-GS": {
+              "evaluated_value": 0.765,
+              "numerator": 76.5,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.765
+            }
+          },
+          "secondary": {
+            "LS_terminated": {
+              "evaluated_value": 0.72,
+              "numerator": 36.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 0.72
+            },
+            "locality": {
+              "expected_n": 50,
+              "preserved_fraction": 0.98,
+              "preserved_n": 49,
+              "preserved_terminated_fraction": 0.72,
+              "preserved_terminated_n": 36,
+              "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
+              "query_truncated_n": 13,
+              "reference_truncated_n": 14,
+              "scored_n": 50,
+              "secondary_convention": "same decoded text and neither side truncated",
+              "status": "complete",
+              "truncated_pair_n": 14,
+              "unavailable_n": 0
+            },
+            "unseen_answer_changed": {
+              "evaluated_value": 0.0,
+              "numerator": 0.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.0
+            },
+            "unseen_false_fire": {
+              "evaluated_value": 0.0,
+              "numerator": 0.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.0,
+              "wilson_evaluated": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 3.469446951953614e-18,
+                "upper": 0.03699349820698568
+              },
+              "wilson_full_inventory": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 3.469446951953614e-18,
+                "upper": 0.03699349820698568
+              }
+            }
+          },
+          "status": "complete"
+        },
+        "300": {
+          "edit_n": 300,
+          "population_identity": "90d3efb77280f30e75b471ba426e77e3945a86a72570acd19c6a197a3d822540",
+          "primary": {
+            "ES": {
+              "evaluated_value": 1.0,
+              "numerator": 300.0,
+              "planned": 300,
+              "scored": 300,
+              "status": "complete",
+              "status_counts": {
+                "ok": 300
+              },
+              "value": 1.0
+            },
+            "LS": {
+              "evaluated_value": 0.98,
+              "numerator": 49.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 0.98
+            },
+            "RET-ES": {
+              "evaluated_value": 1.0,
+              "numerator": 300.0,
+              "planned": 300,
+              "scored": 300,
+              "status": "complete",
+              "status_counts": {
+                "ok": 300
+              },
+              "value": 1.0
+            },
+            "RET-GS": {
+              "evaluated_value": 0.7533333333333333,
+              "numerator": 226.0,
+              "planned": 300,
+              "scored": 300,
+              "status": "complete",
+              "status_counts": {
+                "ok": 300
+              },
+              "value": 0.7533333333333333
+            }
+          },
+          "secondary": {
+            "LS_terminated": {
+              "evaluated_value": 0.72,
+              "numerator": 36.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 0.72
+            },
+            "drift": {
+              "planned_positions": 16256,
+              "references": {
+                "capoff": {
+                  "ES99_positive_nats": 0.6384798650734221,
+                  "count_above_0_1_nats": 52,
+                  "definition": "fractional empirical top1% mean of positive NLL harm; denominator .01*N",
+                  "max_positive_nats": 7.314825578831972,
+                  "maximum_position": "w17:p117",
+                  "mean_positive_nats": 0.006386132870838853,
+                  "mean_signed_nats": 0.00628615224968242,
+                  "zero_positive_n": 10105
+                },
+                "original": {
+                  "ES99_positive_nats": 0.6384798650734221,
+                  "count_above_0_1_nats": 52,
+                  "definition": "fractional empirical top1% mean of positive NLL harm; denominator .01*N",
+                  "max_positive_nats": 7.314825578831972,
+                  "maximum_position": "w17:p117",
+                  "mean_positive_nats": 0.006386132870838853,
+                  "mean_signed_nats": 0.00628615224968242,
+                  "zero_positive_n": 10105
+                }
+              },
+              "scored_positions": 16256,
+              "source_sha256": "2e67327e54b5fb83e765c2320affcf8cfc4fc30b3996eea06105c850609ee524",
+              "status": "complete"
+            },
+            "locality": {
+              "expected_n": 50,
+              "preserved_fraction": 0.98,
+              "preserved_n": 49,
+              "preserved_terminated_fraction": 0.72,
+              "preserved_terminated_n": 36,
+              "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
+              "query_truncated_n": 13,
+              "reference_truncated_n": 14,
+              "scored_n": 50,
+              "secondary_convention": "same decoded text and neither side truncated",
+              "status": "complete",
+              "truncated_pair_n": 14,
+              "unavailable_n": 0
+            },
+            "near_miss": {
+              "expected_n": 100,
+              "preserved_fraction": 1.0,
+              "preserved_n": 100,
+              "preserved_terminated_fraction": 0.63,
+              "preserved_terminated_n": 63,
+              "primary_convention": "DEC-053 bounded exact decoded-text equality, no normalization or termination requirement",
+              "query_truncated_n": 37,
+              "reference_truncated_n": 37,
+              "scored_n": 100,
+              "secondary_convention": "same decoded text and neither side truncated",
+              "status": "complete",
+              "truncated_pair_n": 37,
+              "unavailable_n": 0
+            },
+            "near_miss_bounded": {
+              "evaluated_value": 1.0,
+              "numerator": 100.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 1.0
+            },
+            "near_miss_terminated": {
+              "evaluated_value": 0.63,
+              "numerator": 63.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.63
+            },
+            "new_record_active": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "old_record_retired": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "revision_latest": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "revision_semantic": {
+              "evaluated_value": 1.0,
+              "numerator": 50.0,
+              "planned": 50,
+              "scored": 50,
+              "status": "complete",
+              "status_counts": {
+                "ok": 50
+              },
+              "value": 1.0
+            },
+            "unseen_answer_changed": {
+              "evaluated_value": 0.0,
+              "numerator": 0.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.0
+            },
+            "unseen_false_fire": {
+              "evaluated_value": 0.0,
+              "numerator": 0.0,
+              "planned": 100,
+              "scored": 100,
+              "status": "complete",
+              "status_counts": {
+                "ok": 100
+              },
+              "value": 0.0,
+              "wilson_evaluated": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 3.469446951953614e-18,
+                "upper": 0.03699349820698568
+              },
+              "wilson_full_inventory": {
+                "confidence": 0.95,
+                "interpretation": "descriptive binomial reference; fixed development data/selection and dependent prompts limit population inference",
+                "lower": 3.469446951953614e-18,
+                "upper": 0.03699349820698568
+              }
+            }
+          },
+          "status": "complete"
+        }
+      },
+      "missing_checkpoints": [],
+      "mode": "stage4_development_cell",
+      "primary_metrics_complete": true,
+      "receipt_policy": "report digests, recipe/state identities and contiguous chain verified; snapshot payloads are not opened",
+      "scientific_admission": false,
+      "status": "complete_artifacts",
+      "unreceipted_checkpoints": [],
+      "within_block_order": 2
+    }
+  ],
+  "complete_blocks": [
+    1
+  ],
+  "contrasts": [],
+  "gpu_seconds": 0,
+  "incomplete_cells": [],
+  "limits": [
+    "Complete blocks mean terminal execution artifacts, not universal endpoint availability or scientific admission.",
+    "Missing pairs are not imputed; available-pair means remain diagnostics.",
+    "Three fresh realization clusters keep all five orders together; no iid-order claim.",
+    "Snapshot payloads and training inputs are not opened; reports and receipts establish analysis provenance.",
+    "U12 multiplicity and final secondary thresholds remain pending; no confirmatory verdict is emitted."
+  ],
+  "matrix_file": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-75-development.matrix.json",
+    "sha256": "709703d21bb25847b245bc651022fb45e5c8ed267bb258a62c880fdd38ea3f83"
+  },
+  "matrix_name": "R1-75_v5_development",
+  "matrix_sha256": "ad2af307d4fd441cf58bdac24cdc579d52be4b20affe72cc69497fee5afe8dff",
+  "model_calls": 0,
+  "schema_version": 1,
+  "scope": "development",
+  "sources_sha256": {
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-100.json": "bf71c1ad2d0feea9a716c5788a35e5e5d476f59cc2a7bfb6d46aa31e028bc4f8",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-100.receipt.json": "6385b626d13c43f94c55f494d4c519d0325d3bd8a8b57b07662197a819c381a0",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.receipt.json": "8356985bc09deec39c597d2e8df641c85ec892333adac11cbb08b7cd4e7fc6c2",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/result.json": "a3f44a19b8d5d1d15e32bc43ee81274e143bf34c71258f8b30c183e3ecc101c9",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/cell.json": "d4dc4de35955d7773d034077f2f8c3eb7346f79b84dd49ad3904188d3a96f8e3",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-100.json": "29f7cea53ea5084440f153c14127e5880510f7073ec1a89c9d13d09316a4d6fc",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-100.receipt.json": "49e9c87376f538213761ec259fb3fc8d3971ea2bcfa132ea450bff448e6a4ba0",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.json": "cd7da933af806e0fd8bae05cce9731398c3e3c4bda744f8d3f92f287f23dbd66",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.receipt.json": "2c92887a05f46e0b961b52242f23dae8cadf61267779e87cb56d4889cd8ddf1a",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/result.json": "59cd31161acc3cbe8d418e1d49b117a903de16eba5c766917781258852685edd",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/cell.json": "b7b1860ceba8611ad01ab011ccfcfee1f3c3f947c970c74e69364b250ff78d4d"
+  },
+  "task": "R1-75"
+}
