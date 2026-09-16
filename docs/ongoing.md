@@ -77,7 +77,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 20 (CPU; open now; posted 2026-09-16 18:55 EDT)
 
 Round 19 is committed and mirrored. Chain I (comparator profiles, then the R1-73 calibration) runs until ≈ 01:00;
-chain J (stress panel) follows. Priority order: R1-68e → R1-D9 → HT-3e → R1-64d → R1-73b. Rules as before.
+chain J (stress panel) follows. Priority order: R1-68e → R1-49g → R1-D9 → HT-3e → R1-64d → R1-73b. Rules as before.
 
 ### Lane R1-68e — batched drift assay for the v0 and continuation adapters (first; budget-critical)
 
@@ -92,6 +92,16 @@ corrected partial forwards batched, hard-null rows returning the unedited logits
 adapter as R1-68c (per-position NLL tolerance stated), and rebuilt recipes (`R1-64d-*`, see below) that select the
 batched path. The orchestrator re-profiles on the real base with the ≤ 1e-3 nats / identical-exceedance admission
 rule. If an adapter genuinely cannot be batched, say which and why, with the scalar cost it keeps.
+
+### Lane R1-49g — bind DEC-057 / 058 / 059 into protocol v5.1 and the analysis tree (after R1-68e, before R1-D9)
+
+The lead accepted Q11–Q13 as proposed. Write `docs/R1_stage4_protocol_draft_v5_1.md` (v5 + the exact insertion text
+from R1-49f for U12 / U13 / U14, citing DEC-057–059, change log) and implement them in the R1-75 analysis tree as new
+modules: the 63-interval Bonferroni family with the realization-cluster bootstrap (unadjusted and adjusted intervals,
+all three realization estimates), the four-way classifier with the bound inequalities in the stated priority order,
+and the secondary benchmarks table (cells and macros), with tests on synthetic and TinyBase cells including the
+boundary cases (a bound exactly on a margin; ΔG exactly 0.05; incomplete populations → unavailable). Then rebuild
+the freeze candidate (R1-63e) binding protocol v5.1.
 
 ### Lane R1-D9 — the lead's acts as runnable dry commands: clearance, draw, seal receipts
 

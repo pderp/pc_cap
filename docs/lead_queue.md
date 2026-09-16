@@ -474,9 +474,9 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q8 (protocol v4 §6) | **ANSWERED 2026-09-15: confirmed** (DEC-050) — mean RET-GS s.t. zsRE unseen ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | — | unblocked: the selection and its freeze binding | — |
 | Q9 (protocol v4 §6, LS convention) | **ANSWERED 2026-09-16: bounded text equality primary** (DEC-053); termination-qualified counts and truncation reported alongside. | — | unblocked: the driver's LS/near-miss reporting rule (Codex edit request); confirmatory LS readings | — |
 | Q10 (R1-76 memo) | **ANSWERED 2026-09-16: B** (DEC-056) — review the 700 historically exposed rows; 100 / 300-record MQuAKE diagnostic, 1,000 point absent. | — | unblocked: lane R1-76b (Codex), then the run | — |
-| Q11 (protocol v5 U12; `docs/tasks/R1-49f-lead-bindings.md`) | Comparisons and multiplicity: keep all 7 primary-vs-control contrasts per dataset (21) at checkpoint 1,000, one Bonferroni family of 63 intervals (RET-GS / ES / LS) at 0.05, the existing 10,000-draw realization-cluster bootstrap, reporting unadjusted and adjusted intervals and all three realization estimates. Codex is explicit that with three realization clusters these intervals are nominal, not a finite-sample guarantee. | accept as proposed (I concur; the honest caveat travels with the numbers) | the analysis tree's contrast module (R1-75) and protocol v5 §U12 | Sep 20 |
-| Q12 (U13) | Classifier: keep the DEC-033 margins (+0.05 / −0.02 / −0.01) and the four-way negative / positive / qualified / inconclusive labels with every inequality bound exactly as in the memo (negative has priority; bounds on a margin do not pass strict tests). | accept as proposed | protocol v5 §U13; R1-75 | Sep 20 |
-| Q13 (U14) | Secondary descriptive benchmarks: unseen false fires at 1,000 records ≤ 0.15 (deployment tolerance, distinct from the 0.10 selection gate), common-outside occupancy change within ±0.05, latest revision ≥ 0.95 (≥ 48/50), old-alias reappearance ≤ 0.02, RET-GS 100→1,000 change ≥ −0.05, ES / LS changes ≥ −0.02 / −0.01, resource ceilings from the September 20 admission; cells and macros both shown. | accept as proposed | protocol v5 §U14; R1-75 | Sep 20 |
+| Q11 (protocol v5 U12; `docs/tasks/R1-49f-lead-bindings.md`) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-057). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
+| Q12 (U13) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-058). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
+| Q13 (U14) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-059). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -609,4 +609,6 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     lane R1-68e, first for Codex); the fallback, if it is not ready by September 20, is a protocol amendment putting the
     comparator drift assay at the final checkpoint only (÷3). I will bring the number, not the amendment, on the 20th
     unless you say otherwise.
+
+54. (2026-09-16, 19:05 EDT) Q11–Q13 recorded (DEC-057/058/059). No lead decision is open. Codex gets lane R1-49g: write the three bindings into protocol v5 (a v5.1 draft) and the R1-75 contrast / classifier / benchmark modules with tests; then the freeze candidate is rebuilt (R1-63e). Remaining gates to the freeze are all measurements and receipts: September 20 cost admission (needs R1-68e), the MQuAKE calibration (tonight), the comparator and MQuAKE profiles, the stress panel, and your clearance / draw / seal acts once R1-D9's producers exist.
 
