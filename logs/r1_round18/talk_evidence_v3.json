@@ -1,0 +1,391 @@
+{
+  "task": "HT-4c",
+  "rows": [
+    {
+      "id": "A1",
+      "label": "implemented",
+      "statement": "Frozen GPT-2 prior plus 3,348,228 adaptive reader/controller parameters (1,640,964 + 1,707,264), about 2.7% of the stated 124M base.",
+      "limits": "Per-record state is additional. Current results are a controlled GPT-2-scale JAX/BP-base study, not evidence of frontier-scale or FabricPC transfer.",
+      "evidence": [
+        {
+          "path": "logs/r1_round16/selection_audit.json",
+          "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+        },
+        {
+          "path": "src/pccap/revision_v1/learner.py",
+          "sha256": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117"
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "label": "implemented",
+      "statement": "Per-answer-position residual writes optimize supplied support targets; null selection and the memory-rare overlap gate control intervention.",
+      "limits": "Acceptance, nonzero writes and answer changes are different events. No global optimum, autonomous audit planner or calibrated precision interpretation is established.",
+      "evidence": [
+        {
+          "path": "src/pccap/revision_v1/adapt.py",
+          "sha256": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793"
+        },
+        {
+          "path": "src/pccap/revision_v1/reader.py",
+          "sha256": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018"
+        }
+      ]
+    },
+    {
+      "id": "A3",
+      "label": "proposed",
+      "statement": "Query/rejection and observation/write interfaces motivate the abstract's two-blanket interpretation.",
+      "limits": "No conditional-independence factorization, blanket theorem, one-kappa equivalence or geometric-invariant theorem has been proved.",
+      "evidence": [
+        {
+          "path": "docs/heavy_tail_counter_review.md",
+          "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+        },
+        {
+          "path": "src/pccap/revision_v1/memory.py",
+          "sha256": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54"
+        }
+      ]
+    },
+    {
+      "id": "O2",
+      "label": "implemented",
+      "statement": "42 development candidates, 15 admissible; selected v5 seed2 average has RET-GS macro 0.803333 (zsRE .98 / CounterFact .82 / MQuAKE .61), ES 1, minimum LS .98.",
+      "limits": "Selection followed DEC-050 point estimates. Its unseen 10/100 is on the boundary; Wilson95% 5.52\u201317.44% is descriptive, not selection-adjusted certification. This selected-seed score differs from the ordinary three-seed pilot mean.",
+      "evidence": [
+        {
+          "path": "logs/r1_round16/selection_audit.json",
+          "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+        },
+        {
+          "path": "manifests/revision_v1/primary_condition_v5.json",
+          "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+        }
+      ]
+    },
+    {
+      "id": "A9",
+      "label": "hypothesis",
+      "statement": "Historical zsRE unseen rates of 10/12/9% at 100/300/1000 records do not establish occupancy flatness.",
+      "limits": "Outside-ID populations have zero pairwise overlap. R1-76 prepares one fixed outside100 population across one stream; its owner experiment remains outstanding.",
+      "evidence": [
+        {
+          "path": "logs/r1_round16/selection_audit.json",
+          "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+        },
+        {
+          "path": "docs/tasks/R1-76.md",
+          "sha256": "18222d1c83571c6778528030309f2f699f6dad59a2dc9f975d47497ecf8ea57f"
+        }
+      ]
+    },
+    {
+      "id": "TAIL-zsre",
+      "label": "implemented",
+      "statement": "zsre: 128 windows \u00d7 127 = 16256 scored positions; signed mean +0.002197557 nats, ES95 positive harm 0.043961670, maximum 8.685941; 17 positions > .1 nat; worst 1% contains 99.9407% of positive harm.",
+      "limits": "Rare concentrated harm is observed. No power-law fit, heavy-tail exponent, iid-position inference or universal preservation claim. The pilot's 32-window population is a different assay.",
+      "evidence": [
+        {
+          "path": "logs/heavy_tail/audit-v5-round16-supplement/audit.json",
+          "sha256": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39"
+        },
+        {
+          "path": "results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.json",
+          "sha256": "cd7da933af806e0fd8bae05cce9731398c3e3c4bda744f8d3f92f287f23dbd66"
+        },
+        {
+          "path": "logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf",
+          "sha256": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea"
+        }
+      ]
+    },
+    {
+      "id": "TAIL-counterfact",
+      "label": "implemented",
+      "statement": "counterfact: 128 windows \u00d7 127 = 16256 scored positions; signed mean +0.006286152 nats, ES95 positive harm 0.127704346, maximum 7.314826; 52 positions > .1 nat; worst 1% contains 99.9791% of positive harm.",
+      "limits": "Rare concentrated harm is observed. No power-law fit, heavy-tail exponent, iid-position inference or universal preservation claim. The pilot's 32-window population is a different assay.",
+      "evidence": [
+        {
+          "path": "logs/heavy_tail/audit-v5-round16-supplement/audit.json",
+          "sha256": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39"
+        },
+        {
+          "path": "results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json",
+          "sha256": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0"
+        },
+        {
+          "path": "logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf",
+          "sha256": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea"
+        }
+      ]
+    },
+    {
+      "id": "LS-DEC053",
+      "label": "implemented",
+      "statement": "CounterFact locality: 49/50 bounded-equal and 36/50 terminated-and-equal; near miss: 100/100 bounded-equal and 63/100 terminated-and-equal. Equal truncated pairs explain the 13 and 37 additional preserved cases.",
+      "limits": "DEC-053 makes bounded decoded-text equality primary; termination and per-side truncation remain reported. This is rescoring the same saved generations. A truncated unchanged reference is not automatically cap-induced damage.",
+      "evidence": [
+        {
+          "path": "results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json",
+          "sha256": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0"
+        },
+        {
+          "path": "src/pccap/revision_v1/stage4_assays.py",
+          "sha256": "af4b050dfeaa165c8d4af9ab8893322a6e22421d32baec5f21cdd66f8a9b89b5"
+        },
+        {
+          "path": "docs/tasks/R1-74-R1-75-approved-landing.md",
+          "sha256": "33ee9ed3a80ce7a3a2ad28540d0f86e90d6c6055da3012cc260560657516becf"
+        }
+      ]
+    },
+    {
+      "id": "K-kappa02",
+      "label": "null",
+      "statement": "kappa02: registered decision = null result; RET-GS 0.754444 versus ordinary 0.796111 (difference -0.041667, floor 0.776111). ES95 difference -0.139286 versus spread 0.387471; maximum difference -2.562835 versus spread 4.439309.",
+      "limits": "These are all three seeds \u00d7 three datasets for this coupled arm versus ordinary, using the predeclared average150\u2013300. Retention fails the .02 tolerance and neither tail difference exceeds the seed spread. Preliminary developmental hints; no confirmatory significance or causal coupled-free-energy conclusion.",
+      "evidence": [
+        {
+          "path": "logs/r1_round18/ht3d-pilot-partial-v2-verified-aliases.json",
+          "sha256": "1e1015993831a0eebdac4fc16abe43a7488bcd21bfbf70a63dd15499bea25a56"
+        },
+        {
+          "path": "manifests/revision_v1/kappa_pilot_v3.json",
+          "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+        },
+        {
+          "path": "docs/heavy_tail_counter_review.md",
+          "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+        }
+      ]
+    },
+    {
+      "id": "K-kappa05",
+      "label": "null",
+      "statement": "kappa05: registered decision = null result; RET-GS 0.747778 versus ordinary 0.796111 (difference -0.048333, floor 0.776111). ES95 difference -0.159446 versus spread 0.387471; maximum difference -2.660041 versus spread 4.439309.",
+      "limits": "These are all three seeds \u00d7 three datasets for this coupled arm versus ordinary, using the predeclared average150\u2013300. Retention fails the .02 tolerance and neither tail difference exceeds the seed spread. Preliminary developmental hints; no confirmatory significance or causal coupled-free-energy conclusion.",
+      "evidence": [
+        {
+          "path": "logs/r1_round18/ht3d-pilot-partial-v2-verified-aliases.json",
+          "sha256": "1e1015993831a0eebdac4fc16abe43a7488bcd21bfbf70a63dd15499bea25a56"
+        },
+        {
+          "path": "manifests/revision_v1/kappa_pilot_v3.json",
+          "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+        },
+        {
+          "path": "docs/heavy_tail_counter_review.md",
+          "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+        }
+      ]
+    },
+    {
+      "id": "K-unseen",
+      "label": "implemented",
+      "statement": "Three-seed mean unseen false fires at 100 edits: ordinary zsRE 11.6667%, kappa .2 5%, kappa .5 4%; all three arms 0% on CounterFact and MQuAKE.",
+      "limits": "This endpoint improves descriptively while the retention gate fails. It is not a claim of overall robust superiority or occupancy flatness. Ordinary seed2 CF/MQ files use verified historical v5 names.",
+      "evidence": [
+        {
+          "path": "logs/r1_round18/ht3d-pilot-partial-v2-verified-aliases.json",
+          "sha256": "1e1015993831a0eebdac4fc16abe43a7488bcd21bfbf70a63dd15499bea25a56"
+        },
+        {
+          "path": "docs/tasks/HT-3d-ordinary-seed2-unseen-aliases.json",
+          "sha256": "92aee5f4fe64372d4d21f0c23ba59bbf59ab0c26fdc3b3ac5a6d0eb8f13be97e"
+        }
+      ]
+    },
+    {
+      "id": "K-clip",
+      "label": "proposed",
+      "statement": "Clipped-control comparison remains separately labeled: pilot snapshot has 27/36 complete arm/seed/dataset rows; clip2 comparison = unavailable.",
+      "limits": "Clip2 ceiling-matches kappa .5 only, not kappa .2. Finish all three control seeds and rerun the immutable report before comparing objectives. Never select a checkpoint on the observed tail outcome.",
+      "evidence": [
+        {
+          "path": "logs/r1_round18/ht3d-pilot-partial-v2-verified-aliases.json",
+          "sha256": "1e1015993831a0eebdac4fc16abe43a7488bcd21bfbf70a63dd15499bea25a56"
+        },
+        {
+          "path": "manifests/revision_v1/kappa_pilot_v3.json",
+          "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+        }
+      ]
+    },
+    {
+      "id": "A4",
+      "label": "implemented",
+      "statement": "The answer loss is bounded for positive kappa; the repaired preservation term is a convex f-divergence with a KL zero limit.",
+      "limits": "The whole objective and its gradients are not uniformly bounded; float32 expm1 overflow remains possible. The trainer's finite guard preserves charged failure receipts. This is loss-level coupling, not demonstrated finite precision on arbitrary events.",
+      "evidence": [
+        {
+          "path": "manifests/revision_v1/kappa_pilot_v3.json",
+          "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+        },
+        {
+          "path": "logs/heavy_tail/HT-3b-objective-review.json",
+          "sha256": "024a37a16a19e49195992610d06d2172c353014032c0a32b46f4606b1feeece5"
+        }
+      ]
+    },
+    {
+      "id": "COST-measured",
+      "label": "implemented",
+      "statement": "R1-68d incremental zsRE 300-edit cell: 288.196 seconds, including 277.752 seconds in model-operation phase scopes; full boundary-identity checks 1.835 seconds.",
+      "limits": "One selected-primary/dataset/profile measurement. Cell attempt time excludes pre-attempt model construction. Full-profile and comparator pricing remain owner work; all sixteen R1-64c recipes are inspected without a model.",
+      "evidence": [
+        {
+          "path": "results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-6e8c802ca0ea802814f8/attempt-0000/result.json",
+          "sha256": "76cac05143761d35223a85506fd569ef7d8feaa03927a58b7b4c30a30695ea05"
+        },
+        {
+          "path": "docs/tasks/R1-68d-zsre-v5-incremental.recipe.json",
+          "sha256": "fceb3d2986a26b253c44511fd59918d84f1fa25c6769cd6c9f87383b32040b68"
+        },
+        {
+          "path": "logs/r1_round18/r1-64c-inspection-runlist.json",
+          "sha256": "3999dc616eebcfdeeaa135d939ea9c708150d6967c90753b212fad56737a5c75"
+        }
+      ]
+    },
+    {
+      "id": "COST-schedule",
+      "label": "proposed",
+      "statement": "The 288-second profile materially improves feasibility. A 14\u201316-minute 1000-edit scenario would use 94.5\u2013108 hours for 405 cells, before additions and failed-work reserves.",
+      "limits": "Arithmetic scenario, not admitted heterogeneous cost. The September20 review must price all conditions/datasets, MQuAKE calibration, preparation, retries and optional panels against available time. October9 is the experiment stop; October10\u201314 is analysis/slides/rehearsal, October15 presentation.",
+      "evidence": [
+        {
+          "path": "results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-6e8c802ca0ea802814f8/attempt-0000/result.json",
+          "sha256": "76cac05143761d35223a85506fd569ef7d8feaa03927a58b7b4c30a30695ea05"
+        },
+        {
+          "path": "manifests/revision_v1/freeze_candidate_v5.json",
+          "sha256": "743dd1b6c080b2c6cdfa6a41a3677e6706d4a4f4037d3d24cae858ffb7b92a82"
+        },
+        {
+          "path": "docs/tasks/R1-72-decision-addendum.md",
+          "sha256": "eeeff6fd806bb3bb329b619d80c7172dfe6cad0e9061aea9ba27f0345bceb28e"
+        }
+      ]
+    },
+    {
+      "id": "O7",
+      "label": "proposed",
+      "statement": "Matrix v5 retains 360 core + 45 extension cells in DEC-051 blocks. At this snapshot the final inventory has 405 incomplete cells and 0 completed blocks.",
+      "limits": "Development cells are not confirmation. Queue pause/resume/cost/memory guards are CPU-tested; R1-68d still rejects sealed execution. Final sealed backend, recipes, populations and admission remain required.",
+      "evidence": [
+        {
+          "path": "logs/r1_round18/r1-77-final-draft-inventory.json",
+          "sha256": "249830d787686c4cb1d6c07e589123688ea3545c06a92e6644f596238863d1e7"
+        },
+        {
+          "path": "manifests/revision_v1/run_matrix_v5.json",
+          "sha256": "368352a75bddced6729f8b30dc7edded713625fa8997c90ff2a98333bea7715a"
+        },
+        {
+          "path": "scripts/r1_77_queue.py",
+          "sha256": "c74956f47494259186bbb5d259c0ee0cf5f8c5c0424ddad4fbcb7f18ff241866"
+        }
+      ]
+    },
+    {
+      "id": "MQ-capacity",
+      "label": "proposed",
+      "statement": "MQuAKE register has 4218 nominal subjects against 4050 demand; clearance loss of169 exhausts headroom. Separately, 700 historically exposed metadata-eligible rows cannot supply a 1000-edit + outside100 occupancy assay.",
+      "limits": "The 168-subject headroom is not a certified free development pool. Q10 must choose unavailability or a separately reviewed 100/300-only diagnostic; even 700+168 remains232 short of1100.",
+      "evidence": [
+        {
+          "path": "logs/r1_round17/R1-76-historical-mquake-capacity.json",
+          "sha256": "22e46d2f42ade557bbd022d262520e6053527c6d4679d5316999ec55d274c541"
+        },
+        {
+          "path": "docs/tasks/R1-76-mquake-occupancy.md",
+          "sha256": "63db5bc4dfa1abfa48b9d530f09aa08b2320c936b1b4afb446c68ab229817b80"
+        }
+      ]
+    },
+    {
+      "id": "O6",
+      "label": "proposed",
+      "statement": "A fixed-probe clustered-stress/recovery design and CPU-tested driver exist.",
+      "limits": "No recovery trajectories are claimed. Q5 and its separate stress budget remain open; Q4 is approved DEC-054 and must no longer be called open.",
+      "evidence": [
+        {
+          "path": "manifests/revision_v1/ht_development_panel_v1.json",
+          "sha256": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a"
+        },
+        {
+          "path": "manifests/revision_v1/freeze_candidate_v5.json",
+          "sha256": "743dd1b6c080b2c6cdfa6a41a3677e6706d4a4f4037d3d24cae858ffb7b92a82"
+        }
+      ]
+    },
+    {
+      "id": "N1",
+      "label": "null",
+      "statement": "The completed v0 primary study retains its negative/inconclusive contrasts and registered margins.",
+      "limits": "Revision-v1 development improvements and the new pilot do not retrospectively confirm v0.",
+      "evidence": [
+        {
+          "path": "docs/report.md",
+          "sha256": "f4b4b6fb18e8b9ce672daa6bc80fb429264c2d0fa5780f0fc354212a4f6ffb77"
+        },
+        {
+          "path": "results/S7/summary.json",
+          "sha256": "718348e2517306cbdb9008b05f17296a7f0a714aca54179f7463341fad83f3b3"
+        }
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "logs/r1_round18/ht3d-pilot-partial-v2-verified-aliases.json": "1e1015993831a0eebdac4fc16abe43a7488bcd21bfbf70a63dd15499bea25a56",
+    "manifests/revision_v1/primary_condition_v5.json": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72",
+    "logs/r1_round16/selection_audit.json": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367",
+    "logs/heavy_tail/audit-v5-round16-supplement/audit.json": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39",
+    "results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0",
+    "results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-6e8c802ca0ea802814f8/attempt-0000/result.json": "76cac05143761d35223a85506fd569ef7d8feaa03927a58b7b4c30a30695ea05",
+    "manifests/revision_v1/freeze_candidate_v5.json": "743dd1b6c080b2c6cdfa6a41a3677e6706d4a4f4037d3d24cae858ffb7b92a82",
+    "logs/r1_round18/r1-77-final-draft-inventory.json": "249830d787686c4cb1d6c07e589123688ea3545c06a92e6644f596238863d1e7",
+    "src/pccap/revision_v1/learner.py": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117",
+    "src/pccap/revision_v1/adapt.py": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793",
+    "src/pccap/revision_v1/reader.py": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018",
+    "docs/heavy_tail_counter_review.md": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91",
+    "src/pccap/revision_v1/memory.py": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54",
+    "docs/tasks/R1-76.md": "18222d1c83571c6778528030309f2f699f6dad59a2dc9f975d47497ecf8ea57f",
+    "results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.json": "cd7da933af806e0fd8bae05cce9731398c3e3c4bda744f8d3f92f287f23dbd66",
+    "logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea",
+    "src/pccap/revision_v1/stage4_assays.py": "af4b050dfeaa165c8d4af9ab8893322a6e22421d32baec5f21cdd66f8a9b89b5",
+    "docs/tasks/R1-74-R1-75-approved-landing.md": "33ee9ed3a80ce7a3a2ad28540d0f86e90d6c6055da3012cc260560657516becf",
+    "manifests/revision_v1/kappa_pilot_v3.json": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747",
+    "docs/tasks/HT-3d-ordinary-seed2-unseen-aliases.json": "92aee5f4fe64372d4d21f0c23ba59bbf59ab0c26fdc3b3ac5a6d0eb8f13be97e",
+    "logs/heavy_tail/HT-3b-objective-review.json": "024a37a16a19e49195992610d06d2172c353014032c0a32b46f4606b1feeece5",
+    "docs/tasks/R1-68d-zsre-v5-incremental.recipe.json": "fceb3d2986a26b253c44511fd59918d84f1fa25c6769cd6c9f87383b32040b68",
+    "logs/r1_round18/r1-64c-inspection-runlist.json": "3999dc616eebcfdeeaa135d939ea9c708150d6967c90753b212fad56737a5c75",
+    "docs/tasks/R1-72-decision-addendum.md": "eeeff6fd806bb3bb329b619d80c7172dfe6cad0e9061aea9ba27f0345bceb28e",
+    "manifests/revision_v1/run_matrix_v5.json": "368352a75bddced6729f8b30dc7edded713625fa8997c90ff2a98333bea7715a",
+    "scripts/r1_77_queue.py": "c74956f47494259186bbb5d259c0ee0cf5f8c5c0424ddad4fbcb7f18ff241866",
+    "logs/r1_round17/R1-76-historical-mquake-capacity.json": "22e46d2f42ade557bbd022d262520e6053527c6d4679d5316999ec55d274c541",
+    "docs/tasks/R1-76-mquake-occupancy.md": "63db5bc4dfa1abfa48b9d530f09aa08b2320c936b1b4afb446c68ab229817b80",
+    "manifests/revision_v1/ht_development_panel_v1.json": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a",
+    "docs/report.md": "f4b4b6fb18e8b9ce672daa6bc80fb429264c2d0fa5780f0fc354212a4f6ffb77",
+    "results/S7/summary.json": "718348e2517306cbdb9008b05f17296a7f0a714aca54179f7463341fad83f3b3"
+  },
+  "pilot_snapshot": "logs/r1_round18/ht3d-pilot-partial-v2-verified-aliases.json",
+  "pilot_complete_rows": 27,
+  "framing": "**What it is not.** It is not the coupled free energy of Nelson et al. (no coupled expectation, no changed\ninference distribution), not a coupled Markov blanket, and not a test of the one-\u03ba conjecture that porosity and\ninterference are the same parameter. It is the first controlled measurement of what a loss-level coupling does on\nthis substrate, which is the honest thing to bring to a session chaired by the people who defined \u03ba.",
+  "primary_weights": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_avg150-300.npz",
+    "sha256": "b38fb851e5ebf66de6700aa2a68dbdee23bf093f56f2c0897e3bb275b5af19e6",
+    "run": "r1_50_stream_sel6_text_s2",
+    "checkpoint": "avg150-300",
+    "sources": [
+      "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step150.npz",
+      "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step200.npz",
+      "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step250.npz",
+      "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step300.npz"
+    ]
+  },
+  "freeze_open_gates": 17,
+  "snapshot_policy": "All rows are tied to observed files and hashes; subsequent owner results require a new report/ledger snapshot."
+}

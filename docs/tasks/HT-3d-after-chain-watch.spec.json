@@ -1,0 +1,32 @@
+{
+  "task": "HT-3d",
+  "purpose": "CPU-only report refresh after owner chain; no model execution",
+  "full_recipe": {
+    "path": "docs/tasks/R1-68d-zsre-v5-full.recipe.json",
+    "sha256": "baa35ac96f2f4043d7927d281d9ab46356a7a69959a28aca82e043f08bd3ba85"
+  },
+  "cell": {
+    "condition": "R1_learned_ff",
+    "dataset": "zsre",
+    "order": "source",
+    "realization": "development"
+  },
+  "full_profile_directory": "results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-a7ddf5d426c325315f32",
+  "failure_receipts": [
+    "results/R1/pilot/ht3_kappa02_s0/failure_receipt.json",
+    "results/R1/pilot/ht3_kappa02_s1/failure_receipt.json",
+    "results/R1/pilot/ht3_kappa02_s2/failure_receipt.json",
+    "results/R1/pilot/ht3_kappa05_s0/failure_receipt.json",
+    "results/R1/pilot/ht3_kappa05_s1/failure_receipt.json",
+    "results/R1/pilot/ht3_kappa05_s2/failure_receipt.json",
+    "results/R1/pilot/ht3_clip2_s0/failure_receipt.json",
+    "results/R1/pilot/ht3_clip2_s1/failure_receipt.json",
+    "results/R1/pilot/ht3_clip2_s2/failure_receipt.json"
+  ],
+  "reporter_sources_sha256": {
+    "scripts/ht3d_after_chain.py": "c1ce5db4b4bb7dacebf45bb8993862b446293879692d2620e41e11080cb7457a",
+    "scripts/ht3d_bound_aliases.py": "e87dce7728e99379c60af34fc25b5f714059393378313d91cd7ba9c2ed626349",
+    "scripts/ht3d_pilot_aggregate.py": "04c3937eb5e500804447776a1db7d0e97422472ebf97d6621ac288193e083fb5",
+    "docs/tasks/HT-3d-ordinary-seed2-unseen-aliases.json": "92aee5f4fe64372d4d21f0c23ba59bbf59ab0c26fdc3b3ac5a6d0eb8f13be97e"
+  }
+}
