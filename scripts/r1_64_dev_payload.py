@@ -116,10 +116,11 @@ def payload_from_documents(
 
 def v4_construction(ds, seed=0):
     """CPU metadata/NumPy hashing only. Does not instantiate BPBase or evaluate a model."""
+    import os
+
     from pccap.bases import gpt2_jax as g
     from pccap.bases.bp import _digest
-
-    primary_path = ROOT / "manifests/revision_v1/primary_condition_v4.json"
+    primary_path = Path(os.environ.get("PCCAP_PRIMARY_MANIFEST", str(ROOT / "manifests/revision_v1/primary_condition_v4.json")))  # v5+: PCCAP_PRIMARY_MANIFEST=manifests/revision_v1/primary_condition_v5.json
     primary = json.loads(primary_path.read_text())
     frozen_path = (
         ROOT
@@ -128,7 +129,7 @@ def v4_construction(ds, seed=0):
     frozen = json.loads(frozen_path.read_text())
     if ds not in frozen["calibration"]["BP"]["radii"]:
         raise ValueError("worked v4 construction has no dataset calibration; bind one explicitly")
-    weight = primary["weights"][f"seed{seed}"]
+    weight = primary["weights"] if "path" in primary["weights"] else primary["weights"][f"seed{seed}"]  # v5 binds one averaged checkpoint
     stop_path = (ROOT / primary["stop_tokens"]["path"]).resolve()
     if (
         sha(weight["path"]) != weight["sha256"]
