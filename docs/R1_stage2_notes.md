@@ -877,3 +877,20 @@ averaged — mean 0.803 at exactly the 10 % limit (10 of 100 prompts; a point es
 R1-X12). The retention–rejection trade-off is now a measured curve rather than a seed accident, which is the fact
 the October talk should show. `manifests/revision_v1/primary_condition_v5.json` binds the winner; v3 stays the
 two-dataset fallback.
+
+### Primary condition v5: endpoint battery on the real base (2026-09-15, 23:00 EDT; `results/R1/endpoints/v5_rare1*`, `drift_assay_v5_*`)
+
+| endpoint | result |
+| --- | --- |
+| near-miss preservation (100 CounterFact near neighbours) | 100/100; edited prompt exact 100/100 |
+| revision (100 facts, v1 then v2) | 100/100; old answer reappeared 0/300; new-answer paraphrase exactness 0.795 |
+| second development stream (seed 22) | zsRE 1.00 / 1.00 / 0.99 / 1.00; CounterFact 1.00 / 1.00 / 0.745 / 1.00 |
+| unseen edit-prompt false fires, zsRE at 100 / 300 / 1,000 records | 10 % / 12 % / 9 % (dev prompts at 100; pool prompts at 300 and 1,000) |
+| unseen, CounterFact at 100 / 1,000; MQuAKE at 100 | 0 % / 1 %; 0 % |
+| ordinary-text drift after 100 edits (32 windows, all positions), zsRE / CounterFact / MQuAKE | +0.005 / +0.014 / +0.004 nats; 0.2 % / 0.7 % / 0.4 % of positions fire |
+
+The zsRE unseen rate no longer grows with memory size (v3 reader: 5 → 11 → 10 %; v4 seed 0: 25 → 16 % in the
+driver cell; v5: 10 → 12 → 9 %), and CounterFact and MQuAKE stay at ≤ 1 %. CounterFact drift (+0.014 nats on the
+32-window assay) is above the protocol draft's provisional 0.01-nat ceiling; the full 128-window assay under the
+driver will give the number that counts (the v4 cell measured +0.0002 on zsRE at 300 edits). The v5 identities and
+these results are bound in `primary_condition_v5.json`.

@@ -304,3 +304,5 @@ Reference rows: v0 live C1/C2 RET-GS 0.24/0.29; v0-stable and matched-update RET
 | r1_50_stream_sel6_text_s2_stepavg_rare1_null0.5@mquake | 0c/5d | 0.5 | 1.000 | 1.000 | 0.610 | 1.000 | 0.13 / 0.29 / 0.98 | 0.00 / 0.24 / 1.00 | 30 s |
 | r1_50_stream_sel6_text_s2_stepavg_rare1_null0.5 | 0c/5d | 0.5 | 1.000 | 1.000 | 0.980 | 1.000 | 0.01 / 0.08 / 1.00 | 0.00 / 0.01 / 1.00 | 31 s |
 | r1_50_stream_sel6_text_s2_stepavg_rare1_null0.5@counterfact | 0c/5d | 0.5 | 1.000 | 1.000 | 0.820 | 0.980 | 0.11 / 0.19 / 0.99 | 0.00 / 0.14 / 0.99 | 25 s |
+| v5_rare1_null0.5_stream22 | 0c/5d | 0.5 | 1.000 | 1.000 | 0.990 | 1.000 | 0.01 / 0.09 / 1.00 | 0.00 / 0.01 / 1.00 | 30 s |
+| v5_rare1_null0.5_stream22@counterfact | 0c/5d | 0.5 | 1.000 | 1.000 | 0.745 | 1.000 | 0.11 / 0.24 / 0.99 | 0.00 / 0.22 / 1.00 | 26 s |

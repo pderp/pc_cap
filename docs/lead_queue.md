@@ -494,3 +494,8 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     register v6 bound to a frozen decisions snapshot (draw plan and freeze candidate v3 now emit), κ pilot manifest v2
     (objective passes its re-review; Q4 still yours), and the stress-panel driver (Q5 still yours).
 
+37. (2026-09-15, 23:00 EDT) v5 endpoint battery on the real base: near-miss 100/100, revision 100/100, second stream zsRE 0.99 /
+    CounterFact 0.745 (LS 1.00), zsRE unseen false fires flat at 10 / 12 / 9 % across 100 / 300 / 1,000 records (the growth
+    with memory is gone), CounterFact and MQuAKE ≤ 1 %, drift +0.005 / +0.014 / +0.004 nats. Next GPU work: re-profile the
+    incremental driver (Codex R1-68b) with v5 — the number your Q7 decision needs.
+

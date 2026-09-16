@@ -44,7 +44,29 @@
    "ret_gs_end": 0.61,
    "ls_complete_answer_end": 1.0
   },
-  "unseen_zsre_100": 0.1
+  "unseen_zsre_100": 0.1,
+  "endpoints": {
+   "near_miss": "100/100",
+   "revision": "100/100, old answer reappearance 0, paraphrase exactness 0.795",
+   "stream22": {
+    "zsre": "1.00/1.00/0.99/1.00",
+    "counterfact": "1.00/1.00/0.745/1.00"
+   },
+   "unseen_false_fires": {
+    "zsre_100_dev": 0.1,
+    "zsre_300_pool": 0.12,
+    "zsre_1000_pool": 0.09,
+    "counterfact_100": 0.0,
+    "counterfact_1000_pool": 0.01,
+    "mquake_100": 0.0
+   },
+   "drift_32_windows_nats": {
+    "zsre": 0.0054,
+    "counterfact": 0.0137,
+    "mquake": 0.004
+   },
+   "evidence": "results/R1/endpoints/v5_rare1*, results/R1/drift_assay_v5_*.log, results/R1/stream_eval_v5_rare1_null0.5_stream22*.json"
+  }
  },
  "trade_off": "unconstrained best candidates reach mean RET-GS 0.85-0.87 with 19-55 % zsRE unseen false fires at 100 records; the constrained winner sits at the 10 % limit (n = 100 prompts), so its admissibility is a point estimate at the boundary (R1-X12 review requested)",
  "pools": {
