@@ -1,0 +1,51 @@
+{
+  "task": "round16",
+  "python_file_sha256": {
+    "scripts/r1_x12_selection_review.py": "f5f113fee76f3202db4f0b1d1efbb61e496a91352437f4ffa5640a99fbdb7016",
+    "scripts/r1_68c_batched_drift.py": "bf2e879083bc3b67796824c5c66b695248c923a802b51d8c379d2dea5147bc24",
+    "scripts/r1_68c_dev_cell.py": "20ed5a011437ded21212eb9b3842110e8eee719a565065a657634af1694e61f7",
+    "scripts/r1_68c_rebind_recipe.py": "33d31b5ac18d964e85cc6eb78ab86da6421918553aba73dbcabec359df1c9f51",
+    "scripts/r1_72_schedule_options.py": "a86e0c079f2697675fcbb317aac678f4315dc46741cbafea741c2b9e39f29b19",
+    "scripts/ht1b_v5_audit.py": "fd457abd5cdbf476e55df6b6890c180f936cda01e5f8296d157380d0119d62d3",
+    "scripts/ht1b_plot_v5.py": "3a539735861b45197a5ca0eb5076adc477d7ce63496be31db36faa01f60f06c0",
+    "scripts/r1_64b_comparator_recipes.py": "447cf5583a727c3581705c8fe4ce9d496418e3285ec210e6421d77accfa9012a",
+    "scripts/r1_73_mquake_calibration.py": "80b223ef702035d46bb4de11720ba466bf50c8776bc04864de32cea2d8ad945e",
+    "scripts/r1_63c_freeze_candidate.py": "c11ee264b141e493e9f9b7b4fb65e3da222b5520d82cb39154b9085a4d554ce5",
+    "tests/revision_v1/test_r1_68c_driver.py": "7f934858a2b653dda17b627b7b5f72ca0116ceef850ee30a952bf7c3b348a5dc",
+    "tests/revision_v1/test_r1_64b_comparator_recipes.py": "c2989944a5a85f77c34ffffd529f20894510c1b65ed39c34655de98f9cee48e9",
+    "tests/revision_v1/test_r1_73_calibration.py": "e217772e549611b363194bfa5bcf902ae1a69db146f69ec7dd4833770e787c58"
+  },
+  "lint": "ruff check --no-cache: all13 files passed (12-file batch plus freeze generator)",
+  "format": "ruff format --check: all13 already formatted",
+  "targeted_tests": {
+    "passed": 23,
+    "subtests_passed": 4,
+    "seconds": 6.08
+  },
+  "full_cpu_suite": {
+    "command": [
+      "../venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "tests/revision_v1",
+      "-m",
+      "not gpu"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 88.4016600219984,
+    "log": "logs/r1_round16/revision_cpu_tests.txt",
+    "cpu_only": true
+  },
+  "full_cpu_result": {
+    "passed": 551,
+    "skipped": 8,
+    "subtests_passed": 4,
+    "pytest_seconds": 87.43
+  },
+  "figures": "selection and tail PNGs visually inspected; PDF/SVG/PNG created",
+  "real_base_model_calls": 0,
+  "gpu_seconds": 0
+}

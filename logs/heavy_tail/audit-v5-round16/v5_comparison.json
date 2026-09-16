@@ -1,0 +1,449 @@
+{
+  "cells": {
+    "v4": "R1_learned_ff-zsre-development-source-9084e84fc6dd00038904",
+    "v5_full": "R1_learned_ff-zsre-development-source-d22ce6801209c6184480",
+    "v5_incremental": "R1_learned_ff-zsre-development-source-48f8a79c8742635bf611"
+  },
+  "drift_statistics": {
+    "v4": {
+      "preservation_nll_minus_capoff": {
+        "ES95_positive": 0.004673626794148828,
+        "atom_zero_positive": {
+          "count": 10142,
+          "denominator": 16256
+        },
+        "atom_zero_signed": {
+          "count": 4095,
+          "denominator": 16256
+        },
+        "exceedances_nats": {
+          "0.01": {
+            "count": 1,
+            "denominator": 16256
+          },
+          "0.1": {
+            "count": 1,
+            "denominator": 16256
+          },
+          "1.0": {
+            "count": 1,
+            "denominator": 16256
+          }
+        },
+        "maximum_location": {
+          "item_id": "w125:p26",
+          "row": 15900
+        },
+        "maximum_positive": 3.789635078429953,
+        "maximum_signed": 3.789635078429953,
+        "maximum_tie_count": 1,
+        "mean_positive": 0.00023457355451098034,
+        "mean_signed": 0.00023314769377052249,
+        "median_positive": 0.0,
+        "n": 16256,
+        "negative_count": 6047,
+        "p95_positive": 7.941419568169295e-06,
+        "p99_positive": 1.3034383672305714e-05,
+        "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+        "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+        "total_positive_sum": 3.8132277021304963,
+        "unit": "nats",
+        "worst_1pct_positive_sum": 3.792216429752048,
+        "worst_1pct_share_positive": 0.9944898983171896
+      },
+      "preservation_nll_minus_original": {
+        "ES95_positive": 0.004673626794148828,
+        "atom_zero_positive": {
+          "count": 10142,
+          "denominator": 16256
+        },
+        "atom_zero_signed": {
+          "count": 4095,
+          "denominator": 16256
+        },
+        "exceedances_nats": {
+          "0.01": {
+            "count": 1,
+            "denominator": 16256
+          },
+          "0.1": {
+            "count": 1,
+            "denominator": 16256
+          },
+          "1.0": {
+            "count": 1,
+            "denominator": 16256
+          }
+        },
+        "maximum_location": {
+          "item_id": "w125:p26",
+          "row": 15900
+        },
+        "maximum_positive": 3.789635078429953,
+        "maximum_signed": 3.789635078429953,
+        "maximum_tie_count": 1,
+        "mean_positive": 0.00023457355451098034,
+        "mean_signed": 0.00023314769377052249,
+        "median_positive": 0.0,
+        "n": 16256,
+        "negative_count": 6047,
+        "p95_positive": 7.941419568169295e-06,
+        "p99_positive": 1.3034383672305714e-05,
+        "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+        "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+        "total_positive_sum": 3.8132277021304963,
+        "unit": "nats",
+        "worst_1pct_positive_sum": 3.792216429752048,
+        "worst_1pct_share_positive": 0.9944898983171896
+      }
+    },
+    "v5_full": {
+      "preservation_nll_minus_capoff": {
+        "ES95_positive": 0.04396166976274527,
+        "atom_zero_positive": {
+          "count": 10132,
+          "denominator": 16256
+        },
+        "atom_zero_signed": {
+          "count": 4090,
+          "denominator": 16256
+        },
+        "exceedances_nats": {
+          "0.01": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "0.1": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "1.0": {
+            "count": 10,
+            "denominator": 16256
+          }
+        },
+        "maximum_location": {
+          "item_id": "w16:p31",
+          "row": 2062
+        },
+        "maximum_positive": 8.68594104129011,
+        "maximum_signed": 8.68594104129011,
+        "maximum_tie_count": 1,
+        "mean_positive": 0.00219898203833393,
+        "mean_signed": 0.0021975574241695347,
+        "median_positive": 0.0,
+        "n": 16256,
+        "negative_count": 6042,
+        "p95_positive": 8.017619474998128e-06,
+        "p99_positive": 1.3280278123772874e-05,
+        "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+        "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+        "total_positive_sum": 35.74665201515637,
+        "unit": "nats",
+        "worst_1pct_positive_sum": 35.72545998533691,
+        "worst_1pct_share_positive": 0.9994071604297243
+      },
+      "preservation_nll_minus_original": {
+        "ES95_positive": 0.04396166976274527,
+        "atom_zero_positive": {
+          "count": 10132,
+          "denominator": 16256
+        },
+        "atom_zero_signed": {
+          "count": 4090,
+          "denominator": 16256
+        },
+        "exceedances_nats": {
+          "0.01": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "0.1": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "1.0": {
+            "count": 10,
+            "denominator": 16256
+          }
+        },
+        "maximum_location": {
+          "item_id": "w16:p31",
+          "row": 2062
+        },
+        "maximum_positive": 8.68594104129011,
+        "maximum_signed": 8.68594104129011,
+        "maximum_tie_count": 1,
+        "mean_positive": 0.00219898203833393,
+        "mean_signed": 0.0021975574241695347,
+        "median_positive": 0.0,
+        "n": 16256,
+        "negative_count": 6042,
+        "p95_positive": 8.017619474998128e-06,
+        "p99_positive": 1.3280278123772874e-05,
+        "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+        "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+        "total_positive_sum": 35.74665201515637,
+        "unit": "nats",
+        "worst_1pct_positive_sum": 35.72545998533691,
+        "worst_1pct_share_positive": 0.9994071604297243
+      }
+    },
+    "v5_incremental": {
+      "preservation_nll_minus_capoff": {
+        "ES95_positive": 0.04396166976274527,
+        "atom_zero_positive": {
+          "count": 10132,
+          "denominator": 16256
+        },
+        "atom_zero_signed": {
+          "count": 4090,
+          "denominator": 16256
+        },
+        "exceedances_nats": {
+          "0.01": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "0.1": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "1.0": {
+            "count": 10,
+            "denominator": 16256
+          }
+        },
+        "maximum_location": {
+          "item_id": "w16:p31",
+          "row": 2062
+        },
+        "maximum_positive": 8.68594104129011,
+        "maximum_signed": 8.68594104129011,
+        "maximum_tie_count": 1,
+        "mean_positive": 0.00219898203833393,
+        "mean_signed": 0.0021975574241695347,
+        "median_positive": 0.0,
+        "n": 16256,
+        "negative_count": 6042,
+        "p95_positive": 8.017619474998128e-06,
+        "p99_positive": 1.3280278123772874e-05,
+        "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+        "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+        "total_positive_sum": 35.74665201515637,
+        "unit": "nats",
+        "worst_1pct_positive_sum": 35.72545998533691,
+        "worst_1pct_share_positive": 0.9994071604297243
+      },
+      "preservation_nll_minus_original": {
+        "ES95_positive": 0.04396166976274527,
+        "atom_zero_positive": {
+          "count": 10132,
+          "denominator": 16256
+        },
+        "atom_zero_signed": {
+          "count": 4090,
+          "denominator": 16256
+        },
+        "exceedances_nats": {
+          "0.01": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "0.1": {
+            "count": 17,
+            "denominator": 16256
+          },
+          "1.0": {
+            "count": 10,
+            "denominator": 16256
+          }
+        },
+        "maximum_location": {
+          "item_id": "w16:p31",
+          "row": 2062
+        },
+        "maximum_positive": 8.68594104129011,
+        "maximum_signed": 8.68594104129011,
+        "maximum_tie_count": 1,
+        "mean_positive": 0.00219898203833393,
+        "mean_signed": 0.0021975574241695347,
+        "median_positive": 0.0,
+        "n": 16256,
+        "negative_count": 6042,
+        "p95_positive": 8.017619474998128e-06,
+        "p99_positive": 1.3280278123772874e-05,
+        "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+        "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+        "total_positive_sum": 35.74665201515637,
+        "unit": "nats",
+        "worst_1pct_positive_sum": 35.72545998533691,
+        "worst_1pct_share_positive": 0.9994071604297243
+      }
+    }
+  },
+  "gpu_seconds": 0,
+  "ht1_engine": {
+    "path": "scripts/ht_audit_existing.py",
+    "sha256": "5ae93837b7fb6ecaa578ad3a6e56b4c13d8116d50ac145b25398a40f3f9cd3e1"
+  },
+  "limits": [
+    "Full/incremental are the same saved scientific observations, not independent runs.",
+    "v4/v5 drift pairs share exact source digest, ordered position IDs and both reference NLL vectors.",
+    "Different trained-reader families/seeds: this pair is descriptive, not an isolated averaging effect.",
+    "32-window drift reports are aggregate-only: no tails or row-level pairing can be recovered.",
+    "Unseen outside populations across occupancy differ (see R1-X12), so flatness is not established.",
+    "The unchanged HT-1 missing-data inventory includes aggregate-only summaries and unsupported observations.",
+    "Top-level endpoint row arrays are exposed by this wrapper; statistics and pair keys remain the original HT-1 implementation.",
+    "No inference of a power law; positions within windows are dependent; no iid position intervals."
+  ],
+  "log_bindings": [
+    {
+      "path": "results/R1/drift_assay_v5_counterfact.log",
+      "sha256": "f5477dd066b7ba6f2981741d601b5a398ae69c2db67542f673f55b210ab635e8"
+    },
+    {
+      "path": "results/R1/drift_assay_v5_mquake.log",
+      "sha256": "b3fafd03b0b635168be37e0cd8ae80dc5ef0d254402febc19da9bac0b70cf818"
+    },
+    {
+      "path": "results/R1/drift_assay_v5_zsre.log",
+      "sha256": "ee939be381adda490ac4d2c0b032933847cf0658b1f025c2e1e6a78ca6f10f7f"
+    },
+    {
+      "path": "results/R1/endpoints_v5_rare1.log",
+      "sha256": "668ac0c3db60147be000fd410cf41afdaf5219ec915054484e75ee268a4d2493"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n1000_counterfact.log",
+      "sha256": "c66492550b436728ad7463690dd35df38fb1124d5a59e2d056fb2c3c43eb9085"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n1000_zsre.log",
+      "sha256": "1e0ca0a069c7ce4d16df1c36b8c7a9a7e1019c834830cd15cc19ab8b37b633c8"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n100_counterfact.log",
+      "sha256": "123ebb68a1b846c5ea6c6ffa676de37f13c454fe51703cc5b5e3c7760ff0a567"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n100_mquake.log",
+      "sha256": "aca643a6ace810800528e89f5659eef2d7c36b5b7165b19526dab529b62f27fe"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n100_zsre.log",
+      "sha256": "2a050b4dd0a55964e0bc93147813083323ad0a1e0187f408ffac7a1886c994fd"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n300_counterfact.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/R1/unseen_v5_rare1_n300_zsre.log",
+      "sha256": "42e5e7cfdcb270b66f9269db74384220c10f043bd2cc9f87c3af616cc9892367"
+    }
+  ],
+  "model_calls": 0,
+  "paired_v5_minus_v4_signed_harm": {
+    "capoff": {
+      "ES95_positive": 0.04395063934030056,
+      "atom_zero_positive": {
+        "count": 16239,
+        "denominator": 16256
+      },
+      "atom_zero_signed": {
+        "count": 16238,
+        "denominator": 16256
+      },
+      "exceedances_nats": {
+        "0.01": {
+          "count": 17,
+          "denominator": 16256
+        },
+        "0.1": {
+          "count": 17,
+          "denominator": 16256
+        },
+        "1.0": {
+          "count": 10,
+          "denominator": 16256
+        }
+      },
+      "maximum_location": "w16:p31",
+      "maximum_positive": 8.68594104129011,
+      "maximum_signed": 8.68594104129011,
+      "maximum_tie_count": 1,
+      "mean_positive": 0.0021975319670150283,
+      "mean_signed": 0.001964409730399012,
+      "median_positive": 0.0,
+      "n": 16256,
+      "negative_count": 1,
+      "p95_positive": 0.0,
+      "p99_positive": 0.0,
+      "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+      "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+      "total_positive_sum": 35.7230796557963,
+      "unit": "nats",
+      "worst_1pct_positive_sum": 35.7230796557963,
+      "worst_1pct_share_positive": 1.0
+    },
+    "original": {
+      "ES95_positive": 0.04395063934030056,
+      "atom_zero_positive": {
+        "count": 16239,
+        "denominator": 16256
+      },
+      "atom_zero_signed": {
+        "count": 16238,
+        "denominator": 16256
+      },
+      "exceedances_nats": {
+        "0.01": {
+          "count": 17,
+          "denominator": 16256
+        },
+        "0.1": {
+          "count": 17,
+          "denominator": 16256
+        },
+        "1.0": {
+          "count": 10,
+          "denominator": 16256
+        }
+      },
+      "maximum_location": "w16:p31",
+      "maximum_positive": 8.68594104129011,
+      "maximum_signed": 8.68594104129011,
+      "maximum_tie_count": 1,
+      "mean_positive": 0.0021975319670150283,
+      "mean_signed": 0.001964409730399012,
+      "median_positive": 0.0,
+      "n": 16256,
+      "negative_count": 1,
+      "p95_positive": 0.0,
+      "p99_positive": 0.0,
+      "quantile_definition": "linear interpolation, index (n-1)*q; positive harms",
+      "tail_definition": "fractional empirical tail mass; ES95=sum of largest 0.05*n positive harms / (0.05*n), including fractional boundary observation",
+      "total_positive_sum": 35.7230796557963,
+      "unit": "nats",
+      "worst_1pct_positive_sum": 35.7230796557963,
+      "worst_1pct_share_positive": 1.0
+    }
+  },
+  "producer": {
+    "path": "scripts/ht1b_v5_audit.py",
+    "sha256": "fd457abd5cdbf476e55df6b6890c180f936cda01e5f8296d157380d0119d62d3"
+  },
+  "task": "HT-1b",
+  "v4_v5_exact_ordered_source_position_and_both_reference_nll_match": true,
+  "v5_full_incremental_checkpoint300_equal_fields": {
+    "checkpoint": true,
+    "endpoints": true,
+    "history": false,
+    "locality": false,
+    "observation": true,
+    "retention": false,
+    "state_sha256": true,
+    "unseen": false
+  }
+}

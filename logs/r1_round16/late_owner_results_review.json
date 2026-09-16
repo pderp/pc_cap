@@ -1,0 +1,41 @@
+{
+  "task": "round16 late owner results review",
+  "ledger_evidence_bindings_unchanged": 31,
+  "historical_evidence_updates": [
+    {
+      "id": "E30",
+      "path": "docs/R1_stage2_notes.md",
+      "sha256": "18031d167dfb67849b9fbe240cbad647b2517b7de7c22cf7ab14e2b8740396b6",
+      "current_sha256": "cf5d2e4896482aff03a5400031bcf4f91496c5077a6950e9479d31e85cf602eb",
+      "archived_copy": "logs/r1_round16/stage2_notes_at_ledger_v2.md",
+      "archive_sha256": "18031d167dfb67849b9fbe240cbad647b2517b7de7c22cf7ab14e2b8740396b6",
+      "archive_git_revision": "8da0995",
+      "review": "new CF driver outcomes/Q9 and failed MQ filler runs reviewed in late_owner_results_review.md"
+    }
+  ],
+  "current_notes": {
+    "path": "docs/R1_stage2_notes.md",
+    "sha256": "cf5d2e4896482aff03a5400031bcf4f91496c5077a6950e9479d31e85cf602eb"
+  },
+  "counterfact_checkpoint": {
+    "path": "results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json",
+    "sha256": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0"
+  },
+  "counterfact_preservation": {
+    "locality": {
+      "n": 50,
+      "termination_qualified_preserved": 36,
+      "bounded_identical": 49,
+      "both_truncated_and_identical": 13
+    },
+    "near_miss": {
+      "n": 100,
+      "termination_qualified_preserved": 63,
+      "bounded_identical": 100,
+      "both_truncated_and_identical": 37
+    }
+  },
+  "ordinary_drift_prefix_population": "exact128x128 token windows and both reference vectors shared with zsRE; shorter ordinary prefixes do not explain the measured runtime difference",
+  "MQuAKE_300_1000": "StopIteration at filler collection, no completed row report; no zero-firing or zero-cost outcome inferred",
+  "Q9": "pending owner/lead scoring convention; no policy changed"
+}
