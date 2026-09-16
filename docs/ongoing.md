@@ -147,6 +147,20 @@ confirmatory-v2-*.json` records the recipe: radii per bank from development-stre
 over the MQuAKE development slice v3b, with the exact inputs, outputs and admission fields, and the protocol text for
 U08; no execution. The orchestrator runs it and binds the result into calibration v3.
 
+### Lane R1-74 — locality / near-miss scoring under DEC-053 (edit request; after R1-68c)
+
+DEC-053 binds bounded text equality as the primary locality and near-miss convention: a pair is preserved when the
+cap-on and cap-off 32-token greedy continuations are identical, terminated or not. The driver's `_Challenges.near_miss`
+and `locality` in `src/pccap/revision_v1/stage4_assays.py` currently require termination as well, which on CounterFact
+turns 13/50 identical truncated locality pairs and 37/100 near-miss pairs into failures (v5 CounterFact development
+cell, `results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69…`). Deliver an edit request
+(patch, new file under `docs/tasks/`) that makes `preserved` the bounded-equality verdict and adds
+`preserved_terminated` (the current rule) plus `truncated_pair` / per-side truncation flags to every row and both
+counts to the checkpoint summaries; the stored rows already carry both generations, so a rescoring helper over
+existing checkpoint files (new script) should reproduce 49/50 and 100/100 on that cell and 50/50 / 100/100 on the
+zsRE cells. Because every src edit invalidates the identity-bound recipes, land it together with the R1-68c rebinding
+step so the recipes are rebuilt once. Tests: TinyBase, both conventions.
+
 ### Lane R1-63c — freeze candidate v4 (after R1-X12)
 
 Rebind the freeze candidate to primary_condition_v5, register v6, matrix v4 and the selection manifest; print the open gates.

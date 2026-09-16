@@ -472,7 +472,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q6 (counter-review §5.1) | **ANSWERED 2026-09-16: as proposed** (DEC-051). | — | unblocked: block scheduling | — |
 | Q7 (counter-review §5.3) | **ANSWERED 2026-09-16: as proposed** (DEC-052) — block order, no cut, re-measure Sep 20, accepted-incomplete reporting if needed. | — | unblocked: freeze preparation | — |
 | Q8 (protocol v4 §6) | **ANSWERED 2026-09-15: confirmed** (DEC-050) — mean RET-GS s.t. zsRE unseen ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | — | unblocked: the selection and its freeze binding | — |
-| Q9 (protocol v4 §6, LS convention) | Which locality / near-miss equality is primary: **bounded text equality** (identical 32-token continuations count as preserved; the criterion behind every LS number so far) or **termination-qualified equality** (both continuations must also terminate; the driver's current rule)? On CounterFact the driver gives LS 36/50 and near-miss 63/100 where bounded equality gives 49/50 and 100/100; all but one of the differences are byte-identical truncated pairs. zsRE is unaffected. | bounded text equality primary, termination-qualified reported alongside with truncation counts | the driver's LS/near-miss rule for the confirmatory cells and the DEC-050 LS ≥ 0.98 reading on CounterFact/MQuAKE; development cells can keep running (both numbers are recoverable from the rows) | Sep 20 |
+| Q9 (protocol v4 §6, LS convention) | **ANSWERED 2026-09-16: bounded text equality primary** (DEC-053); termination-qualified counts and truncation reported alongside. | — | unblocked: the driver's LS/near-miss reporting rule (Codex edit request); confirmatory LS readings | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -522,3 +522,5 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     failures (LS 36/50 vs 49/50 under the text-equality rule every earlier LS used). Protocol v4 left this as your
     binding — **Q9** in the ledger, my recommendation stated. Also: the MQuAKE unseen points beyond 100 records are not
     runnable (no reader-unseen MQuAKE filler exists); recorded as a limitation.
+
+42. (2026-09-16, 07:45 EDT) Q9 recorded as DEC-053. Open now: only Q4 (κ pilot) and Q5 (stress panel), both by September 20. The driver keeps scoring both ways from its stored rows; Codex gets an edit request to report both counts in `stage4_assays.py`.
