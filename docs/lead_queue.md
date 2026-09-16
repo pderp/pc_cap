@@ -473,6 +473,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q7 (counter-review §5.3) | **ANSWERED 2026-09-16: as proposed** (DEC-052) — block order, no cut, re-measure Sep 20, accepted-incomplete reporting if needed. | — | unblocked: freeze preparation | — |
 | Q8 (protocol v4 §6) | **ANSWERED 2026-09-15: confirmed** (DEC-050) — mean RET-GS s.t. zsRE unseen ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | — | unblocked: the selection and its freeze binding | — |
 | Q9 (protocol v4 §6, LS convention) | **ANSWERED 2026-09-16: bounded text equality primary** (DEC-053); termination-qualified counts and truncation reported alongside. | — | unblocked: the driver's LS/near-miss reporting rule (Codex edit request); confirmatory LS readings | — |
+| Q10 (R1-76 memo) | MQuAKE unseen-prompt occupancy beyond 100 records: (A) keep the 300 / 1,000-record MQuAKE points unavailable and state the limit (the occupancy curve rests on zsRE and CounterFact with the new common-outside runner), or (B) authorise a bounded alias / context review of the 700 historically primary-exposed MQuAKE rows and a 100 / 300-only diagnostic with the 1,000 point explicitly absent (≈ 1 GPU h + review)? The 1,000-record point cannot be reached under any option without touching the confirmatory reservation (`docs/tasks/R1-76-mquake-occupancy.md`). | A | nothing blocks on it; B would be scheduled after the pilot | Sep 20 |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -549,7 +550,7 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     identical tail counts; I set the real-base admission tolerance at 1e-3 nats per position plus identical exceedance
     counts (protocol v5 will state it). No decision needed. Codex has started round 17 (R1-74 files arriving).
 
-46. (2026-09-16, 09:10 EDT) **Q4 recorded as DEC-054 and the κ pilot launched** (`kappa_pilot_v3.json`): nine new trainings
+46. (2026-09-16, 10:30 EDT) **Q4 recorded as DEC-054 and the κ pilot launched** (`kappa_pilot_v3.json`): nine new trainings
     (κ 0.2, κ 0.5, clipped-surprisal control; seeds 0–2) with the v5 training command; the ordinary arm is the v5
     family itself. Each arm is evaluated on retention (three streams), unseen false fires (three datasets, 100
     records) and the drift tail on 32 shared windows with per-position rows saved, so the pre-registered tail
@@ -559,4 +560,6 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     full (R1-68d driver fix, R1-74 scoring patch applied, R1-75 analysis tree, R1-40c matrix v5, R1-49e protocol v5,
     R1-76 fixed-outside runner and MQuAKE memo); the R1-68d re-profile runs first in the same chain. Open: Q5 only,
     plus Q10 (MQuAKE occupancy population) once I have read Codex's memo.
+
+47. (2026-09-16, 10:35 EDT) **Q10 posted** (MQuAKE occupancy population; my default A). Codex's arithmetic: 700 historically exposed rows could support a 300-record point after review, never the 1,000-record one; the register's 168-subject headroom cannot close the gap and must not be spent on development. zsRE and CounterFact get the proper common-population occupancy curve from the R1-76 runner (its populations are prepared; it runs after the pilot).
 
