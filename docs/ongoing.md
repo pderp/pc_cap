@@ -129,6 +129,24 @@ manifests, the retention–rejection curve (selection v2 table), the unseen flat
 drift +0.0022, the near-miss/revision endpoints, and the driver profile; mark every row implemented / proposed /
 hypothesis / null; keep the empty rows for the κ pilot and the stress panel with their lanes and the lead's Q4/Q5.
 
+### Lane R1-64b — development recipes for every comparator condition (needed for block 1 and R1-72)
+
+The payload builder only emits `R1_learned_ff` recipes; the driver checks `adapter.identity()` against the recipe, so
+comparator recipes cannot be hand-edited. Extend the builder (new module or `--condition` in a new script) to emit
+development recipes for `R1_nonlearned`, `v0_stable`, `matched_update`, `v0_live_C1`, `v0_live_C2`, `S1_literal`,
+`S1_LM` and `R1_learned_ff_v2` on zsRE and CounterFact (300 edits, checkpoints 100/300), computing each identity the
+way `build_adapter` does (metadata only, no base execution), binding the S1 continued bases from
+`r1_24_control_v3` / `r1_24_control_lm_v3_lr1e-8`. TinyBase tests that the emitted identity matches a built adapter.
+The orchestrator profiles each through the driver (the per-condition costs R1-72 lacks).
+
+### Lane R1-73 — MQuAKE calibration for the v0-style conditions (spec; the run is the orchestrator's)
+
+The frozen calibration manifest has bank radii only for zsRE and CounterFact, so no MQuAKE recipe can be built (the
+builder refuses: "no dataset calibration"). Write the calibration procedure as v0 did it (`manifests/archive/frozen-
+confirmatory-v2-*.json` records the recipe: radii per bank from development-stream key displacements) as a script
+over the MQuAKE development slice v3b, with the exact inputs, outputs and admission fields, and the protocol text for
+U08; no execution. The orchestrator runs it and binds the result into calibration v3.
+
 ### Lane R1-63c — freeze candidate v4 (after R1-X12)
 
 Rebind the freeze candidate to primary_condition_v5, register v6, matrix v4 and the selection manifest; print the open gates.

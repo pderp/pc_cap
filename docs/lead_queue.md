@@ -507,3 +507,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     re-measure as soon as R1-68c lands.
 
 39. (2026-09-16, 09:30 EDT) Q6 and Q7 recorded (DEC-051, DEC-052). Open: Q4 (κ pilot) and Q5 (stress panel).
+
+40. (2026-09-16, 10:00 EDT) Started with Q6/Q7 approved: the v5 CounterFact development cell is running through the driver
+    (per-dataset cost for the schedule memo) plus the last unseen points. Two gaps surfaced that I have turned into Codex
+    lanes: comparator-condition recipes cannot be hand-made (identity-bound) — R1-64b builds them; and MQuAKE has no
+    v0-style bank calibration (radii exist only for zsRE/CounterFact), so the v0 live/stable/matched-update MQuAKE cells
+    need a calibration run first — R1-73 specifies it, I run it. Neither needs a decision from you.
+
