@@ -87,7 +87,7 @@ launch or commit). Result files under `results/R1/` are the orchestrator's; read
 Implement the aggregation rule of `manifests/revision_v1/kappa_pilot_v3.json` exactly, as
 `scripts/ht3d_pilot_aggregate.py` + tests. Inputs per arm-seed run (`r1_50_stream_sel6_text_s{0,1,2}` = ordinary;
 `ht3_{kappa02,kappa05,clip2}_s{0,1,2}`): retention `results/R1/stream_eval_<run>_stepavg_rare1_null0.5[@counterfact|@mquake].json`
-(RET-GS at the averaged checkpoint); unseen `results/R1/endpoints/<run>_stepavg_rare1_n100_unseen_<ds>/summary.json`
+(`stream_metrics.ret_gs_end`, with `ls_complete_answer_end` alongside); unseen `results/R1/endpoints/<run>_stepavg_rare1_n100_unseen_<ds>/summary.json`
 (`false_fires` of 100); tail `results/R1/drift_assay_ht3_<run>_<ds>.positions.json` (cap-on and cap-off NLL matrices,
 32 windows × 127 positions; positive harm = max(on − off, 0); ES95 with fractional boundary weights and maximum, as
 HT-1). Outputs: per arm-seed-dataset table; per arm the 3-seed macro means with the seed-spread separation rule
