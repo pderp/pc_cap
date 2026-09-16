@@ -74,59 +74,54 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 18 (CPU; open now; posted 2026-09-16 13:15 EDT)
+  +0.006## 3. Lanes for Codex — round 19 (CPU; open now; posted 2026-09-16 15:05 EDT)
 
-Round 17 is committed and mirrored (all lanes done; R1-74 / R1-75 patches landed). The κ pilot is running (chain H:
-ordinary, κ 0.2 and κ 0.5 × 3 seeds evaluated by 13:05; κ 0.5 seed 2 and the clipped control follow; then the R1-68d
-full profile). Priority order: HT-3d → R1-64c → R1-77 → R1-63d → HT-4c. Rules as before (new files only; CPU only;
-edit requests as patches under `docs/tasks/`; tests under `tests/revision_v1/` must pass; no draw, seal, freeze,
-launch or commit). Result files under `results/R1/` are the orchestrator's; read them, never write there.
+Round 18 is committed and mirrored. The κ pilot finishes ≈ 15:10 EDT; chain I then runs the 16 comparator profiles
+(R1-64c order) and the R1-73 MQuAKE calibration (≈ 3–4 h). Priority order: R1-77b → R1-58c → R1-49f → HT-3e → R1-73b.
+Rules as before (new files only; CPU only; edit requests as patches; tests must pass; no draw, seal, freeze, launch,
+commit). `results/R1/` is the orchestrator's: read, never write.
 
-### Lane HT-3d — κ pilot aggregation under the v3 manifest (CPU; new files; first)
+### Lane R1-77b — sealed confirmation backend for the queue (CPU; new files + tests; first)
 
-Implement the aggregation rule of `manifests/revision_v1/kappa_pilot_v3.json` exactly, as
-`scripts/ht3d_pilot_aggregate.py` + tests. Inputs per arm-seed run (`r1_50_stream_sel6_text_s{0,1,2}` = ordinary;
-`ht3_{kappa02,kappa05,clip2}_s{0,1,2}`): retention `results/R1/stream_eval_<run>_stepavg_rare1_null0.5[@counterfact|@mquake].json`
-(`stream_metrics.ret_gs_end`, with `ls_complete_answer_end` alongside); unseen `results/R1/endpoints/<run>_stepavg_rare1_n100_unseen_<ds>/summary.json`
-(`false_fires` of 100); tail `results/R1/drift_assay_ht3_<run>_<ds>.positions.json` (cap-on and cap-off NLL matrices,
-32 windows × 127 positions; positive harm = max(on − off, 0); ES95 with fractional boundary weights and maximum, as
-HT-1). Outputs: per arm-seed-dataset table; per arm the 3-seed macro means with the seed-spread separation rule
-(signed differences printed); the retention floor (ordinary macro mean − 0.02) and the unseen non-increase check per
-dataset; the counter-review §4 decision rule verdict per coupled arm (declared secondary condition / null result), and
-the §4 "What it is not" paragraph reproduced verbatim (DEC-054 framing binding). Missing runs are reported as
-missing, never imputed or dropped silently; a `failure_receipt.json` in a run directory is reported as a charged
-failure. JSON + Markdown; run it on the partial data now and re-run when the chain ends.
+Your R1-77 handoff lists what the queue lacks to run confirmatory cells. Build it as a new module
+`scripts/r1_77b_sealed_backend.py` (+ tests): the sealed admission loader path (never a development loader), final
+protocol / reservation / freeze identity checks, the R1-68d boundary-identity policy and read-only phase checks kept,
+full failure-cost accounting, the explicit metadata-inspection and execution interface the queue binds by module hash,
+and synthetic TinyBase sealed fixtures in an isolated test root exercising every case in your list (resume, wrong
+identities, torn journals, duplicate launch lock, October 9 stop, partial blocks, analysis-population satisfaction).
+Then deliver the queue's non-development dispatch as an edit request (patch) for `scripts/r1_77_queue.py`; the
+orchestrator applies it. No real sealed payload is read.
 
-### Lane R1-64c — comparator recipes rebound to the R1-68d tree (CPU; new files)
+### Lane R1-58c — draw and seal plan v2 (CPU; dry; new files)
 
-The 16 R1-64b comparator recipes bind the pre-R1-74 code identity and the R1-64 driver. Rebuild them for the installed
-tree (`51263d99…`) and the R1-68d driver's incremental profile if that driver serves every comparator adapter
-(check; if an adapter needs the full profile or the old driver, say which and why, per condition). Deliver
-`docs/tasks/R1-64c-<dataset>-<condition>.recipe.json` with inspection receipts (no model), and an ordered run list
-with the expected checkpoint identities so the orchestrator can profile all eight conditions on zsRE and CounterFact
-in one chain. MQuAKE comparator recipes wait for the R1-73 calibration run (orchestrator).
+The lead performs the draw, seal and freeze. Prepare the exact sequence as a checklist with commands and expected
+receipts: register v6 clearance (alias / context / role; abort rules; DEC-048 option C reading), the three-dataset draw
+under matrix v5 and protocol v5 populations (3 realizations × 1,000 edits + outside + near + neighbour + revision
+per dataset), the seal (payload hashes, reservation identities), and the freeze candidate v5 → frozen manifest step,
+each as a dry-run command that prints what it would write and refuses on any open gate. Include the September 20
+admission inputs (cell ceilings from chain I) as named placeholders.
 
-### Lane R1-77 — block-ordered confirmatory queue runner (CPU; new files + tests)
+### Lane R1-49f — the remaining protocol bindings as lead questions (CPU; new file)
 
-`scripts/r1_77_queue.py`: reads `run_matrix_v5.json`, orders cells by DEC-051 block and within-block order, and runs
-them one at a time through the R1-68d driver from their recipes (resume from the last certified checkpoint on
-restart; refuse on identity mismatch; per-cell cost ledger and receipts; MemAvailable guard; a `--dry-run` that
-prints the queue and the DEC-052 complete-block / incomplete-cell inventory from what exists on disk; `--stop-after
-<block>`; a status command that prints spent and projected hours against a ceiling). No confirmatory recipes exist
-yet, so test it on TinyBase cells and on the existing development cells as a development queue. The orchestrator
-executes it after the freeze.
+Gates U12 (contrasts / multiplicity), U13 (classifier / fidelity inequalities) and U14 (secondary thresholds: unseen,
+revision, scale) still need lead decisions. Write `docs/tasks/R1-49f-lead-bindings.md`: for each, the concrete
+proposal with its default, the alternatives, what changes downstream, and the exact protocol v5 text to insert;
+the orchestrator posts them as Q11–Q13 with defaults. Include DEC-053 and DEC-054 consequences (LS convention in the
+margins; the κ arm as a declared secondary condition only if HT-3d's final verdict says so — it currently fails the
+retention floor).
 
-### Lane R1-63d — freeze candidate v5 (CPU; new file)
+### Lane HT-3e — counter-review of the κ pilot result (after HT-3d final)
 
-Rebind the freeze candidate to the installed tree, matrix v5, protocol v5, primary v5, register v6, `kappa_pilot_v3`
-and DEC-053 / DEC-054; print the open gates with what closes each (the September 20 cost admission, the R1-73
-calibration, the comparator profiles, Q5 / Q10). Dry; no freeze.
+When `results/R1/ht3d_final/` exists (the orchestrator runs your aggregator on the complete chain), review it as
+R1-X12 reviewed the selection: reproduce the macro table from the raw files, check the seed-spread rule and the
+retention floor arithmetic, check the clipped-control comparison (ceiling-matched to κ 0.5 only), and write the
+two-sentence result the slide can carry under the DEC-054 framing. Say plainly whether the tail reduction survives
+the clipped control.
 
-### Lane HT-4c — claim ledger v3 (after HT-3d)
+### Lane R1-73b — MQuAKE comparator recipes (after the R1-73 calibration run)
 
-Update `docs/talk_claim_ledger_v2.md` → v3 (new file): the κ pilot rows filled from HT-3d with the DEC-054 framing,
-the R1-68d cost rows, the DEC-053 locality rows (both conventions), the tail rows from HT-1b including the
-CounterFact supplement, and the occupancy caveat (R1-X12 / R1-76). Every row bound to a file and hash.
+When `results/R1/calibration_mquake_v3/calibration_candidate.json` exists, inspect it against the spec's admission
+fields, then build the eight MQuAKE comparator recipes (as R1-64c) bound to calibration v3, with an ordered run list.
 
 ## 4. Interfaces and coordination
 

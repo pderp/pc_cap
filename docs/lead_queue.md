@@ -576,3 +576,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     seeds, κ 0.2: 6 / 6 / 3 %, κ 0.5: 6 / 3 %; CounterFact and MQuAKE 0 % everywhere. Retention and tails are
     aggregated when the chain ends (≈ 15:00 EDT).
 
+50. (2026-09-16, 15:05 EDT) Codex's round 18 committed (`0a19fac`); round 19 posted (R1-77b sealed backend, R1-58c draw /
+    seal checklist for your acts, R1-49f the remaining protocol bindings as questions Q11–Q13, HT-3e pilot counter-review,
+    R1-73b MQuAKE comparator recipes). **κ pilot, partial (27 of 36 rows):** both coupled arms cut the drift tail —
+    expected shortfall of the worst 5 % 0.22 → 0.08 (κ 0.2) / 0.06 (κ 0.5) nats, maximum 5.3 → 2.7 / 2.6 nats, zsRE
+    unseen false fires 12 % → 5 % / 4 % — but mean RET-GS falls 0.796 → 0.754 / 0.748, past the pre-registered 0.02
+    floor, so under the counter-review §4 rule neither arm becomes a declared secondary condition as it stands. The
+    clipped-surprisal control (ceiling-matched to κ 0.5) decides whether the tail effect is the coupled form or just the
+    ceiling; it finishes within the hour. Framing per DEC-054: preliminary hints, development streams, three seeds.
+
