@@ -474,6 +474,9 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q8 (protocol v4 §6) | **ANSWERED 2026-09-15: confirmed** (DEC-050) — mean RET-GS s.t. zsRE unseen ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | — | unblocked: the selection and its freeze binding | — |
 | Q9 (protocol v4 §6, LS convention) | **ANSWERED 2026-09-16: bounded text equality primary** (DEC-053); termination-qualified counts and truncation reported alongside. | — | unblocked: the driver's LS/near-miss reporting rule (Codex edit request); confirmatory LS readings | — |
 | Q10 (R1-76 memo) | **ANSWERED 2026-09-16: B** (DEC-056) — review the 700 historically exposed rows; 100 / 300-record MQuAKE diagnostic, 1,000 point absent. | — | unblocked: lane R1-76b (Codex), then the run | — |
+| Q11 (protocol v5 U12; `docs/tasks/R1-49f-lead-bindings.md`) | Comparisons and multiplicity: keep all 7 primary-vs-control contrasts per dataset (21) at checkpoint 1,000, one Bonferroni family of 63 intervals (RET-GS / ES / LS) at 0.05, the existing 10,000-draw realization-cluster bootstrap, reporting unadjusted and adjusted intervals and all three realization estimates. Codex is explicit that with three realization clusters these intervals are nominal, not a finite-sample guarantee. | accept as proposed (I concur; the honest caveat travels with the numbers) | the analysis tree's contrast module (R1-75) and protocol v5 §U12 | Sep 20 |
+| Q12 (U13) | Classifier: keep the DEC-033 margins (+0.05 / −0.02 / −0.01) and the four-way negative / positive / qualified / inconclusive labels with every inequality bound exactly as in the memo (negative has priority; bounds on a margin do not pass strict tests). | accept as proposed | protocol v5 §U13; R1-75 | Sep 20 |
+| Q13 (U14) | Secondary descriptive benchmarks: unseen false fires at 1,000 records ≤ 0.15 (deployment tolerance, distinct from the 0.10 selection gate), common-outside occupancy change within ±0.05, latest revision ≥ 0.95 (≥ 48/50), old-alias reappearance ≤ 0.02, RET-GS 100→1,000 change ≥ −0.05, ES / LS changes ≥ −0.02 / −0.01, resource ceilings from the September 20 admission; cells and macros both shown. | accept as proposed | protocol v5 §U14; R1-75 | Sep 20 |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -594,4 +597,16 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     ("bounding surprisal shifts the porosity / interference trade-off; it does not beat it on this substrate; preliminary,
     three seeds"). Codex's HT-3e counter-review checks the arithmetic next. Presentation record updated
     (`assets/presentation-materials/kappa_pilot_v5.md`).
+
+53. (2026-09-16, 18:50 EDT) Codex's round 19 committed (`081d3c0`): sealed confirmation backend and queue dispatch (three
+    edits you approved directly with Codex, plus two follow-ups; 52 tests pass here), the MQuAKE historical review (657
+    usable rows → a 300 + 100 population, spec v3, ready to run), the draw / seal / freeze checklist with dry preflight
+    (refuses on the missing owner receipts, as it should), and the U12–U14 proposals — posted as **Q11–Q13** above with
+    my recommendation to accept all three as written. **A budget finding from chain I:** the v0-style and continuation
+    comparator conditions run through the full profile with the scalar drift assay, and their drift is four times the
+    learned reader's — 2,140 s of a ≈ 2,850 s cell — so a 1,000-edit comparator cell is ≈ 2.2 h and the 225 such cells
+    ≈ 500 h, which does not fit. The fix is the same one that worked for the primary (batched drift for those adapters,
+    lane R1-68e, first for Codex); the fallback, if it is not ready by September 20, is a protocol amendment putting the
+    comparator drift assay at the final checkpoint only (÷3). I will bring the number, not the amendment, on the 20th
+    unless you say otherwise.
 

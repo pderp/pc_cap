@@ -1080,3 +1080,25 @@ evaluation ≈ 4.6 GPU h (chain H, 10:30–15:05 incl. the two R1-68d profiles).
 The R1-68d full profile closed the chain: 725 s (scalar drift 516 s of it), state `b296c15d…`, drift +0.002197557 — the
 full-profile identity overhead is gone as in the incremental one (identity checks 1.2 s).
 
+## Comparator profiles, zsRE (chain I, first five; 2026-09-16, 18:15 EDT)
+
+R1-64c recipes on the installed tree, 300-edit development cells, checkpoints 100 / 300:
+
+| condition | profile | wall (s) | drift op (s) | other op (s) |
+| --- | --- | ---: | ---: | ---: |
+| R1_nonlearned (random reader) | incremental | 253 | ≈ 83 | ≈ 165 |
+| v0_stable | full | 2,874 | 2,138 | 671 |
+| matched_update | full | 2,747 | 2,137 | 546 |
+| v0_live_C1 | full | 2,852 | 2,136 | 650 |
+| v0_live_C2 | full | 2,656 | ≈ 2,130 | ≈ 520 |
+
+The v0-family adapters run the drift assay through the scalar one-prefix-at-a-time path (the R1-68c batched reader
+serves RevisionCap adapters only), and their per-position selection is four times the learned reader's scalar cost
+(2,137 vs 516 s for 16,256 positions). Everything else in these cells is cheap (edits 0.5 s, retention ≈ 90 s per
+checkpoint, unseen ≈ 80 s per checkpoint). Consequence for the matrix: a 1,000-edit v0-style cell with drift at
+three checkpoints ≈ 3 × 2,140 + ≈ 1,500 ≈ 2.2 h; 5 conditions × 3 datasets × 15 = 225 such cells ≈ 500 h. Lane
+R1-68e (batched drift for the v0 / S1 adapters, with the same real-base parity test as R1-68c: ≤ 1e-3 nats per
+position, identical exceedance counts) is the fix; the fallback is a protocol amendment (comparator drift at the final
+checkpoint only), which is the lead's call. S1_LM, S1_literal and the CounterFact cells follow tonight; the MQuAKE
+calibration closes the chain; the stress panel (chain J) runs after it.
+
