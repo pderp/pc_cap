@@ -569,3 +569,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     September 20 re-pricing: profile the comparator conditions (R1-64b recipes, rebound to this tree) and one MQuAKE
     cell after the R1-73 calibration; both run after the κ pilot finishes this afternoon.
 
+49. (2026-09-16, 13:15 EDT) Codex has nothing uncommitted (round 17 and the patch landing are in `79bad7f`); round 18 posted:
+    HT-3d (κ pilot aggregation under the v3 rule, with the DEC-054 framing), R1-64c (comparator recipes rebound to the
+    new tree), R1-77 (block-ordered confirmatory queue runner), R1-63d (freeze candidate v5), HT-4c (claim ledger v3).
+    Pilot so far (6 of 9 trainings, no failures): zsRE unseen false fires at 100 records — ordinary 19 / 6 / 10 % across
+    seeds, κ 0.2: 6 / 6 / 3 %, κ 0.5: 6 / 3 %; CounterFact and MQuAKE 0 % everywhere. Retention and tails are
+    aggregated when the chain ends (≈ 15:00 EDT).
+

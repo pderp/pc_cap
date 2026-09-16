@@ -74,102 +74,59 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 17 (CPU; open now; posted 2026-09-16 08:05 EDT)
+  +0.006## 3. Lanes for Codex — round 18 (CPU; open now; posted 2026-09-16 13:15 EDT)
 
-Round 16 is committed (`2e7ac38`) and mirrored (all eight lanes done). The R1-68c re-profile is running on the GPU
-(orchestrator); R1-64b comparator profiles and the R1-73 calibration run follow it. Priority order:
-R1-68d → R1-74 → R1-75 → R1-40c → R1-49e → R1-76. Rules as before (new files only; CPU only; edit requests as patches under
-`docs/tasks/`; tests under `tests/revision_v1/` must pass; no draw, seal, freeze, launch or commit).
+Round 17 is committed and mirrored (all lanes done; R1-74 / R1-75 patches landed). The κ pilot is running (chain H:
+ordinary, κ 0.2 and κ 0.5 × 3 seeds evaluated by 13:05; κ 0.5 seed 2 and the clipped control follow; then the R1-68d
+full profile). Priority order: HT-3d → R1-64c → R1-77 → R1-63d → HT-4c. Rules as before (new files only; CPU only;
+edit requests as patches under `docs/tasks/`; tests under `tests/revision_v1/` must pass; no draw, seal, freeze,
+launch or commit). Result files under `results/R1/` are the orchestrator's; read them, never write there.
 
-### Lane R1-68d — identity verification once per checkpoint, not once per phase (first; your own driver file)
+### Lane HT-3d — κ pilot aggregation under the v3 manifest (CPU; new files; first)
 
-The R1-68c incremental re-profile (notes §"R1-68c re-profile") measured 837 s for the 300-edit zsRE v5 cell, of which
-534 s is `identity_verification_seconds`: 0.87 s of `adapter.identity()` in each of the 600 edit / immediate phases,
-re-hashing the base weights, reader parameters and installed inputs; model operation is 279 s and batched drift is
-83 s (was 506). A 1,000-edit cell therefore spends ≈ 29 min in identity checks against ≈ 15–17 min of model time.
-Change `scripts/r1_68c_dev_cell.py` (your new file; permission granted for this one file and its tests) so that the
-full immutable-identity rehash runs at attempt start, at every checkpoint before its receipt, on resume and at
-completion, while every phase keeps a cheap check — e.g. object identity / a small fingerprint of the parameter
-containers held in memory, or the existing `state_hash` for the mutable state — recorded per phase as
-`identity_check_seconds` and `identity_check_kind`. Any mismatch at a checkpoint still aborts without a receipt. Rebuild
-the two v5 recipes (`R1-68d-zsre-v5-{full,incremental}.recipe.json`) since the driver source is recipe-bound, and land
-the R1-74 scoring change in the same rebinding. TinyBase tests: timing fields present, identical results and checkpoint
-chain to R1-68c, abort on a checkpoint identity mismatch. The orchestrator re-profiles on the real base immediately.
+Implement the aggregation rule of `manifests/revision_v1/kappa_pilot_v3.json` exactly, as
+`scripts/ht3d_pilot_aggregate.py` + tests. Inputs per arm-seed run (`r1_50_stream_sel6_text_s{0,1,2}` = ordinary;
+`ht3_{kappa02,kappa05,clip2}_s{0,1,2}`): retention `results/R1/stream_eval_<run>_stepavg_rare1_null0.5[@counterfact|@mquake].json`
+(RET-GS at the averaged checkpoint); unseen `results/R1/endpoints/<run>_stepavg_rare1_n100_unseen_<ds>/summary.json`
+(`false_fires` of 100); tail `results/R1/drift_assay_ht3_<run>_<ds>.positions.json` (cap-on and cap-off NLL matrices,
+32 windows × 127 positions; positive harm = max(on − off, 0); ES95 with fractional boundary weights and maximum, as
+HT-1). Outputs: per arm-seed-dataset table; per arm the 3-seed macro means with the seed-spread separation rule
+(signed differences printed); the retention floor (ordinary macro mean − 0.02) and the unseen non-increase check per
+dataset; the counter-review §4 decision rule verdict per coupled arm (declared secondary condition / null result), and
+the §4 "What it is not" paragraph reproduced verbatim (DEC-054 framing binding). Missing runs are reported as
+missing, never imputed or dropped silently; a `failure_receipt.json` in a run directory is reported as a charged
+failure. JSON + Markdown; run it on the partial data now and re-run when the chain ends.
 
-### Lane R1-74 — locality / near-miss scoring under DEC-053 (edit request; with R1-68d)
+### Lane R1-64c — comparator recipes rebound to the R1-68d tree (CPU; new files)
 
-DEC-053 binds bounded text equality as the primary locality and near-miss convention: a pair is preserved when the
-cap-on and cap-off 32-token greedy continuations are identical, terminated or not. The driver's `_Challenges.near_miss`
-and `locality` in `src/pccap/revision_v1/stage4_assays.py` currently require termination as well, which on CounterFact
-turns 13/50 identical truncated locality pairs and 37/100 near-miss pairs into failures (v5 CounterFact development
-cell, `results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69…`). Deliver an edit request
-(patch, new file under `docs/tasks/`) that makes `preserved` the bounded-equality verdict and adds
-`preserved_terminated` (the current rule) plus `truncated_pair` / per-side truncation flags to every row and both
-counts to the checkpoint summaries; the stored rows already carry both generations, so a rescoring helper over
-existing checkpoint files (new script) should reproduce 49/50 and 100/100 on that cell and 50/50 / 100/100 on the
-zsRE cells. Because every src edit invalidates the identity-bound recipes, land it together with the R1-68c rebinding
-step so the recipes are rebuilt once. Tests: TinyBase, both conventions.
+The 16 R1-64b comparator recipes bind the pre-R1-74 code identity and the R1-64 driver. Rebuild them for the installed
+tree (`51263d99…`) and the R1-68d driver's incremental profile if that driver serves every comparator adapter
+(check; if an adapter needs the full profile or the old driver, say which and why, per condition). Deliver
+`docs/tasks/R1-64c-<dataset>-<condition>.recipe.json` with inspection receipts (no model), and an ordered run list
+with the expected checkpoint identities so the orchestrator can profile all eight conditions on zsRE and CounterFact
+in one chain. MQuAKE comparator recipes wait for the R1-73 calibration run (orchestrator).
 
-### Lane R1-75 — stage-4 analysis tree v1 over cell directories (CPU; new files)
+### Lane R1-77 — block-ordered confirmatory queue runner (CPU; new files + tests)
 
-The confirmatory matrix will be a set of driver cell directories (`results/R1/stage4_dev_cells/<cell>/attempt-*/`
-today; the confirmatory root will differ only by path) with `checkpoint-{100,300,1000}.json`, receipts, `phases/` and
-`result.json`. Build `src/pccap/revision_v1/analysis_stage4_v1.py` (or extend under a new module name; the existing
-`analysis_stage4.py` is Codex's R1-57 adapter and may be reused, not edited) plus `scripts/r1_75_analyze_cells.py` that:
-(a) inventories cells by identity (condition, dataset, realization, order, checkpoint) against a matrix file and
-reports complete blocks and the explicit incomplete-cell list in the DEC-051 block order (DEC-052 reporting);
-(b) computes per cell and checkpoint ES, RET-GS, LS under both conventions (DEC-053 primary = bounded text equality;
-termination-qualified and truncation counts alongside), unseen false-fire rate with Wilson intervals, near-miss and
-revision counts, drift mean and tail (max, count > 0.1 nats, expected shortfall over the top 1 %) from the stored rows;
-(c) forms the pre-registered paired contrasts against the controls with the DEC-033 margins (RET-GS +0.05, ES −0.02,
-LS −0.01) per dataset, with the multiplicity structure of protocol v4 §U12, missing pairs never imputed;
-(d) writes one JSON and one Markdown table per matrix, reproducible from the cell files alone. Validate on the
-existing v5 zsRE and CounterFact development cells (expected: CounterFact LS 49/50 bounded / 36/50 terminated,
-near-miss 100/100 / 63/100) and on TinyBase cells from the driver tests. Done-when: tests pass; the two development
-cells reproduce the numbers in `docs/R1_stage2_notes.md`.
+`scripts/r1_77_queue.py`: reads `run_matrix_v5.json`, orders cells by DEC-051 block and within-block order, and runs
+them one at a time through the R1-68d driver from their recipes (resume from the last certified checkpoint on
+restart; refuse on identity mismatch; per-cell cost ledger and receipts; MemAvailable guard; a `--dry-run` that
+prints the queue and the DEC-052 complete-block / incomplete-cell inventory from what exists on disk; `--stop-after
+<block>`; a status command that prints spent and projected hours against a ceiling). No confirmatory recipes exist
+yet, so test it on TinyBase cells and on the existing development cells as a development queue. The orchestrator
+executes it after the freeze.
 
-### Lane R1-40c — successor run matrix v5 and execution binding (CPU; new files)
+### Lane R1-63d — freeze candidate v5 (CPU; new file)
 
-Freeze gate U17: matrix v4 predates primary v5. Write `manifests/revision_v1/run_matrix_v5.json` and its generator:
-360 core cells (8 conditions × 3 datasets × 3 realizations × 5 orders; checkpoints 100/300/1,000) plus the 45-cell
-no-gate extension, each cell with a stable identity (condition, dataset, realization, order), the recipe family it
-is built from (R1-64 / R1-64b / R1-73-calibrated for the v0-style MQuAKE cells), its DEC-051 block number and
-within-block order, and a placeholder for the measured ceiling. Include the queue/retry/resume rules the driver
-already implements (attempt directories, checkpoint resume, refusal on identity mismatch) as explicit fields, and a
-CPU validator that checks the matrix against the freeze candidate's bindings. No costs are admitted here; the
-orchestrator fills the ceilings after the September 20 re-measurement.
+Rebind the freeze candidate to the installed tree, matrix v5, protocol v5, primary v5, register v6, `kappa_pilot_v3`
+and DEC-053 / DEC-054; print the open gates with what closes each (the September 20 cost admission, the R1-73
+calibration, the comparator profiles, Q5 / Q10). Dry; no freeze.
 
-### Lane R1-49e — protocol draft v5 (CPU; new file)
+### Lane HT-4c — claim ledger v3 (after HT-3d)
 
-`docs/R1_stage4_protocol_draft_v5.md`: v4 with DEC-050 (selection rule), DEC-051 (block order), DEC-052 (feasibility
-and incomplete reporting), DEC-053 (LS / near-miss convention: bounded text equality primary, termination-qualified and
-truncation alongside) written into §6 and the U10 / U13 / U14 gates; the unseen, revision and scale decision rules
-stated as explicit inequalities with their denominators (U14); the occupancy caveat from R1-X12 (outside populations
-differ across 100 / 300 / 1,000) stated where unseen rates are compared; and a change log against v4. Do not resolve
-open lead items (Q4, Q5); mark them.
-
-### Lane R1-76 — unseen occupancy with a common outside population, and the MQuAKE gap (CPU; new files + memo)
-
-R1-X12 found that the zsRE 100 / 300 / 1,000-record unseen rates use different outside sets, so flatness is unproved;
-and the MQuAKE 300 / 1,000 points cannot be run (no reader-unseen filler beyond the 500-item pool). Deliver
-(a) `scripts/r1_76_unseen_common.py`: a variant of `r1_44_unseen_run.py` (new file; the old runner is untouched) that
-fixes one outside set of 100 prompts per dataset, disjoint from every filler at the largest occupancy, and evaluates
-it after 100, 300 and 1,000 records in one run so the three rates share a population; CPU/TinyBase tests;
-(b) a short memo `docs/tasks/R1-76-mquake-occupancy.md` on where a reader-unseen MQuAKE filler population could come
-from without touching the confirmatory reservation (the 4,218-subject register-v6 clearance leaves ≈ 168 nominal
-slack; the 6,043-item pool minus reservations; or none) with the exposure consequences of each, for the lead
-(question Q10 in `docs/lead_queue.md`, which the orchestrator posts). No execution.
-
-cs/tasks/`) that makes `preserved` the bounded-equality verdict and adds
-`preserved_terminated` (the current rule) plus `truncated_pair` / per-side truncation flags to every row and both
-counts to the checkpoint summaries; the stored rows already carry both generations, so a rescoring helper over
-existing checkpoint files (new script) should reproduce 49/50 and 100/100 on that cell and 50/50 / 100/100 on the
-zsRE cells. Because every src edit invalidates the identity-bound recipes, land it together with the R1-68c rebinding
-step so the recipes are rebuilt once. Tests: TinyBase, both conventions.
-
-### Lane R1-63c — freeze candidate v4 (after R1-X12)
-
-Rebind the freeze candidate to primary_condition_v5, register v6, matrix v4 and the selection manifest; print the open gates.
+Update `docs/talk_claim_ledger_v2.md` → v3 (new file): the κ pilot rows filled from HT-3d with the DEC-054 framing,
+the R1-68d cost rows, the DEC-053 locality rows (both conventions), the tail rows from HT-1b including the
+CounterFact supplement, and the occupancy caveat (R1-X12 / R1-76). Every row bound to a file and hash.
 
 ## 4. Interfaces and coordination
 
