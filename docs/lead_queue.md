@@ -468,12 +468,12 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q2 (DEC-047) | **ANSWERED 2026-09-15: yes** — S1_LM = the lr 1e-8 continuation. | — | unblocked: the S1_LM cells | — |
 | Q3 (item 26b) | **ANSWERED 2026-09-15: yes** (DEC-049) — stream-based checkpoint selection on all three datasets. | — | unblocked: the selection retrain | — |
 | Q4 (counter-review §4) | **ANSWERED 2026-09-16: go** (DEC-054) — Matthew Ikle reviewed the pivot and counter-review and concurs; results to be framed as preliminary hints per §4 "What it is not". | — | unblocked: the κ pilot (launched) | — |
-| Q5 (counter-review §2/HT-2) | Stress panel go/no-go (6 development cells, 4 GPU h ceiling)? | go, after the confirmatory blocks are safe | the stress-panel runs (contract can be prepared meanwhile) | Sep 20 |
+| Q5 (counter-review §2/HT-2) | **ANSWERED 2026-09-16: go** (DEC-055) — six development cells, 4 GPU-h ceiling, after chain I. | — | unblocked: the stress panel | — |
 | Q6 (counter-review §5.1) | **ANSWERED 2026-09-16: as proposed** (DEC-051). | — | unblocked: block scheduling | — |
 | Q7 (counter-review §5.3) | **ANSWERED 2026-09-16: as proposed** (DEC-052) — block order, no cut, re-measure Sep 20, accepted-incomplete reporting if needed. | — | unblocked: freeze preparation | — |
 | Q8 (protocol v4 §6) | **ANSWERED 2026-09-15: confirmed** (DEC-050) — mean RET-GS s.t. zsRE unseen ≤ 10 % at 100 records and LS ≥ 0.98, on common populations. | — | unblocked: the selection and its freeze binding | — |
 | Q9 (protocol v4 §6, LS convention) | **ANSWERED 2026-09-16: bounded text equality primary** (DEC-053); termination-qualified counts and truncation reported alongside. | — | unblocked: the driver's LS/near-miss reporting rule (Codex edit request); confirmatory LS readings | — |
-| Q10 (R1-76 memo) | MQuAKE unseen-prompt occupancy beyond 100 records: (A) keep the 300 / 1,000-record MQuAKE points unavailable and state the limit (the occupancy curve rests on zsRE and CounterFact with the new common-outside runner), or (B) authorise a bounded alias / context review of the 700 historically primary-exposed MQuAKE rows and a 100 / 300-only diagnostic with the 1,000 point explicitly absent (≈ 1 GPU h + review)? The 1,000-record point cannot be reached under any option without touching the confirmatory reservation (`docs/tasks/R1-76-mquake-occupancy.md`). | A | nothing blocks on it; B would be scheduled after the pilot | Sep 20 |
+| Q10 (R1-76 memo) | **ANSWERED 2026-09-16: B** (DEC-056) — review the 700 historically exposed rows; 100 / 300-record MQuAKE diagnostic, 1,000 point absent. | — | unblocked: lane R1-76b (Codex), then the run | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -584,4 +584,6 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     floor, so under the counter-review §4 rule neither arm becomes a declared secondary condition as it stands. The
     clipped-surprisal control (ceiling-matched to κ 0.5) decides whether the tail effect is the coupled form or just the
     ceiling; it finishes within the hour. Framing per DEC-054: preliminary hints, development streams, three seeds.
+
+51. (2026-09-16, 15:00 EDT) Q5 and Q10 recorded (DEC-055 go, DEC-056 option B). No lead decision is open; Q11–Q13 (multiplicity, fidelity inequalities, secondary thresholds) will follow from Codex's R1-49f. Execution order on the GPU: κ pilot (finishing) → comparator profiles + MQuAKE calibration (chain I, tonight) → stress panel (≤ 4 h) → MQuAKE occupancy diagnostic after Codex's review → September 20 re-pricing.
 

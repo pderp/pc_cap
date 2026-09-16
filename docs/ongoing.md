@@ -77,7 +77,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 19 (CPU; open now; posted 2026-09-16 15:05 EDT)
 
 Round 18 is committed and mirrored. The κ pilot finishes ≈ 15:10 EDT; chain I then runs the 16 comparator profiles
-(R1-64c order) and the R1-73 MQuAKE calibration (≈ 3–4 h). Priority order: R1-77b → R1-58c → R1-49f → HT-3e → R1-73b.
+(R1-64c order) and the R1-73 MQuAKE calibration (≈ 3–4 h). Priority order: R1-77b → R1-76b → R1-58c → R1-49f → HT-3e → R1-73b.
 Rules as before (new files only; CPU only; edit requests as patches; tests must pass; no draw, seal, freeze, launch,
 commit). `results/R1/` is the orchestrator's: read, never write.
 
@@ -91,6 +91,16 @@ and synthetic TinyBase sealed fixtures in an isolated test root exercising every
 identities, torn journals, duplicate launch lock, October 9 stop, partial blocks, analysis-population satisfaction).
 Then deliver the queue's non-development dispatch as an edit request (patch) for `scripts/r1_77_queue.py`; the
 orchestrator applies it. No real sealed payload is read.
+
+### Lane R1-76b — MQuAKE occupancy diagnostic population under DEC-056 (CPU; new files; before R1-58c)
+
+The lead chose option B (DEC-056). Perform the bounded review of the 700 historically primary-exposed MQuAKE rows you
+identified (alias / context / role clearance against the selected reader's training items and exact queries; the
+teacher / token / alias eligibility you flagged as unchecked), and emit a versioned population + spec for the
+`r1_76_unseen_common.py` runner: 300 edit facts + 100 fixed outside prompts, checkpoints 100 and 300 only, the
+1,000-record point explicitly absent, every row labelled "new to the selected reader's training; historically exposed
+elsewhere", no final-register subject used. Report the counts at each filter step. The orchestrator executes it
+(≈ 1 GPU h) after the stress panel.
 
 ### Lane R1-58c — draw and seal plan v2 (CPU; dry; new files)
 

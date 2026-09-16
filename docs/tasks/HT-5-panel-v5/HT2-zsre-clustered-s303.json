@@ -1,0 +1,131 @@
+{
+  "adapter_identity": {
+    "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "class": "pccap.revision_v1.learner.RevisionCap",
+    "condition": "R1_learned_ff",
+    "config_sha256": "1768f7e59046dfc57a2b7c40eccdbb706f1262c994ec927fe6f14a8c3328590f",
+    "locality_base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "params_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+    "rule": null
+  },
+  "admission": {},
+  "banner": "development, not confirmatory",
+  "cell": {
+    "condition": "R1_learned_ff",
+    "dataset": "zsre",
+    "order": "clustered",
+    "realization": "ht-dev-s303"
+  },
+  "checkpoints": [
+    20,
+    60,
+    70,
+    80,
+    100
+  ],
+  "code_sha256": "9bc6a1940aa20f88ebebaeb2d41d0451deee106f3d2a16fe0f7a0423c1613f9b",
+  "construction": {
+    "base": {
+      "files": {
+        "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+        "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+    },
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "calibration": {
+      "bank_scales": {
+        "1": 70.70187377929688,
+        "2": 106.5766658782959,
+        "3": 425.5740661621094
+      },
+      "radii": {
+        "1": 0.2808128833770752,
+        "2": 0.4143741011619568,
+        "3": 0.18857809603214265
+      }
+    },
+    "seed": 0,
+    "stop_tokens": {
+      "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+      "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+    },
+    "weights": {
+      "checkpoint": "avg150-300",
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_avg150-300.npz",
+      "run": "r1_50_stream_sel6_text_s2",
+      "sha256": "b38fb851e5ebf66de6700aa2a68dbdee23bf093f56f2c0897e3bb275b5af19e6",
+      "sources": [
+        "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step150.npz",
+        "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step200.npz",
+        "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step250.npz",
+        "/home/derp/cap/assets/runs/pc_cap/R1/pilot/r1_50_stream_sel6_text_s2/theta_step300.npz"
+      ]
+    }
+  },
+  "construction_primary": {
+    "path": "manifests/revision_v1/primary_selection_v2.json",
+    "sha256": "93cad8d0274dbf2d9ee2a7da6fa2ebcf58900d2bb7b902558bdfaad43ffa5816"
+  },
+  "execution_authorized": false,
+  "ht_panel": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/ht_development_panel_v1.json",
+    "sha256": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a"
+  },
+  "integrity_batch_edits": 16,
+  "integrity_driver_bindings": {
+    "scripts/ht5_dev_cell.py": "bc578382a8556b398db0b7a8a6aae777634b0d335415ddb0f8d216b43c28327b",
+    "scripts/ht5_panel.py": "954cfd82b813880e81869494cc0dee482a9279f74ac36f929a3ac1c6c900a9b7",
+    "scripts/ht5_probe_assays.py": "623af505589fdbf59da93ec7c6aa59a0fd983cc898359e93e4f4fe1f8a7a195f",
+    "scripts/ht5_recipes.py": "dc42eacfbcf462f4fcf8f7070ffa985b3f4cbcdcf6ce95075d396e9d57db95f4",
+    "scripts/r1_68b_dev_cell.py": "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5",
+    "scripts/r1_68b_integrity_runtime.py": "ae66b70ddbef67d45dd590a8d73d763f976ef51f5c8cfd468849e30b6468d1d1"
+  },
+  "integrity_profile": "incremental",
+  "max_new": 32,
+  "mode": "stage4_development_cell",
+  "owner_recipe": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/HT-5-owner-v5.recipe.json",
+    "sha256": "fbc1e026b6d9878c88d9f9b9e838df31b673cdcf4217319465a1b57b5bd63f08"
+  },
+  "payload": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/ht_panel_v5/HT2-zsre-clustered-s303.json",
+    "sha256": "85ad08ad4457e56f84c88f60c339fca32f25d0546656635aedadcfbd5b37f78c"
+  },
+  "reader_provenance": {
+    "calibration": {
+      "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+      "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+    },
+    "identity_method": "NumPy base/checkpoint hashes and registered dataclass configuration; no base execution",
+    "primary": {
+      "path": "manifests/revision_v1/primary_selection_v2.json",
+      "sha256": "93cad8d0274dbf2d9ee2a7da6fa2ebcf58900d2bb7b902558bdfaad43ffa5816"
+    }
+  },
+  "recipe_family": "ht_stress_panel_v1",
+  "schema_version": 1,
+  "source_bindings_sha256": {
+    "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/ht_development_panel_v1.json": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a"
+  },
+  "tokenizer_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+}
