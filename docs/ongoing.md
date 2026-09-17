@@ -74,55 +74,43 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 22 (CPU; open now; posted 2026-09-17 08:45 EDT) — the evidence the freeze needs
+  +0.006## 3. Lanes for Codex — round 23 (CPU; open now; posted 2026-09-17 10:35 EDT) — resolving MQuAKE, admitting endpoints
 
-Round 21 is committed and mirrored. Your R1-D9 producers refuse, correctly, on absent review evidence and receipts.
-Round 22 produces that evidence, so the lead's acts can happen on September 18–19. Priority order:
-**R1-D10a → R1-D10b → R1-D10c → R1-58d → HT-4d → HT-3e.** The existing-file rule is lifted for your own round-19–21
-files (no simultaneous edits to files the orchestrator is running: the drivers and builders in use by chains K–M).
+Round 22 is committed and mirrored. Q14 (MQuAKE capacity) is with the lead, default option A. Priority order:
+**R1-D10d → R1-D10e → R1-D10f → R1-63f.** Rules as in round 22.
 
-### Lane R1-D10a — alias / context / exposure review evidence over register v6 (first)
+### Lane R1-D10d — Q14 options made executable (first)
 
-Produce the unsealed review resource `r1_d9_clearance` expects (`d9.clearance.evidence`): one disposition row for
-every v6 candidate item in all three datasets (nominal 52,411 / 12,246 / 4,218), with `alias_clear`, `context_clear`,
-`exposure_clear` from actual checks — alias equivalence against every exposed subject / entity (register reasons,
-training pools, development slices, the historical 700 MQuAKE rows, the R1-76b population), context limits against the
-final base (`model_limits` from the tokenizer / config), cumulative exposure current as of the round-21 commit — and
-`cross_dataset_disjoint` enforced by global entity id. Rows not reviewed under a declared outcome-independent policy
-(if you must bound the work: review in register order until each dataset has ≥ 1.5 × its 4,050 demand cleared, and
-mark the rest `exclude: not_reviewed_bounded_policy`) are excluded with that reason. `teacher_pass` / `tokens_pass`
-are left for R1-D10b's binding. Write the `evidence_bindings` for the alias / context / exposure reviews and a CPU
-script that reproduces the resource from the register and the bound inputs. Tests on a small synthetic register.
+For each Q14 option (A: MQuAKE 300 edits × 3 realizations, checkpoints 100 / 300; B: one realization at 1,000; C: drop
+MQuAKE; D: A after a context review), produce the exact deltas so the lead's answer applies the same day: the matrix
+(v5.2 candidates per option: cell list, checkpoints, block numbers under DEC-051), protocol v5.2 text (populations,
+the MQuAKE scale limitation stated in U08 / U14, the DEC-057 family unchanged for zsRE / CounterFact), the D9 inputs
+(demand per role and realization), and a capacity check against the D10a pool for each. A script that emits all of
+these from an option code, tests included. State which cells of the current matrix v5.1 each option removes or
+re-cadences.
 
-### Lane R1-D10b — teacher-token review on the final base (script for the orchestrator's GPU run)
+### Lane R1-D10e — adjudication worksheet for the quarantined context matches (MQuAKE first)
 
-The clearance evidence needs `teacher_pass` (base answers the edit prompt incorrectly under the E.2 greedy rule) and
-`tokens_pass` (answer / prompt / paraphrase token limits) on the **final base identity**. Write
-`scripts/r1_d10b_teacher_review.py`: batched greedy decoding of the base over the R1-D10a-eligible rows per dataset
-(reuse `pccap.harness.stage_s2` / the R1-D3 E.2 filter and `r1_d5_mquake_teacher` logic; one lease; MemAvailable
-guard; resumable by dataset; progress receipts), producing the evidence binding with `base_tensor_sha256`,
-`tokenizer_sha256` and per-row `teacher_pass` / `tokens_pass` merged into the dispositions. Estimate the cost (rows ×
-decode) and state it; the orchestrator runs it after chain M.
+List every MQuAKE candidate blocked only by context-quarantine or incidental-mention reasons with its source events,
+grouped by reason, and propose one outcome-independent adjudication rule (e.g. an exact subject-name token match inside
+an edit / paraphrase / locality query is exposure; a mention inside ordinary drift text or a homonym in another
+dataset's query is not), applied mechanically with its effect on capacity per dataset. Do not change dispositions:
+emit a candidate v5 evidence resource under the proposed rule alongside v4, both hash-bound, for the orchestrator's
+review and the lead's decision (it widens A's margin; it cannot reach 4,050).
 
-### Lane R1-D10c — endpoint construction and the composition catalog
+### Lane R1-D10f — near-miss family under global subject disjointness
 
-From a draw receipt (test on the R1-D9b dry structure and on the development slices): construct the near-miss rows
-(`edit_item_id` + `neighbour_item_id` from the reserved near / neighbour roles), the revision facts, the outside prompts,
-the composition catalog for MQuAKE (from the verified multi-hop inventory: cases whose dependencies are all in the
-realization's edits) and the `independent_population` resource (planned denominators per coordinate, fixed before
-observations), in the exact shapes `r1_d9_seal` validates. `--dry-run`; tests.
+Your D10c note: the old same-subject near-miss family is impossible under global disjointness and the proposed
+subject-masked-template family needs semantic admission and may lack compatible pairs. Deliver: the pairing
+feasibility on the D10a pool per dataset (how many compatible support / neighbour pairs exist per template family;
+whether 100 + 100 per realization are reachable), the exact family definition and its admission text for protocol
+v5.2, and a fallback if pairs are short (fewer near-miss cases with the planned denominator retained, never
+manufactured pairs).
 
-### Lane R1-58d — populated inputs and authorization templates for the lead
+### Lane R1-63f — freeze candidate v7 (after Q14)
 
-`docs/tasks/R1-D9-inputs-v2.json` populated for the real run (register v6, matrix v5.1, protocol v5.1, calibration v3,
-stage configurations, evidence and catalog bindings as they land), plus the three authorization documents as
-templates the lead completes by setting `lead_approved: true` and the master seed after the dry-run shows the
-`request_sha256`. A one-page operator sheet: the exact order of commands, what each dry-run must show, what the lead
-signs. The orchestrator runs the dry-runs and hands the lead the sheet.
-
-### Lane HT-4d — claim ledger v4 (as posted in round 21)
-
-### Lane HT-3e — counter-review of the κ pilot and the stress-panel filing (as posted in round 21)
+Rebind to the chosen option's matrix / protocol, calibration v3, the R1-68e driver identity, the sealed backend
+(R1-77c), D10a evidence v4 (or v5) and the D9 templates; print the open gates.
 
 ## 4. Interfaces and coordination
 

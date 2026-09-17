@@ -1201,3 +1201,15 @@ them). Chain K re-runs the twelve non-learned cells: same payloads and weights a
 real-base parity test of the batched path (state hash, every endpoint, per-position drift ≤ 1e-3 nats, identical
 exceedance counts) and its speedup.
 
+## Corrections after Codex's HT-3e review and the D10a inventory (2026-09-17, 10:30 EDT)
+
+Stress panel wording (HT-3e): the two tested schedules produced identical observed trajectories — a result for these
+two schedules and this seed, not a demonstration of universal order invariance; sparse probability degradation
+persisted through edit 100 while primary exact answers stayed 20 / 20 (paraphrase retention 0.8 / 0.6 on
+CounterFact / MQuAKE at the harmed checkpoints); recovery was unobserved within the study window (CounterFact is
+harmed at 80 with 20 later updates observed, MQuAKE at 60 with 40; the 40-update censor is measured from the end of
+treatment). The competing-edit / rare-token-gate explanation in the earlier entry is a mechanism hypothesis, not a
+finding. Matrix accounting: the 360-cell core is 270 non-learned cells (six conditions: v0_stable, matched_update,
+v0_live_C1 / C2, S1_LM, S1_literal) and 90 reader-based cells (R1_learned_ff, R1_nonlearned); the 45-cell extension is
+reader-based. My "225 / 135" split counted five non-learned conditions; the execution plan uses 270 / 90.
+

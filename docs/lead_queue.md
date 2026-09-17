@@ -477,6 +477,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q11 (protocol v5 U12; `docs/tasks/R1-49f-lead-bindings.md`) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-057). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q12 (U13) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-058). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q13 (U14) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-059). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
+| Q14 (R1-D10a capacity) | **MQuAKE cannot be populated at the registered scale.** The conservative clearance leaves 2,129 usable MQuAKE subjects against 4,050 needed (3 realizations × (1,000 edits + 100 outside + 100 near + 100 neighbour + 50 revision)); zsRE and CounterFact clear 6,075 each. No legitimate relaxation reaches 4,050 (ignoring every near reservation gives 3,450; ignoring context matches too gives 4,205 but is not a valid clearance). Options: **(A)** MQuAKE at 300 edits per realization, 3 realizations, checkpoints 100 / 300, demand 1,950 — keeps the paired three-realization design and the DEC-057 bootstrap; MQuAKE's 1,000-record claims become unavailable and are reported so; **(B)** one MQuAKE realization at 1,000 edits (demand 1,350) — keeps the scale, loses the realization clusters (descriptive only for MQuAKE); **(C)** drop MQuAKE from the confirmatory matrix (240 cells), keep its development results; **(D)** a review of the quarantined context matches (Codex lane R1-D10e) to see how many subjects a defensible outcome-independent rule restores, then decide — cannot reach 4,050 on the numbers, so it only widens A's margin. | **A**, with D run in parallel to widen its margin | the MQuAKE draw, matrix v5.2, protocol v5.2, and therefore the freeze; zsRE and CounterFact blocks are not blocked | Sep 18 |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -666,4 +667,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     R1-58d); the teacher pass runs on my GPU after the MQuAKE comparator profiles tonight. Realistic: evidence complete
     September 18, your dry-runs and signatures September 19, launch September 19–20. Nothing needs a decision from
     you now; I will hand you a one-page operator sheet with the exact commands when the inputs are populated.
+
+60. (2026-09-17, 10:30 EDT) Codex's round 22 committed (`1094412`): the review evidence, the teacher-review script, the
+    endpoint constructor with the composition catalog, the populated inputs and your unsigned authorization forms with
+    an operator sheet, claim ledger v4, and the independent pilot / stress review (its wording corrections applied to
+    the notes and the presentation record). **One decision, Q14, needed by tomorrow:** MQuAKE clears 2,129 subjects
+    against 4,050 demanded; the register arithmetic cannot be made to reach 4,050 legitimately. My recommendation is
+    option A (MQuAKE at 300 edits × 3 realizations, checkpoints 100 / 300, its 1,000-record claims reported as
+    unavailable), with the context-match review run in parallel to widen the margin. zsRE and CounterFact are not
+    affected: their teacher pass and draw can proceed, and DEC-051's block order already runs each dataset's block
+    separately, so the launch date does not depend on Q14 unless you choose C.
 
