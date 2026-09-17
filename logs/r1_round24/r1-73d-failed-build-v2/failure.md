@@ -1,0 +1,1 @@
+Eight CPU recipe inspections completed, then the development writer rejected a list-valued inspection report (it accepts only dictionaries). No GPU or model execution. The final build uses a metadata writer for inspection lists. These abandoned recipe identities are preserved and excluded from the active run list.

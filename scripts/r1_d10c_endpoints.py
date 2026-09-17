@@ -20,6 +20,7 @@ from scripts.r1_d9_receipts import planned_compositions, read_resource, ref, sha
 from scripts.r1_d10a_review import ASSETS, ROOT, write_new
 from scripts.r1_d10a_review_core import digest
 from scripts.r1_d10b_teacher_review import verify_bindings
+from scripts.r1_locality_contract import validate_locality
 
 from pccap.data.tokenize import GPT2Tokenizer, tokenize_pair
 from pccap.metrics.editing import normalize_answer
@@ -159,10 +160,18 @@ def construct(
     realizations=3,
     locality_count=50,
     checkpoints=(100, 300, 1000),
+    layout=None,
 ):
     if reservations.get("mode") != "unsealed_fact_reservations":
         raise ValueError("unsealed reservations required")
-    groups = core.audit_reservations(reservations, counts=counts, realizations=realizations)
+    original_counts = counts
+    explicit_layout = layout
+    resolved = core.resolve_layout(
+        layout, counts=counts, realizations=realizations, checkpoints=checkpoints
+    )
+    groups = core.audit_reservations(
+        reservations, counts=counts, realizations=realizations, layout=layout
+    )
     planned = planned_compositions(reservations, catalog)
     if reservations.get("planned_compositions") != planned:
         raise ValueError("composition inventory differs from draw")
@@ -173,6 +182,7 @@ def construct(
     missing = []
     for cell in cells:
         ds, real = cell["dataset"], str(cell["realization"])
+        counts = resolved[ds]["roles_per_realization"]
         gkey = ds + ":" + real
         if gkey not in group_cache:
             roles = {role: groups[ds, real, role]["records"] for role in counts}
@@ -256,6 +266,7 @@ def construct(
                                 "source_outside_item_id": row["item_id"],
                             }
                         )
+            validate_locality(roles["edits"], loc)
             for i in range(len(loc), locality_count):
                 missing.append(
                     {
@@ -302,10 +313,11 @@ def construct(
         cells,
         payloads,
         inventory,
-        counts=counts,
+        counts=original_counts,
         realizations=realizations,
         checkpoints=checkpoints,
         locality_count=locality_count,
+        layout=explicit_layout,
     )
     return (
         payloads,
@@ -454,7 +466,17 @@ def main():
         "windows": drift_tokens[: 128 * 128].reshape(128, 128).astype(int).tolist(),
         "expected_positions": 128 * 127,
     }
-    payloads, population, report = construct(reservations, cells, catalog, plan, drift)
+    from scripts.r1_d9_layouts import from_matrix
+
+    layout = from_matrix(matrix)
+    payloads, population, report = construct(
+        reservations,
+        cells,
+        catalog,
+        plan,
+        drift,
+        layout=layout if "dataset_layouts" in matrix else None,
+    )
     report.update(
         draw_receipt=spec["draw_receipt"],
         reservations=draw["reservations"],

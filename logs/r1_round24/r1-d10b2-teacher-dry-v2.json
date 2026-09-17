@@ -1,0 +1,105 @@
+{
+  "mode": "dry_run",
+  "contract_sha256": "44f6202f38a5460ad64e9c05195f1fa5dcaee6c6657abf05660b41fb3b7cff13",
+  "rows": {
+    "zsre": 6084,
+    "counterfact": 6121,
+    "mquake": 2214
+  },
+  "max_generated_tokens": 461408,
+  "historical_decode_seconds_per_row": 0.026856024849598287,
+  "linear_estimate_seconds": 387.2370223063577,
+  "planning_seconds_2x_to_5x": [
+    774.4740446127154,
+    1936.1851115317884
+  ],
+  "estimate_limit": "historical MQ measured throughput only; final prompt lengths, JIT and chunk shapes may differ; no new GPU measurement",
+  "capacity_shortfall": {},
+  "dataset_layouts": {
+    "zsre": {
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "outside": 100,
+        "near_miss_support": 100,
+        "near_miss_neighbour": 100,
+        "revision": 50
+      },
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "demand_by_role": {
+        "edits": 3000,
+        "outside": 300,
+        "near_miss_support": 300,
+        "near_miss_neighbour": 300,
+        "revision": 150
+      }
+    },
+    "counterfact": {
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "outside": 100,
+        "near_miss_support": 100,
+        "near_miss_neighbour": 100,
+        "revision": 50
+      },
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "demand_by_role": {
+        "edits": 3000,
+        "outside": 300,
+        "near_miss_support": 300,
+        "near_miss_neighbour": 300,
+        "revision": 150
+      }
+    },
+    "mquake": {
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "outside": 100,
+        "near_miss_support": 100,
+        "near_miss_neighbour": 100,
+        "revision": 50
+      },
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "demand_by_role": {
+        "edits": 900,
+        "outside": 300,
+        "near_miss_support": 300,
+        "near_miss_neighbour": 300,
+        "revision": 150
+      }
+    }
+  },
+  "execution_requires": "explicit --execute, one GPU lease, MemAvailable guard",
+  "final_clearance": "still requires independent endpoint-role review and all dataset capacities"
+}

@@ -30,6 +30,13 @@ from scripts.r1_68b_integrity_runtime import DurablePhaseJournal, durable_json
 import pccap  # noqa: F401 -- determinism before importing the JAX driver
 
 ROOT = Path(__file__).resolve().parents[1]
+WORKER_CEILING_FACTOR = {1: 1.0, 2: 1.5 * 1.1}
+
+
+def worker_factor(workers):
+    if type(workers) is not int or workers not in WORKER_CEILING_FACTOR:
+        raise ValueError("workers must be 1 or 2")
+    return WORKER_CEILING_FACTOR[workers]
 
 
 def sha(path):
@@ -203,7 +210,9 @@ def inventory(
     fallback_cell_seconds=None,
     receipt_root=None,
     matrix_hash=None,
+    workers=1,
 ):
+    factor = worker_factor(workers)
     cells = ordered(matrix, stop_after)
     files = analysis.Files()
     rows = []
@@ -261,7 +270,7 @@ def inventory(
             s = fallback_cell_seconds
         if s is not None and (isinstance(s, bool) or not math.isfinite(s) or s <= 0):
             raise ValueError("projection must be finite positive seconds")
-        remaining.append(s)
+        remaining.append(None if s is None else s * factor)
     projected = (
         spent + math.fsum(remaining)
         if all(s is not None for s in remaining) and not unknown
@@ -287,6 +296,8 @@ def inventory(
             else projected <= ceiling_hours * 3600,
             "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback.",
             "scenario_fallback_cell_seconds": fallback_cell_seconds,
+            "projection_workers": workers,
+            "remaining_cell_ceiling_multiplier": factor,
         },
         "backend_status": "development and hash-bound sealed dispatch; final execution requires closed frozen gates",
         "sources_sha256": files.sources,
@@ -334,7 +345,7 @@ def verify_sealed_matrix(matrix, bindings):
         )
 
 
-def launch(binding, manifest, *, resume, output):
+def launch(binding, manifest, *, resume, output, max_wall_seconds=None):
     if manifest.get("test_fixture"):
         raise PermissionError("TinyBase uses injected CPU executor in tests, not CLI launch")
     if manifest.get("mode") == sealed.MODE:
@@ -363,6 +374,10 @@ def launch(binding, manifest, *, resume, output):
     with Path(output).open("xb") as stream:
         deadline = datetime(2026, 10, 10, tzinfo=ZoneInfo("America/New_York")).timestamp()
         timeout = deadline - time.time()
+        if max_wall_seconds is not None:
+            if not math.isfinite(max_wall_seconds) or max_wall_seconds <= 0:
+                raise ValueError("positive process wall ceiling required")
+            timeout = min(timeout, max_wall_seconds)
         if timeout <= 0:
             raise TimeoutError("October 9 experimental deadline passed")
         result = subprocess.run(
@@ -381,7 +396,25 @@ def run_queue(
     ceiling_hours=None,
     executor=launch,
     memory_reader=memory_available_mib,
+    workers=1,
 ):
+    worker_factor(workers)
+    if workers == 2:
+        from scripts.r1_77e_workers import run_two_workers
+
+        # Pass the live module namespace so test/root seams and canonical backend
+        # admission stay identical to the serial path.
+        return run_two_workers(
+            globals(),
+            matrix_path,
+            bindings_path,
+            receipt_root=receipt_root,
+            stop_after=stop_after,
+            min_memory_mib=min_memory_mib,
+            ceiling_hours=ceiling_hours,
+            executor=executor,
+            memory_reader=memory_reader,
+        )
     matrix_path, bindings_path = Path(matrix_path).resolve(), Path(bindings_path).resolve()
     matrix_hash, binding_hash = sha(matrix_path), sha(bindings_path)
     matrix, bindings = read(matrix_path), read(bindings_path)
@@ -531,6 +564,7 @@ def main(argv=None):
     p.add_argument("--ceiling-hours", type=float)
     p.add_argument("--scenario-cell-seconds", type=float)
     p.add_argument("--min-memory-mib", type=float, default=4096.0)
+    p.add_argument("--workers", type=int, choices=(1, 2), default=1)
     p.add_argument("--receipt-root", type=Path, default=ROOT / "logs/r1_round18/queue_receipts")
     args = p.parse_args(argv)
     if args.command == "run" and not args.dry_run:
@@ -543,6 +577,7 @@ def main(argv=None):
             stop_after=args.stop_after,
             min_memory_mib=args.min_memory_mib,
             ceiling_hours=args.ceiling_hours,
+            workers=args.workers,
         )
     else:
         if args.execute:
@@ -554,6 +589,7 @@ def main(argv=None):
             fallback_cell_seconds=args.scenario_cell_seconds,
             receipt_root=args.receipt_root,
             matrix_hash=sha(args.matrix),
+            workers=args.workers,
         )
     print(json.dumps(report, indent=2, allow_nan=False))
     return 0

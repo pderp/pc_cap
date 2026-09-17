@@ -8,6 +8,8 @@ import json
 import math
 from pathlib import Path
 
+from scripts import r1_d9_layouts as layouts
+
 ROOT = Path(__file__).resolve().parents[1]
 DATASETS = ("zsre", "counterfact", "mquake")
 ROLES = {
@@ -72,6 +74,16 @@ def check_receipt(name, r, spec):
         raise ValueError("open or unapproved receipt")
     if r.get("register") != spec["register"]:
         raise ValueError("receipt register identity differs from v6")
+    layout = layouts.from_spec(spec)
+    if spec.get("schema_version") == 3:
+        if (
+            r.get("contract_version") != 2
+            or layouts.digest(r.get("dataset_layouts")) != layouts.digest(layout)
+            or r.get("layout_sha256") != layouts.digest(layout)
+            or r.get("matrix") != spec["matrix"]
+            or r.get("protocol") != spec["protocol"]
+        ):
+            raise ValueError("versioned receipt layout/matrix/protocol differs")
     if name == "joint_clearance":
         if r.get("policy") != "DEC-048-option-C;DEC-042-CounterFact;zsRE-priority":
             raise ValueError("unapproved exclusion policy")
@@ -89,16 +101,15 @@ def check_receipt(name, r, spec):
             raise ValueError("joint clearance incomplete")
         if any(
             type(r.get("cleared_subjects", {}).get(ds)) is not int
-            or r["cleared_subjects"][ds] < 4050
+            or r["cleared_subjects"][ds] < layout[ds]["demand_subjects"]
             for ds in DATASETS
         ):
-            raise ValueError("joint cleared capacity below4050")
+            raise ValueError("joint cleared capacity below admitted per-dataset demand")
     if name in ("draw_receipt", "seal_receipt", "endpoint_construction"):
         if (
-            r.get("realizations") != 3
-            or r.get("roles_per_realization") != ROLES
-            or r.get("datasets") != list(DATASETS)
-        ):
+            spec.get("schema_version") != 3
+            and (r.get("realizations") != 3 or r.get("roles_per_realization") != ROLES)
+        ) or r.get("datasets") != list(DATASETS):
             raise ValueError("registered population changed")
         if (
             r.get("all_roles_disjoint") is not True
@@ -168,12 +179,7 @@ def preflight(spec, stage):
         "ready_for_owner_review": not blocked,
         "blocked": blocked,
         "checked_receipts": checked,
-        "demand": {
-            "datasets": 3,
-            "realizations_per_dataset": 3,
-            "roles_per_realization": ROLES,
-            "distinct_subjects_per_dataset": 4050,
-        },
+        "demand": spec.get("dataset_layouts", layouts.production()),
         "draws_emitted": 0,
         "seals_emitted": 0,
         "freeze_written": False,

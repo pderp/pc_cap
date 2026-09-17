@@ -1,0 +1,428 @@
+{
+  "task": "R1-D10g",
+  "recorded_utc": "2026-09-17T17:10:34.933180+00:00",
+  "later_exposure_supplement": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10g/round24_v1/later-exposure.json",
+    "sha256": "947190ab697a82666f30ee696165be2a639dfd69b77b60ec6efc3090e551d6f6"
+  },
+  "from_commit": "2a8b2379d97443e19915b9a797e5afb6c83ebad9",
+  "through_commit": "e697dba36452645b7ce194310faea752e13ac53e",
+  "chains": {
+    "K": {
+      "progress_snapshot": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round24/chain_k-exposure-snapshot.txt",
+        "sha256": "8c3bcf3e680e094d969e8c7d2c0df1ac8da8a36b0c6a79fae78c3b1e501d47b6"
+      },
+      "recipes_and_payloads_already_reserved": [
+        {
+          "cell": {
+            "condition": "S1_LM",
+            "dataset": "counterfact",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+            "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-counterfact-S1_LM.recipe.json",
+            "sha256": "e2a1d678c56c006a45ff730985d173de23b496378096391890b9286087e342f1"
+          }
+        },
+        {
+          "cell": {
+            "condition": "S1_literal",
+            "dataset": "counterfact",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+            "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-counterfact-S1_literal.recipe.json",
+            "sha256": "c07308c7094ee01649d8e5c63f15a51b971269ea5ae500312d9d69e4fe444c2d"
+          }
+        },
+        {
+          "cell": {
+            "condition": "matched_update",
+            "dataset": "counterfact",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+            "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-counterfact-matched_update.recipe.json",
+            "sha256": "3cafe9dbad914b8bbfc46d5833805b60ca20bd17e165653df29350d1410b8843"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_live_C1",
+            "dataset": "counterfact",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+            "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-counterfact-v0_live_C1.recipe.json",
+            "sha256": "6a414a9de535a586acf304e749de17b47937fff463f15659f4ef45b8a37484c1"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_live_C2",
+            "dataset": "counterfact",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+            "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-counterfact-v0_live_C2.recipe.json",
+            "sha256": "b8b533780b1842f5e81ca2842cebdab433f213d8969461ea0c77059735bd416c"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_stable",
+            "dataset": "counterfact",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+            "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-counterfact-v0_stable.recipe.json",
+            "sha256": "c15a9a253d9f8dfa6d43e722945b04299924fe14ada048e4311fb9664cf49cc0"
+          }
+        },
+        {
+          "cell": {
+            "condition": "S1_LM",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-S1_LM.recipe.json",
+            "sha256": "d33f1fa644d2c873ec29dbda393021f6757e5a5a36bea5e5f93188844b63f8cb"
+          }
+        },
+        {
+          "cell": {
+            "condition": "S1_literal",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-S1_literal.recipe.json",
+            "sha256": "5be449380fd1081fa101a6c66e8cc67668bf1b4cc698b730921051c310aa8a70"
+          }
+        },
+        {
+          "cell": {
+            "condition": "matched_update",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-matched_update.recipe.json",
+            "sha256": "bdbc2e5db3c82ec4606dea1775f3dafbe516a34e0b5742e9cb5a1015283ff566"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_live_C1",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-v0_live_C1.recipe.json",
+            "sha256": "7b06070e680ba7a7ded36c18651a09bbaea2bf92a2b79bafad4ac6ad2f981217"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_live_C2",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-v0_live_C2.recipe.json",
+            "sha256": "9a318daddc2049c9a2e983a6b04ef87b2854cbb5f82dcf98209e4a62c1571eda"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_stable",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-v0_stable.recipe.json",
+            "sha256": "2e1a7d8ac30c4eb30a7dea2b8ed824e99a7925a74566fb4902f30c9fe1795391"
+          }
+        },
+        {
+          "cell": {
+            "condition": "R1_learned_ff",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-68e-zsre-v5-incremental.recipe.json",
+            "sha256": "583515bf368bc774cc9aad9cf3abfba8ae96bb1c842bb768ba39d1c718d9e885"
+          }
+        }
+      ],
+      "planned_or_failed_still_reserved": true,
+      "additional_reserved_population_bindings": [
+        {
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_76_common/round19/mquake_historical_v1.json",
+          "sha256": "8d5a53813fe72c3fed6ab939744c6220bb7cc6120de3fcd79bc3cf06f9178fd2"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/docs/tasks/R1-76b-mquake-historical-v3.population.spec.json",
+          "sha256": "7946340e1147f84e4bdd03b71ff43c90ce1a55bae4fe439950c679284df536d9"
+        }
+      ]
+    },
+    "L": {
+      "progress_snapshot": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round24/chain_l-exposure-snapshot.txt",
+        "sha256": "6dffaf45c2dcc47caec0d53ce8f6ffffc8cdf796367743e38c601ef10bd9e81c"
+      },
+      "recipes_and_payloads_already_reserved": [
+        {
+          "cell": {
+            "condition": "R1_learned_ff_v2",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-R1_learned_ff_v2.recipe.json",
+            "sha256": "8a7dd68c91a7c2754dc67bd9febeda751450da438497027e67bf7f6e8db24bad"
+          }
+        },
+        {
+          "cell": {
+            "condition": "R1_nonlearned",
+            "dataset": "zsre",
+            "order": "source",
+            "realization": "development"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+            "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-R1_nonlearned.recipe.json",
+            "sha256": "e8eac33b25341d9decc59cab387877e703fc0f806d4141cfb6df12823f189725"
+          }
+        }
+      ],
+      "planned_or_failed_still_reserved": true
+    },
+    "M": {
+      "progress_snapshot": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round24/chain_m-exposure-snapshot.txt",
+        "sha256": "04a877fd5a7de6fafcc383388f5d95121ad47b1949b95bf46740e0bbd61714ef"
+      },
+      "recipes_and_payloads_already_reserved": [
+        {
+          "cell": {
+            "condition": "R1_learned_ff_v2",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-R1_learned_ff_v2.recipe.json",
+            "sha256": "361142ef427626358a1856d6afd29fb845da060a0dcf620f345ce5eedfa4c623"
+          }
+        },
+        {
+          "cell": {
+            "condition": "R1_nonlearned",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-R1_nonlearned.recipe.json",
+            "sha256": "86ea65fca6c5cf8ed2cd9c06a30fcabd54d61773a8b42d3a2343bceade934d94"
+          }
+        },
+        {
+          "cell": {
+            "condition": "S1_LM",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-S1_LM.recipe.json",
+            "sha256": "69cb1739acc6c46bf930ba27dc5fbb082318c87c31c3c777fb3bd3b5a4cff7b1"
+          }
+        },
+        {
+          "cell": {
+            "condition": "S1_literal",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-S1_literal.recipe.json",
+            "sha256": "05231c6c48ea5e6fa6e50f3d8cfc0373061b0ac0a2c16ed0793d4d3be46f62c4"
+          }
+        },
+        {
+          "cell": {
+            "condition": "matched_update",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-matched_update.recipe.json",
+            "sha256": "5410c7e99390347ed3da7544e9f814aa9238948efdcc2e1b69615875d90417e1"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_live_C1",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-v0_live_C1.recipe.json",
+            "sha256": "90dea80e3a2d77a1a84126f48e374208ee92fa98481f19ba6b16eaea9800dd71"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_live_C2",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-v0_live_C2.recipe.json",
+            "sha256": "a86bdd6b243cd9ebb238fd556ae9715b64461d407804626c9e4b86913903fe2d"
+          }
+        },
+        {
+          "cell": {
+            "condition": "v0_stable",
+            "dataset": "mquake",
+            "order": "source",
+            "realization": "development_calibration_v3"
+          },
+          "payload": {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73b_calibration_v3/payload.json",
+            "sha256": "9f70a69d518dfafb18be4c2864ae9764f5f25f3b64ad1369b4c2248fc5a47805"
+          },
+          "recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73b/R1-73b-mquake-v0_stable.recipe.json",
+            "sha256": "42b440bf74dcac67c62cd03129b8d631e6770276f26282478eecc1d662ea75d8"
+          }
+        }
+      ],
+      "planned_or_failed_still_reserved": true
+    }
+  },
+  "declared_recipes_total": 69,
+  "additional_events": 0,
+  "eligibility_losses": 0,
+  "notes": [
+    "K includes the primary R1-68e profile and conservatively reserved R1-76 attempts, including its failed launch.",
+    "L is the concurrent zsRE learned-v2/nonlearned run, confirmed by its named development logs.",
+    "M includes all eight R1-73b comparator payloads, including jobs still pending in this progress snapshot.",
+    "All sixteen R1-64d and eight R1-73b recipe payload bindings appear in the full supplement, even if absent from one chain snapshot.",
+    "Progress affects reporting only: eligibility never depends on measured results or whether a declared job succeeded.",
+    "New uncommitted/undeclared payloads are outside the commit-bounded inventory and require a supplement before draw."
+  ]
+}

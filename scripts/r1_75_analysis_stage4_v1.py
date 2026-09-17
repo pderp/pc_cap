@@ -398,7 +398,9 @@ def pair_contrasts(matrix, loaded):
                 for metric in ("ES", "RET-GS", "LS"):
                     grid = []
                     populations_by_realization = {}
-                    for realization in axes["realizations"]:
+                    for realization in axes.get("realizations_by_dataset", {}).get(
+                        dataset, axes.get("realizations", [])
+                    ):
                         values = []
                         for order in axes["orders"]:
                             keys = [

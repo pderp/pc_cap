@@ -1,0 +1,115 @@
+{
+  "task": "R1-58c",
+  "stage": "clearance",
+  "dry_run": true,
+  "would_write": [
+    "/home/derp/cap/pc_cap/docs/tasks/R1-final-joint-clearance.receipt.json",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/clearance"
+  ],
+  "ready_for_owner_review": false,
+  "blocked": [
+    {
+      "gate": "freeze_candidate",
+      "reason": "argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'"
+    },
+    {
+      "gate": "clearance_authorization",
+      "reason": "open or unapproved receipt"
+    },
+    {
+      "gate": "joint_clearance",
+      "reason": "named owner receipt is not supplied"
+    }
+  ],
+  "checked_receipts": {},
+  "demand": {
+    "counterfact": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "mquake": {
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_by_role": {
+        "edits": 900,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "zsre": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    }
+  },
+  "draws_emitted": 0,
+  "seals_emitted": 0,
+  "freeze_written": false,
+  "launch_authorized": false,
+  "note": "Readiness is a metadata check only. The lead performs construction, draw, seal and freeze after review; this command has no mutation mode."
+}

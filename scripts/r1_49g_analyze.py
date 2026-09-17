@@ -60,13 +60,19 @@ def analyze(matrix):
         "resource_status": "No final September20 resource/ceiling receipt adapter is bound; ratios stay unavailable in file-based analysis.",
         "role": "secondary descriptive; no simultaneous significance guarantee",
     }
-    report["analysis_revision"] = "R1-49g_DEC057_DEC058_DEC059"
+    report["analysis_revision"] = (
+        "R1-49h_DEC057_DEC058_DEC059_DEC060"
+        if matrix.get("option") == "D"
+        else "R1-49g_DEC057_DEC058_DEC059"
+    )
+    report["dataset_layouts"] = matrix.get("dataset_layouts")
     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
     report["limits"] += [
         FAMILY["coverage"],
         "Accepted thresholds do not confer population, execution or final scientific admission.",
         "Semantic revision is latest-answer success AND old-retired AND new-active; old acquisition is not an additional filter.",
         "Per-cell occupancy equivalence has no independent realization-cluster interval; only complete three-realization macros can report that interval.",
+        "Option D leaves all MQuAKE 1000-edit primary comparisons unavailable in the unchanged 63-interval family. Actual 300-record rates are descriptive, without a transferred 1000-record threshold.",
     ]
     for name in report["sources_sha256"]:
         _read_verified(name, report["sources_sha256"])
@@ -101,6 +107,18 @@ def markdown(report):
             lines.append(
                 f"| {cell['cell_id']} | {name} | {v['value']} | {v['passes']} | {v['status']} |"
             )
+    lines += [
+        "",
+        "Actual terminal occupancy (secondary descriptive; no threshold or pass decision):",
+        "",
+        "| Cell | Required actual records | Fires / planned | Rate | Wilson 95% | Paired change from actual 100 | Availability |",
+        "|---|---:|---|---|---|---|---|",
+    ]
+    for cell in report["secondary_benchmarks"]["cells"]:
+        v = cell["actual_occupancy_descriptive"]
+        lines.append(
+            f"| {cell['cell_id']} | {v['required_actual_occupancy']} | {v['fires']} / {v['planned']} | {v['value']} | {v['wilson95']} | {v['change_from_actual_100']} | {v['status']} |"
+        )
     lines += [
         "",
         "| Dataset | Condition | Macro benchmark | Value | Pass | Failed cells |",

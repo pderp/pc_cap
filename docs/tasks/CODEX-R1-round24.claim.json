@@ -1,0 +1,106 @@
+{
+  "task": "R1-round24",
+  "agent": "Codex",
+  "created_utc": "2026-09-17T16:34:19.743999+00:00",
+  "head": "e697dba36452645b7ce194310faea752e13ac53e",
+  "task_source_sha256": "0888f456adf22103336c63a8da03288deaae7ae75069708b7ae77ab1b60a36b1",
+  "priority": [
+    "R1-73d",
+    "R1-D10g",
+    "R1-D9d",
+    "R1-77d",
+    "R1-D10b2",
+    "R1-49h",
+    "R1-77e",
+    "R1-58e"
+  ],
+  "active_lane": null,
+  "status": "cpu_complete_owner_handoff",
+  "constraints": [
+    "CPU only",
+    "installed source and backend PATCH ONLY until owner idle boundary",
+    "no commits",
+    "no real-base calls or actual draw/seal/freeze",
+    "resources in assets"
+  ],
+  "owned_existing_files": [
+    "scripts/r1_d9_receipt_core.py",
+    "scripts/r1_d9_receipts.py",
+    "scripts/r1_58c_draw_seal_preflight.py",
+    "scripts/r1_d10c_endpoints.py",
+    "scripts/r1_d10b_teacher_review.py",
+    "scripts/r1_49g_inference.py",
+    "scripts/r1_49g_analyze.py",
+    "scripts/r1_49g_secondary.py",
+    "scripts/r1_75_analysis_stage4_v1.py",
+    "scripts/r1_77_queue.py"
+  ],
+  "owned_new_files_prefixes": [
+    "logs/r1_round24/",
+    "docs/tasks/R1-D9-*-v3.json",
+    "docs/tasks/R1-D10c-construction-inputs-template-v3.json",
+    "docs/R1_stage4_protocol_draft_v5_2_D.md",
+    "manifests/revision_v1/run_matrix_v5_2_D.json",
+    "scripts/r1_d9_layouts.py",
+    "scripts/r1_d10g_promote.py",
+    "scripts/r1_77d_prepare.py",
+    "scripts/r1_58e_operator_inputs.py",
+    "tests/revision_v1/test_r1_49h_analysis.py",
+    "tests/revision_v1/test_r1_58e_rehearsal.py",
+    "tests/revision_v1/test_r1_77d_cadence_patch.py",
+    "tests/revision_v1/test_r1_d10g_b2.py",
+    "tests/revision_v1/test_r1_d9d_layouts.py",
+    "tests/revision_v1/r1_77d_patch_support.py"
+  ],
+  "owner_result_files_not_ours": [
+    "results/R1/chain_m.progress",
+    "results/R1/stage4_dev_cell_r1_73b*",
+    "results/R1/stage4_dev_cells/*mquake-development_calibration_v3*",
+    "results/R1/stage4_dev_cell_r1_64d_concurrent_zsre-matched_update.log",
+    "results/R1/stage4_dev_cell_r1_64d_concurrent_zsre-v0_stable.log",
+    "tracked deletions of results/R1/chain_*.progress and chain_*.done visible at final audit"
+  ],
+  "cpu_test_artifact_prefixes": [
+    "results/R1/r1_75_cpu_tests/",
+    "results/R1/stage4_dev_cells/r1_68c_cpu_tests/",
+    "logs/r1_round19/sealed_tests/",
+    "logs/r1_round21/rehearsal-"
+  ],
+  "updated_task_source_sha256": "b31c0068de393ce19368968186216efedf98d9c29ab696b663a692f2f6ca7d6c",
+  "updated_head": "2c63842a0dc33e255d873b060f2ddde8fccccddb",
+  "owned_new_code_files": [
+    "scripts/r1_d9_layouts.py",
+    "scripts/r1_d10g_promote.py",
+    "scripts/r1_77d_prepare.py",
+    "scripts/r1_58e_operator_inputs.py",
+    "scripts/r1_locality_contract.py",
+    "scripts/r1_73d_locality_recipes.py",
+    "scripts/r1_d10g_locality_supplement.py",
+    "scripts/r1_77e_workers.py",
+    "tests/revision_v1/r1_77d_patch_support.py",
+    "tests/revision_v1/test_r1_49h_analysis.py",
+    "tests/revision_v1/test_r1_58e_rehearsal.py",
+    "tests/revision_v1/test_r1_77d_cadence_patch.py",
+    "tests/revision_v1/test_r1_d10g_b2.py",
+    "tests/revision_v1/test_r1_d9d_layouts.py",
+    "tests/revision_v1/test_r1_73d_locality.py",
+    "tests/revision_v1/test_r1_77e_workers.py"
+  ],
+  "finished_utc": "2026-09-17T17:51:40.038518+00:00",
+  "validated_head": "2c63842a0dc33e255d873b060f2ddde8fccccddb",
+  "validated_task_source_sha256": "b31c0068de393ce19368968186216efedf98d9c29ab696b663a692f2f6ca7d6c",
+  "lane_status": {
+    "R1-73d": "CPU_work_complete_owner_execution_pending",
+    "R1-D10g": "CPU_work_complete_owner_execution_pending",
+    "R1-D9d": "CPU_work_complete_owner_execution_pending",
+    "R1-77d": "patch_prepared_owner_application_pending",
+    "R1-D10b2": "CPU_work_complete_owner_execution_pending",
+    "R1-49h": "CPU_work_complete_owner_execution_pending",
+    "R1-77e": "CPU_work_complete_owner_execution_pending",
+    "R1-58e": "CPU_work_complete_owner_execution_pending"
+  },
+  "validation": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/final-validation.json",
+    "sha256": "78966a690446a966a65907b03d674bca47c0f3824d497a7c3510c9c664dc5935"
+  }
+}

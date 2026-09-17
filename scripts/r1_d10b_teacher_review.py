@@ -17,6 +17,7 @@ import time
 from pathlib import Path
 
 import numpy as np
+from scripts import r1_d9_layouts as layouts
 from scripts.r1_d9_receipts import read_resource, ref, sha, source_rows
 from scripts.r1_d10a_review import ASSETS, ROOT, write_new
 from scripts.r1_d10a_review_core import DATASETS, digest, token_review
@@ -208,6 +209,179 @@ def atomic_new(path, value):
     return ref(path)
 
 
+def admitted_layout(evidence, matrix=None):
+    layout = layouts.admitted(evidence.get("dataset_layouts", layouts.production()))
+    if matrix is not None and layouts.from_matrix(matrix) != layout:
+        raise ValueError("teacher evidence/matrix layout differs")
+    return layout
+
+
+def capacity_shortfall(evidence, layout, *, final=False):
+    flag = "teacher_token_eligible" if final else "preteacher_eligible"
+    counts = {
+        ds: len(
+            {d["entity_id"] for d in evidence["dispositions"] if d["dataset"] == ds and d.get(flag)}
+        )
+        for ds in DATASETS
+    }
+    return {
+        ds: dict(available=n, required=layout[ds]["demand_subjects"])
+        for ds, n in counts.items()
+        if n < layout[ds]["demand_subjects"]
+    }
+
+
+def certify_rows(evidence, sources, contract, chunks, tokenizer):
+    """CPU verification of a completed run; no decode and no eligibility inference."""
+    if (
+        contract.get("rule") != RULE
+        or contract.get("base_tensor_sha256") != evidence["base_tensor_sha256"]
+        or contract.get("tokenizer_sha256") != evidence["tokenizer_sha256"]
+    ):
+        raise ValueError("completed teacher base/tokenizer/rule differs")
+    size = contract.get("chunk_size")
+    if type(size) is not int or size < 1 or set(contract.get("datasets", {})) != set(DATASETS):
+        raise ValueError("teacher contract chunk/population missing")
+    source = {(ds, r["item_id"]): r for ds in DATASETS for r in sources[ds]}
+    expected, reviewed = set(), {}
+    for ds in DATASETS:
+        ids = contract["datasets"][ds]
+        if len(ids) != len(set(ids)):
+            raise ValueError("duplicate completed teacher inventory")
+        for number, offset in enumerate(range(0, len(ids), size)):
+            key = (ds, number)
+            expected.add(key)
+            rows = [source[ds, i] for i in ids[offset : offset + size]]
+            if key not in chunks:
+                raise ValueError("completed teacher chunk missing")
+            values = validate_chunk(chunks[key], digest(contract), ds, number, rows)
+            for row, value in zip(rows, values, strict=True):
+                if token_review(row, tokenizer, evidence["model_limits"]) != value["token_check"]:
+                    raise ValueError("receipt token review differs on current source")
+                reviewed[ds, row["item_id"]] = value
+    if set(chunks) != expected:
+        raise ValueError("unexpected teacher chunks; complete exact run required")
+    wanted = [d for d in evidence["dispositions"] if d["preteacher_eligible"]]
+    if any((d["dataset"], d["item_id"]) not in reviewed for d in wanted):
+        raise ValueError("current eligibility includes rows not decoded in completed run")
+    return [reviewed[d["dataset"], d["item_id"]] for d in wanted]
+
+
+def preserved_bindings(bindings):
+    """Resolve exact archived producer bytes, never silently replace a hash."""
+    result, archived = [], []
+    for b in bindings:
+        path = Path(b["path"])
+        if not path.resolve().is_relative_to(ROOT.parent) or any(
+            x in {"confirm", "stage4_sealed_payloads"} for x in path.parts
+        ):
+            raise PermissionError("unsealed teacher provenance only")
+        if path.is_file() and sha(path) == b["sha256"]:
+            result.append(b)
+            continue
+        target = (
+            ROOT
+            / "logs/r1_round24/producer_snapshot"
+            / (b["sha256"][:12] + "-" + path.name + ".txt")
+        )
+        if path.suffix != ".py" or not target.is_file() or sha(target) != b["sha256"]:
+            raise ValueError(
+                "completed run provenance changed without exact preserved producer: " + str(path)
+            )
+        result.append(ref(target))
+        archived.append(dict(original=b, preserved=ref(target)))
+    verify_bindings(result)
+    return result, archived
+
+
+def certify_run(evidence_binding, run, completion_binding, output, report, matrix_binding):
+    from scripts.r1_58c_draw_seal_preflight import read_metadata
+
+    from pccap.data.tokenize import GPT2Tokenizer
+
+    evidence = read_resource(evidence_binding)
+    layout = admitted_layout(evidence, read_metadata(matrix_binding))
+    completion = read_metadata(completion_binding)
+    if (
+        completion.get("task") != "R1-D10b"
+        or not completion.get("status", "").startswith("teacher evidence complete")
+        or not completion.get("lease")
+    ):
+        raise ValueError("bound completed owner teacher receipt required")
+    finished_ref = ref(run / "teacher_evidence.json")
+    if completion.get("evidence") != finished_ref:
+        raise ValueError("completion receipt does not bind this run")
+    finished = read_resource(finished_ref)
+    contract_ref = ref(run / "contract.json")
+    if (
+        contract_ref not in finished.get("evidence_bindings", [])
+        or finished.get("teacher_token_review_complete") is not True
+    ):
+        raise ValueError("completed evidence lacks exact run contract")
+    contract = read_resource(contract_ref)
+    run_evidence = read_resource(contract["evidence"])
+    register = json.loads(Path(evidence["register"]["path"]).read_text())
+    sources = source_rows(register)
+    original_groups = eligible_rows(run_evidence, sources)
+    if contract["datasets"] != {ds: [r["item_id"] for r in original_groups[ds]] for ds in DATASETS}:
+        raise ValueError("run contract differs from bound original eligibility")
+    chunks, chunk_bindings = {}, []
+    for ds in DATASETS:
+        for path in sorted((run / ds).glob("chunk-*.json")):
+            b = ref(path)
+            if b not in finished["evidence_bindings"]:
+                raise ValueError("chunk absent from completed evidence receipt")
+            c = read_resource(b)
+            key = (ds, c["number"])
+            if key in chunks or path.name != f"chunk-{c['number']:05d}.json":
+                raise ValueError("duplicate/misnamed teacher chunk")
+            chunks[key] = c
+            chunk_bindings.append(b)
+    tok = GPT2Tokenizer(snapshot=Path(evidence["base"]["path"]))
+    if tok.file_sha256() != evidence["tokenizer_sha256"]:
+        raise ValueError("certification tokenizer differs")
+    reviewed = certify_rows(evidence, sources, contract, chunks, tok)
+    history, archived = preserved_bindings(finished["evidence_bindings"] + contract["producer"])
+    verify_bindings(evidence["evidence_bindings"])
+    value = merge(
+        evidence,
+        reviewed,
+        [
+            evidence_binding,
+            finished_ref,
+            contract_ref,
+            completion_binding,
+            matrix_binding,
+            ref(__file__),
+            *history,
+            *chunk_bindings,
+        ],
+    )
+    short = capacity_shortfall(value, layout, final=True)
+    value.update(
+        dataset_layouts=layout,
+        teacher_certification="completed_receipts_CPU_no_redecode",
+        teacher_capacity_sufficient=not short,
+        teacher_capacity_shortfall=short,
+        historical_producer_snapshots=archived,
+    )
+    result = atomic_new(output, value)
+    receipt = dict(
+        task="R1-D10b2",
+        evidence=result,
+        completed_run=completion_binding,
+        matrix=matrix_binding,
+        dataset_layouts=layout,
+        final_capacity_shortfall=short,
+        role_review_complete=False,
+        draw_authorized=False,
+        gpu_seconds=0,
+        model_calls=0,
+    )
+    write_new(report, receipt)
+    return receipt
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--evidence", type=Path, required=True)
@@ -215,6 +389,11 @@ def main():
     ap.add_argument("--output", type=Path, required=True)
     ap.add_argument("--log-dir", type=Path, required=True)
     ap.add_argument("--execute", action="store_true")
+    ap.add_argument("--matrix", type=Path)
+    ap.add_argument("--matrix-sha256")
+    ap.add_argument("--certify-from-run", type=Path)
+    ap.add_argument("--completion-receipt", type=Path)
+    ap.add_argument("--completion-sha256")
     ap.add_argument("--allow-under-capacity-exploration", action="store_true")
     ap.add_argument("--batch-size", type=int, default=64)
     ap.add_argument("--chunk-size", type=int, default=256)
@@ -227,7 +406,37 @@ def main():
     ) or not args.log_dir.resolve().is_relative_to(ROOT / "logs"):
         ap.error("resources under assets and progress receipts under repository logs required")
     evidence_binding = {"path": str(args.evidence.resolve()), "sha256": args.evidence_sha256}
+    matrix_binding = (
+        {"path": str(args.matrix.resolve()), "sha256": args.matrix_sha256} if args.matrix else None
+    )
+    if args.certify_from_run:
+        if (
+            args.execute
+            or args.allow_under_capacity_exploration
+            or not args.completion_receipt
+            or not args.completion_sha256
+            or not matrix_binding
+        ):
+            ap.error(
+                "certification requires bound completion and matrix; no execution/exploration flag"
+            )
+        result = certify_run(
+            evidence_binding,
+            args.certify_from_run.resolve(),
+            {"path": str(args.completion_receipt.resolve()), "sha256": args.completion_sha256},
+            args.output / "certified_teacher_evidence.json",
+            args.log_dir / "certification.json",
+            matrix_binding,
+        )
+        print(json.dumps(result, indent=2))
+        return
     evidence = read_resource(evidence_binding)
+    if matrix_binding:
+        from scripts.r1_58c_draw_seal_preflight import read_metadata
+
+        layout = admitted_layout(evidence, read_metadata(matrix_binding))
+    else:
+        layout = admitted_layout(evidence)
     verify_bindings([evidence["register"], *evidence["evidence_bindings"]])
     register = json.loads(Path(evidence["register"]["path"]).read_text())
     groups = eligible_rows(evidence, source_rows(register))
@@ -254,14 +463,14 @@ def main():
         "batch_size": args.batch_size,
         "chunk_size": args.chunk_size,
         "datasets": {ds: [r["item_id"] for r in groups[ds]] for ds in DATASETS},
+        "dataset_layouts": layout,
+        "layout_sha256": layouts.digest(layout),
+        "matrix": matrix_binding,
+        "under_capacity_exploration": bool(args.allow_under_capacity_exploration),
     }
     contract_sha = digest(contract)
     n = sum(map(len, groups.values()))
-    short = {
-        ds: c["preteacher_subjects"]
-        for ds, c in evidence["counts"].items()
-        if c["preteacher_subjects"] < 4050
-    }
+    short = capacity_shortfall(evidence, layout)
     historical = json.loads((ROOT / "manifests/revision_v1/mquake_pool_v1.json").read_text())
     per_row = historical["teacher_seconds"] / historical["counts"]["candidates"]
     status = {
@@ -274,6 +483,7 @@ def main():
         "planning_seconds_2x_to_5x": [n * per_row * 2, n * per_row * 5],
         "estimate_limit": "historical MQ measured throughput only; final prompt lengths, JIT and chunk shapes may differ; no new GPU measurement",
         "capacity_shortfall": short,
+        "dataset_layouts": layout,
         "execution_requires": "explicit --execute, one GPU lease, MemAvailable guard",
         "final_clearance": "still requires independent endpoint-role review and all dataset capacities",
     }

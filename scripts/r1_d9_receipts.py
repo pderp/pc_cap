@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+from scripts import r1_d9_layouts as layouts
 from scripts import r1_d9_receipt_core as core
 from scripts.r1_58c_draw_seal_preflight import check_receipt, read_metadata
 from scripts.r1_75_analysis_stage4_v1 import COORDS, coordinate_id
@@ -74,6 +75,8 @@ def read_resource(binding):
 
 def implementation_bindings():
     names = [
+        "scripts/r1_d9_layouts.py",
+        "scripts/r1_locality_contract.py",
         "scripts/r1_58_draw_streams.py",
         "scripts/r1_58c_draw_seal_preflight.py",
         "scripts/r1_d1i_register_v6.py",
@@ -88,6 +91,8 @@ def contract(spec, stage):
     """No authorization self-hash or output receipt enters its own request."""
     return core.content_digest(
         {
+            "contract_version": 2 if spec.get("schema_version") == 3 else 1,
+            "dataset_layouts": layouts.from_spec(spec),
             "stage": stage,
             "register": spec["register"],
             "matrix": spec["matrix"],
@@ -157,7 +162,12 @@ def source_rows(register):
 
 def clearance_value(spec, register, evidence, rows):
     core.require(evidence.get("register") == spec["register"], "review/register binding differs")
-    eligible, counts = core.review_candidates(register, rows, evidence)
+    layout = layouts.from_spec(spec)
+    if "dataset_layouts" in evidence:
+        core.require(evidence["dataset_layouts"] == layout, "evidence layout differs")
+    eligible, counts = core.review_candidates(
+        register, rows, evidence, layout=layout if spec.get("schema_version") == 3 else None
+    )
     for binding in evidence.get("evidence_bindings", []):
         path = Path(binding["path"]).resolve()
         core.require(
@@ -173,6 +183,8 @@ def clearance_value(spec, register, evidence, rows):
     return {
         "schema_version": 1,
         "mode": "reviewed_unsealed_candidates",
+        "dataset_layouts": layout,
+        "layout_sha256": layouts.digest(layout),
         "register": spec["register"],
         "evidence": spec["d9"]["clearance"]["evidence"],
         "candidates": eligible,
@@ -234,6 +246,12 @@ def draw_value(spec, receipts):
     clearance = receipts["joint_clearance"]
     candidates = read_resource(clearance["cleared_candidates"])
     core.require(candidates["register"] == spec["register"], "clearance candidate register differs")
+    layout = layouts.from_spec(spec)
+    core.require(
+        layouts.digest(candidates.get("dataset_layouts", layouts.production()))
+        == layouts.digest(layout),
+        "cleared candidate layout differs",
+    )
     rng = receipts["rng_admission"]
     core.require(
         rng.get("rng_rule") == core.RNG_RULE
@@ -260,9 +278,12 @@ def draw_value(spec, receipts):
         candidates["candidates"],
         seed=cfg["master_seed"],
         register_sha256=spec["register"]["sha256"],
+        layout=layouts.from_spec(spec) if spec.get("schema_version") == 3 else None,
     )
     reservation = core.reservation_document(allocation, spec["register"])
-    core.audit_reservations(reservation)
+    core.audit_reservations(
+        reservation, layout=layouts.from_spec(spec) if spec.get("schema_version") == 3 else None
+    )
     reservation.update(paired_orders(reservation))
     reservation["planned_compositions"] = planned_compositions(
         reservation, read_resource(cfg["composition_catalog"])
@@ -317,7 +338,13 @@ def seal_values(spec, receipts, matrix):
             by_content.setdefault(content, value)
             by_binding[key] = by_content[content]
         payloads[cid] = by_binding[key]
-    identities = core.validate_seal(reservation, cells, payloads, population)
+    identities = core.validate_seal(
+        reservation,
+        cells,
+        payloads,
+        population,
+        layout=layouts.from_spec(spec) if spec.get("schema_version") == 3 else None,
+    )
     for cell in cells:
         cid = coordinate_id(cell)
         group = f"{cell['dataset']}:{cell['realization']}"
@@ -365,11 +392,16 @@ def new_json(path, value):
 def check_matrix_layout(matrix):
     from pccap.revision_v1.stage4_adapters import CORE_CONDITIONS
 
+    layout = layouts.from_matrix(matrix)
     axes = matrix["axes"]
     core.require(
-        matrix.get("name") == "run_matrix_v5_1"
-        and axes["datasets"] == list(core.DATASETS)
-        and axes["realizations"] == [0, 1, 2]
+        axes["datasets"] == list(core.DATASETS)
+        and (
+            axes.get("realizations") == [0, 1, 2]
+            if matrix["name"] == "run_matrix_v5_1"
+            else axes.get("realizations_by_dataset")
+            == {d: x["realizations"] for d, x in layout.items()}
+        )
         and axes["orders"] == [100, 101, 102, 103, 104]
         and axes["conditions"] == list(CORE_CONDITIONS),
         "registered v5.1 matrix axes required",
@@ -378,32 +410,36 @@ def check_matrix_layout(matrix):
         (condition, ds, r, o)
         for condition in CORE_CONDITIONS
         for ds in core.DATASETS
-        for r in range(3)
+        for r in layout[ds]["realizations"]
         for o in range(100, 105)
     }
     observed = [tuple(cell[k] for k in COORDS) for cell in matrix["cells"]]
     core.require(
         len(observed) == len(expected)
         and set(observed) == expected
-        and all(c["checkpoints"] == [100, 300, 1000] for c in matrix["cells"]),
+        and all(c["checkpoints"] == layout[c["dataset"]]["checkpoints"] for c in matrix["cells"]),
         "complete 360-cell population/cadence required",
     )
     extension = matrix["extension"]["cells"]
     expected_extension = {
         ("R1_learned_ff_v2", ds, r, o)
         for ds in core.DATASETS
-        for r in range(3)
+        for r in layout[ds]["realizations"]
         for o in range(100, 105)
     }
     core.require(
         len(extension) == 45
         and {tuple(c[k] for k in COORDS) for c in extension} == expected_extension
-        and all(c["checkpoints"] == [100, 300, 1000] for c in extension),
+        and all(c["checkpoints"] == layout[c["dataset"]]["checkpoints"] for c in extension),
         "complete declared optional 45-cell extension required",
     )
-    core.require(
-        matrix["population"]["required_subjects_each_dataset"] == 4050, "matrix role demand changed"
+    expected_demand = {d: x["demand_subjects"] for d, x in layout.items()}
+    demand = matrix["population"].get(
+        "required_subjects_by_dataset",
+        {d: matrix["population"].get("required_subjects_each_dataset") for d in core.DATASETS},
     )
+    core.require(demand == expected_demand, "matrix role demand changed")
+    return layout
 
 
 def prepare(spec, stage, *, evaluate_clearance=True):
@@ -428,7 +464,8 @@ def prepare(spec, stage, *, evaluate_clearance=True):
             d: register["counts"][d]["candidate_subjects"] for d in core.DATASETS
         }
         matrix = read_metadata(spec["matrix"])
-        check_matrix_layout(matrix)
+        matrix_layout = check_matrix_layout(matrix)
+        core.require(matrix_layout == layouts.from_spec(spec), "matrix/spec layout differs")
         read_metadata(spec["protocol"], parse=False)
         state["matrix"] = {"binding": spec["matrix"], "document": matrix}
         cfg = spec["d9"][stage]
@@ -465,7 +502,7 @@ def execute(spec, stage):
     receipt_path, directory = validate_outputs(cfg)
     receipts = state["receipts"]
     receipt = {
-        "schema_version": 1,
+        "schema_version": 2 if spec.get("schema_version") == 3 else 1,
         "task": report["task"],
         "status": "closed",
         "lead_approved": True,
@@ -477,6 +514,15 @@ def execute(spec, stage):
         "launch_authorized": False,
         "gpu_seconds": 0,
     }
+    if spec.get("schema_version") == 3:
+        layout = layouts.from_spec(spec)
+        receipt.update(
+            contract_version=2,
+            dataset_layouts=layout,
+            layout_sha256=layouts.digest(layout),
+            matrix=spec["matrix"],
+            protocol=spec["protocol"],
+        )
     if stage == "clearance":
         value = state["clearance"]
         receipt.update(
@@ -508,11 +554,11 @@ def execute(spec, stage):
     if stage != "clearance":
         receipt.update(
             datasets=list(core.DATASETS),
-            realizations=3,
-            roles_per_realization=core.ROLES,
             all_roles_disjoint=True,
             composition_dependencies_closed=True,
         )
+        if spec.get("schema_version") != 3:
+            receipt.update(realizations=3, roles_per_realization=core.ROLES)
     # Check every metadata source again immediately before writes. A failed write leaves
     # incomplete new artifacts, never a success receipt or a replacement of old files.
     verify_register(read_metadata(spec["register"]))

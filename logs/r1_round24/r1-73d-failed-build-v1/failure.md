@@ -1,0 +1,1 @@
+The first CPU build refused during driver inspection because code/provenance paths were placed in the source-data-only binding map. No GPU or model execution occurred. The rebuilt version keeps the original source-data bindings and validates additional code/provenance bindings in the R1-73d wrapper. This abandoned attempt is preserved; it is not in the development run list.

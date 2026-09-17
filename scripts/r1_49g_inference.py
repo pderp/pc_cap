@@ -135,9 +135,20 @@ def fidelity(mean_kl, mean_signed_loss, *, complete):
 
 def validate_family(matrix):
     axes = matrix["axes"]
+    reduced = matrix.get("option") == "D" or "dataset_layouts" in matrix
+    if reduced:
+        from scripts.r1_d9_layouts import from_matrix
+
+        layout = from_matrix(matrix)
+        if axes.get("realizations_by_dataset") != {d: x["realizations"] for d, x in layout.items()}:
+            raise ValueError("option-D realization inventory differs")
+        if any(
+            c["checkpoints"] != layout[c["dataset"]]["checkpoints"] for c in old.all_cells(matrix)
+        ):
+            raise ValueError("option-D execution cadence differs")
     if (
         axes["datasets"] != list(DATASETS)
-        or axes["realizations"] != [0, 1, 2]
+        or (not reduced and axes["realizations"] != [0, 1, 2])
         or axes["orders"] != [100, 101, 102, 103, 104]
         or set(axes["conditions"]) != {"R1_learned_ff", *CONTROLS}
         or len(axes["conditions"]) != 8
@@ -173,6 +184,27 @@ def primary_contrasts(matrix, loaded):
     output = []
     for dataset in DATASETS:
         for contrast in contrasts:
+            if dataset == "mquake" and matrix.get("option") == "D":
+                output.append(
+                    {
+                        "dataset": dataset,
+                        "checkpoint": 1000,
+                        "contrast": contrast,
+                        "metrics": {
+                            m: cluster_intervals([[None] * 5 for _ in range(3)]) for m in METRICS
+                        },
+                        "classification": "unavailable",
+                        "scientific_admission": False,
+                        "pairing_issues": [
+                            {
+                                "reason": "DEC-060 option D has no MQuAKE 1000-edit population; 300 cannot substitute"
+                            }
+                        ],
+                        "multiplicity": FAMILY,
+                        "interval_count": 3,
+                    }
+                )
+                continue
             grids = {metric: [] for metric in METRICS}
             issues, populations = [], []
             admitted = matrix.get("scope") == "confirmatory"

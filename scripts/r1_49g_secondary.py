@@ -196,7 +196,30 @@ def cell_benchmarks(declared, loaded, reports, *, resources=None):
             if valid
             else "complete measurement and September20 admitted ceiling required",
         )
+    occupancy = max(declared["checkpoints"])
+    actual = _fire_values(terminal, outside, occupancy)
+    actual_change = (
+        math.fsum(b - a for a, b in zip(low, actual, strict=True)) / 100
+        if low is not None and actual is not None
+        else None
+    )
+    descriptive = {
+        "attempted_checkpoint": occupancy,
+        "required_actual_occupancy": occupancy,
+        "status": "complete" if actual is not None else "unavailable",
+        "planned": 100,
+        "scored": 100 if actual is not None else 0,
+        "fires": sum(actual) if actual is not None else None,
+        "value": sum(actual) / 100 if actual is not None else None,
+        "wilson95": old.wilson(sum(actual), 100) if actual is not None else None,
+        "change_from_actual_100": actual_change,
+        "paired_population_sha256": old.digest(outside) if actual_change is not None else None,
+        "threshold": None,
+        "passes": None,
+        "role": "descriptive_actual_occupancy; no transfer of the DEC-059 1000-record tolerance",
+    }
     return {
+        "actual_occupancy_descriptive": descriptive,
         "cell_id": declared["cell_id"],
         "cell": {k: declared[k] for k in old.COORDS},
         "benchmarks": out,

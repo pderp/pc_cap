@@ -1,0 +1,278 @@
+{
+  "contract_version": 2,
+  "d9": {
+    "clearance": {
+      "configuration_bindings": {
+        "calibration_v3": {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/calibration_v3.json",
+          "sha256": "d5bdaf408456866658f7d241be14a27e9c3bed9ee31bec98fa98a5b3e6701dfa"
+        },
+        "comparator_development_recipes": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-R1_learned_ff_v2.recipe.json",
+            "sha256": "cd89beee9efaa4442475a367cbbb2901ca8fe55acb74f4f702145165e02dc1c1"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-R1_nonlearned.recipe.json",
+            "sha256": "f82d7f2e297139db05ccd5ee6060a03b2fdf756b54bea5aa53980f895fbdbf73"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-S1_LM.recipe.json",
+            "sha256": "08c1f60a00683dc8cc4fc71cdfa574df325ac4896b5bee6cc94b5a67ee08aba8"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-S1_literal.recipe.json",
+            "sha256": "426bb140d601e4a6a37a689220d7f900fe874ff3178d9279669e20afa46af715"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-matched_update.recipe.json",
+            "sha256": "df8ed849e4e5613039b6b089da5791b0743d4e7c5661cbd7aa0a0ad3e01d62f3"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-v0_live_C1.recipe.json",
+            "sha256": "a146d83eabd4aeb85dbddb4d948e6dc46fdeae7452c9717960fdacd8088a4503"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-v0_live_C2.recipe.json",
+            "sha256": "359bfdb724128756dc33aef2f16be2255f26e8e0fd202aff0d61ee162d31f0a6"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-73d/R1-73d-mquake-v0_stable.recipe.json",
+            "sha256": "d00f0c3a2b8d0c0b214b4cc7580f977e877f23e492793578ac22874f9265ff08"
+          }
+        ],
+        "final_base_recipe": {
+          "path": "/home/derp/cap/pc_cap/docs/tasks/R1-68c-zsre-v5-full.recipe.json",
+          "sha256": "f39fe5a39b843d0be3b3993a767453ffc5d19d135799bc10420cc727bfe31851"
+        },
+        "primary_v5": {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/primary_condition_v5.json",
+          "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+        }
+      },
+      "evidence": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10g/round24_v2/evidence-v5-operative.json",
+        "sha256": "321bcc4cf14de893caa3d4f5330440f81334e47d91b95e349cf2ca81b2ad843f"
+      },
+      "receipt_output": "/home/derp/cap/pc_cap/docs/tasks/R1-final-joint-clearance.receipt.json",
+      "resource_output": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/clearance",
+      "role_plan": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10g/round24_roles_v2/role_plan.json",
+        "sha256": "479bef357e37c39d214f0fd34d159559a0cbb726cf3f2f1d687a9383930cd161"
+      }
+    },
+    "draw": {
+      "composition_catalog": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10g/round24_roles_v2/composition_catalog.json",
+        "sha256": "c36e9b0530c188596d57003b49befec266ba6a60861ada5a04ce865854e7c9f5"
+      },
+      "master_seed": null,
+      "receipt_output": "/home/derp/cap/pc_cap/docs/tasks/R1-final-draw.receipt.json",
+      "resource_output": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/draw"
+    },
+    "seal": {
+      "bundle": {
+        "path": null,
+        "sha256": null
+      },
+      "independent_population": {
+        "path": null,
+        "sha256": null
+      },
+      "receipt_output": "/home/derp/cap/pc_cap/docs/tasks/R1-final-seal.receipt.json",
+      "resource_output": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/seal"
+    }
+  },
+  "dataset_layouts": {
+    "counterfact": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "mquake": {
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_by_role": {
+        "edits": 900,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "zsre": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    }
+  },
+  "freeze_candidate": {
+    "path": null,
+    "sha256": null
+  },
+  "historical_freeze_candidate": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/freeze_candidate_v7.json",
+    "sha256": "03e6b1972f8213b6a5eeec14a9c60837a69a93a7be706419d3eda06916e15183"
+  },
+  "intended_outputs": {
+    "clearance": [
+      "/home/derp/cap/pc_cap/docs/tasks/R1-final-joint-clearance.receipt.json",
+      "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/clearance"
+    ],
+    "draw": [
+      "/home/derp/cap/pc_cap/docs/tasks/R1-final-draw.receipt.json",
+      "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/draw"
+    ],
+    "freeze": [
+      "manifests/revision_v1/frozen_stage4.json",
+      "docs/tasks/R1-final-cell-recipes/",
+      "manifests/revision_v1/run_matrix_final.json",
+      "docs/tasks/R1-final-queue-bindings.json"
+    ],
+    "seal": [
+      "/home/derp/cap/pc_cap/docs/tasks/R1-final-seal.receipt.json",
+      "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_final_v3/seal"
+    ]
+  },
+  "layout_sha256": "bf71ff1d4523e5036b63a4352be716c03da4e59b3bb8722875c5e7234d89b36d",
+  "matrix": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D.json",
+    "sha256": "dc395f082744d2427d9f4c4a92cde0a98b28080178e7ec435467ba78aa2fe9ba"
+  },
+  "note": "Preteacher evidence is inspection-only. Bind merged certified teacher/role evidence before clearance. Freeze v8 must be rebuilt after idle-boundary patches.",
+  "pending": {
+    "actual_draw_and_endpoint_resources": null,
+    "exposure_after_commit": "6ba2be331f15e356534049f3d001737c077ceed2",
+    "final_teacher_evidence": null,
+    "idle_boundary_patches_and_freeze_v8": null,
+    "joint_role_merged_evidence": null,
+    "near_family_admission": "zsRE same-template/different-subject; explicit review required"
+  },
+  "protocol": {
+    "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_draft_v5_2_D.md",
+    "sha256": "3aad54086c6d45f282b3449244b372f42a562a9d45d67d1f02a9ee15d37a2b42"
+  },
+  "receipts": {
+    "chain_i_cell_ceilings": {
+      "path": null,
+      "sha256": null
+    },
+    "clearance_authorization": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-clearance-authorization-template-v3.json",
+      "sha256": "b243a45f88d2e550f5968b2e5252e643344c7ba60384ba2bdc49299979c1a852"
+    },
+    "closed_gate_receipts": {
+      "path": null,
+      "sha256": null
+    },
+    "draw_authorization": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-draw-authorization-template-v3.json",
+      "sha256": "1b2de8460d6f620fb82d6ef50ef35c8691fc269aa1da4ccfe11fa2234221e0b7"
+    },
+    "draw_receipt": {
+      "path": null,
+      "sha256": null
+    },
+    "endpoint_construction": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-endpoint-construction-template-v3.json",
+      "sha256": "e7afbd803f4215db9758c79edb3f9a33fe19457002834ce95bb4c1096c2ac555"
+    },
+    "freeze_authorization": {
+      "path": null,
+      "sha256": null
+    },
+    "joint_clearance": {
+      "path": null,
+      "sha256": null
+    },
+    "protocol_admission": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-protocol-admission-template-v3.json",
+      "sha256": "7b606e09278f5847c11d4ff126f63a956fc2eb89b9979af60646e1c98068eb95"
+    },
+    "rng_admission": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-rng-admission-template-v3.json",
+      "sha256": "4bccabf1880f3b95f72aea4f2aa27613794bbe18f4a1487b5147ed608f57a81a"
+    },
+    "seal_authorization": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-seal-authorization-template-v3.json",
+      "sha256": "8ff5f57f30da0e0777ab2a16b2fc6eb5ef71d10f9d2a6befd56e12b64eeca6a5"
+    },
+    "seal_receipt": {
+      "path": null,
+      "sha256": null
+    },
+    "september20_admission": {
+      "path": null,
+      "sha256": null
+    }
+  },
+  "register": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v6.json",
+    "sha256": "0ad06b24d727e00c22fd70d669d0e1b6625ecfa5a4578d070cc248ac3f90ad65"
+  },
+  "schema_version": 3,
+  "status": "unsigned_pending_final_teacher_roles_and_owner_admissions",
+  "task": "R1-D9d/R1-58e"
+}
