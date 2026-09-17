@@ -1246,3 +1246,11 @@ and no R1_learned_ff MQuAKE recipe exists on the current identity (the developme
 v2 calibration, which has no MQuAKE entry, and it is identity-bound, so it is not edited). Codex lane R1-73c builds
 it from calibration v3; the run follows.
 
+## Concurrency probe 1: two learned zsRE cells at once (2026-09-17, 11:14 EDT)
+
+R1_nonlearned and R1_learned_ff_v2 zsRE cells (R1-64d recipes) launched together: 282 s and 330 s (solo 253 s and
+290 s), both finished in 330 s wall against 543 s sequential — **1.65× throughput**, host memory 20 GB available
+throughout, swap unchanged. Probe 2 (two non-learned zsRE cells, whose GPU share is larger) is queued after the
+teacher review; if it also clears ≈ 1.4×, blocks 3–5 run two cells at a time with ceilings re-measured under
+concurrency as a separate admission (execution plan §Blocks).
+

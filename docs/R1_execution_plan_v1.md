@@ -26,8 +26,8 @@ Queue ceilings = 1.5 × these (a cell exceeding its ceiling is stopped, charged 
 | ext | R1_learned_ff_v2 (no gate); realizations 0–2 | 45 | 16 | 251 |
 
 Available: from a September 19–20 launch to the October 9 stop ≈ 480–500 wall-clock hours; at 75 % ≈ 360–375
-usable hours; margin ≈ 110–140 h (≈ 45 %) before the extension, ≈ 30–40 % with it. The concurrency probe (chain L)
-may add throughput; if two cells at once give ≥ 1.4× throughput, blocks 3–5 run two at a time with ceilings
+usable hours; margin ≈ 110–140 h (≈ 45 %) before the extension, ≈ 30–40 % with it. Concurrency probe 1 (two learned zsRE cells): 1.65× throughput (330 s wall for 543 s of solo work). Probe 2 (two
+non-learned zsRE cells) is queued; if it also gives ≥ 1.4×, blocks 3–5 run two cells at a time with ceilings
 re-measured under concurrency (a separate admission).
 
 ## Order of operations to launch
