@@ -752,3 +752,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 71. (2026-09-17, 18:45 EDT) Q16 recorded (DEC-062, option B). No lead decision is open. Codex's R1-D9f ships with `family_coordinated` as the bound mode for your RNG admission form; the operator script (R1-58g) follows. Your sitting is tomorrow morning.
 
+72. (2026-09-17, 20:00 EDT) Codex's round 27 committed (`3fbd0d7`). Its independent review (X16) says the package is **not
+    ready for your signatures yet**, for repairable reasons: the final protocol text still forbids the coordinated
+    allocation you chose (an amendment is needed), the statistical definitions it incorporates from v5.1 are not
+    hash-bound, my cost receipt lacks the typed evidence (measured GPU memory ceilings, zsRE / MQuAKE challenge-endpoint
+    costs, a process-hour budget), the production recipe bundle has no producer yet, and six profiles' "0 false
+    fires" were unavailable telemetry (notes corrected). Your clarification to Codex ("allow multiple disjoint pairs
+    per family") is recorded in DEC-062. Round 28 repairs all of it; I run four full-endpoint development cells
+    tonight for the missing cost evidence. Realistic: candidate v12 and your sitting **September 18 afternoon**, launch
+    September 19. No decision is open.
+

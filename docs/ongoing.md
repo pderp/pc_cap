@@ -74,37 +74,51 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 27 (CPU; open now; posted 2026-09-17 18:35 EDT) — the signature package
+  +0.006## 3. Lanes for Codex — round 28 (CPU; open now; posted 2026-09-17 20:00 EDT) — X16 repairs
 
-Round 26 is committed and mirrored; candidate v9 is final; the cost admission receipt v1 exists (unsigned).
-Priority order: **R1-D9f → R1-58g → X16 → HT-4f.** Rules as in round 22.
+Round 27 is committed and mirrored; the X16 notes patch is applied; DEC-062's wording now carries the lead's
+clarification (multiple disjoint pairs per family allowed). Priority order: **R1-49j → R1-58h → R1-64f → R1-63i →
+X17 → HT-4f.** Rules as in round 22.
 
-### Lane R1-D9f — family-coordinated near / neighbour allocation (Q16 option B; build now, activate on the lead's answer)
+### Lane R1-49j — protocol amendment v5.2-D.1 and the normative closure (first)
 
-In `r1_d9_draw` (your file): an allocation mode for the near and neighbour roles only that draws support–neighbour
-pairs as units by exact template family (DEC-061), from the cleared pool after the edit / outside / revision roles
-are allocated, with its own RNG stream and receipt, global disjointness and Hall checks unchanged, fixed before any
-outcome; when fewer than 100 families yield pairs, the planned denominator stays 100 and the shortfall is listed. The
-mode is selected by a bound field in the RNG admission (`near_allocation: independent | family_coordinated`); **DEC-062
-(lead, 18:45 EDT) selects `family_coordinated`** — make it the bound value in the v4 RNG admission template. Tests on synthetic pools including the zsRE-like sparse case; a dry allocation on the real
-cleared pool reporting matched pairs per dataset and realization under both modes.
+Publish `docs/R1_stage4_protocol_v5_2_D_1.md` = the final v5.2-D text with X16 §2's DEC-062 paragraph (the
+multiple-pairs-per-family wording, no longer conditional) replacing the sentence that forbids coordinated allocation,
+and with every incorporated normative document (v5.1's statistical definitions and any other "incorporates" target)
+listed for binding; a change log; a candidate-builder check that the normative closure is bound and that changing
+any bound normative file fails verification (test).
 
-### Lane R1-58g — operator sheet v5: one script, one sitting
+### Lane R1-58h — typed cost admission receipt v2 (producer, from measured receipts)
 
-Turn the exact order into `scripts/r1_58g_operator.sh` (or a Python CLI) with one subcommand per step
-(`protocol-admit`, `cost-admit`, `clearance`, `rng-admit`, `draw`, `endpoints`, `seal`, `freeze`, `launch`), each
-running the dry-run, printing the request digest and the exact fields the lead sets, refusing to proceed until the
-signed form's digest matches, and appending a receipt log. Bind the cost admission receipt v1. The lead runs it
-step by step from the terminal; the orchestrator runs `endpoints` and `launch`. Include the rollback rule (a failed
-step leaves nothing signed downstream).
+Replace the orchestrator's receipt v1 with a producer `scripts/r1_58h_cost_receipt.py` that assembles the typed
+receipt the validator expects from measured evidence: per condition × dataset solo ceilings from
+`cell_ceilings_v1.json`; peak GPU memory from the profile receipts (measured: learned / v0 ≈ 700–780 MiB, S1 ≈
+1,210–1,270 MiB — two bases held) with a 1.5× ceiling; host MemAvailable floor 6 GiB per launch; full-endpoint
+evidence from the CounterFact cells (near-miss + revision ≈ 345 s) and, for zsRE / MQuAKE, from the R1-64f cells when
+they land (until then, an explicit placeholder that the validator reports as pending); the shared process-hour budget
+= 2 workers × 375 h = 750 process-hours, expected ≈ 255 incl. overlap; startup / validation overhead ≈ 30 s per
+cell; the failure policy; all hash-bound to plan v2 and concurrency v2; `lead_approved` left false for the sitting.
+Tests against the validator.
 
-### Lane X16 — final independent review of the signature package
+### Lane R1-64f — full-endpoint development recipes for zsRE and MQuAKE (the orchestrator runs them tonight)
 
-Protocol v5.2-D final, matrix DEC061, candidate v9, forms v4, the cost receipt, the near-miss allocation under both
-Q16 modes, the queue policy v2, plan v2: every decision DEC-033–061 traced to text; every number reproduced; a
-plain readiness verdict with the residual risks listed. New files; edit requests only.
+The zsRE and MQuAKE development payloads carry no near-miss / revision rows, so those endpoint costs are only
+measured on CounterFact. Build, with the D10c constructor on the development slices (DEC-061 family; DEC-062 pairing
+for the dry allocation), four recipes on the current identity: zsRE and MQuAKE × R1_learned_ff (primary v5) and
+v0_stable, 300 edits, checkpoints 100 / 300, with 100 near-miss and 50 revision rows; inspection receipts and a run
+list. These also give the primary its first MQuAKE recipe (the DEC-056 occupancy diagnostic runs after).
 
-### Lane HT-4f — claim ledger v6 (after the cost receipt is signed)
+### Lane R1-63i — candidate v12, inputs / forms v7, operator sheet v6 (after R1-49j and R1-58h)
+
+Bind the amendment, the normative closure, cost receipt v2, the R1-64f results when present, and the production
+recipe bundle interface (list exactly what the bundle must contain and which producer emits it; if a producer is
+missing, say so — X16 §5). Refresh digests; print the open gates, which must then be signatures only.
+
+### Lane X17 — re-review after repairs
+
+Re-run X16 on the v12 package: verdict, residual risks.
+
+### Lane HT-4f — claim ledger v6 (after cost receipt v2 is signed)
 
 ## 4. Interfaces and coordination
 
