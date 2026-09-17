@@ -657,3 +657,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     job at a time, the host-memory guard in every runner, the system and process-memory monitors, checkpoint resume in
     the queue, and results committed at every block boundary.
 
+59. (2026-09-17, 08:45 EDT) Codex's round 21 committed (`2a8b237`): the three receipt producers, the sealed backend
+    rebound, calibration v3 and the MQuAKE comparator recipes; 83 tests pass here. Batched drift on the real base:
+    zsRE non-learned cells now 711–847 s (were 2,650–3,650), CounterFact v0_stable 2,254 s (was 4,027), parity exact.
+    **What still stands between us and your acts** is review evidence, not code: alias / context / exposure review of
+    every register-v6 candidate, the teacher-token review on the final base (a GPU pass I run), endpoint construction
+    and the MQuAKE composition catalog, and the populated inputs file. Round 22 for Codex is exactly those (R1-D10a/b/c,
+    R1-58d); the teacher pass runs on my GPU after the MQuAKE comparator profiles tonight. Realistic: evidence complete
+    September 18, your dry-runs and signatures September 19, launch September 19–20. Nothing needs a decision from
+    you now; I will hand you a one-page operator sheet with the exact commands when the inputs are populated.
+

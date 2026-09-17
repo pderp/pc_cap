@@ -74,66 +74,55 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 21 (CPU; open now; posted 2026-09-17 06:15 EDT; **re-prioritised 06:40 EDT**)
+  +0.006## 3. Lanes for Codex — round 22 (CPU; open now; posted 2026-09-17 08:45 EDT) — the evidence the freeze needs
 
-Round 20 is committed and mirrored. Chain K (R1-64d re-profiles with batched drift, primary identity check, MQuAKE
-occupancy diagnostic) runs until ≈ 12:00. **The lead wants the confirmatory matrix started as early as possible to
-leave a buffer for crashes; the critical path is now the freeze, not the GPU.** New priority order:
-**R1-D9a → R1-D9b → R1-D9c → R1-77c → R1-73b → HT-4d → HT-3e.** Deliver R1-D9 as three separate, individually usable
-pieces so the lead can start acting as each lands. Rules as before.
+Round 21 is committed and mirrored. Your R1-D9 producers refuse, correctly, on absent review evidence and receipts.
+Round 22 produces that evidence, so the lead's acts can happen on September 18–19. Priority order:
+**R1-D10a → R1-D10b → R1-D10c → R1-58d → HT-4d → HT-3e.** The existing-file rule is lifted for your own round-19–21
+files (no simultaneous edits to files the orchestrator is running: the drivers and builders in use by chains K–M).
 
-### Lane R1-D9a — final clearance producer (first)
+### Lane R1-D10a — alias / context / exposure review evidence over register v6 (first)
 
-`scripts/r1_d9_clearance.py`: register-v6 final clearance for the three datasets (alias / context / role; DEC-048
-option C for MQuAKE; every candidate disposition listed, not counts; role feasibility against protocol v5.1
-populations: 3 realizations × (1,000 edits + 100 outside + 100 near + 100 neighbour + 50 revision) per dataset;
-abort rules when demand exceeds cleared supply), writing the clearance receipt in the exact schema R1-58c's preflight
-checks. `--dry-run` prints counts and refusals without writing. TinyBase / small-fixture tests. Not the legacy v3
-two-dataset writer.
+Produce the unsealed review resource `r1_d9_clearance` expects (`d9.clearance.evidence`): one disposition row for
+every v6 candidate item in all three datasets (nominal 52,411 / 12,246 / 4,218), with `alias_clear`, `context_clear`,
+`exposure_clear` from actual checks — alias equivalence against every exposed subject / entity (register reasons,
+training pools, development slices, the historical 700 MQuAKE rows, the R1-76b population), context limits against the
+final base (`model_limits` from the tokenizer / config), cumulative exposure current as of the round-21 commit — and
+`cross_dataset_disjoint` enforced by global entity id. Rows not reviewed under a declared outcome-independent policy
+(if you must bound the work: review in register order until each dataset has ≥ 1.5 × its 4,050 demand cleared, and
+mark the rest `exclude: not_reviewed_bounded_policy`) are excluded with that reason. `teacher_pass` / `tokens_pass`
+are left for R1-D10b's binding. Write the `evidence_bindings` for the alias / context / exposure reviews and a CPU
+script that reproduces the resource from the register and the bound inputs. Tests on a small synthetic register.
 
-### Lane R1-D9b — draw adapter
+### Lane R1-D10b — teacher-token review on the final base (script for the orchestrator's GPU run)
 
-`scripts/r1_d9_draw.py`: the draw over matrix v5.1 populations from the cleared candidates with independent,
-receipted RNG streams per dataset × role × realization (seeds derived from a lead-supplied master seed and the
-frozen register hash), the five paired orders per realization, the draw receipt in the preflight's schema, `--dry-run`.
-Tests: determinism, disjointness across roles / realizations / datasets, refusal on a missing clearance receipt.
+The clearance evidence needs `teacher_pass` (base answers the edit prompt incorrectly under the E.2 greedy rule) and
+`tokens_pass` (answer / prompt / paraphrase token limits) on the **final base identity**. Write
+`scripts/r1_d10b_teacher_review.py`: batched greedy decoding of the base over the R1-D10a-eligible rows per dataset
+(reuse `pccap.harness.stage_s2` / the R1-D3 E.2 filter and `r1_d5_mquake_teacher` logic; one lease; MemAvailable
+guard; resumable by dataset; progress receipts), producing the evidence binding with `base_tensor_sha256`,
+`tokenizer_sha256` and per-row `teacher_pass` / `tokens_pass` merged into the dispositions. Estimate the cost (rows ×
+decode) and state it; the orchestrator runs it after chain M.
 
-### Lane R1-D9c — seal
+### Lane R1-D10c — endpoint construction and the composition catalog
 
-`scripts/r1_d9_seal.py`: sealed payloads under `manifests/confirm/` (or the path the sealed backend expects) with
-payload hashes and reservation identities, the seal receipt, `--dry-run`, refusal on a missing draw receipt; the
-sealed backend (R1-77b/c) must load exactly these. Tests.
+From a draw receipt (test on the R1-D9b dry structure and on the development slices): construct the near-miss rows
+(`edit_item_id` + `neighbour_item_id` from the reserved near / neighbour roles), the revision facts, the outside prompts,
+the composition catalog for MQuAKE (from the verified multi-hop inventory: cases whose dependencies are all in the
+realization's edits) and the `independent_population` resource (planned denominators per coordinate, fixed before
+observations), in the exact shapes `r1_d9_seal` validates. `--dry-run`; tests.
 
-### Lane R1-77c — sealed backend rebound to the R1-68e driver (needed before launch)
+### Lane R1-58d — populated inputs and authorization templates for the lead
 
-As posted: review the driver change against the sealed contract, rebind the donor identity with the review recorded,
-tests updated; plus one end-to-end TinyBase rehearsal: clearance → draw → seal → freeze candidate → queue dry-run →
-one sealed TinyBase cell executed through the sealed backend and analysed by `scripts.r1_49g_analyze`.
+`docs/tasks/R1-D9-inputs-v2.json` populated for the real run (register v6, matrix v5.1, protocol v5.1, calibration v3,
+stage configurations, evidence and catalog bindings as they land), plus the three authorization documents as
+templates the lead completes by setting `lead_approved: true` and the master seed after the dry-run shows the
+`request_sha256`. A one-page operator sheet: the exact order of commands, what each dry-run must show, what the lead
+signs. The orchestrator runs the dry-runs and hands the lead the sheet.
 
-### Lane R1-73b — calibration v3 file and the eight MQuAKE comparator recipes (after R1-77c)
+### Lane HT-4d — claim ledger v4 (as posted in round 21)
 
-`results/R1/calibration_mquake_v3/calibration_candidate.json` exists (measured; the orchestrator admitted it as
-development calibration v3 — notes §"Chain I complete": no positive radius covers any paraphrase at ≤ 1 % outside
-false fires; radius 0 on all banks, exact-key firing, historical b_m). Assemble the versioned
-`manifests/revision_v1/calibration_v3.json` per the spec's admission list (frozen v2 zsRE / CounterFact entries
-unchanged, MQuAKE radii 0 with the receipt, declared fallback), then build the eight MQuAKE comparator recipes on the
-current driver identity (batched drift for the six v0 / S1 families, as `docs/tasks/R1-64d/`), with inspection
-receipts and an ordered run list. State in each recipe and in the protocol text for U08 that the MQuAKE v0-style
-conditions fire on exact prompts only.
-
-### Lane HT-3e — counter-review of the final κ pilot (carried over)
-
-`logs/r1_round18/ht3d-pilot-final-aliases.{md,json}`: independent 36-row reproduction from the raw files, the floor
-and seed-spread arithmetic, the clip-2 comparison, and the two-sentence slide result under DEC-054. Also review the
-stress-panel filing (notes §"Stress panel") against `results/R1/stage4_dev_cells/ht_panel/`: the schedule invariance,
-the harmed-fact identification and the right-censoring statements.
-
-### Lane HT-4d — claim ledger v4
-
-Ledger v3 → v4 (new file): the κ pilot verdict (null result, DEC-054 framing, clip-2 comparison), the stress-panel
-rows (schedule invariance; sparse permanent harm; exact answers intact), the comparator costs (chain I) and the
-batched-drift re-profile (chain K, when filed), MQuAKE calibration v3 (radius 0), and DEC-053 / 057–059 bindings.
-Every row bound to a file and hash.
+### Lane HT-3e — counter-review of the κ pilot and the stress-panel filing (as posted in round 21)
 
 ## 4. Interfaces and coordination
 
