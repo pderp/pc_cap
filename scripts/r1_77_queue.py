@@ -9,28 +9,28 @@ No backend is silently substituted and no admission flag is rewritten.
 from __future__ import annotations
 
 import argparse
-import fcntl
 import hashlib
 import json
 import math
-import os
 import subprocess
 import sys
 import time
-import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from scripts import r1_68c_dev_cell as driver
 from scripts import r1_75_analysis_stage4_v1 as analysis
 from scripts import r1_77b_sealed_backend as sealed
-from scripts.r1_68b_integrity_runtime import DurablePhaseJournal, durable_json
+from scripts.r1_68b_integrity_runtime import (  # noqa: F401 -- scheduler dependency
+    DurablePhaseJournal,
+    durable_json,
+)
 
 import pccap  # noqa: F401 -- determinism before importing the JAX driver
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKER_CEILING_FACTOR = {1: 1.0, 2: 1.5 * 1.1}
+WORKER_CEILING_FACTOR = {1: 1.0, 2: 1.15}
 
 
 def worker_factor(workers):
@@ -202,6 +202,23 @@ def charged_cost(cell, cost, receipt_root, matrix_hash):
     return cost
 
 
+def observe_cell(matrix, cell, *, receipt_root=None, matrix_hash=None):
+    files = analysis.Files()
+    try:
+        observed = analysis.load_cell(
+            cell, files, "development" if matrix["scope"] == "development" else "confirmatory"
+        )
+        cost = charged_cost(cell, cell_cost(cell.get("result_dir")), receipt_root, matrix_hash)
+    except (OSError, ValueError, KeyError, TypeError, PermissionError) as exc:
+        observed = dict(cell_id=cell["cell_id"], status="invalid", artifact_complete=False,
+                        missing_checkpoints=cell["checkpoints"], error=str(exc))
+        cost = dict(known_attempt_wall_seconds=0.0, unknown_attempts=[cell.get("result_dir")], attempts=[])
+    files.verify()
+    return dict(cell_id=cell["cell_id"], block=cell["block_number"],
+                within_block_order=cell["within_block_order"], condition=cell["condition"],
+                dataset=cell["dataset"], observed=observed, cost=cost), files.sources
+
+
 def inventory(
     matrix,
     *,
@@ -214,39 +231,17 @@ def inventory(
 ):
     factor = worker_factor(workers)
     cells = ordered(matrix, stop_after)
-    files = analysis.Files()
-    rows = []
+    sources, rows = {}, []
     for cell in cells:
-        try:
-            observed = analysis.load_cell(
-                cell, files, "development" if matrix["scope"] == "development" else "confirmatory"
-            )
-            cost = charged_cost(cell, cell_cost(cell.get("result_dir")), receipt_root, matrix_hash)
-        except (OSError, ValueError, KeyError, TypeError, PermissionError) as exc:
-            observed = {
-                "cell_id": cell["cell_id"],
-                "status": "invalid",
-                "artifact_complete": False,
-                "missing_checkpoints": cell["checkpoints"],
-                "error": str(exc),
-            }
-            cost = {
-                "known_attempt_wall_seconds": 0.0,
-                "unknown_attempts": [cell.get("result_dir")],
-                "attempts": [],
-            }
-        rows.append(
-            {
-                "cell_id": cell["cell_id"],
-                "block": cell["block_number"],
-                "within_block_order": cell["within_block_order"],
-                "condition": cell["condition"],
-                "dataset": cell["dataset"],
-                "observed": observed,
-                "cost": cost,
-            }
-        )
-    files.verify()
+        row, bindings = observe_cell(matrix, cell, receipt_root=receipt_root, matrix_hash=matrix_hash)
+        from scripts.r1_77f_scheduler import failure_history
+
+        failures = failure_history(globals(), cell["cell_id"], receipt_root, matrix_hash)
+        row["retry"] = dict(failures=failures, maximum_failures=2,
+                            exhausted=failures >= 2 and not row["observed"]["artifact_complete"])
+        rows.append(row)
+        sources.update(bindings)
+
     blocks = []
     for block in sorted({c["block"] for c in rows}):
         group = [c for c in rows if c["block"] == block]
@@ -263,7 +258,7 @@ def inventory(
     unknown = [p for r in rows for p in r["cost"]["unknown_attempts"]]
     remaining = []
     for c, r in zip(cells, rows, strict=True):
-        if r["observed"]["artifact_complete"]:
+        if r["observed"]["artifact_complete"] or r["retry"]["exhausted"]:
             continue
         s = (c.get("ceilings") or {}).get("wall_seconds")
         if s is None:
@@ -300,7 +295,7 @@ def inventory(
             "remaining_cell_ceiling_multiplier": factor,
         },
         "backend_status": "development and hash-bound sealed dispatch; final execution requires closed frozen gates",
-        "sources_sha256": files.sources,
+        "sources_sha256": sources,
     }
 
 
@@ -318,6 +313,11 @@ def verify_sealed_matrix(matrix, bindings):
         binding, m = recipe_for(cell, bindings)
         if m["mode"] != sealed.MODE or cell.get("admitted") is not True:
             raise PermissionError("every confirmatory slot needs sealed admitted recipe")
+        if m.get("population_contract_version") == 2:
+            from scripts.r1_77f_scheduler import CEILING_DEFINITION
+
+            if matrix.get("queue_ceiling_contract") != CEILING_DEFINITION:
+                raise ValueError("DEC-060 matrix must bind the admitted solo ceiling/retry contract")
         if frozen_binding is None:
             frozen_binding = m["freeze"]
             frozen_contracts = sealed.metadata(frozen_binding)["recipe_contracts"]
@@ -397,160 +397,16 @@ def run_queue(
     executor=launch,
     memory_reader=memory_available_mib,
     workers=1,
+    lease_reader=None,
 ):
+    from scripts.r1_77f_scheduler import run_workers
+
     worker_factor(workers)
-    if workers == 2:
-        from scripts.r1_77e_workers import run_two_workers
-
-        # Pass the live module namespace so test/root seams and canonical backend
-        # admission stay identical to the serial path.
-        return run_two_workers(
-            globals(),
-            matrix_path,
-            bindings_path,
-            receipt_root=receipt_root,
-            stop_after=stop_after,
-            min_memory_mib=min_memory_mib,
-            ceiling_hours=ceiling_hours,
-            executor=executor,
-            memory_reader=memory_reader,
-        )
-    matrix_path, bindings_path = Path(matrix_path).resolve(), Path(bindings_path).resolve()
-    matrix_hash, binding_hash = sha(matrix_path), sha(bindings_path)
-    matrix, bindings = read(matrix_path), read(bindings_path)
-    if matrix["scope"] not in ("development", "confirmatory"):
-        raise PermissionError("explicit development or confirmatory matrix scope required")
-    if bindings.get("matrix_sha256") != matrix_hash:
-        raise ValueError("queue bindings reference a different matrix")
-    if matrix["scope"] == "confirmatory":
-        verify_sealed_matrix(matrix, bindings)
-    if not math.isfinite(min_memory_mib) or min_memory_mib <= 0:
-        raise ValueError("positive MemAvailable threshold required")
-    if ceiling_hours is not None and (not math.isfinite(ceiling_hours) or ceiling_hours <= 0):
-        raise ValueError("positive ceiling required")
-    output = Path(receipt_root).resolve()
-    if not output.is_relative_to(ROOT / "logs"):
-        raise PermissionError("queue receipts belong under repo logs")
-    output.mkdir(parents=True, exist_ok=True)
-    # Stable lock per matrix prevents two invocations from selecting the same cell.
-    lockroot = ROOT / "logs/r1_77_queue_locks"
-    lockroot.mkdir(parents=True, exist_ok=True)
-    lockpath = lockroot / f"queue-{matrix_hash}.lock"
-    fd = os.open(lockpath, os.O_RDONLY | os.O_CREAT, 0o600)
-    try:
-        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        for cell in ordered(matrix, stop_after):
-            if sha(matrix_path) != matrix_hash or sha(bindings_path) != binding_hash:
-                raise ValueError("queue inputs changed")
-            observed = inventory(
-                matrix,
-                stop_after=stop_after,
-                ceiling_hours=ceiling_hours,
-                receipt_root=output,
-                matrix_hash=matrix_hash,
-            )
-            if any(r["observed"]["status"] == "invalid" for r in observed["queue"]):
-                raise ValueError("invalid existing cell; queue stops")
-            row = next(r for r in observed["queue"] if r["cell_id"] == cell["cell_id"])
-            # Even a completed cell must match its bound recipe before it is skipped.
-            binding, manifest = recipe_for(cell, bindings)
-            if row["observed"]["artifact_complete"]:
-                verify_resume(cell, manifest)
-                continue
-            recipe_for(cell, bindings, execute=True)
-            backend = sealed if manifest["mode"] == sealed.MODE else driver
-            expected = backend.OUTPUT_ROOT / driver.cell_name(manifest, binding["sha256"])
-            if Path(cell["result_dir"]).resolve() != expected.resolve():
-                raise ValueError("matrix result directory differs from driver destination")
-            if observed["cost"]["unknown_attempts"]:
-                raise ValueError("unknown attempt costs; owner reconciliation required")
-            if ceiling_hours is not None:
-                seconds = (cell.get("ceilings") or {}).get("wall_seconds")
-                if seconds is None:
-                    raise ValueError("per-cell ceiling required for budget admission")
-                if observed["cost"]["known_attempt_hours"] * 3600 + seconds > ceiling_hours * 3600:
-                    return {"status": "budget_stop", "inventory": observed}
-            mem = memory_reader()
-            if not math.isfinite(mem) or mem < min_memory_mib:
-                return {
-                    "status": "memory_guard_stop",
-                    "MemAvailable_MiB": mem,
-                    "inventory": observed,
-                }
-            if datetime.now(ZoneInfo("America/New_York")).date().isoformat() > "2026-10-09":
-                return {"status": "experiment_deadline_stop", "inventory": observed}
-            resume = Path(cell["result_dir"]).exists()
-            if resume:
-                verify_resume(cell, manifest)
-            attempt = output / f"{cell['cell_id']}-{uuid.uuid4().hex}"
-            attempt.mkdir()
-            before_attempts = {str(p.resolve()) for p in Path(cell["result_dir"]).glob("attempt-*")}
-
-            def new_attempts(directory=cell["result_dir"], before=before_attempts):
-                return sorted(
-                    str(p.resolve())
-                    for p in Path(directory).glob("attempt-*")
-                    if str(p.resolve()) not in before
-                )
-
-            start = {
-                "cell_id": cell["cell_id"],
-                "matrix_sha256": matrix_hash,
-                "bindings_sha256": binding_hash,
-                "recipe": binding,
-                "resume": resume,
-                "started_at": datetime.now(timezone.utc).isoformat(),
-                "MemAvailable_MiB": mem,
-                "producer_sha256": sha(__file__),
-            }
-            durable_json(attempt / "start.json", start)
-            begun = time.monotonic()
-            try:
-                code = executor(binding, manifest, resume=resume, output=attempt / "process.log")
-            except BaseException as exc:
-                durable_json(
-                    attempt / "finish.json",
-                    {
-                        **start,
-                        "status": "executor_exception",
-                        "exception": repr(exc),
-                        "charged_process_wall_seconds": time.monotonic() - begun,
-                        "start_sha256": sha(attempt / "start.json"),
-                        "new_attempts": new_attempts(),
-                    },
-                )
-                raise
-            finish = {
-                **start,
-                "status": "process_exited",
-                "exit_code": code,
-                "charged_process_wall_seconds": time.monotonic() - begun,
-                "start_sha256": sha(attempt / "start.json"),
-                "new_attempts": new_attempts(),
-            }
-            durable_json(attempt / "finish.json", finish)
-            after = inventory(
-                matrix,
-                stop_after=stop_after,
-                ceiling_hours=ceiling_hours,
-                receipt_root=output,
-                matrix_hash=matrix_hash,
-            )
-            row = next(r for r in after["queue"] if r["cell_id"] == cell["cell_id"])
-            if code != 0 or not row["observed"]["artifact_complete"]:
-                return {"status": "cell_incomplete_stop", "exit_code": code, "inventory": after}
-        return {
-            "status": "selected_blocks_complete",
-            "inventory": inventory(
-                matrix,
-                stop_after=stop_after,
-                ceiling_hours=ceiling_hours,
-                receipt_root=output,
-                matrix_hash=matrix_hash,
-            ),
-        }
-    finally:
-        os.close(fd)
+    return run_workers(
+        globals(), matrix_path, bindings_path, receipt_root=receipt_root,
+        stop_after=stop_after, min_memory_mib=min_memory_mib, ceiling_hours=ceiling_hours,
+        executor=executor, memory_reader=memory_reader, workers=workers, lease_reader=lease_reader,
+    )
 
 
 def main(argv=None):

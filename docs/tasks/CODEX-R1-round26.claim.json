@@ -1,0 +1,55 @@
+{
+  "task": "CODEX-R1-round26",
+  "agent": "Codex",
+  "status": "completed_available_work_external_dependencies_pending",
+  "active_lane": null,
+  "lanes": [
+    "R1-77f",
+    "R1-D9e",
+    "R1-49i",
+    "R1-63h",
+    "R1-58f",
+    "HT-4f"
+  ],
+  "started_utc": "2026-09-17T20:03:51.333900+00:00",
+  "head": "7f1b2dbee6bde7debc5831386abb1b4cad0f289e",
+  "ongoing_sha256": "d1361f21acfc7b12a91488fda2ecfb1d9c7e695f167d832c018432c8207f6a3a",
+  "planned_existing_edits": [
+    "scripts/r1_77_queue.py",
+    "scripts/r1_77e_workers.py",
+    "scripts/r1_d10c_endpoints.py",
+    "scripts/r1_d9_receipt_core.py",
+    "scripts/r1_d9_receipts.py",
+    "scripts/r1_49g_analyze.py",
+    "scripts/r1_49g_secondary.py",
+    "scripts/r1_75_analysis_stage4_v1.py",
+    "scripts/r1_58c_draw_seal_preflight.py",
+    "scripts/ht4e_claim_ledger.py"
+  ],
+  "constraints": [
+    "CPU only",
+    "no actual draw/seal/freeze",
+    "no live driver/backend/source edits during chain Q",
+    "no commits"
+  ],
+  "owner_dependency": "chain Q corrected MQuAKE results and execution plan v2 / cost admission",
+  "finished_utc": "2026-09-17T20:34:41.107481+00:00",
+  "lane_status": {
+    "R1-77f": "done",
+    "R1-D9e": "done",
+    "R1-49i": "done",
+    "R1-63h": "preview_ready_waiting_chain_Q_and_execution_plan_v2",
+    "R1-58f": "operator_sheet_ready_final_forms_waiting_candidate_v9",
+    "HT-4f": "preview_ready_waiting_chain_Q_and_signed_costs"
+  },
+  "gpu_seconds": 0,
+  "validation": {
+    "regression_tests": 107,
+    "binding_tests": 3,
+    "final_contract_rehearsal_tests": 2,
+    "lint": "pass",
+    "git_diff_check": "pass"
+  },
+  "final_candidate_published": false,
+  "no_commits": true
+}

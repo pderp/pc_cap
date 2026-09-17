@@ -129,42 +129,36 @@ def test_two_tiny_cells_overlap_and_preserve_blocks_cost_and_skip(pair):
     assert not r["inventory"]["cost"]["unknown_attempts"]
     starts = [json.loads(p.read_text()) for p in pair["receipts"].glob("*/start.json")]
     assert len(starts) == 2
-    assert sorted(s["admitted_other_reservations_seconds"] for s in starts) == [0, 165]
-    assert all(s["effective_wall_ceiling_seconds"] == pytest.approx(165) for s in starts)
+    assert sorted(s["admitted_other_reservations_seconds"] for s in starts) == [0, pytest.approx(115)]
+    assert all(s["effective_wall_ceiling_seconds"] == pytest.approx(115) for s in starts)
     again = pair["run"](executor=lambda *a, **k: pytest.fail("completed cell relaunched"))
     assert again["inventory"]["cost"] == r["inventory"]["cost"]
 
 
 @pytest.mark.parametrize("exception", [False, True])
-def test_one_worker_fails_other_completes_and_every_envelope_is_charged(pair, exception):
+def test_one_worker_fails_twice_other_completes_and_every_envelope_is_charged(pair, exception):
     barrier = threading.Barrier(2)
+    counts = {"0": 0, "1": 0}
 
     def execute(b, m, **kw):
-        barrier.wait(timeout=20)
-        if m["cell"]["order"] == "0":
+        order = m["cell"]["order"]
+        counts[order] += 1
+        if counts[order] == 1:
+            barrier.wait(timeout=20)
+        if order == "0":
             if exception:
                 raise RuntimeError("synthetic worker failure")
             return 7
         return pair["execute"](b, m, **kw)
 
-    if exception:
-        with pytest.raises(RuntimeError, match="synthetic worker failure"):
-            pair["run"](executor=execute)
-    else:
-        r = pair["run"](executor=execute)
-        assert r["status"] == "cell_incomplete_stop" and r["exit_code"] == 7
-    observed = q.inventory(
-        pair["matrix"],
-        stop_after=1,
-        receipt_root=pair["receipts"],
-        matrix_hash=pair["mp"]["sha256"],
-        workers=2,
-    )
+    result = pair["run"](executor=execute)
+    assert result["status"] == "selected_blocks_processed_with_incomplete"
+    observed = result["inventory"]
     assert [r["observed"]["artifact_complete"] for r in observed["queue"]] == [False, True]
-    assert len(list(pair["receipts"].glob("*/finish.json"))) == 2
+    assert len(list(pair["receipts"].glob("*/finish.json"))) == 3
     assert observed["cost"]["known_attempt_hours"] > 0 and not observed["cost"]["unknown_attempts"]
-    resumed = pair["run"]()
-    assert resumed["status"] == "selected_blocks_complete"
+    resumed = pair["run"](executor=lambda *a, **kw: pytest.fail("exhausted or complete cell relaunched"))
+    assert resumed["status"] == "selected_blocks_processed_with_incomplete"
     assert len(list(pair["receipts"].glob("*/finish.json"))) == 3
 
 
@@ -187,7 +181,7 @@ def test_shared_reservation_defers_second_then_uses_actual_cost(pair):
 
 def test_scaled_ceiling_stops_before_launch_and_invalid_workers_refuse(pair):
     r = pair["run"](
-        ceiling_hours=150 / 3600, executor=lambda *a, **k: pytest.fail("budget violated")
+        ceiling_hours=110 / 3600, executor=lambda *a, **k: pytest.fail("budget violated")
     )
     assert r["status"] == "budget_stop"
     for workers in (0, 3, True):

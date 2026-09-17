@@ -163,13 +163,14 @@ def test_process_failure_cost_is_charged_before_any_driver_attempt(tiny):
     def fail(*a, **kw):
         raise RuntimeError("construction failed")
 
-    with pytest.raises(RuntimeError, match="construction"):
-        run(tiny, executor=fail)
+    result = run(tiny, executor=fail)
+    assert result["status"] == "selected_blocks_processed_with_incomplete"
     inventory = q.inventory(
         tiny["matrix"], receipt_root=tiny["receipts"], matrix_hash=q.sha(tiny["mp"])
     )
     assert inventory["cost"]["known_attempt_hours"] > 0
-    assert len(inventory["queue"][0]["cost"]["process_receipts"]) == 1
+    assert len(inventory["queue"][0]["cost"]["process_receipts"]) == 2
+    assert inventory["queue"][0]["retry"]["exhausted"]
 
 
 def test_lost_process_receipt_is_unknown_not_free(tiny):

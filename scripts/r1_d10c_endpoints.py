@@ -10,13 +10,14 @@ from __future__ import annotations
 import argparse
 import copy
 import json
-import re
 from collections import Counter
 from pathlib import Path
 
 import numpy as np
 from scripts import r1_d9_receipt_core as core
 from scripts.r1_d9_receipts import planned_compositions, read_resource, ref, sha, source_rows
+from scripts.r1_d9e_near_family import CONTRACT as NEAR_CONTRACT
+from scripts.r1_d9e_near_family import near_key, pair_reserved
 from scripts.r1_d10a_review import ASSETS, ROOT, write_new
 from scripts.r1_d10a_review_core import digest
 from scripts.r1_d10b_teacher_review import verify_bindings
@@ -25,18 +26,6 @@ from scripts.r1_locality_contract import validate_locality
 from pccap.data.tokenize import GPT2Tokenizer, tokenize_pair
 from pccap.metrics.editing import normalize_answer
 from pccap.revision_v1.endpoints_composition import dependency_ids, structural_reason
-
-
-def near_key(row):
-    if row["dataset"] in ("counterfact", "mquake"):
-        return "relation:" + row["relation_id"] if row.get("relation_id") else None
-    subject, prompt = normalize_answer(row["subject"]), normalize_answer(row["prompt"])
-    if not subject:
-        return None
-    pattern = re.compile(r"(?<!\w)" + re.escape(subject) + r"(?!\w)")
-    if len(pattern.findall(prompt)) != 1:
-        return None
-    return "question_template:" + pattern.sub("{subject}", prompt)
 
 
 def role_plan(row, old_answer, tokenizer, limits):
@@ -113,13 +102,14 @@ def build_roles(evidence, sources, raw_zsre, tokenizer):
     return {
         "schema_version": 1,
         "mode": "unsealed_endpoint_role_plan",
+        "near_family_contract": dict(NEAR_CONTRACT),
         "rows": plans,
         "policy": {
             "near": "same relation for CF/MQ; exactly matching subject-masked question template for zsRE, different globally reserved subjects",
             "pairing": "lexical support item order; first unused neighbour with equal near_key; no substitutions across roles",
             "revision": "two bound source versions, v2 equals reserved answer; no fabricated alternative",
             "missing": "preserve full planned denominator and record unavailable reason",
-            "zsre_caveat": "same-template/different-subject family; differs from historical same-subject/other-relation development challenges and requires explicit endpoint admission",
+            "zsre_caveat": "same-template/different-subject family; differs from historical same-subject/other-relation development challenges and is adopted by DEC-061; execution still requires signed endpoint admission",
             "role_capacity": "individual roles only; joint allocation and postdraw pair availability checked separately",
         },
     }
@@ -191,45 +181,14 @@ def construct(
                     p = keyed[ds, row["item_id"]]
                     if p["payload_sha256"] != digest(row) or role not in p["roles"]:
                         raise ValueError("drawn source is not compatible with reserved role")
-            near, used = [], set()
-            supports = sorted(roles["near_miss_support"], key=lambda r: r["item_id"])
-            neighbours = sorted(roles["near_miss_neighbour"], key=lambda r: r["item_id"])
+            for role in ("near_miss_support", "near_miss_neighbour"):
+                for row in roles[role]:
+                    if keyed[ds, row["item_id"]]["near_key"] != near_key(row):
+                        raise ValueError("near-family role plan differs from source")
             near_ids = [f"{gkey}:near:{i}" for i in range(counts["near_miss_support"])]
-            for i, row in enumerate(supports):
-                k = keyed[ds, row["item_id"]]["near_key"]
-                neighbour = next(
-                    (
-                        n
-                        for n in neighbours
-                        if n["item_id"] not in used
-                        and k is not None
-                        and keyed[ds, n["item_id"]]["near_key"] == k
-                    ),
-                    None,
-                )
-                if neighbour is None:
-                    missing.append(
-                        {
-                            "group": gkey,
-                            "item_id": near_ids[i],
-                            "reason": "no_compatible_reserved_neighbour",
-                        }
-                    )
-                    continue
-                used.add(neighbour["item_id"])
-                near.append(
-                    {
-                        "item_id": near_ids[i],
-                        "dataset": ds,
-                        "edit_item_id": row["item_id"],
-                        "neighbour_item_id": neighbour["item_id"],
-                        "edit_prompt": row["prompt"],
-                        "edit_answer": row["answer"],
-                        "neighbour_prompt": neighbour["prompt"],
-                        "neighbour_answer": neighbour["answer"],
-                        "type": k.split(":", 1)[0] + "_other_subject",
-                    }
-                )
+            near = pair_reserved(roles["near_miss_support"], roles["near_miss_neighbour"],
+                                 near_ids, dataset=ds)
+            missing.extend(dict(group=gkey, **row) for row in near["missing"])
             revisions = []
             revision_ids = [f"{gkey}:revision:{i}" for i in range(counts["revision"])]
             for i, row in enumerate(sorted(roles["revision"], key=lambda r: r["item_id"])):
@@ -284,7 +243,7 @@ def construct(
                     "expected_ids": [r["item_id"] for r in roles["outside"]],
                     "rows": roles["outside"],
                 },
-                "near_miss": {"expected_ids": near_ids, "rows": near},
+                "near_miss": near,
                 "revision": {"expected_ids": revision_ids, "rows": revisions},
                 "composition": {
                     "expected_ids": [c["composition_id"] for c in planned[gkey]],
@@ -361,6 +320,7 @@ def prepare(evidence_binding, output, report):
         evidence_binding,
         ref(raw_path),
         ref(__file__),
+        ref(ROOT / "scripts/r1_d9e_near_family.py"),
         ref(manifest_path),
         binding,
     ]

@@ -1,0 +1,121 @@
+.....F.....FFF..F..                                                      [100%]
+=================================== FAILURES ===================================
+________ test_process_failure_cost_is_charged_before_any_driver_attempt ________
+
+tiny = {'matrix': {'scope': 'development', 'cells': [{'condition': 'R1_learned_ff', 'dataset': 'mquake', 'order': '0', 'reali...ngs.json'), 'cell': {'condition': 'R1_learned_ff', 'dataset': 'mquake', 'order': '0', 'realization': 'tiny', ...}, ...}
+
+    def test_process_failure_cost_is_charged_before_any_driver_attempt(tiny):
+        def fail(*a, **kw):
+            raise RuntimeError("construction failed")
+    
+>       with pytest.raises(RuntimeError, match="construction"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE RuntimeError
+
+tests/revision_v1/test_r1_77_queue.py:166: Failed
+________ test_two_tiny_cells_overlap_and_preserve_blocks_cost_and_skip _________
+
+pair = {'f': {'m': {'schema_version': 1, 'mode': 'stage4_sealed_cell', 'cell': {'condition': 'R1_learned_ff', 'dataset': 'mqu...9/docs/tasks/parallel-matrix.json', 'sha256': 'df8c442682d68003884ebc8f96ce55ff22964fdb2307d950a8899fcd51d48382'}, ...}
+
+    def test_two_tiny_cells_overlap_and_preserve_blocks_cost_and_skip(pair):
+        barrier = threading.Barrier(2)
+        active, peak, lock = set(), [], threading.Lock()
+    
+        def execute(b, m, **kw):
+            with lock:
+                active.add(m["cell"]["order"])
+                peak.append(len(active))
+            barrier.wait(timeout=20)
+            result = pair["execute"](b, m, **kw)
+            with lock:
+                active.remove(m["cell"]["order"])
+            return result
+    
+        r = pair["run"](executor=execute)
+        assert max(peak) == 2 and r["status"] == "selected_blocks_complete"
+        assert r["inventory"]["complete_blocks"] == [1]
+        assert not Path(pair["cells"][2]["result_dir"]).exists()
+        assert not r["inventory"]["cost"]["unknown_attempts"]
+        starts = [json.loads(p.read_text()) for p in pair["receipts"].glob("*/start.json")]
+        assert len(starts) == 2
+>       assert sorted(s["admitted_other_reservations_seconds"] for s in starts) == [0, 165]
+E       assert [0.0, 114.99999999999999] == [0, 165]
+E         
+E         At index 1 diff: 114.99999999999999 != 165
+E         Use -v to get more diff
+
+tests/revision_v1/test_r1_77e_workers.py:132: AssertionError
+__ test_one_worker_fails_other_completes_and_every_envelope_is_charged[False] __
+
+pair = {'f': {'m': {'schema_version': 1, 'mode': 'stage4_sealed_cell', 'cell': {'condition': 'R1_learned_ff', 'dataset': 'mqu...7/docs/tasks/parallel-matrix.json', 'sha256': '68faee4d7cfc1dc7f8d16aeb743088c2944e12e48a6aed9d91377785bb53ad75'}, ...}
+exception = False
+
+    @pytest.mark.parametrize("exception", [False, True])
+    def test_one_worker_fails_other_completes_and_every_envelope_is_charged(pair, exception):
+        barrier = threading.Barrier(2)
+    
+        def execute(b, m, **kw):
+            barrier.wait(timeout=20)
+            if m["cell"]["order"] == "0":
+                if exception:
+                    raise RuntimeError("synthetic worker failure")
+                return 7
+            return pair["execute"](b, m, **kw)
+    
+        if exception:
+            with pytest.raises(RuntimeError, match="synthetic worker failure"):
+                pair["run"](executor=execute)
+        else:
+            r = pair["run"](executor=execute)
+>           assert r["status"] == "cell_incomplete_stop" and r["exit_code"] == 7
+E           AssertionError: assert ('selected_blo...th_incomplete' == 'cell_incomplete_stop'
+E             
+E             - cell_incomplete_stop
+E             + selected_blocks_processed_with_incomplete)
+
+tests/revision_v1/test_r1_77e_workers.py:155: AssertionError
+__ test_one_worker_fails_other_completes_and_every_envelope_is_charged[True] ___
+
+pair = {'f': {'m': {'schema_version': 1, 'mode': 'stage4_sealed_cell', 'cell': {'condition': 'R1_learned_ff', 'dataset': 'mqu...1/docs/tasks/parallel-matrix.json', 'sha256': '7c73a08a15d94bfb57026ea6de4acaaa2abd3863c0703c64db3ffecd177bd4a5'}, ...}
+exception = True
+
+    @pytest.mark.parametrize("exception", [False, True])
+    def test_one_worker_fails_other_completes_and_every_envelope_is_charged(pair, exception):
+        barrier = threading.Barrier(2)
+    
+        def execute(b, m, **kw):
+            barrier.wait(timeout=20)
+            if m["cell"]["order"] == "0":
+                if exception:
+                    raise RuntimeError("synthetic worker failure")
+                return 7
+            return pair["execute"](b, m, **kw)
+    
+        if exception:
+>           with pytest.raises(RuntimeError, match="synthetic worker failure"):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE RuntimeError
+
+tests/revision_v1/test_r1_77e_workers.py:151: Failed
+______ test_scaled_ceiling_stops_before_launch_and_invalid_workers_refuse ______
+
+pair = {'f': {'m': {'schema_version': 1, 'mode': 'stage4_sealed_cell', 'cell': {'condition': 'R1_learned_ff', 'dataset': 'mqu...4/docs/tasks/parallel-matrix.json', 'sha256': '6470a67c455bacceec02d59bcb4e51dd1776e6232200044c581d706331d447c1'}, ...}
+
+    def test_scaled_ceiling_stops_before_launch_and_invalid_workers_refuse(pair):
+        r = pair["run"](
+            ceiling_hours=150 / 3600, executor=lambda *a, **k: pytest.fail("budget violated")
+        )
+>       assert r["status"] == "budget_stop"
+E       AssertionError: assert 'selected_blo...th_incomplete' == 'budget_stop'
+E         
+E         - budget_stop
+E         + selected_blocks_processed_with_incomplete
+
+tests/revision_v1/test_r1_77e_workers.py:192: AssertionError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_77_queue.py::test_process_failure_cost_is_charged_before_any_driver_attempt
+FAILED tests/revision_v1/test_r1_77e_workers.py::test_two_tiny_cells_overlap_and_preserve_blocks_cost_and_skip
+FAILED tests/revision_v1/test_r1_77e_workers.py::test_one_worker_fails_other_completes_and_every_envelope_is_charged[False]
+FAILED tests/revision_v1/test_r1_77e_workers.py::test_one_worker_fails_other_completes_and_every_envelope_is_charged[True]
+FAILED tests/revision_v1/test_r1_77e_workers.py::test_scaled_ceiling_stops_before_launch_and_invalid_workers_refuse
+5 failed, 14 passed in 53.40s

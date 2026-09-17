@@ -79,9 +79,17 @@ def test_missing_neighbour_retains_planned_denominator():
         if g["role"] == "near_miss_neighbour"
         for x in g["items"]
     }
+    changed = {}
+    for group in r["allocations"]:
+        for meta, row in zip(group["items"], group["records"], strict=True):
+            if row["item_id"] in neighbours:
+                row.update(relation_id="P2", prompt="different " + row["prompt"])
+                meta["payload_sha256"] = digest(row)
+                changed[row["item_id"]] = row
     for row in plan["rows"]:
         if row["item_id"] in neighbours:
-            row["near_key"] = "unmatched"
+            source = changed[row["item_id"]]
+            row.update(near_key=near_key(source), payload_sha256=digest(source))
     payloads, population, report = build(r, cells, catalog, plan, drift)
     assert len(report["missing"]) == 6
     assert all(len(p["endpoints"]["near_miss"]) == 1 for p in population["cells"].values())

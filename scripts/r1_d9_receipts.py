@@ -77,6 +77,7 @@ def implementation_bindings():
     names = [
         "scripts/r1_d9_layouts.py",
         "scripts/r1_locality_contract.py",
+        "scripts/r1_d9e_near_family.py",
         "scripts/r1_58_draw_streams.py",
         "scripts/r1_58c_draw_seal_preflight.py",
         "scripts/r1_d1i_register_v6.py",
@@ -98,6 +99,7 @@ def contract(spec, stage):
             "matrix": spec["matrix"],
             "protocol": spec["protocol"],
             "configuration": spec["d9"][stage],
+            "near_miss_family_contract": spec.get("near_miss_family_contract"),
             "prerequisites": {
                 n: spec["receipts"].get(n) for n in REQUIRED[stage] if n != stage + "_authorization"
             },
@@ -523,6 +525,8 @@ def execute(spec, stage):
             matrix=spec["matrix"],
             protocol=spec["protocol"],
         )
+    if "near_miss_family_contract" in spec:
+        receipt["near_miss_family_contract"] = spec["near_miss_family_contract"]
     if stage == "clearance":
         value = state["clearance"]
         receipt.update(

@@ -1,0 +1,86 @@
+{
+  "task": "R1-D10c",
+  "role_plan": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9e/round26/roles/role_plan.json",
+    "sha256": "484b082ed14f5162734b76da3d685b395fc6dd669bf05e6c4d273c47ac26eb9c"
+  },
+  "composition_catalog": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9e/round26/roles/composition_catalog.json",
+    "sha256": "c36e9b0530c188596d57003b49befec266ba6a60861ada5a04ce865854e7c9f5"
+  },
+  "composition_cases": 9218,
+  "composition_structural_status": {
+    "structurally_available": 4981,
+    "unavailable_or_conflicting_source_dependencies": 4237
+  },
+  "roles": {
+    "zsre": {
+      "edits": 6084,
+      "outside": 6084,
+      "near_miss_support": 6084,
+      "near_miss_neighbour": 6084,
+      "revision": 5810
+    },
+    "counterfact": {
+      "edits": 6121,
+      "outside": 6121,
+      "near_miss_support": 6121,
+      "near_miss_neighbour": 6121,
+      "revision": 6121
+    },
+    "mquake": {
+      "edits": 2214,
+      "outside": 2214,
+      "near_miss_support": 2214,
+      "near_miss_neighbour": 2214,
+      "revision": 2211
+    }
+  },
+  "policy": {
+    "near": "same relation for CF/MQ; exactly matching subject-masked question template for zsRE, different globally reserved subjects",
+    "pairing": "lexical support item order; first unused neighbour with equal near_key; no substitutions across roles",
+    "revision": "two bound source versions, v2 equals reserved answer; no fabricated alternative",
+    "missing": "preserve full planned denominator and record unavailable reason",
+    "zsre_caveat": "same-template/different-subject family; differs from historical same-subject/other-relation development challenges and is adopted by DEC-061; execution still requires signed endpoint admission",
+    "role_capacity": "individual roles only; joint allocation and postdraw pair availability checked separately"
+  },
+  "status": "prepared unsealed inputs; actual draw/teacher results and endpoint admission pending",
+  "gpu_seconds": 0,
+  "draws": 0,
+  "seals": 0
+}
+{
+  "task": "R1-D9e",
+  "evidence": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9e/round26/joint_evidence_DEC061.json",
+    "sha256": "3ea334b802468ab8b9be4d63dafc9b5925c64ce482568baa28bfec9e76d111b8"
+  },
+  "diagnostic": {
+    "zsre": {
+      "eligible_subjects": 6084,
+      "near_role_subjects": 6084,
+      "distinct_source_families": 728,
+      "planned": 300,
+      "matched": 61,
+      "missing": 239
+    },
+    "counterfact": {
+      "eligible_subjects": 6121,
+      "near_role_subjects": 6121,
+      "distinct_source_families": 34,
+      "planned": 300,
+      "matched": 210,
+      "missing": 90
+    },
+    "mquake": {
+      "eligible_subjects": 2161,
+      "near_role_subjects": 2161,
+      "distinct_source_families": 35,
+      "planned": 300,
+      "matched": 221,
+      "missing": 79
+    }
+  },
+  "draws": 0,
+  "seals": 0
+}

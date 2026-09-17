@@ -1,0 +1,99 @@
+"""Preserve historical evidence and rehearse DEC-061 on unsealed real source rows.
+
+No RNG, actual reservations, model calls, signatures, draw or seal.
+"""
+from __future__ import annotations
+
+import copy
+import itertools
+import json
+from pathlib import Path
+
+from scripts import r1_d9_receipt_core as core
+from scripts import r1_d9_receipts as d9
+from scripts import r1_d10c_endpoints as endpoints
+from scripts.r1_d9e_near_family import CONTRACT, near_key, pair_reserved, validate_section
+from scripts.r1_d10a_review import ROOT, write_new
+from scripts.r1_d10b_teacher_review import verify_bindings
+
+LOG = ROOT / "logs/r1_round26/near_final"
+RESOURCE = ROOT.parent / "assets/runs/pc_cap/R1/r1_d9e/round26_final"
+
+
+def run():
+    prior_spec = d9.read_metadata(d9.ref(ROOT / "docs/tasks/R1-D9-inputs-v3-post77d.json"))
+    prior_binding = prior_spec["d9"]["clearance"]["evidence"]
+    old = d9.read_resource(prior_binding)
+    snapshots = json.loads((LOG.parent / "source-snapshots.json").read_text())
+    preserved, substitutions = copy.deepcopy(old), []
+    for i, binding in enumerate(preserved["evidence_bindings"]):
+        if d9.sha(binding["path"]) == binding["sha256"]:
+            continue
+        relative = str(Path(binding["path"]).relative_to(ROOT))
+        archive = snapshots.get(relative)
+        if not archive or archive["sha256"] != binding["sha256"]:
+            raise ValueError("missing exact historical source: " + relative)
+        verify_bindings([archive])
+        substitutions.append(dict(original=binding, preserved=archive))
+        preserved["evidence_bindings"][i] = archive
+    preserved["historical_source_relocations_round26"] = substitutions
+    preserved["evidence_bindings"] += [prior_binding, d9.ref(__file__)]
+    verify_bindings(preserved["evidence_bindings"])
+    preserved_ref = write_new(RESOURCE / "historical_evidence_preserved.json", preserved)
+    endpoints.prepare(preserved_ref, RESOURCE / "roles", LOG / "r1-d9e-roles.json")
+    plan_binding = d9.ref(RESOURCE / "roles/role_plan.json")
+    plan = d9.read_resource(plan_binding)
+    merged = endpoints.merge_roles(preserved, plan, plan_binding)
+    merged.update(near_miss_family_contract=CONTRACT,
+                  status="DEC061_teacher_roles_complete_owner_signature_and_current_exposure_attestation_pending")
+    merged["evidence_bindings"] += [d9.ref(endpoints.__file__), d9.ref(ROOT / "scripts/r1_d9e_near_family.py")]
+    verify_bindings(merged["evidence_bindings"])
+    binding = write_new(RESOURCE / "joint_evidence_DEC061.json", merged)
+    register = d9.read_metadata(merged["register"])
+    sources = d9.source_rows(register)
+    usable, counts = core.review_candidates(register, sources, merged, layout=prior_spec["dataset_layouts"])
+    diagnostic = {}
+    hall = {}
+    resources = {}
+    for dataset, eligible in usable.items():
+        demands = prior_spec["dataset_layouts"][dataset]["demand_by_role"]
+        hall[dataset] = []
+        for n in range(1, len(demands)+1):
+            for subset in itertools.combinations(demands, n):
+                capacity = sum(bool(set(subset) & set(r["_roles"])) for r in eligible)
+                demand = sum(demands[r] for r in subset)
+                hall[dataset].append(dict(roles=subset, capacity=capacity, demand=demand, margin=capacity-demand))
+        if any(c["margin"] < 0 for c in hall[dataset]):
+            raise ValueError("joint role capacity failed")
+        candidates = sorted((r for r in eligible if "near_miss_support" in r["_roles"]
+                              and "near_miss_neighbour" in r["_roles"]), key=lambda r: r["item_id"])
+        if len(candidates) < 600:
+            raise ValueError("insufficient diagnostic source sample")
+        groups = []
+        for realization in range(3):
+            sample = candidates[200*realization:200*(realization+1)]
+            support, neighbour = sample[::2], sample[1::2]
+            ids = [f"diagnostic:{dataset}:{realization}:near:{i}" for i in range(100)]
+            section = pair_reserved(support, neighbour, ids, dataset=dataset)
+            validate_section(section, support, neighbour, ids, dataset=dataset)
+            groups.append(dict(realization=realization, support_ids=[r["item_id"] for r in support],
+                               neighbour_ids=[r["item_id"] for r in neighbour], section=section))
+        resources[dataset] = write_new(RESOURCE / f"diagnostic-{dataset}.json", groups)
+        diagnostic[dataset] = dict(eligible_subjects=len(eligible), near_role_subjects=len(candidates),
+                                   distinct_source_families=len({near_key(r) for r in candidates}),
+                                   planned=300, matched=sum(len(g["section"]["rows"]) for g in groups),
+                                   missing=sum(len(g["section"]["missing"]) for g in groups))
+    report = dict(task="R1-D9e", evidence=binding, preserved_history=preserved_ref,
+                  role_plan=plan_binding, composition_catalog=d9.ref(RESOURCE / "roles/composition_catalog.json"),
+                  historical_source_relocations=substitutions, counts=counts, hall=hall,
+                  diagnostic=diagnostic, diagnostic_resources=resources, family_contract=CONTRACT,
+                  diagnostic_selection="lexical first 600 compatible first-subject representatives per dataset, alternating support/neighbour, three groups of 100; no RNG",
+                  limitation="Convenience diagnostic only, neither an admitted reservation nor an estimate/guarantee of availability under the final role RNG. Matching never improves by redraw.",
+                  producer=d9.ref(__file__), draws=0, seals=0, model_calls=0,
+                  source_resources_unsealed=True, current_exposure_attestation=False)
+    write_new(LOG / "r1-d9e-real-pool-review.json", report)
+    print(json.dumps({k:report[k] for k in ("task","evidence","diagnostic","draws","seals")}, indent=2))
+
+
+if __name__ == "__main__":
+    run()

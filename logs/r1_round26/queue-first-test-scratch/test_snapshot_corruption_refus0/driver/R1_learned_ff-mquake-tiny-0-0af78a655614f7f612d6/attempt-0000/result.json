@@ -1,0 +1,153 @@
+{
+  "attempt_dir": "/home/derp/cap/pc_cap/logs/r1_round26/queue-first-test-scratch/test_snapshot_corruption_refus0/driver/R1_learned_ff-mquake-tiny-0-0af78a655614f7f612d6/attempt-0000",
+  "attempt_wall_seconds": 0.22298896199208684,
+  "banner": "development, not confirmatory",
+  "boundary_identity_checks": [
+    {
+      "boundary": "attempt_start",
+      "kind": "full_recipe_and_adapter_rehash",
+      "seconds": 0.0005214689881540835
+    },
+    {
+      "boundary": "checkpoint:1",
+      "kind": "full_recipe_and_adapter_rehash",
+      "seconds": 0.0012386339949443936
+    },
+    {
+      "boundary": "pause",
+      "kind": "full_recipe_and_adapter_rehash",
+      "seconds": 0.0018585219804663211
+    }
+  ],
+  "boundary_identity_seconds": 0.0036186249635647982,
+  "cell": {
+    "condition": "R1_learned_ff",
+    "dataset": "mquake",
+    "order": "0",
+    "realization": "tiny"
+  },
+  "completed_checkpoint": 1,
+  "detailed_phase_timers": [
+    {
+      "banner": "development, not confirmatory",
+      "clone_seconds": 0.0,
+      "file_write_seconds": 0.0012704649707302451,
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0022985849936958402,
+      "identity_verification_seconds": 0.0,
+      "mode": "stage4_development_cell",
+      "operation_seconds": 0.10860547999618575,
+      "phase": "edit:1",
+      "recipe_verification_seconds": 0.0,
+      "restore_seconds": 0.0,
+      "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
+      "state_hash_seconds": 5.3652009228244424e-05,
+      "total_phase_seconds": 0.11229672300396487
+    },
+    {
+      "banner": "development, not confirmatory",
+      "clone_seconds": 0.0,
+      "file_write_seconds": 0.0027525049808900803,
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0021501000155694783,
+      "identity_verification_seconds": 0.0,
+      "mode": "stage4_development_cell",
+      "operation_seconds": 0.059967545996187255,
+      "phase": "immediate:1",
+      "recipe_verification_seconds": 0.0,
+      "restore_seconds": 0.0,
+      "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
+      "state_hash_seconds": 0.0002008049632422626,
+      "total_phase_seconds": 0.06515030897571705
+    },
+    {
+      "banner": "development, not confirmatory",
+      "clone_seconds": 0.0,
+      "file_write_seconds": 0.0011564060114324093,
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019291769713163376,
+      "identity_verification_seconds": 0.0,
+      "mode": "stage4_development_cell",
+      "operation_seconds": 0.004795490007381886,
+      "phase": "retention:1",
+      "recipe_verification_seconds": 0.0,
+      "restore_seconds": 0.0,
+      "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
+      "state_hash_seconds": 0.00017582596046850085,
+      "total_phase_seconds": 0.008123498992063105
+    },
+    {
+      "banner": "development, not confirmatory",
+      "clone_seconds": 0.0,
+      "file_write_seconds": 5.645799683406949e-05,
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0016869930259417742,
+      "identity_verification_seconds": 0.0,
+      "mode": "stage4_development_cell",
+      "operation_seconds": 0.002765290002571419,
+      "phase": "locality:1",
+      "recipe_verification_seconds": 0.0,
+      "restore_seconds": 0.0,
+      "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
+      "state_hash_seconds": 0.00017170899081975222,
+      "total_phase_seconds": 0.004738151008496061
+    },
+    {
+      "banner": "development, not confirmatory",
+      "clone_seconds": 0.0,
+      "file_write_seconds": 5.6537974160164595e-05,
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0016572150052525103,
+      "identity_verification_seconds": 0.0,
+      "mode": "stage4_development_cell",
+      "operation_seconds": 0.0030585519853048027,
+      "phase": "unseen:1",
+      "recipe_verification_seconds": 0.0,
+      "restore_seconds": 0.0,
+      "scope": "file writes include journal intent/add/flush; excludes this timing receipt and checkpoint writes",
+      "state_hash_seconds": 0.00015752200852148235,
+      "total_phase_seconds": 0.004984072002116591
+    }
+  ],
+  "identity_policy": "full rehash at attempt start, resume after restore, every checkpoint before receipt, and completion; cheap immutable memory check each phase",
+  "integrity_profile": "incremental",
+  "last_receipt_sha256": "0a6f080acd06c940a067af2f42c053e2e0959ea2fd3bf43eaa062777e533f6f3",
+  "manifest_sha256": "fed32d1b1e4f8bb9a2eee121aa94d9b73371c0e7d7e91894a20da53fe5c5edb9",
+  "mode": "stage4_development_cell",
+  "phase_timer_scope": "this attempt, verification/clone/operation/restore; excludes phase-file writes and admission/resume",
+  "phase_timer_summary": {
+    "edit": {
+      "count": 1,
+      "errors": 0,
+      "operation_seconds": 0.10860547999618575,
+      "wall_seconds": 0.11223018600139767
+    },
+    "immediate": {
+      "count": 1,
+      "errors": 0,
+      "operation_seconds": 0.059967545996187255,
+      "wall_seconds": 0.062394266977207735
+    },
+    "locality": {
+      "count": 1,
+      "errors": 0,
+      "operation_seconds": 0.002765290002571419,
+      "wall_seconds": 0.004679919016780332
+    },
+    "retention": {
+      "count": 1,
+      "errors": 0,
+      "operation_seconds": 0.004795490007381886,
+      "wall_seconds": 0.008060417982051149
+    },
+    "unseen": {
+      "count": 1,
+      "errors": 0,
+      "operation_seconds": 0.0030585519853048027,
+      "wall_seconds": 0.00492583098821342
+    }
+  },
+  "prior_attempt_timer_summary": {},
+  "run_dir": "/home/derp/cap/pc_cap/logs/r1_round26/queue-first-test-scratch/test_snapshot_corruption_refus0/driver/R1_learned_ff-mquake-tiny-0-0af78a655614f7f612d6",
+  "status": "paused_at_checkpoint"
+}

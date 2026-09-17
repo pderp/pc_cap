@@ -84,6 +84,14 @@ def check_receipt(name, r, spec):
             or r.get("protocol") != spec["protocol"]
         ):
             raise ValueError("versioned receipt layout/matrix/protocol differs")
+    family = spec.get("near_miss_family_contract")
+    if family is not None:
+        from scripts.r1_d9e_near_family import CONTRACT
+
+        if family != CONTRACT or r.get("near_miss_family_contract") != family:
+            raise ValueError("DEC-061 near-miss receipt contract differs")
+        if name == "protocol_admission" and r.get("near_family_reviewed") is not True:
+            raise ValueError("near-miss family review is not signed")
     if name == "joint_clearance":
         if r.get("policy") != "DEC-048-option-C;DEC-042-CounterFact;zsRE-priority":
             raise ValueError("unapproved exclusion policy")

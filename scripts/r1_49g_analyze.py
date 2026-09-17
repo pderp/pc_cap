@@ -10,8 +10,21 @@ from pathlib import Path
 from scripts import r1_75_analysis_stage4_v1 as old
 from scripts.r1_49g_inference import FAMILY, primary_contrasts
 from scripts.r1_49g_secondary import cell_benchmarks, macro_benchmarks
+from scripts.r1_d9e_near_family import CONTRACT as NEAR_CONTRACT
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def near_family_summary(section, expected):
+    summary, bounded, terminated = old.preservation_section(section, expected, "neighbour_query")
+    return dict(
+        family_contract=dict(NEAR_CONTRACT), bounded=bounded, terminated=terminated,
+        diagnostics=summary, planned=len(expected), evaluated=bounded["scored"],
+        missing=len(expected)-bounded["scored"], preserved=bounded["numerator"],
+        observed_case_rate=bounded["evaluated_value"], full_inventory_rate=bounded["value"],
+        interpretation="different-subject exact relation/template specificity; not semantic nearest neighbours",
+        denominator_policy="planned slots retained; full rate unavailable with any missing case; no acquisition filter",
+    )
 
 
 def _read_verified(path, sources):
@@ -31,7 +44,10 @@ def analyze(matrix):
     report["primary_family"] = (
         FAMILY if admitted_family else {"status": "unavailable_nonregistered_matrix"}
     )
-    cells = []
+    cells, near_cells = [], []
+    family = matrix.get("near_miss_family_contract")
+    if family is not None and family != NEAR_CONTRACT:
+        raise ValueError("unrecognized near-miss family contract")
     for declared in old.all_cells(matrix):
         observed = loaded[declared["cell_id"]]
         reports = {}
@@ -53,6 +69,20 @@ def analyze(matrix):
                     raise ValueError("duplicate verified checkpoint report")
                 reports[n] = raw
         cells.append(cell_benchmarks(declared, observed, reports))
+        if family is not None:
+            final = declared["checkpoints"][-1]
+            expected = (declared.get("population") or {}).get("endpoints", {}).get("near_miss")
+            if expected is None:
+                near_cells.append(dict(cell_id=declared["cell_id"], status="unavailable",
+                                       reason="independent near-miss population not bound"))
+            else:
+                section = reports.get(final, {}).get("endpoints", {}).get("near_miss")
+                near_cells.append(dict(cell_id=declared["cell_id"], checkpoint=final,
+                                       **near_family_summary(section, expected)))
+    report["near_miss_family"] = dict(
+        status="adopted_DEC061" if family is not None else "legacy_or_not_declared",
+        contract=family, cells=near_cells,
+    )
     report["secondary_benchmarks"] = {
         "decision": "DEC-059",
         "cells": cells,
@@ -66,6 +96,8 @@ def analyze(matrix):
         else "R1-49g_DEC057_DEC058_DEC059"
     )
     report["dataset_layouts"] = matrix.get("dataset_layouts")
+    if family is not None:
+        report["analysis_revision"] = "R1-49i_DEC057_DEC058_DEC059_DEC060_DEC061"
     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
     report["limits"] += [
         FAMILY["coverage"],
@@ -128,6 +160,14 @@ def markdown(report):
         lines.append(
             f"| {r['dataset']} | {r['condition']} | {r['metric']} | {r['value']} | {r['passes']} | {', '.join(r['failed_cells']) or 'none observed'} |"
         )
+    near = report.get("near_miss_family", {})
+    if near.get("cells"):
+        lines += ["", "DEC-061 NM-template-v1 at the final planned checkpoint:", "",
+                  "| Cell | Preserved / evaluated / planned | Full inventory rate | Missing |",
+                  "|---|---|---|---|"]
+        for r in near["cells"]:
+            lines.append(f"| {r['cell_id']} | {r.get('preserved')} / {r.get('evaluated')} / {r.get('planned')} | {r.get('full_inventory_rate')} | {r.get('missing')} |")
+        lines += ["", "Bounded equality compares each neighbour with its actual cap-off baseline. Missing planned slots remain missing; support-edit acquisition does not filter the denominator. This measures exact relation/template specificity, not semantic nearest-neighbour robustness."]
     lines += [
         "",
         "Resource ceilings remain unadmitted. Macro unavailability and missing cell results cannot be read as passes.",
@@ -152,6 +192,7 @@ def run(matrix_path, output_prefix):
     report["matrix_file"] = {"path": str(matrix_path), "sha256": hashlib.sha256(raw).hexdigest()}
     names = [
         "scripts/r1_49g_analyze.py",
+        "scripts/r1_d9e_near_family.py",
         "scripts/r1_49g_inference.py",
         "scripts/r1_49g_secondary.py",
         "scripts/r1_75_analysis_stage4_v1.py",

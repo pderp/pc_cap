@@ -18,7 +18,9 @@ from scripts import r1_77b_sealed_backend as backend
 from scripts import r1_d9_layouts as layouts
 from scripts import r1_d9_receipt_core as core
 from scripts import r1_d9_receipts as producer
-from scripts.r1_d10c_endpoints import construct
+from scripts.r1_77f_scheduler import CEILING_DEFINITION
+from scripts.r1_d9e_near_family import CONTRACT as NEAR_CONTRACT
+from scripts.r1_d10c_endpoints import construct, near_key
 
 from pccap.harness.ledger import Ledger
 from pccap.revision_v1.stage4_adapters import build_adapter
@@ -34,12 +36,19 @@ from tests.revision_v1.test_stage4_cell import CAL, TinyTok
 from tests.revision_v1.tiny_base import TinyBase
 
 
+class FamilyTinyTok(TinyTok):
+    """Collapse valid subject-specific fixture prompts to one synthetic token."""
+
+    def encode(self, text):
+        return super().encode("p?" if text.startswith("Where does ") else text)
+
+
 @pytest.fixture(scope="module")
 def stages():
     root = REPO / "logs/r1_round24/rehearsal" / uuid.uuid4().hex
     resources = REPO.parent / "assets/runs/pc_cap/R1/test_scratch/r1_round24" / root.name
     layout = layouts.production("D")
-    tok = TinyTok()
+    tok = FamilyTinyTok()
     tok.file_sha256 = lambda: "a" * 64
     prompt_ids = tok.encode("p?").tolist()
     answer_ids = tok.encode(" new\n").tolist()
@@ -61,7 +70,8 @@ def stages():
                 item_id=iid,
                 fact_id=iid,
                 subject=iid,
-                prompt="p?",
+                prompt=f"Where does {iid} live?",
+                relation_id="synthetic",
                 answer="new",
                 aliases=["new"],
                 paraphrases=["para?"],
@@ -101,7 +111,7 @@ def stages():
                     item_id=iid,
                     payload_sha256=meta["payload_sha256"],
                     roles=list(layouts.ROLES),
-                    near_key="relation:synthetic",
+                    near_key=near_key(row),
                     revision_versions=[
                         {"version": 1, "answer": "old", "aliases": ["old"]},
                         {"version": 2, "answer": "new", "aliases": ["new"]},
@@ -130,12 +140,14 @@ def stages():
     )
     eb = new_json(resources / "evidence.json", evidence)
     matrix = json.loads((REPO / "manifests/revision_v1/run_matrix_v5_2_option_D.json").read_text())
+    matrix.update(near_miss_family_contract=NEAR_CONTRACT, queue_ceiling_contract=CEILING_DEFINITION)
     mb = new_json(root / "docs/tasks/matrix.json", matrix)
     pb = new_json(root / "docs/tasks/protocol.json", {"synthetic": True, "dataset_layouts": layout})
     catalog = {d: [] for d in layouts.DATASETS}
     cb = new_json(resources / "catalog.json", catalog)
     spec = dict(
         schema_version=3,
+        near_miss_family_contract=NEAR_CONTRACT,
         register=register_binding,
         matrix=mb,
         protocol=pb,
@@ -156,6 +168,7 @@ def stages():
         status="closed",
         lead_approved=True,
         synthetic=True,
+        near_miss_family_contract=NEAR_CONTRACT,
         register=register_binding,
         contract_version=2,
         dataset_layouts=layout,
@@ -164,7 +177,7 @@ def stages():
         protocol=pb,
     )
     for name, extra in [
-        ("protocol_admission", dict(extension_admitted=False)),
+        ("protocol_admission", dict(extension_admitted=False, near_family_reviewed=True)),
         (
             "rng_admission",
             dict(
@@ -391,6 +404,12 @@ def test_full_actual_cadence_sealed_tinybase(make, monkeypatch, stages, dataset)
         for c in report["contrasts"]
         if c["dataset"] == "mquake"
     )
+    family = report["near_miss_family"]
+    assert family["status"] == "adopted_DEC061"
+    near = next(r for r in family["cells"] if r["cell_id"] == cid)
+    assert near["planned"] == near["evaluated"] == near["preserved"] == 100
+    assert near["missing"] == 0 and near["full_inventory_rate"] == 1.0
+    assert "DEC-061 NM-template-v1" in analysis.markdown(report)
     outcome = new_json(f["root"] / f"docs/tasks/round24-analysis-{dataset}.json", report)
     new_json(
         REPO / "logs/r1_round24" / f"rehearsal-{dataset}-{f['root'].name}.json",
