@@ -18,7 +18,7 @@ def read(name):
 
 
 def test_preview_identity_and_unsigned_request_previews():
-    candidate = read("manifests/revision_v1/freeze_candidate_v9_preview.json")
+    candidate = read("manifests/revision_v1/freeze_candidate_v11.json")
     verify(candidate)
     spec = read(candidate["d9_inputs"]["path"])
     assert spec["near_miss_family_contract"] == CONTRACT
@@ -30,7 +30,7 @@ def test_preview_identity_and_unsigned_request_previews():
 
 
 def test_family_omission_and_unreviewed_protocol_cannot_pass():
-    spec = read("docs/tasks/R1-D9-inputs-v4-preview.json")
+    spec = read("docs/tasks/R1-D9-inputs-v6.json")
     receipt = read(spec["receipts"]["protocol_admission"]["path"])
     receipt.update(status="closed", lead_approved=True)
     with pytest.raises(ValueError, match="not signed"):

@@ -78,6 +78,7 @@ def implementation_bindings():
         "scripts/r1_d9_layouts.py",
         "scripts/r1_locality_contract.py",
         "scripts/r1_d9e_near_family.py",
+        "scripts/r1_d9f_allocation.py",
         "scripts/r1_58_draw_streams.py",
         "scripts/r1_58c_draw_seal_preflight.py",
         "scripts/r1_d1i_register_v6.py",
@@ -276,13 +277,21 @@ def draw_value(spec, receipts):
     evidence = read_resource(candidates["evidence"])
     for b in evidence["evidence_bindings"]:
         core.require(sha(b["path"]) == b["sha256"], "review evidence changed after clearance")
-    allocation = core.allocate(
+    from scripts import r1_d9f_allocation as near_allocation
+
+    decision = read_metadata(rng["near_allocation_decision"]) if rng.get("near_allocation") == "family_coordinated" else None
+    mode = near_allocation.admitted_mode(rng, cfg, decision)
+    core.require(receipts["protocol_admission"].get("near_allocation", "independent") == mode,
+                 "protocol/RNG near allocation differs")
+    allocation = near_allocation.allocate(
         candidates["candidates"],
+        mode=mode,
         seed=cfg["master_seed"],
         register_sha256=spec["register"]["sha256"],
         layout=layouts.from_spec(spec) if spec.get("schema_version") == 3 else None,
     )
-    reservation = core.reservation_document(allocation, spec["register"])
+    reservation = near_allocation.reservation_document(allocation, spec["register"])
+    near_allocation.audit(reservation)
     core.audit_reservations(
         reservation, layout=layouts.from_spec(spec) if spec.get("schema_version") == 3 else None
     )
@@ -340,6 +349,9 @@ def seal_values(spec, receipts, matrix):
             by_content.setdefault(content, value)
             by_binding[key] = by_content[content]
         payloads[cid] = by_binding[key]
+    from scripts.r1_d9f_allocation import audit as audit_near_allocation
+
+    audit_near_allocation(reservation)
     identities = core.validate_seal(
         reservation,
         cells,
@@ -540,6 +552,8 @@ def execute(spec, stage):
         artifacts = {"reservations-unsealed.json": value}
         receipt.update(
             master_seed=cfg["master_seed"],
+            near_allocation=value.get("near_allocation", "independent"),
+            near_allocation_contract=value.get("near_allocation_contract"),
             rng_rule=core.RNG_RULE,
             numpy_version=np.__version__,
             paired_orders=[100, 101, 102, 103, 104],

@@ -20,6 +20,7 @@ from scripts import r1_d9_receipt_core as core
 from scripts import r1_d9_receipts as producer
 from scripts.r1_77f_scheduler import CEILING_DEFINITION
 from scripts.r1_d9e_near_family import CONTRACT as NEAR_CONTRACT
+from scripts.r1_d9f_allocation import CONTRACT as ALLOCATION_CONTRACT
 from scripts.r1_d10c_endpoints import construct, near_key
 
 from pccap.harness.ledger import Ledger
@@ -44,7 +45,8 @@ class FamilyTinyTok(TinyTok):
 
 
 @pytest.fixture(scope="module")
-def stages():
+def stages(request):
+    allocation_mode = getattr(request, "param", "independent")
     root = REPO / "logs/r1_round24/rehearsal" / uuid.uuid4().hex
     resources = REPO.parent / "assets/runs/pc_cap/R1/test_scratch/r1_round24" / root.name
     layout = layouts.production("D")
@@ -140,7 +142,9 @@ def stages():
     )
     eb = new_json(resources / "evidence.json", evidence)
     matrix = json.loads((REPO / "manifests/revision_v1/run_matrix_v5_2_option_D.json").read_text())
-    matrix.update(near_miss_family_contract=NEAR_CONTRACT, queue_ceiling_contract=CEILING_DEFINITION)
+    matrix.update(
+        near_miss_family_contract=NEAR_CONTRACT, queue_ceiling_contract=CEILING_DEFINITION
+    )
     mb = new_json(root / "docs/tasks/matrix.json", matrix)
     pb = new_json(root / "docs/tasks/protocol.json", {"synthetic": True, "dataset_layouts": layout})
     catalog = {d: [] for d in layouts.DATASETS}
@@ -163,7 +167,9 @@ def stages():
         },
     )
     spec["d9"]["clearance"]["evidence"] = eb
-    spec["d9"]["draw"].update(master_seed=17, composition_catalog=cb)
+    spec["d9"]["draw"].update(
+        master_seed=17, composition_catalog=cb, near_allocation=allocation_mode
+    )
     common = dict(
         status="closed",
         lead_approved=True,
@@ -176,6 +182,20 @@ def stages():
         matrix=mb,
         protocol=pb,
     )
+    common["near_allocation"] = allocation_mode
+    if allocation_mode == "family_coordinated":
+        common["near_allocation_contract"] = ALLOCATION_CONTRACT
+        common["near_allocation_decision"] = new_json(
+            root / "docs/tasks/synthetic-decision.json",
+            dict(
+                synthetic=True,
+                decision="DEC-062",
+                status="closed",
+                lead_approved=True,
+                near_allocation=allocation_mode,
+                allocation_contract=ALLOCATION_CONTRACT,
+            ),
+        )
     for name, extra in [
         ("protocol_admission", dict(extension_admitted=False, near_family_reviewed=True)),
         (

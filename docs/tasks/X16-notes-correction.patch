@@ -1,0 +1,26 @@
+--- a/docs/R1_stage2_notes.md
++++ b/docs/R1_stage2_notes.md
+@@ -1330,12 +1330,14 @@
+ | --- | ---: | ---: | ---: | ---: | ---: |
+ | R1_nonlearned | 331 | 1.00 | 0.00 | 0 / 50 (random reader fires everywhere: the floor) | 100 |
+ | R1_learned_ff_v2 | 383 | 1.00 | 0.18 | 47 / 50 | 7 |
+-| v0_stable / matched_update | 1,168 / 1,002 | 1.00 | 0.00 | 50 / 50 | 0 |
+-| v0_live_C1 / C2 | 1,148 / 989 | 1.00 | 0.00 | 50 / 50 | 0 |
+-| S1_LM / S1_literal | 1,163 / 1,165 | 1.00 | 0.00 | 39 / 50 · 49 / 50 (continued base vs original-base reference) | 0 |
+-
+-The locality artifact is gone (v0-style 50 / 50 as radius 0 implies). Costs identical to chain M. This closes the
+-measurement set: execution plan v2 (`docs/R1_execution_plan_v2.md`) records the cost admission and
+-`manifests/revision_v1/cell_ceilings_v1.json` the per-cell ceilings: core ≈ 206 solo h → ≈ 125 wall-clock h with two
+-workers, extension +16 solo h; buffer ≈ 2.7× to October 9 from a September 19–20 launch.
+-
++| v0_stable / matched_update | 1,168 / 1,002 | 1.00 | 0.00 | 50 / 50 | unavailable (0 scored / 100 planned) |
++| v0_live_C1 / C2 | 1,148 / 989 | 1.00 | 0.00 | 50 / 50 | unavailable (0 scored / 100 planned) |
++| S1_LM / S1_literal | 1,163 / 1,165 | 1.00 | 0.00 | 39 / 50 · 49 / 50 (continued base vs original-base reference) | unavailable (0 scored / 100 planned) |
++
++The corrected profiles reproduce bounded locality of 50 / 50 for the v0-style conditions. The six v0/S1 profiles
++have unavailable firing telemetry, not measured zero false fires. These eight profiles complete the corrected
++comparator set; full final-endpoint/validation costs and peak memory still require typed admission. Execution
++plan v2 (`docs/R1_execution_plan_v2.md`) and `manifests/revision_v1/cell_ceilings_v1.json` imply 209.4 solo core h,
++about 126.91 elapsed h at the assumed 1.65 throughput, plus 12.15 solo extension h. These are projections, not
++whole-matrix measurements or a signed shared process-hour budget; the experimental stop remains October 9.
++

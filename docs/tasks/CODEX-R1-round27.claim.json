@@ -1,0 +1,56 @@
+{
+  "task": "CODEX-R1-round27",
+  "agent": "Codex",
+  "status": "implementation_and_review_delivered_external_gates_pending",
+  "lanes": [
+    "R1-D9f",
+    "R1-58g",
+    "X16",
+    "HT-4f"
+  ],
+  "started_utc": "2026-09-17T22:20:29.205587+00:00",
+  "head": "ab700a0f8edf4df95a950fb809a86df543836060",
+  "constraints": [
+    "CPU only",
+    "no actual draw/seal/freeze/launch",
+    "no signing",
+    "X16 findings only; no review repairs applied",
+    "no staging or commits",
+    "DEC-062 B bound; multiple disjoint pairs per family clarified; protocol amendment pending"
+  ],
+  "planned_existing_edits": [
+    "scripts/r1_d9_draw.py",
+    "scripts/r1_d9_receipts.py"
+  ],
+  "external_dependencies": [
+    "X16 normative protocol and dependency-binding repairs",
+    "complete typed measured cost evidence and lead signature",
+    "owner final recipe/publication bundle and actual population/signature workflow"
+  ],
+  "finished_utc": "2026-09-17T23:00:41.916400+00:00",
+  "head_at_handoff": "ab700a0f8edf4df95a950fb809a86df543836060",
+  "handoff": "docs/tasks/CODEX-R1-round27-handoff-v2.md",
+  "lanes_status": {
+    "R1-D9f": "software_diagnostic_and_pair_count_clarification_complete; protocol_amendment_and_actual_admission_pending",
+    "R1-58g": "operator_and_unsigned_package_complete; production_inputs_and_X16_repairs_pending",
+    "X16": "review_complete_not_ready",
+    "HT-4f": "blocked_unsigned_and_incomplete_typed_cost_admission"
+  },
+  "validation": {
+    "cpu_tests_passed": 80,
+    "operator_fixture_portability_check_passed": 7,
+    "ruff": "pass",
+    "git_diff_check": "pass",
+    "notes_patch_applicability": "pass",
+    "gpu_seconds": 0,
+    "actual_draws": 0,
+    "signatures": 0,
+    "commits": 0
+  },
+  "prior_handoff": "docs/tasks/CODEX-R1-round27-handoff.md",
+  "lead_clarification": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round27/dec062-pair-unit-clarification.json",
+    "sha256": "1c8a61b2d89f03058466990c136627e8c0d969c1ceabdff312b2d1453210adc3"
+  },
+  "updated_utc": "2026-09-17T23:53:08.996885+00:00"
+}

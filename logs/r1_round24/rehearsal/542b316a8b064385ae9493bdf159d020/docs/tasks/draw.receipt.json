@@ -1,0 +1,179 @@
+{
+  "all_roles_disjoint": true,
+  "authorization": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/542b316a8b064385ae9493bdf159d020/docs/tasks/draw.authorization.json",
+    "sha256": "e9c1f369ac89e3669ab6350817bcf1857965b5f195fb5c30608e768323dd4562"
+  },
+  "clearance_receipt": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/542b316a8b064385ae9493bdf159d020/docs/tasks/clearance.receipt.json",
+    "sha256": "62e0606dcdc9bd08030ccde09df7190e99b842ea434bbb53b2b604e61806439f"
+  },
+  "composition_dependencies_closed": true,
+  "contract_version": 2,
+  "core": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/542b316a8b064385ae9493bdf159d020/scripts/r1_d9_receipt_core.py",
+    "sha256": "d00385ce8ec2544f593a20c0d61ae2dcb5fd110580a997e2877dc0ce382cbc72"
+  },
+  "dataset_layouts": {
+    "counterfact": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "mquake": {
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_by_role": {
+        "edits": 900,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "zsre": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    }
+  },
+  "datasets": [
+    "zsre",
+    "counterfact",
+    "mquake"
+  ],
+  "gpu_seconds": 0,
+  "launch_authorized": false,
+  "layout_sha256": "bf71ff1d4523e5036b63a4352be716c03da4e59b3bb8722875c5e7234d89b36d",
+  "lead_approved": true,
+  "master_seed": 17,
+  "matrix": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/542b316a8b064385ae9493bdf159d020/docs/tasks/matrix.json",
+    "sha256": "e8656ff991418a3b667cee3aea6b5379e647e48b98aa00fae450d6c53d1af923"
+  },
+  "near_allocation": "family_coordinated",
+  "near_allocation_contract": {
+    "backbone": "exact_independent_edit_outside_revision_allocations_all_realizations",
+    "constraints": "original_Hall_capacity_and_global_subject_fact_item_disjointness; no_outcomes_no_seed_retry",
+    "decision_required": "DEC-062",
+    "endpoint_pairing": "DEC061_lexical_repairing_within_reserved_roles; pair_units_select_membership_not_endpoint_slot_order",
+    "family": "DEC-061_NM-template-v1",
+    "namespace": "R1-D9-family-pairs-v1",
+    "pair_units": "within_family_role_exclusive_first_then_dual_role_pairs; source_permuted; distinct_subjects; no_reuse",
+    "pool": "cleared_representatives_after_removing_all_backbone_subjects",
+    "selection": "uniform_permutation_of_disjoint_pair_units; multiple_pairs_per_family_allowed",
+    "shortfall": "reserve_remaining_role_eligible_subjects_without_replacement; missing_pair_slots_keep_planned_denominator",
+    "version": 1
+  },
+  "near_miss_family_contract": {
+    "counterfact_mquake": "exact_nonempty_relation_id",
+    "decision": "DEC-061",
+    "family": "NM-template-v1",
+    "missing": "retain_planned_ids_and_unavailable_reason_no_replacement_no_redraw",
+    "pairing": "lexical_support_item_id_then_first_unused_lexical_neighbour_same_family",
+    "scoring": "DEC-053_bounded_text_equality_neighbour_vs_its_actual_cap_off_baseline",
+    "subjects": "different_globally_reserved_subjects",
+    "zsre": "exact_normalized_subject_masked_question_template_single_whole_word_occurrence"
+  },
+  "numpy_version": "2.5.3",
+  "paired_orders": [
+    100,
+    101,
+    102,
+    103,
+    104
+  ],
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_d9_receipts.py",
+    "sha256": "c2e381e542594d172a2ffe727a6445a34d39a3cdc89518e5061efb24d8807135"
+  },
+  "protocol": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/542b316a8b064385ae9493bdf159d020/docs/tasks/protocol.json",
+    "sha256": "59cf423879ec9766ebe24d063a084766edc756f5fcbb8eae579f92c9ebb6328f"
+  },
+  "register": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/542b316a8b064385ae9493bdf159d020/docs/tasks/register.json",
+    "sha256": "ac4ffb98bd16809cb618d97aec000c807dbf5a51896b40310fea409da11f4036"
+  },
+  "request_sha256": "d515f170d095a17b0fe5562550241160bb194d463e3c8e8bc01a0d0671b9b1e7",
+  "reservations": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/test_scratch/r1_round24/542b316a8b064385ae9493bdf159d020/draw/reservations-unsealed.json",
+    "sha256": "e39d6b9a0439a5bf2edf577e53681a4637ddcbac80538e2c256bba1176f0f776"
+  },
+  "rng_rule": {
+    "algorithm": "numpy.PCG64",
+    "derivation": "SHA256(canonical compact JSON of namespace,seed,register_sha256,dataset,realization,role,stratum); first16 bytes big-endian",
+    "failure": "abort whole draw on shortfall; no outcome-based replacement or seed retry",
+    "namespace": "R1-D9-v1",
+    "quota": "largest remainder of remaining role-eligible strata; lexical ties",
+    "representative": "first eligible row in register order per reviewed global entity",
+    "source_order": "entity_id,item_id lexical within each stratum",
+    "traversal": "dataset declared order, realization 0..2, role declared order",
+    "within_role": "lexical strata then substream permutation"
+  },
+  "schema_version": 2,
+  "status": "closed",
+  "task": "R1-D9b"
+}

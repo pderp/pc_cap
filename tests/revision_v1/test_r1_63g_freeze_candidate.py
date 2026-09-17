@@ -1,4 +1,4 @@
-"""Dry v8 inventories exact current bytes and cannot grant launch authority."""
+"""Current operator candidate inventories exact current bytes and cannot grant launch authority."""
 
 import copy
 import json
@@ -9,7 +9,7 @@ from scripts import r1_63g_freeze_candidate as candidate
 
 @pytest.fixture(scope="module")
 def value():
-    return json.loads((candidate.ROOT / "manifests/revision_v1/freeze_candidate_v8.json").read_text())
+    return json.loads((candidate.ROOT / "manifests/revision_v1/freeze_candidate_v11.json").read_text())
 
 
 def test_current_candidate_and_three_unsigned_requests(value):
