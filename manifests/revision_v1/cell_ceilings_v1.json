@@ -1,0 +1,116 @@
+{
+ "schema_version": 1,
+ "task": "execution plan v2 cost admission (2026-09-17)",
+ "definition": "ceiling_seconds = 1.5 \u00d7 admitted solo cost per confirmatory cell (zsRE / CounterFact 1,000 edits, checkpoints 100/300/1,000; MQuAKE 300 edits, checkpoints 100/300 under DEC-060); the queue multiplies by 1.15 with two workers (R1-77f); a cell exceeding its ceiling is stopped, charged and retried once",
+ "basis": "chains I, K, M, Q (docs/R1_stage2_notes.md \u00a7\u00a7 Chain I complete, Chain K complete, Chain M, Chain Q); learned 1,000-edit cost extrapolated from 300-edit cells (edits + immediate scale linearly; drift once)",
+ "cells": {
+  "R1_learned_ff:zsre": {
+   "solo_hours": 0.35,
+   "ceiling_seconds": 1890
+  },
+  "R1_nonlearned:zsre": {
+   "solo_hours": 0.35,
+   "ceiling_seconds": 1890
+  },
+  "R1_learned_ff_v2:zsre": {
+   "solo_hours": 0.35,
+   "ceiling_seconds": 1890
+  },
+  "v0_stable:zsre": {
+   "solo_hours": 0.48,
+   "ceiling_seconds": 2592
+  },
+  "matched_update:zsre": {
+   "solo_hours": 0.48,
+   "ceiling_seconds": 2592
+  },
+  "v0_live_C1:zsre": {
+   "solo_hours": 0.48,
+   "ceiling_seconds": 2592
+  },
+  "v0_live_C2:zsre": {
+   "solo_hours": 0.48,
+   "ceiling_seconds": 2592
+  },
+  "S1_LM:zsre": {
+   "solo_hours": 0.5,
+   "ceiling_seconds": 2700
+  },
+  "S1_literal:zsre": {
+   "solo_hours": 0.5,
+   "ceiling_seconds": 2700
+  },
+  "R1_learned_ff:counterfact": {
+   "solo_hours": 0.35,
+   "ceiling_seconds": 1890
+  },
+  "R1_nonlearned:counterfact": {
+   "solo_hours": 0.35,
+   "ceiling_seconds": 1890
+  },
+  "R1_learned_ff_v2:counterfact": {
+   "solo_hours": 0.35,
+   "ceiling_seconds": 1890
+  },
+  "v0_stable:counterfact": {
+   "solo_hours": 1.22,
+   "ceiling_seconds": 6588
+  },
+  "matched_update:counterfact": {
+   "solo_hours": 1.22,
+   "ceiling_seconds": 6588
+  },
+  "v0_live_C1:counterfact": {
+   "solo_hours": 1.22,
+   "ceiling_seconds": 6588
+  },
+  "v0_live_C2:counterfact": {
+   "solo_hours": 1.22,
+   "ceiling_seconds": 6588
+  },
+  "S1_LM:counterfact": {
+   "solo_hours": 1.28,
+   "ceiling_seconds": 6912
+  },
+  "S1_literal:counterfact": {
+   "solo_hours": 1.28,
+   "ceiling_seconds": 6912
+  },
+  "R1_learned_ff:mquake": {
+   "solo_hours": 0.11,
+   "ceiling_seconds": 594
+  },
+  "R1_nonlearned:mquake": {
+   "solo_hours": 0.11,
+   "ceiling_seconds": 594
+  },
+  "R1_learned_ff_v2:mquake": {
+   "solo_hours": 0.11,
+   "ceiling_seconds": 594
+  },
+  "v0_stable:mquake": {
+   "solo_hours": 0.33,
+   "ceiling_seconds": 1782
+  },
+  "matched_update:mquake": {
+   "solo_hours": 0.33,
+   "ceiling_seconds": 1782
+  },
+  "v0_live_C1:mquake": {
+   "solo_hours": 0.33,
+   "ceiling_seconds": 1782
+  },
+  "v0_live_C2:mquake": {
+   "solo_hours": 0.33,
+   "ceiling_seconds": 1782
+  },
+  "S1_LM:mquake": {
+   "solo_hours": 0.33,
+   "ceiling_seconds": 1782
+  },
+  "S1_literal:mquake": {
+   "solo_hours": 0.33,
+   "ceiling_seconds": 1782
+  }
+ }
+}

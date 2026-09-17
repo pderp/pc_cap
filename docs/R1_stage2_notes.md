@@ -1324,3 +1324,18 @@ incorrect" there means "no answer", as in the historical E.2 filter (DEC-039: 0 
 and MQuAKE generations are non-empty. This is the same baseline the v0 design used; it should be stated where zsRE
 ES / RET-GS are interpreted (the edit is against an empty baseline answer).
 
+## Chain Q: MQuAKE comparator cells with corrected locality (2026-09-17, 17:52 EDT) — cost admission
+
+| condition | wall (s) | ES | RET-GS | LS (bounded) | unseen FF / 100 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| R1_nonlearned | 331 | 1.00 | 0.00 | 0 / 50 (random reader fires everywhere: the floor) | 100 |
+| R1_learned_ff_v2 | 383 | 1.00 | 0.18 | 47 / 50 | 7 |
+| v0_stable / matched_update | 1,168 / 1,002 | 1.00 | 0.00 | 50 / 50 | 0 |
+| v0_live_C1 / C2 | 1,148 / 989 | 1.00 | 0.00 | 50 / 50 | 0 |
+| S1_LM / S1_literal | 1,163 / 1,165 | 1.00 | 0.00 | 39 / 50 · 49 / 50 (continued base vs original-base reference) | 0 |
+
+The locality artifact is gone (v0-style 50 / 50 as radius 0 implies). Costs identical to chain M. This closes the
+measurement set: execution plan v2 (`docs/R1_execution_plan_v2.md`) records the cost admission and
+`manifests/revision_v1/cell_ceilings_v1.json` the per-cell ceilings: core ≈ 206 solo h → ≈ 125 wall-clock h with two
+workers, extension +16 solo h; buffer ≈ 2.7× to October 9 from a September 19–20 launch.
+

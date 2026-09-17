@@ -733,3 +733,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     ledger v5. Round 26 fixes the X15 items and folds Q15 into the constructor and protocol; then freeze candidate
     v9, the re-signed forms and your operator sheet v4. No lead decision is open.
 
+69. (2026-09-17, 18:00 EDT) **Cost admission done** (`docs/R1_execution_plan_v2.md`, ceilings in
+    `manifests/revision_v1/cell_ceilings_v1.json`): core 360 cells ≈ 209 solo hours → ≈ 127 wall-clock hours with two
+    workers, extension +12 h; against ≈ 360–375 usable hours that is a ≈ 2.7× buffer. The corrected MQuAKE cells are
+    clean (locality 50 / 50 for the v0 conditions). Orchestrator-side gates are closed; what remains is Codex's round
+    26 (queue policy, near-miss family, final protocol text, candidate v9, your operator sheet v4) and your acts.
+
