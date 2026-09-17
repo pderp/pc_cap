@@ -687,3 +687,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     extension ≈ 16 h, against ≈ 360–375 usable hours from a September 19–20 launch: ≈ 45 % margin before the extension.
     The MQuAKE occupancy diagnostic needs one small Codex recipe (R1-73c) and runs after it.
 
+63. (2026-09-17, 12:40 EDT) Codex's round 23 committed (`5bd1519`). Under your DEC-060 (option D): I reviewed and adopted
+    Codex's adjudication rule — only mentions inside ordinary training text or drift windows without a subject
+    annotation are waived; every task-specific exposure stays excluded (`docs/tasks/R1-D10e-orchestrator-review.json`).
+    It restores 32 MQuAKE subjects (margin 211 over the 1,950 demanded), 46 CounterFact, 9 zsRE; it cannot support a
+    larger MQuAKE cadence, so 300 × 3 stands and no new question is needed. The near-miss family is feasible on all
+    three datasets (1,056 MQuAKE pairs for 300 needed). One newly exposed dependency: the draw / seal producers, the
+    validator and the sealed backend assume uniform 1,000-edit layouts and need parameterising for
+    4,050 / 4,050 / 1,950 — Codex's round 24, with the installed-source patch applied by me tonight at the idle
+    boundary. MQuAKE comparator profiles: learned 335–388 s, v0-style 957–1,125 s per 300-edit cell (batched drift).
+    Launch target unchanged: your acts September 19, block 1 by the 20th.
+

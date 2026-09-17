@@ -1,0 +1,42 @@
+{
+ "document": "R1-D10e adjudication review (orchestrator, under DEC-060)",
+ "date": "2026-09-17",
+ "reviewer": "orchestrator (Claude), under DEC-033's delegation; the lead chose Q14 option D (DEC-060)",
+ "rule_reviewed": "Waive a blocking event only if its exact reason is ordinary_text_training_prefix or development_drift_text, it has nonempty ordinary text, and it carries no subject or waiver-subject annotation; keep every edit / answer / paraphrase / locality / near / revision / composition or ambiguous query context and every direct subject reservation; cross-dataset names are not inferred homonyms; no teacher result or outcome enters the rule.",
+ "decision": "ADOPTED as an outcome-independent rule. Rationale: a mention inside an ordinary-text training window or a drift window is pretraining-style text exposure of the base, not editing or query exposure of a subject by the reader or the evaluation; the register's purpose (DEC-041/048) is to exclude subjects the system was taught or asked about, and these events are neither. Everything task-specific stays excluded.",
+ "effect": {
+  "zsre": {
+   "v4_subjects": 6075,
+   "proposed": 6084
+  },
+  "counterfact": {
+   "v4_subjects": 6075,
+   "proposed": 6121
+  },
+  "mquake": {
+   "v4_subjects": 2129,
+   "proposed": 2161,
+   "margin_vs_DEC060_demand_1950": 211
+  }
+ },
+ "limits_acknowledged": [
+  "preteacher and pre-role counts; the teacher pass and role allocation may reduce them",
+  "exposure as of commit 2a8b237; a supplement for later exposure is required before clearance",
+  "the rule does not establish subjects unseen by the base model; it distinguishes text exposure from editing exposure"
+ ],
+ "bindings": {
+  "worksheet_report": {
+   "path": "logs/r1_round23/r1-d10e-adjudication.json",
+   "sha256": "6c7b699ac6f1690d19c747b86f4e6517cd972a68aecd3eba0d97104bb17df115"
+  },
+  "task_record": {
+   "path": "docs/tasks/R1-D10e.md",
+   "sha256": "9513fd329f3326ed7c57ddf50f50f7b64385bfb43b968bbbe0ab0bfaf1583e47"
+  },
+  "candidate_v5": {
+   "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10e/round23_v5/evidence-v5-candidate.json",
+   "sha256": "4720992e4898d0f25df78b9278fc087228eb7320f94292f8a73bff90a2f57955"
+  }
+ },
+ "next": "Codex promotes candidate v5 to an operative evidence resource bound to this review (lane R1-D10g), with the later-exposure supplement; roles and teacher eligibility are regenerated from it."
+}

@@ -74,51 +74,50 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 23 (CPU; open now; posted 2026-09-17 10:35 EDT) — resolving MQuAKE, admitting endpoints
+  +0.006## 3. Lanes for Codex — round 24 (CPU; open now; posted 2026-09-17 12:40 EDT) — make the reduced MQuAKE cadence executable
 
-Round 22 is committed and mirrored. Q14 (MQuAKE capacity) is with the lead, default option A. Priority order:
-**R1-73c (small) → R1-D10d → R1-D10e → R1-D10f → R1-63f.** Rules as in round 22.
+Round 23 is committed and mirrored; the orchestrator adopted the D10e rule (`docs/tasks/R1-D10e-orchestrator-review.json`).
+Priority order: **R1-D10g → R1-D9d → R1-77d → R1-D10b2 → R1-49h → R1-58e.** Rules as in round 22; the installed-source
+and driver patches (R1-77d) are prepared now and applied by the orchestrator at tonight's idle boundary (after chains
+M / N / O), then recipes are rebuilt.
 
-### Lane R1-D10d — Q14 options made executable (first)
+### Lane R1-D10g — promote evidence v5 (first; small)
 
-For each Q14 option (A: MQuAKE 300 edits × 3 realizations, checkpoints 100 / 300; B: one realization at 1,000; C: drop
-MQuAKE; D: A after a context review), produce the exact deltas so the lead's answer applies the same day: the matrix
-(v5.2 candidates per option: cell list, checkpoints, block numbers under DEC-051), protocol v5.2 text (populations,
-the MQuAKE scale limitation stated in U08 / U14, the DEC-057 family unchanged for zsRE / CounterFact), the D9 inputs
-(demand per role and realization), and a capacity check against the D10a pool for each. A script that emits all of
-these from an option code, tests included. State which cells of the current matrix v5.1 each option removes or
-re-cadences.
+Emit the operative evidence resource from candidate v5 bound to the orchestrator's review document, plus the
+later-exposure supplement (exposure since `2a8b237`: chain K / L / M development cells and the R1-73b / R1-64d payloads
+— check and list), and regenerate the role plan and teacher-eligibility inputs from it under the DEC-060 layout
+(zsRE 4,050 / CounterFact 4,050 / MQuAKE 1,950). Both predecessors preserved.
 
-### Lane R1-D10e — adjudication worksheet for the quarantined context matches (MQuAKE first)
+### Lane R1-D9d — per-dataset demand in the D9 producers, preflight and endpoint constructor
 
-List every MQuAKE candidate blocked only by context-quarantine or incidental-mention reasons with its source events,
-grouped by reason, and propose one outcome-independent adjudication rule (e.g. an exact subject-name token match inside
-an edit / paraphrase / locality query is exposure; a mention inside ordinary drift text or a homonym in another
-dataset's query is not), applied mechanically with its effect on capacity per dataset. Do not change dispositions:
-emit a candidate v5 evidence resource under the proposed rule alongside v4, both hash-bound, for the orchestrator's
-review and the lead's decision (it widens A's margin; it cannot reach 4,050).
+Parameterise `r1_d9_receipt_core` / `r1_d9_clearance` / `r1_d9_draw` / `r1_d9_seal`, `r1_58c_draw_seal_preflight` and
+`r1_d10c_endpoints` for the exact per-dataset layout from the option-D matrix (edits per realization, checkpoints,
+roles), preserving global disjointness, Hall's condition, RNG streams and every refusal; version the stage contracts
+and the D9 inputs (v3) and authorization templates (v3) accordingly; tests for both layouts.
 
-### Lane R1-D10f — near-miss family under global subject disjointness
+### Lane R1-77d — validator and sealed backend accept the bound per-dataset cadence (patch prepared, applied at the idle boundary)
 
-Your D10c note: the old same-subject near-miss family is impossible under global disjointness and the proposed
-subject-masked-template family needs semantic admission and may lack compatible pairs. Deliver: the pairing
-feasibility on the D10a pool per dataset (how many compatible support / neighbour pairs exist per template family;
-whether 100 + 100 per realization are reachable), the exact family definition and its admission text for protocol
-v5.2, and a fallback if pairs are short (fewer near-miss cases with the planned denominator retained, never
-manufactured pairs).
+The installed real-payload validator and `r1_77b_sealed_backend` reject a 300-edit confirmatory cell. Prepare the exact
+patches (installed source + backend + tests) that accept the cadence bound in the option-D protocol / matrix and
+nothing else, with the edit request recording the identity change; the orchestrator applies them tonight and rebinds
+recipes / backend / freeze candidate (v8).
 
-### Lane R1-73c — MQuAKE primary (R1_learned_ff, v5) development recipe on the current identity (small; do first)
+### Lane R1-D10b2 — teacher review: admitted layout guard and certify-from-receipts
 
-The DEC-056 occupancy diagnostic (`r1_76_unseen_common --execute`) refuses without a MQuAKE recipe whose construction is
-the selected primary. The R1-64 payload builder binds the frozen v2 calibration (no MQuAKE entry) and is identity-bound,
-so it is not edited. Build `docs/tasks/R1-73c-mquake-R1_learned_ff.recipe.json` with a new builder module bound to
-calibration v3 and the v5 weights (as your R1-73b recipes for the learned comparators), inspection receipt, no
-execution. The orchestrator runs the diagnostic with it.
+Replace the fixed 4,050 guard in `r1_d10b_teacher_review.py` with the admitted per-dataset layout and add a
+certification mode that consumes the receipts of an existing completed run (tonight's chain N run under the
+exploration flag) so the certification does not require re-decoding; tests.
 
-### Lane R1-63f — freeze candidate v7 (after Q14)
+### Lane R1-49h — analysis inventory under option D
 
-Rebind to the chosen option's matrix / protocol, calibration v3, the R1-68e driver identity, the sealed backend
-(R1-77c), D10a evidence v4 (or v5) and the D9 templates; print the open gates.
+`validate_family` must accept the reduced execution inventory while the 63-interval DEC-057 family stays unchanged:
+zsRE / CounterFact inference intact; every MQuAKE 1,000-edit primary comparison reported unavailable (never inferred
+from 300); the secondary benchmarks at MQuAKE's actual occupancy 300. Protocol v5.2-D text where needed; tests.
+
+### Lane R1-58e — full synthetic rehearsal (after the above)
+
+Clearance → draw → endpoints → seal → freeze candidate → queue dry-run → one sealed TinyBase cell per cadence → R1-49g
+analysis, on the option-D layout; the operator sheet v3.
 
 ## 4. Interfaces and coordination
 
