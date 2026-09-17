@@ -31,10 +31,21 @@ concurrency-probe recipes. All 50 replacement locality strings already occurred 
 primary reservation events; all other payload content is unchanged. No previously uncovered
 exposure or additional eligibility loss is introduced. The exact declaration inventory and
 source-event witnesses are bound in operative v5 resource version `round24_v2`.
-Further declared payloads require an updated exposure supplement before draw.
+Round 25 adds 33 recipes on the patched identity, bringing the explicit declaration snapshot to 112.
+Every added recipe reuses an exactly previously reviewed payload. Teacher certification and joint-role
+review are complete; all 93 Hall subset checks pass at 6084 / 6121 / 2161 distinct subjects.
+The current bindings are in `tasks/R1-D9-inputs-v3-post77d.json`. Further payloads or undeclared
+exposure require review, and the lead must attest exposure through draw time.
 
-These are **preteacher** counts. MQuAKE has 2214 eligible items but 2161 distinct subjects;
-the 211-subject margin can shrink under final teacher/token filtering and joint-role allocation.
+The table was prepared before teacher review; the completed review and joint-role checks retain
+these counts. MQuAKE has 2214 eligible items but 2161 distinct subjects, a 211-subject margin.
+Its first-representative revision-compatible count is 2158; individual role capacities overlap.
+
+Teacher-baseline limitation: 6036 of 6084 zsRE items pass E.2 because the pinned base emits a
+newline immediately (empty text, one step). All 6084 pass teacher/token checks; CounterFact and
+MQuAKE teacher generations are nonempty. For most of this zsRE population, ES and RET-GS measure
+answer acquisition/generalization against an empty baseline. Teacher-incorrect is not evidence
+that the base initially answered the fact, and the historical E.2 eligibility rule is unchanged.
 No increased edit count follows automatically from available capacity.
 
 ## Receipt, execution and analysis contract
@@ -54,8 +65,9 @@ disjointness, source review, deterministic RNG streams and whole-draw failure se
 Final recipes require population_contract_version=2 and a bound schema-2 final protocol with
 population_decision=DEC-060-option-D, exact layout/hash/matrix, lead approval, no open gates,
 explicit extension decision, max_new=32, DEC-053 bounded equality and the October 9 deadline.
-The R1-77d source/backend patches remain unapplied until the orchestrator's idle boundary after
-chains M/N/O. Rebuild execution recipes, code identities and freeze candidate v8 after application.
+The R1-77d source/backend patches are installed. Post-patch development recipes and dry freeze
+candidate v8 bind the new identity. Final confirmatory recipes still require actual admitted
+populations, costs and signed receipts; a dry candidate is not an owner freeze.
 Draft matrices and synthetic tests are not executable final admission.
 
 The primary DEC-057 family remains **63 intervals**, allocated 0.05/63. zsRE/CounterFact retain
@@ -74,12 +86,13 @@ truncation diagnostics retain their original definitions. Resource ceilings need
 
 ## Remaining gates
 
-1. Complete the teacher run on all 14419 operative-v5 items, or certify a completed receipt run
-   covering every one of them without re-decoding. An older v4-only run lacks 88 restored items
-   and cannot certify the new inventory by itself. Certification preserves historical producer hashes.
-2. Merge certified teacher evidence with the regenerated role plan, then review joint allocation
-   at demands 4050/4050/1950. Teacher completion alone does not admit the population.
-3. Explicitly admit the proposed zsRE same-template/different-subject near family and endpoint
+1. Review the completed teacher certification, merged role evidence and clearance dry-run at
+   demands 4050/4050/1950; sign the exact current clearance request. Historical producer bytes
+   and the 88 items absent from the older v4 review remain accounted for.
+2. Confirm the current exposure snapshot and attest no additional exposure through draw time.
+   Teacher/role completion alone does not authorize the population draw.
+3. Explicitly admit NM-template-v1 across all three datasets (different subjects, exact relation
+   or subject-masked question template; not semantic nearest neighbours) and endpoint
    missingness. Its semantics differ from historical same-subject development challenges.
 4. Admit protocol/RNG, current exposure and stage-specific requests; perform the actual draw,
    endpoint construction and seal with the v3 operator inputs.
