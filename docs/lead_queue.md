@@ -718,8 +718,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     draw; my default is to adopt Codex's proposal. Everything else on the path to your acts is now running or
     assigned (freeze candidate v8, teacher certification, an independent counter-review of the whole package).
 
-67. (2026-09-17, 15:30 EDT) Teacher review done in three minutes: post-teacher subjects 0 zsRE / 0
-    CounterFact / 0 MQuAKE against demands 4,050 / 4,050 / 1,950 (margins -4,050 / -4,050 / -1,950).
-    The clearance evidence is complete except the role merge (Codex, CPU) and your signatures. R1-77d's tests pass
-    (48). Waiting on Codex for the recipe rebinding (MQuAKE re-run) and freeze candidate v8; on you for Q15.
+67. (2026-09-17, 15:40 EDT) Teacher review done in three minutes: post-teacher subjects 6,084 zsRE / 6,121 CounterFact /
+    2,161 MQuAKE against demands 4,050 / 4,050 / 1,950 (margins +2,034 / +2,071 / +211). The clearance
+    evidence is complete except the role merge (Codex, CPU) and your signatures. R1-77d's tests pass (48). Waiting on
+    Codex for the recipe rebinding (MQuAKE re-run) and freeze candidate v8; on you for Q15. (An earlier version of
+    this line, written 15:30, showed zeros from a misread receipt; corrected.)
 

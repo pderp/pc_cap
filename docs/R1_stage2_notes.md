@@ -1309,10 +1309,12 @@ bound), 180 s wall, one lease, no resumes. Output `assets/runs/pc_cap/R1/r1_d10b
 
 | dataset | reviewed | teacher pass | tokens pass | post-teacher subjects | demand | margin |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| zsre | ? | ? | ? | 0 | 4050 | -4050 |
-| counterfact | ? | ? | ? | 0 | 4050 | -4050 |
-| mquake | ? | ? | ? | 0 | 1950 | -1950 |
+| zsre | 6,084 | 6,084 | 6,084 | 6,084 | 4,050 | +2,034 |
+| counterfact | 6,121 | 6,121 | 6,121 | 6,121 | 4,050 | +2,071 |
+| mquake | 2,214 | 2,214 | 2,214 | 2,161 | 1,950 | +211 |
 
+(Corrected 15:40 EDT: the first filing of this table read the pre-merge counts and showed zeros.) The teacher-pass rate
+is the E.2 rule — the base answers the edit prompt incorrectly — which for counterfactual targets is nearly universal.
 Codex's certification mode (R1-D10h) consumes this run's receipts, merges the flags into the dispositions and
 regenerates the roles; the real clearance dry-run then shows the exact per-role counts and Hall checks.
 
