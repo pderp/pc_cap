@@ -1,0 +1,35 @@
+{
+  "mode": "dry_run",
+  "contract_sha256": "fbe90155f4530715b4ccac12f66370e547821706aaa1770165af6fd465d61d13",
+  "rows": {
+    "zsre": 6075,
+    "counterfact": 6075,
+    "mquake": 2181
+  },
+  "max_generated_tokens": 458592,
+  "historical_decode_seconds_per_row": 0.026856024849598287,
+  "linear_estimate_seconds": 384.87369211959304,
+  "planning_seconds_2x_to_5x": [
+    769.7473842391861,
+    1924.3684605979652
+  ],
+  "estimate_limit": "historical MQ measured throughput only; final prompt lengths, JIT and chunk shapes may differ; no new GPU measurement",
+  "capacity_shortfall": {
+    "mquake": 2129
+  },
+  "execution_requires": "explicit --execute, one GPU lease, MemAvailable guard",
+  "final_clearance": "still requires independent endpoint-role review and all dataset capacities",
+  "command": [
+    "/home/derp/cap/pc_cap/../venv/bin/python",
+    "-m",
+    "scripts.r1_d10b_teacher_review",
+    "--evidence",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10a/round22_v4/evidence.json",
+    "--evidence-sha256",
+    "733f4a269379b961c78e3583178e5688106d0d1b16f080f998058c2dee3ea2de",
+    "--output",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round22_v1",
+    "--log-dir",
+    "logs/r1_round22/teacher"
+  ]
+}

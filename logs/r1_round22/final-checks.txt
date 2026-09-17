@@ -1,0 +1,10 @@
+$ ../venv/bin/ruff check scripts/r1_d10a_review_core.py scripts/r1_d10a_review.py scripts/r1_d10a_capacity_diagnostics.py scripts/r1_d10b_teacher_review.py scripts/r1_d10c_endpoints.py scripts/r1_d10c_development_rehearsal.py scripts/r1_58d_operator_inputs.py scripts/ht3e_independent_review.py scripts/ht4d_claim_ledger.py tests/revision_v1/test_r1_d10a_review.py tests/revision_v1/test_r1_d10b_teacher_review.py tests/revision_v1/test_r1_d10c_endpoints.py tests/revision_v1/test_ht3e_independent_review.py
+All checks passed!
+
+$ /home/derp/cap/pc_cap/../venv/bin/python -m pytest -q -p no:cacheprovider tests/revision_v1/test_r1_d10a_review.py tests/revision_v1/test_r1_d10b_teacher_review.py tests/revision_v1/test_r1_d10c_endpoints.py tests/revision_v1/test_ht3e_independent_review.py tests/revision_v1/test_r1_d9_receipts.py tests/test_package_layout.py
+........................................................................ [ 52%]
+..................................................................       [100%]
+138 passed in 5.90s
+
+$ git diff --check
+
