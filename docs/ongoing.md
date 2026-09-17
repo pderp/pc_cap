@@ -102,7 +102,9 @@ Before the lead signs: review evidence v5 (rule, supplement, roles), the near-mi
 and matrix v5.2-D, the analysis inventory (R1-49h) and the execution plan against the accepted decisions
 (DEC-033–060). Reproduce the subject counts from the register and the operative dispositions independently; list
 every point where a document and a decision disagree; say plainly whether the package is ready for the lead's
-acts. New files only; no fixes applied — edit requests.
+acts. Include the zsRE empty-generation teacher baseline (notes §"Teacher-token review": 6,036 / 6,084 zsRE items
+pass because the base answers nothing) and whether protocol v5.2-D states it. New files only; no fixes applied —
+edit requests.
 
 ### Lane R1-64e — recipe builders and recipes rebound to the patched identity (first)
 

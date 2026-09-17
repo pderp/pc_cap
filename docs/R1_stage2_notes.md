@@ -1318,3 +1318,9 @@ is the E.2 rule — the base answers the edit prompt incorrectly — which for c
 Codex's certification mode (R1-D10h) consumes this run's receipts, merges the flags into the dispositions and
 regenerates the roles; the real clearance dry-run then shows the exact per-role counts and Hall checks.
 
+Limitation to carry into the protocol and X15: on zsRE, 6,036 of the 6,084 reviewed items pass the teacher rule
+because the base emits a newline immediately (empty generation, one step) on the question-form prompt — "teacher
+incorrect" there means "no answer", as in the historical E.2 filter (DEC-039: 0 of 6,000 teacher-correct). CounterFact
+and MQuAKE generations are non-empty. This is the same baseline the v0 design used; it should be stated where zsRE
+ES / RET-GS are interpreted (the edit is against an empty baseline answer).
+
