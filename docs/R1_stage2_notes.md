@@ -1254,3 +1254,37 @@ throughout, swap unchanged. Probe 2 (two non-learned zsRE cells, whose GPU share
 teacher review; if it also clears ≈ 1.4×, blocks 3–5 run two cells at a time with ceilings re-measured under
 concurrency as a separate admission (execution plan §Blocks).
 
+## Chain M: MQuAKE comparator profiles — costs valid, locality invalid (2026-09-17, 13:30 EDT)
+
+R1-73b recipes (calibration v3, radius 0; batched drift for the six non-learned families), 300-edit development cells:
+
+| condition | wall (s) | drift op (s) | rest (s) | ES | RET-GS | unseen FF / 100 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| R1_nonlearned | 331 | 44 | 287 | 1.00 | 0.00 | 100 |
+| R1_learned_ff_v2 | 383 | 85 | 298 | 1.00 | 0.18 | 7 |
+| v0_stable / matched_update | 1,122 / 953 | 87 / 82 | 1,035 / 871 | 1.00 | 0.00 | 0 |
+| v0_live_C1 / C2 | 1,118 / 963 | 87 | 1,031 / 877 | 1.00 | 0.00 | 0 |
+| S1_LM / S1_literal | 1,151 / 1,149 | 105 / 104 | 1,046 / 1,045 | 1.00 | 0.00 | 0 |
+
+Costs: the execution plan's MQuAKE estimates (0.15 h learned, 0.6 h non-learned per 300-edit cell) are confirmed at
+0.09–0.11 h and 0.26–0.32 h — MQuAKE cells are cheaper than estimated (short answers; no challenge sets in these
+development payloads). RET-GS 0.00 for every v0-style condition is the expected consequence of radius 0 (exact-prompt
+firing only; paraphrases never retrieve) and is the declared comparison; the v2 reader's 0.18 is on the exposed
+development population.
+
+**Locality 0 / 50 in every MQuAKE cell is a payload artifact, not a result.** The R1-73b payload's 50 locality
+prompts are all edit prompts of items in the same cell (50 / 50 collide; e.g. locality prompt "Yak-9 was developed
+by" is the edit whose stored answer is "Riot Games"), so the cap-on decode returns the edited answer and the
+original-base reference the true continuation on every row. The zsRE / CounterFact payloads (R1-64 builder) draw
+locality from unrelated prompts and are unaffected (LS 50/50, 49/50). Codex lane R1-73d rebuilds the MQuAKE payloads
+with locality from the unrelated-prompt pool (the R1-65 rule: never an in-memory own prompt), then the eight cells
+are re-run (≈ 2 h; costs will not change materially). The confirmatory MQuAKE payloads come from the D10c constructor,
+which must carry the same rule (checked in R1-58e's rehearsal).
+
+**Teacher review (chain N) refused**: the D10a evidence binds `scripts/r1_d9_receipts.py`, which Codex's round 21
+changed after the evidence was written; the promoted evidence v5 (R1-D10g) rebinds it, and the teacher run follows.
+
+**Concurrency probe 2** refused at start: the driver refuses an existing cell directory without `--resume`, and the
+two R1-64d cells already exist from chain K; re-launched from probe recipes that differ only by a probe field (new
+identities, same payloads and weights).
+

@@ -698,3 +698,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     boundary. MQuAKE comparator profiles: learned 335–388 s, v0-style 957–1,125 s per 300-edit cell (batched drift).
     Launch target unchanged: your acts September 19, block 1 by the 20th.
 
+64. (2026-09-17, 13:35 EDT) MQuAKE comparator profiles done: cheaper than planned (0.1 h learned, 0.3 h non-learned per
+    300-edit cell). Two artifacts found and handed to Codex: the MQuAKE development payload used edit prompts as
+    locality prompts (LS 0 / 50 everywhere — a payload bug, not a result; fix and re-run ≈ 2 h), and the teacher
+    review refused because its evidence bound a script Codex later changed (rebinding is part of the evidence
+    promotion already in round 24). Neither moves the launch date.
+

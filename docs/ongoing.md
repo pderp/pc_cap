@@ -77,9 +77,17 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 24 (CPU; open now; posted 2026-09-17 12:40 EDT) — make the reduced MQuAKE cadence executable
 
 Round 23 is committed and mirrored; the orchestrator adopted the D10e rule (`docs/tasks/R1-D10e-orchestrator-review.json`).
-Priority order: **R1-D10g → R1-D9d → R1-77d → R1-D10b2 → R1-49h → R1-58e.** Rules as in round 22; the installed-source
+Priority order: **R1-73d (small) → R1-D10g → R1-D9d → R1-77d → R1-D10b2 → R1-49h → R1-58e.** Rules as in round 22; the installed-source
 and driver patches (R1-77d) are prepared now and applied by the orchestrator at tonight's idle boundary (after chains
 M / N / O), then recipes are rebuilt.
+
+### Lane R1-73d — MQuAKE development payloads: locality must not be edit prompts (first; small)
+
+Chain M shows LS 0 / 50 in every MQuAKE cell because the R1-73b payload's 50 locality prompts are all edit prompts of
+the same cell (notes §"Chain M"). Rebuild the MQuAKE payloads with locality rows drawn from the unrelated-prompt pool
+under the R1-65 rule (never an own prompt of an in-memory record, at any occupancy), keep everything else identical,
+rebuild the eight recipes on the current identity with inspection receipts, and add the same check to the D10c
+constructor and the seal validator (a locality prompt equal to any reserved edit / paraphrase prompt refuses).
 
 ### Lane R1-D10g — promote evidence v5 (first; small)
 
