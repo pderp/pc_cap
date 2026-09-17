@@ -612,3 +612,16 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 54. (2026-09-16, 19:05 EDT) Q11–Q13 recorded (DEC-057/058/059). No lead decision is open. Codex gets lane R1-49g: write the three bindings into protocol v5 (a v5.1 draft) and the R1-75 contrast / classifier / benchmark modules with tests; then the freeze candidate is rebuilt (R1-63e). Remaining gates to the freeze are all measurements and receipts: September 20 cost admission (needs R1-68e), the MQuAKE calibration (tonight), the comparator and MQuAKE profiles, the stress panel, and your clearance / draw / seal acts once R1-D9's producers exist.
 
+55. (2026-09-17, 03:45 EDT) Chain I done: all 16 comparator profiles and the MQuAKE calibration. Two things you should
+    know before September 20. (a) **Cost shape:** the non-learned conditions cost 0.75–1.3 h per 300-edit cell (scalar
+    drift 1,800–2,900 s; on CounterFact another ≈ 2,000 s of v0 per-query bank search inside the endpoint decodes).
+    Even with Codex's batched drift (R1-68e) the 225 non-learned 1,000-edit cells extrapolate to ≈ 250 h and the 135
+    learned ones ≈ 45 h, against 306 usable hours — feasible only with no failures and the 45-cell extension deferred.
+    I bring the measured number on the 20th; the options if it does not fit are DEC-052's accepted-incomplete reporting
+    in block order, comparator drift at the final checkpoint only (a protocol amendment), or a second GPU. (b) **MQuAKE
+    and the v0 cap:** no key radius separates MQuAKE paraphrases from unrelated prompts (coverage 0 at every radius),
+    so the v0-style conditions run on MQuAKE with radius 0 — exact-prompt firing only, as the calibration spec's
+    declared fallback. I admitted that as calibration v3 (development, declared); it is the honest comparison and
+    needs no decision from you unless you object. The stress panel refused to start on a receipt-format detail in my
+    approval file; fixing and relaunching now.
+

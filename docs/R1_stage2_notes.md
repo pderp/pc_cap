@@ -1102,3 +1102,52 @@ position, identical exceedance counts) is the fix; the fallback is a protocol am
 checkpoint only), which is the lead's call. S1_LM, S1_literal and the CounterFact cells follow tonight; the MQuAKE
 calibration closes the chain; the stress panel (chain J) runs after it.
 
+## Chain I complete: all 16 comparator development profiles and the MQuAKE calibration (2026-09-17, 03:30 EDT)
+
+300-edit development cells, checkpoints 100 / 300, R1-64c recipes on the installed tree (learned conditions
+incremental profile, all others full):
+
+| dataset | condition | wall (s) | drift op (s) | rest (s) |
+| --- | --- | ---: | ---: | ---: |
+| zsRE | R1_nonlearned | 253 | 41 | 212 |
+| zsRE | v0_stable | 2,877 | 2,138 | 739 |
+| zsRE | matched_update | 2,749 | 2,137 | 612 |
+| zsRE | v0_live_C1 | 2,855 | 2,136 | 719 |
+| zsRE | v0_live_C2 | 2,656 | 2,030 | 626 |
+| zsRE | S1_LM | 3,649 | 2,908 | 741 |
+| zsRE | S1_literal | 3,594 | 2,867 | 727 |
+| zsRE | R1_learned_ff_v2 | 290 | 82 | 208 |
+| CounterFact | R1_nonlearned | 343 | 43 | 300 |
+| CounterFact | v0_stable | 4,027 | 1,856 | 2,171 |
+| CounterFact | matched_update | 3,919 | 1,855 | 2,064 |
+| CounterFact | v0_live_C1 | 4,026 | 1,856 | 2,170 |
+| CounterFact | v0_live_C2 | 3,791 | 1,767 | 2,024 |
+| CounterFact | S1_LM | 4,652 | 2,487 | 2,165 |
+| CounterFact | S1_literal | 4,654 | 2,482 | 2,172 |
+| CounterFact | R1_learned_ff_v2 | 399 | 82 | 317 |
+
+Two cost structures. The learned conditions are cheap everywhere (≈ 0.3–0.4 h per 1,000-edit cell). The five
+non-learned conditions pay (i) the scalar drift path, 1,800–2,900 s per assay (the S1 continued bases are slowest:
+a second base is held), and (ii) on CounterFact ≈ 2,000 s of ordinary endpoint work per 300-edit cell — the v0 cap's
+per-query bank search inside the 32-token decodes of the immediate checks (534 s), retention (739 s for two
+checkpoints), unseen (298 s) and the challenge sets (345 s); zsRE's shorter answers keep that at ≈ 700 s. Extrapolated
+to a 1,000-edit cell with three checkpoints: zsRE v0-style ≈ 3 × 2,100 + ≈ 1,500 ≈ 2.2 h (≈ 0.9 h with batched drift,
+R1-68e); CounterFact v0-style ≈ 3 × 1,850 + ≈ 3,900 ≈ 2.6 h (≈ 1.3 h with batched drift); MQuAKE unmeasured (needs
+R1-73b recipes). With R1-68e landed, the 225 non-learned cells are ≈ 250 h and the 135 learned cells ≈ 45 h, against
+306 usable hours — feasible only if nothing fails and the extension is deferred; without R1-68e ≈ 540 h. The
+September 20 admission will state this with the measured R1-68e number; the lead's options if it does not fit are the
+DEC-052 accepted-incomplete reporting in block order, a comparator drift assay at the final checkpoint only (a protocol
+amendment), or a second GPU.
+
+**MQuAKE calibration (R1-73).** Codex's spec, executed on the development slice (100 edits, 100 paraphrases, 500
+outside prompts; `results/R1/calibration_mquake_v3/calibration_candidate.json`): at every grid radius the v0 key
+geometry covers 0 / 100 paraphrases while firing on 6–72 % of outside prompts — the MQuAKE cloze edit keys and their
+question-form paraphrases are farther apart than edit keys are from unrelated prompts. No positive radius meets the
+1 % bound; the spec's declared fallback applies: radius 0 on all three banks (exact-key firing only; measured outside
+false fires 0 / 500; historical b_m carried). This is a measured property of the v0 design on this dataset, not a
+defect of the run: the v0-style conditions on MQuAKE will show ES on exact prompts and base-level GS, which is exactly
+the comparison the learned reader is claimed against. Admission (orchestrator, under DEC-033's delegation; the lead
+may override): calibration v3 = the frozen v2 zsRE / CounterFact radii unchanged + MQuAKE radii 0 with this receipt,
+declared in the protocol (U08) and in every MQuAKE comparator result. Codex assembles the versioned file and the
+MQuAKE recipes (R1-73b).
+
