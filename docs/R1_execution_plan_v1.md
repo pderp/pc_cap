@@ -12,7 +12,7 @@ Matrix v5.1 core = 360 cells in the DEC-051 block order; the 45-cell no-gate ext
 | v0_stable, matched_update, v0_live_C1 / C2 | 0.48 | 1.22 | 0.6 (est.; chain M) |
 | S1_LM, S1_literal | 0.50 | 1.28 | 0.65 (est.; chain M) |
 
-Queue ceilings = 1.5 × these (a cell exceeding its ceiling is stopped, charged and reported; resume is manual).
+Queue ceilings = 1.5 × these solo costs (× 1.1 under two-cell concurrency) (a cell exceeding its ceiling is stopped, charged and reported; resume is manual).
 
 ## Blocks (DEC-051), cells and hours
 
@@ -26,9 +26,10 @@ Queue ceilings = 1.5 × these (a cell exceeding its ceiling is stopped, charged 
 | ext | R1_learned_ff_v2 (no gate); realizations 0–2 | 45 | 16 | 251 |
 
 Available: from a September 19–20 launch to the October 9 stop ≈ 480–500 wall-clock hours; at 75 % ≈ 360–375
-usable hours; margin ≈ 110–140 h (≈ 45 %) before the extension, ≈ 30–40 % with it. Concurrency probe 1 (two learned zsRE cells): 1.65× throughput (330 s wall for 543 s of solo work). Probe 2 (two
-non-learned zsRE cells) is queued; if it also gives ≥ 1.4×, blocks 3–5 run two cells at a time with ceilings
-re-measured under concurrency (a separate admission).
+usable hours; margin ≈ 110–140 h (≈ 45 %) before the extension, ≈ 30–40 % with it. Concurrency admitted (probes 1 and 2: 1.65× and 1.67× throughput, per-cell slowdown ≤ 1.10×, identical results,
+host memory ≥ 20 GB): every block runs **two cells at a time**; per-cell ceilings under concurrency = 1.5 × 1.1 × the
+solo cost. Wall-clock estimate: core ≈ 140 h, with the extension ≈ 150 h, against ≈ 360–375 usable hours — a 2.4×
+buffer. Requires the queue's two-worker mode (R1-77e).
 
 ## Order of operations to launch
 

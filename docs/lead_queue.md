@@ -704,3 +704,8 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     review refused because its evidence bound a script Codex later changed (rebinding is part of the evidence
     promotion already in round 24). Neither moves the launch date.
 
+65. (2026-09-17, 13:40 EDT) **Concurrency admitted: two cells at a time.** Probe 2 (two non-learned cells) gave 1.67×
+    throughput with identical results and 20 GB of host memory free, matching probe 1. The core matrix drops from
+    ≈ 235 solo hours to ≈ 140 wall-clock hours, ≈ 150 with the extension, against ≈ 360–375 usable hours from a
+    September 19–20 launch — a 2.4× buffer for crashes and reruns. Codex adds a two-worker mode to the queue (R1-77e).
+

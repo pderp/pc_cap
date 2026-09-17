@@ -77,7 +77,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 24 (CPU; open now; posted 2026-09-17 12:40 EDT) — make the reduced MQuAKE cadence executable
 
 Round 23 is committed and mirrored; the orchestrator adopted the D10e rule (`docs/tasks/R1-D10e-orchestrator-review.json`).
-Priority order: **R1-73d (small) → R1-D10g → R1-D9d → R1-77d → R1-D10b2 → R1-49h → R1-58e.** Rules as in round 22; the installed-source
+Priority order: **R1-73d (small) → R1-D10g → R1-D9d → R1-77d → R1-D10b2 → R1-49h → R1-77e → R1-58e.** Rules as in round 22; the installed-source
 and driver patches (R1-77d) are prepared now and applied by the orchestrator at tonight's idle boundary (after chains
 M / N / O), then recipes are rebuilt.
 
@@ -121,6 +121,15 @@ exploration flag) so the certification does not require re-decoding; tests.
 `validate_family` must accept the reduced execution inventory while the 63-interval DEC-057 family stays unchanged:
 zsRE / CounterFact inference intact; every MQuAKE 1,000-edit primary comparison reported unavailable (never inferred
 from 300); the secondary benchmarks at MQuAKE's actual occupancy 300. Protocol v5.2-D text where needed; tests.
+
+### Lane R1-77e — two-worker mode for the confirmatory queue
+
+Concurrency is admitted (notes §"Concurrency probe 2": two cells at a time, 1.65–1.67× throughput, identical
+results). Add to `scripts/r1_77_queue.py` a `--workers 2` mode: two cells in flight from the same block order, one
+shared budget / cost account, the existing per-cell canonical locks, MemAvailable guard checked before each launch
+(≥ 6 GiB with one cell running), ceilings under concurrency = 1.5 × 1.1 × the solo ceiling, resume semantics
+unchanged, and the DEC-052 inventory unaffected. Tests with TinyBase cells (including one worker failing while the
+other completes).
 
 ### Lane R1-58e — full synthetic rehearsal (after the above)
 

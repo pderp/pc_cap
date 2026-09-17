@@ -1288,3 +1288,15 @@ changed after the evidence was written; the promoted evidence v5 (R1-D10g) rebin
 two R1-64d cells already exist from chain K; re-launched from probe recipes that differ only by a probe field (new
 identities, same payloads and weights).
 
+## Concurrency probe 2: two non-learned zsRE cells at once (2026-09-17, 13:33 EDT)
+
+v0_stable and matched_update zsRE cells (probe recipes = the R1-64d recipes plus a probe field; same payloads and
+weights) launched together: 922 s and 771 s against 838 s and 708 s solo; both finished in 925 s wall against
+1,546 s sequential — **1.67× throughput**, per-cell slowdown 1.09–1.10×; final states identical to the solo runs;
+host memory ≥ 20 GB available throughout, swap unchanged, no PSI pressure. Together with probe 1 (learned cells,
+1.65×) this admits **two cells at a time** for the confirmatory queue (orchestrator admission under DEC-033's
+delegation): per-cell ceilings under concurrency = 1.5 × (1.1 × solo cost); the queue runner needs a two-worker
+mode with one shared budget account and the existing per-cell locks (Codex lane R1-77e). Effect on the plan: the
+360-cell core at ≈ 235 solo hours becomes ≈ 140 wall-clock hours; with the extension ≈ 150 h — against ≈ 360–375
+usable hours from a September 19–20 launch, a 2.4× buffer for crashes and reruns.
+
