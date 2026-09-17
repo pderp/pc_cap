@@ -1300,3 +1300,19 @@ mode with one shared budget account and the existing per-cell locks (Codex lane 
 360-cell core at ≈ 235 solo hours becomes ≈ 140 wall-clock hours; with the extension ≈ 150 h — against ≈ 360–375
 usable hours from a September 19–20 launch, a 2.4× buffer for crashes and reruns.
 
+## Teacher-token review on the final base complete (2026-09-17, 15:14 EDT)
+
+Chain P: `r1_d10b_teacher_review --execute` over the operative evidence v5 (14,419 items across the three datasets;
+E.2 greedy rule, max_new 32, newline / EOS stop; final base `c4ac3fb8…`, tokenizer `8414cab9…`; matrix v5.2-D layout
+bound), 180 s wall, one lease, no resumes. Output `assets/runs/pc_cap/R1/r1_d10b/round24_v2/teacher_evidence.json`
+(schema 5, `teacher_token_review_complete = true`; `role_compatibility_complete` remains false until the role merge).
+
+| dataset | reviewed | teacher pass | tokens pass | post-teacher subjects | demand | margin |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| zsre | ? | ? | ? | 0 | 4050 | -4050 |
+| counterfact | ? | ? | ? | 0 | 4050 | -4050 |
+| mquake | ? | ? | ? | 0 | 1950 | -1950 |
+
+Codex's certification mode (R1-D10h) consumes this run's receipts, merges the flags into the dispositions and
+regenerates the roles; the real clearance dry-run then shows the exact per-role counts and Hall checks.
+

@@ -1,0 +1,162 @@
+{
+  "mode": "dry_run",
+  "contract_sha256": "44f6202f38a5460ad64e9c05195f1fa5dcaee6c6657abf05660b41fb3b7cff13",
+  "rows": {
+    "zsre": 6084,
+    "counterfact": 6121,
+    "mquake": 2214
+  },
+  "max_generated_tokens": 461408,
+  "historical_decode_seconds_per_row": 0.026856024849598287,
+  "linear_estimate_seconds": 387.2370223063577,
+  "planning_seconds_2x_to_5x": [
+    774.4740446127154,
+    1936.1851115317884
+  ],
+  "estimate_limit": "historical MQ measured throughput only; final prompt lengths, JIT and chunk shapes may differ; no new GPU measurement",
+  "capacity_shortfall": {},
+  "dataset_layouts": {
+    "zsre": {
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "outside": 100,
+        "near_miss_support": 100,
+        "near_miss_neighbour": 100,
+        "revision": 50
+      },
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "demand_by_role": {
+        "edits": 3000,
+        "outside": 300,
+        "near_miss_support": 300,
+        "near_miss_neighbour": 300,
+        "revision": 150
+      }
+    },
+    "counterfact": {
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "outside": 100,
+        "near_miss_support": 100,
+        "near_miss_neighbour": 100,
+        "revision": 50
+      },
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "demand_by_role": {
+        "edits": 3000,
+        "outside": 300,
+        "near_miss_support": 300,
+        "near_miss_neighbour": 300,
+        "revision": 150
+      }
+    },
+    "mquake": {
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "outside": 100,
+        "near_miss_support": 100,
+        "near_miss_neighbour": 100,
+        "revision": 50
+      },
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "demand_by_role": {
+        "edits": 900,
+        "outside": 300,
+        "near_miss_support": 300,
+        "near_miss_neighbour": 300,
+        "revision": 150
+      }
+    }
+  },
+  "execution_requires": "explicit --execute, one GPU lease, MemAvailable guard",
+  "final_clearance": "still requires independent endpoint-role review and all dataset capacities"
+}
+{"dataset": "zsre", "chunk_number": 0, "resumed": false, "reviewed_total": 256, "mem_available_bytes": 20175257600, "wall_seconds": 3.326373600983061, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00000.json", "sha256": "9d05b929da8c40c1727fecb36489b0f27f625c7e773d5fedbc2b718ef9e9746e"}}
+{"dataset": "zsre", "chunk_number": 1, "resumed": false, "reviewed_total": 512, "mem_available_bytes": 19733606400, "wall_seconds": 5.828491341002518, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00001.json", "sha256": "61ec3e97136eea9ce7eb31a0fbcb802b7823917b34d61a91f9fe7be3bed88150"}}
+{"dataset": "zsre", "chunk_number": 2, "resumed": false, "reviewed_total": 768, "mem_available_bytes": 19629920256, "wall_seconds": 6.0786217429849785, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00002.json", "sha256": "da608c4e8b04ab49c9d18b8a608a4c29549d15e3c04ed7587864ffea249edf39"}}
+{"dataset": "zsre", "chunk_number": 3, "resumed": false, "reviewed_total": 1024, "mem_available_bytes": 19626631168, "wall_seconds": 6.213840471988078, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00003.json", "sha256": "91e5c428ecc4c50b0f8540a16242bbf5e78d254c5e5b21cd78ff2457fa297c55"}}
+{"dataset": "zsre", "chunk_number": 4, "resumed": false, "reviewed_total": 1280, "mem_available_bytes": 19626741760, "wall_seconds": 6.981356306001544, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00004.json", "sha256": "92a07dae4283e334d56a0490b9cb0af25d91d764528375694cb43b85176d6eab"}}
+{"dataset": "zsre", "chunk_number": 5, "resumed": false, "reviewed_total": 1536, "mem_available_bytes": 19617869824, "wall_seconds": 7.077754041994922, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00005.json", "sha256": "3afbd870c66141cbbadda0b22f985ecadfe47860912647eda4f238f8a092dcb3"}}
+{"dataset": "zsre", "chunk_number": 6, "resumed": false, "reviewed_total": 1792, "mem_available_bytes": 19627057152, "wall_seconds": 7.200410151010146, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00006.json", "sha256": "ea6471a0aa1da9d816e2799b3fd96ead71832adef7915b1c51ec38a0e5a5dd1d"}}
+{"dataset": "zsre", "chunk_number": 7, "resumed": false, "reviewed_total": 2048, "mem_available_bytes": 19627532288, "wall_seconds": 7.3408265519829, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00007.json", "sha256": "f38f33419424c7950e7ed5287a24139a7e3b4fe959fb311e84ca4cce4284965a"}}
+{"dataset": "zsre", "chunk_number": 8, "resumed": false, "reviewed_total": 2304, "mem_available_bytes": 19619512320, "wall_seconds": 7.49129228698439, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00008.json", "sha256": "9f7d7c9a2b6da13ef2bac44249c2c9113f75abc45207a5cb7dd123ad12f5b7f4"}}
+{"dataset": "zsre", "chunk_number": 9, "resumed": false, "reviewed_total": 2560, "mem_available_bytes": 19641241600, "wall_seconds": 7.630666240002029, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00009.json", "sha256": "56e1f943e705a9b9be0aa881fffc9ce7822171f35d87e0629272cf475a986cdf"}}
+{"dataset": "zsre", "chunk_number": 10, "resumed": false, "reviewed_total": 2816, "mem_available_bytes": 19641352192, "wall_seconds": 7.773967371991603, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00010.json", "sha256": "05658e23115ffa2c06b56ac2b1c4d6e58812fac77709eb84d79de59dd64ecea9"}}
+{"dataset": "zsre", "chunk_number": 11, "resumed": false, "reviewed_total": 3072, "mem_available_bytes": 19641520128, "wall_seconds": 7.906226516992319, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00011.json", "sha256": "c5b88bdcba93e842008f49c7cf3eb650ee5827d7f5e34e2de16acd37c07eefdd"}}
+{"dataset": "zsre", "chunk_number": 12, "resumed": false, "reviewed_total": 3328, "mem_available_bytes": 19641131008, "wall_seconds": 8.144500864000292, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00012.json", "sha256": "65bc7fa4968162f9dd4290c129704c65bce8750bf60fd59acf2fda6f6d05dca8"}}
+{"dataset": "zsre", "chunk_number": 13, "resumed": false, "reviewed_total": 3584, "mem_available_bytes": 19660509184, "wall_seconds": 8.270386332995258, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00013.json", "sha256": "f6afb46238f65eb6ee8e7e62024da3c7e457c22be4325067193175c5b8090e7a"}}
+{"dataset": "zsre", "chunk_number": 14, "resumed": false, "reviewed_total": 3840, "mem_available_bytes": 19660726272, "wall_seconds": 8.39243733198964, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00014.json", "sha256": "b76ac300f3ea3b151941d22fd3c78d2c690dca74da481daa281281db6ab5f389"}}
+{"dataset": "zsre", "chunk_number": 15, "resumed": false, "reviewed_total": 4096, "mem_available_bytes": 19661180928, "wall_seconds": 8.526273761992343, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00015.json", "sha256": "5d750501428fb1033df6ddaf5a97592548850ef0c9482d54b73805a2aeccfeae"}}
+{"dataset": "zsre", "chunk_number": 16, "resumed": false, "reviewed_total": 4352, "mem_available_bytes": 19661037568, "wall_seconds": 8.665126787003828, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00016.json", "sha256": "52fd6cf4500beac980a6859029703ac4dbdd391ab98f8421187cc589080376ee"}}
+{"dataset": "zsre", "chunk_number": 17, "resumed": false, "reviewed_total": 4608, "mem_available_bytes": 19660902400, "wall_seconds": 8.845735770009924, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00017.json", "sha256": "98d377d62cf4ea5b377a0764bd9b805b3b9a6113f6f22afb351bc9364a4cb1d9"}}
+{"dataset": "zsre", "chunk_number": 18, "resumed": false, "reviewed_total": 4864, "mem_available_bytes": 19660767232, "wall_seconds": 9.02675242398982, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00018.json", "sha256": "30cba3aaf36bea56c37965da660375c0353cac2ebdddb5faf99e7f5772f62d7a"}}
+{"dataset": "zsre", "chunk_number": 19, "resumed": false, "reviewed_total": 5120, "mem_available_bytes": 19680874496, "wall_seconds": 9.263338956981897, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00019.json", "sha256": "978dedcca709372c797c06bcfbe1f0c3fa224efd85fb456f17874f7f46657dea"}}
+{"dataset": "zsre", "chunk_number": 20, "resumed": false, "reviewed_total": 5376, "mem_available_bytes": 19682074624, "wall_seconds": 9.512416701996699, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00020.json", "sha256": "044558cdf21b4bc318d2ddbc81b66adcb0f49f096b108645a5fd267a9b5111f8"}}
+{"dataset": "zsre", "chunk_number": 21, "resumed": false, "reviewed_total": 5632, "mem_available_bytes": 19683520512, "wall_seconds": 9.650590695004212, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00021.json", "sha256": "3d2e02446eaa46e4ded83a56283bf7e9353a74a015fc7bab9e47b98bc1c0af6e"}}
+{"dataset": "zsre", "chunk_number": 22, "resumed": false, "reviewed_total": 5888, "mem_available_bytes": 19683631104, "wall_seconds": 9.87328667199472, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00022.json", "sha256": "a806be47f809d4b03ce35e9d9d556da87b875511a36ddeb10c43f2842003e540"}}
+{"dataset": "zsre", "chunk_number": 23, "resumed": false, "reviewed_total": 6084, "mem_available_bytes": 19683602432, "wall_seconds": 11.912274286994943, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/zsre/chunk-00023.json", "sha256": "4602d194374e3aa78fff7601382fb9ab45d8115e50ea0c90315e7cd01dc7ad37"}}
+{"dataset": "counterfact", "chunk_number": 0, "resumed": false, "reviewed_total": 6340, "mem_available_bytes": 19722317824, "wall_seconds": 54.44825078299618, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00000.json", "sha256": "8dcc027594aea547209c1985831077a5e37f5d74eb42d0ac98b5f2b100b04018"}}
+{"dataset": "counterfact", "chunk_number": 1, "resumed": false, "reviewed_total": 6596, "mem_available_bytes": 19640393728, "wall_seconds": 61.8169881629874, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00001.json", "sha256": "231da0b5760c0a959ae2eaef5321cb47163f322fce589d1a0b06ec4f099d8d0b"}}
+{"dataset": "counterfact", "chunk_number": 2, "resumed": false, "reviewed_total": 6852, "mem_available_bytes": 19546431488, "wall_seconds": 70.4609850650013, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00002.json", "sha256": "f3b91e3fe94ce37b8b55430c1de7972d1874a74b804293bde10af6e885405dbb"}}
+{"dataset": "counterfact", "chunk_number": 3, "resumed": false, "reviewed_total": 7108, "mem_available_bytes": 19427405824, "wall_seconds": 74.39029978000326, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00003.json", "sha256": "4df8a6cdbe8077548291ecbed42b3040ad732fd07812bddf5d79a5aaa871a752"}}
+{"dataset": "counterfact", "chunk_number": 4, "resumed": false, "reviewed_total": 7364, "mem_available_bytes": 19580878848, "wall_seconds": 77.59590738799307, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00004.json", "sha256": "148c9404eb9bd2a424d7282f9ebbabb7c201cfee0380e1d64ffda515e0c3df08"}}
+{"dataset": "counterfact", "chunk_number": 5, "resumed": false, "reviewed_total": 7620, "mem_available_bytes": 19529068544, "wall_seconds": 80.90408081299393, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00005.json", "sha256": "ef57c33845981a475f15465c96b553d4475b57e6bf3c8d574ddce4e2d0205777"}}
+{"dataset": "counterfact", "chunk_number": 6, "resumed": false, "reviewed_total": 7876, "mem_available_bytes": 19486101504, "wall_seconds": 83.3480918709829, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00006.json", "sha256": "1a44b232bb4c122de4282cbe5349146f22557fbd0b5e5fc6d4ccea4da3601386"}}
+{"dataset": "counterfact", "chunk_number": 7, "resumed": false, "reviewed_total": 8132, "mem_available_bytes": 19475054592, "wall_seconds": 86.95632657699753, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00007.json", "sha256": "e4df884cafb128d28bd77370eef45df5e5ffb408eac067d5ad3e195f2013071f"}}
+{"dataset": "counterfact", "chunk_number": 8, "resumed": false, "reviewed_total": 8388, "mem_available_bytes": 19455721472, "wall_seconds": 90.11176150100073, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00008.json", "sha256": "1cad5f9d9e0180f0a1cda5ead72240badda32fe3fb5223955890a3ba0af91d79"}}
+{"dataset": "counterfact", "chunk_number": 9, "resumed": false, "reviewed_total": 8644, "mem_available_bytes": 19301527552, "wall_seconds": 95.56130303500686, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00009.json", "sha256": "ff5161287c565245b10a5593219ef8d6012e9f0ab0e366568d47dc7b6ff05757"}}
+{"dataset": "counterfact", "chunk_number": 10, "resumed": false, "reviewed_total": 8900, "mem_available_bytes": 19180597248, "wall_seconds": 100.08340984300594, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00010.json", "sha256": "adca8c4aa7e49fbe566c4144585c2cd6a029afdb035a7e20939d565603398e44"}}
+{"dataset": "counterfact", "chunk_number": 11, "resumed": false, "reviewed_total": 9156, "mem_available_bytes": 19155410944, "wall_seconds": 104.80620474900934, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00011.json", "sha256": "8e3ba95becdf306ede1cf3a48afff122a2c5a66632a3b5054d93e99940e7f67a"}}
+{"dataset": "counterfact", "chunk_number": 12, "resumed": false, "reviewed_total": 9412, "mem_available_bytes": 19119869952, "wall_seconds": 108.12883352200151, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00012.json", "sha256": "b80639c2c7da95dbf0898a34b6365ef0c29929bcd814c478082f4c82f631cca0"}}
+{"dataset": "counterfact", "chunk_number": 13, "resumed": false, "reviewed_total": 9668, "mem_available_bytes": 19292692480, "wall_seconds": 110.44310134800617, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00013.json", "sha256": "1e0413b86bb3b4249673b9b1f1abea84dfd2eebf6735b4a007a8f79467ba5d90"}}
+{"dataset": "counterfact", "chunk_number": 14, "resumed": false, "reviewed_total": 9924, "mem_available_bytes": 19283496960, "wall_seconds": 112.80193058698205, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00014.json", "sha256": "9cc18fe52c7239353d375f38f743f6df52d429ecceb96bc0ccf98b7e13674afe"}}
+{"dataset": "counterfact", "chunk_number": 15, "resumed": false, "reviewed_total": 10180, "mem_available_bytes": 19296759808, "wall_seconds": 115.15858022100292, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00015.json", "sha256": "54f499bda0eeb084b8532bcc439fab28c6f855aec6bd1b5f1a3a21d872dc9ac1"}}
+{"dataset": "counterfact", "chunk_number": 16, "resumed": false, "reviewed_total": 10436, "mem_available_bytes": 19289460736, "wall_seconds": 119.52602600198588, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00016.json", "sha256": "a18f12d9b45f09de670309d50c62a1a3e2652ed98ba65c7e5d8becbbf59e613c"}}
+{"dataset": "counterfact", "chunk_number": 17, "resumed": false, "reviewed_total": 10692, "mem_available_bytes": 19262914560, "wall_seconds": 122.67315805499675, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00017.json", "sha256": "93e824e560dcbe3ac5e886c5a0a8a21ed1df1d399814486a29845df04d25faf7"}}
+{"dataset": "counterfact", "chunk_number": 18, "resumed": false, "reviewed_total": 10948, "mem_available_bytes": 19243335680, "wall_seconds": 125.01260905200616, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00018.json", "sha256": "52c745d857c2966385781db6991a2dbd01fcbcf0123db1841e22e97dce5c9d7a"}}
+{"dataset": "counterfact", "chunk_number": 19, "resumed": false, "reviewed_total": 11204, "mem_available_bytes": 19237359616, "wall_seconds": 127.48590803798288, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00019.json", "sha256": "95297ee5f0063a58013537f417768e1071e373fe0800ab8448955edb36ee4993"}}
+{"dataset": "counterfact", "chunk_number": 20, "resumed": false, "reviewed_total": 11460, "mem_available_bytes": 19173441536, "wall_seconds": 130.03759796600207, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00020.json", "sha256": "0948ebbd7bbd55d4316a201a7b7345144d4d88fd4d5fac7603cd0c009565471b"}}
+{"dataset": "counterfact", "chunk_number": 21, "resumed": false, "reviewed_total": 11716, "mem_available_bytes": 19162484736, "wall_seconds": 132.63205017198925, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00021.json", "sha256": "13b4e46d4e860e5d972427e39055e676fec3146b52e2ef8ecea5d66240bbdad0"}}
+{"dataset": "counterfact", "chunk_number": 22, "resumed": false, "reviewed_total": 11972, "mem_available_bytes": 19187978240, "wall_seconds": 135.14928418499767, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00022.json", "sha256": "882365fd232065857e6b5641bd3766958b49b2b9d218752d3092396cdb4ecab2"}}
+{"dataset": "counterfact", "chunk_number": 23, "resumed": false, "reviewed_total": 12205, "mem_available_bytes": 19176087552, "wall_seconds": 141.95998914400116, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/counterfact/chunk-00023.json", "sha256": "26702965df5c86ca300336724a80049a5583e99773f0881041caaf05d389475c"}}
+{"dataset": "mquake", "chunk_number": 0, "resumed": false, "reviewed_total": 12461, "mem_available_bytes": 18861592576, "wall_seconds": 146.7906968620082, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00000.json", "sha256": "ee38041cef20bd99ebc31603be69a4eec0c13bca76cd7b1a8e1eba5a02bfd89f"}}
+{"dataset": "mquake", "chunk_number": 1, "resumed": false, "reviewed_total": 12717, "mem_available_bytes": 19076337664, "wall_seconds": 149.7138069930079, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00001.json", "sha256": "8c0cacd7186bafc753226fc04d82ec4ccca7c99881e8c532b516f97c410009ea"}}
+{"dataset": "mquake", "chunk_number": 2, "resumed": false, "reviewed_total": 12973, "mem_available_bytes": 19067617280, "wall_seconds": 152.72587524098344, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00002.json", "sha256": "e68bbe4baca1b31bf552b1e59c19c1ef765633fdd5be1c369c3ce199b67ee810"}}
+{"dataset": "mquake", "chunk_number": 3, "resumed": false, "reviewed_total": 13229, "mem_available_bytes": 19033952256, "wall_seconds": 155.49687780899694, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00003.json", "sha256": "536395bb184550b8cb8f9125d036c040a12c9a86d702c7ef40795dc24a633e44"}}
+{"dataset": "mquake", "chunk_number": 4, "resumed": false, "reviewed_total": 13485, "mem_available_bytes": 18997940224, "wall_seconds": 158.30705604000832, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00004.json", "sha256": "c4a40760f3c0d24839539c02229d65d9a359f609a1f66e2ab18ff94b59dea425"}}
+{"dataset": "mquake", "chunk_number": 5, "resumed": false, "reviewed_total": 13741, "mem_available_bytes": 18951057408, "wall_seconds": 162.87514754099539, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00005.json", "sha256": "c121d194726e2f35cbaa538d9592db2649d475a28143edb3a58e34172ee95540"}}
+{"dataset": "mquake", "chunk_number": 6, "resumed": false, "reviewed_total": 13997, "mem_available_bytes": 18806063104, "wall_seconds": 165.82188556398614, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00006.json", "sha256": "6b1ca1cc4b2ddfff96a21a0907baa6570032fb33b9b1355aaa0ae23a1cbce8a1"}}
+{"dataset": "mquake", "chunk_number": 7, "resumed": false, "reviewed_total": 14253, "mem_available_bytes": 18816659456, "wall_seconds": 168.47310409098282, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00007.json", "sha256": "3ac3409a47bd9c2bf5658fb7fa827b05017e3b5a12bc1301f6c7a304fcf9d1a3"}}
+{"dataset": "mquake", "chunk_number": 8, "resumed": false, "reviewed_total": 14419, "mem_available_bytes": 18844958720, "wall_seconds": 173.08469146600692, "chunk": {"path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d10b/round24_v2/mquake/chunk-00008.json", "sha256": "59bf35614b89edffb223b5259ac8090d9ce215ed22583859c72ed2bd3b726c62"}}
