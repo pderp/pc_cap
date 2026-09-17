@@ -1151,3 +1151,35 @@ may override): calibration v3 = the frozen v2 zsRE / CounterFact radii unchanged
 declared in the protocol (U08) and in every MQuAKE comparator result. Codex assembles the versioned file and the
 MQuAKE recipes (R1-73b).
 
+## Stress panel (DEC-055 / HT-2) complete (2026-09-17, 03:55 EDT)
+
+Six development cells on primary v5 through Codex's HT-5 supervisor (`docs/tasks/HT-5-panel-v5/`, budget account
+`results/R1/stage4_dev_cells/ht_panel/_budget/`): 1,310 s charged of the 14,400 s ceiling, ≈ 215 s per cell, no
+failures. 100 attempted edits per cell (20 warm-up, 40 treatment, 40 later), old-fact probes = the first 20 facts,
+teacher-forced target-token NLL and exact answers at edits 20 / 60 / 70 / 80 / 100, reference = the cell's own
+edit-20 state.
+
+| dataset | schedule | exact old answers at 100 | mean positive ΔNLL vs edit 20 (nats / token) at 60 / 70 / 80 / 100 | worst fact (mean over its tokens) | max token Δ | recovery |
+| --- | --- | ---: | --- | --- | ---: | --- |
+| zsRE | shuffled = clustered | 20 / 20 | 0 / 0 / 0 / 0 | none | 0 | [0, 0] (never harmed) |
+| CounterFact | shuffled = clustered | 20 / 20 | 0 / 0 / 0.324 / 0.324 | cf-20223 +4.0, cf-45 +2.5 | 12.5 | none, right-censored > 40 updates |
+| MQuAKE | shuffled = clustered | 20 / 20 | 0.112 / 0.112 / 0.112 / 0.112 | mquake:9405b94b… +2.0 | 6.6 | none, right-censored |
+
+Three observations. (1) **Schedule does not matter for this reader**: the shuffled and clustered arms give identical
+numbers to four decimals on every dataset. The memory is a set of records with hard top-1 selection and per-record
+deltas; the state after the same 60 or 100 facts is the same whatever the order, so the "clustered difficult items"
+stress finds nothing to stress. That is itself the result of HT-2's cadence hypothesis: no order effect on this
+substrate. (2) **Harm is item-determined, sparse and permanent**: on CounterFact two of the twenty probed facts lose
+2.5 and 4.0 nats per token on average (one token loses 12.5 nats) after one of edits 71–80 enters memory, and on
+MQuAKE one fact loses 2.0 nats (max 6.6) after the treatment block; nothing changes afterwards because nothing
+in the reader revisits a stored record — recovery is not a process this design has, so the lag is right-censored at
+40 updates in every harmed cell. (3) **Greedy answers hide it**: exact old answers stay 20 / 20 everywhere; the harm is
+in the probability mass, which is exactly the tail argument of the talk (HT-1b) at the scale of single facts. zsRE's
+short answers are untouched.
+
+The CounterFact and MQuAKE harm coincides with a later edit whose subject or answer shares tokens with the probed
+fact (the reader's rare-token gate admits a selection on the probe prompt once such a record exists); the per-token
+rows (`ht_relative.token_rows`, `delta_from_edit20`) and the edit history in each checkpoint identify the pair.
+Development only; three datasets, one seed each; the panel's role in the talk is the recovery-lag slide, whose
+honest content is "no recovery mechanism, harm is permanent and localized".
+

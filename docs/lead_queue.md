@@ -625,3 +625,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     needs no decision from you unless you object. The stress panel refused to start on a receipt-format detail in my
     approval file; fixing and relaunching now.
 
+56. (2026-09-17, 04:10 EDT) **Stress panel done** (22 min of the 4 h): shuffled and clustered schedules give identical results
+    on every dataset (the memory is an order-free set of records), old exact answers stay 20 / 20 everywhere, and the
+    harm that does occur is sparse, item-determined and permanent — CounterFact two of 20 probed facts lose 2.5 and 4.0
+    nats per token (one token 12.5 nats) after a later edit, MQuAKE one fact 2.0 nats, zsRE nothing; no recovery within
+    40 updates because nothing in the design revisits a stored record. Presentation record:
+    `assets/presentation-materials/stress_panel_v5.md`. GPU is idle until Codex's R1-68e / R1-73b / R1-76b land;
+    next GPU jobs in order: R1-68e re-profiles, MQuAKE comparator profiles, the MQuAKE occupancy diagnostic.
+
