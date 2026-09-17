@@ -69,7 +69,7 @@ def test_constructor_and_seal_refuse_reserved_prompt(prompt_role):
 
 def test_actual_rebuilt_recipes_preserve_every_nonlocality_setting():
     root = Path(__file__).resolve().parents[2]
-    receipts = json.loads((root / "docs/tasks/R1-73d/inspection-receipts.json").read_text())
+    receipts = json.loads((root / "docs/tasks/R1-73d-post77d/inspection-receipts.json").read_text())
     assert len(receipts) == 8
     for receipt in receipts:
         binding = receipt["recipe"]

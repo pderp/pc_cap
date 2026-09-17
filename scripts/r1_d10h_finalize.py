@@ -1,0 +1,161 @@
+"""Bind current development declarations and inspect post-teacher role clearance.
+
+No draw, semantic admission, signature, model execution, or sealed data access.
+"""
+
+from __future__ import annotations
+
+import copy
+import itertools
+import json
+import subprocess
+
+from scripts import r1_d9_receipts as d9
+from scripts.r1_d10a_review import ROOT, write_new
+from scripts.r1_d10b_teacher_review import verify_bindings
+
+LOG = ROOT / "logs/r1_round25"
+RESOURCE = ROOT.parent / "assets/runs/pc_cap/R1/r1_d10h/round25_v2"
+
+
+def read(path):
+    return json.loads((ROOT / path).read_text())
+
+
+def supplement():
+    promotion = read("logs/r1_round24/r1-d10g-promotion-v2.json")
+    previous = d9.read_resource(promotion["declarations"])
+    known = {(r["payload"]["path"], r["payload"]["sha256"]) for r in previous["recipes"]}
+    old = {r["recipe"]["path"] for r in previous["recipes"]}
+    recipes = []
+    head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    for path in sorted((ROOT / "docs/tasks").rglob("*.recipe.json")):
+        value = json.loads(path.read_text())
+        if value.get("mode") != "stage4_development_cell":
+            continue
+        b = value["payload"]
+        if (b["path"], b["sha256"]) not in known or d9.sha(b["path"]) != b["sha256"]:
+            raise ValueError("new or changed payload requires exposure review: " + str(path))
+        recipes.append(dict(recipe=d9.ref(path), payload=b, cell=value["cell"]))
+    if head != subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip():
+        raise ValueError("HEAD changed during declaration review")
+    record = dict(task="R1-D10h", head=head, prior=promotion["declarations"],
+                  recipes=recipes, added_declarations=sum(r["recipe"]["path"] not in old for r in recipes),
+                  additional_uncovered_exposure=0, eligibility_losses=0,
+                  rule="Exact previously reviewed payload path and SHA; execution outcomes irrelevant.",
+                  producer=d9.ref(__file__),
+                  limitation="Finite declaration snapshot; lead must attest no later or undeclared exposure at draw.")
+    binding = write_new(RESOURCE / "post77d-declarations.json", record)
+    joint = read("logs/r1_round25/r1-d10h-joint.json")
+    evidence = d9.read_resource(joint["evidence"])
+    verify_bindings(evidence["evidence_bindings"])
+    evidence.update(later_declarations=binding, exposure_as_of_commit=head,
+                    status="postteacher_joint_roles_current_declaration_snapshot_owner_attestation_pending")
+    evidence["evidence_bindings"] += [joint["evidence"], binding, d9.ref(__file__),
+                                      *[r["recipe"] for r in recipes]]
+    final = write_new(RESOURCE / "joint_evidence_post77d.json", evidence)
+    report = dict(task="R1-D10h", evidence=final, declarations=binding,
+                  declarations_count=len(recipes), added_declarations=record["added_declarations"],
+                  role_plan=joint["role_plan"], teacher=joint["teacher"],
+                  additional_uncovered_exposure=0, eligibility_losses=0,
+                  owner_current_exposure_attestation=False, draw_authorized=False)
+    write_new(LOG / "r1-d10h-final-evidence.json", report)
+    return report
+
+
+def inputs(final):
+    """New schema-3 drafts preserve their predecessors and never sign themselves."""
+    spec = read("docs/tasks/R1-D9-inputs-v3.json")
+    old_spec = copy.deepcopy(spec)
+    roles = read("logs/r1_round25/r1-d10h-roles.json")
+    recipes = read("logs/r1_round25/r1-64e-build.json")
+    spec.update(task="R1-63g/R1-D10h", status="unsigned_post77d_teacher_and_roles_complete",
+                note="Current declaration snapshot; owner signatures/exposure attestation and semantic admission still required.")
+    spec["pending"].update(final_teacher_evidence=final["teacher"],
+                           joint_role_merged_evidence=final["evidence"],
+                           exposure_after_commit=d9.read_resource(final["declarations"])["head"],
+                           idle_boundary_patches_and_freeze_v8="R1-77d applied; freeze candidate v8 is a separate dry inventory, not an admission")
+    cfg = spec["d9"]["clearance"]
+    cfg.update(evidence=final["evidence"], role_plan=roles["role_plan"])
+    cfg["configuration_bindings"].update(
+        comparator_development_recipes=[r["recipe"] for r in recipes["mquake_recipes"]],
+        zsre_counterfact_development_recipes=[r["recipe"] for r in recipes["comparator_recipes"]],
+        final_base_recipe=recipes["primary"]["recipe"],
+        queue_concurrency=d9.ref(ROOT / "docs/R1_stage4_queue_concurrency_v1.md"),
+        execution_plan=d9.ref(ROOT / "docs/R1_execution_plan_v1.md"),
+    )
+    spec["d9"]["draw"]["composition_catalog"] = roles["composition_catalog"]
+    for stage in ("clearance", "draw", "seal"):
+        spec["d9"][stage]["resource_output"] = str(
+            ROOT.parent / "assets/runs/pc_cap/R1/r1_d9_final_post77d" / stage)
+    for name in ("protocol_admission", "rng_admission", "endpoint_construction"):
+        template = d9.read_metadata(spec["receipts"][name])
+        if template.get("lead_approved") is not False or template.get("status") != "draft":
+            raise PermissionError("never replace a signed or completed receipt")
+        if name == "protocol_admission":
+            template.update(endpoint_role_plan=roles["role_plan"],
+                            configuration_bindings=copy.deepcopy(cfg["configuration_bindings"]))
+        stem = name.replace("_", "-")
+        spec["receipts"][name] = write_new(
+            ROOT / f"docs/tasks/R1-D9-{stem}-template-v3-post77d.json", template)
+    changes = {}
+    for stage in ("clearance", "draw", "seal"):
+        name = stage + "_authorization"
+        template = d9.read_metadata(spec["receipts"][name])
+        if template.get("lead_approved") is not False or template.get("status") != "draft":
+            raise PermissionError("never replace signed authorization")
+        before = template["inspection_only_request_sha256"]
+        patched_old = d9.contract(old_spec, stage)
+        current = d9.contract(spec, stage)
+        template.update(request_sha256=None, inspection_only_request_sha256=current)
+        spec["receipts"][name] = write_new(
+            ROOT / f"docs/tasks/R1-D9-{stage}-authorization-template-v3-post77d.json", template)
+        changes[stage] = dict(previous_preview=before, previous_inputs_on_patched_code=patched_old,
+                              current_preview=current, must_be_signed_again=True,
+                              reason="Installed tree/backend plus evidence, roles, recipes and prerequisite bindings changed.")
+    spec["intended_outputs"].update({s: [spec["d9"][s]["receipt_output"],
+                                        spec["d9"][s]["resource_output"]]
+                                     for s in ("clearance", "draw", "seal")})
+    binding = write_new(ROOT / "docs/tasks/R1-D9-inputs-v3-post77d.json", spec)
+    construction = read("docs/tasks/R1-D10c-construction-inputs-template-v3.json")
+    construction.update(role_plan=roles["role_plan"], catalog=roles["composition_catalog"],
+                        output=str(ROOT.parent / "assets/runs/pc_cap/R1/r1_d10c/final_endpoints_post77d"),
+                        report=str(LOG / "r1-d10c-final-construction.json"))
+    construction_ref = write_new(ROOT / "docs/tasks/R1-D10c-construction-inputs-template-v3-post77d.json", construction)
+    summaries = {}
+    for stage in ("clearance", "draw", "seal"):
+        report, state = d9.prepare(spec, stage)
+        if any(b["gate"] == "bound_inputs_or_outputs" for b in report["blocked"]):
+            raise ValueError(report)
+        if stage == "clearance":
+            value = state.get("clearance")
+            if value is None:
+                raise ValueError(report)
+            report["counts"] = value["counts"]
+            report["role_margins"] = {}
+            report["hall"] = {}
+            for dataset, rows in value["candidates"].items():
+                layout = spec["dataset_layouts"][dataset]
+                demands = layout["demand_by_role"]
+                checks = []
+                for n in range(1, len(demands) + 1):
+                    for subset in itertools.combinations(demands, n):
+                        capacity = sum(bool(set(subset) & set(r["_roles"])) for r in rows)
+                        demand = sum(demands[r] for r in subset)
+                        checks.append(dict(roles=subset, capacity=capacity, demand=demand, margin=capacity-demand))
+                report["hall"][dataset] = checks
+                report["role_margins"][dataset] = {
+                    r: dict(eligible=value["counts"][dataset]["role_eligible"][r], demand=n,
+                            margin=value["counts"][dataset]["role_eligible"][r]-n)
+                    for r, n in demands.items()}
+        summaries[stage] = write_new(LOG / f"r1-d9-{stage}-dry-post77d.json", report)
+    return write_new(LOG / "r1-d10h-operator-refresh.json", dict(
+        task="R1-63g/R1-D10h", inputs=binding, construction_inputs=construction_ref,
+        stage_request_changes=changes, dry_reports=summaries,
+        unsigned_templates=True, draws=0, seals=0, gpu_seconds=0,
+        signature_order=["clearance", "protocol/RNG", "draw", "endpoint construction", "seal"],
+        note="Refresh later requests after binding each actual prerequisite; previews are not signatures. Candidate v8 is intentionally outside the D9 request dependency graph."))
+
+
+if __name__ == "__main__":
+    print(json.dumps(inputs(supplement()), indent=2))

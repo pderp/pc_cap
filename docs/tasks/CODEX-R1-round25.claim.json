@@ -1,0 +1,39 @@
+{
+  "task": "CODEX-R1-round25",
+  "agent": "Codex",
+  "status": "cpu_complete_with_owner_result_dependency",
+  "active_lane": null,
+  "lanes": [
+    "R1-64e",
+    "R1-63g",
+    "R1-D10h",
+    "R1-X15",
+    "HT-4e"
+  ],
+  "started_utc": "2026-09-17T19:18:27.625882+00:00",
+  "head": "3f2343e81f248ab2eb3dff3f339103fe26f4f169",
+  "ongoing_sha256": "f20920ba45b5db022aba2487709a83342d0cb2dd208ee084b54b95c7057ed148",
+  "constraints": [
+    "CPU only",
+    "no real draw, seal, freeze or GPU execution",
+    "no commits",
+    "X15 new files only; findings as edit requests"
+  ],
+  "planned_existing_edits": [],
+  "coordination": "Builder identity rebinding first; owner may execute once inspection receipts are published.",
+  "completed_utc": "2026-09-17T19:42:02.869387+00:00",
+  "lane_status": {
+    "R1-64e": "complete",
+    "R1-D10h": "complete",
+    "R1-63g": "dry_candidate_complete",
+    "R1-X15": "complete_review_only",
+    "HT-4e": "snapshot_complete_after_chain_P_refresh_pending"
+  },
+  "existing_edits": [
+    "tests/revision_v1/test_r1_64c_comparator_recipes.py",
+    "tests/revision_v1/test_r1_73b_comparator_recipes.py",
+    "tests/revision_v1/test_r1_73d_locality.py"
+  ],
+  "gpu_seconds": 0,
+  "committed": false
+}

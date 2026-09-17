@@ -15,7 +15,7 @@ def manifests():
     cal = recipes.ROOT / "manifests/revision_v1/calibration_v3.json"
     return payload, [
         recipes.build(
-            recipes.ROOT / f"docs/tasks/R1-64d/R1-64d-zsre-{c}.recipe.json", cal, binding, bindings
+            recipes.ROOT / f"docs/tasks/R1-64e/R1-64e-zsre-{c}.recipe.json", cal, binding, bindings
         )
         for c in recipes.CONDITIONS
     ]

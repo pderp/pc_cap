@@ -1,0 +1,161 @@
+{
+  "adapter_identity": {
+    "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "class": "pccap.revision_v1.learner.RevisionCap",
+    "condition": "R1_nonlearned",
+    "config_sha256": "99321a9972b7637745a73c87d6f4c8d3e7863fd683e819c2a53fe5770663cb2d",
+    "locality_base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "params_sha256": "fa3c0b5a0b162c7b11bfdc08ae77571b82780ada8a541afad1cbd04fc5019d00",
+    "rule": null
+  },
+  "admission": {
+    "condition_admitted": false,
+    "launch_authorized": false,
+    "lead_approved": false,
+    "protocol_frozen": false
+  },
+  "banner": "development, not confirmatory",
+  "cell": {
+    "condition": "R1_nonlearned",
+    "dataset": "zsre",
+    "order": "source",
+    "realization": "development"
+  },
+  "checkpoints": [
+    100,
+    300
+  ],
+  "code_sha256": "23efcc8dd7218acf1fedc044ce5692cb8847fbe71fbc2148bca614b00c16ce3c",
+  "comparator_recipe": {
+    "S1_note": "historical two-pool continuation; final training-budget reconciliation remains open",
+    "bindings": {
+      "factory": {
+        "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_adapters.py",
+        "sha256": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37"
+      },
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_64b_comparator_recipes.py",
+        "sha256": "447cf5583a727c3581705c8fe4ce9d496418e3285ec210e6421d77accfa9012a"
+      },
+      "random_checkpoint_authority": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_draft_v4.json",
+        "sha256": "924bf4b42453e1dc9a603b1e47e22dce2790b3d7168df3aa29f715a9cdc55526"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-68c-zsre-v5-full.recipe.json",
+        "sha256": "f39fe5a39b843d0be3b3993a767453ffc5d19d135799bc10420cc727bfe31851"
+      }
+    },
+    "calibration_note": "historical BP dataset radii/scales; MQuAKE and any final per-continued-base recalibration remain separate admission work",
+    "entry_point": "python -m scripts.r1_64b_comparator_recipes run",
+    "launch_authorized": false,
+    "method": "registered dataclass + NumPy tensor hashing; no model execution",
+    "source_reader_provenance": "inherited reader_provenance describes source payload recipe only; comparator identity and these bindings define this condition",
+    "task": "R1-64b"
+  },
+  "construction": {
+    "base": {
+      "files": {
+        "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+        "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+    },
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "calibration": {
+      "bank_scales": {
+        "1": 70.70187377929688,
+        "2": 106.5766658782959,
+        "3": 425.5740661621094
+      },
+      "radii": {
+        "1": 0.2808128833770752,
+        "2": 0.4143741011619568,
+        "3": 0.18857809603214265
+      }
+    },
+    "seed": 0,
+    "weights": {
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/pilot/random_tied/theta.npz",
+      "sha256": "a0e50ef72af48963062f8acabcf02ca66171d5d87f12cebf7074978a38a8317c"
+    }
+  },
+  "integrity_batch_edits": 16,
+  "integrity_driver_bindings": {
+    "scripts/r1_68b_dev_cell.py": "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5",
+    "scripts/r1_68b_integrity_runtime.py": "ae66b70ddbef67d45dd590a8d73d763f976ef51f5c8cfd468849e30b6468d1d1",
+    "scripts/r1_68c_batched_drift.py": "bf2e879083bc3b67796824c5c66b695248c923a802b51d8c379d2dea5147bc24",
+    "scripts/r1_68c_dev_cell.py": "5293448fd423c1eeab35374ff96ec040d221a32eb63261ccabaf92cdb6fae3c2",
+    "scripts/r1_68e_batched_drift_v0.py": "092364cab36cba3eea3f9c6aed4245a612228dd26cbb189cf2c58dd61c9c22c7"
+  },
+  "integrity_profile": "incremental",
+  "integrity_rebind": {
+    "model_executed": false,
+    "purpose": "development-only timing/behavioral comparison; same population and reader",
+    "source_code_sha256": "19c50855a9f5352f91fd5f45677869bd1f3047212c023e30726d26420b3229d4",
+    "source_recipe": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64d/R1-64d-zsre-R1_nonlearned.recipe.json",
+      "sha256": "e8eac33b25341d9decc59cab387877e703fc0f806d4141cfb6df12823f189725"
+    }
+  },
+  "max_new": 32,
+  "mode": "stage4_development_cell",
+  "payload": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_zsre_v5/payload.json",
+    "sha256": "1d071f72af77fea3908f4fb152872cd5d1346aaec3f3b372ae4e9e346b982167"
+  },
+  "r1_64c": {
+    "bindings": {
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_64c_comparator_recipes.py",
+        "sha256": "22dbd3c99f41f68d171de3157f8732a8decd90f6d2ee3c8da48f3f243bed6d62"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64b-zsre-R1_nonlearned.recipe.json",
+        "sha256": "3d0b7ef5e89bab4d27a13765ac67b8a6a3a19fc23cee344ca223cce05a68fa70"
+      }
+    },
+    "checkpoint_policy": "same bound weights and payload as R1-64b; states at 100/300 measured by execution, never predicted",
+    "entry_point": "python -m scripts.r1_64c_comparator_recipes run",
+    "launch_authorized": false,
+    "profile_reason": "Exact RevisionCap: audited IndexedAdapter supports this class.",
+    "task": "R1-64c"
+  },
+  "reader_provenance": {
+    "calibration": {
+      "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+      "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+    },
+    "identity_method": "NumPy base/checkpoint hashes and registered dataclass configuration; no base execution",
+    "primary": {
+      "path": "manifests/revision_v1/primary_condition_v5.json",
+      "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+    }
+  },
+  "schema_version": 1,
+  "source_bindings_sha256": {
+    "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "/home/derp/cap/pc_cap/manifests/dev/challenges.json": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+    "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+  },
+  "tokenizer_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+}

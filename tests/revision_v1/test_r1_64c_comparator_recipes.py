@@ -38,7 +38,10 @@ def test_wrong_class_never_enters_incremental():
 
 
 def test_generated_recipes_preserve_population_parameters_and_base():
-    for path in sorted((c.ROOT / "docs/tasks").glob("R1-64c-*.recipe.json")):
+    paths = sorted((c.ROOT / "docs/tasks/R1-64e").glob("R1-64e-*.recipe.json"))
+    paths = [p for p in paths if "primary-v5" not in p.name]
+    assert len(paths) == 16
+    for path in paths:
         m = json.loads(path.read_text())
         old = json.loads(Path(m["r1_64c"]["bindings"]["source_recipe"]["path"]).read_text())
         assert m["code_sha256"] == c.driver.code_identity()

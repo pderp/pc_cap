@@ -1,0 +1,112 @@
+--- a/docs/R1_stage4_protocol_draft_v5_2_D.md
++++ b/docs/R1_stage4_protocol_draft_v5_2_D.md
+@@ -31,10 +31,21 @@
+ primary reservation events; all other payload content is unchanged. No previously uncovered
+ exposure or additional eligibility loss is introduced. The exact declaration inventory and
+ source-event witnesses are bound in operative v5 resource version `round24_v2`.
+-Further declared payloads require an updated exposure supplement before draw.
++Round 25 adds 33 recipes on the patched identity, bringing the explicit declaration snapshot to 112.
++Every added recipe reuses an exactly previously reviewed payload. Teacher certification and joint-role
++review are complete; all 93 Hall subset checks pass at 6084 / 6121 / 2161 distinct subjects.
++The current bindings are in `tasks/R1-D9-inputs-v3-post77d.json`. Further payloads or undeclared
++exposure require review, and the lead must attest exposure through draw time.
+ 
+-These are **preteacher** counts. MQuAKE has 2214 eligible items but 2161 distinct subjects;
+-the 211-subject margin can shrink under final teacher/token filtering and joint-role allocation.
++The table was prepared before teacher review; the completed review and joint-role checks retain
++these counts. MQuAKE has 2214 eligible items but 2161 distinct subjects, a 211-subject margin.
++Its first-representative revision-compatible count is 2158; individual role capacities overlap.
++
++Teacher-baseline limitation: 6036 of 6084 zsRE items pass E.2 because the pinned base emits a
++newline immediately (empty text, one step). All 6084 pass teacher/token checks; CounterFact and
++MQuAKE teacher generations are nonempty. For most of this zsRE population, ES and RET-GS measure
++answer acquisition/generalization against an empty baseline. Teacher-incorrect is not evidence
++that the base initially answered the fact, and the historical E.2 eligibility rule is unchanged.
+ No increased edit count follows automatically from available capacity.
+ 
+ ## Receipt, execution and analysis contract
+@@ -54,8 +65,9 @@
+ Final recipes require population_contract_version=2 and a bound schema-2 final protocol with
+ population_decision=DEC-060-option-D, exact layout/hash/matrix, lead approval, no open gates,
+ explicit extension decision, max_new=32, DEC-053 bounded equality and the October 9 deadline.
+-The R1-77d source/backend patches remain unapplied until the orchestrator's idle boundary after
+-chains M/N/O. Rebuild execution recipes, code identities and freeze candidate v8 after application.
++The R1-77d source/backend patches are installed. Post-patch development recipes and dry freeze
++candidate v8 bind the new identity. Final confirmatory recipes still require actual admitted
++populations, costs and signed receipts; a dry candidate is not an owner freeze.
+ Draft matrices and synthetic tests are not executable final admission.
+ 
+ The primary DEC-057 family remains **63 intervals**, allocated 0.05/63. zsRE/CounterFact retain
+@@ -74,12 +86,13 @@
+ 
+ ## Remaining gates
+ 
+-1. Complete the teacher run on all 14419 operative-v5 items, or certify a completed receipt run
+-   covering every one of them without re-decoding. An older v4-only run lacks 88 restored items
+-   and cannot certify the new inventory by itself. Certification preserves historical producer hashes.
+-2. Merge certified teacher evidence with the regenerated role plan, then review joint allocation
+-   at demands 4050/4050/1950. Teacher completion alone does not admit the population.
+-3. Explicitly admit the proposed zsRE same-template/different-subject near family and endpoint
++1. Review the completed teacher certification, merged role evidence and clearance dry-run at
++   demands 4050/4050/1950; sign the exact current clearance request. Historical producer bytes
++   and the 88 items absent from the older v4 review remain accounted for.
++2. Confirm the current exposure snapshot and attest no additional exposure through draw time.
++   Teacher/role completion alone does not authorize the population draw.
++3. Explicitly admit NM-template-v1 across all three datasets (different subjects, exact relation
++   or subject-masked question template; not semantic nearest neighbours) and endpoint
+    missingness. Its semantics differ from historical same-subject development challenges.
+ 4. Admit protocol/RNG, current exposure and stage-specific requests; perform the actual draw,
+    endpoint construction and seal with the v3 operator inputs.
+--- a/docs/R1_execution_plan_v1.md
++++ b/docs/R1_execution_plan_v1.md
+@@ -1,8 +1,8 @@
+ # Revision v1 confirmatory execution plan v1 (2026-09-17)
+ 
+ Status: provisional cost admission from chains I / K (measured 300-edit development cells, batched drift); MQuAKE
+-non-learned costs pending chain M; MQuAKE cadence under DEC-060 (300 edits × 3 realizations, checkpoints 100 / 300).
+-Matrix v5.1 core = 360 cells in the DEC-051 block order; the 45-cell no-gate extension is separate and last.
++corrected MQuAKE profiles pending the post-R1-77d run list; MQuAKE cadence under DEC-060 (300 edits × 3 realizations, checkpoints 100 / 300).
++Matrix v5.2-D core = 360 cells in the DEC-051 block order; the 45-cell no-gate extension is separate and last.
+ 
+ ## Per-cell cost (hours; 1,000 edits, three checkpoints, drift once; batched drift where applicable)
+ 
+@@ -26,24 +26,31 @@
+ | ext | R1_learned_ff_v2 (no gate); realizations 0–2 | 45 | 16 | 251 |
+ 
+ Available: from a September 19–20 launch to the October 9 stop ≈ 480–500 wall-clock hours; at 75 % ≈ 360–375
+-usable hours; margin ≈ 110–140 h (≈ 45 %) before the extension, ≈ 30–40 % with it. Concurrency admitted (probes 1 and 2: 1.65× and 1.67× throughput, per-cell slowdown ≤ 1.10×, identical results,
++usable hours; margin ≈ 110–140 h (≈ 45 %) before the extension, ≈ 30–40 % with it. Concurrency admitted (probes 1 and 2: 1.65× and 1.67× throughput, identical final state hashes in the saved pairs; attempt slowdowns up to 1.1335×,
+ host memory ≥ 20 GB): every block runs **two cells at a time**; per-cell ceilings under concurrency = 1.5 × 1.1 × the
+ solo cost. Wall-clock estimate: core ≈ 140 h, with the extension ≈ 150 h, against ≈ 360–375 usable hours — a 2.4×
+ buffer. Requires the queue's two-worker mode (R1-77e).
+ 
+ ## Order of operations to launch
+ 
+-1. Chain M (MQuAKE comparator profiles) → MQuAKE column measured → this plan v2 with admitted ceilings.
+-2. R1-D10e review applied (DEC-060) → matrix / protocol v5.2 (R1-D10d, option A) → freeze candidate v7 (R1-63f).
+-3. Teacher-token review (chain N) → clearance evidence complete → lead: clearance dry-run + signature.
+-4. Lead: draw (master seed), seal; endpoint construction (R1-D10c) between draw and seal.
+-5. Lead: freeze (candidate v7 → frozen manifest). Sealed backend (R1-77c) bound.
++1. Finish the eight corrected MQuAKE profiles in `docs/tasks/R1-73d-post77d/`; measure full
++   endpoint/validation and process-envelope costs, reconcile the ceiling factor, and admit plan v2.
++2. DEC-060 option D: review protocol/matrix v5.2-D and X15 corrections; explicitly admit Q15
++   near-family semantics, RNG and extension choice. R1-77d is installed; dry candidate v8 inventories it.
++3. Teacher certification and joint-role review are complete (R1-D10h). The lead reviews the
++   new `R1-D9-inputs-v3-post77d.json` clearance dry-run and signs its exact request.
++4. Lead: attest current exposure, authorize draw (master seed), construct endpoints, then seal.
++   Recompute each request after binding its actual prerequisite receipts.
++5. Lead: close all gates and freeze the final package, replacing dry candidate v8 with the
++   actual frozen manifest. Bind the patched sealed backend, admitted costs and final recipes.
+ 6. Queue launch: `scripts.r1_77_queue run --execute` in block order; results committed at each block boundary;
+    the DEC-052 inventory printed by `status` daily.
+ 
+ ## Crash and interruption policy
+ 
+ One GPU job at a time (unless the concurrency admission says two); MemAvailable guard ≥ 4 GiB in every runner;
+-system and process-memory monitors; checkpoint resume from the last certified receipt; any cell that fails twice is
+-reported as incomplete and the queue moves on (DEC-052); results committed at every block boundary; the lead can
++system and process-memory monitors; checkpoint resume from the last certified receipt. A failure stops new dispatch; under two-worker
++execution the other worker drains and both process costs are recorded. The owner reconciles the
++failure and explicitly resumes or records incomplete cells under DEC-052; there is no automatic
++two-retry/skip implementation; results committed at every block boundary; the lead can
+ stop after any block with a coherent subset.
