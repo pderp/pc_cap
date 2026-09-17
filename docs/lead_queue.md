@@ -633,3 +633,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     `assets/presentation-materials/stress_panel_v5.md`. GPU is idle until Codex's R1-68e / R1-73b / R1-76b land;
     next GPU jobs in order: R1-68e re-profiles, MQuAKE comparator profiles, the MQuAKE occupancy diagnostic.
 
+57. (2026-09-17, 06:15 EDT) Codex's round 20 committed (`c1667c3`): batched drift for the v0 / S1 adapters (driver patch you
+    approved, applied; 57 tests pass), protocol v5.1 with Q11–Q13 written in and the analysis modules, freeze candidate
+    v6. Correction to my cost arithmetic: the driver runs drift once per cell, not at every checkpoint, so the core
+    matrix is ≈ 355 h with scalar drift and ≈ 290 h with batched drift (inside 306 h, no margin for the extension or
+    failures) — CounterFact's v0 endpoint decodes, not drift, are now the largest term. Chain K re-profiles all twelve
+    non-learned zsRE / CounterFact cells with the batched path (also the real-base parity test); numbers by this
+    afternoon. Round 21 for Codex: R1-73b (calibration v3 file + MQuAKE comparator recipes), R1-D9, HT-3e, R1-77c
+    (sealed backend rebound), HT-4d (claim ledger v4).
+

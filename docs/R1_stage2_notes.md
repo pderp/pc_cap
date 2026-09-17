@@ -1183,3 +1183,21 @@ rows (`ht_relative.token_rows`, `delta_from_edit20`) and the edit history in eac
 Development only; three datasets, one seed each; the panel's role in the talk is the recovery-lag slide, whose
 honest content is "no recovery mechanism, harm is permanent and localized".
 
+## Correction to the comparator extrapolation, and the R1-68e driver landed (2026-09-17, 06:10 EDT)
+
+Codex's round 20 handoff points out that the driver runs the drift assay **once per cell, at the final checkpoint**
+(the cells above show `drift n = 1`), so the "3 × drift" in the 1,000-edit extrapolations of the previous two entries
+overcounts. Corrected, per 1,000-edit cell with checkpoints 100 / 300 / 1,000: zsRE non-learned ≈ 2,140 (scalar
+drift) + ≈ 1,500 ≈ 1.0 h, CounterFact non-learned ≈ 1,850 + ≈ 3,900 ≈ 1.6 h (the v0 per-query cost in the endpoint
+decodes dominates there); learned ≈ 0.3 h. Totals for the 360-cell core, scalar drift: 75 zsRE non-learned × 1.0 +
+150 CounterFact / MQuAKE non-learned × ≈ 1.6 + 135 learned × 0.3 ≈ 355 h — over 306 h. With batched drift
+(R1-68e, driver patch applied with the lead's approval, tests 57 pass; measured next), the drift term falls to a few
+hundred seconds and the same sum is ≈ 290 h — inside 306 h with no margin for the 45-cell extension or failures.
+MQuAKE non-learned costs are unmeasured (recipes need R1-73b); CounterFact stands in for them above.
+
+The 16 R1-64d recipes (`docs/tasks/R1-64d/`) are the R1-64c recipes rebuilt on the patched driver's identity with
+`drift_implementation = v0_batched_v1` for the six v0 / S1 families (built with Codex's builder; the loader accepts
+them). Chain K re-runs the twelve non-learned cells: same payloads and weights as the R1-64c runs, so each pair is a
+real-base parity test of the batched path (state hash, every endpoint, per-position drift ≤ 1e-3 nats, identical
+exceedance counts) and its speedup.
+
