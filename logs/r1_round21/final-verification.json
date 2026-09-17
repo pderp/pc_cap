@@ -1,0 +1,53 @@
+{
+  "driver_code_sha256": "19c50855a9f5352f91fd5f45677869bd1f3047212c023e30726d26420b3229d4",
+  "driver_sha256": "5293448fd423c1eeab35374ff96ec040d221a32eb63261ccabaf92cdb6fae3c2",
+  "gpu_seconds": 0,
+  "real_draws": 0,
+  "real_seals": 0,
+  "recipes_reinspected": 8,
+  "stages": {
+    "clearance": {
+      "blocked": [
+        {
+          "gate": "owner_receipts",
+          "reason": "clearance_authorization: receipt not supplied"
+        },
+        {
+          "gate": "exhaustive_clearance_review",
+          "reason": "required unsealed resource path/SHA binding is not supplied"
+        }
+      ],
+      "nominal_subjects": {
+        "counterfact": 12246,
+        "mquake": 4218,
+        "zsre": 52411
+      }
+    },
+    "draw": {
+      "blocked": [
+        {
+          "gate": "owner_receipts",
+          "reason": "clearance_authorization: receipt not supplied; joint_clearance: receipt not supplied; protocol_admission: receipt not supplied; rng_admission: receipt not supplied; draw_authorization: receipt not supplied"
+        }
+      ],
+      "nominal_subjects": {
+        "counterfact": 12246,
+        "mquake": 4218,
+        "zsre": 52411
+      }
+    },
+    "seal": {
+      "blocked": [
+        {
+          "gate": "owner_receipts",
+          "reason": "joint_clearance: receipt not supplied; protocol_admission: receipt not supplied; rng_admission: receipt not supplied; draw_authorization: receipt not supplied; draw_receipt: receipt not supplied; endpoint_construction: receipt not supplied; seal_authorization: receipt not supplied"
+        }
+      ],
+      "nominal_subjects": {
+        "counterfact": 12246,
+        "mquake": 4218,
+        "zsre": 52411
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+# U08 addendum: MQuAKE development calibration v3
+
+2026-09-17 · R1-73b · additive to the Stage 4 protocol draft v5.1.
+
+The orchestrator admitted the measured MQuAKE calibration as **development calibration v3** (ongoing round 21; lead queue entry 55). The original measurement receipt remains `measured_not_admitted`: its historical flags are preserved. This addendum records the subsequent development admission; final calibration, protocol, population, cost and freeze admissions remain open.
+
+**MQuAKE v0-style conditions fire on exact prompts only under the declared fallback.** More precisely, all three banks use radius zero with the implementation's exact-key tolerance. This provides no admitted paraphrase radius and does not guarantee acquisition or retention even on an exact prompt. Coincident keys are not a semantic identity guarantee. RET-GS continues to score every planned paraphrase; failed generalization remains in its denominator.
+
+The saved keys in `results/R1/calibration_mquake_v3/calibration_candidate.json` comprise 100 development edit prompts, their 100 paraphrases and 500 outside prompts from the exposed training pool. Independent array reproduction in `scripts/r1_73b_calibration_v3.py` confirms that none of the 20 positive grid radii per bank meets the empirical outside false-fire limit of 1%. Radius zero covers 0/100 own paraphrases and fires on 0/500 outside prompts on each bank. The 0/500 observation is not a guarantee about the population. Larger inadmissible radii do cover paraphrases; the result concerns admissibility, not impossibility at every radius.
+
+`manifests/revision_v1/calibration_v3.json` retains every frozen-v2 zsRE and CounterFact calibration entry, all EPC and GRAM entries, and the historical bank scales without alteration. It adds only the BP MQuAKE radii and their measured receipt, source hashes and independent audit. The six v0/S1 comparator recipes use these radii. The two RevisionCap comparators retain their own gates. S1 uses the original-BP calibration for development profiling; no continued-base calibration measurement is asserted, and final U03 admission remains necessary.
+
+The eight R1-73b recipes bind the installed R1-68e driver, with full integrity and explicit `v0_batched_v1` drift for the six v0/S1 families, and the existing incremental integrity profile for the two RevisionCap families. Checkpoints remain 100 and 300; drift runs at the final checkpoint. The model is constructed only by an explicit owner execution command after inspection and GPU coordination.
+
+The 300-attempt profiling population is the 100 v3b development edits plus 200 training-pool fillers. Outside prompts also come from the already exposed training pool; locality probes can overlap the profile's filler edits. These are development behavior/cost measurements, with no reader-training independence or fresh-confirmation claim. They are not the DEC-056 historical occupancy diagnostic. MQuAKE near-miss and revision challenges are absent from the current development challenge inventory; the payload retains the required expected counts (100 and 50) and records the full shortfalls. A zero-row phase cannot estimate the cost of the final challenge inventory.
+
+Owner execution must retain failure costs and checkpoint receipts. It does not close U08 for confirmation or authorize the real draw, seal, freeze or matrix launch. Final binding into an existing protocol file requires the lead's existing-file permission; this addendum is independently bound in every new recipe.

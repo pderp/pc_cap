@@ -1,0 +1,121 @@
+FFF..                                                                    [100%]
+=================================== FAILURES ===================================
+________ test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[None] _________
+tests/revision_v1/test_r1_77c_rehearsal.py:35: in test_sealed_v0_dispatch_requires_explicit_recipe_opt_in
+    result = f["execute"]()
+             ^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:228: in execute
+    return backend.execute(
+scripts/r1_77b_sealed_backend.py:850: in execute
+    result = _run_sealed_cell(
+scripts/r1_77b_sealed_backend.py:609: in _run_sealed_cell
+    outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:521: in phase
+    result = timed("operation_seconds", operation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:491: in timed
+    return fn()
+           ^^^^
+scripts/r1_77b_sealed_backend.py:609: in <lambda>
+    outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+                                                   ^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:584: in update
+    out = adapter.update_item(item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/stage4_adapters.py:75: in update_item
+    out = self.learner.update_item(item, self.router, self.budget)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/cap/cap.py:206: in update_item
+    return update_item(self, item, router, budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/cap/learn.py:271: in update_item
+    rr = round_update(cap, ids, y, item, router, budget, t, used, transport, weight_fn, correction_track,
+src/pccap/cap/learn.py:193: in round_update
+    ep_c = cap.edited_forward(ids)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/v0_stable.py:38: in edited_forward
+    sites[m] = np.asarray(fr.sites[sid], np.float32)  # residual actually entering the site (with upstream writes)
+                          ^^^^^^^^^^^^^
+E   KeyError: SiteId(bank=2, block=7, position=0)
+___ test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[profile_default] ___
+tests/revision_v1/test_r1_77c_rehearsal.py:35: in test_sealed_v0_dispatch_requires_explicit_recipe_opt_in
+    result = f["execute"]()
+             ^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:228: in execute
+    return backend.execute(
+scripts/r1_77b_sealed_backend.py:850: in execute
+    result = _run_sealed_cell(
+scripts/r1_77b_sealed_backend.py:609: in _run_sealed_cell
+    outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:521: in phase
+    result = timed("operation_seconds", operation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:491: in timed
+    return fn()
+           ^^^^
+scripts/r1_77b_sealed_backend.py:609: in <lambda>
+    outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+                                                   ^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:584: in update
+    out = adapter.update_item(item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/stage4_adapters.py:75: in update_item
+    out = self.learner.update_item(item, self.router, self.budget)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/cap/cap.py:206: in update_item
+    return update_item(self, item, router, budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/cap/learn.py:271: in update_item
+    rr = round_update(cap, ids, y, item, router, budget, t, used, transport, weight_fn, correction_track,
+src/pccap/cap/learn.py:193: in round_update
+    ep_c = cap.edited_forward(ids)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/v0_stable.py:38: in edited_forward
+    sites[m] = np.asarray(fr.sites[sid], np.float32)  # residual actually entering the site (with upstream writes)
+                          ^^^^^^^^^^^^^
+E   KeyError: SiteId(bank=2, block=7, position=0)
+____ test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[v0_batched_v1] ____
+tests/revision_v1/test_r1_77c_rehearsal.py:35: in test_sealed_v0_dispatch_requires_explicit_recipe_opt_in
+    result = f["execute"]()
+             ^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:228: in execute
+    return backend.execute(
+scripts/r1_77b_sealed_backend.py:850: in execute
+    result = _run_sealed_cell(
+scripts/r1_77b_sealed_backend.py:609: in _run_sealed_cell
+    outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:521: in phase
+    result = timed("operation_seconds", operation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:491: in timed
+    return fn()
+           ^^^^
+scripts/r1_77b_sealed_backend.py:609: in <lambda>
+    outcome = phase(f"edit:{n}", lambda item=item: update(item), learning=True)
+                                                   ^^^^^^^^^^^^
+scripts/r1_77b_sealed_backend.py:584: in update
+    out = adapter.update_item(item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/stage4_adapters.py:75: in update_item
+    out = self.learner.update_item(item, self.router, self.budget)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/cap/cap.py:206: in update_item
+    return update_item(self, item, router, budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/cap/learn.py:271: in update_item
+    rr = round_update(cap, ids, y, item, router, budget, t, used, transport, weight_fn, correction_track,
+src/pccap/cap/learn.py:193: in round_update
+    ep_c = cap.edited_forward(ids)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src/pccap/revision_v1/v0_stable.py:38: in edited_forward
+    sites[m] = np.asarray(fr.sites[sid], np.float32)  # residual actually entering the site (with upstream writes)
+                          ^^^^^^^^^^^^^
+E   KeyError: SiteId(bank=2, block=7, position=0)
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[None]
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[profile_default]
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[v0_batched_v1]
+3 failed, 2 passed in 5.52s

@@ -1,0 +1,56 @@
+FFFF.                                                                    [100%]
+=================================== FAILURES ===================================
+________ test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[None] _________
+tests/revision_v1/test_r1_77c_rehearsal.py:26: in test_sealed_v0_dispatch_requires_explicit_recipe_opt_in
+    f = make(profile="full", condition="v0_stable", drift_implementation=implementation)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:115: in fixture
+    cap, _ = factory(None)
+             ^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:105: in factory
+    cap = build_adapter(
+src/pccap/revision_v1/stage4_adapters.py:222: in build_adapter
+    raise ValueError("reader parameters do not belong to a v0 family")
+E   ValueError: reader parameters do not belong to a v0 family
+___ test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[profile_default] ___
+tests/revision_v1/test_r1_77c_rehearsal.py:26: in test_sealed_v0_dispatch_requires_explicit_recipe_opt_in
+    f = make(profile="full", condition="v0_stable", drift_implementation=implementation)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:115: in fixture
+    cap, _ = factory(None)
+             ^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:105: in factory
+    cap = build_adapter(
+src/pccap/revision_v1/stage4_adapters.py:222: in build_adapter
+    raise ValueError("reader parameters do not belong to a v0 family")
+E   ValueError: reader parameters do not belong to a v0 family
+____ test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[v0_batched_v1] ____
+tests/revision_v1/test_r1_77c_rehearsal.py:26: in test_sealed_v0_dispatch_requires_explicit_recipe_opt_in
+    f = make(profile="full", condition="v0_stable", drift_implementation=implementation)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:115: in fixture
+    cap, _ = factory(None)
+             ^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:105: in factory
+    cap = build_adapter(
+src/pccap/revision_v1/stage4_adapters.py:222: in build_adapter
+    raise ValueError("reader parameters do not belong to a v0 family")
+E   ValueError: reader parameters do not belong to a v0 family
+_____________ test_batch_choice_is_part_of_frozen_recipe_contract ______________
+tests/revision_v1/test_r1_77c_rehearsal.py:43: in test_batch_choice_is_part_of_frozen_recipe_contract
+    f = make(profile="full", condition="v0_stable")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:115: in fixture
+    cap, _ = factory(None)
+             ^^^^^^^^^^^^^
+tests/revision_v1/test_r1_77b_sealed_backend.py:105: in factory
+    cap = build_adapter(
+src/pccap/revision_v1/stage4_adapters.py:222: in build_adapter
+    raise ValueError("reader parameters do not belong to a v0 family")
+E   ValueError: reader parameters do not belong to a v0 family
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[None]
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[profile_default]
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_sealed_v0_dispatch_requires_explicit_recipe_opt_in[v0_batched_v1]
+FAILED tests/revision_v1/test_r1_77c_rehearsal.py::test_batch_choice_is_part_of_frozen_recipe_contract
+4 failed, 1 passed in 5.11s

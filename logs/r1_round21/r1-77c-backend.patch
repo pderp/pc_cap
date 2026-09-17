@@ -1,0 +1,54 @@
+--- a/scripts/r1_77b_sealed_backend.py
++++ b/scripts/r1_77b_sealed_backend.py
+@@ -1,7 +1,7 @@
+ """R1-77b sealed owner backend; inspect metadata by default, execute explicitly.
+ 
+ The admission path is stage4_cell.load_cell(allow_sealed=True), never a
+- development loader. R1-68d's execution body is copied with a pinned source hash;
++ development loader. R1-68e's execution body is copied with a pinned source hash;
+  sealed admission, output namespaces and deadline checks are the only changes.
+ """
+ 
+@@ -31,7 +31,6 @@
+     durable_json,
+     phase_summary,
+ )
+-from scripts.r1_68c_batched_drift import batched_drift
+ 
+ from pccap.harness.snapshot import restore, serialize
+ from pccap.revision_v1 import stage4_cell as core
+@@ -49,7 +48,7 @@
+ RESOURCE_ROOT = ROOT.parent / "assets/runs/pc_cap/R1/stage4_sealed_cells"
+ RECEIPT_ROOT = ROOT / "logs/r1_77b_execution"
+ FROZEN_RELATIVE = "manifests/revision_v1/frozen_stage4.json"
+-DONOR_SHA256 = "f8d04d3cacdc8cac0b97ba7cfda213a38623a7be92adfe881260d3f82c2c0c0d"
++DONOR_SHA256 = "5293448fd423c1eeab35374ff96ec040d221a32eb63261ccabaf92cdb6fae3c2"
+ GATES = tuple(f"U{i:02}" for i in range(1, 19))
+ 
+ 
+@@ -95,7 +94,7 @@
+     if m.get("backend") != backend_binding():
+         raise ValueError("sealed backend module/file identity mismatch")
+     if sha(code_root / "scripts/r1_68c_dev_cell.py") != DONOR_SHA256:
+-        raise ValueError("R1-68d donor changed; reconcile the sealed fork")
++        raise ValueError("R1-68e donor changed; reconcile the sealed fork")
+     donor.profile_config(m, code_root)
+     if m.get("code_sha256") != core.code_identity(code_root):
+         raise ValueError("installed sealed code identity mismatch")
+@@ -642,13 +641,9 @@
+                 )
+                 cp["endpoints"]["drift"] = phase(
+                     f"drift:{n}",
+-                    lambda ep=ep: (
+-                        batched_drift(
+-                            assays, ep["drift"], batch_size=manifest.get("drift_batch_size", 16)
+-                        )
+-                        if profile == "incremental"
+-                        else assays.drift(ep["drift"])
+-                    ),
++                    # R1-77c review: the signed recipe field alone opts into
++                    # v0 batching; no condition-based inference or reduced integrity.
++                    lambda ep=ep: donor.run_drift_assay(assays, ep["drift"], manifest, profile),
+                 )
+             cp["observation"] = adapter.observe()
+             cp["state_sha256"] = adapter.state_hash()

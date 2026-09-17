@@ -1,0 +1,12 @@
+...........................F                                             [100%]
+=================================== FAILURES ===================================
+________ test_three_owner_writers_keep_receipt_last_and_match_preflight ________
+tests/revision_v1/test_r1_d9_receipts.py:394: in test_three_owner_writers_keep_receipt_last_and_match_preflight
+    result = producer.execute(spec, stage)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_d9_receipts.py:441: in execute
+    read_metadata(spec["protocol"], parse=False)
+E   TypeError: test_three_owner_writers_keep_receipt_last_and_match_preflight.<locals>.<lambda>() got an unexpected keyword argument 'parse'
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_d9_receipts.py::test_three_owner_writers_keep_receipt_last_and_match_preflight
+1 failed, 27 passed in 5.70s

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import uuid
 from dataclasses import replace
@@ -55,9 +56,23 @@ def make(monkeypatch):
     monkeypatch.setattr(core, "CHECKPOINTS", (1, 2))
 
     def fixture(
-        *, profile="incremental", change=None, bad_reservation=False, missing_locality=False
+        *,
+        profile="incremental",
+        change=None,
+        bad_reservation=False,
+        missing_locality=False,
+        condition="R1_learned_ff",
+        drift_implementation=None,
+        data_override=None,
+        reservations_override=None,
+        realization="tiny",
+        order="0",
     ):
-        data = payload(2, composition=True)
+        data = (
+            copy.deepcopy(data_override)
+            if data_override is not None
+            else payload(2, composition=True)
+        )
         if missing_locality:
             data["endpoints"]["locality"]["rows"] = []
         tok = TinyTok()
@@ -87,13 +102,15 @@ def make(monkeypatch):
         def factory(m):
             cfg = _cfg()
             cfg.fast = replace(cfg.fast, steps=0, delta_steps=0)
+            from tests.revision_v1.test_r1_68e_batched_drift_v0 import RetainedTinyBase
+
             cap = build_adapter(
-                "R1_learned_ff",
-                TinyBase(),
+                condition,
+                TinyBase() if condition.startswith("R1_") else RetainedTinyBase(),
                 Ledger(),
                 calibration=CAL,
                 synthetic=True,
-                revision_config=cfg,
+                revision_config=cfg if condition.startswith("R1_") else None,
             )
             return cap, tok
 
@@ -103,9 +120,9 @@ def make(monkeypatch):
             "mode": backend.MODE,
             "cell": {
                 "condition": cap.condition,
-                "dataset": "mquake",
-                "realization": "tiny",
-                "order": "0",
+                "dataset": data["items"][0]["dataset"],
+                "realization": realization,
+                "order": order,
             },
             "backend": backend.backend_binding(),
             "code_sha256": core.code_identity(REPO),
@@ -126,6 +143,8 @@ def make(monkeypatch):
                 ordered_item_ids_sha256=core.digest([r["item_id"] for r in data["items"]]),
             ),
         }
+        if drift_implementation is not None:
+            m["drift_implementation"] = drift_implementation
         m["payload"] = new_json(resources / "payload.json", data)
         roles = [
             {
@@ -146,7 +165,9 @@ def make(monkeypatch):
         ]
         m["reservations"] = new_json(
             resources / "reservations.json",
-            {"mode": "content_sealed_fact_reservations", "allocations": roles},
+            reservations_override
+            if reservations_override is not None
+            else {"mode": "content_sealed_fact_reservations", "allocations": roles},
         )
         m["protocol"] = new_json(
             root / "manifests/revision_v1/protocol.json",
@@ -197,6 +218,11 @@ def make(monkeypatch):
         if change:
             change(m, frozen, data)
         frozen["recipe_contracts"] = {analysis.coordinate_id(m["cell"]): backend.contract_digest(m)}
+        if reservations_override is not None:
+            new_json(
+                root / "docs/tasks/synthetic-freeze-candidate.json",
+                {**frozen, "mode": "synthetic_candidate_not_frozen", "launch_authorized": False},
+            )
         m["freeze"] = new_json(root / backend.FROZEN_RELATIVE, frozen)
         binding = new_json(root / "docs/tasks/recipe.json", m)
 
