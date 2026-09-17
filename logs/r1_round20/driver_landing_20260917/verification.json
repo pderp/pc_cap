@@ -1,0 +1,28 @@
+{
+  "task": "R1-68e-driver-landing",
+  "status": "applied_and_cpu_verified",
+  "verified_utc": "2026-09-17T09:01:35.340171+00:00",
+  "approved_patch_sha256": "b186e71e7d87d177c1253ae7cd631741f04df25406ffdce4a5ffd93c773774f8",
+  "driver_file_sha256": "5293448fd423c1eeab35374ff96ec040d221a32eb63261ccabaf92cdb6fae3c2",
+  "driver_code_sha256": "19c50855a9f5352f91fd5f45677869bd1f3047212c023e30726d26420b3229d4",
+  "tests": {
+    "passed": 32,
+    "seconds": 6.78,
+    "log": "logs/r1_round20/driver_landing_20260917/cpu-tests.txt",
+    "coverage": "all six v0/S1 families, actual driver dispatch/profile bindings, scalar parity, hard-null rows, and an isolated TinyBase development cell"
+  },
+  "ruff": "passed",
+  "git_diff_check": "passed",
+  "tracked_files_modified": [
+    "scripts/r1_68c_dev_cell.py"
+  ],
+  "gpu_seconds": 0,
+  "committed": false,
+  "remaining": [
+    "R1-64d comparator recipe rebinding",
+    "R1-73b MQuAKE recipes against admitted calibration",
+    "owner real-base parity/profile",
+    "explicit sealed-backend donor reconciliation before sealed execution",
+    "new freeze candidate for post-hook identities"
+  ]
+}

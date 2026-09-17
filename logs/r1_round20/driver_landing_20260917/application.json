@@ -1,0 +1,20 @@
+{
+  "task": "R1-68e-driver-landing",
+  "applied_utc": "2026-09-17T09:00:13.610480+00:00",
+  "authorization": "User: please make the driver patch edit",
+  "target": "scripts/r1_68c_dev_cell.py",
+  "before_sha256": "f8d04d3cacdc8cac0b97ba7cfda213a38623a7be92adfe881260d3f82c2c0c0d",
+  "after_sha256": "5293448fd423c1eeab35374ff96ec040d221a32eb63261ccabaf92cdb6fae3c2",
+  "patch": {
+    "path": "docs/tasks/R1-68e-driver.patch",
+    "sha256": "b186e71e7d87d177c1253ae7cd631741f04df25406ffdce4a5ffd93c773774f8"
+  },
+  "owner_idle_confirmation": {
+    "path": "docs/lead_queue.md",
+    "entry": "56; 2026-09-17 04:10 EDT",
+    "text": "56. (2026-09-17, 04:10 EDT) **Stress panel done** (22 min of the 4 h): shuffled and clustered schedules give identical results\n    on every dataset (the memory is an order-free set of records), old exact answers stay 20 / 20 everywhere, and the\n    harm that does occur is sparse, item-determined and permanent \u2014 CounterFact two of 20 probed facts lose 2.5 and 4.0\n    nats per token (one token 12.5 nats) after a later edit, MQuAKE one fact 2.0 nats, zsRE nothing; no recovery within\n    40 updates because nothing in the design revisits a stored record. Presentation record:\n    `assets/presentation-materials/stress_panel_v5.md`. GPU is idle until Codex's R1-68e / R1-73b / R1-76b land;\n    next GPU jobs in order: R1-68e re-profiles, MQuAKE comparator profiles, the MQuAKE occupancy diagnostic."
+  },
+  "validation_status": "pending; see separate verification receipt",
+  "gpu_seconds": 0,
+  "committed": false
+}

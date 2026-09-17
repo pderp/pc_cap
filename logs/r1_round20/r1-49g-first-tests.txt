@@ -1,0 +1,148 @@
+.......F.F......F                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_exact_classifier_boundaries[kwargs7-negative] ______________
+
+kwargs = {'eu': -0.02001}, verdict = 'negative'
+
+    @pytest.mark.parametrize(
+        "kwargs,verdict",
+        [
+            ({}, "positive"),
+            ({"g": 0.049999}, "inconclusive"),
+            ({"gl": 0}, "inconclusive"),
+            ({"el": -0.02}, "qualified"),
+            ({"ll": -0.01}, "qualified"),
+            ({"gu": 0.04999}, "negative"),
+            ({"gu": 0.05}, "positive"),
+            ({"eu": -0.02001}, "negative"),
+            ({"el": -0.03, "eu": -0.02, "e": -0.02}, "qualified"),
+            ({"lu": -0.01001}, "negative"),
+            ({"ll": -0.03, "lu": -0.01, "l": -0.01}, "qualified"),
+        ],
+    )
+    def test_exact_classifier_boundaries(kwargs, verdict):
+>       assert inf.classify(stats(**kwargs), admitted=True) == verdict
+E       AssertionError: assert 'unavailable' == 'negative'
+E         
+E         - negative
+E         + unavailable
+
+logs/r1_round20/test_r1_49g_candidate.py:48: AssertionError
+______________ test_exact_classifier_boundaries[kwargs9-negative] ______________
+
+kwargs = {'lu': -0.01001}, verdict = 'negative'
+
+    @pytest.mark.parametrize(
+        "kwargs,verdict",
+        [
+            ({}, "positive"),
+            ({"g": 0.049999}, "inconclusive"),
+            ({"gl": 0}, "inconclusive"),
+            ({"el": -0.02}, "qualified"),
+            ({"ll": -0.01}, "qualified"),
+            ({"gu": 0.04999}, "negative"),
+            ({"gu": 0.05}, "positive"),
+            ({"eu": -0.02001}, "negative"),
+            ({"el": -0.03, "eu": -0.02, "e": -0.02}, "qualified"),
+            ({"lu": -0.01001}, "negative"),
+            ({"ll": -0.03, "lu": -0.01, "l": -0.01}, "qualified"),
+        ],
+    )
+    def test_exact_classifier_boundaries(kwargs, verdict):
+>       assert inf.classify(stats(**kwargs), admitted=True) == verdict
+E       AssertionError: assert 'unavailable' == 'negative'
+E         
+E         - negative
+E         + unavailable
+
+logs/r1_round20/test_r1_49g_candidate.py:48: AssertionError
+____ test_tinybase_complete_cell_does_not_fill_1000_or_50_case_requirements ____
+
+    def test_tinybase_complete_cell_does_not_fill_1000_or_50_case_requirements():
+        from scripts import r1_68c_dev_cell as driver
+    
+        from tests.revision_v1.test_r1_68c_driver import DriverTests
+        from tests.revision_v1.test_r1_75_analysis import matrix, plan
+    
+        project = ROOT / "logs/r1_round20/synthetic_tests" / uuid.uuid4().hex
+        with (
+            patch.object(driver, "OUTPUT_ROOT", project / "results"),
+            patch.object(old, "ROOT", project),
+        ):
+            case = DriverTests()
+            case.setUp()
+            try:
+                fixture = case.fixture("incremental")
+>               result = case.run_cell(fixture)
+                         ^^^^^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_49g_candidate.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_68c_driver.py:170: in run_cell
+    return driver.run_development_cell(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+manifest_path = PosixPath('/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1-68c-5fs464td/recipe-incremental.json')
+expected_sha256 = '645400522b032bdaa2f4e3bd4763c216126761e6128ec1e7ead833f6d44f07f8'
+adapter = <scripts.r1_68b_integrity_runtime.IndexedAdapter object at 0x7f46c81bb4a0>
+tokenizer = <tests.revision_v1.test_stage4_cell.TinyTok object at 0x7f4759f656d0>
+output_root = PosixPath('/home/derp/cap/pc_cap/logs/r1_round20/synthetic_tests/281b0417f47b4d6e9b925ff8317eef0b/results/r1_68c_cpu_tests/9821d73c79b34835bc03505b98a72ce2')
+resource_root = PosixPath('/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1-68c-5fs464td/snapshots')
+code_root = PosixPath('/home/derp/cap/pc_cap'), resume = False
+allow_sealed = False, stop_after_checkpoint = None
+
+    def run_development_cell(
+        manifest_path,
+        expected_sha256,
+        adapter,
+        tokenizer,
+        *,
+        output_root,
+        resource_root,
+        code_root=ROOT,
+        resume=False,
+        allow_sealed=False,
+        stop_after_checkpoint=None,
+    ):
+        """Run one cell; each attempt/phase/checkpoint is a new file, never appended.
+    
+        A complete checkpoint receipt is written last and binds both the report and
+        snapshot. Interrupted work remains in its attempt directory and stays in
+        resource accounting. Resume restores only a contiguous verified prefix.
+        """
+        admission_started = time.monotonic()
+        manifest, payload = load_development_cell(
+            manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
+        )
+        profile, batch_edits = profile_config(manifest, code_root)
+        if profile == "incremental":
+            adapter = IndexedAdapter(adapter)
+        identity = adapter.identity()
+        boundary_identity_checks = [
+            {
+                "boundary": "attempt_start",
+                "kind": "full_recipe_and_adapter_rehash",
+                "seconds": time.monotonic() - admission_started,
+            }
+        ]
+        memory_fingerprint = memory_identity(adapter)
+        if (
+            identity != manifest["adapter_identity"]
+            or adapter.condition != manifest["cell"]["condition"]
+        ):
+            raise ValueError("adapter/base/config/parameter identity mismatch")
+        if stop_after_checkpoint is not None and stop_after_checkpoint not in manifest["checkpoints"]:
+            raise ValueError("stop must be a declared checkpoint")
+        root, assets = Path(output_root).resolve(), Path(resource_root).resolve()
+        if not root.is_relative_to(ROOT / "results/R1/stage4_dev_cells") or not assets.is_relative_to(
+            ROOT.parent / "assets"
+        ):
+>           raise ValueError("outputs belong in pc_cap; snapshot resources belong in assets")
+E           ValueError: outputs belong in pc_cap; snapshot resources belong in assets
+
+scripts/r1_68c_dev_cell.py:265: ValueError
+=========================== short test summary info ============================
+FAILED logs/r1_round20/test_r1_49g_candidate.py::test_exact_classifier_boundaries[kwargs7-negative]
+FAILED logs/r1_round20/test_r1_49g_candidate.py::test_exact_classifier_boundaries[kwargs9-negative]
+FAILED logs/r1_round20/test_r1_49g_candidate.py::test_tinybase_complete_cell_does_not_fill_1000_or_50_case_requirements
+3 failed, 14 passed in 1.52s

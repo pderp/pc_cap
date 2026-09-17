@@ -1,0 +1,204 @@
+PARITY v0_live_C1 occupied=False max_per_position_nats=6.5398211202e-07
+.PARITY v0_live_C2 occupied=False max_per_position_nats=6.5398211202e-07
+.PARITY v0_stable occupied=False max_per_position_nats=6.5398211202e-07
+.PARITY matched_update occupied=False max_per_position_nats=6.5398211202e-07
+.PARITY S1_LM occupied=False max_per_position_nats=1.04640087972e-06
+.PARITY S1_literal occupied=False max_per_position_nats=1.04640087972e-06
+.PARITY v0_live_C1 occupied=True max_per_position_nats=1.81584119563e-06
+.PARITY v0_live_C2 occupied=True max_per_position_nats=1.81584119563e-06
+.PARITY v0_stable occupied=True max_per_position_nats=1.81584119563e-06
+.PARITY matched_update occupied=True max_per_position_nats=1.81584119563e-06
+.PARITY S1_LM occupied=True max_per_position_nats=1.81584119563e-06
+.PARITY S1_literal occupied=True max_per_position_nats=1.81584119563e-06
+...........FFFFFFFF.
+=================================== FAILURES ===================================
+_____________ test_hook_is_opt_in_and_preserves_existing_dispatch ______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3e58338080>
+
+    def test_hook_is_opt_in_and_preserves_existing_dispatch(monkeypatch):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+___________ test_hook_profile_admission_and_module_hash[v0_live_C1] ____________
+
+condition = 'v0_live_C1'
+
+    @pytest.mark.parametrize("condition", list(batch.CONDITION_CLASSES))
+    def test_hook_profile_admission_and_module_hash(condition):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+___________ test_hook_profile_admission_and_module_hash[v0_live_C2] ____________
+
+condition = 'v0_live_C2'
+
+    @pytest.mark.parametrize("condition", list(batch.CONDITION_CLASSES))
+    def test_hook_profile_admission_and_module_hash(condition):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+____________ test_hook_profile_admission_and_module_hash[v0_stable] ____________
+
+condition = 'v0_stable'
+
+    @pytest.mark.parametrize("condition", list(batch.CONDITION_CLASSES))
+    def test_hook_profile_admission_and_module_hash(condition):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+_________ test_hook_profile_admission_and_module_hash[matched_update] __________
+
+condition = 'matched_update'
+
+    @pytest.mark.parametrize("condition", list(batch.CONDITION_CLASSES))
+    def test_hook_profile_admission_and_module_hash(condition):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+______________ test_hook_profile_admission_and_module_hash[S1_LM] ______________
+
+condition = 'S1_LM'
+
+    @pytest.mark.parametrize("condition", list(batch.CONDITION_CLASSES))
+    def test_hook_profile_admission_and_module_hash(condition):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+___________ test_hook_profile_admission_and_module_hash[S1_literal] ____________
+
+condition = 'S1_literal'
+
+    @pytest.mark.parametrize("condition", list(batch.CONDITION_CLASSES))
+    def test_hook_profile_admission_and_module_hash(condition):
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+__________________ test_hook_tinybase_dispatch_matches_scalar __________________
+
+    def test_hook_tinybase_dispatch_matches_scalar():
+>       driver = projected_driver()
+                 ^^^^^^^^^^^^^^^^^^
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def projected_driver():
+        path = ROOT / "scripts/r1_68c_dev_cell.py"
+        source = path.read_text()
+        if "def run_drift_assay(" not in source:
+            from tests.revision_v1.test_r1_round19_preflight import patched_source
+    
+>           source = patched_source(source, (ROOT / "docs/tasks/R1-68e-driver.patch").read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: patched_source() missing 1 required positional argument: 'marker'
+
+logs/r1_round20/test_r1_68e_hook_candidate.py:23: TypeError
+=========================== short test summary info ============================
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_is_opt_in_and_preserves_existing_dispatch
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_profile_admission_and_module_hash[v0_live_C1]
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_profile_admission_and_module_hash[v0_live_C2]
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_profile_admission_and_module_hash[v0_stable]
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_profile_admission_and_module_hash[matched_update]
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_profile_admission_and_module_hash[S1_LM]
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_profile_admission_and_module_hash[S1_literal]
+FAILED logs/r1_round20/test_r1_68e_hook_candidate.py::test_hook_tinybase_dispatch_matches_scalar
+8 failed, 23 passed in 4.23s

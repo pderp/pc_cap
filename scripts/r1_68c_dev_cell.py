@@ -21,6 +21,8 @@ from scripts.r1_68b_integrity_runtime import (
     phase_summary,
 )
 from scripts.r1_68c_batched_drift import batched_drift
+from scripts.r1_68e_batched_drift_v0 import CONDITION_CLASSES, IMPLEMENTATION
+from scripts.r1_68e_batched_drift_v0 import batched_drift as v0_batched_drift
 
 from pccap.harness.snapshot import restore, serialize
 from pccap.revision_v1.analysis import digest
@@ -52,6 +54,7 @@ DRIVER_FILES = (
     "scripts/r1_68b_integrity_runtime.py",
     "scripts/r1_68c_dev_cell.py",
     "scripts/r1_68c_batched_drift.py",
+    "scripts/r1_68e_batched_drift_v0.py",
 )
 PARENT_DRIVER_SHA256 = "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5"
 UPSTREAM_ENGINE_SHA256 = "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da"
@@ -118,7 +121,29 @@ def profile_config(manifest, root=ROOT):
         raise ValueError("incremental-capable driver source bindings mismatch")
     if profile == "incremental" and not manifest["cell"]["condition"].startswith("R1_"):
         raise ValueError("incremental profile supports only audited RevisionCap conditions")
+    implementation = manifest.get("drift_implementation", "profile_default")
+    if implementation not in ("profile_default", IMPLEMENTATION):
+        raise ValueError("unsupported drift implementation")
+    if implementation == IMPLEMENTATION and (
+        profile != "full" or manifest["cell"]["condition"] not in CONDITION_CLASSES
+    ):
+        raise ValueError("v0 batch drift requires a v0-family condition and full integrity")
     return profile, batch
+
+
+def run_drift_assay(assays, definition, manifest, profile):
+    implementation = manifest.get("drift_implementation", "profile_default")
+    if implementation == IMPLEMENTATION:
+        return v0_batched_drift(
+            assays, definition, batch_size=manifest.get("drift_batch_size", 16)
+        )
+    if implementation != "profile_default":
+        raise ValueError("unsupported drift implementation")
+    if profile == "incremental":
+        return batched_drift(
+            assays, definition, batch_size=manifest.get("drift_batch_size", 16)
+        )
+    return assays.drift(definition)
 
 
 def code_identity(root=ROOT):
@@ -602,13 +627,7 @@ def run_development_cell(
                 )
                 cp["endpoints"]["drift"] = phase(
                     f"drift:{n}",
-                    lambda ep=ep: (
-                        batched_drift(
-                            assays, ep["drift"], batch_size=manifest.get("drift_batch_size", 16)
-                        )
-                        if profile == "incremental"
-                        else assays.drift(ep["drift"])
-                    ),
+                    lambda ep=ep: run_drift_assay(assays, ep["drift"], manifest, profile),
                 )
             cp["observation"] = adapter.observe()
             cp["state_sha256"] = adapter.state_hash()
