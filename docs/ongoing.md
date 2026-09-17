@@ -74,67 +74,48 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 24 (CPU; open now; posted 2026-09-17 12:40 EDT) — make the reduced MQuAKE cadence executable
+  +0.006## 3. Lanes for Codex — round 25 (CPU; open now; posted 2026-09-17 15:20 EDT) — after the R1-77d patch
 
-Round 23 is committed and mirrored; the orchestrator adopted the D10e rule (`docs/tasks/R1-D10e-orchestrator-review.json`).
-Priority order: **R1-73d (small) → R1-D10g → R1-D9d → R1-77d → R1-D10b2 → R1-49h → R1-77e → R1-58e.** Rules as in round 22; the installed-source
-and driver patches (R1-77d) are prepared now and applied by the orchestrator at tonight's idle boundary (after chains
-M / N / O), then recipes are rebuilt.
+The R1-77d patch is applied (installed tree and backend identities changed); the orchestrator rebuilt the R1-73d
+MQuAKE recipes on the new identity and is running the teacher review (operative evidence v5, matrix v5.2-D) and the
+MQuAKE re-run (chain P). Priority order: **R1-64e (first: the builders pin the pre-patch driver identity — `r1_73b_comparator_recipes.verify` refuses "driver identity changed", so the R1-73d MQuAKE rebuild and every other recipe builder must be rebound before any development profiling) → R1-63g → R1-D10h → X15 → HT-4e.** Rules as in round 22.
 
-### Lane R1-73d — MQuAKE development payloads: locality must not be edit prompts (first; small)
+### Lane R1-63g — freeze candidate v8 on the patched identity (first)
 
-Chain M shows LS 0 / 50 in every MQuAKE cell because the R1-73b payload's 50 locality prompts are all edit prompts of
-the same cell (notes §"Chain M"). Rebuild the MQuAKE payloads with locality rows drawn from the unrelated-prompt pool
-under the R1-65 rule (never an own prompt of an in-memory record, at any occupancy), keep everything else identical,
-rebuild the eight recipes on the current identity with inspection receipts, and add the same check to the D10c
-constructor and the seal validator (a locality prompt equal to any reserved edit / paraphrase prompt refuses).
+Rebind: installed tree + R1-68e driver + patched sealed backend, protocol v5.2-D and matrix v5.2-D, calibration v3,
+evidence v5 operative + roles v2, D9 inputs / forms v3 + contract v2, the corrected MQuAKE recipes
+(`docs/tasks/R1-73d-post77d/`), the concurrency policy (two workers), the execution plan; refresh every D9 request
+digest that the patch invalidated and list which stage approvals must be re-signed; print the open gates with what
+closes each.
 
-### Lane R1-D10g — promote evidence v5 (first; small)
+### Lane R1-D10h — teacher certification and the post-teacher clearance rehearsal
 
-Emit the operative evidence resource from candidate v5 bound to the orchestrator's review document, plus the
-later-exposure supplement (exposure since `2a8b237`: chain K / L / M development cells and the R1-73b / R1-64d payloads
-— check and list), and regenerate the role plan and teacher-eligibility inputs from it under the DEC-060 layout
-(zsRE 4,050 / CounterFact 4,050 / MQuAKE 1,950). Both predecessors preserved.
+When `assets/runs/pc_cap/R1/r1_d10b/round24_v2/` completes (chain P), run the certification mode against its
+completion receipt, merge teacher / token results into the dispositions, regenerate roles, and run the real
+clearance producer in `--dry-run` on the real inputs v3 (no authorization) to show the exact counts, Hall checks and
+the remaining refusals (which should be only the missing lead signatures and the current-exposure attestation).
+Report the post-teacher margins per dataset and per role.
 
-### Lane R1-D9d — per-dataset demand in the D9 producers, preflight and endpoint constructor
+### Lane X15 — independent counter-review of the pre-freeze package
 
-Parameterise `r1_d9_receipt_core` / `r1_d9_clearance` / `r1_d9_draw` / `r1_d9_seal`, `r1_58c_draw_seal_preflight` and
-`r1_d10c_endpoints` for the exact per-dataset layout from the option-D matrix (edits per realization, checkpoints,
-roles), preserving global disjointness, Hall's condition, RNG streams and every refusal; version the stage contracts
-and the D9 inputs (v3) and authorization templates (v3) accordingly; tests for both layouts.
+Before the lead signs: review evidence v5 (rule, supplement, roles), the near-miss family proposal, protocol v5.2-D
+and matrix v5.2-D, the analysis inventory (R1-49h) and the execution plan against the accepted decisions
+(DEC-033–060). Reproduce the subject counts from the register and the operative dispositions independently; list
+every point where a document and a decision disagree; say plainly whether the package is ready for the lead's
+acts. New files only; no fixes applied — edit requests.
 
-### Lane R1-77d — validator and sealed backend accept the bound per-dataset cadence (patch prepared, applied at the idle boundary)
+### Lane R1-64e — recipe builders and recipes rebound to the patched identity (first)
 
-The installed real-payload validator and `r1_77b_sealed_backend` reject a 300-edit confirmatory cell. Prepare the exact
-patches (installed source + backend + tests) that accept the cadence bound in the option-D protocol / matrix and
-nothing else, with the edit request recording the identity change; the orchestrator applies them tonight and rebinds
-recipes / backend / freeze candidate (v8).
+Rebind the driver-identity pins in `r1_64c_comparator_recipes`, `r1_73b_comparator_recipes`, `r1_73d_locality_recipes`
+(and any other builder that pins it) to the patched tree, recording the identity change; then rebuild the eight
+corrected MQuAKE recipes (R1-73d → post-patch), the 16 zsRE / CounterFact comparator recipes (R1-64d → R1-64e) and
+the primary v5 recipe, with inspection receipts, no execution. The orchestrator re-runs the MQuAKE cells as soon as
+the eight recipes load.
 
-### Lane R1-D10b2 — teacher review: admitted layout guard and certify-from-receipts
+### Lane HT-4e — claim ledger v5
 
-Replace the fixed 4,050 guard in `r1_d10b_teacher_review.py` with the admitted per-dataset layout and add a
-certification mode that consumes the receipts of an existing completed run (tonight's chain N run under the
-exploration flag) so the certification does not require re-decoding; tests.
-
-### Lane R1-49h — analysis inventory under option D
-
-`validate_family` must accept the reduced execution inventory while the 63-interval DEC-057 family stays unchanged:
-zsRE / CounterFact inference intact; every MQuAKE 1,000-edit primary comparison reported unavailable (never inferred
-from 300); the secondary benchmarks at MQuAKE's actual occupancy 300. Protocol v5.2-D text where needed; tests.
-
-### Lane R1-77e — two-worker mode for the confirmatory queue
-
-Concurrency is admitted (notes §"Concurrency probe 2": two cells at a time, 1.65–1.67× throughput, identical
-results). Add to `scripts/r1_77_queue.py` a `--workers 2` mode: two cells in flight from the same block order, one
-shared budget / cost account, the existing per-cell canonical locks, MemAvailable guard checked before each launch
-(≥ 6 GiB with one cell running), ceilings under concurrency = 1.5 × 1.1 × the solo ceiling, resume semantics
-unchanged, and the DEC-052 inventory unaffected. Tests with TinyBase cells (including one worker failing while the
-other completes).
-
-### Lane R1-58e — full synthetic rehearsal (after the above)
-
-Clearance → draw → endpoints → seal → freeze candidate → queue dry-run → one sealed TinyBase cell per cadence → R1-49g
-analysis, on the option-D layout; the operator sheet v3.
+After chain P: MQuAKE comparator rows with the corrected locality, the concurrency admission, the execution plan,
+DEC-060 and the MQuAKE scale limitation; every row hash-bound.
 
 ## 4. Interfaces and coordination
 

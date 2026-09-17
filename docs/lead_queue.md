@@ -478,6 +478,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q12 (U13) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-058). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q13 (U14) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-059). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q14 (R1-D10a capacity) | **ANSWERED 2026-09-17: option D** (DEC-060) — context-match review first (R1-D10e), then MQuAKE at 300 edits × 3 realizations, checkpoints 100 / 300, with the restored margin; a larger cadence, if the review allows one, comes back as a question. | — | unblocked: R1-D10d option-A deltas, R1-D10e review, then the MQuAKE draw | — |
+| Q15 (near-miss family; `docs/R1_near_miss_family_v5_2_proposal.md`) | The confirmatory near-miss challenge cannot reuse v0's same-subject family (global subject disjointness across roles). Codex proposes: support and neighbour are distinct subjects sharing an exact relation / question template (family), with the preserved answer measured on the neighbour after the support edit; feasibility 2,845 / 3,030 / 1,056 disjoint pairs vs 300 needed; missing pairs keep the planned denominator. Adopt this semantics for protocol v5.2-D? | adopt as proposed | the near-miss rows of the draw and seal (R1-D9c / D10c) and the near-miss endpoint in the analysis; not the launch of other endpoints | Sep 18 |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -708,4 +709,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     throughput with identical results and 20 GB of host memory free, matching probe 1. The core matrix drops from
     ≈ 235 solo hours to ≈ 140 wall-clock hours, ≈ 150 with the extension, against ≈ 360–375 usable hours from a
     September 19–20 launch — a 2.4× buffer for crashes and reruns. Codex adds a two-worker mode to the queue (R1-77e).
+
+66. (2026-09-17, 15:20 EDT) Codex's round 24 committed (`1828aa2`), the R1-77d patch applied at the idle boundary (the
+    installed tree now accepts the bound per-dataset cadence; 300-edit MQuAKE cells run under the sealed backend), the
+    MQuAKE recipes rebuilt on the new identity, and chain P started: the teacher-token review on the final base over
+    14,419 candidates (operative evidence v5), then the MQuAKE comparator re-run with corrected locality. **One
+    decision, Q15 (near-miss family semantics), by tomorrow** — a scientific definition the protocol needs before the
+    draw; my default is to adopt Codex's proposal. Everything else on the path to your acts is now running or
+    assigned (freeze candidate v8, teacher certification, an independent counter-review of the whole package).
 

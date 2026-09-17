@@ -151,17 +151,19 @@ def inspect_manifest(path, expected_sha256, *, code_root=None):
         raise ValueError("recipe not in final frozen contract inventory")
     protocol = metadata(m["protocol"])
     if (
-        protocol.get("schema_version") != 1
+        protocol.get("schema_version") not in (1, 2)
         or protocol.get("mode") != "stage4_final_protocol"
         or protocol.get("lead_approved") is not True
         or protocol.get("open_gates") != []
-        or protocol.get("checkpoints") != list(core.CHECKPOINTS)
         or protocol.get("max_new") != 32
         or protocol.get("locality_score") != "bounded_text_equality_DEC053"
         or protocol.get("experiment_deadline") != "2026-10-09"
     ):
         raise PermissionError("final executable protocol not admitted")
-    if m["checkpoints"] != protocol["checkpoints"] or m["max_new"] != protocol["max_new"]:
+    cadence = core.registered_checkpoints(m, protocol)
+    if protocol.get("schema_version") == 1 and protocol.get("checkpoints") != cadence:
+        raise ValueError("legacy protocol cadence differs")
+    if m["checkpoints"] != cadence or m["max_new"] != protocol["max_new"]:
         raise ValueError("recipe/protocol cadence mismatch")
     return m
 

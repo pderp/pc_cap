@@ -71,6 +71,56 @@ def _unique(ids, name, *, allow_empty=False):
     return ids
 
 
+def registered_checkpoints(manifest, protocol=None):
+    """Require the frozen protocol and exact DEC-060 dataset/matrix contract."""
+    version = manifest.get("population_contract_version")
+    if version is None:
+        if protocol is not None and protocol.get("schema_version") != 1:
+            raise ValueError("versioned protocol requires versioned recipe")
+        return list(CHECKPOINTS)
+    if type(version) is not int or version != 2:
+        raise ValueError("unsupported population contract version")
+    protocol = read_binding(manifest["protocol"]) if protocol is None else protocol
+    if (protocol.get("schema_version") != 2 or protocol.get("mode") != "stage4_final_protocol"
+        or protocol.get("lead_approved") is not True or protocol.get("open_gates") != []
+        or protocol.get("population_decision") != "DEC-060-option-D"
+        or protocol.get("max_new") != 32
+        or protocol.get("locality_score") != "bounded_text_equality_DEC053"
+        or protocol.get("experiment_deadline") != "2026-10-09"):
+        raise ValueError("admitted DEC-060 final protocol required")
+    expected = {}
+    for ds in ("zsre", "counterfact", "mquake"):
+        roles = dict(edits=300 if ds == "mquake" else 1000, outside=100,
+                     near_miss_support=100, near_miss_neighbour=100, revision=50)
+        expected[ds] = dict(realizations=[0, 1, 2], roles_per_realization=roles,
+                            checkpoints=[100, 300] if ds == "mquake" else [100, 300, 1000],
+                            demand_per_realization=sum(roles.values()),
+                            demand_subjects=3*sum(roles.values()),
+                            demand_by_role={r: 3*n for r, n in roles.items()})
+    if content_digest(protocol.get("dataset_layouts")) != content_digest(expected) or protocol.get("layout_sha256") != content_digest(expected):
+        raise ValueError("protocol role demand/cadence differs from DEC-060")
+    if manifest.get("matrix") != protocol.get("matrix"):
+        raise ValueError("recipe/protocol matrix binding differs")
+    matrix = read_binding(protocol["matrix"])
+    if (matrix.get("name") != "run_matrix_v5_2_option_D" or matrix.get("option") != "D"
+        or content_digest(matrix.get("dataset_layouts")) != content_digest(expected)
+        or matrix.get("layout_sha256") != content_digest(expected)):
+        raise ValueError("bound option-D matrix required")
+    cells = list(matrix["cells"])
+    if protocol.get("extension_admitted") is True:
+        cells += matrix.get("extension", {}).get("cells", [])
+    elif protocol.get("extension_admitted") is not False:
+        raise ValueError("explicit extension admission required")
+    cell = manifest["cell"]
+    matched = [c for c in cells if all(str(c[k]) == str(cell[k]) for k in ("condition", "dataset", "realization", "order"))]
+    if len(matched) != 1 or cell["dataset"] not in expected:
+        raise ValueError("recipe cell absent/duplicated in admitted matrix")
+    checkpoints = expected[cell["dataset"]]["checkpoints"]
+    if matched[0]["checkpoints"] != checkpoints or manifest["checkpoints"] != checkpoints:
+        raise ValueError("cell/recipe/protocol dataset cadence differs")
+    return checkpoints
+
+
 def validate_payload(manifest, payload):
     cell = manifest["cell"]
     if set(cell) != {"condition", "dataset", "realization", "order"}:
@@ -105,7 +155,7 @@ def validate_payload(manifest, payload):
     if type(manifest["max_new"]) is not int or not 1 <= manifest["max_new"] <= 32:
         raise ValueError("invalid greedy token limit")
     real = manifest["mode"] != "synthetic"
-    if real and (cps != list(CHECKPOINTS) or manifest["max_new"] != 32):
+    if real and (cps != registered_checkpoints(manifest) or manifest["max_new"] != 32):
         raise ValueError("registered checkpoints and 32-token decoder required")
     if real and any(not r.get("paraphrases") for r in items):
         raise ValueError("registered RET-GS requires paraphrases for every item")
