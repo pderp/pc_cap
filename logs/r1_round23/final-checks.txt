@@ -1,0 +1,11 @@
+$ ../venv/bin/ruff check scripts/r1_d10d_options.py scripts/r1_d10e_adjudication.py scripts/r1_d10f_near_feasibility.py scripts/r1_63f_freeze_candidate.py tests/revision_v1/test_r1_d10d_options.py tests/revision_v1/test_r1_d10e_adjudication.py tests/revision_v1/test_r1_d10f_near_feasibility.py tests/revision_v1/test_r1_63f_freeze_candidate.py
+All checks passed!
+
+$ ../venv/bin/python -m pytest -q -p no:cacheprovider tests/revision_v1/test_r1_d10d_options.py tests/revision_v1/test_r1_d10e_adjudication.py tests/revision_v1/test_r1_d10f_near_feasibility.py tests/revision_v1/test_r1_63f_freeze_candidate.py tests/revision_v1/test_r1_d10a_review.py tests/revision_v1/test_r1_d10b_teacher_review.py tests/revision_v1/test_r1_d10c_endpoints.py tests/revision_v1/test_r1_d9_receipts.py tests/test_package_layout.py
+........................................................................ [ 44%]
+........................................................................ [ 88%]
+..................                                                       [100%]
+162 passed in 5.91s
+
+$ git diff --check
+

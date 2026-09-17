@@ -1,0 +1,105 @@
+{
+  "task": "R1-D10d",
+  "status": "legacy consumer integration remains required",
+  "runtime_refusal_checks": [
+    {
+      "option": "A",
+      "validator": "legacy_D9_matrix",
+      "refused": true,
+      "reason": "registered v5.1 matrix axes required"
+    },
+    {
+      "option": "A",
+      "validator": "legacy_DEC057_matrix",
+      "refused": true,
+      "reason": "'realizations'"
+    },
+    {
+      "option": "B",
+      "validator": "legacy_D9_matrix",
+      "refused": true,
+      "reason": "registered v5.1 matrix axes required"
+    },
+    {
+      "option": "B",
+      "validator": "legacy_DEC057_matrix",
+      "refused": true,
+      "reason": "'realizations'"
+    },
+    {
+      "option": "C",
+      "validator": "legacy_D9_matrix",
+      "refused": true,
+      "reason": "registered v5.1 matrix axes required"
+    },
+    {
+      "option": "C",
+      "validator": "legacy_DEC057_matrix",
+      "refused": true,
+      "reason": "DEC-057 axes required; family cannot shrink to observed cells"
+    },
+    {
+      "option": "D",
+      "validator": "legacy_D9_matrix",
+      "refused": true,
+      "reason": "registered v5.1 matrix axes required"
+    },
+    {
+      "option": "D",
+      "validator": "legacy_DEC057_matrix",
+      "refused": true,
+      "reason": "'realizations'"
+    }
+  ],
+  "bindings": [
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_d9_receipts.py",
+      "sha256": "1cabc075de5d5a5a54eb87d96a5447fa921561ed8148e1485d0d32f53a0de934"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_d9_receipt_core.py",
+      "sha256": "da8a224574c1378bbd5ff22d91609ff3c214b760b8d6864571384744f08b7422"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_d10b_teacher_review.py",
+      "sha256": "1bc616de1914618efcd1b71567d42e18282d3142d07d28f09750a7eae85381ff"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py",
+      "sha256": "66ae2f0d35218bcae374c4407cd2d10f14a99edd62dbf184d115e0766f3a8276"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_58c_draw_seal_preflight.py",
+      "sha256": "61dc779cefc5db81b32246a00b3614711db7b0c29cddb9d1caf8c9f5d60ab05f"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_77b_sealed_backend.py",
+      "sha256": "2d0f6d2f625cdf36aea429d0dc6a9592c11032f3fff08ae9525d3fde2c1d845f"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_cell.py",
+      "sha256": "164638b177a408fd9753690efd919960c41d2b3595934425189a1d4213eb5b63"
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_49g_inference.py",
+      "sha256": "70c0a3680c7945847696c47a72b1d3751dc0c7761a9cc71da1166ca33928b7bf"
+    }
+  ],
+  "cadence_guards": [
+    {
+      "path": "scripts/r1_77b_sealed_backend.py",
+      "function": "inspect_manifest",
+      "line": 153,
+      "condition": "protocol.get('schema_version') != 1 or protocol.get('mode') != 'stage4_final_protocol' or protocol.get('lead_approved') is not True or (protocol.get('open_gates') != []) or (protocol.get('checkpoints') != list(core.CHECKPOINTS)) or (protocol.get('max_new') != 32) or (protocol.get('locality_score') != 'bounded_text_equality_DEC053') or (protocol.get('experiment_deadline') != '2026-10-09')",
+      "source": "if (\n        protocol.get(\"schema_version\") != 1\n        or protocol.get(\"mode\") != \"stage4_final_protocol\"\n        or protocol.get(\"lead_approved\") is not True\n        or protocol.get(\"open_gates\") != []\n        or protocol.get(\"checkpoints\") != list(core.CHECKPOINTS)\n        or protocol.get(\"max_new\") != 32\n        or protocol.get(\"locality_score\") != \"bounded_text_equality_DEC053\"\n        or protocol.get(\"experiment_deadline\") != \"2026-10-09\"\n    ):\n        raise PermissionError(\"final executable protocol not admitted\")"
+    },
+    {
+      "path": "src/pccap/revision_v1/stage4_cell.py",
+      "function": "validate_payload",
+      "line": 108,
+      "condition": "real and (cps != list(CHECKPOINTS) or manifest['max_new'] != 32)",
+      "source": "if real and (cps != list(CHECKPOINTS) or manifest[\"max_new\"] != 32):\n        raise ValueError(\"registered checkpoints and 32-token decoder required\")"
+    }
+  ],
+  "active_source_modified": false
+}

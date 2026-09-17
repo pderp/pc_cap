@@ -1,0 +1,63 @@
+# R1-D10e — complete context-only candidate reason index
+
+The source-bound worksheet is `/home/derp/cap/assets/runs/pc_cap/R1/r1_d10e/round23_v5/context-worksheet.json` (SHA256 `afd25bce182feb45b1cd4cf8e700757fafe590d1c254efa9d3b85abe6a1654e6`). It lists every item and source event; the table below indexes nonexclusive reason groups. One item can occur under several reasons. No operative disposition changed.
+
+| Dataset | Reason | Context-only items |
+| --- | --- | ---: |
+| mquake | R1-76b_reserved_subject | 65 |
+| mquake | counterfact_development_locality_query_subject | 46 |
+| mquake | counterfact_development_reserved_subject | 32 |
+| mquake | counterfact_development_unrelated_query_subject | 46 |
+| mquake | counterfact_training_locality_query_subject | 136 |
+| mquake | counterfact_training_reserved_subject | 78 |
+| mquake | development_drift_text | 13 |
+| mquake | development_endpoint:composition | 15 |
+| mquake | development_endpoint:locality | 7 |
+| mquake | development_endpoint:near_miss | 17 |
+| mquake | development_endpoint:revision | 11 |
+| mquake | development_endpoint:unseen | 40 |
+| mquake | development_payload_reserved | 179 |
+| mquake | historical_query_reservation | 250 |
+| mquake | historical_s0_reserved | 3 |
+| mquake | mquake_development_locality_query_subject | 21 |
+| mquake | mquake_development_reserved_subject | 42 |
+| mquake | mquake_development_unrelated_query_subject | 23 |
+| mquake | mquake_training_locality_query_subject | 23 |
+| mquake | mquake_training_reserved_subject | 144 |
+| mquake | mquake_unverified_near_miss_query_subject | 20 |
+| mquake | ordinary_text_training_prefix | 108 |
+| mquake | reserved_near_miss_candidate | 157 |
+| mquake | zsre_development_locality_query_subject | 19 |
+| mquake | zsre_development_reserved_subject | 19 |
+| mquake | zsre_development_unrelated_query_subject | 50 |
+| mquake | zsre_training_locality_query_subject | 126 |
+| mquake | zsre_training_reserved_subject | 104 |
+| counterfact | R1-76b_reserved_subject | 8 |
+| counterfact | counterfact_development_reserved_subject | 1 |
+| counterfact | counterfact_training_reserved_subject | 4 |
+| counterfact | development_drift_text | 4 |
+| counterfact | development_endpoint:composition | 5 |
+| counterfact | development_endpoint:unseen | 7 |
+| counterfact | development_payload_reserved | 38 |
+| counterfact | historical_query_reservation | 16 |
+| counterfact | mquake_development_locality_query_subject | 8 |
+| counterfact | mquake_development_reserved_subject | 9 |
+| counterfact | mquake_development_unrelated_query_subject | 9 |
+| counterfact | mquake_training_locality_query_subject | 8 |
+| counterfact | mquake_training_reserved_subject | 21 |
+| counterfact | mquake_unverified_near_miss_query_subject | 2 |
+| counterfact | ordinary_text_training_prefix | 50 |
+| counterfact | reserved_near_miss_candidate | 35 |
+| counterfact | zsre_development_reserved_subject | 4 |
+| counterfact | zsre_development_unrelated_query_subject | 9 |
+| counterfact | zsre_training_reserved_subject | 41 |
+| zsre | development_drift_text | 1 |
+| zsre | development_payload_reserved | 4 |
+| zsre | historical_query_reservation | 9 |
+| zsre | mquake_training_locality_query_subject | 1 |
+| zsre | mquake_unverified_near_miss_query_subject | 2 |
+| zsre | ordinary_text_training_prefix | 8 |
+| zsre | reserved_near_miss_candidate | 7 |
+| zsre | zsre_development_unrelated_query_subject | 3 |
+| zsre | zsre_training_locality_query_subject | 13 |
+| zsre | zsre_training_reserved_subject | 10 |
