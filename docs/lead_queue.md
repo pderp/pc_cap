@@ -479,7 +479,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q13 (U14) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-059). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q14 (R1-D10a capacity) | **ANSWERED 2026-09-17: option D** (DEC-060) — context-match review first (R1-D10e), then MQuAKE at 300 edits × 3 realizations, checkpoints 100 / 300, with the restored margin; a larger cadence, if the review allows one, comes back as a question. | — | unblocked: R1-D10d option-A deltas, R1-D10e review, then the MQuAKE draw | — |
 | Q15 (near-miss family) | **ANSWERED 2026-09-17: adopt as proposed** (DEC-061). | — | unblocked: the near-miss rows of the draw / seal and protocol v5.2-D | — |
-| Q16 (near-miss pair allocation; `logs/r1_round26/near_final/r1-d9e-real-pool-review.json`) | With support and neighbour roles drawn independently, Codex's real-pool diagnostic matches only 61 / 300 zsRE pairs (728 template families), 210 / 300 CounterFact, 221 / 300 MQuAKE — most zsRE near-miss cases would be reported unavailable. Options: **(A)** keep independent role draws; report evaluated / planned; **(B)** draw support–neighbour pairs as units by template family (a family-coordinated allocation for the near and neighbour roles only, still RNG-receipted and fixed before any outcome; other roles unchanged). | **B** — outcome-independent, no scope change, makes the endpoint evaluable | the draw producer for the near / neighbour roles (Codex R1-D9f); nothing else | Sep 18 |
+| Q16 (near-miss pair allocation) | **ANSWERED 2026-09-17: B** (DEC-062) — family-coordinated pair allocation for the near / neighbour roles, bound in the RNG admission. | — | unblocked: R1-D9f activation; the draw | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -749,4 +749,6 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     order — each step's dry-run prints the exact request digest you sign. Codex's round 27 builds the Q16-B allocation
     (activated on your answer), the operator sheet v5 with every command as one script you run step by step, and a
     final independent review of the package.
+
+71. (2026-09-17, 18:45 EDT) Q16 recorded (DEC-062, option B). No lead decision is open. Codex's R1-D9f ships with `family_coordinated` as the bound mode for your RNG admission form; the operator script (R1-58g) follows. Your sitting is tomorrow morning.
 

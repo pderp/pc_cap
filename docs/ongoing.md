@@ -85,8 +85,8 @@ In `r1_d9_draw` (your file): an allocation mode for the near and neighbour roles
 pairs as units by exact template family (DEC-061), from the cleared pool after the edit / outside / revision roles
 are allocated, with its own RNG stream and receipt, global disjointness and Hall checks unchanged, fixed before any
 outcome; when fewer than 100 families yield pairs, the planned denominator stays 100 and the shortfall is listed. The
-mode is selected by a bound field in the RNG admission (`near_allocation: independent | family_coordinated`), default
-independent until DEC-062. Tests on synthetic pools including the zsRE-like sparse case; a dry allocation on the real
+mode is selected by a bound field in the RNG admission (`near_allocation: independent | family_coordinated`); **DEC-062
+(lead, 18:45 EDT) selects `family_coordinated`** — make it the bound value in the v4 RNG admission template. Tests on synthetic pools including the zsRE-like sparse case; a dry allocation on the real
 cleared pool reporting matched pairs per dataset and realization under both modes.
 
 ### Lane R1-58g — operator sheet v5: one script, one sitting
