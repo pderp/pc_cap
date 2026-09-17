@@ -74,49 +74,37 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 26 (CPU; open now; posted 2026-09-17 16:00 EDT) — X15 fixes, Q15 into the pipeline, candidate v9
+  +0.006## 3. Lanes for Codex — round 27 (CPU; open now; posted 2026-09-17 18:35 EDT) — the signature package
 
-Round 25 is committed and mirrored; DEC-061 adopts the near-miss family. The orchestrator applies X15's document patch,
-runs the corrected MQuAKE cells (chain Q) and writes execution plan v2 (the cost admission) tonight. Priority order:
-**R1-77f → R1-D9e → R1-49i → R1-63h → R1-58f → HT-4f.** Rules as in round 22.
+Round 26 is committed and mirrored; candidate v9 is final; the cost admission receipt v1 exists (unsigned).
+Priority order: **R1-D9f → R1-58g → X16 → HT-4f.** Rules as in round 22.
 
-### Lane R1-77f — queue ceilings and failure policy per X15 (first; your own file)
+### Lane R1-D9f — family-coordinated near / neighbour allocation (Q16 option B; build now, activate on the lead's answer)
 
-(a) Ceilings: the matrix stores the admitted solo ceiling (1.5 × measured solo cost); with `--workers 2` the queue
-multiplies by the measured concurrent slowdown bound **1.15** (X15: observed up to 1.13), not 1.65 — record the
-definition in `docs/R1_stage4_queue_concurrency_v1.md` → v2 and the matrix schema. (b) Failure policy per DEC-052 and
-the execution plan: a failed cell is retried once automatically from its last certified checkpoint; a second failure
-marks it incomplete in the inventory and the queue continues with the next cell (the other worker is not drained);
-a host-level failure (memory guard, lease loss) still stops dispatch. Tests for both.
+In `r1_d9_draw` (your file): an allocation mode for the near and neighbour roles only that draws support–neighbour
+pairs as units by exact template family (DEC-061), from the cleared pool after the edit / outside / revision roles
+are allocated, with its own RNG stream and receipt, global disjointness and Hall checks unchanged, fixed before any
+outcome; when fewer than 100 families yield pairs, the planned denominator stays 100 and the shortfall is listed. The
+mode is selected by a bound field in the RNG admission (`near_allocation: independent | family_coordinated`), default
+independent until DEC-062. Tests on synthetic pools including the zsRE-like sparse case; a dry allocation on the real
+cleared pool reporting matched pairs per dataset and realization under both modes.
 
-### Lane R1-D9e — near-miss family (DEC-061) in the constructor, seal validator and analysis
+### Lane R1-58g — operator sheet v5: one script, one sitting
 
-Implement the adopted family in `r1_d10c_endpoints` (support / neighbour pairing from the reserved roles by exact
-template family; missing pairs retained with the planned denominator), the seal validator's checks, and the near-miss
-endpoint scoring in `r1_49g_analyze` (bounded equality on the neighbour's answer); rehearse on the synthetic path
-and on the D10a pool (dry). Tests.
+Turn the exact order into `scripts/r1_58g_operator.sh` (or a Python CLI) with one subcommand per step
+(`protocol-admit`, `cost-admit`, `clearance`, `rng-admit`, `draw`, `endpoints`, `seal`, `freeze`, `launch`), each
+running the dry-run, printing the request digest and the exact fields the lead sets, refusing to proceed until the
+signed form's digest matches, and appending a receipt log. Bind the cost admission receipt v1. The lead runs it
+step by step from the terminal; the orchestrator runs `endpoints` and `launch`. Include the rollback rule (a failed
+step leaves nothing signed downstream).
 
-### Lane R1-49i — protocol v5.2-D final text
+### Lane X16 — final independent review of the signature package
 
-Fold in: DEC-061 (near-miss family), the zsRE empty-generation teacher baseline caveat (notes §"Teacher-token
-review"), the ceiling definitions and the two-worker policy (R1-77f), the retry-once-then-skip failure policy, the
-DEC-052 inventory wording, and X15's factual corrections; change log against v5.2-D draft. This is the text the lead
-signs in the protocol admission.
+Protocol v5.2-D final, matrix DEC061, candidate v9, forms v4, the cost receipt, the near-miss allocation under both
+Q16 modes, the queue policy v2, plan v2: every decision DEC-033–061 traced to text; every number reproduced; a
+plain readiness verdict with the residual risks listed. New files; edit requests only.
 
-### Lane R1-63h — freeze candidate v9 (after R1-77f / D9e / 49i land)
-
-Rebind everything (including the corrected MQuAKE development recipes and their results when chain Q completes, and
-execution plan v2); refresh the request digests; print the open gates — which should then be only the lead's
-signatures and the cost admission receipt.
-
-### Lane R1-58f — operator sheet v4 and re-signed forms (after R1-63h)
-
-Forms bound to candidate v9's digests; the sheet lists the exact order (clearance → draw with the lead's master seed →
-endpoints → seal → freeze → queue launch with two workers), what each dry-run must print, and what the lead signs.
-
-### Lane HT-4f — claim ledger v6 (after chain Q)
-
-Refresh with the corrected MQuAKE rows and the cost admission.
+### Lane HT-4f — claim ledger v6 (after the cost receipt is signed)
 
 ## 4. Interfaces and coordination
 

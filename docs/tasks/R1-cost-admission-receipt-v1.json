@@ -1,0 +1,41 @@
+{
+ "document": "Cost admission receipt v1 (execution plan v2)",
+ "date": "2026-09-17",
+ "status": "closed",
+ "admitted_by": "orchestrator, under DEC-052 (re-measurement brought forward from September 20) and DEC-033's delegation",
+ "lead_approved": false,
+ "lead_signature": {
+  "name": null,
+  "date": null,
+  "note": "set lead_approved true with name and date in the same sitting as the protocol admission; the plan and ceilings are hash-bound below"
+ },
+ "bindings": {
+  "execution_plan_v2": {
+   "path": "docs/R1_execution_plan_v2.md",
+   "sha256": "a26da560141de6f4352dad0e60ea34d615f3e569b004664b2b3da53ffc106753"
+  },
+  "cell_ceilings_v1": {
+   "path": "manifests/revision_v1/cell_ceilings_v1.json",
+   "sha256": "d1f556322cab55e17aecd240bc2b7a013234a125ac3e5766a4af46c33dec973d"
+  },
+  "concurrency_policy_v2": {
+   "path": "docs/R1_stage4_queue_concurrency_v2.md",
+   "sha256": "e0e20142e54ecf0f0138bdbb3ccdf3ec6a1757170300763f6a61dfe145d5d1c4"
+  }
+ },
+ "admitted": {
+  "solo_ceiling_rule": "1.5 \u00d7 measured solo cost per confirmatory cell (cell_ceilings_v1)",
+  "two_worker_multiplier": 1.15,
+  "core_solo_hours": 209.4,
+  "core_wall_hours_two_workers": 127,
+  "extension_solo_hours": 12.2,
+  "usable_hours_to_oct_9_from_sept_19_launch": "\u2248 360\u2013375 (75 % availability)",
+  "failure_policy": "retry once from the last certified checkpoint, then incomplete and continue (DEC-052 inventory)",
+  "startup_and_validation_overhead": "\u2248 30 s per cell (construction + admission), inside the 1.5\u00d7 padding",
+  "measurement_basis": "chains I, K, M, Q: one measured 300-edit development cell per condition \u00d7 dataset on the installed tree; 1,000-edit costs extrapolate per-edit phases linearly with drift once"
+ },
+ "limits": [
+  "development payloads carried no near-miss / revision rows for zsRE and MQuAKE; CounterFact's did (\u2248 345 s per cell) \u2014 the ceilings for zsRE / MQuAKE non-learned cells include a 1.5\u00d7 pad that covers the confirmatory challenge sets at CounterFact's measured cost",
+  "process-hour budget under two workers includes overlap; queue wall time is reported separately"
+ ]
+}

@@ -479,6 +479,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q13 (U14) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-059). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q14 (R1-D10a capacity) | **ANSWERED 2026-09-17: option D** (DEC-060) — context-match review first (R1-D10e), then MQuAKE at 300 edits × 3 realizations, checkpoints 100 / 300, with the restored margin; a larger cadence, if the review allows one, comes back as a question. | — | unblocked: R1-D10d option-A deltas, R1-D10e review, then the MQuAKE draw | — |
 | Q15 (near-miss family) | **ANSWERED 2026-09-17: adopt as proposed** (DEC-061). | — | unblocked: the near-miss rows of the draw / seal and protocol v5.2-D | — |
+| Q16 (near-miss pair allocation; `logs/r1_round26/near_final/r1-d9e-real-pool-review.json`) | With support and neighbour roles drawn independently, Codex's real-pool diagnostic matches only 61 / 300 zsRE pairs (728 template families), 210 / 300 CounterFact, 221 / 300 MQuAKE — most zsRE near-miss cases would be reported unavailable. Options: **(A)** keep independent role draws; report evaluated / planned; **(B)** draw support–neighbour pairs as units by template family (a family-coordinated allocation for the near and neighbour roles only, still RNG-receipted and fixed before any outcome; other roles unchanged). | **B** — outcome-independent, no scope change, makes the endpoint evaluable | the draw producer for the near / neighbour roles (Codex R1-D9f); nothing else | Sep 18 |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -738,4 +739,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     workers, extension +12 h; against ≈ 360–375 usable hours that is a ≈ 2.7× buffer. The corrected MQuAKE cells are
     clean (locality 50 / 50 for the v0 conditions). Orchestrator-side gates are closed; what remains is Codex's round
     26 (queue policy, near-miss family, final protocol text, candidate v9, your operator sheet v4) and your acts.
+
+70. (2026-09-17, 18:30 EDT) **The signature package is ready except two items.** Codex's round 26 is committed and freeze
+    candidate v9 is final (728 bindings; 8 / 8 corrected MQuAKE profiles; plan v2 bound; all open gates are
+    signatures or population operations). What I need from you, in one sitting when the operator sheet v5 lands
+    (tomorrow morning): (1) **Q16** above — my recommendation B; (2) the signatures: protocol admission (final text
+    `docs/R1_stage4_protocol_v5_2_D_final.md`), the cost admission receipt (`docs/tasks/R1-cost-admission-receipt-v1.json`,
+    plan v2 and ceilings hash-bound), clearance, RNG admission with your master seed, then draw, seal and freeze in
+    order — each step's dry-run prints the exact request digest you sign. Codex's round 27 builds the Q16-B allocation
+    (activated on your answer), the operator sheet v5 with every command as one script you run step by step, and a
+    final independent review of the package.
 
