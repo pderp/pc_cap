@@ -478,7 +478,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q12 (U13) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-058). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q13 (U14) | **ANSWERED 2026-09-16: accepted as proposed** (DEC-059). | — | unblocked: protocol v5 binding (lane R1-49g) and the R1-75 contrast module | — |
 | Q14 (R1-D10a capacity) | **ANSWERED 2026-09-17: option D** (DEC-060) — context-match review first (R1-D10e), then MQuAKE at 300 edits × 3 realizations, checkpoints 100 / 300, with the restored margin; a larger cadence, if the review allows one, comes back as a question. | — | unblocked: R1-D10d option-A deltas, R1-D10e review, then the MQuAKE draw | — |
-| Q15 (near-miss family; `docs/R1_near_miss_family_v5_2_proposal.md`) | The confirmatory near-miss challenge cannot reuse v0's same-subject family (global subject disjointness across roles). Codex proposes: support and neighbour are distinct subjects sharing an exact relation / question template (family), with the preserved answer measured on the neighbour after the support edit; feasibility 2,845 / 3,030 / 1,056 disjoint pairs vs 300 needed; missing pairs keep the planned denominator. Adopt this semantics for protocol v5.2-D? | adopt as proposed | the near-miss rows of the draw and seal (R1-D9c / D10c) and the near-miss endpoint in the analysis; not the launch of other endpoints | Sep 18 |
+| Q15 (near-miss family) | **ANSWERED 2026-09-17: adopt as proposed** (DEC-061). | — | unblocked: the near-miss rows of the draw / seal and protocol v5.2-D | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -723,4 +723,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     evidence is complete except the role merge (Codex, CPU) and your signatures. R1-77d's tests pass (48). Waiting on
     Codex for the recipe rebinding (MQuAKE re-run) and freeze candidate v8; on you for Q15. (An earlier version of
     this line, written 15:30, showed zeros from a misread receipt; corrected.)
+
+68. (2026-09-17, 15:55 EDT) Q15 recorded (DEC-061). Codex's round 25 committed: recipes rebound after the patch (the MQuAKE
+    re-run starts now), teacher certification and the real clearance dry-run — **6,084 / 6,121 / 2,161 subjects
+    against 4,050 / 4,050 / 1,950, all 93 Hall checks pass, the only refusal left is your unsigned authorization** —
+    freeze candidate v8, an independent review (X15: eight findings, all factual / policy, none scientific: ceiling
+    padding would be applied twice between plan and queue; the queue stops on failure rather than retry-and-skip;
+    the concurrency slowdown reaches 1.13×, not 1.10; the zsRE empty-answer baseline needs its caveat) and claim
+    ledger v5. Round 26 fixes the X15 items and folds Q15 into the constructor and protocol; then freeze candidate
+    v9, the re-signed forms and your operator sheet v4. No lead decision is open.
 

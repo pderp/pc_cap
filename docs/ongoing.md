@@ -74,50 +74,49 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 25 (CPU; open now; posted 2026-09-17 15:20 EDT) — after the R1-77d patch
+  +0.006## 3. Lanes for Codex — round 26 (CPU; open now; posted 2026-09-17 16:00 EDT) — X15 fixes, Q15 into the pipeline, candidate v9
 
-The R1-77d patch is applied (installed tree and backend identities changed); the orchestrator rebuilt the R1-73d
-MQuAKE recipes on the new identity and is running the teacher review (operative evidence v5, matrix v5.2-D) and the
-MQuAKE re-run (chain P). Priority order: **R1-64e (first: the builders pin the pre-patch driver identity — `r1_73b_comparator_recipes.verify` refuses "driver identity changed", so the R1-73d MQuAKE rebuild and every other recipe builder must be rebound before any development profiling) → R1-63g → R1-D10h → X15 → HT-4e.** Rules as in round 22.
+Round 25 is committed and mirrored; DEC-061 adopts the near-miss family. The orchestrator applies X15's document patch,
+runs the corrected MQuAKE cells (chain Q) and writes execution plan v2 (the cost admission) tonight. Priority order:
+**R1-77f → R1-D9e → R1-49i → R1-63h → R1-58f → HT-4f.** Rules as in round 22.
 
-### Lane R1-63g — freeze candidate v8 on the patched identity (first)
+### Lane R1-77f — queue ceilings and failure policy per X15 (first; your own file)
 
-Rebind: installed tree + R1-68e driver + patched sealed backend, protocol v5.2-D and matrix v5.2-D, calibration v3,
-evidence v5 operative + roles v2, D9 inputs / forms v3 + contract v2, the corrected MQuAKE recipes
-(`docs/tasks/R1-73d-post77d/`), the concurrency policy (two workers), the execution plan; refresh every D9 request
-digest that the patch invalidated and list which stage approvals must be re-signed; print the open gates with what
-closes each.
+(a) Ceilings: the matrix stores the admitted solo ceiling (1.5 × measured solo cost); with `--workers 2` the queue
+multiplies by the measured concurrent slowdown bound **1.15** (X15: observed up to 1.13), not 1.65 — record the
+definition in `docs/R1_stage4_queue_concurrency_v1.md` → v2 and the matrix schema. (b) Failure policy per DEC-052 and
+the execution plan: a failed cell is retried once automatically from its last certified checkpoint; a second failure
+marks it incomplete in the inventory and the queue continues with the next cell (the other worker is not drained);
+a host-level failure (memory guard, lease loss) still stops dispatch. Tests for both.
 
-### Lane R1-D10h — teacher certification and the post-teacher clearance rehearsal
+### Lane R1-D9e — near-miss family (DEC-061) in the constructor, seal validator and analysis
 
-When `assets/runs/pc_cap/R1/r1_d10b/round24_v2/` completes (chain P), run the certification mode against its
-completion receipt, merge teacher / token results into the dispositions, regenerate roles, and run the real
-clearance producer in `--dry-run` on the real inputs v3 (no authorization) to show the exact counts, Hall checks and
-the remaining refusals (which should be only the missing lead signatures and the current-exposure attestation).
-Report the post-teacher margins per dataset and per role.
+Implement the adopted family in `r1_d10c_endpoints` (support / neighbour pairing from the reserved roles by exact
+template family; missing pairs retained with the planned denominator), the seal validator's checks, and the near-miss
+endpoint scoring in `r1_49g_analyze` (bounded equality on the neighbour's answer); rehearse on the synthetic path
+and on the D10a pool (dry). Tests.
 
-### Lane X15 — independent counter-review of the pre-freeze package
+### Lane R1-49i — protocol v5.2-D final text
 
-Before the lead signs: review evidence v5 (rule, supplement, roles), the near-miss family proposal, protocol v5.2-D
-and matrix v5.2-D, the analysis inventory (R1-49h) and the execution plan against the accepted decisions
-(DEC-033–060). Reproduce the subject counts from the register and the operative dispositions independently; list
-every point where a document and a decision disagree; say plainly whether the package is ready for the lead's
-acts. Include the zsRE empty-generation teacher baseline (notes §"Teacher-token review": 6,036 / 6,084 zsRE items
-pass because the base answers nothing) and whether protocol v5.2-D states it. New files only; no fixes applied —
-edit requests.
+Fold in: DEC-061 (near-miss family), the zsRE empty-generation teacher baseline caveat (notes §"Teacher-token
+review"), the ceiling definitions and the two-worker policy (R1-77f), the retry-once-then-skip failure policy, the
+DEC-052 inventory wording, and X15's factual corrections; change log against v5.2-D draft. This is the text the lead
+signs in the protocol admission.
 
-### Lane R1-64e — recipe builders and recipes rebound to the patched identity (first)
+### Lane R1-63h — freeze candidate v9 (after R1-77f / D9e / 49i land)
 
-Rebind the driver-identity pins in `r1_64c_comparator_recipes`, `r1_73b_comparator_recipes`, `r1_73d_locality_recipes`
-(and any other builder that pins it) to the patched tree, recording the identity change; then rebuild the eight
-corrected MQuAKE recipes (R1-73d → post-patch), the 16 zsRE / CounterFact comparator recipes (R1-64d → R1-64e) and
-the primary v5 recipe, with inspection receipts, no execution. The orchestrator re-runs the MQuAKE cells as soon as
-the eight recipes load.
+Rebind everything (including the corrected MQuAKE development recipes and their results when chain Q completes, and
+execution plan v2); refresh the request digests; print the open gates — which should then be only the lead's
+signatures and the cost admission receipt.
 
-### Lane HT-4e — claim ledger v5
+### Lane R1-58f — operator sheet v4 and re-signed forms (after R1-63h)
 
-After chain P: MQuAKE comparator rows with the corrected locality, the concurrency admission, the execution plan,
-DEC-060 and the MQuAKE scale limitation; every row hash-bound.
+Forms bound to candidate v9's digests; the sheet lists the exact order (clearance → draw with the lead's master seed →
+endpoints → seal → freeze → queue launch with two workers), what each dry-run must print, and what the lead signs.
+
+### Lane HT-4f — claim ledger v6 (after chain Q)
+
+Refresh with the corrected MQuAKE rows and the cost admission.
 
 ## 4. Interfaces and coordination
 
