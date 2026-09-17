@@ -77,7 +77,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 23 (CPU; open now; posted 2026-09-17 10:35 EDT) — resolving MQuAKE, admitting endpoints
 
 Round 22 is committed and mirrored. Q14 (MQuAKE capacity) is with the lead, default option A. Priority order:
-**R1-D10d → R1-D10e → R1-D10f → R1-63f.** Rules as in round 22.
+**R1-73c (small) → R1-D10d → R1-D10e → R1-D10f → R1-63f.** Rules as in round 22.
 
 ### Lane R1-D10d — Q14 options made executable (first)
 
@@ -106,6 +106,14 @@ feasibility on the D10a pool per dataset (how many compatible support / neighbou
 whether 100 + 100 per realization are reachable), the exact family definition and its admission text for protocol
 v5.2, and a fallback if pairs are short (fewer near-miss cases with the planned denominator retained, never
 manufactured pairs).
+
+### Lane R1-73c — MQuAKE primary (R1_learned_ff, v5) development recipe on the current identity (small; do first)
+
+The DEC-056 occupancy diagnostic (`r1_76_unseen_common --execute`) refuses without a MQuAKE recipe whose construction is
+the selected primary. The R1-64 payload builder binds the frozen v2 calibration (no MQuAKE entry) and is identity-bound,
+so it is not edited. Build `docs/tasks/R1-73c-mquake-R1_learned_ff.recipe.json` with a new builder module bound to
+calibration v3 and the v5 weights (as your R1-73b recipes for the learned comparators), inspection receipt, no
+execution. The orchestrator runs the diagnostic with it.
 
 ### Lane R1-63f — freeze candidate v7 (after Q14)
 

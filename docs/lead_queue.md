@@ -680,3 +680,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 61. (2026-09-17, 10:50 EDT) Q14 recorded as DEC-060 (option D). No lead decision is open. When Codex's adjudication worksheet lands I review the rule and the restored subjects, apply option A's cadence with that margin (or bring back a larger cadence as a question if the numbers allow), and Codex then emits matrix / protocol v5.2 and freeze candidate v7.
 
+62. (2026-09-17, 11:25 EDT) **Chain K done; the cost admission is in draft** (`docs/R1_execution_plan_v1.md`). Batched drift
+    is admitted for all six non-learned families (every position within 3e-4 nats of the scalar path; the S1 cells
+    differ only at 1–2 positions sitting exactly on the 0.01 threshold). Per 1,000-edit cell: learned 0.35 h, zsRE
+    non-learned ≈ 0.5 h, CounterFact non-learned ≈ 1.2 h; MQuAKE measured tonight. Core matrix ≈ 235 h in block order,
+    extension ≈ 16 h, against ≈ 360–375 usable hours from a September 19–20 launch: ≈ 45 % margin before the extension.
+    The MQuAKE occupancy diagnostic needs one small Codex recipe (R1-73c) and runs after it.
+

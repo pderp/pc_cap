@@ -1213,3 +1213,36 @@ finding. Matrix accounting: the 360-cell core is 270 non-learned cells (six cond
 v0_live_C1 / C2, S1_LM, S1_literal) and 90 reader-based cells (R1_learned_ff, R1_nonlearned); the 45-cell extension is
 reader-based. My "225 / 135" split counted five non-learned conditions; the execution plan uses 270 / 90.
 
+## Chain K complete: batched drift admitted for all six non-learned families; cost model (2026-09-17, 11:20 EDT)
+
+| dataset | condition | scalar (s) | batched (s) | speedup | state + scores equal | drift max \|Δ\| (nats) | exceedances |
+| --- | --- | ---: | ---: | ---: | --- | ---: | --- |
+| zsRE | v0_stable | 2,874 | 838 | 3.4× | yes | 7.2e-5 | identical |
+| zsRE | matched_update | 2,747 | 708 | 3.9× | yes | 9.7e-5 | identical |
+| zsRE | v0_live_C1 / C2 | 2,852 / 2,653 | 829 / 717 | 3.4× / 3.7× | yes | 1.1e-4 / 4.6e-5 | identical |
+| zsRE | S1_LM / S1_literal | 3,646 / 3,590 | 843 / 827 | 4.3× | yes | 2.9e-4 / 2.6e-4 | differ by 1–2 of ≈ 3,500 at the 0.01 threshold, all within 1.1e-4 of it |
+| CounterFact | v0_stable | 4,025 | 2,252 | 1.8× | yes | 4.6e-5 | identical |
+| CounterFact | matched_update | 3,917 | 2,162 | 1.8× | yes | 4.6e-5 | identical |
+| CounterFact | v0_live_C1 / C2 | 4,023 / 3,789 | 2,312 / 2,150 | 1.7× / 1.8× | yes | 4.6e-5 | identical |
+| CounterFact | S1_LM / S1_literal | 4,648 / 4,650 | 2,321 / 2,325 | 2.0× | yes | 2.9e-4 / 2.6e-4 | as zsRE S1: boundary positions only |
+
+Admission of the batched path (orchestrator, under DEC-033's delegation): every per-position difference is ≤ 3e-4
+nats (rule: ≤ 1e-3), and exceedance counts at 0.01 / 0.1 / 1 nat agree except at positions whose scalar value lies
+within the per-position tolerance of the threshold (S1 cells: 1–2 positions of ≈ 3,500 at 0.01, values 0.0099–0.0101;
+the S1 continued bases differ from the original base at thousands of positions, so straddling is expected). The rule
+is restated accordingly: identical exceedance counts after excluding positions within 1e-3 nats of the threshold.
+The primary v5 on the R1-68e driver: 299 s, state `b296c15d…`, drift +0.002197529 — unchanged for the fifth time.
+
+**Cost model per 1,000-edit cell (checkpoints 100 / 300 / 1,000, drift once at the end; batched everywhere):**
+learned conditions 0.35 h; zsRE non-learned ≈ 0.48 h (edits + immediate ≈ 1,000 s, retention 3 × 92, unseen 3 × 80,
+drift ≈ 100); CounterFact non-learned ≈ 1.22 h (edits + immediate ≈ 2,300 s, retention 3 × 370, unseen 3 × 150,
+challenges 345, drift ≈ 100); S1 ≈ +5 %. MQuAKE non-learned: chain M tonight (under DEC-060 MQuAKE cells are 300
+edits with checkpoints 100 / 300, so the measured development cell is the cell). The execution plan
+(`docs/R1_execution_plan_v1.md`) totals ≈ 234 h for the 360-cell core in DEC-051 block order plus ≈ 16 h for the
+extension, against ≈ 330–355 usable hours from a September 19–20 launch to October 9.
+
+The MQuAKE occupancy diagnostic refused: the runner requires a MQuAKE recipe with the selected-primary constructor,
+and no R1_learned_ff MQuAKE recipe exists on the current identity (the development payload builder binds the frozen
+v2 calibration, which has no MQuAKE entry, and it is identity-bound, so it is not edited). Codex lane R1-73c builds
+it from calibration v3; the run follows.
+
