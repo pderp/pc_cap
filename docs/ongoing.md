@@ -74,13 +74,43 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 21 (CPU; open now; posted 2026-09-17 06:15 EDT)
+  +0.006## 3. Lanes for Codex — round 21 (CPU; open now; posted 2026-09-17 06:15 EDT; **re-prioritised 06:40 EDT**)
 
-Round 20 is committed and mirrored. The orchestrator built the R1-64d recipes with your builder (batched drift for
-the six v0 / S1 families) and is re-profiling all twelve non-learned zsRE / CounterFact cells (chain K, ≈ 6 h).
-Priority order: R1-73b → R1-D9 → HT-3e → R1-77c → HT-4d. Rules as before.
+Round 20 is committed and mirrored. Chain K (R1-64d re-profiles with batched drift, primary identity check, MQuAKE
+occupancy diagnostic) runs until ≈ 12:00. **The lead wants the confirmatory matrix started as early as possible to
+leave a buffer for crashes; the critical path is now the freeze, not the GPU.** New priority order:
+**R1-D9a → R1-D9b → R1-D9c → R1-77c → R1-73b → HT-4d → HT-3e.** Deliver R1-D9 as three separate, individually usable
+pieces so the lead can start acting as each lands. Rules as before.
 
-### Lane R1-73b — calibration v3 file and the eight MQuAKE comparator recipes (first)
+### Lane R1-D9a — final clearance producer (first)
+
+`scripts/r1_d9_clearance.py`: register-v6 final clearance for the three datasets (alias / context / role; DEC-048
+option C for MQuAKE; every candidate disposition listed, not counts; role feasibility against protocol v5.1
+populations: 3 realizations × (1,000 edits + 100 outside + 100 near + 100 neighbour + 50 revision) per dataset;
+abort rules when demand exceeds cleared supply), writing the clearance receipt in the exact schema R1-58c's preflight
+checks. `--dry-run` prints counts and refusals without writing. TinyBase / small-fixture tests. Not the legacy v3
+two-dataset writer.
+
+### Lane R1-D9b — draw adapter
+
+`scripts/r1_d9_draw.py`: the draw over matrix v5.1 populations from the cleared candidates with independent,
+receipted RNG streams per dataset × role × realization (seeds derived from a lead-supplied master seed and the
+frozen register hash), the five paired orders per realization, the draw receipt in the preflight's schema, `--dry-run`.
+Tests: determinism, disjointness across roles / realizations / datasets, refusal on a missing clearance receipt.
+
+### Lane R1-D9c — seal
+
+`scripts/r1_d9_seal.py`: sealed payloads under `manifests/confirm/` (or the path the sealed backend expects) with
+payload hashes and reservation identities, the seal receipt, `--dry-run`, refusal on a missing draw receipt; the
+sealed backend (R1-77b/c) must load exactly these. Tests.
+
+### Lane R1-77c — sealed backend rebound to the R1-68e driver (needed before launch)
+
+As posted: review the driver change against the sealed contract, rebind the donor identity with the review recorded,
+tests updated; plus one end-to-end TinyBase rehearsal: clearance → draw → seal → freeze candidate → queue dry-run →
+one sealed TinyBase cell executed through the sealed backend and analysed by `scripts.r1_49g_analyze`.
+
+### Lane R1-73b — calibration v3 file and the eight MQuAKE comparator recipes (after R1-77c)
 
 `results/R1/calibration_mquake_v3/calibration_candidate.json` exists (measured; the orchestrator admitted it as
 development calibration v3 — notes §"Chain I complete": no positive radius covers any paraphrase at ≤ 1 % outside
@@ -91,24 +121,12 @@ current driver identity (batched drift for the six v0 / S1 families, as `docs/ta
 receipts and an ordered run list. State in each recipe and in the protocol text for U08 that the MQuAKE v0-style
 conditions fire on exact prompts only.
 
-### Lane R1-D9 — clearance, draw and seal receipt producers (carried over; not started in round 20)
-
-As posted in round 20: the three producers behind R1-58c's refusals, dry-run capable, TinyBase-tested, register-v6
-based (not the legacy v3 writer), independent role / realization RNG streams, exact receipt schemas. No real draw or
-seal.
-
 ### Lane HT-3e — counter-review of the final κ pilot (carried over)
 
 `logs/r1_round18/ht3d-pilot-final-aliases.{md,json}`: independent 36-row reproduction from the raw files, the floor
 and seed-spread arithmetic, the clip-2 comparison, and the two-sentence slide result under DEC-054. Also review the
 stress-panel filing (notes §"Stress panel") against `results/R1/stage4_dev_cells/ht_panel/`: the schedule invariance,
 the harmed-fact identification and the right-censoring statements.
-
-### Lane R1-77c — sealed backend rebound to the R1-68e driver
-
-`scripts/r1_77b_sealed_backend.py` pins the pre-R1-68e donor driver hash and now refuses. Review the driver change
-against the sealed contract (the batched v0 drift path is opt-in by recipe field; sealed recipes must bind it
-explicitly or not at all), rebind the donor identity with that review recorded, tests updated. No silent rehash.
 
 ### Lane HT-4d — claim ledger v4
 

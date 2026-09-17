@@ -642,3 +642,18 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     afternoon. Round 21 for Codex: R1-73b (calibration v3 file + MQuAKE comparator recipes), R1-D9, HT-3e, R1-77c
     (sealed backend rebound), HT-4d (claim ledger v4).
 
+58. (2026-09-17, 06:40 EDT) **Starting the long run early.** The GPU is no longer the critical path; the freeze is. The
+    sequence to launch is: cost admission → your clearance → your draw → your seal → freeze candidate v7 → frozen
+    manifest (your act) → queue launch in DEC-051 block order. What is missing is the code for the three receipts
+    (R1-58c's preflight refuses on exactly those). I have re-prioritised Codex's round 21 to build them first as three
+    separate pieces (R1-D9a clearance, R1-D9b draw, R1-D9c seal), then the sealed backend rebinding with an end-to-end
+    TinyBase rehearsal (R1-77c), then the MQuAKE recipes. On my side: the cost admission moves from September 20 to
+    **today**, from chain K's batched-drift numbers (DEC-052 set the 20th as a deadline, not a date), and I write the
+    execution plan with per-block ceilings tonight. **Target: your acts on September 18–19 and block 1 launched by
+    September 19**, two days ahead of the plan, which at ≈ 290 h of work over the ≈ 480 wall-clock hours to October 9
+    leaves ≈ 40 % of the time as buffer for crashes and reruns. What you will have to do, when the producers land: run
+    the four checklist commands in `docs/tasks/R1-58c-draw-seal-plan-v2.md` (clearance, draw with a master seed you
+    choose, seal, freeze) — each has a dry-run that shows what it would write first. Crash protection in place: one
+    job at a time, the host-memory guard in every runner, the system and process-memory monitors, checkpoint resume in
+    the queue, and results committed at every block boundary.
+
