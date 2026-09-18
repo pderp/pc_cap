@@ -804,3 +804,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     registered descriptive statistic in the reports and protocol (Codex lane HT-7). Presentation record:
     `assets/presentation-materials/fidelity_concentration_v5.md`.
 
+78. (2026-09-18, 07:45 EDT) **Repository size policy in place**, per your request after the push warnings. The four
+    65–77 MB files were Codex's synthetic assembler-rehearsal fixtures that my `git add -A` commits of its rounds swept
+    in — my commits, my responsibility. Now: a pre-commit hook refuses any file above 45 MB (tested: a 50 MB dummy is
+    rejected); the rehearsal, operator-test, certification and pytest fixture trees are ignored and untracked (they
+    remain on disk; the freeze candidate binds none of them); a genuine large JSON artifact is split into ≤ 40 MB parts
+    with an index and a reassembly command. The already-pushed large blobs stay in history (rewriting it would break
+    the shared clones); they are under GitHub's hard limit and only warned.
+

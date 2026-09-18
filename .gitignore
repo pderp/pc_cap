@@ -21,3 +21,13 @@ logs/r1_round10/driver_tests/
 results/R1/stage4_dev_cells/tiny_tests/
 logs/r1_round8/pytest_tmp/
 logs/process_memory/*.jsonl
+
+# repo size policy (2026-09-18): synthetic rehearsal / operator-test / certification fixture trees are regenerable CPU-test
+# outputs (Codex handoffs); they stay on disk, never in git. Genuine artifacts > 45 MB are split (scripts/repo_size_policy.py).
+docs/tasks/R1-63j-rehearsal/
+logs/r1_round*/rehearsal/
+logs/r1_round*/rehearsal-*.json
+logs/r1_round*/operator-test-*/
+logs/r1_round*/certification_tests/
+logs/r1_round*/pytest-*/
+logs/r1_77_queue_locks/

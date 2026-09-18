@@ -117,6 +117,15 @@ framing (the tail statement on 245k positions), kept separate from the classifie
 
 ### Lane HT-4f — claim ledger v6
 
+## 3a. Repository size policy (lead, 2026-09-18)
+
+No committed file above 45 MB (GitHub warns at 50, refuses at 100). Enforced by `.githooks/pre-commit` →
+`scripts/repo_size_policy.py check` (repo-local `core.hooksPath`). Synthetic rehearsal / operator-test / certification
+/ pytest fixture trees are ignored (`.gitignore`) and stay on disk; regenerable or bulky data goes under `assets/`;
+a genuine JSON artifact that must be in the repository is split with `scripts/repo_size_policy.py split FILE.json`
+(byte parts ≤ 40 MB + an index with the whole-file sha256; `join` reassembles). Codex: write fixture outputs only under
+the ignored directories or `assets/`, and name in the handoff any new directory that should be ignored.
+
 ## 4. Interfaces and coordination
 
 As before: `pccap.contracts`, `pccap.bases.gpt2_jax`, `pccap.bases.bp.BPBase`, `pccap.harness.arms.make_learner/
