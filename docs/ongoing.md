@@ -91,7 +91,9 @@ projection with both scenarios; host peaks (direct + monitor-matched); the failu
 
 Fix in order: the rebinder's backend pin (post-63l identity), the extension recipes' full-validation contract (the
 failing `test_extension_also_carries_required_full_contract`), the operator `check_fields(cost-admit)` reading the
-typed receipt's bound ceilings; rebuild every recipe identity; rehearse D9 → endpoints → seal → freeze candidate →
+typed receipt's bound ceilings, and `scripts/r1_63l_prepare_backend.py` (used by
+`test_whole_synthetic_package_passes_actual_queue_and_backend`), which still expects the pre-patch backend anchor
+("sealed admission patch anchor changed") — make it recognise the installed post-63l backend as R1-77d's helper does; rebuild every recipe identity; rehearse D9 → endpoints → seal → freeze candidate →
 queue dry-run with two workers and the watch on the real unsigned inputs; emit candidate v14 / forms v9 / sheet v8
 with the open gates listed (signatures only).
 
