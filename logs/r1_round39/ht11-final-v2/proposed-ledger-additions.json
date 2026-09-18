@@ -1,0 +1,212 @@
+[
+  {
+    "id": "PROPOSED-programme",
+    "status": "proposed_only",
+    "statement": "Charlie Derr and Matthew Ikl\u00e9; October 15, 2026 Binghamton satellite. The submitted active-inference abstract describes a broader programme; current frozen-GPT-2/memory experiments do not implement its complete coupled-free-energy agent.",
+    "evidence": [
+      {
+        "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+        "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+      },
+      {
+        "path": "/home/derp/cap/errata/presentation_details/Active_Inference_in_the_Extremes_Abstract_charlie_derr.pdf",
+        "sha256": "bb9bb99c196c0392f790223096bef92627d5ea7cad09e349e84f2b5004db6f01"
+      },
+      {
+        "path": "/home/derp/cap/errata/presentation_details/sattellite-schedule",
+        "sha256": "39b90570144a38a34bdae07cb17c6cc403d0b41f4e7da82dc8d1c6ec03bfa3e3"
+      }
+    ],
+    "limits": "Development, policy or planning evidence only; no new experiment or confirmatory admission. Add through the versioned ledger producer after the signing session."
+  },
+  {
+    "id": "PROPOSED-selection-uncertainty",
+    "status": "proposed_only",
+    "statement": "Selected v5 zsRE unseen gate acceptance is 10/100 at 100 memory records, with descriptive fixed-candidate Wilson 95% interval 5.52\u201317.44%; no selection adjustment or certified rate below 10%.",
+    "evidence": [
+      {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round16/selection_audit.json",
+        "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/logs/review_r1_selection.md",
+        "sha256": "8ed0c03e9fd7b5bcc9da86581250cdb8115b84dffe3f2ca7551891775b5468b0"
+      }
+    ],
+    "limits": "Development, policy or planning evidence only; no new experiment or confirmatory admission. Add through the versioned ledger producer after the signing session."
+  },
+  {
+    "id": "PROPOSED-HT6-full-validation",
+    "status": "proposed_only",
+    "statement": "Four development cells at 300 edits cover 1,931 complete 128-token windows / 245,237 scored positions each. Learned MQuAKE/zsRE mean KL is .005544/.002270; stable-v0 MQuAKE/zsRE is 0/.000789. zsRE stable-v0 maximum positive NLL change is 16.159 nats despite passing mean benchmarks. Bound numeric rows retain both references and concentration.",
+    "evidence": [
+      {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round35/ht6-final/report.json",
+        "sha256": "d2d3fb2c9a4514a9b9554861dbf198883c2b05c9f850b369a0fd12fbc198c3bd"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+        "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+      }
+    ],
+    "limits": "Development, policy or planning evidence only; no new experiment or confirmatory admission. Add through the versioned ledger producer after the signing session.",
+    "numeric_rows": [
+      {
+        "cell": "R1-64g-mquake-R1_learned_ff.recipe",
+        "reference": "capoff",
+        "mean_kl_label": "fail",
+        "mean_kl_nats": 0.0055436876192047485,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.00560097637484533,
+        "maximum_positive_nll": 8.187550349757514,
+        "source_pointer": "/cells/R1-64g-mquake-R1_learned_ff.recipe/full/references/capoff",
+        "n": 245237,
+        "kl_half_mass_positions": 171
+      },
+      {
+        "cell": "R1-64g-mquake-R1_learned_ff.recipe",
+        "reference": "original",
+        "mean_kl_label": "fail",
+        "mean_kl_nats": 0.0055436876192047485,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.00560097637484533,
+        "maximum_positive_nll": 8.187550349757514,
+        "source_pointer": "/cells/R1-64g-mquake-R1_learned_ff.recipe/full/references/original",
+        "n": 245237,
+        "kl_half_mass_positions": 171
+      },
+      {
+        "cell": "R1-64g-mquake-v0_stable.recipe",
+        "reference": "capoff",
+        "mean_kl_label": "pass",
+        "mean_kl_nats": 0.0,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.0,
+        "maximum_positive_nll": 0.0,
+        "source_pointer": "/cells/R1-64g-mquake-v0_stable.recipe/full/references/capoff",
+        "n": 245237,
+        "kl_half_mass_positions": null
+      },
+      {
+        "cell": "R1-64g-mquake-v0_stable.recipe",
+        "reference": "original",
+        "mean_kl_label": "pass",
+        "mean_kl_nats": 0.0,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.0,
+        "maximum_positive_nll": 0.0,
+        "source_pointer": "/cells/R1-64g-mquake-v0_stable.recipe/full/references/original",
+        "n": 245237,
+        "kl_half_mass_positions": null
+      },
+      {
+        "cell": "R1-64g-zsre-R1_learned_ff.recipe",
+        "reference": "capoff",
+        "mean_kl_label": "fail",
+        "mean_kl_nats": 0.0022697245010713067,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.0023100152852649995,
+        "maximum_positive_nll": 9.944688650769267,
+        "source_pointer": "/cells/R1-64g-zsre-R1_learned_ff.recipe/full/references/capoff",
+        "n": 245237,
+        "kl_half_mass_positions": 64
+      },
+      {
+        "cell": "R1-64g-zsre-R1_learned_ff.recipe",
+        "reference": "original",
+        "mean_kl_label": "fail",
+        "mean_kl_nats": 0.0022697245010713067,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.0023100152852649995,
+        "maximum_positive_nll": 9.944688650769267,
+        "source_pointer": "/cells/R1-64g-zsre-R1_learned_ff.recipe/full/references/original",
+        "n": 245237,
+        "kl_half_mass_positions": 64
+      },
+      {
+        "cell": "R1-64g-zsre-v0_stable.recipe",
+        "reference": "capoff",
+        "mean_kl_label": "pass",
+        "mean_kl_nats": 0.0007885906766150197,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.0008551620371875969,
+        "maximum_positive_nll": 16.15929916947589,
+        "source_pointer": "/cells/R1-64g-zsre-v0_stable.recipe/full/references/capoff",
+        "n": 245237,
+        "kl_half_mass_positions": 10
+      },
+      {
+        "cell": "R1-64g-zsre-v0_stable.recipe",
+        "reference": "original",
+        "mean_kl_label": "pass",
+        "mean_kl_nats": 0.0007885906766150197,
+        "mean_nll_label": "pass",
+        "mean_signed_nll_increase_nats": 0.0008551620371875969,
+        "maximum_positive_nll": 16.15929916947589,
+        "source_pointer": "/cells/R1-64g-zsre-v0_stable.recipe/full/references/original",
+        "n": 245237,
+        "kl_half_mass_positions": 10
+      }
+    ]
+  },
+  {
+    "id": "PROPOSED-DEC064",
+    "status": "proposed_only",
+    "statement": "Mean cap KL <= .001 and signed mean NLL increase <= .01 nats are secondary benchmarks for original and own-cap-off references; equality passes. Numerical failure does not veto primary admission; incomplete/corrupt evidence remains unavailable. Continued-base certification is separate.",
+    "evidence": [
+      {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round35/ht6-final/report.json",
+        "sha256": "d2d3fb2c9a4514a9b9554861dbf198883c2b05c9f850b369a0fd12fbc198c3bd"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+        "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+      }
+    ],
+    "limits": "Development, policy or planning evidence only; no new experiment or confirmatory admission. Add through the versioned ledger producer after the signing session."
+  },
+  {
+    "id": "PROPOSED-D4-scope",
+    "status": "proposed_only",
+    "statement": "D4 declares 120 zsRE + 120 CounterFact + 45 MQuAKE core cells, plus 45 optional learned-v2 cells. Five MQuAKE conditions / 75 cells are prospectively omitted. MQuAKE is limited to 100/300 checkpoints, leaving 21 of the fixed 63 checkpoint-1000 primary intervals unavailable. S1 is not certified as exact-v5 compute matched.",
+    "evidence": [
+      {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_4.json",
+        "sha256": "c4f677ab61ba7caf494feee926c54264fcfc6f8bbc560ca45928bb8bc166b336"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+        "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/docs/R1_U03_interpretation_memo.md",
+        "sha256": "6d26792487defdbb0643f899418924a215532c32a42a349119b429fbde559ce2"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round25/r1-x15-independent.json",
+        "sha256": "e10a61da97677d81645bd5fa5199fdd9df8b033db71262baeb60c213703c83db"
+      }
+    ],
+    "limits": "Development, policy or planning evidence only; no new experiment or confirmatory admission. Add through the versioned ledger producer after the signing session."
+  },
+  {
+    "id": "PROPOSED-cost-v3",
+    "status": "proposed_only",
+    "statement": "Execution plan v3 scenarios: 431.31 expected process-hours, 646.96 at all cell ceilings, 750 shared process-hour cap; approximately 227.30 elapsed hours at assumed 1.65x throughput. Projections, not measured completion or proof of signed cost admission. Experiments stop October 9; October 10\u201314 is for analysis and preparation.",
+    "evidence": [
+      {
+        "path": "/home/derp/cap/pc_cap/docs/R1_execution_plan_v3.md",
+        "sha256": "f5b0f48aadc9d0bae36db5468983aa580742b9292fc88ebc810cf34f088e1034"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-cost-admission-receipt-v4.json",
+        "sha256": "7895bd719beb5f17d6bfc6c613a4f7b1d16839b49506aefab82a430e5db41aee"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/docs/heavy_tail_suggested_slight_pivot.md",
+        "sha256": "973aa5fdb44e42c7dcc10822794236c4e5be89d0cb5fcc2acb7e42fe4fc5caf7"
+      }
+    ],
+    "limits": "Development, policy or planning evidence only; no new experiment or confirmatory admission. Add through the versioned ledger producer after the signing session."
+  }
+]

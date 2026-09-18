@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_d14_synthetic_analysis.py", line 163, in <module>
+    print(json.dumps(run(parser.parse_args().name),indent=2))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d14_synthetic_analysis.py", line 148, in run
+    report=analysis.run(fixture['matrix']['path'],prefix)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_49g_analyze.py", line 238, in run
+    report = analyze(json.loads(raw))
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_49g_analyze.py", line 51, in analyze
+    report["contrasts"] = primary_contrasts(matrix, loaded) if admitted_family else []
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_49g_inference.py", line 191, in primary_contrasts
+    contrasts = validate_family(matrix)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_49g_inference.py", line 142, in validate_family
+    layout = from_matrix(matrix)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d9_layouts.py", line 112, in from_matrix
+    raise ValueError("registered v5.1 or DEC-060 option-D matrix required")
+ValueError: registered v5.1 or DEC-060 option-D matrix required

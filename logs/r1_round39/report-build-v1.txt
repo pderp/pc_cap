@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_d14_report.py", line 554, in <module>
+    print(json.dumps(run(a.analysis, a.output, journal=a.watch_journal), indent=2))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d14_report.py", line 528, in run
+    text = fill(Path(template).read_text(), values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d14_report.py", line 425, in fill
+    raise ValueError("template must bind every declared placeholder exactly once")
+ValueError: template must bind every declared placeholder exactly once

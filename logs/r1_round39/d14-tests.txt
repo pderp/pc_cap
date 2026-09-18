@@ -1,0 +1,26 @@
+.F.........                                                              [100%]
+=================================== FAILURES ===================================
+________ test_unavailable_mquake_intervals_and_omissions_stay_distinct _________
+
+analysis = {'analysis_revision': 'R1-49n_DEC066_D4_prospective_scope', 'analysis_source_sha256': {'scripts/ht7_concentration.py':...': True, 'planned': 60, ...}, {'artifact_complete': 45, 'block_number': 6, 'complete': True, 'planned': 45, ...}], ...}
+
+    def test_unavailable_mquake_intervals_and_omissions_stay_distinct(analysis):
+        rows = report.build(analysis, report.watch_snapshot(None, analysis))["tables"]
+        mq = [r for r in rows["primary"] if r["dataset"] == "mquake"]
+        assert len(mq) == 21
+>       assert all(r["estimate"] is None and r["adjusted_interval"]["lower"] is None for r in mq)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_d14_report.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7fe9319f25f0>
+
+>   assert all(r["estimate"] is None and r["adjusted_interval"]["lower"] is None for r in mq)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+
+tests/revision_v1/test_r1_d14_report.py:41: TypeError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_d14_report.py::test_unavailable_mquake_intervals_and_omissions_stay_distinct
+1 failed, 10 passed in 0.38s

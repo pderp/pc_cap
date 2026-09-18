@@ -1,0 +1,35 @@
+--- a/scripts/ht10_slide_deck.py
++++ b/scripts/ht10_slide_deck.py
+@@ -40,7 +40,7 @@
+          foot="Interfaces are architectural analogies. Freezing weights proves neither a Markov blanket nor universal preservation."),
+     dict(title="Retention and rejection compete", figure="selection_retention_rejection.png", label="ADAPTIVE DEVELOPMENT SELECTION",
+          points=["42 candidates · 15 admissible", "Selected v5 macro RET-GS: 0.8033", "zsRE .98 · CounterFact .82 · MQuAKE .61",
+-                 "Unseen gate acceptance: 10/100", "Fixed-candidate Wilson 95%: 5.52–17.44%"],
++                 "zsRE unseen gate acceptance: 10/100", "Fixed-candidate Wilson 95%: 5.52–17.44%"],
+          foot="Development selection, not confirmation. The interval is not selection-adjusted and does not certify a rate below 10%."),
+     dict(title="A small average can hide a large local loss", figure="mean_vs_tail_v5.png", label="FIXED 128-WINDOW DEVELOPMENT ASSAY",
+          points=["zsRE mean signed ΔNLL: .00220 nats", "ES95 positive harm: .04396 nats", "Worst position: 8.69 nats",
+@@ -61,10 +61,10 @@
+          foot=DEC054),
+     dict(title="The κ pilot did not meet its success rule", figure="kappa-tradeoff.png", label="DESCRIPTIVE TRADE-OFF, NOT A DECLARED GAIN",
+          points=["RET-GS: ordinary .7961", "κ .2: .7544 · κ .5: .7478", "Predeclared retention floor: .7761",
+-                 "Both κ arms fail retention and tail separation", "Clip2 keeps retention; fails separation and adds a CounterFact false fire"],
++                 "Both κ arms fail retention and tail separation", "Clip2 meets the retention floor; fails separation and adds a CounterFact false fire"],
+          foot=DEC054),
+     dict(title="Correct answers can conceal probability harm", figure="stress-trajectories.png", label="DEVELOPMENT STRESS PANEL · ONE SEED",
+-         points=["All 20 old exact answers remain correct", "CounterFact at edit 100:", "Mean positive ΔNLL .32379", "Maximum 12.53188 nats",
++         points=["Each tested dataset retains 20/20 old exact answers at observed checkpoints", "CounterFact at edit 100:", "Mean positive ΔNLL .32379", "Maximum 12.53188 nats",
+                  "Harm persists through the last observation"],
+          foot="One seed, two schedules, measured probes only. Recovery is unobserved, not impossible or permanent; equal schedules do not prove order invariance."),
+     dict(title="What independent confirmation can establish", kind="scope", label="PLANNED D.4 MATRIX · NO CONFIRMATORY RESULTS SHOWN",
+--- a/docs/presentation/talk_outline_v1.md
++++ b/docs/presentation/talk_outline_v1.md
+@@ -57,7 +57,7 @@
+ | MQuAKE v0 stable | 0 | 0 | 0 | undefined: zero total KL |
+ | zsRE v0 stable | .000789 | .000855 | 16.159 | 10 |
+ 
+-**Qualification:** DEC-064 makes cap mean KL ≤.001 and signed mean NLL increase ≤.01 **secondary benchmarks**, without vetoing primary comparisons. Both learned cells fail KL and pass NLL; zsRE v0 passes both despite its maximum. Original-base and own-cap-off references coincide numerically here but stay separately reported; S1 references need not coincide. The fixed first 128 windows are not an iid sample. Matching overlap is a consistency check, not proof of representativeness. Near-zero target-token ΔNLL is not proof of an unchanged full distribution or of no reader firing. The continued-base certification gate is separate.
++**Qualification:** DEC-064 makes cap mean KL ≤.001 and signed mean NLL increase ≤.01 **secondary benchmarks**, without vetoing primary comparisons. Both learned cells fail KL and pass NLL; zsRE v0 passes both despite its maximum. Original-base and own-cap-off references coincide numerically here but stay separately reported; S1 references need not coincide. Full validation covers 1,931 complete 128-token windows (245,237 next-token positions), with context reset per window. The earlier 128-window prefix is a dependent subset, not an iid sample. Matching overlap is a consistency check, not proof of representativeness. Near-zero target-token ΔNLL is not proof of an unchanged full distribution or of no reader firing. The continued-base certification gate is separate.
+ 
+ ### 6. Three failures that improved the investigation — 1.5 minutes
+ 

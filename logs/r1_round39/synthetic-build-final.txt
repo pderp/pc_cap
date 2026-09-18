@@ -1,0 +1,63 @@
+{
+  "matrix": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D14-rehearsal/d14-complete-final/matrix.json",
+    "sha256": "48ceb92648ee59c678d2384dc64e4cae0fdedb855f3331c02ebe02ff91f0c01a"
+  },
+  "watch": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round39/d14-complete-final-synthetic-watch.jsonl",
+    "sha256": "7479998af5b7d59c40cced7087d22a6b5d604d3ca5502fe44a3e3f613861a611"
+  },
+  "contract": {
+    "schema_version": 1,
+    "policy": "DEC-063-complete-windows-final-both-references-v1",
+    "source_inventory": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round39/d14-complete-final-synthetic-token-inventory.json",
+      "sha256": "05fe63f52bca4a5ee68133291a0544a37559493c821eac416ae3e592916c4e4a"
+    },
+    "source": {
+      "path": "/home/derp/cap/assets/test_scratch/r1_round39/d14-complete-final/tokens.npy",
+      "sha256": "687d828d3cc2d1337551a7a59e7888e0ea1f37166941d38b46f9d39a1966a8d9"
+    },
+    "source_tokens": 7,
+    "window_tokens": 3,
+    "complete_windows": 2,
+    "expected_positions": 4,
+    "trailing_tokens_dropped": 1,
+    "windows_int64le_sha256": "e573e9d31f08212b4706ae18a1b9fdc5452dca472313c963611aaa6256780ee3",
+    "tail_policy": "drop_incomplete_trailing_window",
+    "context_policy": "reset_every_window",
+    "checkpoint_policy": "final_only_plus_sample_at_every_checkpoint",
+    "references": [
+      "own_capoff",
+      "original_base"
+    ],
+    "kl_direction": "reference || cap",
+    "sample_windows": null
+  },
+  "synthetic": true,
+  "results": "/home/derp/cap/pc_cap/results/R1/r1_d14_synthetic/d14-complete-final",
+  "source_declaration": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_4.json",
+    "sha256": "c4f677ab61ba7caf494feee926c54264fcfc6f8bbc560ca45928bb8bc166b336"
+  },
+  "analysis": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round39/d14-complete-final/analysis.json",
+    "sha256": "184d993835aa32f2187d4f519ee49a9f2cb87d87c735fff083c6f61f3c6f8e5b"
+  },
+  "cells": 330,
+  "metrics": 63,
+  "complete_blocks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "research_results": false,
+  "validation_positions": 4,
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_d14_synthetic_analysis.py",
+    "sha256": "ad2d25bcf350b22db73dc21c4341f36d99bba5e7192c3c8c9e7c67513869e5ec"
+  }
+}
