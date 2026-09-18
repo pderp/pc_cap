@@ -901,3 +901,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     steps 7 and 8), the daily / block-boundary operations tooling, the post-session verification, the ledger, and a
     first slide deck. No decision is open; the session can start whenever you like.
 
+91. (2026-09-18, 11:20 EDT) Step 1 (protocol-admit) is signed and complete — receipt de7703b3… in the session journal; the
+    extension is admitted. Codex's round 38 committed in both repos: the producer I run between your steps 7 and 8, the
+    daily / block-boundary operations tooling with a crash checklist, and a first 12-slide deck
+    (`assets/presentation-materials/deck_v1/current-research-deck.pdf`, speaker notes carry every qualification).
+    Round 39: the confirmatory report skeleton that block 1 fills, a claim-by-claim deck review, then the post-session
+    verification and the ledger. Next for you: step 2, cost-admit, same preview → review → sign → execute cycle
+    (`docs/tasks/R1-D9-operator-sheet-v8.md`).
+

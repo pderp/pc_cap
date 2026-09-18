@@ -74,40 +74,30 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 38 (CPU; open now; posted 2026-09-18 10:30 EDT) — the freeze assembly, then run-time operations
+  +0.006## 3. Lanes for Codex — round 39 (CPU; open now; posted 2026-09-18 11:20 EDT) — while the lead signs
 
-Round 37 is committed and mirrored. The lead's signing session (operator sheet v8) can start any time; steps 1–7 need
-nothing from Codex. Priority order: **R1-63n → R1-D13 → X20 (after the session) → HT-4f (after the cost signature)
-→ HT-10.** Rules as in round 22 and §3a. Do not edit any file bound by candidate v14 or the operator's request
-digests while the session may be running (new files only this round).
+Round 38 is committed and mirrored. The lead's signing session is under way (step 1 of 9 complete). New files only;
+nothing bound by the operator's digests may change until the session ends. Priority order: **R1-D14 → HT-11 → X20
+(after the session) → HT-4f (after the cost signature).**
 
-### Lane R1-63n — freeze assembly-inputs producer (first; needed between steps 7 and 8)
+### Lane R1-D14 — the confirmatory report skeleton, filled by the analysis (first)
 
-Operator sheet v8 §"After step 7" asks for a **new** assembly-input document derived from the operator's latest
-`*-inputs.json`, binding the genuine gate-closure receipts (the signed protocol / cost / clearance / RNG / draw /
-endpoint / seal receipts map onto U01–U18 — state the mapping explicitly, gate by gate, and which gates close by
-which receipt) and the schedule admission (plan v3 + receipt v4 signed). Write `scripts/r1_63n_assembly_inputs.py`
-that builds it from the operator session's receipts journal (`logs/R1/operator_v8/receipts.jsonl`) and the inputs
-v9, refuses on any missing or unsigned receipt, prints the gate table, and emits the document the staging command in
-the sheet consumes; rehearse on the synthetic session; tests. The orchestrator runs it after step 7.
+Run `r1_49g_analyze` / R1-75 on the round-38 synthetic completed matrix (D.4 layout, two cadences) and turn its
+output into `docs/R1_stage4_report_skeleton.md`: every table and figure the final report will contain (the 21
+contrasts × 3 metrics with intervals and classifier labels per dataset; the secondary benchmarks incl. the cap-fidelity
+labels and the watch summary; the DEC-052 inventory; the MQuAKE 300-edit descriptive block with the five omitted
+conditions stated; the S1 / U03 interpretation; the full-validation tail statistics), with placeholders bound to the
+analysis JSON keys so block 1's real output drops in. Tests: the skeleton fills from the synthetic output with no
+unbound placeholder.
 
-### Lane R1-D13 — run-time operations (before launch)
+### Lane HT-11 — claim-by-claim review of deck v1 against the ledger
 
-(a) A `scripts/r1_d13_daily.py` that the orchestrator runs each morning: queue status, hours spent / projected,
-fidelity-watch new entries and alerts since the last run, host / GPU health from the monitors, and the lead-queue
-text block; (b) the block-boundary procedure as one command chaining D11 report → D12 re-pricing proposal → the
-text block, with the "globally idle snapshot" check D12 needs; (c) a resume checklist for a crash (what to verify
-before `run --execute --resume`). Tests on the synthetic queue.
+Each slide's claim traced to a ledger row and evidence file; any wording that outruns the evidence flagged with the
+replacement text; the DEC-054 framing checked on both κ slides; slides 10–11 marked prospective. Edit requests only.
 
-### Lane X20 — post-session verification (as posted; after the lead signs)
+### Lane X20 — post-session verification (after the lead's step 8)
 
-### Lane HT-4f — claim ledger v6 (after the signed cost receipt)
-
-### Lane HT-10 — first slide deck from the outline (low priority; parallel)
-
-A Markdown / reveal-style deck built from `talk_outline_v1.md` with the exported figures, one slide per outline row,
-speaker notes carrying each claim's qualification; exported to PDF under `assets/presentation-materials/deck_v1/`.
-The lead restyles; the content stays bound to the ledger.
+### Lane HT-4f — claim ledger v6 (after the signed cost receipt, step 2)
 
 ## 4. Interfaces and coordination
 
