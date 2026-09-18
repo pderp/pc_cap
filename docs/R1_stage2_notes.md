@@ -1341,3 +1341,26 @@ plan v2 (`docs/R1_execution_plan_v2.md`) and `manifests/revision_v1/cell_ceiling
 about 126.91 elapsed h at the assumed 1.65 throughput, plus 12.15 solo extension h. These are projections, not
 whole-matrix measurements or a signed shared process-hour budget; the experimental stop remains October 9.
 
+## Chain R: full-endpoint development cells for zsRE and MQuAKE, with host memory (2026-09-17, 21:32 EDT)
+
+R1-64f recipes (300 edits, checkpoints 100 / 300, near-miss 100, revision 50; current identity; `/usr/bin/time -v`
+around the driver):
+
+| cell | wall (s) | near-miss op (s) | revision op (s) | max RSS (GB) | ES | RET-GS | LS | near-miss | revision | unseen FF / 100 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| zsRE · primary v5 | 413 | 70 | 44 | 2.71 | 1.00 | 0.973 | 50 / 50 | 87 / 100 | 50 / 50 | 14 |
+| zsRE · v0_stable | 1,111 | 156 | 111 | 2.77 | 0.99 | 0.280 | 48 / 50 | 36 / 100 | 4 / 50 | 0 |
+| MQuAKE · primary v5 | 521 | 79 | 41 | 2.71 | 1.00 | 0.733 | 49 / 50 | 100 / 100 | 50 / 50 | 0 |
+| MQuAKE · v0_stable | 1,487 | 227 | 89 | 2.69 | 1.00 | 0.000 | 50 / 50 | 100 / 100 | 1 / 50 | 0 |
+
+Costs: the challenge sets add 115–315 s per cell (learned 110–120 s; v0-style 270–315 s, its per-query bank search
+again), inside the 1.5× pad of the plan-v2 ceilings for every class (zsRE learned 413 s here vs an admitted
+1,000-edit ceiling of 1,890 s; MQuAKE v0_stable 1,487 s vs a 300-edit ceiling of 1,782 s — the tightest, 17 % of
+margin). Host process peak ≈ 2.7 GB RSS for all four (learned and v0 alike); with two workers ≈ 5.5 GB against
+≥ 19 GB available. Results (development, exposed populations): the primary's first MQuAKE full-endpoint profile —
+RET-GS 0.733, near-miss 100 / 100, revision 50 / 50, unseen 0 / 100; on zsRE unseen 14 / 100 at 300 records on
+this population (the DEC-050 gate was 10 % at 100 records on the selection population). The v0 cap does what its
+design implies: revision 4 / 50 and 1 / 50 (it cannot overwrite a stored fact), near-miss 36 / 100 on zsRE.
+These four receipts and the `.time` files are the direct host-peak and endpoint-cost evidence X17 asked for
+(R1-58i / R1-58j).
+

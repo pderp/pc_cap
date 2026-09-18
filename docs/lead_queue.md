@@ -770,3 +770,8 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     Round 29 is exactly those three plus a re-review. Your sitting moves to when candidate v13 exists — September 18
     evening at the earliest, more likely the 19th morning; launch the 19th. No decision is open.
 
+74. (2026-09-17, 21:40 EDT) The four full-endpoint cells are done: challenge sets cost 115–315 s per cell, all inside the
+    admitted ceilings (tightest: MQuAKE v0_stable at 83 % of its ceiling); host peak ≈ 2.7 GB per cell, ≈ 5.5 GB for
+    two workers against 19 GB free. First MQuAKE full profile of the primary: RET-GS 0.73, near-miss 100 / 100,
+    revision 50 / 50. Codex's round 29 turns these into cost receipt v3 and candidate v13. GPU idle.
+
