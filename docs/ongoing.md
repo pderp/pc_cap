@@ -74,61 +74,33 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 32 (CPU; open now; posted 2026-09-18 07:00 EDT) — the fidelity gate
+  +0.006## 3. Lanes for Codex — round 33 (CPU; open now; posted 2026-09-18 07:35 EDT) — Q17 into the protocol; finish the package
 
-Round 31 is committed and mirrored. Chain S (three cells left) runs until ≈ 08:30; the R1-63l backend patch is applied
-after it. Priority order: **R1-49l → HT-7 → HT-6 → R1-58l → R1-63m → X19 → HT-4f.** Rules as in round 22.
+Round 32 is committed and mirrored. Q17 is with the lead (default option 1). Chain S runs until ≈ 09:00; the R1-63l
+backend patch is applied by the orchestrator right after. Priority order: **R1-49m → HT-6 (final) → R1-58l → R1-63m →
+X19 → HT-4f.** Rules as in round 22 and §3a (fixture outputs under `assets/runs/pc_cap/R1/rehearsal_fixtures/`).
 
-### Lane R1-49l — provenance and interpretation of the fidelity limit (first; decides whether the lead has a question)
+### Lane R1-49m — protocol v5.2-D.3 and the classifier hook for the Q17 answer (prepare all three; bind on the answer)
 
-Chain S shows the primary's full-validation mean KL 0.0055 nats against the registered KL ≤ 0.001. Trace the limit:
-DEC-033 D-R3 ("fidelity KL ≤ 1e-3, loss increase ≤ 0.01") and its use in DEC-047 (the S1 continuation
-certification), plan 9, and every protocol draft v1 → v5.2-D.2: was the KL limit registered as (a) a fidelity gate on
-the *continued base* only, (b) a drift gate on the *cap* (cap-on vs original base) at the final checkpoint, or (c)
-both? Quote the exact sentences. Then state what the current D.2 classifier does with a cap cell that fails (b):
-which label, whether the primary comparisons are still computed, and how the DEC-058 classifier interacts. If the
-registered meaning is (a) and D.2 silently extended it to (b), say so — that is a scope change the lead must decide
-(the orchestrator posts it as Q17 with the options: keep the extension as a declared secondary fidelity benchmark;
-or bind the cap drift gate at the NLL-increase limit ≤ 0.01 that the sampled assays have always used, with KL
-reported descriptively). No threshold is changed by this lane.
+For each Q17 option: the exact D.3 text (fidelity section, U13 / U16, change log) and the analysis behaviour
+(`r1_49g_analyze` / R1-75: under option 1 the cap fidelity result is a labelled secondary benchmark and never sets
+`scientific_admission = False`; under 2 the NLL bound is the admission inequality with KL descriptive; under 3 the
+current behaviour), each as a patch + tests on the synthetic family; publish D.3 for the lead's option the moment the
+orchestrator records the decision. Keep the continued-base gate (DEC-047) unchanged in all three.
 
-### Lane HT-7 — concentration statistics for the full-validation endpoint (registered descriptive; small)
+### Lane HT-6 — final full-validation fidelity report (after chain S)
 
-The lead asks that every future cell record how the fidelity loss is distributed across contexts. The vectors are
-already stored; add to the R1-68f report, `r1_49g_analyze` / R1-75 and protocol D.2 (descriptive, no threshold):
-share of total KL (both references) in the top 0.1 % / 1 % of positions and top 1 % / 5 % / 10 % of windows; the
-number of positions carrying 50 % of KL; per-window mean-KL quantiles (median, p90, p99, max) and the counts of
-windows above 0.001 / 0.01 / 0.1; the untouched-position fraction (|Δloss| < 1e-6); a Gini over positions; the
-same for positive loss harm. Compute retroactively for the chain S cells (a CPU script over the NPZ files) and
-reproduce the orchestrator's numbers for cell 1 (notes §"How the full-validation fidelity loss is distributed").
+All four cells, both references, sample-vs-population consistency, the survival-curve figure, the concentration
+statistics (HT-7 spec), the talk framing under DEC-054; a copy of the figure and the two-sentence result for
+`assets/presentation-materials/`.
 
-### Lane HT-6 — full-validation fidelity report over chain S (after the four cells)
+### Lane R1-58l — cost receipt v4 + typed validator (after chain S)
 
-For each of the four cells: mean KL and NLL increase against both references, ES95 / ES99 / max, exceedance
-counts, coverage, the overlap gate result, the phase cost; the same statistics on the sampled 128 windows for the
-same checkpoint (are the sample and the population consistent?); a short reading for the talk under the DEC-054
-framing (the tail statement on 245k positions), kept separate from the classifier question of R1-49l.
-
-### Lane R1-58l — cost receipt v4 (after chain S; as posted in round 31)
-
-### Lane R1-63m — candidate v14, forms v9, sheet v8 (after R1-58l and the backend patch)
+### Lane R1-63m — candidate v14 / forms v9 / sheet v8 (after R1-49m's bound option, R1-58l and the backend patch)
 
 ### Lane X19 — re-review
 
 ### Lane HT-4f — claim ledger v6
-
-## 3a. Repository size policy (lead, 2026-09-18)
-
-No committed file above 45 MB (GitHub warns at 50, refuses at 100). Enforced by `.githooks/pre-commit` →
-`scripts/repo_size_policy.py check` (repo-local `core.hooksPath`). Synthetic rehearsal / operator-test / certification
-/ pytest fixture trees are ignored (`.gitignore`) and stay on disk; regenerable or bulky data goes under `assets/`;
-a genuine JSON artifact that must be in the repository is split with `scripts/repo_size_policy.py split FILE.json`
-(byte parts ≤ 40 MB + an index with the whole-file sha256; `join` reassembles). Codex: write fixture outputs only under
-the ignored directories or `assets/`, and name in the handoff any new directory that should be ignored.
-The assets repository (`/home/derp/cap/assets`, its own git) tracks hash-bound evidence / receipts / populations /
-payload manifests / presentation materials (files > 45 MB as `split --keep` parts, originals kept on disk for the
-bindings); weights, caches, environments, raw data and multi-GB run outputs are ignored there. The orchestrator commits
-both repositories when the lead asks for a commit.
 
 ## 4. Interfaces and coordination
 

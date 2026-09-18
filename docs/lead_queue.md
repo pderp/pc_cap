@@ -480,6 +480,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q14 (R1-D10a capacity) | **ANSWERED 2026-09-17: option D** (DEC-060) — context-match review first (R1-D10e), then MQuAKE at 300 edits × 3 realizations, checkpoints 100 / 300, with the restored margin; a larger cadence, if the review allows one, comes back as a question. | — | unblocked: R1-D10d option-A deltas, R1-D10e review, then the MQuAKE draw | — |
 | Q15 (near-miss family) | **ANSWERED 2026-09-17: adopt as proposed** (DEC-061). | — | unblocked: the near-miss rows of the draw / seal and protocol v5.2-D | — |
 | Q16 (near-miss pair allocation) | **ANSWERED 2026-09-17: B** (DEC-062) — family-coordinated pair allocation for the near / neighbour roles, bound in the RNG admission. | — | unblocked: R1-D9f activation; the draw | — |
+| Q17 (fidelity limit scope; `docs/tasks/R1-49l.md`) | Codex's provenance audit (14 protocol documents, both PDFs, plan 9, decisions): the fidelity bounds KL ≤ 0.001 / NLL increase ≤ 0.01 were registered for **continued-base certification with the cap disabled** (the guide, DEC-033, DEC-047, the Q12 text you accepted as DEC-058). Protocol v5.2-D.2 extended them to the cap-on full-validation endpoint of every cell and made a failing cell's primary comparisons unavailable — an extension you never adopted. On the one measured cell the primary's KL is 0.0055 (fails) while its NLL increase is 0.0056 (passes). Options: **(1)** cap fidelity becomes a declared **secondary benchmark** — KL and NLL both reported with pass / fail labels per cell, concentration statistics alongside, no veto on the primary retention / generalization comparisons; the continued-base gate stays as registered; **(2)** bind cap admission at NLL increase ≤ 0.01 (the quantity every drift assay has used) with KL descriptive; **(3)** adopt D.2's joint KL / NLL veto explicitly, accepting that the primary likely fails admission on every cell. | **(1)** — closest to what was registered; keeps every result visible; no threshold changed after seeing a result | protocol v5.2-D.3, the analysis classifier hook, candidate v14; the sitting | Sep 18 |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -818,4 +819,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     presentation materials are tracked (2,290 files; the five evidence files above 45 MB are committed as split parts
     with their originals kept on disk so the freeze bindings still resolve). Same 45 MB hook in both repos. If you want
     the weights tracked too, that is a Git LFS decision rather than plain git.
+
+80. (2026-09-18, 07:30 EDT) Codex's round 32 committed. **Q17 needs you today** (ledger above): the fidelity limit that the
+    primary "fails" on the full validation split was registered for certifying continuation bases, not for the cap;
+    the current protocol text extended it and would void the primary's comparisons on any failing cell. My
+    recommendation is option 1: report cap fidelity as a declared secondary benchmark (KL and NLL, pass / fail, with the
+    concentration statistics), keep the continued-base gate as registered, change no threshold. Codex prepares protocol
+    v5.2-D.3 for whichever option you choose. Chain S is on its second cell (three to go); the sitting stays on
+    September 19.
 
