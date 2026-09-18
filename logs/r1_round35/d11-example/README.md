@@ -1,0 +1,1 @@
+Synthetic three-cell queue example only. Two completed cells in block 1; block 2 is active. Production certification is stubbed exactly as in the test fixture. Actual queue cost replacement/retry accounting and watch replay are exercised. Fixture resources are under assets. This text has not been posted.

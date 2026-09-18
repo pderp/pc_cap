@@ -263,14 +263,16 @@ Incomplete cells after exhausted retries stay listed; the queue's projection
 does not reserve another forbidden retry for them. Unknown/live costs make the
 known spend a lower bound and remove the projection. Legacy driver-only costs
 are labelled as excluding process startup. Boundary mode returns exit 2 when
-the boundary has unprocessed cells or accounting/integrity/watch gaps; it still
+cells through the requested boundary have unprocessed work or accounting/integrity/watch gaps; it still
 writes the diagnostic report. Artifact completeness alone is not scientific
 success or a claim that a condition passes the fidelity benchmark.
 
 The current operator launch runs the whole admitted matrix; it does not pause
-at each block. If next-block workers are already active, take a daily snapshot
-and label unknown spend, then obtain a coherent boundary report at a quiescent
-point. A future deliberate block-at-a-time launch requires an explicit operator
+at each block. A completed boundary can be reported while next-block workers
+run: its own known process-hours and gaps are listed separately, while the
+whole-matrix spend stays labelled as a lower bound and its projection remains
+unavailable until live attempts close. Retry if evidence changes during the scan.
+A future deliberate block-at-a-time launch requires an explicit operator
 interface change/review; this runbook does not bypass the signed launch contract
 with an ad-hoc `stop_after` value. **Creep alerts must be relayed immediately**
 from stderr/watch alerts, rather than waiting for a clean block-boundary report.

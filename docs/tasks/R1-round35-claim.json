@@ -1,12 +1,16 @@
 {
   "task": "round35",
   "agent": "Codex",
-  "status": "in_progress",
+  "status": "handoff_D11_complete_cost_basis_partial",
   "started_utc": "2026-09-18T12:32:30+00:00",
   "base_commit": "f021f50",
-  "active_lanes": ["R1-D11"],
+  "active_lanes": [],
+  "completed_lanes": ["R1-D11"],
+  "partial_lanes": ["R1-58l: four donors and all27 sampled-rate transfer basis"],
+  "handoff": "docs/tasks/R1-round35-handoff.md",
+  "verification": "52 focused CPU tests; Ruff; shell/Python syntax; four-donor and all27 extraction",
   "conditional_lanes": ["R1-58l", "R1-63m", "X19", "HT-4f"],
-  "coordination": "CPU-only launch documentation and reporting. Claude owns post-chain-S backend/package patches, recipe rebind, fourth-cell watch and final HT-6. No active driver, backend or src edits; no GPU, sealed payloads, signatures or commits.",
+  "coordination": "CPU-only launch documentation/reporting and cost basis. Claude completed backend/package patches, fourth-cell watch and final HT-6 and committed an intermediate D11 snapshot in c3484f3. Additional assembler hash patch left proposed during owner edits. No driver/backend/src edits or commits by Codex.",
   "gpu_seconds": 0,
   "commits": false
 }

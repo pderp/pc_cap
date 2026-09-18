@@ -188,7 +188,16 @@ def build(matrix_path, *, receipt_root, journal, previous=None, boundary_block=N
         for r in selected
         if not r["observed"]["artifact_complete"] and not r["retry"]["exhausted"]
     ]
-    ready = boundary_block is not None and not issues and not unprocessed
+    selected_ids = {r["cell_id"] for r in selected}
+    boundary_gaps = [
+        r["cell_id"]
+        for r in ledger["rows"]
+        if r["cell_id"] in selected_ids and (r["unknown_attempts"] or r["uncovered_driver_seconds"])
+    ]
+    boundary_gaps = sorted(
+        set(boundary_gaps) | (selected_ids & (set(missing_watch) | set(invalid)))
+    )
+    ready = boundary_block is not None and not boundary_gaps and not unprocessed
     entries = [
         dict(e, queue_cell_id=expected.get(e["cell_id"]))
         for e in state["entries"]
@@ -218,6 +227,13 @@ def build(matrix_path, *, receipt_root, journal, previous=None, boundary_block=N
         boundary_block=boundary_block,
         boundary_ready=ready,
         boundary_unprocessed=unprocessed,
+        boundary_gap_cells=boundary_gaps,
+        boundary_known_process_hours=math.fsum(
+            r["charged_seconds"] for r in ledger["rows"] if r["cell_id"] in selected_ids
+        )
+        / 3600
+        if boundary_block is not None
+        else None,
         complete_cells=complete,
         total_cells=len(cells),
         inventory=inventory,
@@ -301,7 +317,10 @@ def text(report):
     ]
     if report["boundary_block"] is not None:
         lines.append(
-            f"Boundary ready: {report['boundary_ready']}; unprocessed cells through boundary: {report['boundary_unprocessed']}."
+            f"Boundary ready: {report['boundary_ready']}; unprocessed cells through boundary: {report['boundary_unprocessed']}; accounting/watch gap cells through boundary: {report['boundary_gap_cells']}."
+        )
+        lines.append(
+            f"Known process-hours through this boundary: {hours(report['boundary_known_process_hours'])}. Later active blocks can leave the whole-matrix spend/projection incomplete without reopening this boundary."
         )
     lines += [
         report["scientific_limit"],

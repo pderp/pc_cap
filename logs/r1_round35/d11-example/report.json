@@ -1,0 +1,527 @@
+{
+  "version": 1,
+  "task": "R1-D11",
+  "generated_utc": "2026-09-18T12:55:32.480189+00:00",
+  "identity": {
+    "matrix": {
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/matrix.json",
+      "sha256": "ffb4ec95bb65a4e7e3b5f81fb0cd8dd519e99369a32dd5dd72aa4e2e276b700b"
+    },
+    "receipt_root": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue",
+    "journal": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/watch/observations.jsonl",
+    "workers": 2,
+    "ceiling_hours": 750
+  },
+  "previous": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/posted-baseline.json",
+    "sha256": "2f18a7e0c522eabc339a49095c756a92b051b264997e4a34e2d337da97a584af"
+  },
+  "boundary_block": 1,
+  "boundary_ready": true,
+  "boundary_unprocessed": [],
+  "boundary_gap_cells": [],
+  "boundary_known_process_hours": 0.011111111111111112,
+  "complete_cells": [
+    "f960f05840090fbe64f91a87",
+    "5fd987dbba8234da2670c13b"
+  ],
+  "total_cells": 3,
+  "inventory": {
+    "scope": "confirmatory",
+    "queue": [
+      {
+        "cell_id": "f960f05840090fbe64f91a87",
+        "block": 1,
+        "within_block_order": 1,
+        "condition": "synthetic",
+        "dataset": "zsre",
+        "observed": {
+          "status": "complete",
+          "artifact_complete": true,
+          "missing_checkpoints": []
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 20.0,
+          "unknown_attempts": [],
+          "attempts": [
+            {
+              "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/cell0/attempt-0000/result.json",
+              "sha256": "1852e1b825e608dd611ca6c01b28bfe5d16d3bf221022236d99066dd9d5ebdca",
+              "wall_seconds": 15
+            }
+          ],
+          "driver_attempt_wall_seconds": 15.0,
+          "process_receipts": [
+            {
+              "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell0-process0/finish.json",
+              "sha256": "a86853f1582cdf360b2bdefc06777b954bad29417b296bfea7173d4366a628e7",
+              "wall_seconds": 20
+            }
+          ]
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      },
+      {
+        "cell_id": "5fd987dbba8234da2670c13b",
+        "block": 1,
+        "within_block_order": 2,
+        "condition": "synthetic",
+        "dataset": "zsre",
+        "observed": {
+          "status": "complete",
+          "artifact_complete": true,
+          "missing_checkpoints": []
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 20.0,
+          "unknown_attempts": [],
+          "attempts": [
+            {
+              "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/cell1/attempt-0000/result.json",
+              "sha256": "1852e1b825e608dd611ca6c01b28bfe5d16d3bf221022236d99066dd9d5ebdca",
+              "wall_seconds": 15
+            }
+          ],
+          "driver_attempt_wall_seconds": 15.0,
+          "process_receipts": [
+            {
+              "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell1-process0/finish.json",
+              "sha256": "4c6ac56d2ad7e78fbb15fcb31470d29f08636c594a318ef3c2b1a5593ed31053",
+              "wall_seconds": 20
+            }
+          ]
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      },
+      {
+        "cell_id": "d15d51ef978c04e07e192d20",
+        "block": 2,
+        "within_block_order": 3,
+        "condition": "synthetic",
+        "dataset": "zsre",
+        "observed": {
+          "status": "missing",
+          "artifact_complete": false,
+          "missing_checkpoints": [
+            1
+          ]
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 0.0,
+          "unknown_attempts": [
+            "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell2-process0/start.json"
+          ],
+          "attempts": [],
+          "driver_attempt_wall_seconds": 0.0,
+          "process_receipts": []
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "block": 1,
+        "cells": 2,
+        "complete": true,
+        "incomplete_cell_ids": []
+      },
+      {
+        "block": 2,
+        "cells": 1,
+        "complete": false,
+        "incomplete_cell_ids": [
+          "d15d51ef978c04e07e192d20"
+        ]
+      }
+    ],
+    "complete_blocks": [
+      1
+    ],
+    "incomplete_cells": [
+      {
+        "cell_id": "d15d51ef978c04e07e192d20",
+        "missing_checkpoints": [
+          1
+        ]
+      }
+    ],
+    "cost": {
+      "known_attempt_hours": 0.011111111111111112,
+      "unknown_attempts": [
+        "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell2-process0/start.json"
+      ],
+      "projected_total_hours": null,
+      "ceiling_hours": 750,
+      "projected_within_ceiling": null,
+      "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback.",
+      "scenario_fallback_cell_seconds": null,
+      "projection_workers": 2,
+      "remaining_cell_ceiling_multiplier": 1.15
+    },
+    "backend_status": "development and hash-bound sealed dispatch; final execution requires closed frozen gates",
+    "sources_sha256": {}
+  },
+  "cost_ledger": {
+    "rows": [
+      {
+        "cell_id": "f960f05840090fbe64f91a87",
+        "charged_seconds": 20.0,
+        "process_envelope_seconds": 20.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [
+          {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell0-process0/finish.json",
+            "sha256": "a86853f1582cdf360b2bdefc06777b954bad29417b296bfea7173d4366a628e7",
+            "wall_seconds": 20
+          }
+        ],
+        "driver_attempts": [
+          {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/cell0/attempt-0000/result.json",
+            "sha256": "1852e1b825e608dd611ca6c01b28bfe5d16d3bf221022236d99066dd9d5ebdca",
+            "wall_seconds": 15
+          }
+        ],
+        "unknown_attempts": []
+      },
+      {
+        "cell_id": "5fd987dbba8234da2670c13b",
+        "charged_seconds": 20.0,
+        "process_envelope_seconds": 20.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [
+          {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell1-process0/finish.json",
+            "sha256": "4c6ac56d2ad7e78fbb15fcb31470d29f08636c594a318ef3c2b1a5593ed31053",
+            "wall_seconds": 20
+          }
+        ],
+        "driver_attempts": [
+          {
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/cell1/attempt-0000/result.json",
+            "sha256": "1852e1b825e608dd611ca6c01b28bfe5d16d3bf221022236d99066dd9d5ebdca",
+            "wall_seconds": 15
+          }
+        ],
+        "unknown_attempts": []
+      },
+      {
+        "cell_id": "d15d51ef978c04e07e192d20",
+        "charged_seconds": 0.0,
+        "process_envelope_seconds": 0.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [],
+        "driver_attempts": [],
+        "unknown_attempts": [
+          "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell2-process0/start.json"
+        ]
+      }
+    ],
+    "charged_seconds": 40.0,
+    "uncovered_driver_seconds": 0.0,
+    "basis": "Process envelopes replace covered driver attempts; overlap and failures charged once each. Uncovered legacy driver times exclude process startup. JAX timers are not added."
+  },
+  "issues": [
+    "Live, interrupted or unreadable attempts have unknown costs; known spend is a lower bound and projection is unavailable."
+  ],
+  "watch": {
+    "required": false,
+    "cursor": {
+      "events": 3,
+      "bytes": 4435,
+      "sha256": "049d5dc6c5f4bd7a9e4dc29d4ea377229e180d39605cff2a2c7800dfc90b7980"
+    },
+    "new_observations": 2,
+    "new_queue_observations": 2,
+    "entries": [
+      {
+        "cell_id": "c4bfe38461bd851bad2da91c67cc1455ac73d8ff0808bb42d27c5c0d5d69fa85",
+        "recorded_utc": "2026-09-18T12:00:00+00:00",
+        "observation": {
+          "cell": {
+            "condition": "synthetic",
+            "dataset": "zsre",
+            "order": 0,
+            "realization": 0
+          },
+          "cell_id": "c4bfe38461bd851bad2da91c67cc1455ac73d8ff0808bb42d27c5c0d5d69fa85",
+          "identity": {
+            "cell": {
+              "condition": "synthetic",
+              "dataset": "zsre",
+              "order": 0,
+              "realization": 0
+            },
+            "mode": "stage4_sealed_cell",
+            "recipe_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "recipe": {
+            "path": "synthetic",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "references": {
+            "capoff": {
+              "kl": {
+                "mean_signed": 0.005
+              },
+              "loss": {
+                "mean_signed": 0.0
+              }
+            },
+            "original": {
+              "kl": {
+                "mean_signed": 0.005
+              },
+              "loss": {
+                "mean_signed": 0.0
+              }
+            }
+          },
+          "scope": "confirmatory"
+        },
+        "creep_reasons": [
+          {
+            "kind": "new_running_maximum",
+            "reference": "capoff",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.002,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "capoff",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "new_running_maximum",
+            "reference": "original",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.002,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "original",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          }
+        ],
+        "queue_cell_id": "f960f05840090fbe64f91a87"
+      },
+      {
+        "cell_id": "5f317e4673cd2a6bb091375b60dbeebd07c9d1d65c923c67f2f1af64da9034c2",
+        "recorded_utc": "2026-09-18T12:00:00+00:00",
+        "observation": {
+          "cell": {
+            "condition": "synthetic",
+            "dataset": "zsre",
+            "order": 1,
+            "realization": 0
+          },
+          "cell_id": "5f317e4673cd2a6bb091375b60dbeebd07c9d1d65c923c67f2f1af64da9034c2",
+          "identity": {
+            "cell": {
+              "condition": "synthetic",
+              "dataset": "zsre",
+              "order": 1,
+              "realization": 0
+            },
+            "mode": "stage4_sealed_cell",
+            "recipe_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "recipe": {
+            "path": "synthetic",
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "references": {
+            "capoff": {
+              "kl": {
+                "mean_signed": 0.005
+              },
+              "loss": {
+                "mean_signed": 0.0
+              }
+            },
+            "original": {
+              "kl": {
+                "mean_signed": 0.005
+              },
+              "loss": {
+                "mean_signed": 0.0
+              }
+            }
+          },
+          "scope": "confirmatory"
+        },
+        "creep_reasons": [
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "capoff",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "original",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          }
+        ],
+        "queue_cell_id": "5fd987dbba8234da2670c13b"
+      }
+    ],
+    "alerts": [
+      {
+        "cell_id": "c4bfe38461bd851bad2da91c67cc1455ac73d8ff0808bb42d27c5c0d5d69fa85",
+        "recorded_utc": "2026-09-18T12:00:00+00:00",
+        "group": "synthetic:zsre",
+        "reasons": [
+          {
+            "kind": "new_running_maximum",
+            "reference": "capoff",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.002,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "capoff",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "new_running_maximum",
+            "reference": "original",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.002,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "original",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          }
+        ],
+        "delivery": "pending_orchestrator_notification",
+        "admission_veto": false,
+        "queue_cell_id": "f960f05840090fbe64f91a87"
+      },
+      {
+        "cell_id": "5f317e4673cd2a6bb091375b60dbeebd07c9d1d65c923c67f2f1af64da9034c2",
+        "recorded_utc": "2026-09-18T12:00:00+00:00",
+        "group": "synthetic:zsre",
+        "reasons": [
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "capoff",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          },
+          {
+            "kind": "above_twice_development_reference",
+            "reference": "original",
+            "metric": "mean_kl",
+            "value": 0.005,
+            "compared_value": 0.004,
+            "compared_cell_id": "2ab23e19c8bf39f7117fab27de5b2cf9f1b8ed1305e809960c4e7b93a8b05c1d"
+          }
+        ],
+        "delivery": "pending_orchestrator_notification",
+        "admission_veto": false,
+        "queue_cell_id": "5fd987dbba8234da2670c13b"
+      }
+    ],
+    "missing_completed_cells": [],
+    "delta_scope": "Global watch since the explicitly supplied previous report (or journal beginning). queue_cell_id identifies this matrix; other observations retain their original scope.",
+    "delivery": "not_sent; use the last actually posted report as --previous",
+    "admission_veto": false
+  },
+  "accounting_sources_sha256": {
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell0-process0/finish.json": "a86853f1582cdf360b2bdefc06777b954bad29417b296bfea7173d4366a628e7",
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell0-process0/start.json": "e290d5432479ca2a0a75dafaee732e6b405a6f73c79bd547d5f996de49730b93",
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell1-process0/finish.json": "4c6ac56d2ad7e78fbb15fcb31470d29f08636c594a318ef3c2b1a5593ed31053",
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell1-process0/start.json": "e282dc7474366854dfbaad3567abb46f2948ac472751acc0113f9b63ac65ca46",
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/logs/queue/cell2-process0/start.json": "57f48bf998374aac2887c61db6a0ae3e1f999b923bc86a919fbd90b8ea6c4a7e",
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/cell0/attempt-0000/result.json": "1852e1b825e608dd611ca6c01b28bfe5d16d3bf221022236d99066dd9d5ebdca",
+    "/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/b653e4708e13460387076e996a382764/results/cell1/attempt-0000/result.json": "1852e1b825e608dd611ca6c01b28bfe5d16d3bf221022236d99066dd9d5ebdca"
+  },
+  "implementation": {
+    "report": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_d11_block_report.py",
+      "sha256": "7c246f004e4510560eb7b4a16e68bc38c6b559e11fccf27bd780ad6a4136b66f"
+    },
+    "queue": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+      "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+    },
+    "watch": {
+      "policy": {
+        "version": 1,
+        "decision": "DEC-064a",
+        "bounds_nats": {
+          "mean_kl": 0.001,
+          "mean_signed_nll_increase": 0.01
+        },
+        "breach": "strictly above either bound against either reference",
+        "identity": "digest of mode, recipe SHA256 and declared cell coordinates",
+        "maxima": "all verified observations; condition x dataset x reference x metric",
+        "development_reference": "first verified development observation per condition x dataset, frozen by journal order",
+        "creep": "a breaching entry strictly exceeds a previous maximum or twice its frozen development reference, per reference/metric",
+        "reporting": "immediate local alert; orchestrator conveys alerts immediately and entries at block boundaries",
+        "admission_veto": false
+      },
+      "implementations": [
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/ht8_fidelity_watch.py",
+          "sha256": "d129b756d864456a9d62de00ef19a21ab34bee76b8aff1800730747406958c85"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/r1_63l_full_validation_contract.py",
+          "sha256": "bdd1be0ed58e04af4c6f449b47e191555573b8bac21ca650e5b535d4c93d667f"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/r1_49m_fidelity_policy.py",
+          "sha256": "f96862b9778acc734e954944a895b2939f8d550d7ac6ccf02cff2ed4f0986216"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/ht7_concentration.py",
+          "sha256": "3d1ab4de890dfa0780a7380675edf29a43ae392f52d2b994946a25eb8f06b2c5"
+        }
+      ]
+    }
+  },
+  "scientific_limit": "Artifact completeness does not assert benchmark success, effect significance, admission or launch authority.",
+  "report_sha256": "d7cd667d41bef61520349bfc6e58c3f9d3a59f13143c36924dca908f0919bdd5"
+}

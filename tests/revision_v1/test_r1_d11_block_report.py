@@ -173,6 +173,19 @@ def test_open_process_cost_is_unknown_and_boundary_refuses(fixture):
     assert "lower bound" in report.text(out)
 
 
+def test_next_block_can_run_while_finished_boundary_is_reported(fixture):
+    f = fixture
+    for n in (0, 1):
+        f["process"](n, seconds=20)
+        f["complete"].add(f["cells"][n]["cell_id"])
+    f["process"](2, finish=False)
+    out = f["build"](boundary_block=1)
+    assert out["boundary_ready"]
+    assert out["boundary_known_process_hours"] == 40 / 3600
+    assert out["inventory"]["cost"]["projected_total_hours"] is None
+    assert "lower bound" in report.text(out)
+
+
 def test_uncovered_legacy_driver_time_remains_visible(fixture):
     f = fixture
     put(
