@@ -11,3 +11,5 @@ Labels are the DEC-064 secondary benchmark; nothing here vetoes a primary compar
 | 2026-09-18 | R1-64g mquake R1_learned_ff (chain S) | MQuAKE | R1_learned_ff (primary v5) | 300 | development | 0.00554 | +0.00560 | 0.114 | 8.19 | 171 (0.07 %) | 99.6 % | first entry; development reference |
 
 Running maxima (KL): MQuAKE · R1_learned_ff 0.00554.
+
+No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, development): zero observed loss / KL change on all 245,237 positions (radius-0 cap never fires on ordinary text) — no entry.

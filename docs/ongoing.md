@@ -74,45 +74,33 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 33 (CPU; open now; posted 2026-09-18 07:15 EDT) — Q17 into the protocol; finish the package
+  +0.006## 3. Lanes for Codex — round 34 (CPU; open now; posted 2026-09-18 07:55 EDT) — the successor package on D.3
 
-Round 32 is committed and mirrored. Q17 is with the lead (default option 1). Chain S runs until ≈ 09:00; the R1-63l
-backend patch is applied by the orchestrator right after. Priority order: **R1-49m → HT-8 → HT-6 (final) → R1-58l → R1-63m →
-X19 → HT-4f.** Rules as in round 22 and §3a (fixture outputs under `assets/runs/pc_cap/R1/rehearsal_fixtures/`).
+Round 33 is committed and mirrored. Chain S finishes ≈ 09:15 (two zsRE cells); the orchestrator then applies the
+R1-63l backend patch and rebinds every recipe identity. Priority order: **HT-8 → R1-63m → R1-58l → HT-6 (final) →
+X19 → HT-4f.** Rules as in round 22 and §3a.
 
-### Lane R1-49m — protocol v5.2-D.3 and the classifier hook for the Q17 answer (prepare all three; bind on the answer)
+### Lane HT-8 — fidelity watch hook (DEC-064a; as posted in round 33; first)
 
-For each Q17 option: the exact D.3 text (fidelity section, U13 / U16, change log) and the analysis behaviour
-(`r1_49g_analyze` / R1-75: under option 1 the cap fidelity result is a labelled secondary benchmark and never sets
-`scientific_admission = False`; under 2 the NLL bound is the admission inequality with KL descriptive; under 3 the
-current behaviour), each as a patch + tests on the synthetic family; publish D.3 for **option 1 — DEC-064 (lead, 07:20 EDT)**: cap fidelity as a labelled secondary benchmark with the
-concentration statistics, never setting `scientific_admission = False`; the other two options are recorded as
-considered, not built. Keep the continued-base gate (DEC-047) unchanged in all three.
+### Lane R1-63m — candidate v14, forms v9, sheet v8 on D.3 (after the backend patch lands, ≈ 09:30)
 
-### Lane HT-8 — fidelity watch (DEC-064a; small; before HT-6 final)
+Use `r1_49m_normative_closure.closure`, the D.3 protocol / matrix bindings and both new analysis modules; carry the
+DEC-064 policy through the copied final matrix cells; bind the new analysis hashes in the publication evidence;
+rehearse the D9 input / receipt / candidate chain against the exact post-patch identities (driver, backend, R1-68f
+module); the fidelity watch bound as a queue post-cell step. Historical v13 digests stay historical.
 
-`scripts/ht8_fidelity_watch.py`: over every completed cell directory (development roots and, later, the confirmatory
-receipt root), read the full-validation report / NPZ, evaluate the formerly critical bounds (KL > 0.001, NLL Δ >
-0.01, either reference), append breaching cells to `docs/fidelity_watch.md` and a machine log
-`results/R1/fidelity_watch/entries.jsonl` (idempotent by cell identity), maintain running maxima per condition ×
-dataset, raise a creep alert (`alerts.jsonl` + a line in the Markdown) when a new entry exceeds the previous maximum
-for its condition × dataset or 2 × the development reference; include the HT-7 concentration statistics per entry.
-Hook it into the queue's post-cell step (R1-77 queue, after the receipt is certified) and into the HT-6 report.
-Tests on synthetic reports. Reproduce the first entry (notes §"How the full-validation fidelity loss is distributed").
+### Lane R1-58l — cost receipt v4 with its typed validator (after chain S)
 
-### Lane HT-6 — final full-validation fidelity report (after chain S)
+Four donors (chain S) for the full-validation costs (learned ≈ 1,300 s; v0 ≈ 1,470 s per cell; zsRE numbers when
+they land), the explicit transfers (CounterFact per-position ratio, S1's extra original-base forward, 1,000-record
+occupancy), cell ceilings v2 and the revised process-hour projection (full validation adds ≈ 0.36–0.41 h per cell:
+core ≈ 209 + ≈ 140 solo h ≈ 350 solo h → ≈ 215 wall-clock h with two workers), the gap inventory, the v4 validator.
 
-All four cells, both references, sample-vs-population consistency, the survival-curve figure, the concentration
-statistics (HT-7 spec), the talk framing under DEC-054; a copy of the figure and the two-sentence result for
-`assets/presentation-materials/`.
+### Lane HT-6 — final report and presentation export (after chain S; no `--allow-partial`)
 
-### Lane R1-58l — cost receipt v4 + typed validator (after chain S)
+### Lane X19 — re-review of the v14 package
 
-### Lane R1-63m — candidate v14 / forms v9 / sheet v8 (after R1-49m's bound option, R1-58l and the backend patch)
-
-### Lane X19 — re-review
-
-### Lane HT-4f — claim ledger v6
+### Lane HT-4f — claim ledger v6 (after receipt v4 is signed)
 
 ## 4. Interfaces and coordination
 

@@ -837,3 +837,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     development reference). First entry: the chain S primary MQuAKE cell, KL 0.0055. Codex implements the automatic
     hook into the queue (HT-8); until then I run it by hand after each chain.
 
+83. (2026-09-18, 07:55 EDT) Codex's round 33 committed in both repos: protocol v5.2-D.3 implements your Q17 answer (cap
+    fidelity labelled, never a veto; continued-base gate unchanged), the concentration statistics are in the reports.
+    Fidelity watch: the second full-validation cell (MQuAKE v0_stable) shows zero change — a radius-0 cap never fires on
+    ordinary text — so no entry. Full-validation cost measured for the v0 class too: ≈ 1,470 s per cell. Round 34:
+    the watch hook, candidate v14 on D.3 after I install the last backend patch (≈ 09:30), cost receipt v4, the final
+    fidelity report, a re-review, the ledger. Sitting: September 19.
+
