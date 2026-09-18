@@ -981,3 +981,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     verification runs in parallel; if it finds a defect the queue is stopped at the next cell boundary and we resume
     from the last certified checkpoint after the fix. The tree stays locked.
 
+101. (2026-09-18, 18:50 EDT) **First two confirmatory cells complete** (primary v5, zsRE, realization 0, orders 100 and
+    101; 74 and 75 min each under two workers). At 1,000 records: ES 0.977, RET-GS 0.955, LS 50 / 50, unseen false fires
+    9 %, near-miss 86 / 100, revision 49 / 50 — in line with development. **Fidelity watch, creep alert (DEC-064a):**
+    zsRE · primary at 1,000 records measures mean KL 0.00238 and NLL Δ 0.00245 against the development reference
+    0.00227 / 0.00231 from 300 records — a new running maximum by 5 %, consistent with more records, not a jump; no
+    admission effect (DEC-064). **Cost watch:** the full-validation phase took 3,100 s per cell with two workers
+    against 1,300 s measured solo — the two batched full assays contend for the GPU far more than the short probes
+    predicted — so these cells used 90 % of their effective ceiling. Throughput is still ≈ 1.3× solo, but a heavier
+    class (S1) could touch its ceiling. I am watching every finish; if a cell is stopped at its ceiling, the retry
+    policy applies and I bring you a ceilings amendment or a one-worker switch rather than let cells go incomplete.
+
