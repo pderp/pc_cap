@@ -1,0 +1,103 @@
+..F
+=================================== FAILURES ===================================
+___________ test_extension_also_carries_required_full_contract[True] ___________
+
+assembly_inputs = (PosixPath('/home/derp/cap/pc_cap/docs/tasks/R1-63j-rehearsal/59e423711b5548e79b3fecd4e558e8d9'), {'register': {'path'...d_ff_v2-counterfact.runtime.json', 'sha256': 'e895ff70a743fbd4a00f5dd0a7db251846bbcd672bc2ef4e73231b8cd404b778'}, ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa588e73410>
+
+    @pytest.mark.parametrize("assembly_inputs", [True], indirect=True)
+    def test_extension_also_carries_required_full_contract(assembly_inputs, monkeypatch):
+        install(monkeypatch)
+        root, spec, templates = assembly_inputs
+>       result = bundle.assemble(spec, templates, root / "extension-staged", normative=closure())
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_63j_production_bundle.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/r1_63j_production_bundle.py:464: in assemble
+    matrix=mb,
+        ^^^^^^^
+scripts/r1_63j_production_bundle.py:180: in virtual_validate
+    matrix, bindings = value(bundle["matrix"]), value(bundle["bindings"])
+scripts/r1_77_queue.py:324: in verify_sealed_matrix
+    binding, m = recipe_for(cell, bindings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:111: in recipe_for
+    sealed.inspect_manifest(path, binding["sha256"])
+scripts/r1_63j_production_bundle.py:176: in <lambda>
+    patch.object(backend, "inspect_manifest", lambda p, h: binspect(p, h, code_root=code_root)),
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/fa5b51891eb78dc707e6471f.json')
+expected_sha256 = '722e1fde024aa44d5390648bbc3ef0731db293a3a1f6e55617877a066995241c'
+code_root = PosixPath('/home/derp/cap/pc_cap')
+
+    def inspect_manifest(path, expected_sha256, *, code_root=None):
+        """Verify final authority and code without opening payload or reservations."""
+        code_root = ROOT if code_root is None else Path(code_root)
+        m = metadata({"path": str(path), "sha256": expected_sha256})
+        if m.get("schema_version") != 1 or m.get("mode") != MODE or m.get("test_fixture"):
+            raise PermissionError(
+                "actual sealed-mode recipe required; no development/test admission flag"
+            )
+        if m.get("backend") != backend_binding():
+            raise ValueError("sealed backend module/file identity mismatch")
+        if sha(code_root / "scripts/r1_68c_dev_cell.py") != DONOR_SHA256:
+            raise ValueError("R1-68e donor changed; reconcile the sealed fork")
+        donor.profile_config(m, code_root)
+        if m.get("code_sha256") != core.code_identity(code_root):
+            raise ValueError("installed sealed code identity mismatch")
+        if any(
+            m.get("admission", {}).get(k) is not True
+            for k in ("lead_approved", "protocol_frozen", "condition_admitted", "launch_authorized")
+        ):
+            raise PermissionError("unresolved sealed launch admission")
+        if Path(m["freeze"]["path"]).resolve() != ROOT / FROZEN_RELATIVE:
+            raise PermissionError("R1 final frozen manifest required; historical v0/candidates refused")
+        frozen = metadata(m["freeze"])
+        if (
+            frozen.get("schema_version") != 1
+            or frozen.get("mode") != "stage4_final_freeze"
+            or frozen.get("lead_approved") is not True
+            or frozen.get("launch_authorized") is not True
+            or frozen.get("open_gates") != []
+            or set(frozen.get("closed_gates", {})) != set(GATES)
+        ):
+            raise PermissionError("final freeze has unresolved gates")
+        for gate in GATES:
+            receipt = metadata(frozen["closed_gates"][gate])
+            if (
+                receipt.get("gate") != gate
+                or receipt.get("status") != "closed"
+                or receipt.get("lead_approved") is not True
+            ):
+                raise PermissionError("gate closure receipt not approved: " + gate)
+        if (
+            frozen.get("backend") != m["backend"]
+            or frozen.get("code_sha256") != m["code_sha256"]
+            or frozen.get("integrity_driver_bindings") != m["integrity_driver_bindings"]
+        ):
+            raise ValueError("freeze/backend/code identity mismatch")
+        for key in ("protocol", "reservations", "population"):
+            if frozen.get(key) != m.get(key):
+                raise ValueError("freeze/recipe binding mismatch: " + key)
+        if not frozen.get("bindings_sha256"):
+            raise PermissionError("freeze requires provenance/code/environment bindings")
+        for name, expected in frozen["bindings_sha256"].items():
+            p = Path(name).resolve()
+            if not p.is_relative_to(code_root) or "confirm" in p.parts:
+                raise PermissionError("freeze metadata/code binding path refused")
+            if p in [Path(m[k]["path"]).resolve() for k in ("payload", "reservations", "population")]:
+                raise ValueError(
+                    "opaque payload/reservation/population hashes belong in dedicated bindings"
+                )
+            if sha(p) != expected:
+>               raise ValueError("freeze provenance binding mismatch: " + name)
+E               ValueError: freeze provenance binding mismatch: /home/derp/cap/pc_cap/scripts/r1_63j_production_bundle.py
+
+scripts/r1_77b_sealed_backend.py:148: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_63j_production_bundle.py::test_extension_also_carries_required_full_contract[True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 passed in 266.88s (0:04:26)

@@ -13,19 +13,22 @@ from scripts.r1_d10a_review import ROOT, write_new
 
 def build(*, preview=False, cost_receipt=None):
     profiles = profile_inventory()
-    plan = ROOT / "docs/R1_execution_plan_v2.md"
+    plan = ROOT / "docs/R1_execution_plan_v3.md"
     pending = external_dependencies(profiles, plan)
     cost = None
     if cost_receipt is not None:
         cost = d9.ref(Path(cost_receipt).resolve())
-        spec = d9.read_metadata(d9.ref(ROOT / "docs/tasks/R1-D9-inputs-v4.json"))
-        d9.check_receipt("chain_i_cell_ceilings", d9.read_metadata(cost), spec)
+        spec = d9.read_metadata(d9.ref(ROOT / "docs/tasks/R1-D9-inputs-v9.json"))
+        value = d9.read_metadata(cost)
+        if type(value.get("receipt_revision")) is not int or value["receipt_revision"] != 4:
+            raise ValueError("final ledger requires typed cost receipt v4")
+        d9.check_receipt("chain_i_cell_ceilings", value, spec)
     else:
         pending.append("signed_full_endpoint_process_cost_admission")
     if pending and not preview:
         raise ValueError("Final ledger dependencies pending: " + ", ".join(pending))
     tag = "v6-preview" if preview else "v6"
-    prefix = ROOT / "logs/r1_round26"
+    prefix = ROOT / "logs/r1_round36"
     inventory = write_new(prefix / f"ht4f-profiles-{tag}.json", dict(profiles=profiles, producer=d9.ref(__file__)))
     rows = []
 
@@ -39,12 +42,12 @@ def build(*, preview=False, cost_receipt=None):
               f"MQuAKE {row['condition']}: " + (f"RET-ES {row['retention']['es']}; RET-GS {row['retention']['gs']}; bounded locality {row['locality']['preserved_n']}/{row['locality']['expected_n']}; driver attempt {row['attempt_wall_seconds']:.3f} seconds." if complete else "No completed result for this exact corrected recipe."),
               "300 attempted development edits; exposed population. Attempt timing excludes outer process startup; these runs do not establish full final endpoint costs. Chain M locality0/50 is an invalid payload artifact and is never substituted. Missing near/revision endpoints stay unavailable.",
               [inventory, row["recipe"], *([row[k] for k in ("result", "checkpoint", "receipt")] if complete else [])])
-    review_path = prefix / "near_final/r1-d9e-real-pool-review.json"
+    review_path = ROOT / "logs/r1_round26/near_final/r1-d9e-real-pool-review.json"
     review = d9.read_metadata(d9.ref(review_path))
     claim("DEC061", "adopted_and_CPU_validated",
           "Exact different-subject relation/template family is implemented in constructor, seal validator and bounded neighbour-baseline analysis. Missing planned slots are retained.",
           "Different-subject template specificity, not semantic nearest-neighbour robustness. Historical development near cases are a different family. No final drawn population or confirmatory outcome exists.",
-          ["docs/R1_stage4_protocol_v5_2_D_final.md", "scripts/r1_d9e_near_family.py", review_path])
+          ["docs/R1_stage4_protocol_v5_2_D_4.md", "scripts/r1_d9e_near_family.py", review_path])
     counts = "; ".join(f"{ds}: {r['matched']}/300 matched, {r['missing']} missing" for ds, r in review["diagnostic"].items())
     claim("NEAR-dry-availability", "diagnostic_only", counts + ".",
           review["limitation"], [review_path])
@@ -58,11 +61,11 @@ def build(*, preview=False, cost_receipt=None):
           "The admitted solo ceiling already includes1.5× measured cost; two workers apply1.15 once. Ordinary failures retry once, then remain incomplete while dispatch continues; host failures stop dispatch.",
           "Probes do not establish every full-endpoint slowdown. Sum process envelopes including overlap/failures; keep elapsed wall planning separate. No new GPU throughput measurement.", ["docs/R1_stage4_queue_concurrency_v2.md", "scripts/r1_77f_scheduler.py", "logs/r1_round26/regression-tests.txt"])
     claim("COST", "signed_cost_receipt_bound" if cost else "pending",
-          "Execution plan v2 is bound." if plan.is_file() else "Execution plan v2 and full endpoint/process cost admission remain pending.",
+          "Execution plan v3 is bound." if plan.is_file() else "Execution plan v3 and full endpoint/process cost admission remain pending.",
           "Do not promote the older provisional235/251 solo-hour or140/150 elapsed-hour scenarios into admitted costs. A plan file alone is not a signed ceiling receipt.", [*([d9.ref(plan)] if plan.is_file() else []), *([cost] if cost else [])])
     claim("SCOPE", "adopted",
-          "360core cells plus45optional; zsRE/CounterFact1000 edits per realization, MQuAKE300. The63-interval primary family is unchanged; its21 MQuAKE1000 intervals are unavailable.",
-          "No extrapolation from300 to1000, alpha redistribution or orders-as-independent-clusters. No confirmatory outcome has been produced by this work.", ["manifests/revision_v1/run_matrix_v5_2_D_DEC061.json"])
+          "285core cells plus45optional (DEC-066: only primary, random-reader and stable MQuAKE core; five other MQuAKE arms prospectively not run); zsRE/CounterFact1000 edits per realization, MQuAKE300. The63-interval primary family is unchanged; its21 MQuAKE1000 intervals are unavailable.",
+          "No extrapolation from300 to1000, alpha redistribution or orders-as-independent-clusters. No confirmatory outcome has been produced by this work.", ["manifests/revision_v1/run_matrix_v5_2_D_4.json"])
     parent = d9.ref(ROOT / "logs/r1_round25/talk_evidence_v5.json")
     framing = d9.read_metadata(parent)["framing"]
     for row in rows:

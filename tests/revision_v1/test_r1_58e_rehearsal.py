@@ -155,7 +155,12 @@ def stages(request):
         **dict.fromkeys(core.REVIEW_FLAGS, True),
     )
     eb = new_json(resources / "evidence.json", evidence)
-    matrix = json.loads((REPO / "manifests/revision_v1/run_matrix_v5_2_option_D.json").read_text())
+    matrix_name = (
+        "run_matrix_v5_2_D_4.json"
+        if isinstance(options, dict) and options.get("current_policy")
+        else "run_matrix_v5_2_option_D.json"
+    )
+    matrix = json.loads((REPO / "manifests/revision_v1" / matrix_name).read_text())
     matrix.update(
         near_miss_family_contract=NEAR_CONTRACT, queue_ceiling_contract=CEILING_DEFINITION
     )

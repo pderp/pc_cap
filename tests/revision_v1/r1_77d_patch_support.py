@@ -15,7 +15,17 @@ def install(monkeypatch):
     if hasattr(core, "registered_checkpoints"):
         root = Path(__file__).resolve().parents[2]
         record = json.loads((root / "logs/r1_round24/r1-77d-patch.json").read_text())
-        for path, expected in record["proposed_files_sha256"].items():
+        identities = dict(record["proposed_files_sha256"])
+        full = json.loads((root / "logs/r1_round30/r1-68f-patch.json").read_text())
+        final = json.loads((root / "logs/r1_round31/r1-63l-backend-patch.json").read_text())
+        target = "scripts/r1_77b_sealed_backend.py"
+        if (
+            identities[target] != full["original_files_sha256"][target]
+            or full["proposed_files_sha256"][target] != final["original_sha256"]
+        ):
+            raise ValueError("installed backend successor chain is not reviewed")
+        identities[target] = final["proposed_sha256"]
+        for path, expected in identities.items():
             if hashlib.sha256((root / path).read_bytes()).hexdigest() != expected:
                 raise ValueError("installed cadence patch differs from reviewed bytes")
         return "installed"

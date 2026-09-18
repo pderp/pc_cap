@@ -6,7 +6,7 @@ from scripts import r1_58h_cost_contract as contract
 from tests.revision_v1.test_r1_58h_cost_receipt import complete
 
 
-@pytest.mark.parametrize("revision", [None, True, 2.0, "3", 0, 1, 4, 99])
+@pytest.mark.parametrize("revision", [None, True, 2.0, "3", 0, 1, 5, 99])
 def test_new_or_malformed_revision_cannot_bypass_supplement(tmp_path, revision):
     _, receipt = complete(tmp_path)
     receipt["receipt_revision"] = revision

@@ -82,7 +82,7 @@ def journal_append(path, rows, value):
 
 def fields_for(step, spec):
     if step == "protocol-admit":
-        return dict(
+        fields = dict(
             extension_admitted=None,
             near_family_reviewed=False,
             zsre_empty_baseline_reviewed=False,
@@ -91,6 +91,9 @@ def fields_for(step, spec):
             near_allocation_decision=spec.get("near_allocation_decision"),
             family_pair_unit_policy_reviewed=spec.get("family_pair_unit_policy_reviewed", False),
         )
+        if "full_validation" in spec:
+            fields.update(full_validation_reviewed=False, cap_fidelity_policy_reviewed=False)
+        return fields
     if step == "cost-admit":
         source = cost_source(spec)
         if source.get("cost_schema_version") == 2:
@@ -193,6 +196,11 @@ def protocol_allocation_decision(fields):
 
 def check_fields(step, fields, spec):
     if step == "protocol-admit":
+        if "full_validation" in spec and any(
+            fields.get(k) is not True
+            for k in ("full_validation_reviewed", "cap_fidelity_policy_reviewed")
+        ):
+            raise ValueError("explicit DEC-063 full-validation and DEC-064 policy reviews required")
         if type(fields.get("extension_admitted")) is not bool or any(
             fields.get(k) is not True
             for k in (
@@ -230,9 +238,12 @@ def check_fields(step, fields, spec):
         ):
             raise ValueError("positive explicitly signed shared process-hour budget required")
         cells = fields.get("cells", [])
-        expected = d9.read_metadata(d9.ref(ROOT / "manifests/revision_v1/cell_ceilings_v1.json"))[
-            "cells"
-        ]
+        ceiling_binding = (
+            source["bindings"]["cell_ceilings"]
+            if source.get("cost_schema_version") == 2
+            else d9.ref(ROOT / "manifests/revision_v1/cell_ceilings_v1.json")
+        )
+        expected = d9.read_metadata(ceiling_binding)["cells"]
         keys = [c["condition"] + ":" + c["dataset"] for c in cells]
         if len(keys) != len(set(keys)) or set(keys) != set(expected):
             raise ValueError("all27 unique condition/dataset cost ceilings required")
@@ -439,7 +450,10 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
                 dry["authorization_to_supply"] = step + "_authorization"
             elif step == "endpoints":
                 construction = d9.read_metadata(
-                    d9.ref(ROOT / "docs/tasks/R1-D10c-construction-inputs-template-v4.json")
+                    spec.get(
+                        "construction_inputs",
+                        d9.ref(ROOT / "docs/tasks/R1-D10c-construction-inputs-template-v4.json"),
+                    )
                 )
                 protocol = d9.read_metadata(spec["receipts"]["protocol_admission"])
                 construction.update(
@@ -488,6 +502,9 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
             elif step == "launch":
                 matrix = d9.read_metadata(fields["matrix"])
                 bindings = d9.read_metadata(fields["bindings"])
+                if bindings.get("matrix_sha256") != fields["matrix"]["sha256"]:
+                    raise ValueError("queue bindings reference a different matrix")
+                queue.validate_watch(matrix)
                 queue.verify_sealed_matrix(matrix, bindings)
                 if fields["workers"] != 2:
                     raise ValueError("this operator contract admits two workers")
@@ -673,11 +690,11 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("step", choices=STEPS)
-    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v8.json")
+    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v9.json")
     p.add_argument(
-        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v13.json"
+        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v14.json"
     )
-    p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v5")
+    p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v8")
     p.add_argument("--form", type=Path)
     p.add_argument("--write-form", type=Path)
     p.add_argument("--execute", action="store_true")

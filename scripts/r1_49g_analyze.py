@@ -123,6 +123,10 @@ def analyze(matrix):
     if matrix.get("cap_fidelity_policy") is not None:
         report["analysis_revision"] = "R1-49m_DEC064_D3_cap_benchmark_no_veto"
         report["cap_fidelity_policy"] = matrix["cap_fidelity_policy"]
+    if matrix.get("policy_revision") == "DEC066_D4":
+        report["analysis_revision"] = "R1-49n_DEC066_D4_prospective_scope"
+        report["prospective_scope"] = matrix["prospective_scope"]
+        report["prospectively_omitted_cells"] = matrix["prospectively_omitted_cells"]
     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
     report["limits"] += [
         FAMILY["coverage"],
@@ -148,6 +152,11 @@ def markdown(report):
         "| Dataset | Contrast | Classification | RET-GS realization estimates | Adjusted RET-GS interval |",
         "|---|---|---|---|---|",
     ]
+    if report.get("prospective_scope"):
+        lines[2:2] = [
+            "DEC-066: 285 core cells plus 45 optional. The five omitted MQuAKE arms are prospectively not run; calibration implications are not measured per-cell outcomes.",
+            "",
+        ]
     for r in report["contrasts"]:
         gs = r["metrics"]["RET-GS"]
         lines.append(

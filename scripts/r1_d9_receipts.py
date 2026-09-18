@@ -81,6 +81,7 @@ def implementation_bindings():
         "scripts/r1_d9f_allocation.py",
         "scripts/r1_58h_cost_contract.py",
         "scripts/r1_58j_cost_receipt.py",
+        "scripts/r1_58l_cost_v4.py",
         "scripts/r1_58j_validation_inventory.py",
         "scripts/r1_58i_host_peaks.py",
         "scripts/r1_58_draw_streams.py",
@@ -89,6 +90,7 @@ def implementation_bindings():
         "scripts/r1_75_analysis_stage4_v1.py",
         "scripts/r1_77b_sealed_backend.py",
         "scripts/r1_63l_full_validation_contract.py",
+        "scripts/r1_49n_scope.py",
     ]
     names += [str(p.relative_to(ROOT)) for p in sorted((ROOT / "src/pccap").rglob("*.py"))]
     return {n: sha(ROOT / n) for n in names}
@@ -417,6 +419,8 @@ def new_json(path, value):
 
 
 def check_matrix_layout(matrix):
+    from scripts.r1_49n_scope import conditions
+
     from pccap.revision_v1.stage4_adapters import CORE_CONDITIONS
 
     layout = layouts.from_matrix(matrix)
@@ -433,10 +437,11 @@ def check_matrix_layout(matrix):
         and axes["conditions"] == list(CORE_CONDITIONS),
         "registered v5.1 matrix axes required",
     )
+    condition_map = conditions(matrix)
     expected = {
         (condition, ds, r, o)
-        for condition in CORE_CONDITIONS
         for ds in core.DATASETS
+        for condition in condition_map[ds]
         for r in layout[ds]["realizations"]
         for o in range(100, 105)
     }
@@ -445,7 +450,7 @@ def check_matrix_layout(matrix):
         len(observed) == len(expected)
         and set(observed) == expected
         and all(c["checkpoints"] == layout[c["dataset"]]["checkpoints"] for c in matrix["cells"]),
-        "complete 360-cell population/cadence required",
+        "complete declared core population/cadence required",
     )
     extension = matrix["extension"]["cells"]
     expected_extension = {

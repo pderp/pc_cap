@@ -20,7 +20,7 @@ from scripts import r1_68c_dev_cell as driver
 from scripts import r1_77_queue as queue
 from scripts import r1_77b_sealed_backend as backend
 from scripts import r1_d9_receipts as d9
-from scripts.r1_49m_normative_closure import closure
+from scripts.r1_49n_normative_closure import closure
 from scripts.r1_77f_scheduler import CEILING_DEFINITION
 from scripts.r1_d10a_review import ROOT, write_new
 
@@ -83,7 +83,7 @@ def inspect(spec):
     )
 
 
-def template_catalog(output=None):
+def template_catalog(output=None, *, active_root="R1-post63l-active", full_root="R1-64g-post63l"):
     """Refresh runtime metadata only; preserve source construction/adapter identity.
 
     A development code digest and a sealed code digest hash different inventories.
@@ -93,7 +93,7 @@ def template_catalog(output=None):
 
     output = Path(output) if output else ROOT / "docs/tasks/R1-63j-runtime" / uuid4().hex
     sources = {}
-    for directory in ("R1-post68f-active/R1-64e", "R1-post68f-active/R1-73d-post68f", "R1-64g"):
+    for directory in (f"{active_root}/R1-64e", f"{active_root}/R1-73d-post68f", full_root):
         for p in sorted((ROOT / "docs/tasks" / directory).glob("*.recipe.json")):
             m = d9.read_metadata(d9.ref(p))
             if m["code_sha256"] != driver.code_identity():
@@ -177,13 +177,21 @@ def virtual_validate(bundle, documents, *, code_root=ROOT):
         patch.object(queue, "read", read),
         patch.object(queue, "sha", file_sha),
     ):
-        queue.verify_sealed_matrix(value(bundle["matrix"]), value(bundle["bindings"]))
+        matrix, bindings = value(bundle["matrix"]), value(bundle["bindings"])
+        if bindings.get("matrix_sha256") != bundle["matrix"]["sha256"]:
+            raise ValueError("queue bindings reference a different matrix")
+        queue.validate_watch(matrix)
+        queue.verify_sealed_matrix(matrix, bindings)
+        queue_preview = queue.inventory(matrix, workers=2, ceiling_hours=750)
     return dict(
         queue_backend_validation="passed",
         cells=len(value(bundle["bindings"])["recipes"]),
         payloads_opened=0,
         model_constructed=False,
         published=False,
+        workers=2,
+        fidelity_watch_verified=True,
+        queue_inventory=queue_preview,
     )
 
 
@@ -233,7 +241,11 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
     metadata_bindings.update(norm["bindings_sha256"])
     watch_contract = watch.binding()
     for b in [*declaration["analysis_implementation"].values(), *watch_contract["implementations"]]:
-        d9.read_metadata(b, parse=False)
+        path = Path(b["path"]).resolve()
+        if not any(path.is_relative_to(code_root / directory) for directory in ("scripts", "src")):
+            raise PermissionError("analysis/watch binding must identify repository code")
+        if d9.sha(path) != b["sha256"]:
+            raise ValueError("analysis/watch implementation identity changed: " + str(path))
         metadata_bindings[b["path"]] = b["sha256"]
     for name in ("r1_77_queue", "r1_77f_scheduler"):
         b = d9.ref(ROOT / f"scripts/{name}.py")
@@ -464,7 +476,7 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v7.json")
+    ap.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v9.json")
     ap.add_argument("--staging", type=Path)
     ap.add_argument("--templates", type=Path)
     ap.add_argument("--report", type=Path, required=True)

@@ -1,0 +1,488 @@
+{
+  "adapter_identity": {
+    "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "class": "pccap.cap.cap.Cap",
+    "condition": "v0_live_C1",
+    "config_sha256": "4ff39a3c3e3555b14828c0158cd13f9bd9ff3563e9e08d46099d1081c378c931",
+    "locality_base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "params_sha256": null,
+    "rule": null
+  },
+  "admission": {
+    "condition_admitted": false,
+    "launch_authorized": false,
+    "lead_approved": false,
+    "protocol_frozen": false
+  },
+  "banner": "development, not confirmatory",
+  "cell": {
+    "condition": "v0_live_C1",
+    "dataset": "mquake",
+    "order": "source",
+    "realization": "development_calibration_v3"
+  },
+  "checkpoints": [
+    100,
+    300
+  ],
+  "code_sha256": "7838c25d3d3eb5b43404a649ff827a4f10a75291a78681b932da394a108229d0",
+  "comparator_recipe": {
+    "S1_note": "historical two-pool continuation; final training-budget reconciliation remains open",
+    "bindings": {
+      "factory": {
+        "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_adapters.py",
+        "sha256": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37"
+      },
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_64b_comparator_recipes.py",
+        "sha256": "447cf5583a727c3581705c8fe4ce9d496418e3285ec210e6421d77accfa9012a"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-68c-zsre-v5-full.recipe.json",
+        "sha256": "f39fe5a39b843d0be3b3993a767453ffc5d19d135799bc10420cc727bfe31851"
+      }
+    },
+    "calibration_note": "historical BP dataset radii/scales; MQuAKE and any final per-continued-base recalibration remain separate admission work",
+    "entry_point": "python -m scripts.r1_64b_comparator_recipes run",
+    "launch_authorized": false,
+    "method": "registered dataclass + NumPy tensor hashing; no model execution",
+    "source_reader_provenance": "inherited reader_provenance describes source payload recipe only; comparator identity and these bindings define this condition",
+    "task": "R1-64b"
+  },
+  "construction": {
+    "base": {
+      "files": {
+        "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+        "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+    },
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "calibration": {
+      "bank_scales": {
+        "1": 70.70187377929688,
+        "2": 106.5766658782959,
+        "3": 425.5740661621094
+      },
+      "radii": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0
+      }
+    },
+    "seed": 0
+  },
+  "drift_batch_size": 16,
+  "drift_implementation": "v0_batched_v1",
+  "integrity_batch_edits": 16,
+  "integrity_driver_bindings": {
+    "scripts/r1_68b_dev_cell.py": "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5",
+    "scripts/r1_68b_integrity_runtime.py": "ae66b70ddbef67d45dd590a8d73d763f976ef51f5c8cfd468849e30b6468d1d1",
+    "scripts/r1_68c_batched_drift.py": "bf2e879083bc3b67796824c5c66b695248c923a802b51d8c379d2dea5147bc24",
+    "scripts/r1_68c_dev_cell.py": "895094861ac5d40a440b56c65589a1b37380c8bee4d21b180b0d806994cdcc24",
+    "scripts/r1_68e_batched_drift_v0.py": "092364cab36cba3eea3f9c6aed4245a612228dd26cbb189cf2c58dd61c9c22c7",
+    "scripts/r1_68f_full_validation.py": "7e7301b9089326365e76d10d29d112d27029848627b66d1308120dfbd7368473"
+  },
+  "integrity_profile": "full",
+  "integrity_rebind": {
+    "model_executed": false,
+    "purpose": "development-only timing/behavioral comparison; same population and reader",
+    "source_code_sha256": "23efcc8dd7218acf1fedc044ce5692cb8847fbe71fbc2148bca614b00c16ce3c",
+    "source_recipe": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64e/R1-64e-zsre-v0_live_C1.recipe.json",
+      "sha256": "8e242e576784f88f599255340552ed833a0f5394d7bff71cfaf58bcd240c443b"
+    }
+  },
+  "max_new": 32,
+  "mode": "stage4_development_cell",
+  "payload": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_73d_locality_v3/payload.json",
+    "sha256": "69f4b7e66b60e1e4cab5640bf0966f0a7fe46d1d2a2ffb9b445ccff46b8b807f"
+  },
+  "r1_64c": {
+    "bindings": {
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_64c_comparator_recipes.py",
+        "sha256": "22dbd3c99f41f68d171de3157f8732a8decd90f6d2ee3c8da48f3f243bed6d62"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64b-zsre-v0_live_C1.recipe.json",
+        "sha256": "428451b0fe00c8756f68a40c9da9c7fda5ce05d30af837075051aea89115333c"
+      }
+    },
+    "checkpoint_policy": "same bound weights and payload as R1-64b; states at 100/300 measured by execution, never predicted",
+    "entry_point": "python -m scripts.r1_64c_comparator_recipes run",
+    "launch_authorized": false,
+    "profile_reason": "Cap/StableCap/MatchedUpdateCap are outside IndexedAdapter's exact RevisionCap type contract; full integrity required.",
+    "task": "R1-64c"
+  },
+  "r1_64d": {
+    "note": "R1-64c recipe + v0 batched drift (R1-68e) on the R1-68e driver identity; built by the orchestrator with Codex's builder",
+    "task": "R1-64d"
+  },
+  "r1_73b": {
+    "applies_to_this_condition": true,
+    "bindings": {
+      "U08_addendum": {
+        "path": "/home/derp/cap/pc_cap/docs/R1_stage4_U08_mquake_calibration_v3.md",
+        "sha256": "f7fa3b8b2707f12043f5fc0cab409f56aa41e9497782167aa4a36d2b122ecb5c"
+      },
+      "calibration": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/calibration_v3.json",
+        "sha256": "d5bdaf408456866658f7d241be14a27e9c3bed9ee31bec98fa98a5b3e6701dfa"
+      },
+      "calibration_auditor": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_73b_calibration_v3.py",
+        "sha256": "6bfa7931bb18194d89765d387df5070ccc9f2b2e58e16c78d9ab0b1030b915c6"
+      },
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_73b_comparator_recipes.py",
+        "sha256": "138e910d3881ea6d215d1f496ae3229360823f66abae6e3e0ae0b27df626b533"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-post63l-active/R1-64e/R1-64e-zsre-v0_live_C1.recipe.json",
+        "sha256": "de41921495300da373354e15a2315a31b31f05b0b85855e4acf57694d5d6515b"
+      }
+    },
+    "continued_base_transfer": "Use original-BP zero radii and historical b_m for S1 development profiling; no continued-base calibration measurement is asserted. Final U03 admission remains required.",
+    "entry_point": "python -m scripts.r1_73b_comparator_recipes run",
+    "exact_key_note": "MQuAKE v0-style conditions use the declared radius-zero exact-key (exact-prompt) fallback on all three banks; no paraphrase radius was admitted. Exact-prompt presentation is not a guarantee of acquisition or retention; RET-GS still scores every planned paraphrase.",
+    "historical_template_note": "R1-64b/c/d metadata is source-template provenance; R1-73b defines the current dataset, payload and calibration.",
+    "launch_authorized": false,
+    "population": {
+      "challenge_shortfalls": {
+        "near_miss": 100,
+        "revision": 50
+      },
+      "dev_items": 100,
+      "locality_note": "First 50 distinct v3b unrelated source prompts excluding every prompt/paraphrase in the full 300-edit stream; exposed development/training data, not fresh confirmation.",
+      "population_purpose": "300-attempt comparator cost/behavior development profile; NOT the DEC-056 historical outside-occupancy diagnostic",
+      "source_order": "manifest order; no outcome-based selection",
+      "training_pool_fillers": 200,
+      "training_pool_note": "100 v3b development edits plus 200 selected-reader training-pool fillers; outside 100 also comes from this training pool. No reader-training independence or fresh-confirmation claim."
+    },
+    "reader_note": "RevisionCap conditions retain their own gates; radius 0 applies only to the six v0-style families.",
+    "state_hash": "measured by owner execution; not predicted",
+    "task": "R1-73b"
+  },
+  "r1_73d": {
+    "bindings": {
+      "locality_guard": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_locality_contract.py",
+        "sha256": "ef5670930ae22f2416965b25ec1cea8b93973a3ab340028c140b5aef72c1b43d"
+      },
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_73d_locality_recipes.py",
+        "sha256": "e6f78047aaba88d0d907fcdf6cd3f16c98756e06a677f6e3927d4b9437b7e71c"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-post63l-active/R1-73b-post68f/R1-73b-mquake-v0_live_C1.recipe.json",
+        "sha256": "4c0ca9eb988eb2198f7d203d8839d831b33b91bc3dc2494d4a13d8977d4809d9"
+      },
+      "unrelated_source": {
+        "path": "/home/derp/cap/pc_cap/manifests/dev/mquake_dev_v3b.json",
+        "sha256": "9c4c75d62e6caae2bc5e948102a43e4ad7b413102efc57590be266a569b1b24d"
+      }
+    },
+    "historical_results": "Chain M locality0/50 is invalid as locality; retain historical cost/other results with their original identities.",
+    "launch_authorized": false,
+    "selection_audit": {
+      "eligible_unique": 300,
+      "excluded_overlap_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "rule": "exact source text; all attempted edit prompts and paraphrases, including future edits",
+      "selected_source_indices": [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249
+      ]
+    },
+    "task": "R1-73d"
+  },
+  "reader_provenance": {
+    "calibration": {
+      "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+      "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+    },
+    "identity_method": "NumPy base/checkpoint hashes and registered dataclass configuration; no base execution",
+    "primary": {
+      "path": "manifests/revision_v1/primary_condition_v5.json",
+      "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+    }
+  },
+  "schema_version": 1,
+  "source_bindings_sha256": {
+    "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/composition.jsonl": "5bad38276be292cbd9aa27eca93419f56a371b3bfd60cc63c1da6d80d7c04865",
+    "/home/derp/cap/pc_cap/manifests/dev/challenges.json": "3cbff9e672c70716bd0edb5f92db49f09cba45cf5575b9e0f02bb16c4896885b",
+    "/home/derp/cap/pc_cap/manifests/dev/mquake_dev_v3b.json": "9c4c75d62e6caae2bc5e948102a43e4ad7b413102efc57590be266a569b1b24d",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/mquake_items_v1.json": "2cfaea61c1631b06a5036c298d4ecf5bb6c8b581d8560e32bcf55076430c9a25",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+  },
+  "tokenizer_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+}

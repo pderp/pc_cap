@@ -13,6 +13,16 @@ NAME = "scripts/r1_77b_sealed_backend.py"
 
 def proposed():
     old = (ROOT / NAME).read_text()
+    record_path = ROOT / "logs/r1_round31/r1-63l-backend-patch.json"
+    if record_path.exists():
+        record = json.loads(record_path.read_text())
+        if record["target"] != NAME:
+            raise ValueError("reviewed sealed admission patch targets a different backend")
+        installed = hashlib.sha256(old.encode()).hexdigest()
+        if installed == record["proposed_sha256"]:
+            return old, old
+        if installed != record["original_sha256"]:
+            raise ValueError("sealed admission backend differs from both reviewed identities")
     source = old
     replacements = [
         (
@@ -44,6 +54,20 @@ def proposed():
 
 def main():
     old, new = proposed()
+    if old == new:
+        print(
+            json.dumps(
+                dict(
+                    task="R1-63l",
+                    status="already_installed",
+                    target=NAME,
+                    sha256=hashlib.sha256(old.encode()).hexdigest(),
+                    installed_backend_modified=False,
+                ),
+                indent=2,
+            )
+        )
+        return
     patch = "".join(
         difflib.unified_diff(
             old.splitlines(True), new.splitlines(True), fromfile="a/" + NAME, tofile="b/" + NAME

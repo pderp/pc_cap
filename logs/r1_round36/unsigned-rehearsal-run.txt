@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_63m_unsigned_rehearsal.py", line 82, in <module>
+    print(json.dumps(run(), indent=2))
+                     ^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_63m_unsigned_rehearsal.py", line 42, in run
+    stages = {stage: d9.prepare(spec, stage)[0] for stage in ("clearance", "draw", "seal")}
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d9_receipts.py", line 523, in prepare
+    evidence = read_resource(spec["d9"][stage]["evidence"])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_63m_unsigned_rehearsal.py", line 39, in forbidden
+    raise AssertionError("unsigned preparation opened a resource")
+AssertionError: unsigned preparation opened a resource

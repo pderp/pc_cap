@@ -8,12 +8,11 @@ from uuid import uuid4
 import pytest
 from scripts import r1_63j_production_bundle as bundle
 from scripts import r1_d9_receipts as d9
-from scripts.r1_49k_normative_closure import closure
+from scripts.r1_49n_normative_closure import closure
 from scripts.r1_d10a_review import ROOT, write_new
 
 from tests.revision_v1 import test_r1_58e_rehearsal as rehearsal
 from tests.revision_v1.r1_63l_patch_support import install
-from tests.revision_v1.test_r1_58h_cost_receipt import complete
 
 
 @pytest.fixture(scope="module")
@@ -25,6 +24,7 @@ def assembly_inputs(request):
         SimpleNamespace(
             param=dict(
                 full_validation=True,
+                current_policy=True,
                 allocation="family_coordinated",
                 extension=getattr(request, "param", False),
             )
@@ -47,7 +47,7 @@ def assembly_inputs(request):
     spec.update(schema_version=3, receipts=copy.deepcopy(info["receipts"]))
     common = {k: v for k, v in spec.items() if k not in ("schema_version", "receipts")}
     common.update(contract_version=2, status="closed", lead_approved=True, synthetic=True)
-    _, cost = complete(root)
+    cost = d9.read_metadata(d9.ref(ROOT / "docs/tasks/R1-cost-admission-receipt-v4.json"))
     cost.update(common)
     spec["receipts"]["chain_i_cell_ceilings"] = write_new(root / "cost.json", cost)
     spec["receipts"]["september20_admission"] = write_new(
@@ -63,7 +63,7 @@ def assembly_inputs(request):
     spec["receipts"]["closed_gate_receipts"] = write_new(
         root / "gates.json", dict(common, gates=gates)
     )
-    templates = bundle.template_catalog()
+    templates = bundle.template_catalog(root / "runtime")
     write_new(root / "inputs.json", spec)
     write_new(root / "templates.json", templates)
     return root, spec, templates
@@ -83,14 +83,16 @@ def test_whole_synthetic_package_passes_actual_queue_and_backend(assembly_inputs
     root, spec, templates = assembly_inputs
     before = (ROOT / bundle.backend.FROZEN_RELATIVE).exists()
     result = bundle.assemble(spec, templates, root / "staged", normative=closure())
-    assert result["verification"]["cells"] == 360
+    assert result["verification"]["cells"] == 285
+    assert result["verification"]["workers"] == 2
+    assert result["verification"]["fidelity_watch_verified"]
     assert not result["published"] and not result["verification"]["model_constructed"]
     assert (ROOT / bundle.backend.FROZEN_RELATIVE).exists() == before
     doc = d9.read_metadata(result["bundle"])
     from scripts.r1_58g_operator import publication_preview
 
     publication_preview(result["bundle"], spec)
-    assert len(doc["artifacts"]) == 364
+    assert len(doc["artifacts"]) == 289
     assert all(not Path(a["destination"]).exists() for a in doc["artifacts"])
     for b in d9.read_metadata(result["bundle"])["templates"].values():
         assert d9.read_metadata(b)["full_validation"]["expected_positions"] == 245237
@@ -105,16 +107,20 @@ def test_extension_also_carries_required_full_contract(assembly_inputs, monkeypa
     install(monkeypatch)
     root, spec, templates = assembly_inputs
     result = bundle.assemble(spec, templates, root / "extension-staged", normative=closure())
-    assert result["verification"]["cells"] == 405
+    assert result["verification"]["cells"] == 330
     doc = d9.read_metadata(result["bundle"])
-    assert len(doc["artifacts"]) == 409
+    assert len(doc["artifacts"]) == 334
     recipes = [
         d9.read_metadata(a["source"])
         for a in doc["artifacts"]
         if "/recipes/" in a["source"]["path"]
     ]
-    assert len(recipes) == 405
+    assert len(recipes) == 330
     assert all(r["full_validation"] == spec["full_validation"] for r in recipes)
+    write_new(
+        ROOT / f"logs/r1_round36/assembler-extension-{root.name}.json",
+        dict(result, synthetic=True, source=d9.ref(root / "inputs.json")),
+    )
 
 
 @pytest.mark.parametrize(

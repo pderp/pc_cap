@@ -68,10 +68,16 @@ def require_installed():
     if "scripts/r1_68f_full_validation.py" not in driver.DRIVER_FILES:
         raise RuntimeError("R1-68f driver patch has not been installed by the orchestrator")
     record = json.loads((ROOT / "logs/r1_round30/r1-68f-patch.json").read_text())
-    for name, expected in {
+    identities = {
         **record["proposed_files_sha256"],
         **record["new_implementation_files_sha256"],
-    }.items():
+    }
+    successor = json.loads((ROOT / "logs/r1_round31/r1-63l-backend-patch.json").read_text())
+    target = successor["target"]
+    if identities.get(target) != successor["original_sha256"]:
+        raise ValueError("R1-63l is not a reviewed successor of the R1-68f backend")
+    identities[target] = successor["proposed_sha256"]
+    for name, expected in identities.items():
         if driver.sha(ROOT / name) != expected:
             raise ValueError("installed driver/backend differs from reviewed R1-68f bytes")
 

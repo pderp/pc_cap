@@ -1,0 +1,587 @@
+{
+  "authority_note": "Reviewed cost estimates only; no admission, experimental outcome, or launch authority.",
+  "bindings": {
+    "cell_ceilings": {
+      "path": "/home/derp/cap/pc_cap/manifests/revision_v1/cell_ceilings_v2.json",
+      "sha256": "5ba39738fe8897e42161778ba85cce070dae0214c6508031c0910c320d2a679e"
+    },
+    "concurrency_policy": {
+      "path": "/home/derp/cap/pc_cap/docs/R1_stage4_queue_concurrency_v2.md",
+      "sha256": "e0e20142e54ecf0f0138bdbb3ccdf3ec6a1757170300763f6a61dfe145d5d1c4"
+    },
+    "donor_validator": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_58l_measurement_inventory.py",
+      "sha256": "219dc6b0937bcf6bda2b5ae449718e6beb61b2d61f17cdcf71bff94ba005a7a2"
+    },
+    "endpoint_executor": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_77b_sealed_backend.py",
+      "sha256": "e3b4514dd097d10d59c479add9522c548db41ae830aed2c6f49fd622e3b4fd19"
+    },
+    "execution_plan": {
+      "path": "/home/derp/cap/pc_cap/docs/R1_execution_plan_v3.md",
+      "sha256": "c7364611c31eab6ddd8c4221221b80d13e005197acad202abb994cc9903c5673"
+    },
+    "historical_ceilings": {
+      "path": "/home/derp/cap/pc_cap/manifests/revision_v1/cell_ceilings_v1.json",
+      "sha256": "d1f556322cab55e17aecd240bc2b7a013234a125ac3e5766a4af46c33dec973d"
+    },
+    "historical_execution_plan": {
+      "path": "/home/derp/cap/pc_cap/docs/R1_execution_plan_v2.md",
+      "sha256": "a26da560141de6f4352dad0e60ea34d615f3e569b004664b2b3da53ffc106753"
+    },
+    "host_peak_evidence": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-host-peaks-after-chain-R.json",
+      "sha256": "45671d682124e2c8541238e5074dbdb00625e2716c9fd9b6c1278bf643161a2c"
+    },
+    "host_producer": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_58i_host_peaks.py",
+      "sha256": "4bafb2bc95e1a88dae97940380e32d71d380a5483905db18e2fbc8ce916f2161"
+    },
+    "matrix": {
+      "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_4.json",
+      "sha256": "04d15464ee640189f1d7532683693c93cd7ce24df37c4b36b85233a0bd39aeec"
+    },
+    "measurement_parser": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_58h_cost_receipt.py",
+      "sha256": "96534db7adb7077d512c4e88e3663b24ba0a887e088bfc3d8e323d19437ad864"
+    },
+    "prior_cost_source": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-cost-after-chain-R.json",
+      "sha256": "1078c3972791a5da756f4b8776b3dca2e314fb6dd9d88480e36c697dbc59b315"
+    },
+    "producer": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_58l_cost_v4.py",
+      "sha256": "ce57fbe8b55dc3f2cf1cdd75e430b3c0464522ba3f1d7d400353d632f48da7aa"
+    },
+    "transfer_basis": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round35/transfer-basis-v2.json",
+      "sha256": "adc7889cf53470d21beffc820b66e1da81bc0efa7b1a8ee0cf5a81b31c3a3cca"
+    },
+    "transfer_reviews": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-58l-reviewed-transfers-v4.json",
+      "sha256": "80e45f6eccc86da8e3c616d10be069f87a1ed6f5df66baf12570aebc296114d9"
+    },
+    "validator": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_58h_cost_contract.py",
+      "sha256": "11d6963ae7b4c2f71e52e2a57308bac58452e79b3909a2bb103021e257feae5f"
+    }
+  },
+  "cells": [
+    {
+      "condition": "R1_learned_ff",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_learned_ff-counterfact.json",
+        "sha256": "a4a05bf8dec1c99914cece02e634ce9ddf36a01880c8e2ca077dd7388b07c697"
+      },
+      "peak_device_mib": 1152.9063720703125,
+      "peak_host_mib": 3734.63671875,
+      "wall_seconds": 11640.32619129944
+    },
+    {
+      "condition": "R1_learned_ff",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_learned_ff-mquake.json",
+        "sha256": "6fadf1636f9e34d25f83a4ad3760b338551e9d51c5fb596a25338f2c0c5a791c"
+      },
+      "peak_device_mib": 1139.751708984375,
+      "peak_host_mib": 4013.021484375,
+      "wall_seconds": 2718.5668722614937
+    },
+    {
+      "condition": "R1_learned_ff",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_learned_ff-zsre.json",
+        "sha256": "a45fd505e09310f00ed595e4b0b438a9b215a2d52017309ec97cf5bf903b1c71"
+      },
+      "peak_device_mib": 1144.285400390625,
+      "peak_host_mib": 3995.443359375,
+      "wall_seconds": 4287.655787568045
+    },
+    {
+      "condition": "R1_learned_ff_v2",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_learned_ff_v2-counterfact.json",
+        "sha256": "719d5f8a22ac78689310c5d5933ed845a6be0ac8c97a9e047f9b83eec55b1376"
+      },
+      "peak_device_mib": 1120.263427734375,
+      "peak_host_mib": 3736.412109375,
+      "wall_seconds": 4044.0135955940505
+    },
+    {
+      "condition": "R1_learned_ff_v2",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_learned_ff_v2-mquake.json",
+        "sha256": "1e6941f642dd1b441132c5d269bfc820a9fa3d8401076d1b8aaf54c6e29300e8"
+      },
+      "peak_device_mib": 1106.50341796875,
+      "peak_host_mib": 3733.0078125,
+      "wall_seconds": 3640.120816248649
+    },
+    {
+      "condition": "R1_learned_ff_v2",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_learned_ff_v2-zsre.json",
+        "sha256": "50cf522b2e9ec40223630e9887a0a479b97fc3ddf773992e0d3b95a54a011b30"
+      },
+      "peak_device_mib": 1088.47705078125,
+      "peak_host_mib": 3662.94140625,
+      "wall_seconds": 5474.628486035202
+    },
+    {
+      "condition": "R1_nonlearned",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_nonlearned-counterfact.json",
+        "sha256": "ee2108e2f8fd8ebe4ed3fa2707dde4f88578433f41414bed1c8e2caddabe92f2"
+      },
+      "peak_device_mib": 1110.286376953125,
+      "peak_host_mib": 3722.14453125,
+      "wall_seconds": 3031.7367502098555
+    },
+    {
+      "condition": "R1_nonlearned",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_nonlearned-mquake.json",
+        "sha256": "86f63a0be02cbfe89d266f4429f45add9613046edb1ff7b0fc3a590d5a494d0b"
+      },
+      "peak_device_mib": 1146.4053955078125,
+      "peak_host_mib": 3736.46484375,
+      "wall_seconds": 2406.5764550131244
+    },
+    {
+      "condition": "R1_nonlearned",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/R1_nonlearned-zsre.json",
+        "sha256": "e7a7d27cb552d23d12a36dd64fb71e27729ecdb412d0b111ee33a1f3ebcbaf7b"
+      },
+      "peak_device_mib": 1116.9385986328125,
+      "peak_host_mib": 3671.373046875,
+      "wall_seconds": 3936.544570351508
+    },
+    {
+      "condition": "S1_LM",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/S1_LM-counterfact.json",
+        "sha256": "ab52c690b0c9b4d91ea3fa98e33866da11e35db0e34ddf8e3843ed27965fe191"
+      },
+      "peak_device_mib": 1817.9366455078125,
+      "peak_host_mib": 4716.3515625,
+      "wall_seconds": 10202.229231149391
+    },
+    {
+      "condition": "S1_LM",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/S1_LM-mquake.json",
+        "sha256": "9bcb11f9dc46ed722eebbc140d6d62ed3de16685a39640f0ae3e0d1492cd2587"
+      },
+      "peak_device_mib": 1804.6146240234375,
+      "peak_host_mib": 4715.513671875,
+      "wall_seconds": 5400.305688471068
+    },
+    {
+      "condition": "S1_LM",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/S1_LM-zsre.json",
+        "sha256": "bccdde058728eb23b3897a7a826b765686e86f5030337664c2dce4b5b6068307"
+      },
+      "peak_device_mib": 1809.1365966796875,
+      "peak_host_mib": 4628.865234375,
+      "wall_seconds": 6410.007241604217
+    },
+    {
+      "condition": "S1_literal",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/S1_literal-counterfact.json",
+        "sha256": "575e1ef1b53f3c062402f167ad1ff53c295292ecd5bab857840fd91183ae4351"
+      },
+      "peak_device_mib": 1801.26416015625,
+      "peak_host_mib": 4709.666015625,
+      "wall_seconds": 10200.937878965338
+    },
+    {
+      "condition": "S1_literal",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/S1_literal-mquake.json",
+        "sha256": "950565ace9909c5ddb492713018ad3e8bf11bc8823535e9f2c3d74feca371dec"
+      },
+      "peak_device_mib": 1800.1146240234375,
+      "peak_host_mib": 4715.33203125,
+      "wall_seconds": 5401.491440892001
+    },
+    {
+      "condition": "S1_literal",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/S1_literal-zsre.json",
+        "sha256": "0d494675428180c5f08e06df36372815014873b7868538b454239454b77c1b4d"
+      },
+      "peak_device_mib": 1904.195068359375,
+      "peak_host_mib": 4634.724609375,
+      "wall_seconds": 6409.6670001742095
+    },
+    {
+      "condition": "matched_update",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/matched_update-counterfact.json",
+        "sha256": "d0f801731c41834835a02cb72a07d7dd8fe44826f50668aee4f7246b2f4d4e66"
+      },
+      "peak_device_mib": 1053.979248046875,
+      "peak_host_mib": 3912.99609375,
+      "wall_seconds": 8885.491368166295
+    },
+    {
+      "condition": "matched_update",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/matched_update-mquake.json",
+        "sha256": "82c0d995bdfc6042c3bdd85ac7ccb52d1e8e9b8eb68f741a714599aa8229a78c"
+      },
+      "peak_device_mib": 1053.8583984375,
+      "peak_host_mib": 3944.6953125,
+      "wall_seconds": 4317.731960657215
+    },
+    {
+      "condition": "matched_update",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/matched_update-zsre.json",
+        "sha256": "9696b0328d447df69839d50e1a0c52ccc78c26810e32e22cd4349541155704c1"
+      },
+      "peak_device_mib": 1119.931640625,
+      "peak_host_mib": 3873.703125,
+      "wall_seconds": 5270.580675510483
+    },
+    {
+      "condition": "v0_live_C1",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_live_C1-counterfact.json",
+        "sha256": "a505e12cbc104a7b54e00d9fe1188a74f546e004b1cb3c43cfa7d32ffe36ef32"
+      },
+      "peak_device_mib": 1146.68115234375,
+      "peak_host_mib": 3949.166015625,
+      "wall_seconds": 8859.142229628254
+    },
+    {
+      "condition": "v0_live_C1",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_live_C1-mquake.json",
+        "sha256": "d5c3349afb33dd39d3cfe472b4d004907217320a3c9f31935bf6c92c5f144eb0"
+      },
+      "peak_device_mib": 1056.0421142578125,
+      "peak_host_mib": 3956.53125,
+      "wall_seconds": 4463.448651021218
+    },
+    {
+      "condition": "v0_live_C1",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_live_C1-zsre.json",
+        "sha256": "cf42a4ee852e35babbc6eac598267fb35d04e26244684a6392fb7e72bd4192b9"
+      },
+      "peak_device_mib": 1054.130859375,
+      "peak_host_mib": 3859.65234375,
+      "wall_seconds": 5337.911660086276
+    },
+    {
+      "condition": "v0_live_C2",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_live_C2-counterfact.json",
+        "sha256": "ecc6438cb09c5ed500a040d1e0b2c4051f523af17bccbdaa1a7c016214f10dfa"
+      },
+      "peak_device_mib": 1049.357666015625,
+      "peak_host_mib": 3930.85546875,
+      "wall_seconds": 8826.382380995787
+    },
+    {
+      "condition": "v0_live_C2",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_live_C2-mquake.json",
+        "sha256": "4b42634e6a7899390ec9a6cbe779408aac1bdd6aeb475bb8790f19ba7bb5676f"
+      },
+      "peak_device_mib": 1052.86083984375,
+      "peak_host_mib": 3934.962890625,
+      "wall_seconds": 4400.642854703109
+    },
+    {
+      "condition": "v0_live_C2",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_live_C2-zsre.json",
+        "sha256": "740a6feb200cb31e0d27311ca9bd1581172f5817f935017bb71b576938732962"
+      },
+      "peak_device_mib": 1096.332275390625,
+      "peak_host_mib": 3778.857421875,
+      "wall_seconds": 5177.892384091583
+    },
+    {
+      "condition": "v0_stable",
+      "dataset": "counterfact",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_stable-counterfact.json",
+        "sha256": "e5001d0f1d7fc87565064379e2fbd5077feef7a3c26dbc1de3ccb61b9891e010"
+      },
+      "peak_device_mib": 1120.80615234375,
+      "peak_host_mib": 3944.173828125,
+      "wall_seconds": 8847.963705623568
+    },
+    {
+      "condition": "v0_stable",
+      "dataset": "mquake",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_stable-mquake.json",
+        "sha256": "5f2f7ab6eca464fa62c74fab78e66cf9634429a11ae2bfbe36da62f97c77e18b"
+      },
+      "peak_device_mib": 1133.31298828125,
+      "peak_host_mib": 4117.880859375,
+      "wall_seconds": 3953.1789482279273
+    },
+    {
+      "condition": "v0_stable",
+      "dataset": "zsre",
+      "measurement": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round36/cost-v4-final-evidence/v0_stable-zsre.json",
+        "sha256": "8e64b4984c7f68ce29dd44e7e0fe032801c5363e053fe781b595c761a758d8e0"
+      },
+      "peak_device_mib": 1052.8253173828125,
+      "peak_host_mib": 4135.681640625,
+      "wall_seconds": 4880.758815952489
+    }
+  ],
+  "contract_version": 2,
+  "cost_schema_version": 2,
+  "dataset_layouts": {
+    "counterfact": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "mquake": {
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_by_role": {
+        "edits": 900,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "zsre": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    }
+  },
+  "earlier_full_validation_sensitivity": {
+    "core": {
+      "cells": 360,
+      "solo_ceiling_process_hours": 578.163720420735,
+      "solo_hours": 385.44248028049,
+      "two_worker_ceiling_process_hours": 664.8882784838452,
+      "two_worker_process_hours": 443.2588523225634
+    },
+    "extension": {
+      "cells": 45,
+      "solo_ceiling_process_hours": 52.751002383273175,
+      "solo_hours": 35.167334922182114,
+      "two_worker_ceiling_process_hours": 60.66365274076415,
+      "two_worker_process_hours": 40.442435160509426
+    }
+  },
+  "expected_process_hours": 429.46850000408546,
+  "expected_process_hours_basis": "Recomputed exact DEC-065 formulas plus all checkpoints/endpoints and explicit startup; 1.15 concurrency once. Older 483.7013h scenario preserved separately.",
+  "failure_policy": "Charge actual process elapsed for every attempt, including startup, validation, failures, watchdog stops and retries. Retry once from the last certified checkpoint, then incomplete; never subtract failed work or count overlap as free time.",
+  "failures_included": true,
+  "full_endpoint_cost_basis_reviewed": true,
+  "full_validation": {
+    "checkpoint_policy": "final_only_plus_sample_at_every_checkpoint",
+    "complete_windows": 1931,
+    "context_policy": "reset_every_window",
+    "expected_positions": 245237,
+    "kl_direction": "reference || cap",
+    "policy": "DEC-063-complete-windows-final-both-references-v1",
+    "references": [
+      "own_capoff",
+      "original_base"
+    ],
+    "sample_windows": 128,
+    "schema_version": 1,
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "source_inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "source_tokens": 247289,
+    "tail_policy": "drop_incomplete_trailing_window",
+    "trailing_tokens_dropped": 121,
+    "window_tokens": 128,
+    "windows_int64le_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b"
+  },
+  "full_validation_evidence_status": "complete",
+  "host_mem_available_floor_mib": 6144,
+  "host_peak_evidence": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-host-peaks-after-chain-R.json",
+    "sha256": "45671d682124e2c8541238e5074dbdb00625e2716c9fd9b6c1278bf643161a2c"
+  },
+  "host_policy_note": "Maximum measured same-condition host/device observation across historical and chain-S evidence. Temporal monitor RSS is sampled and uniquely matched, not an exact argv attribution or guaranteed true peak. No 1000-state or distinct S1-full memory measurement is invented.",
+  "layout_sha256": "bf71ff1d4523e5036b63a4352be716c03da4e59b3bb8722875c5e7234d89b36d",
+  "lead_approved": false,
+  "lead_signature": {
+    "date": null,
+    "name": null
+  },
+  "matrix": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_4.json",
+    "sha256": "04d15464ee640189f1d7532683693c93cd7ce24df37c4b36b85233a0bd39aeec"
+  },
+  "memory_ceiling_factor": 1.5,
+  "near_miss_family_contract": {
+    "counterfact_mquake": "exact_nonempty_relation_id",
+    "decision": "DEC-061",
+    "family": "NM-template-v1",
+    "missing": "retain_planned_ids_and_unavailable_reason_no_replacement_no_redraw",
+    "pairing": "lexical_support_item_id_then_first_unused_lexical_neighbour_same_family",
+    "scoring": "DEC-053_bounded_text_equality_neighbour_vs_its_actual_cap_off_baseline",
+    "subjects": "different_globally_reserved_subjects",
+    "zsre": "exact_normalized_subject_masked_question_template_single_whole_word_occurrence"
+  },
+  "pending_evidence": [],
+  "prior_receipt": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-cost-after-chain-R.json",
+    "sha256": "1078c3972791a5da756f4b8776b3dca2e314fb6dd9d88480e36c697dbc59b315"
+  },
+  "projection": {
+    "combined": {
+      "ceiling_process_hours": 644.2027500061281,
+      "cells": 330,
+      "estimated_elapsed_hours_at_1p65_throughput": 226.33386034470908,
+      "headroom_to_750_at_ceiling_process_hours": 105.7972499938719,
+      "headroom_to_750_at_expected_process_hours": 320.53149999591454,
+      "historical_without_full_process_hours": 226.31999999999996,
+      "revised_without_full_process_hours": 260.89551233841644,
+      "solo_hours": 373.45086956877,
+      "two_worker_process_hours": 429.46850000408546
+    },
+    "core": {
+      "ceiling_process_hours": 581.1503444537965,
+      "cells": 285,
+      "estimated_elapsed_hours_at_1p65_throughput": 204.18106085333216,
+      "headroom_to_750_at_ceiling_process_hours": 168.8496555462035,
+      "headroom_to_750_at_expected_process_hours": 362.5664370308023,
+      "historical_without_full_process_hours": 212.3475,
+      "revised_without_full_process_hours": 241.55390654492217,
+      "solo_hours": 336.898750407998,
+      "two_worker_process_hours": 387.4335629691977
+    },
+    "extension": {
+      "ceiling_process_hours": 63.052405552331614,
+      "cells": 45,
+      "estimated_elapsed_hours_at_1p65_throughput": 22.152799491376943,
+      "headroom_to_750_at_ceiling_process_hours": 686.9475944476684,
+      "headroom_to_750_at_expected_process_hours": 707.9650629651122,
+      "historical_without_full_process_hours": 13.972499999999997,
+      "revised_without_full_process_hours": 19.341605793494285,
+      "solo_hours": 36.55211916077195,
+      "two_worker_process_hours": 42.03493703488774
+    }
+  },
+  "protocol": {
+    "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+    "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+  },
+  "receipt_revision": 4,
+  "register": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/exclusions_frozen_v6.json",
+    "sha256": "0ad06b24d727e00c22fd70d669d0e1b6625ecfa5a4578d070cc248ac3f90ad65"
+  },
+  "shared_process_hours": 750,
+  "shared_process_hours_basis": "2 workers * 375 h; proposal for explicit lead admission",
+  "startup_validation_evidence_status": "explicit_estimate",
+  "startup_validation_seconds_per_cell_estimate": 30,
+  "status": "unsigned_cost_basis_complete",
+  "task": "R1-58l",
+  "two_worker_wall_ceiling_multiplier": 1.15
+}

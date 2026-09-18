@@ -14,7 +14,10 @@ from scripts.r1_d10a_review_core import digest
 
 def verify(candidate):
     if candidate.get("schema_version", 0) >= 12:
-        from scripts.r1_49j_normative_closure import verify as verify_normative
+        if candidate.get("schema_version", 0) >= 14:
+            from scripts.r1_49n_normative_closure import verify as verify_normative
+        else:
+            from scripts.r1_49j_normative_closure import verify as verify_normative
 
         verify_normative(candidate)
     for name, expected in candidate["bindings_sha256"].items():

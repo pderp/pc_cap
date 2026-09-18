@@ -166,9 +166,18 @@ def validate_family(matrix):
         raise ValueError("exact DEC-057 family binding required")
     old.validate_matrix(matrix)
     coordinates = {old.coordinate(c) for c in matrix["cells"]}
-    expected = set(itertools.product(axes["conditions"], DATASETS, [0, 1, 2], axes["orders"]))
-    if coordinates != expected or len(matrix["cells"]) != 360:
-        raise ValueError("complete independently declared 360-cell primary inventory required")
+    from scripts.r1_49n_scope import conditions
+
+    condition_map = conditions(matrix)
+    expected = {
+        (condition, dataset, realization, order)
+        for dataset in DATASETS
+        for condition in condition_map[dataset]
+        for realization in (0, 1, 2)
+        for order in axes["orders"]
+    }
+    if coordinates != expected or len(matrix["cells"]) != len(expected):
+        raise ValueError("complete independently declared primary inventory required")
     return primary
 
 

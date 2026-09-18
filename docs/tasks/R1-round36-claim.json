@@ -1,0 +1,28 @@
+{
+  "task": "round36",
+  "agent": "Codex",
+  "status": "available_work_complete",
+  "started_utc": "2026-09-18T13:02:11+00:00",
+  "base_commit": "072c0f3",
+  "completed_utc": "2026-09-18T13:55:53+00:00",
+  "active_lanes": [],
+  "completed_lanes": ["R1-58l: unsigned cost preparation", "R1-63m: unsigned D.4 package and rehearsals", "X19: engineering and cost review"],
+  "conditional_lanes": ["HT-4f: after actual signed receipt v4"],
+  "coordination": "ongoing round36 explicitly states the orchestrator is editing no scripts and all are available for repairs. CPU only, no model/GPU execution, no production draw/seal/freeze, signatures or commits. Preserve two pre-existing untracked runtime-catalog directories.",
+  "validation": {
+    "cpu_tests_passed": 113,
+    "focused_tests": "logs/r1_round36/final-focused-tests.txt",
+    "analysis_tests": "logs/r1_round36/analysis-regression-tests.txt",
+    "assembly_tests": "logs/r1_round36/final-assembly-tests.txt",
+    "lint": "passed",
+    "review": "logs/r1_round36/X19-review.json",
+    "real_unsigned_rehearsal": "logs/r1_round36/unsigned-rehearsal-final.json"
+  },
+  "remaining": [
+    "Actual lead signatures and U03 scientific interpretation review",
+    "Authorized draw, endpoint construction and missingness review, independent seals and freeze publication",
+    "HT-4f final ledger after actual signed cost receipt v4"
+  ],
+  "gpu_seconds": 0,
+  "commits": false
+}

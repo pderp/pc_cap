@@ -1,0 +1,12 @@
+# Round 36 handoff
+
+2026-09-18, Codex. Available CPU preparation is complete. No commit, staging, GPU use, model execution or production admission was performed.
+
+- **R1-58l:** typed cost receipt v4, validator and ceilings v2 include all 27 cost rows, four measured chain-S donors, DEC-065 full-cost transfers and the lead's approved endpoint transfers for 14 incomplete rows. These fill cost estimates only. Receipt v4 remains unsigned. Final expected process cost is **431.306629 h**, or **646.959943 h** at all per-cell ceilings against 750 h. See [execution plan v3](../R1_execution_plan_v3.md).
+- **R1-63m:** DEC-066 D.4 now propagates through matrix, protocol, strict inventory guards, inference/analysis, candidate v14, forms v9, operator sheet v8, runtime templates and complete core/extension rehearsals. Scope is **285 core +45 optional**. The 75 omitted MQuAKE cells are explicitly not run; all 63 primary intervals remain declared. See [R1-63m](R1-63m.md) and [operator sheet v8](R1-D9-operator-sheet-v8.md).
+- **X19:** current bindings, independently recomputed component costs and weighted totals, unsigned-state checks and negative controls pass. Both synthetic package proofs use the final D.4 implementation, typed v4 costs, two workers and the fidelity watch. See [X19](X19.md) and [machine-readable review](../../logs/r1_round36/X19-review.json).
+- **HT-4f:** the consumer is updated, but final ledger v6 still requires the real signed cost v4 receipt. Unsigned refusal is verified. See [conditional handoff](HT-4f-round36-handoff.md).
+
+Validation: **113 CPU tests passed** (50 focused, 52 analysis, 11 assembly), plus Ruff and whitespace checks. Evidence is in `logs/r1_round36/`; use the `final-*` logs, `analysis-regression-tests.txt`, `unsigned-rehearsal-final.json` and `X19-review.json`. Intermediate unsigned drafts and superseded rehearsal logs are retained as history, not current admission evidence.
+
+The remaining work includes genuine signatures, the U03 scientific interpretation review, and then authorized draw, endpoint construction/missingness review, seals and freeze publication. Historical S1 continuation certification is retained; exact matching to v5's training compute is not established. Cost forecasts retain explicit transfer, memory and throughput assumptions and must be reconciled at block boundaries. The candidate deliberately reports `signatures_only: false` so these requirements remain visible. October 9 is still the experimental stop.
