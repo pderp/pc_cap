@@ -1,0 +1,270 @@
+RESEARCH PROGRAMME → CURRENT EXPERIMENTS
+
+
+
+Where correction helps — and what the mean hides
+Coupled Active Inference on a Frozen Transformer Prior: A Risk-Aware Residual Agent
+for Non-Equilibrium Regimes
+
+Charlie Derr · Matthew Iklé
+
+October 15, 2026 · Binghamton satellite
+
+A frozen language model. A small adaptive memory. Controlled tests of
+correction and unintended interference.
+
+
+
+
+Development evidence, September 18 snapshot. The submitted abstract describes the broader programme.
+
+                                                                                                       01 / 12
+IMPLEMENTED IN JAX
+
+
+
+The system we actually built
+Frozen GPT-2 base (~124M
+parameters)
+                                                                    Supplied fact → residual write                     Per-record memory
+3,348,228 trained reader/controller
+parameters (~2.7%)
+
+Separate per-record memory state                                    New query + frozen prior + memory
+
+Gate acceptance ≠ nonzero
+residual ≠ changed answer
+                                                                    Learned retrieval / null gate → residual or unchanged base
+
+
+
+
+                                                                    Proposed coupled objective and active audits
+
+
+
+Interfaces are architectural analogies. Freezing weights proves neither a Markov blanket nor universal preservation.
+
+                                                                                                                                           02 / 12
+ADAPTIVE DEVELOPMENT SELECTION
+
+
+
+Retention and rejection compete
+42 candidates · 15 admissible
+
+Selected v5 macro RET-GS:
+0.8033
+
+zsRE .98 · CounterFact .82 ·
+MQuAKE .61
+
+Unseen gate acceptance:
+10/100
+
+Fixed-candidate Wilson 95%:
+5.52–17.44%
+
+
+
+
+Development selection, not confirmation. The interval is not selection-adjusted and does not certify a rate below 10%.
+
+                                                                                                                         03 / 12
+FIXED 128-WINDOW DEVELOPMENT ASSAY
+
+
+
+A small average can hide a large local loss
+zsRE mean signed ΔNLL:
+.00220 nats
+
+ES95 positive harm: .04396
+nats
+
+Worst position: 8.69 nats
+
+17 of 16,256 positions exceed
+.1 nat
+
++8 nats ≈ 3,000× less likely
+target token
+
+
+
+
+Rare concentrated harm; no power-law or tail-exponent claim. Positions are dependent; saved profiles are not independent replications.
+
+                                                                                                                                         04 / 12
+245,237 FIXED POSITIONS · 300 DEVELOPMENT EDITS
+
+
+
+Complete validation sharpens the picture
+Learned MQuAKE: mean KL
+.005544
+
+Learned zsRE: mean KL
+.002270
+
+Both exceed the .001 KL
+benchmark
+
+zsRE v0: mean KL .000789
+
+Yet its worst ΔNLL is 16.159
+nats
+
+
+
+
+DEC-064: cap benchmarks are secondary labels, without an admission veto. Continued-base certification is separate. Fixed windows are not iid.
+
+                                                                                                                                                05 / 12
+RETROSPECTIVE DEVELOPMENT LESSONS
+
+
+
+Three failures changed the investigation
+Reader fires too widely → explicit null / rejection training
+
+Occupancy and source confounding → common-population qualification
+
+Benign-looking averages → per-position tails and complete validation
+
+
+
+
+No randomized isolation of each repair. Investigators chose these audits; the agent did not perform expected-free-energy action selection.
+
+                                                                                                                                             06 / 12
+LOSS-LEVEL PILOT · THREE SEEDS
+
+
+
+A small, specified κ intervention
+Answer surprisal: (1 − p^κ) / κ
+
+κ → 0 gives ordinary −log p
+
+κ = .2 and .5; ordinary and clip-2 controls
+
+Fixed checkpoint average: 150–300
+
+Only the answer term is bounded; not the whole objective or all gradients
+
+
+
+
+Preliminary hints at what the architecture could provide; not the coupled free energy (no coupled expectation or changed inference distribution), not a coupled Markov
+blanket, and not a test of the one-κ conjecture that porosity and interference are the same parameter.
+                                                                                                                                                                         07 / 12
+DESCRIPTIVE TRADE-OFF, NOT A DECLARED GAIN
+
+
+
+The κ pilot did not meet its success rule
+RET-GS: ordinary .7961
+
+κ .2: .7544 · κ .5: .7478
+
+Predeclared retention floor:
+.7761
+
+Both κ arms fail retention and
+tail separation
+
+Clip2 keeps retention; fails
+separation and adds a
+CounterFact false fire
+
+
+
+
+Preliminary hints at what the architecture could provide; not the coupled free energy (no coupled expectation or changed inference distribution), not a coupled Markov
+blanket, and not a test of the one-κ conjecture that porosity and interference are the same parameter.
+                                                                                                                                                                         08 / 12
+DEVELOPMENT STRESS PANEL · ONE SEED
+
+
+
+Correct answers can conceal probability harm
+All 20 old exact answers
+remain correct
+
+CounterFact at edit 100:
+
+Mean positive ΔNLL .32379
+
+Maximum 12.53188 nats
+
+Harm persists through the
+last observation
+
+
+
+
+One seed, two schedules, measured probes only. Recovery is unobserved, not impossible or permanent; equal schedules do not prove order invariance.
+
+                                                                                                                                                     09 / 12
+PLANNED D.4 MATRIX · NO CONFIRMATORY RESULTS SHOWN
+
+
+
+What independent confirmation can establish
+zsRE: 120 core cells
+
+CounterFact: 120 core cells
+
+MQuAKE: 45 core cells at 300 edits
+
+285 core + 45 optional cells
+
+MQuAKE core: primary v5, random reader, v0 stable
+
+
+
+
+75 MQuAKE cells are prospectively omitted, not measured zeros. Keep 63 intervals, including 21 unavailable MQ1000 intervals. S1 is not exact-v5 compute
+matched.
+                                                                                                                                                          10 / 12
+PLANNING SCENARIOS, NOT MEASURED PROGRESS
+
+
+
+Headroom is conditional; October 9 is the stop
+431.31 expected process-hours
+
+646.96 at every cell ceiling
+
+750 shared process-hour cap
+
+≈227.30 elapsed hours at assumed 1.65× throughput
+
+October 10–14: locked-data analysis, figures, rehearsal
+
+
+
+
+Process-hours include both workers and failures; they are not elapsed hours. Transfers and memory limits are incompletely measured. Cost unsigned at outline
+snapshot.
+                                                                                                                                                               11 / 12
+A QUESTION FOR THE ROOM
+
+
+
+What would distinguish a coupled objective?
+Measured: concentrated harm and loss-level trade-offs
+
+Proposed: coupled expectations and correlated-regime adaptation
+
+Test: improve the correction–tail-harm trade-off beyond clipping and
+better rejection training, while preserving retention
+
+
+
+
+Preliminary hints, not coupled free energy or a test of the one-κ conjecture. The present null neither refutes nor confirms the broader programme.
+
+                                                                                                                                                     12 / 12
+

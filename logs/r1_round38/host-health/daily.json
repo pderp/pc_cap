@@ -1,0 +1,45 @@
+{
+  "task": "R1-D13",
+  "version": 1,
+  "mode": "health",
+  "health": {
+    "observed_utc": "2026-09-18T14:48:18.331781+00:00",
+    "freshness_limit_seconds": 120,
+    "memory": {
+      "status": "unavailable",
+      "read_issues": [
+        "/home/derp/cap/pc_cap/logs/process_memory/memory-20260918T101117.308966Z-5028c55a0d4c4e9688bfe44d762f7868-00023.jsonl:67100594: invalid numeric monitor field",
+        "/home/derp/cap/pc_cap/logs/process_memory/memory-20260918T124417.375648Z-5028c55a0d4c4e9688bfe44d762f7868-00024.jsonl:54835386: invalid numeric monitor field"
+      ],
+      "process_labels": "PID/start_ticks only; no guessed command identity or argv"
+    },
+    "gpu": {
+      "status": "fresh",
+      "timestamp": "2026-09-18T10:48:13-04:00",
+      "age_seconds": 5.331781,
+      "utilization_percent": 0.0,
+      "memory_used_mib": 659.0,
+      "memory_total_mib": 12227.0,
+      "temperature_c": 45.0,
+      "power_w": 24.92,
+      "clock_mhz": 360.0,
+      "throttle_mask": "0x0000000000000004",
+      "pstate": "P3",
+      "gpu_processes": "2042,72;22030,154;",
+      "kernel_clues": "",
+      "source": {
+        "path": "/home/derp/cap/pc_cap/logs/sysmon/sysmon-20260918.log",
+        "offset": 1671132,
+        "bytes": 432,
+        "line_sha256": "1fe5b3adca49147c55764580ff0ddc61186f913c4030c62e247efe201fcf8cac"
+      },
+      "boot_identity": "not recorded by sysmon; timestamp freshness only",
+      "read_issues": [],
+      "interpretation": "Saved observations, not a crash diagnosis or launch clearance; throttle mask is preserved, not classified."
+    },
+    "source_policy": "Bounded complete-line tails from two segments; missing/stale/partial data explicitly reported; no live GPU query."
+  },
+  "posted": false,
+  "launch_authorized": false,
+  "report_sha256": "2ec5d303bc2b60c477e552745bbc3a74a88409996ba94c3e9ffcc22d1cf966f9"
+}

@@ -1,0 +1,140 @@
+{
+  "task": "R1-D13",
+  "version": 1,
+  "mode": "health",
+  "health": {
+    "observed_utc": "2026-09-18T14:49:32.559139+00:00",
+    "freshness_limit_seconds": 120,
+    "memory": {
+      "status": "fresh",
+      "timestamp": "2026-09-18T14:49:27.429337+00:00",
+      "age_seconds": 5.129802,
+      "boot_id": "d53f420c-3b8e-4a9b-ba80-58e323dd49ed",
+      "mem_available_mib": 21436.05859375,
+      "mem_total_mib": 31655.8046875,
+      "below_launch_floor": false,
+      "swap_used_mib": 2436.09375,
+      "monitor_alerts": [],
+      "coverage": {
+        "visible": 511,
+        "sampled": 511,
+        "unreadable": 0,
+        "raced": 0,
+        "malformed": 0
+      },
+      "psi": {
+        "memory": {
+          "some": {
+            "avg10": 0.0,
+            "avg60": 0.0,
+            "avg300": 0.0,
+            "total": 3215633
+          },
+          "full": {
+            "avg10": 0.0,
+            "avg60": 0.0,
+            "avg300": 0.0,
+            "total": 3182898
+          }
+        },
+        "io": {
+          "some": {
+            "avg10": 0.17,
+            "avg60": 0.1,
+            "avg300": 0.07,
+            "total": 927000484
+          },
+          "full": {
+            "avg10": 0.17,
+            "avg60": 0.1,
+            "avg300": 0.06,
+            "total": 894639653
+          }
+        },
+        "cpu": {
+          "some": {
+            "avg10": 0.0,
+            "avg60": 0.0,
+            "avg300": 0.0,
+            "total": 478100706
+          },
+          "full": {
+            "avg10": 0.0,
+            "avg60": 0.0,
+            "avg300": 0.0,
+            "total": 0
+          }
+        }
+      },
+      "rss_unavailable_processes": 276,
+      "top_rss": [
+        {
+          "pid": 2080091,
+          "start_ticks": 14691919,
+          "rss_kib": 710820,
+          "swap_kib": 24332
+        },
+        {
+          "pid": 2244,
+          "start_ticks": 2906,
+          "rss_kib": 694936,
+          "swap_kib": 128600
+        },
+        {
+          "pid": 1794047,
+          "start_ticks": 8314735,
+          "rss_kib": 642960,
+          "swap_kib": 11688
+        },
+        {
+          "pid": 4972,
+          "start_ticks": 13760,
+          "rss_kib": 533080,
+          "swap_kib": 43740
+        },
+        {
+          "pid": 21983,
+          "start_ticks": 125479,
+          "rss_kib": 483508,
+          "swap_kib": 72860
+        }
+      ],
+      "source": {
+        "path": "/home/derp/cap/pc_cap/logs/process_memory/memory-20260918T124417.375648Z-5028c55a0d4c4e9688bfe44d762f7868-00024.jsonl",
+        "offset": 55362222,
+        "bytes": 75794,
+        "line_sha256": "806f1f3d1e65234000b3e131d4b378bd1867148aa765cbbd6ff30d0398a717b1"
+      },
+      "read_issues": [],
+      "process_labels": "PID/start_ticks only; no guessed command identity or argv"
+    },
+    "gpu": {
+      "status": "fresh",
+      "timestamp": "2026-09-18T10:49:24-04:00",
+      "age_seconds": 8.559139,
+      "utilization_percent": 0.0,
+      "memory_used_mib": 661.0,
+      "memory_total_mib": 12227.0,
+      "temperature_c": 46.0,
+      "power_w": 24.98,
+      "clock_mhz": 352.0,
+      "throttle_mask": "0x0000000000000004",
+      "pstate": "P3",
+      "gpu_processes": "2042,72;22030,156;",
+      "kernel_clues": "",
+      "source": {
+        "path": "/home/derp/cap/pc_cap/logs/sysmon/sysmon-20260918.log",
+        "offset": 1674158,
+        "bytes": 432,
+        "line_sha256": "a8e1f8dfb3e49a101a724196cacdf9cd2b70ce25f8836dae6f88112fb8b7a61a"
+      },
+      "boot_identity": "not recorded by sysmon; timestamp freshness only",
+      "read_issues": [],
+      "interpretation": "Saved observations, not a crash diagnosis or launch clearance; throttle mask is preserved, not classified."
+    },
+    "source_policy": "Bounded complete-line tails from two segments; missing/stale/partial data explicitly reported; no live GPU query."
+  },
+  "posted": false,
+  "launch_authorized": false,
+  "report_sha256": "318044415ff0c3cb81b867c61e17318aabb9c0fb21d7adeebf8bd0e8b40bfce0"
+}
