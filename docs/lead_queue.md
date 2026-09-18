@@ -853,3 +853,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     v0_stable) finishes ≈ 09:00; then the two pending patches (backend cadence, successor package), the identity
     rebind, cost receipt v4 and candidate v14.
 
+85. (2026-09-18, 08:55 EDT) Chain S complete and filed. Full-validation costs: ≈ 1,300 s per learned cell, ≈ 1,400–1,470 s
+    per v0-style cell (≈ 0.4 h), host peak ≤ 2.8 GB. Fidelity watch: four cells audited, two breaches (both learned
+    cells: MQuAKE 0.0055, zsRE 0.0023), zero creep alerts; the zsRE v0_stable cell measures 0.0008 (pass). Final
+    fidelity report built; figure and two-sentence result in the presentation materials. The two pending patches are
+    installed; Codex has two small blockers before candidate v14 (a builder pin, one assembler test).
+

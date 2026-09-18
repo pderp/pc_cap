@@ -85,7 +85,13 @@ build. Priority order: **R1-58l → R1-63m → R1-D11 → X19 → HT-4f.** Rules
 As posted: four donors, explicit transfers, ceilings v2 (full validation ≈ 0.36 h learned / ≈ 0.41 h v0 per cell),
 revised process-hour projection, gap inventory, the v4 validator. State the remaining gaps that are not signatures.
 
-### Lane R1-63m — candidate v14, forms v9, sheet v8 on D.3 with the watch bound (after the two patches, ≈ 09:30)
+### Lane R1-63m — candidate v14, forms v9, sheet v8 on D.3 with the watch bound (patches applied 08:45; two blockers first)
+
+Both patches are installed. (1) `r1_64g_full_validation_recipes --rebind-active` refuses: it pins the R1-68f-reviewed
+backend bytes; re-pin the rebinder (and any other builder that pins the backend) to the post-63l identity, recording
+the change. (2) After the successor patch, `tests/revision_v1/test_r1_63j_production_bundle.py::test_extension_also_carries_required_full_contract`
+fails (both parametrisations): make the extension recipes carry the full-validation contract exactly as the core.
+Then rebuild every recipe identity and the package.
 
 ### Lane R1-D11 — launch-day runbook and block-boundary report (new)
 

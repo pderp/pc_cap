@@ -1,0 +1,219 @@
+# HT-6 — full-validation and sampled development tails
+
+Status: **complete_descriptive_report**; 4/4 completed measurements.
+
+DEC-064 labels cap fidelity as a secondary benchmark without a primary-comparison veto. This development report makes no confirmatory classifier decision. Both references remain visible even when their numerical results coincide.
+
+Full validation is 1,931 complete 128-token windows / 245,237 predictions; 121 trailing tokens are dropped. The first 128 windows / 16,256 predictions are the fixed descriptive sample. Sample loss statistics use its separately saved rows; sample KL is derived from the matching full-vector prefix, not an independent sampled KL assay.
+
+DEC-064a watch updated at report creation: 4 audited cells, 2 breaching cells, 0 creep alerts (0 new). See `docs/fidelity_watch.md`; the orchestrator delivers alerts to the lead. Watch file hashes in JSON identify this time's snapshot; those live registries continue to grow.
+
+## R1-64g-mquake-R1_learned_ff.recipe
+
+Checkpoint 300; overlap **pass**, maximum loss difference 1.421e-14 nats. Full coverage verified.
+
+| Population | Reference | Measure (nats) | N | Mean signed | ES95 positive | ES99 positive | Max positive | >.01 | >.1 | >1 |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| full | capoff | NLL increase | 245237 | 0.0056009764 | 0.11446756 | 0.57233781 | 8.1875503 | 817 | 768 | 485 |
+| full | capoff | KL(ref || cap) | 245237 | 0.0055436876 | 0.11087375 | 0.55436876 | 8.2425379 | 902 | 839 | 467 |
+| full | original | NLL increase | 245237 | 0.0056009764 | 0.11446756 | 0.57233781 | 8.1875503 | 817 | 768 | 485 |
+| full | original | KL(ref || cap) | 245237 | 0.0055436876 | 0.11087375 | 0.55436876 | 8.2425379 | 902 | 839 | 467 |
+| sample | capoff | NLL increase | 16256 | 0.007530943 | 0.15313023 | 0.76565115 | 5.6402928 | 88 | 82 | 44 |
+| sample | capoff | KL(ref || cap) | 16256 | 0.0076691941 | 0.15338388 | 0.76691941 | 5.5636782 | 97 | 89 | 45 |
+| sample | original | NLL increase | 16256 | 0.007530943 | 0.15313023 | 0.76565115 | 5.6402928 | 88 | 82 | 44 |
+| sample | original | KL(ref || cap) | 16256 | 0.0076691941 | 0.15338388 | 0.76691941 | 5.5636782 | 97 | 89 | 45 |
+
+Against the original base, full mean signed NLL increase is 0.0056009764, versus 0.007530943 in the fixed prefix. The full maximum positive increase is 8.1875503. The worst 1% of positions contain 100% of positive loss harm.
+Overlap agreement checks the same positions. The prefix and complete population have different denominators and can legitimately have different means and tails; this is not a representativeness test.
+Full original-reference loss has 244,333 exact zeros, 84 negative changes, and 820 positive changes. The positive-harm zero atom includes zero and negative loss changes.
+
+Costs: full outer phase 1298.988 s; all 2 sampled phases combined 138.931 s; attempt 1864.606 s. Allocator peak 742.72021484375 MiB is a lifetime high-water observation.
+
+DEC-064 cap fidelity: secondary benchmarks; failure does not veto primary comparisons.
+
+| Cell | Reference | Mean KL | KL ≤.001 | Mean signed NLL increase | NLL ≤.01 | Availability |
+|---|---|---:|---|---:|---|---|
+| R1-64g-mquake-R1_learned_ff.recipe | capoff | 0.0055436876 | fail | 0.0056009764 | pass | complete |
+| R1-64g-mquake-R1_learned_ff.recipe | original | 0.0055436876 | fail | 0.0056009764 | pass | complete |
+
+Population: **full**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 244333 / 245237 | 171 (0.000697285) | 0.631015 / 1 | 0.998188 | 1612 / 1931 | 215 / 22 | 0.306813 / 0.720977 / 0.930385 | 0 / 0.013872 / 0.108869 / 0.273118 |
+| original | 244333 / 245237 | 171 (0.000697285) | 0.631015 / 1 | 0.998188 | 1612 / 1931 | 215 / 22 | 0.306813 / 0.720977 / 0.930385 | 0 / 0.013872 / 0.108869 / 0.273118 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+Population: **sample**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 16159 / 16256 | 19 (0.0011688) | 0.460493 / 1 | 0.99704 | 100 / 128 | 21 / 1 | 0.196585 / 0.528667 / 0.796943 | 0 / 0.0335543 / 0.0820399 / 0.168755 |
+| original | 16159 / 16256 | 19 (0.0011688) | 0.460493 / 1 | 0.99704 | 100 / 128 | 21 / 1 | 0.196585 / 0.528667 / 0.796943 | 0 / 0.0335543 / 0.0820399 / 0.168755 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+## R1-64g-mquake-v0_stable.recipe
+
+Checkpoint 300; overlap **pass**, maximum loss difference 1.421e-14 nats. Full coverage verified.
+
+| Population | Reference | Measure (nats) | N | Mean signed | ES95 positive | ES99 positive | Max positive | >.01 | >.1 | >1 |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| full | capoff | NLL increase | 245237 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| full | capoff | KL(ref || cap) | 245237 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| full | original | NLL increase | 245237 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| full | original | KL(ref || cap) | 245237 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sample | capoff | NLL increase | 16256 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sample | capoff | KL(ref || cap) | 16256 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sample | original | NLL increase | 16256 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sample | original | KL(ref || cap) | 16256 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+No positive loss harm; its concentration share is undefined.
+Overlap agreement checks the same positions. The prefix and complete population have different denominators and can legitimately have different means and tails; this is not a representativeness test.
+Full original-reference loss has 245,237 exact zeros, 0 negative changes, and 0 positive changes. The positive-harm zero atom includes zero and negative loss changes.
+
+Costs: full outer phase 1309.054 s; all 2 sampled phases combined 170.823 s; attempt 2960.605 s. Allocator peak 755.5419921875 MiB is a lifetime high-water observation.
+
+DEC-064 cap fidelity: secondary benchmarks; failure does not veto primary comparisons.
+
+| Cell | Reference | Mean KL | KL ≤.001 | Mean signed NLL increase | NLL ≤.01 | Availability |
+|---|---|---:|---|---:|---|---|
+| R1-64g-mquake-v0_stable.recipe | capoff | 0 | pass | 0 | pass | complete |
+| R1-64g-mquake-v0_stable.recipe | original | 0 | pass | 0 | pass | complete |
+
+Population: **full**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 245237 / 245237 | undefined (undefined) | undefined / undefined | undefined | 1931 / 1931 | 0 / 0 | undefined / undefined / undefined | 0 / 0 / 0 / 0 |
+| original | 245237 / 245237 | undefined (undefined) | undefined / undefined | undefined | 1931 / 1931 | 0 / 0 | undefined / undefined / undefined | 0 / 0 / 0 / 0 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+Population: **sample**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 16256 / 16256 | undefined (undefined) | undefined / undefined | undefined | 128 / 128 | 0 / 0 | undefined / undefined / undefined | 0 / 0 / 0 / 0 |
+| original | 16256 / 16256 | undefined (undefined) | undefined / undefined | undefined | 128 / 128 | 0 / 0 | undefined / undefined / undefined | 0 / 0 / 0 / 0 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+## R1-64g-zsre-R1_learned_ff.recipe
+
+Checkpoint 300; overlap **pass**, maximum loss difference 1.421e-14 nats. Full coverage verified.
+
+| Population | Reference | Measure (nats) | N | Mean signed | ES95 positive | ES99 positive | Max positive | >.01 | >.1 | >1 |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| full | capoff | NLL increase | 245237 | 0.0023100153 | 0.04747269 | 0.23736345 | 9.9446887 | 312 | 299 | 189 |
+| full | capoff | KL(ref || cap) | 245237 | 0.0022697245 | 0.04539449 | 0.22697245 | 9.6531919 | 349 | 329 | 182 |
+| full | original | NLL increase | 245237 | 0.0023100153 | 0.04747269 | 0.23736345 | 9.9446887 | 312 | 299 | 189 |
+| full | original | KL(ref || cap) | 245237 | 0.0022697245 | 0.04539449 | 0.22697245 | 9.6531919 | 349 | 329 | 182 |
+| sample | capoff | NLL increase | 16256 | 0.0051699218 | 0.10392113 | 0.51960566 | 8.4798454 | 46 | 42 | 25 |
+| sample | capoff | KL(ref || cap) | 16256 | 0.0048086654 | 0.096173308 | 0.48086654 | 5.3039691 | 50 | 46 | 25 |
+| sample | original | NLL increase | 16256 | 0.0051699218 | 0.10392113 | 0.51960566 | 8.4798454 | 46 | 42 | 25 |
+| sample | original | KL(ref || cap) | 16256 | 0.0048086654 | 0.096173308 | 0.48086654 | 5.3039691 | 50 | 46 | 25 |
+
+Against the original base, full mean signed NLL increase is 0.0023100153, versus 0.0051699218 in the fixed prefix. The full maximum positive increase is 9.9446887. The worst 1% of positions contain 100% of positive loss harm.
+Overlap agreement checks the same positions. The prefix and complete population have different denominators and can legitimately have different means and tails; this is not a representativeness test.
+Full original-reference loss has 244,888 exact zeros, 36 negative changes, and 313 positive changes. The positive-harm zero atom includes zero and negative loss changes.
+
+Costs: full outer phase 1392.939 s; all 2 sampled phases combined 144.877 s; attempt 1864.918 s. Allocator peak 762.85693359375 MiB is a lifetime high-water observation.
+
+DEC-064 cap fidelity: secondary benchmarks; failure does not veto primary comparisons.
+
+| Cell | Reference | Mean KL | KL ≤.001 | Mean signed NLL increase | NLL ≤.01 | Availability |
+|---|---|---:|---|---:|---|---|
+| R1-64g-zsre-R1_learned_ff.recipe | capoff | 0.0022697245 | fail | 0.0023100153 | pass | complete |
+| R1-64g-zsre-R1_learned_ff.recipe | original | 0.0022697245 | fail | 0.0023100153 | pass | complete |
+
+Population: **full**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 244888 / 245237 | 64 (0.000260972) | 0.956438 / 1 | 0.999305 | 1778 / 1931 | 96 / 7 | 0.492234 / 0.941079 / 1 | 0 / 0 / 0.0592407 / 0.339325 |
+| original | 244888 / 245237 | 64 (0.000260972) | 0.956438 / 1 | 0.999305 | 1778 / 1931 | 96 / 7 | 0.492234 / 0.941079 / 1 | 0 / 0 / 0.0592407 / 0.339325 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+Population: **sample**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 16206 / 16256 | 11 (0.000676673) | 0.717112 / 1 | 0.998496 | 114 / 128 | 8 / 2 | 0.437088 / 0.905431 / 0.995953 | 0 / 0.00136722 / 0.118862 / 0.230606 |
+| original | 16206 / 16256 | 11 (0.000676673) | 0.717112 / 1 | 0.998496 | 114 / 128 | 8 / 2 | 0.437088 / 0.905431 / 0.995953 | 0 / 0.00136722 / 0.118862 / 0.230606 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+## R1-64g-zsre-v0_stable.recipe
+
+Checkpoint 300; overlap **pass**, maximum loss difference 1.421e-14 nats. Full coverage verified.
+
+| Population | Reference | Measure (nats) | N | Mean signed | ES95 positive | ES99 positive | Max positive | >.01 | >.1 | >1 |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| full | capoff | NLL increase | 245237 | 0.00085516204 | 0.019219928 | 0.096099639 | 16.159299 | 185 | 160 | 47 |
+| full | capoff | KL(ref || cap) | 245237 | 0.00078859068 | 0.015771814 | 0.078859068 | 15.27436 | 280 | 128 | 39 |
+| full | original | NLL increase | 245237 | 0.00085516204 | 0.019219928 | 0.096099639 | 16.159299 | 185 | 160 | 47 |
+| full | original | KL(ref || cap) | 245237 | 0.00078859068 | 0.015771814 | 0.078859068 | 15.27436 | 280 | 128 | 39 |
+| sample | capoff | NLL increase | 16256 | 0.0012096796 | 0.026788972 | 0.13394486 | 16.159299 | 13 | 12 | 2 |
+| sample | capoff | KL(ref || cap) | 16256 | 0.001082595 | 0.021651899 | 0.1082595 | 14.360993 | 21 | 9 | 1 |
+| sample | original | NLL increase | 16256 | 0.0012096796 | 0.026788972 | 0.13394486 | 16.159299 | 13 | 12 | 2 |
+| sample | original | KL(ref || cap) | 16256 | 0.001082595 | 0.021651899 | 0.1082595 | 14.360993 | 21 | 9 | 1 |
+
+Against the original base, full mean signed NLL increase is 0.00085516204, versus 0.0012096796 in the fixed prefix. The full maximum positive increase is 16.159299. The worst 1% of positions contain 100% of positive loss harm.
+Overlap agreement checks the same positions. The prefix and complete population have different denominators and can legitimately have different means and tails; this is not a representativeness test.
+Full original-reference loss has 244,956 exact zeros, 91 negative changes, and 190 positive changes. The positive-harm zero atom includes zero and negative loss changes.
+
+Costs: full outer phase 1310.443 s; all 2 sampled phases combined 177.750 s; attempt 2527.075 s. Allocator peak 701.883544921875 MiB is a lifetime high-water observation.
+
+DEC-064 cap fidelity: secondary benchmarks; failure does not veto primary comparisons.
+
+| Cell | Reference | Mean KL | KL ≤.001 | Mean signed NLL increase | NLL ≤.01 | Availability |
+|---|---|---:|---|---:|---|---|
+| R1-64g-zsre-v0_stable.recipe | capoff | 0.00078859068 | pass | 0.00085516204 | pass | complete |
+| R1-64g-zsre-v0_stable.recipe | original | 0.00078859068 | pass | 0.00085516204 | pass | complete |
+
+Population: **full**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 244956 / 245237 | 10 (4.07769e-05) | 0.996518 / 1 | 0.999794 | 1827 / 1931 | 33 / 5 | 0.687298 / 0.955754 / 0.993067 | 0 / 0.000252454 / 0.0161969 / 0.120271 |
+| original | 244956 / 245237 | 10 (4.07769e-05) | 0.996518 / 1 | 0.999794 | 1827 / 1931 | 33 / 5 | 0.687298 / 0.955754 / 0.993067 | 0 / 0.000252454 / 0.0161969 / 0.120271 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+Population: **sample**.
+
+HT-7 concentration (descriptive; fractional top shares include zero mass):
+
+| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |
+|---|---|---|---|---|---|---|---|---|
+| capoff | 16235 / 16256 | 1 (6.15157e-05) | 0.992597 / 1 | 0.999827 | 122 / 128 | 1 / 1 | 0.855769 / 0.965147 / 0.992545 | 0 / 0.000393705 / 0.0078035 / 0.115959 |
+| original | 16235 / 16256 | 1 (6.15157e-05) | 0.992597 / 1 | 0.999827 | 122 / 128 | 1 / 1 | 0.855769 / 0.965147 / 0.992545 | 0 / 0.000393705 / 0.0078035 / 0.115959 |
+
+Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.
+
+## Reading for the talk
+
+DEC-054: preliminary hints at what the architecture could provide; not the coupled free energy, not a test of the one-kappa conjecture; these cells do not compare kappa treatments
+
+The result describes how ordinary-text harm is distributed after factual edits. Report the mean beside the tail, denominators and zero mass; a low average does not bound rare consequences. These are fixed development populations with dependent positions. No power-law exponent, iid uncertainty or kappa benefit is inferred.
+
+The figure shows strict empirical exceedance P(positive NLL increase > x) against the original base. Its vertical axis is logarithmic; zero survival falls below the plot. Steps use the count strictly above each observed x; no fitted line is shown. Missing panels remain unavailable.
+
+![Full and sampled exceedance curves](tail-survival.png)

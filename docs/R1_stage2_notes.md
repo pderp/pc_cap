@@ -1387,3 +1387,26 @@ next-token distribution (KL > 1 nat at 467 of them), not because of a diffuse sh
 descriptive statistic for every cell (lane HT-7): the vectors are already stored; the reports gain the concentration
 summary above. Whether the registered fidelity gate is a mean-KL gate on the cap is R1-49l's provenance question.
 
+## Chain S: full-validation measurement cells complete (2026-09-18, 08:41 EDT)
+
+R1-64g recipes (300 edits, checkpoints 100 / 300, near-miss 100, revision 50, DEC-063 full validation at 300):
+
+| cell | attempt wall (s) | full phase (s) | max RSS (GB) | mean KL (orig ‖ cap) | mean NLL Δ | ES95 | max | positions for 50 % KL | benchmark |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| MQuAKE · primary v5 | 1,868 | 1,299 | 2.74 | 0.00554 | +0.00560 | 0.114 | 8.19 | 171 | KL fail / NLL pass |
+| MQuAKE · v0_stable | 2,963 | ≈ 1,470 | 2.81 | 0 | 0 | 0 | 0 | — | pass (never fires) |
+| zsRE · primary v5 | 1,869 | ≈ 1,300 | 2.73 | 0.00227 | +0.00231 | 0.047 | 9.94 | 64 | KL fail / NLL pass |
+| zsRE · v0_stable | 2,529 | ≈ 1,400 | 2.82 | 0.00079 | +0.00086 | — | — | — | pass |
+
+Overlap gates pass (sample vs population, max loss difference 1.4e-14); both references coincide for the original-base
+conditions. Full-validation cost: ≈ 1,300 s learned, ≈ 1,400–1,470 s v0-style per cell (≈ 0.36–0.41 h), host peak
+≤ 2.82 GB. The fidelity watch (DEC-064a) holds four audited cells, two breaches (learned MQuAKE 0.0055, learned zsRE
+0.0023), zero creep alerts; running maxima are the development references. The final HT-6 report:
+`logs/r1_round35/ht6-final/report.md`; survival figure copied to `assets/presentation-materials/figures/tail-survival.{png,pdf}`.
+
+Idle-boundary work after the chain: R1-63l backend patch and the HT-8 successor-package patch applied. Two follow-ups
+for Codex: the R1-64g rebinder pins the R1-68f-reviewed backend bytes and now refuses ("installed driver/backend
+differs from reviewed R1-68f bytes") — it must be re-pinned to the post-63l identity before any recipe is rebuilt;
+and two assembler tests fail after the successor patch (`test_extension_also_carries_required_full_contract`), so the
+extension recipes' full-validation contract needs the fix before candidate v14.
+

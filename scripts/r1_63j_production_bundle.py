@@ -12,13 +12,15 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+from scripts import ht8_fidelity_watch as watch
+from scripts import r1_49m_fidelity_policy as fidelity_policy
 from scripts import r1_58c_draw_seal_preflight as preflight
 from scripts import r1_63l_full_validation_contract as full_contract
 from scripts import r1_68c_dev_cell as driver
 from scripts import r1_77_queue as queue
 from scripts import r1_77b_sealed_backend as backend
 from scripts import r1_d9_receipts as d9
-from scripts.r1_49k_normative_closure import closure
+from scripts.r1_49m_normative_closure import closure
 from scripts.r1_77f_scheduler import CEILING_DEFINITION
 from scripts.r1_d10a_review import ROOT, write_new
 
@@ -205,6 +207,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
     population = d9.read_resource(seal["analysis_population"])
     if set(inventory) != ids or set(population["cells"]) != ids:
         raise ValueError("sealed inventory/population must equal whole admitted matrix")
+    fidelity_policy.validate(declaration.get("cap_fidelity_policy"))
+    fidelity_policy.validate_matrix(declaration, queue.analysis.all_cells(declaration))
     validation = full_contract.validate(spec.get("full_validation"))
     if (
         declaration.get("full_validation") != validation
@@ -227,6 +231,13 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         str(code_root / "requirements.lock"): d9.sha(code_root / "requirements.lock")
     }
     metadata_bindings.update(norm["bindings_sha256"])
+    watch_contract = watch.binding()
+    for b in [*declaration["analysis_implementation"].values(), *watch_contract["implementations"]]:
+        d9.read_metadata(b, parse=False)
+        metadata_bindings[b["path"]] = b["sha256"]
+    for name in ("r1_77_queue", "r1_77f_scheduler"):
+        b = d9.ref(ROOT / f"scripts/{name}.py")
+        metadata_bindings[b["path"]] = b["sha256"]
     implementation = full_contract.ref(full_contract.__file__)
     metadata_bindings[implementation["path"]] = implementation["sha256"]
     for b in [spec["matrix"], spec["protocol"], *spec["receipts"].values()]:
@@ -283,6 +294,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         near_allocation_decision=admitted.get("near_allocation_decision"),
         protocol_admission=spec["receipts"]["protocol_admission"],
         effective_only_after_exact_signed_publication=True,
+        cap_fidelity_policy=declaration["cap_fidelity_policy"],
+        fidelity_watch=watch_contract,
         full_validation=validation,
         full_validation_implementation=implementation,
     )
@@ -369,6 +382,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         backend=backend.backend_binding(),
         code_sha256=core.code_identity(code_root),
         integrity_driver_bindings=driver.driver_bindings(code_root),
+        cap_fidelity_policy=declaration["cap_fidelity_policy"],
+        fidelity_watch=watch_contract,
         bindings_sha256=metadata_bindings,
         recipe_contracts={cid: backend.contract_digest(m) for cid, m in recipes.items()},
         publication_condition="proposal only until exact signed operator freeze publication",
@@ -392,6 +407,7 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         scope="confirmatory",
         queue_ceiling_contract=CEILING_DEFINITION,
         source_matrix=spec["matrix"],
+        fidelity_watch=watch_contract,
         freeze=freeze,
         shared_process_hours=receipts["chain_i_cell_ceilings"]["shared_process_hours"],
         cost_admission=spec["receipts"]["chain_i_cell_ceilings"],

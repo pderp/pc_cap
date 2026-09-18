@@ -23,6 +23,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from scripts import r1_63l_full_validation_contract as full_contract
 from scripts import r1_68c_dev_cell as donor
 from scripts import r1_68f_full_validation as full_validation
 from scripts.r1_68b_integrity_runtime import (
@@ -166,6 +167,7 @@ def inspect_manifest(path, expected_sha256, *, code_root=None):
         raise ValueError("legacy protocol cadence differs")
     if m["checkpoints"] != cadence or m["max_new"] != protocol["max_new"]:
         raise ValueError("recipe/protocol cadence mismatch")
+    full_contract.admit(m, protocol, frozen)
     return m
 
 
@@ -200,7 +202,13 @@ def load_sealed_cell(path, expected_sha256, *, code_root=None, allow_sealed=Fals
     from scripts.r1_75_analysis_stage4_v1 import coordinate_id
 
     pop = declared["cells"][coordinate_id(m["cell"])]
-    if pop != planned_population(payload):
+    expected_population = planned_population(payload)
+    if "full_validation" in m:
+        full_contract.sample(m["full_validation"], payload["endpoints"]["drift"])
+        expected_population["full_validation"] = m["full_validation"]
+        if declared.get("full_validation") != m["full_validation"]:
+            raise ValueError("frozen full-validation population root differs")
+    if pop != expected_population:
         raise ValueError("payload differs from independently frozen analysis population")
     # Observed rows may be a subset: analysis must retain missing denominators.
     return m, payload
