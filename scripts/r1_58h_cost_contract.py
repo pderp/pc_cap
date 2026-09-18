@@ -23,9 +23,14 @@ def positive(value):
 def validate(receipt):
     if receipt.get("cost_schema_version") != 2:
         raise ValueError("typed cost schema v2 required")
+    # Original schema-v2 receipts predate the revision field. Never route a new
+    # revision through the old generic validator just because its fields fit.
+    revision = receipt.get("receipt_revision", 2)
+    if type(revision) is not int or revision not in (2, 3):
+        raise ValueError("unsupported typed cost receipt revision; explicit validator required")
     if receipt.get("pending_evidence"):
         raise ValueError("cost evidence pending: " + "; ".join(receipt["pending_evidence"]))
-    if receipt.get("receipt_revision") == 3:
+    if revision == 3:
         from scripts.r1_58j_cost_receipt import validate_supplement
 
         validate_supplement(receipt)

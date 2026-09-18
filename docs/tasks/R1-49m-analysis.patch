@@ -1,0 +1,407 @@
+diff --git a/scripts/r1_49g_analyze.py b/scripts/r1_49g_analyze.py
+index 70bb06a..dd7a69a 100644
+--- a/scripts/r1_49g_analyze.py
++++ b/scripts/r1_49g_analyze.py
+@@ -7,6 +7,7 @@ import hashlib
+ import json
+ from pathlib import Path
+ 
++from scripts import r1_49m_fidelity_policy as fidelity_policy
+ from scripts import r1_63l_full_validation_contract as full_contract
+ from scripts import r1_75_analysis_stage4_v1 as old
+ from scripts.r1_49g_inference import FAMILY, primary_contrasts
+@@ -119,6 +120,9 @@ def analyze(matrix):
+     if matrix.get("full_validation") is not None:
+         report["analysis_revision"] = "R1-63l_DEC063_full_and_sampled_validation"
+         report["full_validation_contract"] = matrix["full_validation"]
++    if matrix.get("cap_fidelity_policy") is not None:
++        report["analysis_revision"] = "R1-49m_DEC064_D3_cap_benchmark_no_veto"
++        report["cap_fidelity_policy"] = matrix["cap_fidelity_policy"]
+     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
+     report["limits"] += [
+         FAMILY["coverage"],
+@@ -137,6 +141,7 @@ def markdown(report):
+         "# R1-49g — DEC-057/058/059 analysis",
+         "",
+         f"Scope: {report['scope']}. GPU/model calls: zero.",
++        report.get("cap_fidelity_interpretation", ""),
+         "",
+         "The 63 intervals use nominal Bonferroni allocation of 0.05 and three realization clusters; exact familywise coverage is not claimed.",
+         "",
+@@ -206,6 +211,8 @@ def markdown(report):
+         "",
+     ]
+     lines += full_contract.report_lines(report["cells"])
++    if report.get("cap_fidelity_policy") is not None:
++        lines += fidelity_policy.report_lines(report["cells"])
+     return "\n".join(lines)
+ 
+ 
+@@ -231,6 +238,8 @@ def run(matrix_path, output_prefix):
+         "scripts/r1_74_rescore.py",
+         "scripts/ht_audit_existing.py",
+         "scripts/r1_63l_full_validation_contract.py",
++        "scripts/r1_49m_fidelity_policy.py",
++        "scripts/ht7_concentration.py",
+     ]
+     report["analysis_source_sha256"] = {
+         name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in names
+diff --git a/scripts/r1_75_analysis_stage4_v1.py b/scripts/r1_75_analysis_stage4_v1.py
+index 3df50bc..3112f48 100644
+--- a/scripts/r1_75_analysis_stage4_v1.py
++++ b/scripts/r1_75_analysis_stage4_v1.py
+@@ -12,6 +12,8 @@ import math
+ from collections import Counter
+ from pathlib import Path
+ 
++from scripts import ht7_concentration as ht7
++from scripts import r1_49m_fidelity_policy as fidelity_policy
+ from scripts import r1_63l_full_validation_contract as full_contract
+ from scripts.ht_audit_existing import tail_sum
+ from scripts.r1_74_rescore import preservation_flags, preservation_summary
+@@ -240,6 +242,7 @@ def summarize_checkpoint(report, population, n, final):
+ 
+ def validate_matrix(matrix):
+     cells = all_cells(matrix)
++    fidelity_policy.validate_matrix(matrix, cells)
+     validation = matrix.get("full_validation")
+     if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+         full_contract.validate(validation)
+@@ -382,6 +385,11 @@ def load_cell(cell, files, scope):
+                     files.sources,
+                     sampled_population=cell["population"]["drift"],
+                 )
++                if cell.get("cap_fidelity_policy") is not None:
++                    fidelity_policy.validate(cell["cap_fidelity_policy"])
++                    summary = secondary["full_validation"]
++                    if summary.get("complete"):
++                        summary["concentration"] = ht7.from_binding(summary["vectors"])
+             elif "full_validation" in report.get("endpoints", {}):
+                 raise ValueError("full-validation observation at an intermediate checkpoint")
+         previous = rec["receipt_sha256"]
+@@ -436,15 +444,17 @@ def load_cell(cell, files, scope):
+         if expected_full is not None
+         else None
+     )
+-    out["scientific_admission"] = (
+-        scope == "confirmatory"
+-        and cell.get("admitted") is True
+-        and out["primary_metrics_complete"]
+-        and (
+-            expected_full is None
+-            or (out["endpoint_complete"] and out["full_validation_fidelity_passes"])
+-        )
++    out["scientific_admission"] = fidelity_policy.scientific_admission(cell, out, scope)
++    out["cap_fidelity_policy"] = cell.get("cap_fidelity_policy")
++    out["cap_fidelity_interpretation"] = (
++        "DEC-064 labelled secondary benchmark; numeric failure never vetoes primary comparisons"
++        if cell.get("cap_fidelity_policy") is not None
++        else "historical pre-DEC-064 behavior; not the current adopted policy"
+     )
++    if cell.get("cap_fidelity_policy") is not None:
++        out["cap_fidelity_benchmark"] = fidelity_policy.benchmark(
++            final_secondary.get("full_validation", {})
++        )
+     out["unreceipted_checkpoints"] = [
+         str(p)
+         for p in sorted(directory.glob("attempt-*/checkpoint-*.json"))
+@@ -614,6 +624,12 @@ def analyze(matrix):
+         "matrix_name": matrix["name"],
+         "matrix_sha256": digest(matrix),
+         "scope": matrix["scope"],
++        "cap_fidelity_policy": matrix.get("cap_fidelity_policy"),
++        "cap_fidelity_interpretation": (
++            "DEC-064 secondary benchmarks; numeric cap failures do not veto primary comparisons."
++            if matrix.get("cap_fidelity_policy") is not None
++            else "Historical matrix without DEC-064 binding; any D.2 cap-veto behavior is a historical replay, not the current adopted policy."
++        ),
+         "banner": "development/draft observations do not fill confirmation slots",
+         "cells": [loaded[c["cell_id"]] for c in ordered],
+         "blocks": blocks,
+@@ -638,6 +654,7 @@ def markdown(report):
+         f"# {report['matrix_name']} — Stage 4 cell analysis",
+         "",
+         report["banner"],
++        report.get("cap_fidelity_interpretation", ""),
+         "",
+         "| Block | Planned | Terminal artifacts | Complete primary metrics | Execution complete |",
+         "| --- | ---: | ---: | ---: | --- |",
+@@ -710,4 +727,6 @@ def markdown(report):
+         )
+     lines += ["", *["- " + s for s in report["limits"]]]
+     lines += full_contract.report_lines(report["cells"])
++    if report.get("cap_fidelity_policy") is not None:
++        lines += fidelity_policy.report_lines(report["cells"])
+     return "\n".join(lines) + "\n"
+diff --git a/scripts/r1_49m_fidelity_policy.py b/scripts/r1_49m_fidelity_policy.py
+new file mode 100644
+index 0000000..f7d1db6
+--- /dev/null
++++ b/scripts/r1_49m_fidelity_policy.py
+@@ -0,0 +1,113 @@
++"""DEC-064 option 1: cap benchmarks do not veto primary comparisons.
++
++An absent policy retains explicit historical D.2 replay behavior. A D.3 matrix
++must bind this policy at root and in every cell; a partial binding is invalid.
++"""
++
++from __future__ import annotations
++
++import math
++
++from scripts import ht7_concentration as ht7
++
++POLICY = {
++    "version": 1,
++    "decision": "DEC-064",
++    "option": 1,
++    "cap_role": "labelled_secondary_benchmark_without_admission_veto",
++    "mean_kl_ceiling_nats": 0.001,
++    "mean_signed_nll_increase_ceiling_nats": 0.01,
++    "references": ["capoff", "original"],
++    "equality_passes": True,
++    "continued_base_gate": "DEC-047 unchanged; cap disabled",
++    "incomplete_or_invalid_evidence": "unavailable; no fabricated pass",
++    "concentration": ht7.CONTRACT,
++}
++
++
++def validate(policy):
++    if policy != POLICY:
++        raise ValueError("unrecognized or missing DEC-064 cap fidelity policy")
++    return policy
++
++
++def validate_matrix(matrix, cells):
++    policy = matrix.get("cap_fidelity_policy")
++    d3 = matrix.get("policy_revision") == "DEC064_D3"
++    if policy is not None or d3 or any("cap_fidelity_policy" in c for c in cells):
++        validate(policy)
++        if matrix.get("full_validation") is None:
++            raise ValueError("DEC-064 requires the full-validation measurement contract")
++        for cell in cells:
++            validate(cell.get("cap_fidelity_policy"))
++
++
++def scientific_admission(cell, observed, scope):
++    policy = cell.get("cap_fidelity_policy")
++    if policy is not None:
++        validate(policy)
++    required = (cell.get("population") or {}).get("full_validation") is not None
++    if policy is not None and not required:
++        return False
++    return bool(
++        scope == "confirmatory"
++        and cell.get("admitted") is True
++        and observed["primary_metrics_complete"]
++        and (
++            not required
++            or (
++                observed["endpoint_complete"]
++                and (policy is not None or observed["full_validation_fidelity_passes"])
++            )
++        )
++    )
++
++
++def benchmark(summary):
++    if not summary.get("complete"):
++        return dict(status="unavailable", passes=None, references={}, admission_veto=False)
++    refs = {}
++    for name in POLICY["references"]:
++        ref = summary["references"][name]
++        kl, loss = ref["kl"]["mean_signed"], ref["loss"]["mean_signed"]
++        if not math.isfinite(kl) or not math.isfinite(loss) or kl < 0:
++            raise ValueError("finite means and nonnegative KL required")
++        refs[name] = dict(
++            mean_kl_nats=kl,
++            mean_signed_nll_increase_nats=loss,
++            mean_kl_label="pass" if kl <= 0.001 else "fail",
++            mean_nll_label="pass" if loss <= 0.01 else "fail",
++        )
++    return dict(
++        status="complete",
++        policy=POLICY,
++        references=refs,
++        passes=all(r["mean_kl_label"] == r["mean_nll_label"] == "pass" for r in refs.values()),
++        admission_veto=False,
++    )
++
++
++def report_lines(cells):
++    lines = [
++        "",
++        "DEC-064 cap fidelity: secondary benchmarks; failure does not veto primary comparisons.",
++        "",
++        "| Cell | Reference | Mean KL | KL ≤.001 | Mean signed NLL increase | NLL ≤.01 | Availability |",
++        "|---|---|---:|---|---:|---|---|",
++    ]
++    for cell in cells:
++        b = cell.get("cap_fidelity_benchmark", {})
++        if not b.get("references"):
++            lines.append(
++                f"| {cell['cell_id']} | both | — | unavailable | — | unavailable | {b.get('status', cell['status'])} |"
++            )
++        for name, ref in b.get("references", {}).items():
++            lines.append(
++                f"| {cell['cell_id']} | {name} | {ref['mean_kl_nats']:.8g} | {ref['mean_kl_label']} | {ref['mean_signed_nll_increase_nats']:.8g} | {ref['mean_nll_label']} | {b['status']} |"
++            )
++    for cell in cells:
++        for cp in cell.get("checkpoints", {}).values():
++            concentration = cp.get("secondary", {}).get("full_validation", {}).get("concentration")
++            if concentration:
++                lines += ["", f"Cell {cell['cell_id']}", *ht7.report_lines(concentration)]
++    return lines
+diff --git a/scripts/ht7_concentration.py b/scripts/ht7_concentration.py
+new file mode 100644
+index 0000000..3bfe876
+--- /dev/null
++++ b/scripts/ht7_concentration.py
+@@ -0,0 +1,147 @@
++"""HT-7 descriptive concentration on complete, already audited position vectors."""
++
++from __future__ import annotations
++
++import hashlib
++from pathlib import Path
++
++import numpy as np
++
++CONTRACT = {
++    "version": 1,
++    "role": "descriptive; no admission or inferential cutoff",
++    "near_zero_loss_absolute_tolerance_nats": 1e-6,
++    "position_top_fractions": [0.001, 0.01],
++    "window_top_fractions": [0.01, 0.05, 0.1],
++    "top_share_boundary": "fractional empirical mass including zeros",
++    "half_mass_count": "smallest integer count in descending order reaching >= 50%",
++    "quantiles": "numpy linear at (N-1)*q",
++    "gini": "unadjusted finite-population Gini including zeros",
++    "zero_total": "shares, half-mass count/fraction and Gini are null",
++    "window_kl_benchmark_nats": 0.001,
++    "window_kl_strict_exceedance_nats": [0.01, 0.1],
++}
++
++
++def mass_summary(values, fractions):
++    a = np.asarray(values, dtype=np.float64).reshape(-1)
++    if not a.size or not np.isfinite(a).all() or np.any(a < 0):
++        raise ValueError("finite nonnegative nonempty concentration values required")
++    a = np.sort(a)
++    total = float(a.sum())
++    descending = a[::-1]
++    shares = {}
++    for fraction in fractions:
++        if not 0 < fraction <= 1:
++            raise ValueError("top fraction outside (0,1]")
++        mass = fraction * len(a)
++        whole = int(np.floor(mass))
++        subtotal = descending[:whole].sum()
++        if whole < len(a):
++            subtotal += (mass - whole) * descending[whole]
++        shares[str(fraction)] = float(subtotal / total) if total else None
++    half = (
++        int(np.searchsorted(np.cumsum(descending), total / 2, side="left")) + 1 if total else None
++    )
++    gini = (
++        float(np.dot(2 * np.arange(1, len(a) + 1) - len(a) - 1, a) / (len(a) * total))
++        if total
++        else None
++    )
++    return dict(
++        n=len(a),
++        total=total,
++        positive_count=int(np.count_nonzero(a)),
++        zero_count=int(np.count_nonzero(a == 0)),
++        minimum_count_for_half_mass=half,
++        fraction_for_half_mass=half / len(a) if half is not None else None,
++        top_shares=shares,
++        gini=gini,
++    )
++
++
++def concentration(values):
++    a = np.asarray(values)
++    if a.ndim != 3 or a.shape[2] != 5 or 0 in a.shape or not np.isfinite(a).all():
++        raise ValueError("finite (window,position,5) vectors required")
++    if np.any(a < 0):
++        raise ValueError("stored NLL and KL must be nonnegative")
++    refs = {}
++    for name, loss_col, kl_col in (("capoff", 1, 3), ("original", 2, 4)):
++        delta = a[:, :, 0] - a[:, :, loss_col]
++        kl = a[:, :, kl_col]
++        window_kl = kl.mean(axis=1)
++        near_zero = int(np.count_nonzero(np.abs(delta) < 1e-6))
++        refs[name] = dict(
++            near_zero_loss_change=dict(
++                count=near_zero, denominator=delta.size, fraction=near_zero / delta.size
++            ),
++            loss_positive_positions=mass_summary(
++                np.maximum(delta, 0), CONTRACT["position_top_fractions"]
++            ),
++            kl_positions=mass_summary(kl, CONTRACT["position_top_fractions"]),
++            kl_windows=mass_summary(window_kl, CONTRACT["window_top_fractions"]),
++            window_mean_kl=dict(
++                n=len(window_kl),
++                benchmark_pass_count=int(np.count_nonzero(window_kl <= 0.001)),
++                strict_exceedances={
++                    str(t): int(np.count_nonzero(window_kl > t)) for t in (0.01, 0.1)
++                },
++                quantiles={
++                    str(q): float(np.quantile(window_kl, q, method="linear"))
++                    for q in (0.5, 0.9, 0.99, 1.0)
++                },
++            ),
++        )
++    return dict(
++        contract=CONTRACT,
++        windows=a.shape[0],
++        positions=a.shape[0] * a.shape[1],
++        references=refs,
++        interpretation="Near-zero target-token loss change does not prove unchanged predictions or distributions. Concentration alone does not identify reader firing, a causal mechanism, or a power law.",
++    )
++
++
++def from_binding(binding):
++    path = Path(binding["path"])
++
++    def verify():
++        if hashlib.sha256(path.read_bytes()).hexdigest() != binding["sha256"]:
++            raise ValueError("concentration vector hash changed")
++
++    verify()
++    with np.load(path, allow_pickle=False) as archive:
++        if archive.files != ["values"]:
++            raise ValueError("unexpected concentration vector inventory")
++        result = concentration(archive["values"])
++    verify()
++    return result
++
++
++def report_lines(value):
++    lines = [
++        "",
++        "HT-7 concentration (descriptive; fractional top shares include zero mass):",
++        "",
++        "| Reference | Near-zero target NLL change / N | Positions for half KL (fraction) | Top .1% / 1% KL share | Position Gini | Windows KL ≤.001 / N | Windows >.01 / >.1 | Top 1% / 5% / 10% window KL share | Window median / p90 / p99 / max KL |",
++        "|---|---|---|---|---|---|---|---|---|",
++    ]
++    for name, ref in value["references"].items():
++        pos, win, means = ref["kl_positions"], ref["kl_windows"], ref["window_mean_kl"]
++        near = ref["near_zero_loss_change"]
++
++        def fmt(x):
++            return "undefined" if x is None else f"{x:.6g}"
++
++        lines.append(
++            f"| {name} | {near['count']} / {near['denominator']} | {fmt(pos['minimum_count_for_half_mass'])} ({fmt(pos['fraction_for_half_mass'])}) | "
++            + " / ".join(fmt(x) for x in pos["top_shares"].values())
++            + f" | {fmt(pos['gini'])} | {means['benchmark_pass_count']} / {means['n']} | "
++            + " / ".join(str(x) for x in means["strict_exceedances"].values())
++            + " | "
++            + " / ".join(fmt(x) for x in win["top_shares"].values())
++            + " | "
++            + " / ".join(fmt(x) for x in means["quantiles"].values())
++            + " |"
++        )
++    return [*lines, "", value["interpretation"]]

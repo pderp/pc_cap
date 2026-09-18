@@ -1,0 +1,60 @@
+.......E......F.......................                                   [100%]
+==================================== ERRORS ====================================
+__________________ ERROR at setup of test_vector_hash_checked __________________
+
+self = PosixPath('/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round33/pytest-initial')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round33/pytest-initial'
+
+/usr/lib64/python3.12/pathlib.py:1311: FileNotFoundError
+=================================== FAILURES ===================================
+______ test_all_cap_failures_leave_primary_intervals_and_labels_unchanged ______
+
+    def test_all_cap_failures_leave_primary_intervals_and_labels_unchanged():
+        m, loaded = reduced()
+        baseline = inference.primary_contrasts(m, loaded)
+        for cell in m["cells"]:
+            cell["cap_fidelity_policy"] = copy.deepcopy(policy.POLICY)
+            cell["population"]["full_validation"] = {"synthetic": True}
+            obs = loaded[cell["cell_id"]]
+            obs.update(
+                primary_metrics_complete=True,
+                endpoint_complete=True,
+                full_validation_fidelity_passes=False,
+            )
+            obs["scientific_admission"] = policy.scientific_admission(cell, obs, "confirmatory")
+>       results = inference.primary_contrasts(m, loaded)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_49m_fidelity_policy.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/r1_49g_inference.py:182: in primary_contrasts
+    contrasts = validate_family(matrix)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_49g_inference.py:167: in validate_family
+    old.validate_matrix(matrix)
+scripts/r1_75_analysis_stage4_v1.py:245: in validate_matrix
+    fidelity_policy.validate_matrix(matrix, cells)
+scripts/r1_49m_fidelity_policy.py:38: in validate_matrix
+    validate(policy)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def validate(policy):
+        if policy != POLICY:
+>           raise ValueError("unrecognized or missing DEC-064 cap fidelity policy")
+E           ValueError: unrecognized or missing DEC-064 cap fidelity policy
+
+scripts/r1_49m_fidelity_policy.py:30: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_49m_fidelity_policy.py::test_all_cap_failures_leave_primary_intervals_and_labels_unchanged
+ERROR tests/revision_v1/test_ht7_concentration.py::test_vector_hash_checked
+1 failed, 36 passed, 1 error in 1.14s

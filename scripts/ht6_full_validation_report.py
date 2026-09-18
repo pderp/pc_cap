@@ -12,6 +12,8 @@ import subprocess
 from pathlib import Path
 
 import numpy as np
+from scripts import ht7_concentration as ht7
+from scripts import r1_49m_fidelity_policy as fidelity_policy
 from scripts import r1_58l_measurement_inventory as measured
 from scripts import r1_63l_full_validation_contract as full
 from scripts.ht_audit_existing import statistics, tail_sum
@@ -138,6 +140,11 @@ def build(*, allow_partial=False):
             checkpoint=checkpoint,
             full=result,
             sample=sample,
+            cap_fidelity_benchmark=fidelity_policy.benchmark(result),
+            concentration=dict(
+                full=ht7.concentration(values),
+                sample=ht7.concentration(values[: contract["sample_windows"]]),
+            ),
             sample_minus_full=comparisons,
             cost={
                 k: record[k]
@@ -153,7 +160,7 @@ def build(*, allow_partial=False):
             },
             coverage=result["coverage"],
             bindings_sha256=record["bindings_sha256"],
-            admission_interpretation="D.2 numerical fidelity flags retained as historical implementation output; cap-gate scope is pending R1-49l/lead decision, not decided by HT-6",
+            admission_interpretation="DEC-064: cap fidelity is a labelled secondary benchmark without an admission veto. These remain development cells, not confirmatory admissions.",
         )
         curves[key] = dict(
             full=(values[:, :, 0] - values[:, :, 2]).ravel(),
@@ -176,6 +183,8 @@ def build(*, allow_partial=False):
             full.ref(full.__file__),
             full.ref(ROOT / "scripts/ht_audit_existing.py"),
             full.ref(ROOT / "scripts/ht6_plot.py"),
+            full.ref(ht7.__file__),
+            full.ref(fidelity_policy.__file__),
         ],
         framing="DEC-054: preliminary hints at what the architecture could provide; not the coupled free energy, not a test of the one-kappa conjecture; these cells do not compare kappa treatments",
         limits=[
@@ -194,7 +203,7 @@ def markdown(report):
         "",
         f"Status: **{report['status']}**; {report['completed']}/4 completed measurements.",
         "",
-        "This descriptive report makes no classifier decision. R1-49l traces the separate cap-gate scope question. Both references remain visible even when their numerical results coincide.",
+        "DEC-064 labels cap fidelity as a secondary benchmark without a primary-comparison veto. This development report makes no confirmatory classifier decision. Both references remain visible even when their numerical results coincide.",
         "",
         "Full validation is 1,931 complete 128-token windows / 245,237 predictions; 121 trailing tokens are dropped. The first 128 windows / 16,256 predictions are the fixed descriptive sample. Sample loss statistics use its separately saved rows; sample KL is derived from the matching full-vector prefix, not an independent sampled KL assay.",
     ]
@@ -230,6 +239,13 @@ def markdown(report):
             "",
             f"Costs: full outer phase {cell['cost']['full_outer_seconds']:.3f} s; all {cell['cost']['sampled_checkpoint_count']} sampled phases combined {cell['cost']['sampled_all_checkpoints_seconds']:.3f} s; attempt {cell['cost']['attempt_wall_seconds']:.3f} s. Allocator peak {cell['cost']['device_allocator_lifetime_peak_mib']} MiB is a lifetime high-water observation.",
         ]
+        lines += fidelity_policy.report_lines([dict(cell_id=key, **cell)])
+        for population in ("full", "sample"):
+            lines += [
+                "",
+                f"Population: **{population}**.",
+                *ht7.report_lines(cell["concentration"][population]),
+            ]
     lines += [
         "",
         "## Reading for the talk",

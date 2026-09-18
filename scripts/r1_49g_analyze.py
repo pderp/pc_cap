@@ -7,6 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from scripts import r1_49m_fidelity_policy as fidelity_policy
 from scripts import r1_63l_full_validation_contract as full_contract
 from scripts import r1_75_analysis_stage4_v1 as old
 from scripts.r1_49g_inference import FAMILY, primary_contrasts
@@ -119,6 +120,9 @@ def analyze(matrix):
     if matrix.get("full_validation") is not None:
         report["analysis_revision"] = "R1-63l_DEC063_full_and_sampled_validation"
         report["full_validation_contract"] = matrix["full_validation"]
+    if matrix.get("cap_fidelity_policy") is not None:
+        report["analysis_revision"] = "R1-49m_DEC064_D3_cap_benchmark_no_veto"
+        report["cap_fidelity_policy"] = matrix["cap_fidelity_policy"]
     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
     report["limits"] += [
         FAMILY["coverage"],
@@ -137,6 +141,7 @@ def markdown(report):
         "# R1-49g — DEC-057/058/059 analysis",
         "",
         f"Scope: {report['scope']}. GPU/model calls: zero.",
+        report.get("cap_fidelity_interpretation", ""),
         "",
         "The 63 intervals use nominal Bonferroni allocation of 0.05 and three realization clusters; exact familywise coverage is not claimed.",
         "",
@@ -206,6 +211,8 @@ def markdown(report):
         "",
     ]
     lines += full_contract.report_lines(report["cells"])
+    if report.get("cap_fidelity_policy") is not None:
+        lines += fidelity_policy.report_lines(report["cells"])
     return "\n".join(lines)
 
 
@@ -231,6 +238,8 @@ def run(matrix_path, output_prefix):
         "scripts/r1_74_rescore.py",
         "scripts/ht_audit_existing.py",
         "scripts/r1_63l_full_validation_contract.py",
+        "scripts/r1_49m_fidelity_policy.py",
+        "scripts/ht7_concentration.py",
     ]
     report["analysis_source_sha256"] = {
         name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in names

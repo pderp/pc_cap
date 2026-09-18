@@ -12,6 +12,8 @@ import math
 from collections import Counter
 from pathlib import Path
 
+from scripts import ht7_concentration as ht7
+from scripts import r1_49m_fidelity_policy as fidelity_policy
 from scripts import r1_63l_full_validation_contract as full_contract
 from scripts.ht_audit_existing import tail_sum
 from scripts.r1_74_rescore import preservation_flags, preservation_summary
@@ -240,6 +242,7 @@ def summarize_checkpoint(report, population, n, final):
 
 def validate_matrix(matrix):
     cells = all_cells(matrix)
+    fidelity_policy.validate_matrix(matrix, cells)
     validation = matrix.get("full_validation")
     if matrix.get("endpoint_contract_version") == 1 or validation is not None:
         full_contract.validate(validation)
@@ -382,6 +385,11 @@ def load_cell(cell, files, scope):
                     files.sources,
                     sampled_population=cell["population"]["drift"],
                 )
+                if cell.get("cap_fidelity_policy") is not None:
+                    fidelity_policy.validate(cell["cap_fidelity_policy"])
+                    summary = secondary["full_validation"]
+                    if summary.get("complete"):
+                        summary["concentration"] = ht7.from_binding(summary["vectors"])
             elif "full_validation" in report.get("endpoints", {}):
                 raise ValueError("full-validation observation at an intermediate checkpoint")
         previous = rec["receipt_sha256"]
@@ -436,15 +444,17 @@ def load_cell(cell, files, scope):
         if expected_full is not None
         else None
     )
-    out["scientific_admission"] = (
-        scope == "confirmatory"
-        and cell.get("admitted") is True
-        and out["primary_metrics_complete"]
-        and (
-            expected_full is None
-            or (out["endpoint_complete"] and out["full_validation_fidelity_passes"])
-        )
+    out["scientific_admission"] = fidelity_policy.scientific_admission(cell, out, scope)
+    out["cap_fidelity_policy"] = cell.get("cap_fidelity_policy")
+    out["cap_fidelity_interpretation"] = (
+        "DEC-064 labelled secondary benchmark; numeric failure never vetoes primary comparisons"
+        if cell.get("cap_fidelity_policy") is not None
+        else "historical pre-DEC-064 behavior; not the current adopted policy"
     )
+    if cell.get("cap_fidelity_policy") is not None:
+        out["cap_fidelity_benchmark"] = fidelity_policy.benchmark(
+            final_secondary.get("full_validation", {})
+        )
     out["unreceipted_checkpoints"] = [
         str(p)
         for p in sorted(directory.glob("attempt-*/checkpoint-*.json"))
@@ -614,6 +624,12 @@ def analyze(matrix):
         "matrix_name": matrix["name"],
         "matrix_sha256": digest(matrix),
         "scope": matrix["scope"],
+        "cap_fidelity_policy": matrix.get("cap_fidelity_policy"),
+        "cap_fidelity_interpretation": (
+            "DEC-064 secondary benchmarks; numeric cap failures do not veto primary comparisons."
+            if matrix.get("cap_fidelity_policy") is not None
+            else "Historical matrix without DEC-064 binding; any D.2 cap-veto behavior is a historical replay, not the current adopted policy."
+        ),
         "banner": "development/draft observations do not fill confirmation slots",
         "cells": [loaded[c["cell_id"]] for c in ordered],
         "blocks": blocks,
@@ -638,6 +654,7 @@ def markdown(report):
         f"# {report['matrix_name']} — Stage 4 cell analysis",
         "",
         report["banner"],
+        report.get("cap_fidelity_interpretation", ""),
         "",
         "| Block | Planned | Terminal artifacts | Complete primary metrics | Execution complete |",
         "| --- | ---: | ---: | ---: | --- |",
@@ -710,4 +727,6 @@ def markdown(report):
         )
     lines += ["", *["- " + s for s in report["limits"]]]
     lines += full_contract.report_lines(report["cells"])
+    if report.get("cap_fidelity_policy") is not None:
+        lines += fidelity_policy.report_lines(report["cells"])
     return "\n".join(lines) + "\n"

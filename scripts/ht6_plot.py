@@ -29,15 +29,32 @@ def render(source, output):
             )
             ax.set_axis_off()
             continue
+        ax.set_yscale("log")
+        ax.set_ylim(0.5 / max(s["n"] for s in panel["series"]), 1.05)
+        positive = False
         for series in panel["series"]:
+            label = f"{series['name']} (N={series['n']:,})"
+            if not any(y > 0 for y in series["y"]):
+                ax.plot([], [], label=label + "; no positive harm")
+                continue
+            positive = True
             ax.step(
                 series["x"],
                 series["y"],
                 where="post",
-                label=f"{series['name']} (N={series['n']:,})",
+                label=label,
             )
-        ax.set_yscale("log")
-        ax.set_ylim(0.5 / max(s["n"] for s in panel["series"]), 1.05)
+        ax.set_xlim(left=0)
+        if not positive:
+            ax.set_xlim(0, 1)
+            ax.text(
+                0.5,
+                0.5,
+                "No positive NLL harm observed\nSurvival = 0 for every x ≥ 0",
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
         ax.set_xlabel("Positive NLL increase (nats)")
         ax.set_ylabel("Fraction strictly above x")
         ax.grid(alpha=0.2)

@@ -1,7 +1,7 @@
 # HT-6 — full-validation fidelity and tail report
 
-- Status: report generator and CPU checks complete; final four-cell report pending chain S. The saved output is an explicitly partial **1/4 preview**.
-- Agent: Codex, round 32.
+- Status: report generator and CPU checks complete; final four-cell report pending chain S. Latest saved output is an explicitly partial **2/4 preview** (round 33, below).
+- Agent: Codex, rounds 32–33.
 - Inputs: the four R1-64g recipes, completed immutable checkpoint/result/vector/GNU-time evidence, DEC-063 populations, DEC-054 framing and R1-49l's separate scope audit.
 - Outputs: `scripts/ht6_full_validation_report.py`, `scripts/ht6_plot.py`, `tests/revision_v1/test_ht6_full_validation_report.py`, `logs/r1_round32/ht6-partial-preview-v2/{report.json,report.md,curve-series.json,tail-survival.png,tail-survival.pdf,plot-environment.json}`.
 
@@ -43,5 +43,13 @@ Numerical analysis stays in the project venv. Rendering runs the existing `asset
 - Done-when: all four audited cell reports, full/sample comparison, costs and qualified talk reading exist. Final four-cell completion not reached.
 - Cost: CPU only, GPU seconds 0, model calls 0.
 - Deviations: prepared the report pipeline and one-cell preview while the three remaining owner runs continue. No missing outcomes were inferred.
-- Unresolved: completion of chain S; R1-49l/Q17 scope remains separate. Cost admission and classifier decisions are not performed by this lane.
+- Unresolved: completion of chain S. Q17 is now resolved by DEC-064; cost admission and confirmatory classifier decisions are not performed by this lane.
 - Questions for lead: none additional to the R1-49l handoff.
+
+## Round 33 update — DEC-064 and HT-7
+
+The latest preview is `logs/r1_round33/ht6-partial-preview-v2/`: both completed MQuAKE cells, both references, full and sampled results, benchmark labels, full HT-7 concentration, sampled/full overlap, PNG/PDF and the plotting-environment record. All four donors remain mandatory for the default final report. The learned-reader cell fails the KL benchmark and passes NLL; v0 has zero observed loss/KL changes and passes both. Under DEC-064 these labels do not veto primary comparisons; development status remains unchanged.
+
+The plot now explicitly labels the all-zero survival case instead of leaving an apparently empty logarithmic panel. Its step direction remains the tested strict empirical survival definition. Visual inspection and the 79-test round-33 regression passed. The earlier round-33 preview remains an intermediate artifact; **v2** is the reviewed preview.
+
+After the other two profiles finish, build with no `--allow-partial`, inspect the four-cell report and figure, and copy the final figure plus a two-sentence qualified result to `assets/presentation-materials/`. That final export has not yet happened. See `HT-7.md` and `R1-round33-handoff.md`.
