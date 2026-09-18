@@ -440,6 +440,7 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         dict(
             recipes=bindings,
             matrix=mb,
+            matrix_sha256=mb["sha256"],
             freeze=freeze,
             cost_admission=spec["receipts"]["chain_i_cell_ceilings"],
         ),

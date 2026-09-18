@@ -74,33 +74,26 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 35 (CPU; open now; posted 2026-09-18 08:25 EDT) — cost v4, package v14, launch runbook
+  +0.006## 3. Lanes for Codex — round 36 (CPU; open now; posted 2026-09-18 09:05 EDT) — receipt v4 and candidate v14, no more gaps
 
-Round 34 is committed and mirrored. After chain S (≈ 09:00) the orchestrator applies the R1-63l backend patch and
-the HT-8 successor-package patch, rebinds every recipe identity, runs the watch on the fourth cell and the final HT-6
-build. Priority order: **R1-58l → R1-63m → R1-D11 → X19 → HT-4f.** Rules as in round 22 and §3a.
+Round 35 is committed and mirrored; the D11 assembler patch is applied. DEC-065 (decisions file) states the cost
+transfers explicitly so the typed receipt can bind them. Priority order: **R1-58l (finish) → R1-63m (finish) → X19 →
+HT-4f.** Rules as in round 22 and §3a. The orchestrator is not editing any script now; every file is yours to fix.
 
-### Lane R1-58l — cost receipt v4 with its typed validator (first; the fourth donor lands ≈ 09:00)
+### Lane R1-58l — cost receipt v4, typed validator, ceilings v2 (finish)
 
-As posted: four donors, explicit transfers, ceilings v2 (full validation ≈ 0.36 h learned / ≈ 0.41 h v0 per cell),
-revised process-hour projection, gap inventory, the v4 validator. State the remaining gaps that are not signatures.
+Bind DEC-065's transfers (i)–(iv) as reviewed transfers; ingest the four chain S donors and the 27 sampled-phase
+costs; ceilings v2 = 1.5 × (measured or transferred solo cost incl. the full phase); the revised process-hour
+projection with both scenarios; host peaks (direct + monitor-matched); the failure-charging rule; the v4 validator;
+`lead_approved` false. List what is left that is not a signature — the target is nothing.
 
-### Lane R1-63m — candidate v14, forms v9, sheet v8 on D.3 with the watch bound (patches applied 08:45; two blockers first)
+### Lane R1-63m — candidate v14, forms v9, sheet v8 (finish)
 
-Both patches are installed. (1) `r1_64g_full_validation_recipes --rebind-active` refuses: it pins the R1-68f-reviewed
-backend bytes; re-pin the rebinder (and any other builder that pins the backend) to the post-63l identity, recording
-the change. (2) After the successor patch, `tests/revision_v1/test_r1_63j_production_bundle.py::test_extension_also_carries_required_full_contract`
-fails (both parametrisations): make the extension recipes carry the full-validation contract exactly as the core.
-Then rebuild every recipe identity and the package.
-
-### Lane R1-D11 — launch-day runbook and block-boundary report (new)
-
-`docs/tasks/R1-D11-launch-runbook.md` + `scripts/r1_d11_block_report.py`: the exact orchestrator commands from the
-lead's freeze act to the first queued cell (endpoint construction on the sealed draw, seal, the queue with two
-workers and the watch, the receipt root), the daily status command, and a block-boundary report generator that
-turns the queue inventory + the fidelity watch + the cost ledger into the text block the orchestrator posts in the
-lead queue (complete cells, incomplete list, hours spent / projected, watch entries and alerts since the last
-boundary). Tests on the synthetic queue.
+Fix in order: the rebinder's backend pin (post-63l identity), the extension recipes' full-validation contract (the
+failing `test_extension_also_carries_required_full_contract`), the operator `check_fields(cost-admit)` reading the
+typed receipt's bound ceilings; rebuild every recipe identity; rehearse D9 → endpoints → seal → freeze candidate →
+queue dry-run with two workers and the watch on the real unsigned inputs; emit candidate v14 / forms v9 / sheet v8
+with the open gates listed (signatures only).
 
 ### Lane X19 — re-review of the v14 package
 

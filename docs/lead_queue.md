@@ -859,3 +859,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     fidelity report built; figure and two-sentence result in the presentation materials. The two pending patches are
     installed; Codex has two small blockers before candidate v14 (a builder pin, one assembler test).
 
+86. (2026-09-18, 09:05 EDT) Codex's round 35 committed in both repos: the launch-day runbook with the block-boundary report
+    I will post to you after each block, and the complete four-donor cost basis. **Schedule with full validation:**
+    Codex's scenario is ≈ 484 process-hours for the 405 cells (≈ 726 with the 1.5× per-cell safety margin, against the
+    750 process-hour cap), i.e. ≈ 245–260 wall-clock hours with two workers against ≈ 360–375 usable from a
+    September 19–20 launch — the buffer is now ≈ 1.4–1.5×, down from 2.7× before DEC-063 added the full split. I
+    recorded the cost transfers the receipt needs (DEC-065; you may override) and the first confirmatory block's
+    measured costs replace them. Round 36 finishes receipt v4 and candidate v14; X19 then reviews. Your sitting:
+    September 19, provided X19 says ready.
+
