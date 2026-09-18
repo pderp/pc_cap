@@ -1,0 +1,38 @@
+F....                                                                    [100%]
+=================================== FAILURES ===================================
+_____ test_failed_gate_keeps_intervals_and_suppresses_only_affected_labels _____
+
+    def test_failed_gate_keeps_intervals_and_suppresses_only_affected_labels():
+>       r = audit.classifier_rehearsal()["scenarios"]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_49l_fidelity_interpretation.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/r1_49l_fidelity_audit.py:125: in classifier_rehearsal
+    results[name] = inference.primary_contrasts(matrix, observations)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_49g_inference.py:182: in primary_contrasts
+    contrasts = validate_family(matrix)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_49g_inference.py:142: in validate_family
+    layout = from_matrix(matrix)
+             ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'name': 'synthetic', 'scope': 'confirmatory', 'cells': [{'condition': 'R1_learned_ff', 'dataset': 'zsre', 'realizatio...d_update', 'v0_live_C1', 'v0_live_C2', ...], 'realizations': [0, 1, 2], 'orders': [100, 101, 102, 103, 104], ...}, ...}
+
+    def from_matrix(matrix):
+        if matrix.get("name") == "run_matrix_v5_1":
+            if "dataset_layouts" in matrix and digest(matrix["dataset_layouts"]) != digest(
+                production()
+            ):
+                raise ValueError("legacy matrix layout changed")
+            return production()
+        if matrix.get("name") != "run_matrix_v5_2_option_D" or matrix.get("option") != "D":
+>           raise ValueError("registered v5.1 or DEC-060 option-D matrix required")
+E           ValueError: registered v5.1 or DEC-060 option-D matrix required
+
+scripts/r1_d9_layouts.py:112: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_49l_fidelity_interpretation.py::test_failed_gate_keeps_intervals_and_suppresses_only_affected_labels
+1 failed, 4 passed in 0.42s

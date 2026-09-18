@@ -1,0 +1,157 @@
+commit 73ff6b06219a5ff7844dc8d3a4aac5f3b87f7db9
+Author: Derp Peoples <dpeoples@earthland.ai>
+Date:   Fri Sep 18 06:52:34 2026 -0400
+
+    Codex round 31: R1-63l production consumers carry full_validation (assembler, populations, admission, analysis; backend patch prepared), R1-49k protocol v5.2-D.2 (DEC-063 text), R1-58l receipt v4 plan
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    Claude-Session: https://claude.ai/code/session_01KJfiMMKuEUX8oia1Rsxsz2
+
+diff --git a/scripts/r1_75_analysis_stage4_v1.py b/scripts/r1_75_analysis_stage4_v1.py
+index bb72676..3df50bc 100644
+--- a/scripts/r1_75_analysis_stage4_v1.py
++++ b/scripts/r1_75_analysis_stage4_v1.py
+@@ -12,6 +12,7 @@ import math
+ from collections import Counter
+ from pathlib import Path
+ 
++from scripts import r1_63l_full_validation_contract as full_contract
+ from scripts.ht_audit_existing import tail_sum
+ from scripts.r1_74_rescore import preservation_flags, preservation_summary
+ 
+@@ -164,6 +165,8 @@ def drift_summary(section, expected):
+             "max_positive_nats": maximum,
+             "maximum_position": ids[positive.index(maximum)],
+             "count_above_0_1_nats": sum(x > 0.1 for x in values),
++            "exceedances_nats": {str(x): sum(v > x for v in values) for x in (0.01, 0.1, 1.0)},
++            "ES95_positive_nats": tail_sum(positive, 0.05) / (0.05 * planned),
+             "ES99_positive_nats": tail_sum(positive, 0.01) / (0.01 * planned),
+             "definition": "fractional empirical top1% mean of positive NLL harm; denominator .01*N",
+             "zero_positive_n": sum(x == 0 for x in positive),
+@@ -237,6 +240,17 @@ def summarize_checkpoint(report, population, n, final):
+ 
+ def validate_matrix(matrix):
+     cells = all_cells(matrix)
++    validation = matrix.get("full_validation")
++    if matrix.get("endpoint_contract_version") == 1 or validation is not None:
++        full_contract.validate(validation)
++        for cell in cells:
++            population = cell.get("population")
++            if (
++                cell.get("full_validation") != validation
++                or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
++                or (population is not None and population.get("full_validation") != validation)
++            ):
++                raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+     if not cells:
+         raise ValueError("nonempty independently declared matrix required")
+     identities = [coordinate(c) for c in cells]
+@@ -281,6 +295,12 @@ def load_cell(cell, files, scope):
+         "checkpoints": {},
+         "missing_checkpoints": list(cell["checkpoints"]),
+         "scientific_admission": False,
++        "full_validation_complete": False
++        if (cell.get("population") or {}).get("full_validation")
++        else None,
++        "endpoint_complete": False
++        if (cell.get("population") or {}).get("full_validation")
++        else None,
+     }
+     directory = cell.get("result_dir")
+     if not directory:
+@@ -342,6 +362,28 @@ def load_cell(cell, files, scope):
+         out["checkpoints"][str(n)] = summarize_checkpoint(
+             report, cell.get("population"), n, max(cell["checkpoints"])
+         )
++        expected_full = (cell.get("population") or {}).get("full_validation")
++        if expected_full is not None:
++            secondary = out["checkpoints"][str(n)]["secondary"]
++            secondary["sampled_drift"] = {
++                **drift_summary(
++                    report.get("endpoints", {}).get("drift"), cell["population"]["drift"]
++                ),
++                "population": "128-window-prefix_descriptive",
++            }
++            if n == max(cell["checkpoints"]):
++                secondary["full_validation"] = full_contract.summary(
++                    report.get("endpoints", {}).get("full_validation"),
++                    expected_full,
++                    report,
++                    local,
++                    cell["manifest_sha256"],
++                    meta["adapter_identity"],
++                    files.sources,
++                    sampled_population=cell["population"]["drift"],
++                )
++            elif "full_validation" in report.get("endpoints", {}):
++                raise ValueError("full-validation observation at an intermediate checkpoint")
+         previous = rec["receipt_sha256"]
+         receipt_hashes[n] = previous
+     completed_results = []
+@@ -368,8 +410,40 @@ def load_cell(cell, files, scope):
+         v["status"] == "complete" for v in out["checkpoints"].values()
+     )
+     out["status"] = "complete_artifacts" if out["artifact_complete"] else "partial_cell"
++    expected_full = (cell.get("population") or {}).get("full_validation")
++    final_secondary = out["checkpoints"].get(str(max(cell["checkpoints"])), {}).get("secondary", {})
++    out["full_validation_complete"] = (
++        final_secondary.get("full_validation", {}).get("complete", False)
++        if expected_full is not None
++        else None
++    )
++    out["full_validation_fidelity_passes"] = (
++        (final_secondary.get("full_validation", {}).get("fidelity") or {}).get("passes", False)
++        if expected_full is not None
++        else None
++    )
++    out["sampled_drift_complete"] = (
++        not out["missing_checkpoints"]
++        and all(
++            cp["secondary"].get("sampled_drift", {}).get("status") == "complete"
++            for cp in out["checkpoints"].values()
++        )
++        if expected_full is not None
++        else None
++    )
++    out["endpoint_complete"] = (
++        out["full_validation_complete"] and out["sampled_drift_complete"]
++        if expected_full is not None
++        else None
++    )
+     out["scientific_admission"] = (
+-        scope == "confirmatory" and cell.get("admitted") is True and out["primary_metrics_complete"]
++        scope == "confirmatory"
++        and cell.get("admitted") is True
++        and out["primary_metrics_complete"]
++        and (
++            expected_full is None
++            or (out["endpoint_complete"] and out["full_validation_fidelity_passes"])
++        )
+     )
+     out["unreceipted_checkpoints"] = [
+         str(p)
+@@ -516,6 +590,7 @@ def analyze(matrix):
+         }
+         for c in ordered
+         if not loaded[c["cell_id"]]["artifact_complete"]
++        or loaded[c["cell_id"]].get("endpoint_complete") is False
+     ]
+     blocks = []
+     for block in sorted({c["block_number"] for c in cells}):
+@@ -526,7 +601,9 @@ def analyze(matrix):
+                 "planned": len(rows),
+                 "artifact_complete": sum(r["artifact_complete"] for r in rows),
+                 "primary_metrics_complete": sum(r["primary_metrics_complete"] for r in rows),
+-                "complete": all(r["artifact_complete"] for r in rows),
++                "complete": all(
++                    r["artifact_complete"] and r.get("endpoint_complete") is not False for r in rows
++                ),
+             }
+         )
+     comparisons = pair_contrasts(matrix, loaded)
+@@ -632,4 +709,5 @@ def markdown(report):
+             + f" | {c['classification']} |"
+         )
+     lines += ["", *["- " + s for s in report["limits"]]]
++    lines += full_contract.report_lines(report["cells"])
+     return "\n".join(lines) + "\n"

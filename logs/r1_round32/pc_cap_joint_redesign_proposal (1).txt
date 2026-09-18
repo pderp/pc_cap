@@ -1,0 +1,168 @@
+PC CAP / JOINT REDESIGN PROPOSAL                                                                  13 SEPTEMBER 2026
+
+
+
+
+A more capable cap, with a base
+trained to support it
+REPORT 2 / CONCISE RESEARCH PROPOSAL
+Recommendation based on the reviewed results. The design below is proposed work, not a measured
+improvement.
+
+
+  Recommendation. Give the cap a learned ability to recognize, interpret and apply new
+  knowledge. Train the base and cap together on short learning episodes, rewarding successful
+  updates and preservation of earlier knowledge.
+
+
+
+Why change both?
+The present cap stores a fixed activation correction behind a similarity gate. It can memorize an
+answer but often fails to recognize a reworded question, or interferes with another memory. Some
+retention losses occur while memory is not full. More expressive reading and correction mechanisms
+directly address these failures. [P1]
+The distillation starts with a copy of the teacher and trains it to match that teacher. In ideal arithmetic,
+the copy already minimizes the pure output-matching loss. This explains why close fidelity alone gives
+little reason to expect more editable internal representations. The new objective must explicitly reward
+being easy to update. [P2]
+
+The proposed cap
+
+ Capability                          Simple implementation idea
+
+ Recognize when a memory             Learn a reader from several transformer depths and the question context.
+ applies                             Train with paraphrases and similar-looking questions that should remain
+                                     unchanged.
+
+ Apply knowledge in context          Store an encoded fact or correction. A small neural network combines it with
+                                     the current question to generate the appropriate activation changes.
+
+ Coordinate the changes              Use one shared internal state to generate corrections at several depths
+                                     together.
+
+ Remember quickly; generalize        Write new experiences to episodic memory. Use a slower, replay-supported
+ gradually                           learning process to acquire reusable patterns.
+
+
+A practical starting scale is a few million trainable cap parameters, two or three small layers and a
+256-512-dimensional internal state, plus bounded memory. These are pilot choices, not established
+optimal settings.
+Example: after learning "Mira now works at Helix Labs," answer "Who employs Mira?" correctly while
+preserving the answer to "Where did Mira previously work?" The missing capability is recognizing the
+new fact's scope and using it appropriately.
+
+
+
+
+Prepared for Benjamin Goertzel | Research assessment                                                            1/3
+PC CAP / JOINT REDESIGN PROPOSAL                                                                  13 SEPTEMBER 2026
+
+
+
+
+Train for the ability to learn
+Distillation should preserve competence and develop an interface that supports useful updates.
+
+Each training episode simulates a small piece of continual learning. The system starts with earlier
+knowledge, receives a new fact or rule, updates the cap, and is tested on new applications plus old and
+unrelated examples.
+
+ Training step                       What it teaches
+
+ 1. Preserve ordinary behavior       Keep the cap-disabled base close to the teacher on ordinary text.
+
+ 2. Teach a new fact or rule         Allow only a small, declared number of cap updates using the teaching
+                                     examples.
+
+ 3. Test new formulations            Reward correct answers to unseen paraphrases and applications of the taught
+                                     information.
+
+ 4. Recheck earlier knowledge        Penalize damage to old corrections and closely related questions outside the
+                                     new fact's scope.
+
+ 5. Improve the learning system      Use the episode's results to improve the cap and selected base parameters,
+                                     while measuring the required computation.
+
+
+Teacher fidelity applies to ordinary base behavior; revised questions are scored against the new
+information. This avoids asking the edited system to reproduce an obsolete teacher answer. Final
+evaluation must use facts and entities excluded from training.
+
+Where predictive coding can contribute
+A subsequent cap version can maintain a small latent state that predicts and reconciles observations
+from the tapped transformer depths, conditioned on retrieved memories. A few internal adjustment
+steps could produce coordinated corrections. Initially, the observations can remain fixed while the
+small cap settles, followed by one corrected base pass.
+This gives iterative computation a useful role inside the cap. It is a hypothesis: the comparison must
+show that the extra adjustment improves answers enough to justify its cost. Prediction uses the
+prompt and stored knowledge; the correct answer is supplied only during learning.
+
+Keep the learning claims precise
+First build a differentiable reference that learns the episodic objective reliably. An ePC-capable base
+trained by ordinary backpropagation is a hybrid system. A separate condition must test explicit ePC
+updates before claiming an advantage from that learning rule.
+During each evaluation stream, hold the base fixed so cap learning can be assessed cleanly. A later,
+separate experiment can allow slow local consolidation into the backbone; that is needed to test the
+proposed advantage of local backbone plasticity.
+
+
+
+
+Prepared for Benjamin Goertzel | Research assessment                                                              2/3
+PC CAP / JOINT REDESIGN PROPOSAL                                                                        13 SEPTEMBER 2026
+
+
+
+
+A small experiment that can decide
+Start with clear failure diagnoses, then test the coordinated change.
+
+First diagnostic: give the current cap the correct stored entry on paraphrase questions. A large
+improvement points to retrieval failure; persistent failure points to inadequate correction
+expressiveness. Use this oracle only for diagnosis, never as a deployable score.
+
+The main comparison
+ Base                                 Current cap                              More capable cap
+
+ Current distilled ePC                Existing reference                       Does the cap alone help?
+
+ Base trained for episodic            Does the base change alone help?         Does coordinated training help most?
+ editability
+
+
+For this table, use the same cap-update method across cells. Test predictive-coding learning and cap
+settling as additional controlled switches. Include the original BP base and a BP-trained counterpart of
+the strongest revised system with comparable data, objectives and compute.
+
+What would count as progress?
+• More correct answers to new paraphrases and applications after a long stream of edits.
+• Strong initial acquisition and retained original answers, with little damage to earlier or unrelated
+knowledge.
+• A useful cost trade-off after counting cap pretraining, base preparation, learning, memory and
+prediction.
+Start on short development streams, then extend to 1,000 edits and a small controlled task that
+requires combining two learned facts. Use separate final test data and fixed decision rules. A result
+that helps equally on BP is still useful; it would support the cap and objective without establishing an
+ePC-specific advantage.
+
+Recommended implementation order
+Learned retrieval and context-dependent corrections first; episodic base/cap training
+second; cap-level predictive-coding inference third. This sequence produces interpretable
+intermediate results while pursuing the coordinated design. Preserve the current completed
+experiment as the baseline.
+
+Sources and related work
+P1 Observed retrieval, retention and capacity findings. docs/report.md.
+P2 Teacher-copy initialization; pc/kd_energy.py defines teacher matching. src/pccap/distill/train.py.
+P3 Mitchell et al. (2022), Memory-Based Model Editing at Scale (SERAC): learned interpretation and scope of stored
+edits.
+P4 Chen et al., Lifelong Knowledge Editing with Retrieval-Augmented Continuous Prompt Learning (RECIPE): jointly
+trained retrieval and knowledge application.
+The related papers motivate learned memory interpretation; they do not validate the proposed ePC design. The
+companion coding-agent report specifies interfaces, implementation stages and evaluation gates.
+
+
+
+
+Prepared for Benjamin Goertzel | Research assessment                                                                 3/3
+
