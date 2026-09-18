@@ -74,29 +74,27 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 34 (CPU; open now; posted 2026-09-18 07:55 EDT) — the successor package on D.3
+  +0.006## 3. Lanes for Codex — round 35 (CPU; open now; posted 2026-09-18 08:25 EDT) — cost v4, package v14, launch runbook
 
-Round 33 is committed and mirrored. Chain S finishes ≈ 09:15 (two zsRE cells); the orchestrator then applies the
-R1-63l backend patch and rebinds every recipe identity. Priority order: **HT-8 → R1-63m → R1-58l → HT-6 (final) →
-X19 → HT-4f.** Rules as in round 22 and §3a.
+Round 34 is committed and mirrored. After chain S (≈ 09:00) the orchestrator applies the R1-63l backend patch and
+the HT-8 successor-package patch, rebinds every recipe identity, runs the watch on the fourth cell and the final HT-6
+build. Priority order: **R1-58l → R1-63m → R1-D11 → X19 → HT-4f.** Rules as in round 22 and §3a.
 
-### Lane HT-8 — fidelity watch hook (DEC-064a; as posted in round 33; first)
+### Lane R1-58l — cost receipt v4 with its typed validator (first; the fourth donor lands ≈ 09:00)
 
-### Lane R1-63m — candidate v14, forms v9, sheet v8 on D.3 (after the backend patch lands, ≈ 09:30)
+As posted: four donors, explicit transfers, ceilings v2 (full validation ≈ 0.36 h learned / ≈ 0.41 h v0 per cell),
+revised process-hour projection, gap inventory, the v4 validator. State the remaining gaps that are not signatures.
 
-Use `r1_49m_normative_closure.closure`, the D.3 protocol / matrix bindings and both new analysis modules; carry the
-DEC-064 policy through the copied final matrix cells; bind the new analysis hashes in the publication evidence;
-rehearse the D9 input / receipt / candidate chain against the exact post-patch identities (driver, backend, R1-68f
-module); the fidelity watch bound as a queue post-cell step. Historical v13 digests stay historical.
+### Lane R1-63m — candidate v14, forms v9, sheet v8 on D.3 with the watch bound (after the two patches, ≈ 09:30)
 
-### Lane R1-58l — cost receipt v4 with its typed validator (after chain S)
+### Lane R1-D11 — launch-day runbook and block-boundary report (new)
 
-Four donors (chain S) for the full-validation costs (learned ≈ 1,300 s; v0 ≈ 1,470 s per cell; zsRE numbers when
-they land), the explicit transfers (CounterFact per-position ratio, S1's extra original-base forward, 1,000-record
-occupancy), cell ceilings v2 and the revised process-hour projection (full validation adds ≈ 0.36–0.41 h per cell:
-core ≈ 209 + ≈ 140 solo h ≈ 350 solo h → ≈ 215 wall-clock h with two workers), the gap inventory, the v4 validator.
-
-### Lane HT-6 — final report and presentation export (after chain S; no `--allow-partial`)
+`docs/tasks/R1-D11-launch-runbook.md` + `scripts/r1_d11_block_report.py`: the exact orchestrator commands from the
+lead's freeze act to the first queued cell (endpoint construction on the sealed draw, seal, the queue with two
+workers and the watch, the receipt root), the daily status command, and a block-boundary report generator that
+turns the queue inventory + the fidelity watch + the cost ledger into the text block the orchestrator posts in the
+lead queue (complete cells, incomplete list, hours spent / projected, watch entries and alerts since the last
+boundary). Tests on the synthetic queue.
 
 ### Lane X19 — re-review of the v14 package
 

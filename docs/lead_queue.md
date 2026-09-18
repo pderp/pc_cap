@@ -844,3 +844,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     the watch hook, candidate v14 on D.3 after I install the last backend patch (≈ 09:30), cost receipt v4, the final
     fidelity report, a re-review, the ledger. Sitting: September 19.
 
+84. (2026-09-18, 08:20 EDT) **Fidelity watch — breach notice (not a creep alert).** The third full-validation cell, the
+    primary reader on zsRE at 300 records, measures mean KL 0.0023 (above the 0.001 benchmark) and mean NLL increase
+    0.0023 (below 0.01); 64 positions carry half the KL; max 9.9 nats. It becomes the development reference for
+    zsRE · primary. Watch state: three cells observed, two breaches (MQuAKE 0.0055, zsRE 0.0023), zero creep alerts.
+    Codex's round 34 committed in both repos: the watch is now automatic — it runs after every certified cell in the
+    queue and in the fidelity report, with durable records and alerts I relay to you. Last chain S cell (zsRE
+    v0_stable) finishes ≈ 09:00; then the two pending patches (backend cadence, successor package), the identity
+    rebind, cost receipt v4 and candidate v14.
+
