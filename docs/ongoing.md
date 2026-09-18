@@ -85,8 +85,9 @@ X19 → HT-4f.** Rules as in round 22 and §3a (fixture outputs under `assets/ru
 For each Q17 option: the exact D.3 text (fidelity section, U13 / U16, change log) and the analysis behaviour
 (`r1_49g_analyze` / R1-75: under option 1 the cap fidelity result is a labelled secondary benchmark and never sets
 `scientific_admission = False`; under 2 the NLL bound is the admission inequality with KL descriptive; under 3 the
-current behaviour), each as a patch + tests on the synthetic family; publish D.3 for the lead's option the moment the
-orchestrator records the decision. Keep the continued-base gate (DEC-047) unchanged in all three.
+current behaviour), each as a patch + tests on the synthetic family; publish D.3 for **option 1 — DEC-064 (lead, 07:45 EDT)**: cap fidelity as a labelled secondary benchmark with the
+concentration statistics, never setting `scientific_admission = False`; the other two options are recorded as
+considered, not built. Keep the continued-base gate (DEC-047) unchanged in all three.
 
 ### Lane HT-6 — final full-validation fidelity report (after chain S)
 
