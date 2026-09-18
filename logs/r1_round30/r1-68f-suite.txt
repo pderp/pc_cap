@@ -1,0 +1,129 @@
+.............................F.................................... [ 46%]
+........................................................................ [ 97%]
+....                                                                     [100%]
+=================================== FAILURES ===================================
+___________ test_sealed_execution_hook_with_isolated_tiny_admission ____________
+
+make = <function make.<locals>.fixture at 0x7f593c2d9940>
+paths = (PosixPath('/home/derp/cap/assets/runs/pc_cap/R1/r1_68f_tests/eba91957ad5141368cc2ea17af4b2b41'), PosixPath('/home/derp/cap/pc_cap/logs/r1_round30/cpu_fixtures/eba91957ad5141368cc2ea17af4b2b41'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f59242ab500>
+
+    def test_sealed_execution_hook_with_isolated_tiny_admission(make, paths, monkeypatch):
+        install(monkeypatch)
+        # The proposed donor lives in memory. The synthetic admission fixture binds
+        # installed file bytes; retain that disk pin only for this isolated test.
+        monkeypatch.setattr(backend, "DONOR_SHA256", driver.sha(driver.__file__))
+        manifest, definition, _ = fixture(paths)
+        validate = full.validate_spec
+    
+        def tiny_population(m):
+            # Sealed admission correctly forbids test_fixture on its recipe. Inject
+            # the TinyBase-only population exception into this test process, without
+            # relaxing the actual sealed loader, gate, population or recipe checks.
+            return validate({**m, "test_fixture": True})
+    
+        monkeypatch.setattr(full, "validate_spec", tiny_population)
+        data = payload(2, composition=True)
+        data["endpoints"]["drift"] = definition
+    
+        def enable(m, frozen, data):
+            m["full_validation"] = manifest["full_validation"]
+    
+        f = make(change=enable, data_override=data)
+        result = f["execute"]()
+        assert result["status"] == "complete"
+        reports = [
+            json.loads(p.read_text())
+            for p in Path(result["run_dir"]).glob("attempt-*/checkpoint-*.json")
+            if not p.name.endswith(".receipt.json")
+        ]
+        reports.sort(key=lambda r: r["checkpoint"])
+        assert "drift" in reports[0]["endpoints"]
+        assert "full_validation" not in reports[0]["endpoints"]
+        assert reports[1]["endpoints"]["full_validation"]["status"] == "complete"
+>       with pytest.raises(ValueError, match="already complete"):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_68f_full_validation.py:354: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_77b_sealed_backend.py:230: in execute
+    return backend.execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = '/home/derp/cap/pc_cap/logs/r1_round19/sealed_tests/27fcc3ddd684483c8dc691e0a5496425/docs/tasks/recipe.json'
+expected_sha256 = '3750fa530289d5a846bbe780e6c692706ae3c2f68938f130511164ff588f2dab'
+resume = True
+factory = <function make.<locals>.fixture.<locals>.factory at 0x7f593c51aca0>
+code_root = PosixPath('/home/derp/cap/pc_cap')
+output_root = PosixPath('/home/derp/cap/pc_cap/logs/r1_round19/sealed_tests/27fcc3ddd684483c8dc691e0a5496425/results/R1/stage4_sealed_cells')
+resource_root = PosixPath('/home/derp/cap/assets/test_scratch/r1_round19/27fcc3ddd684483c8dc691e0a5496425/snapshots')
+receipt_root = PosixPath('/home/derp/cap/pc_cap/logs/r1_round19/sealed_tests/27fcc3ddd684483c8dc691e0a5496425/logs/execution')
+stop_after_checkpoint = None
+
+    if output_root != OUTPUT_ROOT or resource_root != RESOURCE_ROOT:
+        raise PermissionError("canonical sealed output/resource roots required")
+    if not receipt_root.is_relative_to(ROOT / "logs"):
+        raise PermissionError("execution cost receipts belong in repo logs")
+    receipt_root.mkdir(parents=True, exist_ok=True)
+    folder = receipt_root / uuid.uuid4().hex
+    durable_directory(folder)
+    start = {
+        "recipe": {"path": str(Path(path).resolve()), "sha256": expected_sha256},
+        "resume": resume,
+        "backend": backend_binding(),
+        "started_unix": time.time(),
+    }
+    begun = time.monotonic()
+    durable_json(folder / "start.json", start)
+    fd = None
+    status, error, result = "failed", None, None
+    try:
+        deadline_check()
+        m = inspect_manifest(path, expected_sha256, code_root=code_root)
+        from scripts.r1_75_analysis_stage4_v1 import coordinate_id
+    
+        locks = ROOT / "logs/r1_77b_locks"
+        locks.mkdir(parents=True, exist_ok=True)
+        fd = os.open(locks / (coordinate_id(m["cell"]) + ".lock"), os.O_RDONLY | os.O_CREAT, 0o600)
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        for prior in receipt_root.glob("*/start.json"):
+            if prior.parent == folder:
+                continue
+            old = json.loads(prior.read_text())
+            if old.get("recipe") == start["recipe"] and not (prior.parent / "finish.json").exists():
+                raise ValueError("unknown prior execution cost requires owner reconciliation")
+        m, _ = load_sealed_cell(path, expected_sha256, code_root=code_root, allow_sealed=True)
+        run = output_root / cell_name(m, expected_sha256)
+        if resume and any(run.glob("attempt-*/result.json")):
+            if any(
+                json.loads(p.read_text()).get("status") == "complete"
+                for p in run.glob("attempt-*/result.json")
+            ):
+                raise ValueError("already complete; duplicate completed attempt refused")
+        adapter, tok = (construct_owner_adapter if factory is None else factory)(m)
+        result = _run_sealed_cell(
+            path,
+            expected_sha256,
+            adapter,
+            tok,
+            output_root=output_root,
+            resource_root=resource_root,
+            code_root=code_root,
+            resume=resume,
+            allow_sealed=True,
+            stop_after_checkpoint=stop_after_checkpoint,
+        )
+        status = result["status"]
+        return result
+    except BaseException as exc:
+        error = {"type": type(exc).__name__, "message": str(exc)}
+        raise
+    finally:
+>       if fd is not None:
+                ^^^^^^^^^^^
+E       ValueError: already complete; duplicate completed attempt refused
+
+scripts/r1_77b_sealed_backend.py:870: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_68f_full_validation.py::test_sealed_execution_hook_with_isolated_tiny_admission
+1 failed, 141 passed, 6 subtests passed in 87.42s (0:01:27)
