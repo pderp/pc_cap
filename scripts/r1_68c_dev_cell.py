@@ -13,6 +13,7 @@ import time
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
+from scripts import r1_68f_full_validation as full_validation
 from scripts.r1_68b_integrity_runtime import (
     DurablePhaseJournal,
     IndexedAdapter,
@@ -55,6 +56,7 @@ DRIVER_FILES = (
     "scripts/r1_68c_dev_cell.py",
     "scripts/r1_68c_batched_drift.py",
     "scripts/r1_68e_batched_drift_v0.py",
+    "scripts/r1_68f_full_validation.py",
 )
 PARENT_DRIVER_SHA256 = "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5"
 UPSTREAM_ENGINE_SHA256 = "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da"
@@ -128,6 +130,7 @@ def profile_config(manifest, root=ROOT):
         profile != "full" or manifest["cell"]["condition"] not in CONDITION_CLASSES
     ):
         raise ValueError("v0 batch drift requires a v0-family condition and full integrity")
+    full_validation.validate_spec(manifest)
     return profile, batch
 
 
@@ -205,6 +208,7 @@ def validate_development_payload(manifest, payload):
     # Only reuse common inventory checks. The synthetic branch is the existing
     # validator's public way to omit sealed allocations and fixed 1000 cadence.
     validate_payload({**manifest, "mode": "synthetic"}, payload)
+    full_validation.validate_sample(manifest, payload["endpoints"]["drift"])
     return payload
 
 
@@ -265,6 +269,7 @@ def run_development_cell(
         manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
     )
     profile, batch_edits = profile_config(manifest, code_root)
+    full_validation.validate_sample(manifest, payload["endpoints"]["drift"])
     if profile == "incremental":
         adapter = IndexedAdapter(adapter)
     identity = adapter.identity()
@@ -385,6 +390,9 @@ def run_development_cell(
             if not report_path.is_relative_to(run) or not snapshot_path.is_relative_to(resources):
                 raise ValueError("checkpoint path escapes cell")
             report = read_binding(rec["report"])
+            full_validation.verify_report(
+                report, manifest, report_path, expected_sha256
+            )
             if profile == "incremental":
                 journal_directory = report_path.parent / "phases"
                 if Path(rec["journal"]["directory"]).resolve() != journal_directory:
@@ -489,6 +497,7 @@ def run_development_cell(
             "locality",
             "unseen",
             "drift",
+            "full_validation",
         )
         # Only edits use the incremental digest. Read-only phases use a full state
         # hash so an uninstrumented in-place mutation cannot escape the check.
@@ -615,6 +624,11 @@ def run_development_cell(
                     manifest["payload"]["sha256"],
                 ),
             )
+            if n != len(items) and "full_validation" in manifest:
+                cp["endpoints"]["drift"] = phase(
+                    f"drift:{n}",
+                    lambda ep=ep: run_drift_assay(assays, ep["drift"], manifest, profile),
+                )
             if n == len(items):
                 for kind in ("near_miss", "revision"):
                     cp["endpoints"][kind] = phase(
@@ -629,6 +643,15 @@ def run_development_cell(
                     f"drift:{n}",
                     lambda ep=ep: run_drift_assay(assays, ep["drift"], manifest, profile),
                 )
+                if "full_validation" in manifest:
+                    cp["endpoints"]["full_validation"] = phase(
+                        f"full_validation:{n}",
+                        lambda n=n, ep=ep, cp=cp: full_validation.run(
+                            assays, manifest, ep["drift"], cp["endpoints"]["drift"],
+                            attempt / f"full-validation-{n}.npz",
+                            checkpoint=n, manifest_sha256=expected_sha256,
+                        ),
+                    )
             cp["observation"] = adapter.observe()
             cp["state_sha256"] = adapter.state_hash()
             if profile == "incremental":

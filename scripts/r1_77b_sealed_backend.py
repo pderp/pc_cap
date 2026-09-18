@@ -24,6 +24,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from scripts import r1_68c_dev_cell as donor
+from scripts import r1_68f_full_validation as full_validation
 from scripts.r1_68b_integrity_runtime import (
     DurablePhaseJournal,
     IndexedAdapter,
@@ -48,7 +49,7 @@ OUTPUT_ROOT = ROOT / "results/R1/stage4_sealed_cells"
 RESOURCE_ROOT = ROOT.parent / "assets/runs/pc_cap/R1/stage4_sealed_cells"
 RECEIPT_ROOT = ROOT / "logs/r1_77b_execution"
 FROZEN_RELATIVE = "manifests/revision_v1/frozen_stage4.json"
-DONOR_SHA256 = "5293448fd423c1eeab35374ff96ec040d221a32eb63261ccabaf92cdb6fae3c2"
+DONOR_SHA256 = "895094861ac5d40a440b56c65589a1b37380c8bee4d21b180b0d806994cdcc24"
 GATES = tuple(f"U{i:02}" for i in range(1, 19))
 
 
@@ -278,6 +279,7 @@ def _run_sealed_cell(
         manifest_path, expected_sha256, code_root=code_root, allow_sealed=allow_sealed
     )
     profile, batch_edits = profile_config(manifest, code_root)
+    full_validation.validate_sample(manifest, payload["endpoints"]["drift"])
     if profile == "incremental":
         adapter = IndexedAdapter(adapter)
     identity = adapter.identity()
@@ -399,6 +401,9 @@ def _run_sealed_cell(
             if not report_path.is_relative_to(run) or not snapshot_path.is_relative_to(resources):
                 raise ValueError("checkpoint path escapes cell")
             report = read_binding(rec["report"])
+            full_validation.verify_report(
+                report, manifest, report_path, expected_sha256
+            )
             if profile == "incremental":
                 journal_directory = report_path.parent / "phases"
                 if Path(rec["journal"]["directory"]).resolve() != journal_directory:
@@ -505,6 +510,7 @@ def _run_sealed_cell(
             "locality",
             "unseen",
             "drift",
+            "full_validation",
         )
         # Only edits use the incremental digest. Read-only phases use a full state
         # hash so an uninstrumented in-place mutation cannot escape the check.
@@ -631,6 +637,11 @@ def _run_sealed_cell(
                     manifest["payload"]["sha256"],
                 ),
             )
+            if n != len(items) and "full_validation" in manifest:
+                cp["endpoints"]["drift"] = phase(
+                    f"drift:{n}",
+                    lambda ep=ep: donor.run_drift_assay(assays, ep["drift"], manifest, profile),
+                )
             if n == len(items):
                 for kind in ("near_miss", "revision"):
                     cp["endpoints"][kind] = phase(
@@ -647,6 +658,15 @@ def _run_sealed_cell(
                     # v0 batching; no condition-based inference or reduced integrity.
                     lambda ep=ep: donor.run_drift_assay(assays, ep["drift"], manifest, profile),
                 )
+                if "full_validation" in manifest:
+                    cp["endpoints"]["full_validation"] = phase(
+                        f"full_validation:{n}",
+                        lambda n=n, ep=ep, cp=cp: full_validation.run(
+                            assays, manifest, ep["drift"], cp["endpoints"]["drift"],
+                            attempt / f"full-validation-{n}.npz",
+                            checkpoint=n, manifest_sha256=expected_sha256,
+                        ),
+                    )
             cp["observation"] = adapter.observe()
             cp["state_sha256"] = adapter.state_hash()
             if profile == "incremental":

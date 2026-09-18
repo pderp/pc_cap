@@ -74,40 +74,35 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 30 (CPU; open now; posted 2026-09-18 05:05 EDT) — the full-validation endpoint
+  +0.006## 3. Lanes for Codex — round 31 (CPU; open now; posted 2026-09-18 06:15 EDT) — carry the endpoint through production
 
-Round 29 is committed and mirrored. DEC-063 (decisions file) settles the full-validation policy: complete windows only
-(1,931 × 128, 245,237 predictions, 121 trailing tokens dropped), final checkpoint of every cell, both references,
-sampled 128 windows at intermediate checkpoints. Priority order: **R1-68f → R1-64g → R1-58k → R1-63k → X19 → HT-4f.**
-Rules as in round 22; the driver edit (R1-68f) is applied by the orchestrator at an idle boundary (the GPU is idle now,
-so immediately on delivery), followed by a rebuild of every recipe identity (your R1-64e rebinder).
+Round 30 is committed; the R1-68f patch is applied (new driver + backend identities); the orchestrator rebuilds the
+four R1-64g recipes and runs them now (chain S). Priority order: **R1-63l → R1-49k → R1-58l → R1-63m → X19 → HT-4f.**
+Rules as in round 22; no edits to the driver / backend while chain S runs.
 
-### Lane R1-68f — full-validation drift phase in the driver (first)
+### Lane R1-63l — production consumers carry `full_validation` (first)
 
-Add to `scripts/r1_68c_dev_cell.py` (via patch + tests) a `full_validation` phase at the final checkpoint, recipe-bound:
-population = the complete-window inventory of the bound source with the DEC-063 tail policy and hash; batched drift
-path for every adapter family (RevisionCap and v0 / S1) with per-prefix selection; both references (original base;
-own cap-off, S1's continued base); outputs: finite per-position loss / KL vectors (stored compactly), coverage,
-exceedance counts and ES95 / max as in HT-1, checkpoint / state / source hashes, device peak, phase wall; the
-existing 128-window drift phase unchanged at every checkpoint. Memory: bounded by the batch (no retained 245k
-hidden states). TinyBase tests including parity of the first 128 windows with the sampled phase.
+Your handoff: the assembler drops unknown runtime fields and the analysis reads only sampled drift. Make the
+production recipe assembler (R1-63j) emit the bound `full_validation` contract in every core / extension recipe
+(DEC-063 policy, source hash, complete-window inventory, both references), the sealed backend admit it (patched
+identity), the frozen-population and admission schemas include it, and `r1_49g_analyze` / R1-75 read the full
+endpoint (loss / KL vectors, coverage, exceedance counts, ES95 / max) at the final checkpoint alongside the sampled
+statistics; reports label full vs sampled. Synthetic rehearsal at both cadences; tests.
 
-### Lane R1-64g — recipes to measure it (after R1-68f lands and identities are rebuilt)
+### Lane R1-49k — protocol v5.2-D.2: the full-validation endpoint text
 
-Four development recipes on the new identity: zsRE × {primary v5, v0_stable} and MQuAKE × {primary v5, v0_stable}
-with the full-validation phase enabled (300 edits, checkpoints 100 / 300, challenge sets as R1-64f), inspection
-receipts, run list. The orchestrator runs them and files the full-validation cost per class.
+DEC-063 into the protocol (population, tail policy, references, cadence, storage, the overlap gate, what is
+confirmatory vs descriptive), U08 / U16 updated, change log; the sampled 128-window tail statistics declared as the
+talk's descriptive population.
 
-### Lane R1-58k — cost receipt v4 and candidate v14 (after the four runs)
+### Lane R1-58l — cost receipt v4 with its typed validator (after chain S)
 
-Ingest the full-validation costs (per class; state the cross-dataset transfer for CounterFact explicitly as a
-proposal with the measured basis), the complete chain R host / endpoint evidence, refresh candidate v14 / forms v9 /
-sheet v8; list remaining blockers, which must then be signatures only.
+Ingest the four full-validation measurements (per class: learned, v0-style; zsRE and MQuAKE measured, CounterFact
+by explicit transfer with the measured basis — sampled drift per position ratio), the intermediate-checkpoint
+sampled-drift cadence addition (now at every checkpoint), refresh cell ceilings v2 and the process-hour projection,
+list every remaining gap that is not a signature; the revision-4 validator.
 
-### Lane R1-63k — production assembler dry-run on the real unsigned inputs v9
-
-Exercise the assembler end to end on the real (unsigned) package to show the bundle it would emit, so the lead's
-sitting has no first-time surprises.
+### Lane R1-63m — candidate v14, forms v9, sheet v8 (after R1-63l / 49k / 58l)
 
 ### Lane X19 — re-review of the v14 package
 
