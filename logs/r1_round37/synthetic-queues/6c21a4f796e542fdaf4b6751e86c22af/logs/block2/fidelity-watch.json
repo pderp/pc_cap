@@ -1,0 +1,157 @@
+{
+  "required": true,
+  "cursor": {
+    "events": 4,
+    "bytes": 5924,
+    "sha256": "78acab624e66432cf4ef3b80919e5e878e5ef1a95ac59f3d81c03100382e8dcb"
+  },
+  "new_observations": 2,
+  "new_queue_observations": 2,
+  "entries": [
+    {
+      "cell_id": "6c57415ebd98edc5a41360f398f7f8fff6040b9475fca1f508729d6f97456330",
+      "recorded_utc": "2026-09-18T14:00:00+00:00",
+      "observation": {
+        "cell": {
+          "condition": "R1_learned_ff",
+          "dataset": "zsre",
+          "order": 2,
+          "realization": 0
+        },
+        "cell_id": "6c57415ebd98edc5a41360f398f7f8fff6040b9475fca1f508729d6f97456330",
+        "identity": {
+          "cell": {
+            "condition": "R1_learned_ff",
+            "dataset": "zsre",
+            "order": 2,
+            "realization": 0
+          },
+          "mode": "stage4_sealed_cell",
+          "recipe_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "recipe": {
+          "path": "synthetic",
+          "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "references": {
+          "capoff": {
+            "kl": {
+              "mean_signed": 0.005
+            },
+            "loss": {
+              "mean_signed": 0
+            }
+          },
+          "original": {
+            "kl": {
+              "mean_signed": 0.005
+            },
+            "loss": {
+              "mean_signed": 0
+            }
+          }
+        },
+        "scope": "confirmatory"
+      },
+      "creep_reasons": [
+        {
+          "kind": "new_running_maximum",
+          "reference": "capoff",
+          "metric": "mean_kl",
+          "value": 0.005,
+          "compared_value": 0.002,
+          "compared_cell_id": "b55d620e203ea17d1007d5383ff172c7238df9e8a3bba5c2c3bd3d9497a8b63a"
+        },
+        {
+          "kind": "new_running_maximum",
+          "reference": "original",
+          "metric": "mean_kl",
+          "value": 0.005,
+          "compared_value": 0.002,
+          "compared_cell_id": "b55d620e203ea17d1007d5383ff172c7238df9e8a3bba5c2c3bd3d9497a8b63a"
+        }
+      ],
+      "queue_cell_id": "996aeb9361c348b8b0aa7fd3"
+    },
+    {
+      "cell_id": "39110e5170ae0520740a8ec9456144c0ad1f954fb5915d1ca61fd80b54827ae4",
+      "recorded_utc": "2026-09-18T14:00:00+00:00",
+      "observation": {
+        "cell": {
+          "condition": "R1_learned_ff",
+          "dataset": "zsre",
+          "order": 3,
+          "realization": 0
+        },
+        "cell_id": "39110e5170ae0520740a8ec9456144c0ad1f954fb5915d1ca61fd80b54827ae4",
+        "identity": {
+          "cell": {
+            "condition": "R1_learned_ff",
+            "dataset": "zsre",
+            "order": 3,
+            "realization": 0
+          },
+          "mode": "stage4_sealed_cell",
+          "recipe_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "recipe": {
+          "path": "synthetic",
+          "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "references": {
+          "capoff": {
+            "kl": {
+              "mean_signed": 0.005
+            },
+            "loss": {
+              "mean_signed": 0
+            }
+          },
+          "original": {
+            "kl": {
+              "mean_signed": 0.005
+            },
+            "loss": {
+              "mean_signed": 0
+            }
+          }
+        },
+        "scope": "confirmatory"
+      },
+      "creep_reasons": [],
+      "queue_cell_id": "1dfef2e4e9a36d84f5bd3af1"
+    }
+  ],
+  "alerts": [
+    {
+      "cell_id": "6c57415ebd98edc5a41360f398f7f8fff6040b9475fca1f508729d6f97456330",
+      "recorded_utc": "2026-09-18T14:00:00+00:00",
+      "group": "R1_learned_ff:zsre",
+      "reasons": [
+        {
+          "kind": "new_running_maximum",
+          "reference": "capoff",
+          "metric": "mean_kl",
+          "value": 0.005,
+          "compared_value": 0.002,
+          "compared_cell_id": "b55d620e203ea17d1007d5383ff172c7238df9e8a3bba5c2c3bd3d9497a8b63a"
+        },
+        {
+          "kind": "new_running_maximum",
+          "reference": "original",
+          "metric": "mean_kl",
+          "value": 0.005,
+          "compared_value": 0.002,
+          "compared_cell_id": "b55d620e203ea17d1007d5383ff172c7238df9e8a3bba5c2c3bd3d9497a8b63a"
+        }
+      ],
+      "delivery": "pending_orchestrator_notification",
+      "admission_veto": false,
+      "queue_cell_id": "996aeb9361c348b8b0aa7fd3"
+    }
+  ],
+  "missing_completed_cells": [],
+  "delta_scope": "Global watch since the explicitly supplied previous report (or journal beginning). queue_cell_id identifies this matrix; other observations retain their original scope.",
+  "delivery": "not_sent; use the last actually posted report as --previous",
+  "admission_veto": false
+}

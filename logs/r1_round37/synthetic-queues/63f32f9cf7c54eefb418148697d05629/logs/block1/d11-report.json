@@ -1,0 +1,446 @@
+{
+  "version": 1,
+  "task": "R1-D11",
+  "generated_utc": "2026-09-18T14:21:52.725243+00:00",
+  "identity": {
+    "matrix": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/matrix.json",
+      "sha256": "2b7a8af96868e68f79ad754d086957e1455346024ab473fa62f0d3ac7e56cfd7"
+    },
+    "receipt_root": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts",
+    "journal": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/watch.jsonl",
+    "workers": 2,
+    "ceiling_hours": 750
+  },
+  "previous": null,
+  "boundary_block": 1,
+  "boundary_ready": true,
+  "boundary_unprocessed": [],
+  "boundary_gap_cells": [],
+  "boundary_known_process_hours": 0.09583333333333334,
+  "complete_cells": [
+    "8ac801b775b03013412fa07d",
+    "0c6cc01e0cc460179ad2d414"
+  ],
+  "total_cells": 4,
+  "inventory": {
+    "scope": "confirmatory",
+    "queue": [
+      {
+        "cell_id": "8ac801b775b03013412fa07d",
+        "block": 1,
+        "within_block_order": 1,
+        "condition": "R1_learned_ff",
+        "dataset": "zsre",
+        "observed": {
+          "status": "complete",
+          "artifact_complete": true,
+          "missing_checkpoints": []
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 115.0,
+          "unknown_attempts": [],
+          "attempts": [
+            {
+              "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/results/cell0/attempt-0000/result.json",
+              "sha256": "028d3e6176b579ea79d5760a4b9b2d79bc1845e9e9b20717b24ec539b330020a",
+              "wall_seconds": 114
+            }
+          ],
+          "driver_attempt_wall_seconds": 114.0,
+          "process_receipts": [
+            {
+              "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell0-process0/finish.json",
+              "sha256": "f8787b7ac6968d546bef1e17d3aeaa34742e81de77a7e0664bd73de851b51239",
+              "wall_seconds": 115
+            }
+          ]
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      },
+      {
+        "cell_id": "0c6cc01e0cc460179ad2d414",
+        "block": 1,
+        "within_block_order": 2,
+        "condition": "R1_learned_ff",
+        "dataset": "zsre",
+        "observed": {
+          "status": "complete",
+          "artifact_complete": true,
+          "missing_checkpoints": []
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 230.0,
+          "unknown_attempts": [],
+          "attempts": [
+            {
+              "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/results/cell1/attempt-0000/result.json",
+              "sha256": "c8b004ef83502a84d86dad670827484d9f7ef427b3920414b387ca091647ead8",
+              "wall_seconds": 229
+            }
+          ],
+          "driver_attempt_wall_seconds": 229.0,
+          "process_receipts": [
+            {
+              "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell1-process0/finish.json",
+              "sha256": "1af3543a081ba76379483830fb38fae5221be838b42bcfff33304d41fc860d99",
+              "wall_seconds": 230
+            }
+          ]
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      },
+      {
+        "cell_id": "996aeb9361c348b8b0aa7fd3",
+        "block": 2,
+        "within_block_order": 3,
+        "condition": "R1_learned_ff",
+        "dataset": "zsre",
+        "observed": {
+          "status": "missing",
+          "artifact_complete": false,
+          "missing_checkpoints": [
+            100,
+            300,
+            1000
+          ]
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 0.0,
+          "unknown_attempts": [],
+          "attempts": [],
+          "driver_attempt_wall_seconds": 0.0,
+          "process_receipts": []
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      },
+      {
+        "cell_id": "1dfef2e4e9a36d84f5bd3af1",
+        "block": 2,
+        "within_block_order": 4,
+        "condition": "R1_learned_ff",
+        "dataset": "zsre",
+        "observed": {
+          "status": "missing",
+          "artifact_complete": false,
+          "missing_checkpoints": [
+            100,
+            300,
+            1000
+          ]
+        },
+        "cost": {
+          "known_attempt_wall_seconds": 0.0,
+          "unknown_attempts": [],
+          "attempts": [],
+          "driver_attempt_wall_seconds": 0.0,
+          "process_receipts": []
+        },
+        "retry": {
+          "failures": 0,
+          "maximum_failures": 2,
+          "exhausted": false
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "block": 1,
+        "cells": 2,
+        "complete": true,
+        "incomplete_cell_ids": []
+      },
+      {
+        "block": 2,
+        "cells": 2,
+        "complete": false,
+        "incomplete_cell_ids": [
+          "996aeb9361c348b8b0aa7fd3",
+          "1dfef2e4e9a36d84f5bd3af1"
+        ]
+      }
+    ],
+    "complete_blocks": [
+      1
+    ],
+    "incomplete_cells": [
+      {
+        "cell_id": "996aeb9361c348b8b0aa7fd3",
+        "missing_checkpoints": [
+          100,
+          300,
+          1000
+        ]
+      },
+      {
+        "cell_id": "1dfef2e4e9a36d84f5bd3af1",
+        "missing_checkpoints": [
+          100,
+          300,
+          1000
+        ]
+      }
+    ],
+    "cost": {
+      "known_attempt_hours": 0.09583333333333334,
+      "unknown_attempts": [],
+      "projected_total_hours": 2.8351689753906952,
+      "ceiling_hours": 750,
+      "projected_within_ceiling": true,
+      "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback.",
+      "scenario_fallback_cell_seconds": null,
+      "projection_workers": 2,
+      "remaining_cell_ceiling_multiplier": 1.15
+    },
+    "backend_status": "development and hash-bound sealed dispatch; final execution requires closed frozen gates",
+    "sources_sha256": {}
+  },
+  "cost_ledger": {
+    "rows": [
+      {
+        "cell_id": "8ac801b775b03013412fa07d",
+        "charged_seconds": 115.0,
+        "process_envelope_seconds": 115.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell0-process0/finish.json",
+            "sha256": "f8787b7ac6968d546bef1e17d3aeaa34742e81de77a7e0664bd73de851b51239",
+            "wall_seconds": 115
+          }
+        ],
+        "driver_attempts": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/results/cell0/attempt-0000/result.json",
+            "sha256": "028d3e6176b579ea79d5760a4b9b2d79bc1845e9e9b20717b24ec539b330020a",
+            "wall_seconds": 114
+          }
+        ],
+        "unknown_attempts": []
+      },
+      {
+        "cell_id": "0c6cc01e0cc460179ad2d414",
+        "charged_seconds": 230.0,
+        "process_envelope_seconds": 230.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell1-process0/finish.json",
+            "sha256": "1af3543a081ba76379483830fb38fae5221be838b42bcfff33304d41fc860d99",
+            "wall_seconds": 230
+          }
+        ],
+        "driver_attempts": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/results/cell1/attempt-0000/result.json",
+            "sha256": "c8b004ef83502a84d86dad670827484d9f7ef427b3920414b387ca091647ead8",
+            "wall_seconds": 229
+          }
+        ],
+        "unknown_attempts": []
+      },
+      {
+        "cell_id": "996aeb9361c348b8b0aa7fd3",
+        "charged_seconds": 0.0,
+        "process_envelope_seconds": 0.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [],
+        "driver_attempts": [],
+        "unknown_attempts": []
+      },
+      {
+        "cell_id": "1dfef2e4e9a36d84f5bd3af1",
+        "charged_seconds": 0.0,
+        "process_envelope_seconds": 0.0,
+        "uncovered_driver_seconds": 0.0,
+        "process_receipts": [],
+        "driver_attempts": [],
+        "unknown_attempts": []
+      }
+    ],
+    "charged_seconds": 345.0,
+    "uncovered_driver_seconds": 0.0,
+    "basis": "Process envelopes replace covered driver attempts; overlap and failures charged once each. Uncovered legacy driver times exclude process startup. JAX timers are not added."
+  },
+  "issues": [],
+  "watch": {
+    "required": true,
+    "cursor": {
+      "events": 2,
+      "bytes": 2962,
+      "sha256": "9c87db38874f06ed2e9e579240e037591a80aeb0002d2b2c7db3cd3f7bdda282"
+    },
+    "new_observations": 2,
+    "new_queue_observations": 2,
+    "entries": [
+      {
+        "cell_id": "b55d620e203ea17d1007d5383ff172c7238df9e8a3bba5c2c3bd3d9497a8b63a",
+        "recorded_utc": "2026-09-18T14:00:00+00:00",
+        "observation": {
+          "cell": {
+            "condition": "R1_learned_ff",
+            "dataset": "zsre",
+            "order": 0,
+            "realization": 0
+          },
+          "cell_id": "b55d620e203ea17d1007d5383ff172c7238df9e8a3bba5c2c3bd3d9497a8b63a",
+          "identity": {
+            "cell": {
+              "condition": "R1_learned_ff",
+              "dataset": "zsre",
+              "order": 0,
+              "realization": 0
+            },
+            "mode": "stage4_sealed_cell",
+            "recipe_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "recipe": {
+            "path": "synthetic",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          },
+          "references": {
+            "capoff": {
+              "kl": {
+                "mean_signed": 0.002
+              },
+              "loss": {
+                "mean_signed": 0
+              }
+            },
+            "original": {
+              "kl": {
+                "mean_signed": 0.002
+              },
+              "loss": {
+                "mean_signed": 0
+              }
+            }
+          },
+          "scope": "confirmatory"
+        },
+        "creep_reasons": [],
+        "queue_cell_id": "8ac801b775b03013412fa07d"
+      },
+      {
+        "cell_id": "0ab2897c3505cf43cc361c6ec24a2a7f7fe747b1d3215c78575bc621bf4fc5cd",
+        "recorded_utc": "2026-09-18T14:00:00+00:00",
+        "observation": {
+          "cell": {
+            "condition": "R1_learned_ff",
+            "dataset": "zsre",
+            "order": 1,
+            "realization": 0
+          },
+          "cell_id": "0ab2897c3505cf43cc361c6ec24a2a7f7fe747b1d3215c78575bc621bf4fc5cd",
+          "identity": {
+            "cell": {
+              "condition": "R1_learned_ff",
+              "dataset": "zsre",
+              "order": 1,
+              "realization": 0
+            },
+            "mode": "stage4_sealed_cell",
+            "recipe_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "recipe": {
+            "path": "synthetic",
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "references": {
+            "capoff": {
+              "kl": {
+                "mean_signed": 0.002
+              },
+              "loss": {
+                "mean_signed": 0
+              }
+            },
+            "original": {
+              "kl": {
+                "mean_signed": 0.002
+              },
+              "loss": {
+                "mean_signed": 0
+              }
+            }
+          },
+          "scope": "confirmatory"
+        },
+        "creep_reasons": [],
+        "queue_cell_id": "0c6cc01e0cc460179ad2d414"
+      }
+    ],
+    "alerts": [],
+    "missing_completed_cells": [],
+    "delta_scope": "Global watch since the explicitly supplied previous report (or journal beginning). queue_cell_id identifies this matrix; other observations retain their original scope.",
+    "delivery": "not_sent; use the last actually posted report as --previous",
+    "admission_veto": false
+  },
+  "accounting_sources_sha256": {
+    "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell0-process0/finish.json": "f8787b7ac6968d546bef1e17d3aeaa34742e81de77a7e0664bd73de851b51239",
+    "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell0-process0/start.json": "0be63ac0d4e82a4e5fa20b72ac795c9d4ed8a62c839b6b8785c72ca2e7919ab3",
+    "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell1-process0/finish.json": "1af3543a081ba76379483830fb38fae5221be838b42bcfff33304d41fc860d99",
+    "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/logs/receipts/cell1-process0/start.json": "f2d760d71c01bae38f6eff73f3df1883ed3283c9142c4640037fe6f845187e43",
+    "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/results/cell0/attempt-0000/result.json": "028d3e6176b579ea79d5760a4b9b2d79bc1845e9e9b20717b24ec539b330020a",
+    "/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/63f32f9cf7c54eefb418148697d05629/results/cell1/attempt-0000/result.json": "c8b004ef83502a84d86dad670827484d9f7ef427b3920414b387ca091647ead8"
+  },
+  "implementation": {
+    "report": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_d11_block_report.py",
+      "sha256": "7c246f004e4510560eb7b4a16e68bc38c6b559e11fccf27bd780ad6a4136b66f"
+    },
+    "queue": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+      "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+    },
+    "watch": {
+      "policy": {
+        "version": 1,
+        "decision": "DEC-064a",
+        "bounds_nats": {
+          "mean_kl": 0.001,
+          "mean_signed_nll_increase": 0.01
+        },
+        "breach": "strictly above either bound against either reference",
+        "identity": "digest of mode, recipe SHA256 and declared cell coordinates",
+        "maxima": "all verified observations; condition x dataset x reference x metric",
+        "development_reference": "first verified development observation per condition x dataset, frozen by journal order",
+        "creep": "a breaching entry strictly exceeds a previous maximum or twice its frozen development reference, per reference/metric",
+        "reporting": "immediate local alert; orchestrator conveys alerts immediately and entries at block boundaries",
+        "admission_veto": false
+      },
+      "implementations": [
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/ht8_fidelity_watch.py",
+          "sha256": "d129b756d864456a9d62de00ef19a21ab34bee76b8aff1800730747406958c85"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/r1_63l_full_validation_contract.py",
+          "sha256": "bdd1be0ed58e04af4c6f449b47e191555573b8bac21ca650e5b535d4c93d667f"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/r1_49m_fidelity_policy.py",
+          "sha256": "f96862b9778acc734e954944a895b2939f8d550d7ac6ccf02cff2ed4f0986216"
+        },
+        {
+          "path": "/home/derp/cap/pc_cap/scripts/ht7_concentration.py",
+          "sha256": "3d1ab4de890dfa0780a7380675edf29a43ae392f52d2b994946a25eb8f06b2c5"
+        }
+      ]
+    }
+  },
+  "scientific_limit": "Artifact completeness does not assert benchmark success, effect significance, admission or launch authority.",
+  "report_sha256": "7e63942f4e14f450374d41734b18b8329d8b52054b5f2afb197365f58a45139f"
+}

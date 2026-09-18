@@ -1,0 +1,84 @@
+..................F...............                                       [100%]
+=================================== FAILURES ===================================
+____ test_real_mode_checks_cell_admission_and_freeze_not_inherited_top_flag ____
+
+scenario = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/d579386025e04523a2c9d34abf306432'), 'matrix...51acf0d64e820b7e92bb8f93e3ee537a9'}, 'peak_device_mib': 1088.47705078125, ...}, ...], 'contract_version': 2, ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc9e36427b0>
+
+    def test_real_mode_checks_cell_admission_and_freeze_not_inherited_top_flag(scenario, monkeypatch):
+        f = scenario
+        # Disclosed synthetic signed metadata, never a real source receipt/signature.
+        f["cost"].update(lead_approved=True, status="closed", operator_request_sha256="a" * 64,
+                          lead_signature=dict(name="SYNTHETIC TEST ONLY", date="2026-09-18"))
+        put(f["cp"], f["cost"])
+        monkeypatch.setattr(reprice.costs, "validate", lambda c: None)  # signature-branch fixture only
+        f["matrix"]["cost_admission"] = reprice.d11.ref(f["cp"])
+        f["matrix"]["launch_allowed"] = False  # exact assembler's inherited top-level value
+        fp = put(f["root"] / "synthetic-freeze.json", dict(
+            lead_approved=True, launch_authorized=True, open_gates=[],
+            cost_admission=reprice.d11.ref(f["cp"])))
+        f["matrix"]["freeze"] = reprice.d11.ref(fp)
+        for cell in f["cells"]:
+            cell.update(admitted=True, launch_allowed=True,
+                        population=dict(full_validation=f["cost"]["full_validation"]))
+        put(f["mp"], f["matrix"])
+        finish_block(f)
+>       out = f["build"](synthetic=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_d12_reprice.py:307: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_d12_reprice.py:92: in build
+    return reprice.build(mp, receipt_root=receipts, journal=journal, cost_receipt=cp,
+scripts/r1_d12_reprice.py:99: in build
+    for c in d11.queue.ordered(matrix)), "admitted confirmatory cells required")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:67: in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'scope': 'confirmatory', 'cells': [{'condition': 'R1_learned_ff', 'dataset': 'zsre', 'realization': 0, 'order': 0, .....checkpoint', 'complete_windows': 1931, 'context_policy': 'reset_every_window', 'expected_positions': 245237, ...}, ...}
+
+    def validate_matrix(matrix):
+        cells = all_cells(matrix)
+        fidelity_policy.validate_matrix(matrix, cells)
+        validation = matrix.get("full_validation")
+        if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+            full_contract.validate(validation)
+            for cell in cells:
+                population = cell.get("population")
+                if (
+                    cell.get("full_validation") != validation
+                    or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
+                    or (population is not None and population.get("full_validation") != validation)
+                ):
+                    raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+        if not cells:
+            raise ValueError("nonempty independently declared matrix required")
+        identities = [coordinate(c) for c in cells]
+        if len(set(identities)) != len(cells) or len({c["cell_id"] for c in cells}) != len(cells):
+            raise ValueError("duplicate expected cell coordinate or ID")
+        for c in cells:
+            if c["cell_id"] != coordinate_id(c):
+                raise ValueError("unstable cell coordinate identity")
+            cp = c["checkpoints"]
+            if not cp or cp != sorted(set(cp)) or any(type(n) is not int or n <= 0 for n in cp):
+                raise ValueError("ordered positive checkpoint contract required")
+            if type(c["block_number"]) is not int or type(c["within_block_order"]) is not int:
+                raise ValueError("explicit block ordering required")
+            p = c.get("population")
+            if p is not None:
+                if (
+>                   len(p["item_ids"]) != max(cp)
+                        ^^^^^^^^^^^^^
+                    or len(p["item_ids"]) != len(set(p["item_ids"]))
+                    or len(p["paraphrase_counts"]) != len(p["item_ids"])
+                    or any(type(n) is not int or n < 1 for n in p["paraphrase_counts"])
+                ):
+E               KeyError: 'item_ids'
+
+scripts/r1_75_analysis_stage4_v1.py:273: KeyError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_d12_reprice.py::test_real_mode_checks_cell_admission_and_freeze_not_inherited_top_flag
+1 failed, 33 passed in 4.24s

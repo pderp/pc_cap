@@ -1,0 +1,49 @@
+F
+=================================== FAILURES ===================================
+___________ test_measured_rates_single_concurrency_and_actual_spend ____________
+
+scenario = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round37/synthetic-queues/398f0605cddf4842b31794f224940b88'), 'matrix...51acf0d64e820b7e92bb8f93e3ee537a9'}, 'peak_device_mib': 1088.47705078125, ...}, ...], 'contract_version': 2, ...}, ...}
+
+    def test_measured_rates_single_concurrency_and_actual_spend(scenario):
+        f = scenario
+        finish_block(f)
+>       out = f["build"]()
+              ^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_d12_reprice.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_d12_reprice.py:91: in build
+    return reprice.build(mp, receipt_root=receipts, journal=journal, cost_receipt=cp,
+scripts/r1_d12_reprice.py:98: in build
+    snap = d11.build(matrix_path, receipt_root=receipt_root, journal=journal,
+scripts/r1_d11_block_report.py:100: in build
+    cells = queue.ordered(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:67: in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'scope': 'confirmatory', 'cells': [{'condition': 'R1_learned_ff', 'dataset': 'zsre', 'realization': 0, 'order': 0, .....checkpoint', 'complete_windows': 1931, 'context_policy': 'reset_every_window', 'expected_positions': 245237, ...}, ...}
+
+    def validate_matrix(matrix):
+        cells = all_cells(matrix)
+        fidelity_policy.validate_matrix(matrix, cells)
+        validation = matrix.get("full_validation")
+        if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+            full_contract.validate(validation)
+            for cell in cells:
+                population = cell.get("population")
+                if (
+                    cell.get("full_validation") != validation
+                    or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
+                    or (population is not None and population.get("full_validation") != validation)
+                ):
+>                   raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+E                   ValueError: matrix/cell/frozen population DEC-063 contract mismatch
+
+scripts/r1_75_analysis_stage4_v1.py:256: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_d12_reprice.py::test_measured_rates_single_concurrency_and_actual_spend
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 3.95s
