@@ -82,7 +82,7 @@ step 8) → HT-4f (after step 2).**
 
 ### Lane R1-63o — re-bind the ENTIRE live package to the current tree, then freeze the tree (URGENT; supersedes R1-D10i)
 
-**Sequencing (17:05 EDT):** proceed as soon as the lead answers Q19 and Q20 (lead queue). Fold both into the same
+**Sequencing (17:30 EDT): both answered — DEC-069 (Q19: A + the t-interval secondary display) and DEC-068 (Q20: triplet-first). Proceed now.** Fold both into the same
 versioned pass: protocol **D.5** (Q19: the three-cluster inference statement per review §2 — registered computation kept,
 relabelled as preliminary decision summaries, every realization estimate and order dispersion shown, effects before
 labels, no 95 % familywise claim; plus the assumption-labelled t-interval if the lead takes it; and §1's explicit
