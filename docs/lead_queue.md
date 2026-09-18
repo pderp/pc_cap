@@ -830,3 +830,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 81. (2026-09-18, 07:20 EDT) Q17 recorded (DEC-064, option 1). No lead decision is open. Codex binds it into protocol v5.2-D.3 and the analysis; candidate v14 and your sitting stay on September 19.
 
+82. (2026-09-18, 07:35 EDT) **Fidelity watch added** as you asked (DEC-064a): every completed cell whose cap fidelity would
+    have failed the old bounds (KL > 0.001 or NLL Δ > 0.01) is logged in `docs/fidelity_watch.md` with its numbers and
+    the running maximum per condition × dataset; I report new entries to you at every block boundary and a creep
+    alert immediately (a value above the previous maximum for that condition × dataset, or above twice the
+    development reference). First entry: the chain S primary MQuAKE cell, KL 0.0055. Codex implements the automatic
+    hook into the queue (HT-8); until then I run it by hand after each chain.
+

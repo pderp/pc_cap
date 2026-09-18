@@ -77,7 +77,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 33 (CPU; open now; posted 2026-09-18 07:15 EDT) — Q17 into the protocol; finish the package
 
 Round 32 is committed and mirrored. Q17 is with the lead (default option 1). Chain S runs until ≈ 09:00; the R1-63l
-backend patch is applied by the orchestrator right after. Priority order: **R1-49m → HT-6 (final) → R1-58l → R1-63m →
+backend patch is applied by the orchestrator right after. Priority order: **R1-49m → HT-8 → HT-6 (final) → R1-58l → R1-63m →
 X19 → HT-4f.** Rules as in round 22 and §3a (fixture outputs under `assets/runs/pc_cap/R1/rehearsal_fixtures/`).
 
 ### Lane R1-49m — protocol v5.2-D.3 and the classifier hook for the Q17 answer (prepare all three; bind on the answer)
@@ -88,6 +88,17 @@ For each Q17 option: the exact D.3 text (fidelity section, U13 / U16, change log
 current behaviour), each as a patch + tests on the synthetic family; publish D.3 for **option 1 — DEC-064 (lead, 07:20 EDT)**: cap fidelity as a labelled secondary benchmark with the
 concentration statistics, never setting `scientific_admission = False`; the other two options are recorded as
 considered, not built. Keep the continued-base gate (DEC-047) unchanged in all three.
+
+### Lane HT-8 — fidelity watch (DEC-064a; small; before HT-6 final)
+
+`scripts/ht8_fidelity_watch.py`: over every completed cell directory (development roots and, later, the confirmatory
+receipt root), read the full-validation report / NPZ, evaluate the formerly critical bounds (KL > 0.001, NLL Δ >
+0.01, either reference), append breaching cells to `docs/fidelity_watch.md` and a machine log
+`results/R1/fidelity_watch/entries.jsonl` (idempotent by cell identity), maintain running maxima per condition ×
+dataset, raise a creep alert (`alerts.jsonl` + a line in the Markdown) when a new entry exceeds the previous maximum
+for its condition × dataset or 2 × the development reference; include the HT-7 concentration statistics per entry.
+Hook it into the queue's post-cell step (R1-77 queue, after the receipt is certified) and into the HT-6 report.
+Tests on synthetic reports. Reproduce the first entry (notes §"How the full-validation fidelity loss is distributed").
 
 ### Lane HT-6 — final full-validation fidelity report (after chain S)
 
