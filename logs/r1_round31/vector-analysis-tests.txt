@@ -1,0 +1,55 @@
+.......F.....                                                            [100%]
+=================================== FAILURES ===================================
+________________ test_corrupt_complete_endpoint_refuses[sample] ________________
+
+tiny_contract = {'schema_version': 1, 'policy': 'DEC-063-complete-windows-final-both-references-v1', 'source_inventory': {'path': '/ho...9f46729cd4aa9244babb11/tokens.npy', 'sha256': '687d828d3cc2d1337551a7a59e7888e0ea1f37166941d38b46f9d39a1966a8d9'}, ...}
+fault = 'sample'
+
+    @pytest.mark.parametrize(
+        "fault",
+        [
+            "hash",
+            "shape",
+            "nan",
+            "negative",
+            "source",
+            "reference",
+            "sample",
+            "stats",
+            "coverage",
+            "fields",
+        ],
+    )
+    def test_corrupt_complete_endpoint_refuses(tiny_contract, fault):  # noqa: F811
+        s, r, p, v = evidence(tiny_contract)
+        if fault in ("hash", "shape", "nan", "negative"):
+            v = v[:, :1] if fault == "shape" else v
+            if fault == "nan":
+                v[0, 0, 0] = np.nan
+            if fault == "negative":
+                v[0, 0, 3] = -0.1
+            if fault == "hash":
+                v[0, 0, 0] += 0.1
+            np.savez_compressed(p, values=v)
+            if fault != "hash":
+                s["vectors"].update(contract.ref(p))
+        if fault == "source":
+            s["source"] = {**s["source"], "sha256": "b" * 64}
+        if fault == "reference":
+            s["reference_base_sha256"]["original_base"] = "wrong"
+        if fault == "sample":
+            r["endpoints"]["drift"]["rows"].pop()
+        if fault == "stats":
+            s["statistics"]["loss_delta_original"]["ES95_positive"] = 1.0
+        if fault == "coverage":
+            s["coverage"] = {**s["coverage"], "expected_positions": 3}
+        if fault == "fields":
+            s["vectors"]["fields"] = list(reversed(contract.FIELDS))
+>       with pytest.raises((ValueError, KeyError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (ValueError, KeyError)
+
+tests/revision_v1/test_r1_63l_vector_analysis.py:132: Failed
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_63l_vector_analysis.py::test_corrupt_complete_endpoint_refuses[sample]
+1 failed, 12 passed in 0.48s

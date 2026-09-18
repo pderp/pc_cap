@@ -1,0 +1,354 @@
+...FF                                                                    [100%]
+=================================== FAILURES ===================================
+____________ test_actual_300_1000_cadences_full_and_sampled[mquake] ____________
+
+make = <function make.<locals>.fixture at 0x7f5b53797f60>
+stages = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/f223cd03183d4584811cc0126487d689'), 'resources': P...e_cells': 360, 'costs_admitted': False, 'extension_cells': 45, 'measured_total_ceiling_seconds': None, ...}, ...}, ...}
+tiny_contract = {'schema_version': 1, 'policy': 'DEC-063-complete-windows-final-both-references-v1', 'source_inventory': {'path': '/ho...324d5ba303b323d23cf6dc/tokens.npy', 'sha256': '687d828d3cc2d1337551a7a59e7888e0ea1f37166941d38b46f9d39a1966a8d9'}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b538b1d30>
+dataset = 'mquake'
+
+    @pytest.mark.parametrize("dataset", ["mquake", "zsre"])
+    def test_actual_300_1000_cadences_full_and_sampled(
+        make, stages, tiny_contract, monkeypatch, dataset
+    ):  # noqa: F811
+        install(monkeypatch)
+        monkeypatch.setattr(contract, "ROOT", backend.ROOT.path)
+        template = next(
+            c
+            for c in stages["matrix"]["cells"]
+            if c["dataset"] == dataset
+            and c["condition"] == "R1_learned_ff"
+            and c["realization"] == 0
+            and c["order"] == 100
+        )
+        cid = template["cell_id"]
+        data = stages["payloads"][cid]
+        # Exercise the actual seal validator over all 360 populations, with only the
+        # model/source fixture substituted; no production draw/seal is performed.
+        populations = copy.deepcopy(stages["population"])
+        populations["full_validation"] = tiny_contract
+        for p in populations["cells"].values():
+            p["full_validation"] = tiny_contract
+        core.validate_seal(
+            stages["sealed"],
+            [{k: c[k] for k in old_analysis.COORDS} for c in stages["matrix"]["cells"]],
+            stages["payloads"],
+            populations,
+            layout=layouts.production("D"),
+            full_validation=tiny_contract,
+        )
+        matrix_doc = copy.deepcopy(stages["matrix"])
+        matrix_doc.update(full_validation=tiny_contract, endpoint_contract_version=1)
+        matrix_binding = new_json(backend.ROOT / "docs/tasks/DEC063-matrix.json", matrix_doc)
+    
+        def enable(m, frozen, payload):
+            m.update(
+                checkpoints=template["checkpoints"],
+                population_contract_version=2,
+                matrix=matrix_binding,
+                integrity_batch_edits=100,
+                full_validation=tiny_contract,
+                full_validation_implementation=contract.ref(contract.__file__),
+            )
+            protocol = dict(
+                schema_version=2,
+                mode="stage4_final_protocol",
+                lead_approved=True,
+                open_gates=[],
+                population_decision="DEC-060-option-D",
+                dataset_layouts=layouts.production("D"),
+                layout_sha256=layouts.digest(layouts.production("D")),
+                matrix=matrix_binding,
+                extension_admitted=False,
+                max_new=32,
+                locality_score="bounded_text_equality_DEC053",
+                experiment_deadline="2026-10-09",
+                full_validation=tiny_contract,
+                full_validation_implementation=m["full_validation_implementation"],
+            )
+            m["protocol"] = new_json(backend.ROOT / "docs/tasks/DEC063-protocol.json", protocol)
+            m["population"] = new_json(
+                stages["resources"] / ("full-pop-" + dataset + ".json"), populations
+            )
+            frozen.update(
+                protocol=m["protocol"],
+                population=m["population"],
+                full_validation=tiny_contract,
+                full_validation_implementation=m["full_validation_implementation"],
+            )
+            frozen["bindings_sha256"][m["full_validation_implementation"]["path"]] = m[
+                "full_validation_implementation"
+            ]["sha256"]
+    
+        f = make(
+            data_override=data,
+            reservations_override=stages["sealed"],
+            realization=0,
+            order=100,
+            change=enable,
+        )
+    
+        def factory(m):
+            cfg = _cfg()
+            cfg.fast = replace(cfg.fast, steps=0, delta_steps=0)
+            return build_adapter(
+                "R1_learned_ff",
+                TerminatingTinyBase(),
+                Ledger(),
+                calibration=CAL,
+                synthetic=True,
+                revision_config=cfg,
+            ), stages["tokenizer"]
+    
+        result = backend.execute(
+            f["binding"]["path"], f["binding"]["sha256"], code_root=REPO, factory=factory
+        )
+        assert result["status"] == "complete"
+        phases = result["phase_timer_summary"]
+        assert phases["drift"]["count"] == len(template["checkpoints"])
+        assert phases["full_validation"]["count"] == 1
+        declared = dict(
+            template,
+            full_validation=tiny_contract,
+            population=populations["cells"][cid],
+            admitted=True,
+            result_dir=result["run_dir"],
+            manifest_sha256=f["binding"]["sha256"],
+            adapter_identity=f["m"]["adapter_identity"],
+            code_sha256=f["m"]["code_sha256"],
+            payload_sha256=f["m"]["payload"]["sha256"],
+        )
+        matrix_doc.update(scope="confirmatory", cells=[declared], extension={"cells": []})
+>       report = analysis.analyze(matrix_doc)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_63l_consumers.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/r1_49g_analyze.py:44: in analyze
+    report["contrasts"] = primary_contrasts(matrix, loaded) if admitted_family else []
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_49g_inference.py:182: in primary_contrasts
+    contrasts = validate_family(matrix)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'accepted_decisions': {'DEC-054': {'row': "| DEC-054 | 2026-09-16 | **Q4: the loss-level κ pilot goes** (lead, relayi... {'core_cells': 360, 'costs_admitted': False, 'extension_cells': 45, 'measured_total_ceiling_seconds': None, ...}, ...}
+
+    def validate_family(matrix):
+        axes = matrix["axes"]
+        reduced = matrix.get("option") == "D" or "dataset_layouts" in matrix
+        if reduced:
+            from scripts.r1_d9_layouts import from_matrix
+    
+            layout = from_matrix(matrix)
+            if axes.get("realizations_by_dataset") != {d: x["realizations"] for d, x in layout.items()}:
+                raise ValueError("option-D realization inventory differs")
+            if any(
+                c["checkpoints"] != layout[c["dataset"]]["checkpoints"] for c in old.all_cells(matrix)
+            ):
+                raise ValueError("option-D execution cadence differs")
+        if (
+            axes["datasets"] != list(DATASETS)
+            or (not reduced and axes["realizations"] != [0, 1, 2])
+            or axes["orders"] != [100, 101, 102, 103, 104]
+            or set(axes["conditions"]) != {"R1_learned_ff", *CONTROLS}
+            or len(axes["conditions"]) != 8
+        ):
+            raise ValueError("DEC-057 axes required; family cannot shrink to observed cells")
+        primary = [c for c in matrix["contrasts"] if c["role"] == "primary"]
+        if (
+            len(primary) != 7
+            or {c["control"] for c in primary} != set(CONTROLS)
+            or any(c["treatment"] != "R1_learned_ff" for c in primary)
+            or len({c["id"] for c in primary}) != 7
+        ):
+            raise ValueError("exact seven registered primary contrasts required")
+        if matrix.get("multiplicity") != FAMILY:
+            raise ValueError("exact DEC-057 family binding required")
+        old.validate_matrix(matrix)
+        coordinates = {old.coordinate(c) for c in matrix["cells"]}
+        expected = set(itertools.product(axes["conditions"], DATASETS, [0, 1, 2], axes["orders"]))
+        if coordinates != expected or len(matrix["cells"]) != 360:
+>           raise ValueError("complete independently declared 360-cell primary inventory required")
+E           ValueError: complete independently declared 360-cell primary inventory required
+
+scripts/r1_49g_inference.py:171: ValueError
+_____________ test_actual_300_1000_cadences_full_and_sampled[zsre] _____________
+
+make = <function make.<locals>.fixture at 0x7f5b4e68f240>
+stages = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round24/rehearsal/f223cd03183d4584811cc0126487d689'), 'resources': P...e_cells': 360, 'costs_admitted': False, 'extension_cells': 45, 'measured_total_ceiling_seconds': None, ...}, ...}, ...}
+tiny_contract = {'schema_version': 1, 'policy': 'DEC-063-complete-windows-final-both-references-v1', 'source_inventory': {'path': '/ho...d944ec9a8abed745cca831/tokens.npy', 'sha256': '687d828d3cc2d1337551a7a59e7888e0ea1f37166941d38b46f9d39a1966a8d9'}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b52404170>
+dataset = 'zsre'
+
+    @pytest.mark.parametrize("dataset", ["mquake", "zsre"])
+    def test_actual_300_1000_cadences_full_and_sampled(
+        make, stages, tiny_contract, monkeypatch, dataset
+    ):  # noqa: F811
+        install(monkeypatch)
+        monkeypatch.setattr(contract, "ROOT", backend.ROOT.path)
+        template = next(
+            c
+            for c in stages["matrix"]["cells"]
+            if c["dataset"] == dataset
+            and c["condition"] == "R1_learned_ff"
+            and c["realization"] == 0
+            and c["order"] == 100
+        )
+        cid = template["cell_id"]
+        data = stages["payloads"][cid]
+        # Exercise the actual seal validator over all 360 populations, with only the
+        # model/source fixture substituted; no production draw/seal is performed.
+        populations = copy.deepcopy(stages["population"])
+        populations["full_validation"] = tiny_contract
+        for p in populations["cells"].values():
+            p["full_validation"] = tiny_contract
+        core.validate_seal(
+            stages["sealed"],
+            [{k: c[k] for k in old_analysis.COORDS} for c in stages["matrix"]["cells"]],
+            stages["payloads"],
+            populations,
+            layout=layouts.production("D"),
+            full_validation=tiny_contract,
+        )
+        matrix_doc = copy.deepcopy(stages["matrix"])
+        matrix_doc.update(full_validation=tiny_contract, endpoint_contract_version=1)
+        matrix_binding = new_json(backend.ROOT / "docs/tasks/DEC063-matrix.json", matrix_doc)
+    
+        def enable(m, frozen, payload):
+            m.update(
+                checkpoints=template["checkpoints"],
+                population_contract_version=2,
+                matrix=matrix_binding,
+                integrity_batch_edits=100,
+                full_validation=tiny_contract,
+                full_validation_implementation=contract.ref(contract.__file__),
+            )
+            protocol = dict(
+                schema_version=2,
+                mode="stage4_final_protocol",
+                lead_approved=True,
+                open_gates=[],
+                population_decision="DEC-060-option-D",
+                dataset_layouts=layouts.production("D"),
+                layout_sha256=layouts.digest(layouts.production("D")),
+                matrix=matrix_binding,
+                extension_admitted=False,
+                max_new=32,
+                locality_score="bounded_text_equality_DEC053",
+                experiment_deadline="2026-10-09",
+                full_validation=tiny_contract,
+                full_validation_implementation=m["full_validation_implementation"],
+            )
+            m["protocol"] = new_json(backend.ROOT / "docs/tasks/DEC063-protocol.json", protocol)
+            m["population"] = new_json(
+                stages["resources"] / ("full-pop-" + dataset + ".json"), populations
+            )
+            frozen.update(
+                protocol=m["protocol"],
+                population=m["population"],
+                full_validation=tiny_contract,
+                full_validation_implementation=m["full_validation_implementation"],
+            )
+            frozen["bindings_sha256"][m["full_validation_implementation"]["path"]] = m[
+                "full_validation_implementation"
+            ]["sha256"]
+    
+        f = make(
+            data_override=data,
+            reservations_override=stages["sealed"],
+            realization=0,
+            order=100,
+            change=enable,
+        )
+    
+        def factory(m):
+            cfg = _cfg()
+            cfg.fast = replace(cfg.fast, steps=0, delta_steps=0)
+            return build_adapter(
+                "R1_learned_ff",
+                TerminatingTinyBase(),
+                Ledger(),
+                calibration=CAL,
+                synthetic=True,
+                revision_config=cfg,
+            ), stages["tokenizer"]
+    
+        result = backend.execute(
+            f["binding"]["path"], f["binding"]["sha256"], code_root=REPO, factory=factory
+        )
+        assert result["status"] == "complete"
+        phases = result["phase_timer_summary"]
+        assert phases["drift"]["count"] == len(template["checkpoints"])
+        assert phases["full_validation"]["count"] == 1
+        declared = dict(
+            template,
+            full_validation=tiny_contract,
+            population=populations["cells"][cid],
+            admitted=True,
+            result_dir=result["run_dir"],
+            manifest_sha256=f["binding"]["sha256"],
+            adapter_identity=f["m"]["adapter_identity"],
+            code_sha256=f["m"]["code_sha256"],
+            payload_sha256=f["m"]["payload"]["sha256"],
+        )
+        matrix_doc.update(scope="confirmatory", cells=[declared], extension={"cells": []})
+>       report = analysis.analyze(matrix_doc)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_63l_consumers.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/r1_49g_analyze.py:44: in analyze
+    report["contrasts"] = primary_contrasts(matrix, loaded) if admitted_family else []
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_49g_inference.py:182: in primary_contrasts
+    contrasts = validate_family(matrix)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'accepted_decisions': {'DEC-054': {'row': "| DEC-054 | 2026-09-16 | **Q4: the loss-level κ pilot goes** (lead, relayi... {'core_cells': 360, 'costs_admitted': False, 'extension_cells': 45, 'measured_total_ceiling_seconds': None, ...}, ...}
+
+    def validate_family(matrix):
+        axes = matrix["axes"]
+        reduced = matrix.get("option") == "D" or "dataset_layouts" in matrix
+        if reduced:
+            from scripts.r1_d9_layouts import from_matrix
+    
+            layout = from_matrix(matrix)
+            if axes.get("realizations_by_dataset") != {d: x["realizations"] for d, x in layout.items()}:
+                raise ValueError("option-D realization inventory differs")
+            if any(
+                c["checkpoints"] != layout[c["dataset"]]["checkpoints"] for c in old.all_cells(matrix)
+            ):
+                raise ValueError("option-D execution cadence differs")
+        if (
+            axes["datasets"] != list(DATASETS)
+            or (not reduced and axes["realizations"] != [0, 1, 2])
+            or axes["orders"] != [100, 101, 102, 103, 104]
+            or set(axes["conditions"]) != {"R1_learned_ff", *CONTROLS}
+            or len(axes["conditions"]) != 8
+        ):
+            raise ValueError("DEC-057 axes required; family cannot shrink to observed cells")
+        primary = [c for c in matrix["contrasts"] if c["role"] == "primary"]
+        if (
+            len(primary) != 7
+            or {c["control"] for c in primary} != set(CONTROLS)
+            or any(c["treatment"] != "R1_learned_ff" for c in primary)
+            or len({c["id"] for c in primary}) != 7
+        ):
+            raise ValueError("exact seven registered primary contrasts required")
+        if matrix.get("multiplicity") != FAMILY:
+            raise ValueError("exact DEC-057 family binding required")
+        old.validate_matrix(matrix)
+        coordinates = {old.coordinate(c) for c in matrix["cells"]}
+        expected = set(itertools.product(axes["conditions"], DATASETS, [0, 1, 2], axes["orders"]))
+        if coordinates != expected or len(matrix["cells"]) != 360:
+>           raise ValueError("complete independently declared 360-cell primary inventory required")
+E           ValueError: complete independently declared 360-cell primary inventory required
+
+scripts/r1_49g_inference.py:171: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_63l_consumers.py::test_actual_300_1000_cadences_full_and_sampled[mquake]
+FAILED tests/revision_v1/test_r1_63l_consumers.py::test_actual_300_1000_cadences_full_and_sampled[zsre]
+2 failed, 3 passed in 273.72s (0:04:33)

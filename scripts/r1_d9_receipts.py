@@ -88,6 +88,7 @@ def implementation_bindings():
         "scripts/r1_d1i_register_v6.py",
         "scripts/r1_75_analysis_stage4_v1.py",
         "scripts/r1_77b_sealed_backend.py",
+        "scripts/r1_63l_full_validation_contract.py",
     ]
     names += [str(p.relative_to(ROOT)) for p in sorted((ROOT / "src/pccap").rglob("*.py"))]
     return {n: sha(ROOT / n) for n in names}
@@ -105,6 +106,7 @@ def contract(spec, stage):
             "protocol": spec["protocol"],
             "configuration": spec["d9"][stage],
             "near_miss_family_contract": spec.get("near_miss_family_contract"),
+            "full_validation": spec.get("full_validation"),
             "prerequisites": {
                 n: spec["receipts"].get(n) for n in REQUIRED[stage] if n != stage + "_authorization"
             },
@@ -283,10 +285,16 @@ def draw_value(spec, receipts):
         core.require(sha(b["path"]) == b["sha256"], "review evidence changed after clearance")
     from scripts import r1_d9f_allocation as near_allocation
 
-    decision = read_metadata(rng["near_allocation_decision"]) if rng.get("near_allocation") == "family_coordinated" else None
+    decision = (
+        read_metadata(rng["near_allocation_decision"])
+        if rng.get("near_allocation") == "family_coordinated"
+        else None
+    )
     mode = near_allocation.admitted_mode(rng, cfg, decision)
-    core.require(receipts["protocol_admission"].get("near_allocation", "independent") == mode,
-                 "protocol/RNG near allocation differs")
+    core.require(
+        receipts["protocol_admission"].get("near_allocation", "independent") == mode,
+        "protocol/RNG near allocation differs",
+    )
     allocation = near_allocation.allocate(
         candidates["candidates"],
         mode=mode,
@@ -362,6 +370,7 @@ def seal_values(spec, receipts, matrix):
         payloads,
         population,
         layout=layouts.from_spec(spec) if spec.get("schema_version") == 3 else None,
+        full_validation=spec.get("full_validation"),
     )
     for cell in cells:
         cid = coordinate_id(cell)
@@ -484,6 +493,14 @@ def prepare(spec, stage, *, evaluate_clearance=True):
         matrix = read_metadata(spec["matrix"])
         matrix_layout = check_matrix_layout(matrix)
         core.require(matrix_layout == layouts.from_spec(spec), "matrix/spec layout differs")
+        core.require(
+            matrix.get("full_validation") == spec.get("full_validation"),
+            "matrix/spec full-validation contract differs",
+        )
+        if matrix.get("full_validation") is not None:
+            from scripts.r1_63l_full_validation_contract import validate
+
+            validate(matrix["full_validation"])
         read_metadata(spec["protocol"], parse=False)
         state["matrix"] = {"binding": spec["matrix"], "document": matrix}
         cfg = spec["d9"][stage]
@@ -543,6 +560,8 @@ def execute(spec, stage):
         )
     if "near_miss_family_contract" in spec:
         receipt["near_miss_family_contract"] = spec["near_miss_family_contract"]
+    if "full_validation" in spec:
+        receipt["full_validation"] = spec["full_validation"]
     if stage == "clearance":
         value = state["clearance"]
         receipt.update(

@@ -1,28 +1,36 @@
 """Full inventory assembly over actual synthetic D9 receipts, with real metadata guards."""
 
 import copy
-import json
 from pathlib import Path
+from types import SimpleNamespace
 from uuid import uuid4
 
 import pytest
 from scripts import r1_63j_production_bundle as bundle
 from scripts import r1_d9_receipts as d9
-from scripts.r1_49j_normative_closure import closure
+from scripts.r1_49k_normative_closure import closure
 from scripts.r1_d10a_review import ROOT, write_new
 
+from tests.revision_v1 import test_r1_58e_rehearsal as rehearsal
+from tests.revision_v1.r1_63l_patch_support import install
 from tests.revision_v1.test_r1_58h_cost_receipt import complete
 
 
 @pytest.fixture(scope="module")
-def assembly_inputs():
+def assembly_inputs(request):
     root = ROOT / "docs/tasks/R1-63j-rehearsal" / uuid4().hex
     root.mkdir(parents=True)
-    # Immutable prior rehearsal: actual public D9 clearance/draw/constructor/seal.
-    summary = ROOT / "logs/r1_round24/rehearsal/6b4dd4bdd6f24ae3bc658be282ede176/summary.json"
-    if not summary.exists():
-        summary = sorted((ROOT / "logs/r1_round24/rehearsal").glob("*/summary.json"))[0]
-    info = json.loads(summary.read_text())
+    # Actual synthetic D9 producers with the current DEC-063 population contract.
+    fixture = rehearsal.stages.__wrapped__(
+        SimpleNamespace(
+            param=dict(
+                full_validation=True,
+                allocation="family_coordinated",
+                extension=getattr(request, "param", False),
+            )
+        )
+    )
+    info = d9.read_metadata(fixture["record"])
     seal = d9.read_metadata(info["receipts"]["seal_receipt"])
     spec = {
         k: seal[k]
@@ -33,6 +41,7 @@ def assembly_inputs():
             "dataset_layouts",
             "layout_sha256",
             "near_miss_family_contract",
+            "full_validation",
         )
     }
     spec.update(schema_version=3, receipts=copy.deepcopy(info["receipts"]))
@@ -69,7 +78,8 @@ def test_real_unsigned_inspection_never_opens_resources(monkeypatch):
     assert result["blocked"] and result["payloads_opened"] == 0
 
 
-def test_whole_synthetic_package_passes_actual_queue_and_backend(assembly_inputs):
+def test_whole_synthetic_package_passes_actual_queue_and_backend(assembly_inputs, monkeypatch):
+    install(monkeypatch)
     root, spec, templates = assembly_inputs
     before = (ROOT / bundle.backend.FROZEN_RELATIVE).exists()
     result = bundle.assemble(spec, templates, root / "staged", normative=closure())
@@ -82,10 +92,29 @@ def test_whole_synthetic_package_passes_actual_queue_and_backend(assembly_inputs
     publication_preview(result["bundle"], spec)
     assert len(doc["artifacts"]) == 364
     assert all(not Path(a["destination"]).exists() for a in doc["artifacts"])
+    for b in d9.read_metadata(result["bundle"])["templates"].values():
+        assert d9.read_metadata(b)["full_validation"]["expected_positions"] == 245237
     write_new(
         ROOT / f"logs/r1_round29/assembler-rehearsal-{root.name}.json",
         dict(result, synthetic=True, source=d9.ref(root / "inputs.json")),
     )
+
+
+@pytest.mark.parametrize("assembly_inputs", [True], indirect=True)
+def test_extension_also_carries_required_full_contract(assembly_inputs, monkeypatch):
+    install(monkeypatch)
+    root, spec, templates = assembly_inputs
+    result = bundle.assemble(spec, templates, root / "extension-staged", normative=closure())
+    assert result["verification"]["cells"] == 405
+    doc = d9.read_metadata(result["bundle"])
+    assert len(doc["artifacts"]) == 409
+    recipes = [
+        d9.read_metadata(a["source"])
+        for a in doc["artifacts"]
+        if "/recipes/" in a["source"]["path"]
+    ]
+    assert len(recipes) == 405
+    assert all(r["full_validation"] == spec["full_validation"] for r in recipes)
 
 
 @pytest.mark.parametrize(

@@ -46,7 +46,21 @@ class FamilyTinyTok(TinyTok):
 
 @pytest.fixture(scope="module")
 def stages(request):
-    allocation_mode = getattr(request, "param", "independent")
+    options = getattr(request, "param", "independent")
+    allocation_mode = (
+        options.get("allocation", "family_coordinated") if isinstance(options, dict) else options
+    )
+    full_validation = None
+    extension_admitted = bool(isinstance(options, dict) and options.get("extension"))
+    drift = {"windows": [[2, 3, 4]], "expected_positions": 2}
+    if isinstance(options, dict) and options.get("full_validation"):
+        from scripts.r1_63l_full_validation_contract import production_contract
+
+        full_validation = production_contract()
+        tokens = np.load(full_validation["source"]["path"], allow_pickle=False)
+        drift = dict(
+            windows=tokens[: 128 * 128].reshape(128, 128).tolist(), expected_positions=16256
+        )
     root = REPO / "logs/r1_round24/rehearsal" / uuid.uuid4().hex
     resources = REPO.parent / "assets/runs/pc_cap/R1/test_scratch/r1_round24" / root.name
     layout = layouts.production("D")
@@ -145,6 +159,8 @@ def stages(request):
     matrix.update(
         near_miss_family_contract=NEAR_CONTRACT, queue_ceiling_contract=CEILING_DEFINITION
     )
+    if full_validation is not None:
+        matrix["full_validation"] = full_validation
     mb = new_json(root / "docs/tasks/matrix.json", matrix)
     pb = new_json(root / "docs/tasks/protocol.json", {"synthetic": True, "dataset_layouts": layout})
     catalog = {d: [] for d in layouts.DATASETS}
@@ -167,6 +183,8 @@ def stages(request):
         },
     )
     spec["d9"]["clearance"]["evidence"] = eb
+    if full_validation is not None:
+        spec["full_validation"] = full_validation
     spec["d9"]["draw"].update(
         master_seed=17, composition_catalog=cb, near_allocation=allocation_mode
     )
@@ -183,6 +201,8 @@ def stages(request):
         protocol=pb,
     )
     common["near_allocation"] = allocation_mode
+    if full_validation is not None:
+        common.update(full_validation=full_validation, full_validation_reviewed=True)
     if allocation_mode == "family_coordinated":
         common["near_allocation_contract"] = ALLOCATION_CONTRACT
         common["near_allocation_decision"] = new_json(
@@ -197,7 +217,10 @@ def stages(request):
             ),
         )
     for name, extra in [
-        ("protocol_admission", dict(extension_admitted=False, near_family_reviewed=True)),
+        (
+            "protocol_admission",
+            dict(extension_admitted=extension_admitted, near_family_reviewed=True),
+        ),
         (
             "rng_admission",
             dict(
@@ -243,13 +266,16 @@ def stages(request):
         draw = json.loads(Path(spec["receipts"]["draw_receipt"]["path"]).read_text())
         reservations = producer.read_resource(draw["reservations"])
         cells = [{k: c[k] for k in producer.COORDS} for c in matrix["cells"]]
+        if extension_admitted:
+            cells += [{k: c[k] for k in producer.COORDS} for c in matrix["extension"]["cells"]]
         payloads, population, endpoints = construct(
             reservations,
             cells,
             catalog,
             plan,
-            {"windows": [[2, 3, 4]], "expected_positions": 2},
+            drift,
             layout=layout,
+            full_validation=full_validation,
         )
         unique = {}
         payload_bindings = {}
@@ -306,6 +332,7 @@ def stages(request):
         population=population,
         sealed=sealed,
         tokenizer=tok,
+        spec=spec,
     )
 
 

@@ -70,6 +70,14 @@ def read_metadata(binding, *, parse=True):
 
 
 def check_receipt(name, r, spec):
+    if "full_validation" in spec:
+        from scripts.r1_63l_full_validation_contract import validate
+
+        expected_validation = validate(spec["full_validation"])
+        if r.get("full_validation") != expected_validation:
+            raise ValueError("receipt DEC-063 full-validation contract differs")
+        if name == "protocol_admission" and r.get("full_validation_reviewed") is not True:
+            raise ValueError("DEC-063 protocol review not signed")
     if name == "chain_i_cell_ceilings" and r.get("cost_schema_version") == 2:
         from scripts.r1_58h_cost_contract import validate as validate_cost_evidence
 

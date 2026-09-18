@@ -135,17 +135,21 @@ def fields_for(step, spec):
 
 
 def common(spec):
-    return {
-        k: copy.deepcopy(spec[k])
-        for k in (
-            "register",
-            "matrix",
-            "protocol",
-            "dataset_layouts",
-            "layout_sha256",
-            "near_miss_family_contract",
-        )
-    } | {"contract_version": 2}
+    return (
+        {
+            k: copy.deepcopy(spec[k])
+            for k in (
+                "register",
+                "matrix",
+                "protocol",
+                "dataset_layouts",
+                "layout_sha256",
+                "near_miss_family_contract",
+            )
+        }
+        | {"contract_version": 2}
+        | ({"full_validation": spec["full_validation"]} if "full_validation" in spec else {})
+    )
 
 
 def cost_binding(spec=None):

@@ -151,6 +151,7 @@ def construct(
     locality_count=50,
     checkpoints=(100, 300, 1000),
     layout=None,
+    full_validation=None,
 ):
     if reservations.get("mode") != "unsealed_fact_reservations":
         raise ValueError("unsealed reservations required")
@@ -169,6 +170,11 @@ def construct(
     if len(keyed) != len(plan["rows"]):
         raise ValueError("duplicate role plan")
     payloads, inventory, group_cache, payload_cache = {}, {"cells": {}}, {}, {}
+    if full_validation is not None:
+        from scripts.r1_63l_full_validation_contract import sample
+
+        sample(full_validation, drift)
+        inventory["full_validation"] = full_validation
     missing = []
     for cell in cells:
         ds, real = cell["dataset"], str(cell["realization"])
@@ -186,8 +192,9 @@ def construct(
                     if keyed[ds, row["item_id"]]["near_key"] != near_key(row):
                         raise ValueError("near-family role plan differs from source")
             near_ids = [f"{gkey}:near:{i}" for i in range(counts["near_miss_support"])]
-            near = pair_reserved(roles["near_miss_support"], roles["near_miss_neighbour"],
-                                 near_ids, dataset=ds)
+            near = pair_reserved(
+                roles["near_miss_support"], roles["near_miss_neighbour"], near_ids, dataset=ds
+            )
             missing.extend(dict(group=gkey, **row) for row in near["missing"])
             revisions = []
             revision_ids = [f"{gkey}:revision:{i}" for i in range(counts["revision"])]
@@ -267,6 +274,8 @@ def construct(
         cid = core.coordinate_id(cell)
         payloads[cid] = payload_cache[order_key]
         inventory["cells"][cid] = core.planned_population(payloads[cid])
+        if full_validation is not None:
+            inventory["cells"][cid]["full_validation"] = full_validation
     identities = core.validate_seal(
         reservations,
         cells,
@@ -277,6 +286,7 @@ def construct(
         checkpoints=checkpoints,
         locality_count=locality_count,
         layout=explicit_layout,
+        full_validation=full_validation,
     )
     return (
         payloads,
@@ -407,6 +417,8 @@ def main():
     draw = json.loads(Path(spec["draw_receipt"]["path"]).read_text())
     reservations = read_resource(draw["reservations"])
     matrix = json.loads(Path(spec["matrix"]["path"]).read_text())
+    if draw.get("full_validation") != matrix.get("full_validation"):
+        raise ValueError("draw/matrix full-validation contract differs")
     cells = [
         {k: c[k] for k in ("condition", "dataset", "realization", "order")} for c in matrix["cells"]
     ]
@@ -436,6 +448,7 @@ def main():
         plan,
         drift,
         layout=layout if "dataset_layouts" in matrix else None,
+        full_validation=matrix.get("full_validation"),
     )
     report.update(
         draw_receipt=spec["draw_receipt"],

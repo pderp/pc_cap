@@ -7,6 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from scripts import r1_63l_full_validation_contract as full_contract
 from scripts import r1_75_analysis_stage4_v1 as old
 from scripts.r1_49g_inference import FAMILY, primary_contrasts
 from scripts.r1_49g_secondary import cell_benchmarks, macro_benchmarks
@@ -18,10 +19,16 @@ ROOT = Path(__file__).resolve().parents[1]
 def near_family_summary(section, expected):
     summary, bounded, terminated = old.preservation_section(section, expected, "neighbour_query")
     return dict(
-        family_contract=dict(NEAR_CONTRACT), bounded=bounded, terminated=terminated,
-        diagnostics=summary, planned=len(expected), evaluated=bounded["scored"],
-        missing=len(expected)-bounded["scored"], preserved=bounded["numerator"],
-        observed_case_rate=bounded["evaluated_value"], full_inventory_rate=bounded["value"],
+        family_contract=dict(NEAR_CONTRACT),
+        bounded=bounded,
+        terminated=terminated,
+        diagnostics=summary,
+        planned=len(expected),
+        evaluated=bounded["scored"],
+        missing=len(expected) - bounded["scored"],
+        preserved=bounded["numerator"],
+        observed_case_rate=bounded["evaluated_value"],
+        full_inventory_rate=bounded["value"],
         interpretation="different-subject exact relation/template specificity; not semantic nearest neighbours",
         denominator_policy="planned slots retained; full rate unavailable with any missing case; no acquisition filter",
     )
@@ -32,7 +39,7 @@ def _read_verified(path, sources):
     raw = path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != sources.get(str(path)):
         raise ValueError("R1-75 report source changed or was not verified")
-    return json.loads(raw)
+    return None if path.suffix == ".npz" else json.loads(raw)
 
 
 def analyze(matrix):
@@ -73,15 +80,26 @@ def analyze(matrix):
             final = declared["checkpoints"][-1]
             expected = (declared.get("population") or {}).get("endpoints", {}).get("near_miss")
             if expected is None:
-                near_cells.append(dict(cell_id=declared["cell_id"], status="unavailable",
-                                       reason="independent near-miss population not bound"))
+                near_cells.append(
+                    dict(
+                        cell_id=declared["cell_id"],
+                        status="unavailable",
+                        reason="independent near-miss population not bound",
+                    )
+                )
             else:
                 section = reports.get(final, {}).get("endpoints", {}).get("near_miss")
-                near_cells.append(dict(cell_id=declared["cell_id"], checkpoint=final,
-                                       **near_family_summary(section, expected)))
+                near_cells.append(
+                    dict(
+                        cell_id=declared["cell_id"],
+                        checkpoint=final,
+                        **near_family_summary(section, expected),
+                    )
+                )
     report["near_miss_family"] = dict(
         status="adopted_DEC061" if family is not None else "legacy_or_not_declared",
-        contract=family, cells=near_cells,
+        contract=family,
+        cells=near_cells,
     )
     report["secondary_benchmarks"] = {
         "decision": "DEC-059",
@@ -98,6 +116,9 @@ def analyze(matrix):
     report["dataset_layouts"] = matrix.get("dataset_layouts")
     if family is not None:
         report["analysis_revision"] = "R1-49i_DEC057_DEC058_DEC059_DEC060_DEC061"
+    if matrix.get("full_validation") is not None:
+        report["analysis_revision"] = "R1-63l_DEC063_full_and_sampled_validation"
+        report["full_validation_contract"] = matrix["full_validation"]
     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
     report["limits"] += [
         FAMILY["coverage"],
@@ -162,12 +183,21 @@ def markdown(report):
         )
     near = report.get("near_miss_family", {})
     if near.get("cells"):
-        lines += ["", "DEC-061 NM-template-v1 at the final planned checkpoint:", "",
-                  "| Cell | Preserved / evaluated / planned | Full inventory rate | Missing |",
-                  "|---|---|---|---|"]
+        lines += [
+            "",
+            "DEC-061 NM-template-v1 at the final planned checkpoint:",
+            "",
+            "| Cell | Preserved / evaluated / planned | Full inventory rate | Missing |",
+            "|---|---|---|---|",
+        ]
         for r in near["cells"]:
-            lines.append(f"| {r['cell_id']} | {r.get('preserved')} / {r.get('evaluated')} / {r.get('planned')} | {r.get('full_inventory_rate')} | {r.get('missing')} |")
-        lines += ["", "Bounded equality compares each neighbour with its actual cap-off baseline. Missing planned slots remain missing; support-edit acquisition does not filter the denominator. This measures exact relation/template specificity, not semantic nearest-neighbour robustness."]
+            lines.append(
+                f"| {r['cell_id']} | {r.get('preserved')} / {r.get('evaluated')} / {r.get('planned')} | {r.get('full_inventory_rate')} | {r.get('missing')} |"
+            )
+        lines += [
+            "",
+            "Bounded equality compares each neighbour with its actual cap-off baseline. Missing planned slots remain missing; support-edit acquisition does not filter the denominator. This measures exact relation/template specificity, not semantic nearest-neighbour robustness.",
+        ]
     lines += [
         "",
         "Resource ceilings remain unadmitted. Macro unavailability and missing cell results cannot be read as passes.",
@@ -175,6 +205,7 @@ def markdown(report):
         *report["limits"],
         "",
     ]
+    lines += full_contract.report_lines(report["cells"])
     return "\n".join(lines)
 
 
@@ -199,6 +230,7 @@ def run(matrix_path, output_prefix):
         "src/pccap/revision_v1/analysis.py",
         "scripts/r1_74_rescore.py",
         "scripts/ht_audit_existing.py",
+        "scripts/r1_63l_full_validation_contract.py",
     ]
     report["analysis_source_sha256"] = {
         name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in names

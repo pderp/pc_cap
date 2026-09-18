@@ -13,11 +13,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import r1_58c_draw_seal_preflight as preflight
+from scripts import r1_63l_full_validation_contract as full_contract
 from scripts import r1_68c_dev_cell as driver
 from scripts import r1_77_queue as queue
 from scripts import r1_77b_sealed_backend as backend
 from scripts import r1_d9_receipts as d9
-from scripts.r1_49j_normative_closure import closure
+from scripts.r1_49k_normative_closure import closure
 from scripts.r1_77f_scheduler import CEILING_DEFINITION
 from scripts.r1_d10a_review import ROOT, write_new
 
@@ -34,6 +35,8 @@ RUNTIME_KEYS = (
     "drift_implementation",
     "integrity_driver_bindings",
     "code_sha256",
+    "full_validation",
+    "full_validation_implementation",
 )
 
 
@@ -88,7 +91,7 @@ def template_catalog(output=None):
 
     output = Path(output) if output else ROOT / "docs/tasks/R1-63j-runtime" / uuid4().hex
     sources = {}
-    for directory in ("R1-64e", "R1-73d-post77d", "R1-64f"):
+    for directory in ("R1-post68f-active/R1-64e", "R1-post68f-active/R1-73d-post68f", "R1-64g"):
         for p in sorted((ROOT / "docs/tasks" / directory).glob("*.recipe.json")):
             m = d9.read_metadata(d9.ref(p))
             if m["code_sha256"] != driver.code_identity():
@@ -112,6 +115,8 @@ def template_catalog(output=None):
             source_recipe=d9.ref(path),
             producer=d9.ref(__file__),
             note="runtime metadata conversion only; no historical result reused as sealed execution",
+            full_validation=full_contract.production_contract(),
+            full_validation_implementation=full_contract.ref(full_contract.__file__),
         )
         if key == "R1_learned_ff:counterfact":
             value.update(
@@ -200,6 +205,15 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
     population = d9.read_resource(seal["analysis_population"])
     if set(inventory) != ids or set(population["cells"]) != ids:
         raise ValueError("sealed inventory/population must equal whole admitted matrix")
+    validation = full_contract.validate(spec.get("full_validation"))
+    if (
+        declaration.get("full_validation") != validation
+        or population.get("full_validation") != validation
+    ):
+        raise ValueError("DEC-063 matrix/independent population contract mismatch")
+    for pop in population["cells"].values():
+        if pop.get("full_validation") != validation:
+            raise ValueError("DEC-063 missing from a sealed cell population")
     # Population is an independent metadata inventory; cell payloads and reservations stay opaque.
     costs = {
         c["condition"] + ":" + c["dataset"]: c for c in receipts["chain_i_cell_ceilings"]["cells"]
@@ -213,6 +227,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         str(code_root / "requirements.lock"): d9.sha(code_root / "requirements.lock")
     }
     metadata_bindings.update(norm["bindings_sha256"])
+    implementation = full_contract.ref(full_contract.__file__)
+    metadata_bindings[implementation["path"]] = implementation["sha256"]
     for b in [spec["matrix"], spec["protocol"], *spec["receipts"].values()]:
         if b.get("path"):
             d9.read_metadata(b, parse=False)
@@ -267,6 +283,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         near_allocation_decision=admitted.get("near_allocation_decision"),
         protocol_admission=spec["receipts"]["protocol_admission"],
         effective_only_after_exact_signed_publication=True,
+        full_validation=validation,
+        full_validation_implementation=implementation,
     )
     protocol_binding = stage(
         "protocol.json", final_root / "manifests/revision_v1/stage4_final_protocol.json", protocol
@@ -286,6 +304,11 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
             ):
                 raise ValueError("runtime template coordinate/code identity mismatch")
             driver.profile_config(m, code_root)
+            if (
+                m.get("full_validation") != validation
+                or m.get("full_validation_implementation") != implementation
+            ):
+                raise ValueError("runtime template lacks current DEC-063 contract/implementation")
             bp = calibration["calibration"]["BP"]
             expected_cal = dict(bank_scales=bp["b_m"], radii=bp["radii"][cell["dataset"]])
             if m["construction"]["calibration"] != expected_cal:
@@ -349,6 +372,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         bindings_sha256=metadata_bindings,
         recipe_contracts={cid: backend.contract_digest(m) for cid, m in recipes.items()},
         publication_condition="proposal only until exact signed operator freeze publication",
+        full_validation=validation,
+        full_validation_implementation=implementation,
     )
     freeze = stage("freeze-proposal.json", final_root / backend.FROZEN_RELATIVE, frozen)
     bindings = {}
@@ -370,6 +395,8 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
         freeze=freeze,
         shared_process_hours=receipts["chain_i_cell_ceilings"]["shared_process_hours"],
         cost_admission=spec["receipts"]["chain_i_cell_ceilings"],
+        endpoint_contract_version=1,
+        full_validation=validation,
     )
     for cell in cells:
         cid = cell["cell_id"]
@@ -385,6 +412,7 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
             adapter_identity=m["adapter_identity"],
             code_sha256=m["code_sha256"],
             result_dir=str(backend.OUTPUT_ROOT / core.cell_name(m, b["sha256"])),
+            full_validation=validation,
         )
     final["cells"] = [c for c in cells if c["block_number"] != 6]
     final["extension"]["cells"] = [c for c in cells if c["block_number"] == 6]
