@@ -1,0 +1,996 @@
+[
+  {
+    "title": "Where correction helps — and what the mean hides",
+    "kind": "opening",
+    "label": "RESEARCH PROGRAMME → CURRENT EXPERIMENTS",
+    "submitted_title": "Coupled Active Inference on a Frozen Transformer Prior: A Risk-Aware Residual Agent for Non-Equilibrium Regimes",
+    "points": [
+      "Charlie Derr · Matthew Iklé",
+      "October 15, 2026 · Binghamton satellite",
+      "A frozen language model. A small adaptive memory. Controlled tests of correction and unintended interference."
+    ],
+    "foot": "Development evidence, September 18 snapshot. The submitted abstract describes the broader programme.",
+    "number": 1,
+    "outline_title": "From the abstract to a measurable question",
+    "suggested_duration": "1 minute",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "A1",
+        "pointer": "/rows/0",
+        "statement_sha256": "72fd62c3355978addda591cc0f3161efa4a81109e92907cd97175c3568f211d6",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round16/selection_audit.json",
+            "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/learner.py",
+            "sha256": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117"
+          }
+        ]
+      },
+      {
+        "id": "A2",
+        "pointer": "/rows/1",
+        "statement_sha256": "ebf25e251a9e114b30c81b95e76488aff0985d551c38622654f0c92f2db7607c",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/adapt.py",
+            "sha256": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/reader.py",
+            "sha256": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018"
+          }
+        ]
+      },
+      {
+        "id": "A3",
+        "pointer": "/rows/2",
+        "statement_sha256": "0bf015a48e55cd4d065da5b519781735b7a7df5c8d48019a05649a344a08991e",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/memory.py",
+            "sha256": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54"
+          }
+        ]
+      },
+      {
+        "id": "N1",
+        "pointer": "/rows/8",
+        "statement_sha256": "84a4203150bf491ca23b818660d29d5dfd9a8470fce1ca55fe301782dc0ca091",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/report.md",
+            "sha256": "f4b4b6fb18e8b9ce672daa6bc80fb429264c2d0fa5780f0fc354212a4f6ffb77"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/results/S7/summary.json",
+            "sha256": "718348e2517306cbdb9008b05f17296a7f0a714aca54179f7463341fad83f3b3"
+          }
+        ]
+      },
+      {
+        "id": "programme",
+        "pointer": "/rows/34",
+        "statement_sha256": "7281d946303c86b464dbc2c819555b714f66f0f6bf4fdc88837036f4560c1a8d",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          },
+          {
+            "path": "/home/derp/cap/errata/presentation_details/Active_Inference_in_the_Extremes_Abstract_charlie_derr.pdf",
+            "sha256": "bb9bb99c196c0392f790223096bef92627d5ea7cad09e349e84f2b5004db6f01"
+          },
+          {
+            "path": "/home/derp/cap/errata/presentation_details/sattellite-schedule",
+            "sha256": "39b90570144a38a34bdae07cb17c6cc403d0b41f4e7da82dc8d1c6ec03bfa3e3"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** A frozen prior plus a small editable memory lets us measure correction and unintended interference separately.\n\n**Evidence / figure:** The submitted PDF at `/home/derp/cap/errata/presentation_details/Active_Inference_in_the_Extremes_Abstract_charlie_derr.pdf`; local `sattellite-schedule` in that directory; `docs/heavy_tail_counter_review.md` §§1, 8; ledger v5 A1–A3. Use the implementation/proposal diagram specified below.\n\n**Qualification:** Present active-inference language as the motivation and programme; the current empirical system does not instantiate the abstract's complete coupled-free-energy agent. The earlier v0 study's negative/inconclusive findings remain in `docs/report.md`; revision development does not retrospectively confirm them.\n\n**Ledger v6 content:** A1, A2, A3, N1, programme. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  },
+  {
+    "title": "The system we actually built",
+    "kind": "diagram",
+    "label": "IMPLEMENTED IN JAX",
+    "points": [
+      "Frozen GPT-2 base (~124M parameters)",
+      "3,348,228 trained reader/controller parameters (~2.7%)",
+      "Separate per-record memory state",
+      "Gate acceptance ≠ nonzero residual ≠ changed answer"
+    ],
+    "foot": "Interfaces are architectural analogies. Freezing weights proves neither a Markov blanket nor universal preservation.",
+    "number": 2,
+    "outline_title": "What is actually implemented",
+    "suggested_duration": "1.5 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "A1",
+        "pointer": "/rows/0",
+        "statement_sha256": "72fd62c3355978addda591cc0f3161efa4a81109e92907cd97175c3568f211d6",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round16/selection_audit.json",
+            "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/learner.py",
+            "sha256": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117"
+          }
+        ]
+      },
+      {
+        "id": "A2",
+        "pointer": "/rows/1",
+        "statement_sha256": "ebf25e251a9e114b30c81b95e76488aff0985d551c38622654f0c92f2db7607c",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/adapt.py",
+            "sha256": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/reader.py",
+            "sha256": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018"
+          }
+        ]
+      },
+      {
+        "id": "A3",
+        "pointer": "/rows/2",
+        "statement_sha256": "0bf015a48e55cd4d065da5b519781735b7a7df5c8d48019a05649a344a08991e",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/memory.py",
+            "sha256": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** The fixed GPT-2 base is augmented by 3,348,228 trained reader/controller parameters and separate per-record state.\n\n**Evidence / figure:** `logs/r1_round16/selection_audit.json`, `logs/review_r1_selection.md`, `src/pccap/revision_v1/learner.py`, `reader.py`, `adapt.py`, `memory.py`. Diagram: supplied fact → residual write; new query → learned retrieval/null decision → selected residual or unchanged base. Label the two interfaces as architectural analogies and put proposed active inference in dashed boxes.\n\n**Qualification:** The 1,640,964 reader +1,707,264 controller parameters are about 2.7% of the stated 124M base; memory records add state. Query acceptance, nonzero residuals and changed answers are different events. Neither a blanket theorem nor universal preservation follows from freezing the weights.\n\n**Ledger v6 content:** A1, A2, A3. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  },
+  {
+    "title": "Retention and rejection compete",
+    "figure": "selection_retention_rejection.png",
+    "label": "ADAPTIVE DEVELOPMENT SELECTION",
+    "points": [
+      "42 candidates · 15 admissible",
+      "Selected v5 macro RET-GS: 0.8033",
+      "zsRE .98 · CounterFact .82 · MQuAKE .61",
+      "zsRE unseen gate acceptance: 10/100",
+      "Fixed-candidate Wilson 95%: 5.52–17.44%"
+    ],
+    "foot": "Development selection, not confirmation. The interval is not selection-adjusted and does not certify a rate below 10%.",
+    "number": 3,
+    "outline_title": "Correction versus unintended intervention",
+    "suggested_duration": "1.5 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "O2",
+        "pointer": "/rows/3",
+        "statement_sha256": "30e5a017d51a4dc4fee5f937ff102209580c391a644ac575f1fd45d2aaf56b26",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round16/selection_audit.json",
+            "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/primary_condition_v5.json",
+            "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+          }
+        ]
+      },
+      {
+        "id": "selection-uncertainty",
+        "pointer": "/rows/35",
+        "statement_sha256": "1ad40467694219e53416493764d3f77a0144d9ef8be4f84b0749b401ed7f5976",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round16/selection_audit.json",
+            "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/review_r1_selection.md",
+            "sha256": "8ed0c03e9fd7b5bcc9da86581250cdb8115b84dffe3f2ca7551891775b5468b0"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** Common-population development selection exposes a retention–rejection trade-off and a clear selected operating point.\n\n**Evidence / figure:** `logs/r1_round16/selection_retention_rejection.pdf` (PNG/SVG also available); `selection_audit.json`; `logs/review_r1_selection.md`; ledger O2. Label 42 candidates, 15 admissible, selected v5 RET-GS 0.8033 macro (.98 zsRE / .82 CounterFact / .61 MQuAKE), unseen gate acceptance 10/100.\n\n**Qualification:** Adaptive development selection, not confirmation. The descriptive fixed-candidate Wilson interval is 5.52–17.44%; it does not certify a population rate below 10%, and is not selection-adjusted. The selected-seed 0.8033 differs from the κ pilot's ordinary three-seed mean 0.7961. Different historical occupancy probe populations do not establish a flat memory-size response.\n\n**Ledger v6 content:** O2, selection-uncertainty. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval.",
+    "figure_binding": {
+      "path": "/home/derp/cap/assets/presentation-materials/figures/ht9-v1/selection_retention_rejection.png",
+      "sha256": "d379d088136251fd0fa988c6ebb0ff2c5343d5ae41064ed0d3cf8fb6ed3aba29"
+    }
+  },
+  {
+    "title": "A small average can hide a large local loss",
+    "figure": "mean_vs_tail_v5.png",
+    "label": "FIXED 128-WINDOW DEVELOPMENT ASSAY",
+    "points": [
+      "zsRE mean signed ΔNLL: .00220 nats",
+      "ES95 positive harm: .04396 nats",
+      "Worst position: 8.69 nats",
+      "17 of 16,256 positions exceed .1 nat",
+      "+8 nats ≈ 3,000× less likely target token"
+    ],
+    "foot": "Rare concentrated harm; no power-law or tail-exponent claim. Positions are dependent; saved profiles are not independent replications.",
+    "number": 4,
+    "outline_title": "Why the mean misses the consequence",
+    "suggested_duration": "2 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "TAIL-zsre",
+        "pointer": "/rows/4",
+        "statement_sha256": "56cea725424e8131aed89aca10141bfffbc324513b04397557ba99c4552167e6",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/audit.json",
+            "sha256": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.json",
+            "sha256": "cd7da933af806e0fd8bae05cce9731398c3e3c4bda744f8d3f92f287f23dbd66"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf",
+            "sha256": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea"
+          }
+        ]
+      },
+      {
+        "id": "TAIL-counterfact",
+        "pointer": "/rows/5",
+        "statement_sha256": "5b2ccec13f571baf25fa16324f5a5f92df250a1a5b90379a169a933aae2e2993",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/audit.json",
+            "sha256": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json",
+            "sha256": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf",
+            "sha256": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** Small average ordinary-text drift coexists with rare positions suffering losses of several nats.\n\n**Evidence / figure:** `logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf` and `audit.json`; historical checkpoint sources are bound there. For v5 zsRE, mean signed ΔNLL .00220, ES95 positive harm .04396, maximum 8.69 nats; 17/16,256 positions exceed .1 nat. CounterFact maximum 7.31, 52/16,256 above .1.\n\n**Explain:** NLL = −log probability assigned to the observed next token; a positive change means that token became less likely. ES95 averages the worst 5% of positive-part harms, including zeros where applicable. A loss increase of 8 nats means the target token is about 3,000 times less probable under the edited distribution for that scored prefix.\n\n**Qualification:** Fixed 128-window development assay, dependent positions; different readers/edit histories are descriptive comparisons. Empirical concentration does not establish a power law or a tail exponent. These saved profiles are not independent replications. Use “rare concentrated harm,” not an unproved distributional-family claim.\n\n**Ledger v6 content:** TAIL-zsre, TAIL-counterfact. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval.",
+    "figure_binding": {
+      "path": "/home/derp/cap/assets/presentation-materials/figures/ht9-v1/mean_vs_tail_v5.png",
+      "sha256": "08ed50f5b0a2412e6414e56926fe2fa7fa76cfa0c67c3b06a10aa13475600486"
+    }
+  },
+  {
+    "title": "Complete validation sharpens the picture",
+    "figure": "full-fidelity-and-tail.png",
+    "label": "245,237 FIXED POSITIONS · 300 DEVELOPMENT EDITS",
+    "points": [
+      "Learned MQuAKE: mean KL .005544",
+      "Learned zsRE: mean KL .002270",
+      "Both exceed the .001 KL benchmark",
+      "zsRE v0: mean KL .000789",
+      "Yet its worst ΔNLL is 16.159 nats"
+    ],
+    "foot": "DEC-064: cap benchmarks are secondary labels, without an admission veto. Continued-base certification is separate. Fixed windows are not iid.",
+    "number": 5,
+    "outline_title": "The complete validation population changes the picture",
+    "suggested_duration": "2 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "HT6-full-validation",
+        "pointer": "/rows/36",
+        "statement_sha256": "76849f5b7e2530aadfa6322be9c38761d5d7988c8c257904fc5f8d0d692d58ab",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round35/ht6-final/report.json",
+            "sha256": "d2d3fb2c9a4514a9b9554861dbf198883c2b05c9f850b369a0fd12fbc198c3bd"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+            "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+          }
+        ]
+      },
+      {
+        "id": "DEC064",
+        "pointer": "/rows/37",
+        "statement_sha256": "a4e81749eb260f0656360b86a1930457d76808b2658b4a3a5c41040595fcaebc",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round35/ht6-final/report.json",
+            "sha256": "d2d3fb2c9a4514a9b9554861dbf198883c2b05c9f850b369a0fd12fbc198c3bd"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+            "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_3.md",
+            "sha256": "eee0a7a0e6838d41323fca360e3cc5fd03c41e622dbc077308f7e2ecfcdd9803"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** Full validation confirms concentration and shows that a passing mean benchmark can still conceal a large local loss.\n\n**Evidence / figure:** `logs/r1_round35/ht6-final/{report.json,report.md,tail-survival.pdf}`; new `logs/r1_round37/presentation-figures-v2/full-fidelity-and-tail.pdf`. Show this four-cell table, all at 300 development edits and N=245,237:\n\n| Cell | Mean KL | Signed mean ΔNLL | Max positive ΔNLL | Positions carrying half KL |\n|---|---:|---:|---:|---:|\n| MQuAKE primary v5 | .005544 | .005601 | 8.188 | 171 |\n| zsRE primary v5 | .002270 | .002310 | 9.945 | 64 |\n| MQuAKE v0 stable | 0 | 0 | 0 | undefined: zero total KL |\n| zsRE v0 stable | .000789 | .000855 | 16.159 | 10 |\n\n**Qualification:** DEC-064 makes cap mean KL ≤.001 and signed mean NLL increase ≤.01 **secondary benchmarks**, without vetoing primary comparisons. Both learned cells fail KL and pass NLL; zsRE v0 passes both despite its maximum. Original-base and own-cap-off references coincide numerically here but stay separately reported; S1 references need not coincide. Full validation covers 1,931 complete 128-token windows (245,237 next-token positions), with context reset per window. The earlier 128-window prefix is a dependent subset, not an iid sample. Matching overlap is a consistency check, not proof of representativeness. Near-zero target-token ΔNLL is not proof of an unchanged full distribution or of no reader firing. The continued-base certification gate is separate.\n\n**Ledger v6 content:** HT6-full-validation, DEC064. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval.",
+    "figure_binding": {
+      "path": "/home/derp/cap/assets/presentation-materials/figures/ht9-v1/full-fidelity-and-tail.png",
+      "sha256": "2df9ca59660066a1b6625ace3438dd9ad418feac68c7cb8d8a9088cfa1872cb1"
+    }
+  },
+  {
+    "title": "Three failures changed the investigation",
+    "kind": "timeline",
+    "label": "RETROSPECTIVE DEVELOPMENT LESSONS",
+    "points": [
+      "Reader fires too widely → explicit null / rejection training",
+      "Occupancy and source confounding → common-population qualification",
+      "Benign-looking averages → per-position tails and complete validation"
+    ],
+    "foot": "No randomized isolation of each repair. Investigators chose these audits; the agent did not perform expected-free-energy action selection.",
+    "number": 6,
+    "outline_title": "Three failures that improved the investigation",
+    "suggested_duration": "1.5 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "A2",
+        "pointer": "/rows/1",
+        "statement_sha256": "ebf25e251a9e114b30c81b95e76488aff0985d551c38622654f0c92f2db7607c",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/adapt.py",
+            "sha256": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/reader.py",
+            "sha256": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018"
+          }
+        ]
+      },
+      {
+        "id": "O2",
+        "pointer": "/rows/3",
+        "statement_sha256": "30e5a017d51a4dc4fee5f937ff102209580c391a644ac575f1fd45d2aaf56b26",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round16/selection_audit.json",
+            "sha256": "775c31525cd5684857f680a679902a379e021937adfed2d215330e037847b367"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/primary_condition_v5.json",
+            "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+          }
+        ]
+      },
+      {
+        "id": "TAIL-zsre",
+        "pointer": "/rows/4",
+        "statement_sha256": "56cea725424e8131aed89aca10141bfffbc324513b04397557ba99c4552167e6",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/audit.json",
+            "sha256": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.json",
+            "sha256": "cd7da933af806e0fd8bae05cce9731398c3e3c4bda744f8d3f92f287f23dbd66"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf",
+            "sha256": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea"
+          }
+        ]
+      },
+      {
+        "id": "HT6-full-validation",
+        "pointer": "/rows/36",
+        "statement_sha256": "76849f5b7e2530aadfa6322be9c38761d5d7988c8c257904fc5f8d0d692d58ab",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round35/ht6-final/report.json",
+            "sha256": "d2d3fb2c9a4514a9b9554861dbf198883c2b05c9f850b369a0fd12fbc198c3bd"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+            "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** Concrete failures changed the reader's rejection training and the measurements used to evaluate it.\n\n**Evidence / figure:** A three-row methods timeline built from `docs/R1_stage2_notes.md` (own-prompt/null inversion, ordinary-text null training, R1-56 memory-rare overlap gate), `logs/review_r1_selection.md`, and the HT-1b/HT-6 sources above. Rows: generalized reader fires too widely → explicit null/rejection training; occupancy/source confounding → common-population qualification; benign-looking averages → per-position tails and complete validation.\n\n**Qualification:** These are retrospective development lessons, not randomized estimates of each repair's isolated effect. Do not use the invalid Chain-M MQuAKE locality artifact as evidence of interference. This is investigators learning from failures, not observed expected-free-energy action selection.\n\n**Ledger v6 content:** A2, O2, TAIL-zsre, HT6-full-validation. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  },
+  {
+    "title": "A small, specified κ intervention",
+    "kind": "objective",
+    "label": "LOSS-LEVEL PILOT · THREE SEEDS",
+    "points": [
+      "Answer surprisal: (1 − p^κ) / κ",
+      "κ → 0 gives ordinary −log p",
+      "κ = .2 and .5; ordinary and clip-2 controls",
+      "Fixed checkpoint average: 150–300",
+      "Only the answer term is bounded; not the whole objective or all gradients"
+    ],
+    "foot": "Preliminary hints at what the architecture could provide; not the coupled free energy (no coupled expectation or changed inference distribution), not a coupled Markov blanket, and not a test of the one-κ conjecture that porosity and interference are the same parameter.",
+    "number": 7,
+    "outline_title": "A small, specified κ intervention",
+    "suggested_duration": "1.5 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "A4",
+        "pointer": "/rows/7",
+        "statement_sha256": "dcbc4232f7fe0f15242fe8f39a0c31c490b8454d72f0a00ccd50bce3a9c3e8d3",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/HT-3b-objective-review.json",
+            "sha256": "024a37a16a19e49195992610d06d2172c353014032c0a32b46f4606b1feeece5"
+          }
+        ]
+      },
+      {
+        "id": "K-kappa02",
+        "pointer": "/rows/9",
+        "statement_sha256": "f9899ae7c94236510c031b4939c3fd19e24c5cf0d25afa4225a10b227a0f9225",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "K-kappa05",
+        "pointer": "/rows/10",
+        "statement_sha256": "2a20b2918590437ab9c3f250ab76d77362e6e758d31c4a1418a69190e9fd642d",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "K-clip2",
+        "pointer": "/rows/11",
+        "statement_sha256": "7d743531708fe7219da32e6cb05a244eed89f7b4c470b754329b9b8c1653cced",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** The pilot changes the reader's loss and asks whether retention can be preserved while unintended intervention and drift tails improve.\n\n**Evidence / figure:** `manifests/revision_v1/kappa_pilot_v3.json`; `logs/heavy_tail/HT-3b-objective-review.json`; `logs/r1_round22/ht3e-independent-review-v2.json`. Use a compact objective/decision-rule box: answer surprisal `(1 − p^κ)/κ`, ordinary limit −log p, κ .2/.5, ordinary control and clip-2 control, three seeds, fixed 150–300 checkpoint average. Cite the implemented repaired preservation divergence; do not copy the earlier counter-review's unrepaired divergence formula as the final objective.\n\n**Qualification (DEC-054, on slide):** “Preliminary hints at what the architecture could provide; not the coupled free energy (no coupled expectation or changed inference distribution), not a coupled Markov blanket, and not a test of the one-κ conjecture that porosity and interference are the same parameter.” Only the answer surprisal is bounded; the whole objective and gradients are not uniformly bounded. Clip 2 matches κ=.5's answer-loss ceiling, not κ=.2's.\n\n**Ledger v6 content:** A4, K-kappa02, K-kappa05, K-clip2. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  },
+  {
+    "title": "The κ pilot did not meet its success rule",
+    "figure": "kappa-tradeoff.png",
+    "label": "DESCRIPTIVE TRADE-OFF, NOT A DECLARED GAIN",
+    "points": [
+      "RET-GS: ordinary .7961",
+      "κ .2: .7544 · κ .5: .7478",
+      "Predeclared retention floor: .7761",
+      "Both κ arms fail retention and tail separation",
+      "Clip2 meets the retention floor; fails separation and adds a CounterFact false fire"
+    ],
+    "foot": "Preliminary hints at what the architecture could provide; not the coupled free energy (no coupled expectation or changed inference distribution), not a coupled Markov blanket, and not a test of the one-κ conjecture that porosity and interference are the same parameter.",
+    "number": 8,
+    "outline_title": "The κ result is a trade-off, not a declared gain",
+    "suggested_duration": "2 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "K-kappa02",
+        "pointer": "/rows/9",
+        "statement_sha256": "f9899ae7c94236510c031b4939c3fd19e24c5cf0d25afa4225a10b227a0f9225",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "K-kappa05",
+        "pointer": "/rows/10",
+        "statement_sha256": "2a20b2918590437ab9c3f250ab76d77362e6e758d31c4a1418a69190e9fd642d",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "K-clip2",
+        "pointer": "/rows/11",
+        "statement_sha256": "7d743531708fe7219da32e6cb05a244eed89f7b4c470b754329b9b8c1653cced",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** Both κ arms reduce descriptive tail harm but fail the predeclared retention floor and tail-separation rule.\n\n**Evidence / figure:** `logs/r1_round37/presentation-figures-v2/kappa-tradeoff.pdf`; source `logs/r1_round22/ht3e-independent-review-v2.json` (36 independently reproduced rows), with original aggregate `logs/r1_round18/ht3d-pilot-final-aliases.json`. Means ordinary / κ .2 / κ .5 / clip2: RET-GS .7961 / .7544 / .7478 / .7789; ES95 .2229 / .0836 / .0635 / .1033 nats. Mark floor .7761 and show individual seed macros, not invented confidence intervals.\n\n**Qualification (DEC-054, on slide):** Repeat the framing sentence from slide 7. The reductions lie within the predeclared seed-spread thresholds. Clip2 meets retention but has a CounterFact false fire where ordinary has zero, and fails tail separation; it is a descriptive control, not proof of robust superiority. Three seeds and 32-window/4,064-position assays per dataset; no confirmatory κ claim and no selection of a favorable tail checkpoint.\n\n**Ledger v6 content:** K-kappa02, K-kappa05, K-clip2. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval.",
+    "figure_binding": {
+      "path": "/home/derp/cap/assets/presentation-materials/figures/ht9-v1/kappa-tradeoff.png",
+      "sha256": "19e44bcc193190743df0bd901bea20319313db8d195d5dc9dbcd026261594d66"
+    }
+  },
+  {
+    "title": "Correct answers can conceal probability harm",
+    "figure": "stress-trajectories.png",
+    "label": "DEVELOPMENT STRESS PANEL · ONE SEED",
+    "points": [
+      "Each tested dataset retains 20/20 old exact answers at observed checkpoints",
+      "CounterFact at edit 100:",
+      "Mean positive ΔNLL .32379",
+      "Maximum 12.53188 nats",
+      "Harm persists through the last observation"
+    ],
+    "foot": "One seed, two schedules, measured probes only. Recovery is unobserved, not impossible or permanent; equal schedules do not prove order invariance.",
+    "number": 9,
+    "outline_title": "Exact answers can survive while probability deteriorates",
+    "suggested_duration": "1.5 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "STRESS-zsre",
+        "pointer": "/rows/12",
+        "statement_sha256": "6117a1a80a6a53ed91cab5d68bf8d00ff288b4f4df867f9ecb6408088e9ef646",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/ht_development_panel_v1.json",
+            "sha256": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/ht5_probe_assays.py",
+            "sha256": "623af505589fdbf59da93ec7c6aa59a0fd983cc898359e93e4f4fe1f8a7a195f"
+          }
+        ]
+      },
+      {
+        "id": "STRESS-counterfact",
+        "pointer": "/rows/13",
+        "statement_sha256": "5d9ef417c62475e89833e66e78e0645e704b579c8e54aa413741765cbfeba5e0",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/ht_development_panel_v1.json",
+            "sha256": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/ht5_probe_assays.py",
+            "sha256": "623af505589fdbf59da93ec7c6aa59a0fd983cc898359e93e4f4fe1f8a7a195f"
+          }
+        ]
+      },
+      {
+        "id": "STRESS-mquake",
+        "pointer": "/rows/14",
+        "statement_sha256": "7d65ddc5f8cbe3e78a343c1a51c9e3bb456cab49952910657a2217705ef803ea",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/ht_development_panel_v1.json",
+            "sha256": "c0eb167e240e91f8cf076db3e6991c1408291fe56c32765efcd56181e5ad3f1a"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/ht5_probe_assays.py",
+            "sha256": "623af505589fdbf59da93ec7c6aa59a0fd983cc898359e93e4f4fe1f8a7a195f"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** Old-fact probability harm persisted through edit 100 despite all 20 old exact answers remaining correct.\n\n**Evidence / figure:** `logs/r1_round37/presentation-figures-v2/stress-trajectories.pdf`; audited `stress` section of `logs/r1_round22/ht3e-independent-review-v2.json`; `manifests/revision_v1/ht_development_panel_v1.json`. CounterFact edit-100 mean positive ΔNLL .32379, maximum 12.53188; MQuAKE mean .112 approximately and maximum 6.6 approximately; zsRE zero. Show points only at measured edits 20/60/70/80/100; connecting lines do not identify the onset between probes.\n\n**Qualification:** One seed, two tested schedules, three datasets. Their observed equality is not universal order invariance. Recovery was unobserved, not proved impossible or permanent. CounterFact first detected harm at 80 gives 20 observed later updates; MQuAKE detection at 60 gives 40. The registered censor from treatment end60 and time since first detected harm are different quantities. The tested memory lacks a revisiting mechanism, but that is an explanatory hypothesis, not an identified cause.\n\n**Ledger v6 content:** STRESS-zsre, STRESS-counterfact, STRESS-mquake. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval.",
+    "figure_binding": {
+      "path": "/home/derp/cap/assets/presentation-materials/figures/ht9-v1/stress-trajectories.png",
+      "sha256": "8ce8d4b87dd3c4a0f0079d5c7c12ce689abd08c5a0f42432af4421447421a223"
+    }
+  },
+  {
+    "title": "What independent confirmation can establish",
+    "kind": "scope",
+    "label": "PLANNED D.4 MATRIX · NO CONFIRMATORY RESULTS SHOWN",
+    "points": [
+      "zsRE: 120 core cells",
+      "CounterFact: 120 core cells",
+      "MQuAKE: 45 core cells at 300 edits",
+      "285 core + 45 optional cells",
+      "MQuAKE core: primary v5, random reader, v0 stable"
+    ],
+    "foot": "75 MQuAKE cells are prospectively omitted, not measured zeros. Keep 63 intervals, including 21 unavailable MQ1000 intervals. S1 is not exact-v5 compute matched.",
+    "number": 10,
+    "outline_title": "What the independent matrix can still establish",
+    "suggested_duration": "1.5 minutes",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "U12-14",
+        "pointer": "/rows/33",
+        "statement_sha256": "fc8b6d548234a6b11ca94f484c3094baeaebcf4f0346005ae98ae382e0d71f65",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/decisions.md",
+            "sha256": "86447397c152880a4b552d3a6198f5a9d255d03b233d4817973a7ad346de657b"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/r1_49g_inference.py",
+            "sha256": "afddc97bb67efab38aa20bb9c62a11050d07f402e3953f59d10ac8ec1dd07399"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/r1_49g_secondary.py",
+            "sha256": "91d8cf73ba4bd321959d46bf98110a9d7ebc29a2b394379b61fa6b88be8aa8e6"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round24/r1-49h-draft-inventory-v2.json",
+            "sha256": "229c7692805849e0e7a7253b0cfa7807361728b390d38b32eb7887cac03f5e18"
+          }
+        ]
+      },
+      {
+        "id": "ZSRE-empty-baseline",
+        "pointer": "/rows/31",
+        "statement_sha256": "078ad938ac6ca1a5fb735bd0a35d371e1668c759e1b8e871ff09f1b6f05cdc0d",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round25/r1-x15-independent.json",
+            "sha256": "e10a61da97677d81645bd5fa5199fdd9df8b033db71262baeb60c213703c83db"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round25/r1-d10h-certification.json",
+            "sha256": "117fde7841380ff96173027e086bd09dc3550f0bc150b2ae55aea691355fb4d1"
+          }
+        ]
+      },
+      {
+        "id": "D4-scope",
+        "pointer": "/rows/38",
+        "statement_sha256": "afa81035c7203595e2dd11b1f5d783e150f5c12e29eebe5f25874363d6fa98f4",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_4.json",
+            "sha256": "c4f677ab61ba7caf494feee926c54264fcfc6f8bbc560ca45928bb8bc166b336"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md",
+            "sha256": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_U03_interpretation_memo.md",
+            "sha256": "6d26792487defdbb0643f899418924a215532c32a42a349119b429fbde559ce2"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round25/r1-x15-independent.json",
+            "sha256": "e10a61da97677d81645bd5fa5199fdd9df8b033db71262baeb60c213703c83db"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** The prospective matrix tests the selected editing treatments on reserved populations, with omissions and failures explicitly reported.\n\n**Evidence / figure:** `manifests/revision_v1/run_matrix_v5_2_D_4.json`; `docs/R1_stage4_protocol_v5_2_D_4.md`; `docs/R1_U03_interpretation_memo.md`; planned completion inventory from `scripts/r1_d12_reprice.py`. Use a scope table: zsRE120 + CounterFact120 + MQuAKE45 =285 core; +45 optional; MQuAKE only primary, random reader and v0 stable in core. As of this outline, confirmation is pending signatures and actual population operations; show no invented success bars.\n\n**Qualification:** Five MQuAKE arms/75 cells are prospectively not run, not measured zeros. MQuAKE stops at 300 and its 21 checkpoint-1000 intervals remain unavailable; retain all 63 declared intervals, without alpha redistribution or treating orders as independent realizations. S1 controls have certified historical bases, not a proved exact-v5 compute match. Most eligible zsRE teacher baselines are empty answers (6,036/6,084), so discuss acquisition/generalization rather than correction of initially answered facts. At the talk, replace status with the actual October 9 inventory and complete-block results; retain every incomplete cell.\n\n**Ledger v6 content:** U12-14, ZSRE-empty-baseline, D4-scope. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  },
+  {
+    "title": "Headroom is conditional; October 9 is the stop",
+    "kind": "budget",
+    "label": "PLANNING SCENARIOS, NOT MEASURED PROGRESS",
+    "points": [
+      "431.31 expected process-hours",
+      "646.96 at every cell ceiling",
+      "750 shared process-hour cap",
+      "≈227.30 elapsed hours at assumed 1.65× throughput",
+      "October 10–14: locked-data analysis, figures, rehearsal"
+    ],
+    "foot": "Process-hours include both workers and failures; they are not elapsed hours. Transfers and memory limits are incompletely measured. Cost unsigned at outline snapshot.",
+    "number": 11,
+    "outline_title": "Feasibility and the limits that remain",
+    "suggested_duration": "1 minute",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "CONCURRENCY",
+        "pointer": "/rows/28",
+        "statement_sha256": "c1efe58b380ccdffd13df77c79ae4ba6ea65ce8d81dd5273d000f384f56b1404",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage2_notes.md",
+            "sha256": "a85f2d815ab2011337f105fd1c0459d836e35260894478b750e859c2244316ec"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_stage4_queue_concurrency_v1.md",
+            "sha256": "720c2feca45c3d859705ec3f8a42e4f92ce5455e10baf9c2d9c0e4b09e5db714"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+            "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/scripts/r1_77e_workers.py",
+            "sha256": "07a8bd1589ad637b16fe3606453e7f5f1ca819b001fd228b6101532fa1809c38"
+          }
+        ]
+      },
+      {
+        "id": "cost-v3",
+        "pointer": "/rows/39",
+        "statement_sha256": "c7131d1109e0a063c701fbff31183dc67854e5e3076f44628680cd592b91b407",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/R1_execution_plan_v3.md",
+            "sha256": "f5b0f48aadc9d0bae36db5468983aa580742b9292fc88ebc810cf34f088e1034"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-cost-admission-receipt-v4.json",
+            "sha256": "7895bd719beb5f17d6bfc6c613a4f7b1d16839b49506aefab82a430e5db41aee"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_suggested_slight_pivot.md",
+            "sha256": "973aa5fdb44e42c7dcc10822794236c4e5be89d0cb5fcc2acb7e42fe4fc5caf7"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** The reduced scope has explicit budget headroom, while completion depends on observed costs and the October 9 stop.\n\n**Evidence / figure:** `docs/R1_execution_plan_v3.md`; `docs/tasks/R1-cost-admission-receipt-v4.json`; current D12 block plan when real data exist. Current scenarios:431.31 expected process hours,646.96 at all cell ceilings,750 shared cap; approximately227.30 elapsed hours under inherited1.65× throughput. Use a simple table, not a measured progress chart.\n\n**Qualification:** Process hours sum simultaneous workers and failures; they are not elapsed hours. Transfers, full-assay memory and future concurrency are not all measured. Budget margin is not a completion guarantee. October 10–14 is for locked-data analysis, figures and rehearsal; no experiments after October 9. The cost receipt is unsigned at this snapshot.\n\n**Ledger v6 content:** CONCURRENCY, cost-v3. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  },
+  {
+    "title": "What would distinguish a coupled objective?",
+    "kind": "closing",
+    "label": "A QUESTION FOR THE ROOM",
+    "points": [
+      "Measured: concentrated harm and loss-level trade-offs",
+      "Proposed: coupled expectations and correlated-regime adaptation",
+      "Test: improve the correction–tail-harm trade-off beyond clipping and better rejection training, while preserving retention"
+    ],
+    "foot": "Preliminary hints, not coupled free energy or a test of the one-κ conjecture. The present null neither refutes nor confirms the broader programme.",
+    "number": 12,
+    "outline_title": "The question for the room",
+    "suggested_duration": "1 minute",
+    "ledger": {
+      "path": "/home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json",
+      "sha256": "de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9"
+    },
+    "ledger_rows": [
+      {
+        "id": "A3",
+        "pointer": "/rows/2",
+        "statement_sha256": "0bf015a48e55cd4d065da5b519781735b7a7df5c8d48019a05649a344a08991e",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/memory.py",
+            "sha256": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54"
+          }
+        ]
+      },
+      {
+        "id": "A4",
+        "pointer": "/rows/7",
+        "statement_sha256": "dcbc4232f7fe0f15242fe8f39a0c31c490b8454d72f0a00ccd50bce3a9c3e8d3",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/HT-3b-objective-review.json",
+            "sha256": "024a37a16a19e49195992610d06d2172c353014032c0a32b46f4606b1feeece5"
+          }
+        ]
+      },
+      {
+        "id": "K-kappa02",
+        "pointer": "/rows/9",
+        "statement_sha256": "f9899ae7c94236510c031b4939c3fd19e24c5cf0d25afa4225a10b227a0f9225",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "K-kappa05",
+        "pointer": "/rows/10",
+        "statement_sha256": "2a20b2918590437ab9c3f250ab76d77362e6e758d31c4a1418a69190e9fd642d",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "K-clip2",
+        "pointer": "/rows/11",
+        "statement_sha256": "7d743531708fe7219da32e6cb05a244eed89f7b4c470b754329b9b8c1653cced",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json",
+            "sha256": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/kappa_pilot_v3.json",
+            "sha256": "554db1b3462e0dfe6e92cdc4ecf071280b75892a8a4dc561759dcd959fea5747"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          }
+        ]
+      },
+      {
+        "id": "TAIL-zsre",
+        "pointer": "/rows/4",
+        "statement_sha256": "56cea725424e8131aed89aca10141bfffbc324513b04397557ba99c4552167e6",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/audit.json",
+            "sha256": "c55377b8d07ded5303b633596cd18f6c33164313436c41b7bf8faff65d59ec39"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development-source-d22ce6801209c6184480/attempt-0000/checkpoint-300.json",
+            "sha256": "cd7da933af806e0fd8bae05cce9731398c3e3c4bda744f8d3f92f287f23dbd66"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/logs/heavy_tail/audit-v5-round16-supplement/mean_vs_tail_v5.pdf",
+            "sha256": "3b55a4099a23b6fd44ab88f4d0c9dc1a9743278d917495505af963e6073960ea"
+          }
+        ]
+      },
+      {
+        "id": "programme",
+        "pointer": "/rows/34",
+        "statement_sha256": "7281d946303c86b464dbc2c819555b714f66f0f6bf4fdc88837036f4560c1a8d",
+        "evidence": [
+          {
+            "path": "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md",
+            "sha256": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91"
+          },
+          {
+            "path": "/home/derp/cap/errata/presentation_details/Active_Inference_in_the_Extremes_Abstract_charlie_derr.pdf",
+            "sha256": "bb9bb99c196c0392f790223096bef92627d5ea7cad09e349e84f2b5004db6f01"
+          },
+          {
+            "path": "/home/derp/cap/errata/presentation_details/sattellite-schedule",
+            "sha256": "39b90570144a38a34bdae07cb17c6cc403d0b41f4e7da82dc8d1c6ec03bfa3e3"
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "**Claim:** The next scientific question is whether a correctly specified coupled objective improves the correction–tail-harm trade-off beyond ordinary robust losses and better rejection training.\n\n**Evidence / figure:** Slides3–9, counter-review §8, submitted abstract. End with a measured/proposed split: measured sparse harm and loss-level trade-offs; proposed coupled expectations, correlated-regime adaptation and expected-free-energy choice of audits.\n\n**Qualification (DEC-054):** Preliminary hints, not coupled free energy or a test of the one-κ conjecture. The present null does not refute the broader CFE programme, and the descriptive tail reduction does not confirm it. Invite a concrete comparison that could separate the coupled form from clipping while preserving retention.\n\n**Ledger v6 content:** A3, A4, K-kappa02, K-kappa05, K-clip2, TAIL-zsre, programme. Source: /home/derp/cap/pc_cap/logs/r1_round40/talk_evidence_v6_content.json (SHA256 de27eca560fae719a7d78e7e21a79da2b47f2807881afedf88e10aa44704bac9). Signed cost remains pending; this binds prepared content, not a published signed-cost ledger or launch approval."
+  }
+]

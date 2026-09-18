@@ -1,0 +1,366 @@
+{
+  "task": "R1-X21",
+  "status": "review_complete_gaps_require_owner_edits",
+  "normative_files": 9,
+  "normative_closure": {
+    "schema_version": 1,
+    "root_document": "docs/R1_stage4_protocol_v5_2_D_4.md",
+    "graph": {
+      "docs/R1_stage4_protocol_v5_2_D_1.md": [
+        "docs/R1_stage4_protocol_draft_v5_1.md",
+        "docs/R1_stage4_queue_concurrency_v2.md"
+      ],
+      "docs/R1_stage4_protocol_draft_v5_1.md": [
+        "docs/updated_plan9.md"
+      ],
+      "docs/R1_stage4_queue_concurrency_v2.md": [],
+      "docs/updated_plan9.md": [
+        "docs/more_input/pc_cap_coding_agent_guide (1).pdf",
+        "docs/more_input/pc_cap_joint_redesign_proposal (1).pdf"
+      ],
+      "docs/more_input/pc_cap_coding_agent_guide (1).pdf": [],
+      "docs/more_input/pc_cap_joint_redesign_proposal (1).pdf": [],
+      "docs/R1_stage4_protocol_v5_2_D_2.md": [
+        "docs/R1_stage4_protocol_v5_2_D_1.md"
+      ],
+      "docs/R1_stage4_protocol_v5_2_D_3.md": [
+        "docs/R1_stage4_protocol_v5_2_D_2.md"
+      ],
+      "docs/R1_stage4_protocol_v5_2_D_4.md": [
+        "docs/R1_stage4_protocol_v5_2_D_3.md"
+      ]
+    },
+    "bindings_sha256": {
+      "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_draft_v5_1.md": "de3891f47588c147f54295c74e590435f68abce92bdfdae43c1c59b34c9037f2",
+      "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_1.md": "b17c71e382d580ba854bd46b65e687c3f53e6fc85d682d580cd5704541a24fea",
+      "/home/derp/cap/pc_cap/docs/R1_stage4_queue_concurrency_v2.md": "e0e20142e54ecf0f0138bdbb3ccdf3ec6a1757170300763f6a61dfe145d5d1c4",
+      "/home/derp/cap/pc_cap/docs/more_input/pc_cap_coding_agent_guide (1).pdf": "4e82a741e4bd744aea3b63eecf41eb2802659eb6d2ee0863334861a4f6061cf0",
+      "/home/derp/cap/pc_cap/docs/more_input/pc_cap_joint_redesign_proposal (1).pdf": "e694d0cbce31d5e2f5147b1cff8c0e8664a20dc01a64ed29da3fd966ca4db96b",
+      "/home/derp/cap/pc_cap/docs/updated_plan9.md": "e8cd32b5a21991ba1178a3112f62c5a0bd6a4f91bbb4ec97d1df127ac91234c9",
+      "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_2.md": "c66f1cce9e8a2263fb12563996dbfc8cc7770e55f32962f9b8b01de72cb809db",
+      "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_3.md": "eee0a7a0e6838d41323fca360e3cc5fd03c41e622dbc077308f7e2ecfcdd9803",
+      "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8"
+    },
+    "precedence": "D.4 and later adopted decisions govern superseded provisions; DEC-066 prospective MQuAKE reduction; DEC-064 cap policy unchanged"
+  },
+  "obligations": [
+    {
+      "id": "T1",
+      "requirement": "D4 declared blocks and completed-block inventory",
+      "table": "blocks",
+      "rows": 6,
+      "analysis_pointers": [
+        "/blocks",
+        "/complete_blocks"
+      ],
+      "normative": "D4 execution blocks; D1 DEC052",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T2",
+      "requirement": "Planned/missing/invalid cells and independent endpoint completeness",
+      "table": "cell_inventory",
+      "rows": 330,
+      "analysis_pointers": [
+        "/cells",
+        "/incomplete_cells"
+      ],
+      "normative": "D1 DEC052",
+      "status": "partial",
+      "edit_request": "X21-G4"
+    },
+    {
+      "id": "T3",
+      "requirement": "21 dataset contrasts \u00d73 metrics, both intervals, three realization values, classifier, pairing",
+      "table": "primary",
+      "rows": 63,
+      "analysis_pointers": [
+        "/contrasts/*/metrics/*",
+        "/contrasts/*/classification",
+        "/primary_family"
+      ],
+      "normative": "v5.1 \u00a75.3; D4 U12",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T4",
+      "requirement": "11 per-cell descriptive secondary benchmarks, counts/Wilson and availability",
+      "table": "secondary_cells",
+      "rows": 3630,
+      "analysis_pointers": [
+        "/secondary_benchmarks/cells/*/benchmarks"
+      ],
+      "normative": "v5.1 \u00a75.1",
+      "status": "covered_with_explicit_unavailability",
+      "edit_request": "X21-G7"
+    },
+    {
+      "id": "T5",
+      "requirement": "Equal-weight dataset macros, paired equivalence intervals and failed-cell inventory",
+      "table": "secondary_macros",
+      "rows": 297,
+      "analysis_pointers": [
+        "/secondary_benchmarks/macros"
+      ],
+      "normative": "v5.1 \u00a75.1/5.3",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T5a",
+      "requirement": "Near-family independent denominators and bounded/terminated diagnostics",
+      "table": "near_miss",
+      "rows": 330,
+      "analysis_pointers": [
+        "/near_miss_family/cells"
+      ],
+      "normative": "D1 DEC061/062",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T5b",
+      "requirement": "Actual checkpoint ES/RET-ES/RET-GS/LS values, counts and cell coordinates",
+      "table": "trajectories",
+      "rows": 3720,
+      "analysis_pointers": [
+        "/cells/*/checkpoints/*/primary"
+      ],
+      "normative": "D4 U08",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T5c",
+      "requirement": "Endpoint counters, truncation and unsupported/unavailable observations",
+      "table": "endpoint_observations",
+      "rows": 6360,
+      "analysis_pointers": [
+        "/cells/*/checkpoints/*/secondary"
+      ],
+      "normative": "v5.1 \u00a75.1",
+      "status": "partial",
+      "edit_request": "X21-G6"
+    },
+    {
+      "id": "T6",
+      "requirement": "MQuAKE actual300 occupancy, outside fires, Wilson and change from100; no1000 threshold",
+      "table": "mquake300",
+      "rows": 60,
+      "analysis_pointers": [
+        "/secondary_benchmarks/cells/*/actual_occupancy_descriptive"
+      ],
+      "normative": "D1 actual occupancy; D4 U08/U12",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T6a",
+      "requirement": "Five calibration-determined omitted conditions/75 coordinates; never measured zeros",
+      "table": "omissions",
+      "rows": 75,
+      "analysis_pointers": [
+        "/prospectively_omitted_cells"
+      ],
+      "normative": "D4 scope",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T7",
+      "requirement": "Both cap references and KL/NLL labels, joint numeric flag, no primary veto",
+      "table": "fidelity",
+      "rows": 660,
+      "analysis_pointers": [
+        "/cells/*/cap_fidelity_benchmark"
+      ],
+      "normative": "D3 DEC064",
+      "status": "partial",
+      "edit_request": "X21-G2"
+    },
+    {
+      "id": "T8",
+      "requirement": "Watch entries/creep alerts, exact-matrix/global scope, no implicit notification acknowledgement",
+      "table": "watch_summary",
+      "rows": 1,
+      "analysis_pointers": [
+        "watch:/entries",
+        "watch:/alerts",
+        "watch:/observations"
+      ],
+      "normative": "DEC064a in decisions; D3 fidelity",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "T9",
+      "requirement": "Full/sample signed and positive means, ES95/99, exceedances, exp(mean), maximum/location and zero masses",
+      "table": "tails",
+      "rows": 3180,
+      "analysis_pointers": [
+        "/cells/*/checkpoints/*/secondary/full_validation/references/*/{loss,kl}",
+        "/cells/*/checkpoints/*/secondary/sampled_drift/references/*"
+      ],
+      "normative": "v5.1 \u00a75.2; D2/D3 tails",
+      "status": "partial",
+      "edit_request": "X21-G1"
+    },
+    {
+      "id": "T10",
+      "requirement": "Near-zero loss fraction, half mass/top shares/Gini, window KL summaries and undefined zero-total shares",
+      "table": "concentration",
+      "rows": 660,
+      "analysis_pointers": [
+        "/cells/*/checkpoints/*/secondary/full_validation/concentration/references"
+      ],
+      "normative": "D3 HT7",
+      "status": "covered",
+      "edit_request": null
+    },
+    {
+      "id": "U03",
+      "requirement": "Qualified historical LM/literal continuation controls, no exact-v5-compute claim",
+      "table": null,
+      "rows": null,
+      "analysis_pointers": [],
+      "normative": "D4 final paragraph; U03 memo",
+      "status": "partial",
+      "edit_request": "X21-G5"
+    },
+    {
+      "id": "Secondary-extension",
+      "requirement": "Historical-v2 secondary paired package contrast at each declared checkpoint",
+      "table": null,
+      "rows": null,
+      "analysis_pointers": [
+        "/historical_pointwise_contrasts/*[contrast.role=secondary]"
+      ],
+      "normative": "v5.1 \u00a75.3; D4 optional extension",
+      "status": "missing_formatter_output",
+      "edit_request": "X21-G3"
+    },
+    {
+      "id": "Composition",
+      "requirement": "Predetermined dependency-closed composition, fixed planned cases/questions, conflicts/unavailability",
+      "table": null,
+      "rows": null,
+      "analysis_pointers": [
+        "raw checkpoint:/endpoints/composition; absent from installed analysis JSON"
+      ],
+      "normative": "v5.1 \u00a75.1; D1 population",
+      "status": "missing_analysis_output",
+      "edit_request": "X21-G6"
+    },
+    {
+      "id": "Accounting",
+      "requirement": "Known charged process costs, unknown records, retry exhaustion/host failure and block reconciliation",
+      "table": null,
+      "rows": null,
+      "analysis_pointers": [
+        "D11/D13 reporting outputs; not joined by scientific formatter"
+      ],
+      "normative": "D1 DEC052; D4 U16",
+      "status": "missing_report_integration",
+      "edit_request": "X21-G4"
+    }
+  ],
+  "figures": [
+    {
+      "name": "disposition",
+      "table": "blocks",
+      "rows": 6,
+      "status": "descriptive_visualization_covered",
+      "qualification": "artifact counts only; not full cost/retry accounting (G4)"
+    },
+    {
+      "name": "primary-intervals",
+      "table": "primary",
+      "rows": 63,
+      "status": "descriptive_visualization_covered",
+      "qualification": "63 slots; unavailable MQuAKE explicit; existing adjusted intervals only"
+    },
+    {
+      "name": "checkpoint-trajectories",
+      "table": "trajectories",
+      "rows": 3720,
+      "status": "descriptive_visualization_covered",
+      "qualification": "means of available cell values, not an uncertainty interval or independent-orders analysis"
+    },
+    {
+      "name": "cap-fidelity",
+      "table": "fidelity",
+      "rows": 660,
+      "status": "descriptive_visualization_covered",
+      "qualification": "two references and threshold lines; explicit joint flag still needed in table (G2)"
+    },
+    {
+      "name": "full-validation-tails",
+      "table": "tails",
+      "rows": 3180,
+      "status": "descriptive_visualization_covered",
+      "qualification": "per-cell summaries, not pooled tokens; omitted tail fields requested for table (G1)"
+    },
+    {
+      "name": "watch-sequence",
+      "table": "watch_observations",
+      "rows": 330,
+      "status": "descriptive_visualization_covered",
+      "qualification": "KL sequence only; NLL remains in watch tables; observation index is not elapsed time"
+    }
+  ],
+  "sources_sha256": {
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_draft_v5_1.md": "de3891f47588c147f54295c74e590435f68abce92bdfdae43c1c59b34c9037f2",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_1.md": "b17c71e382d580ba854bd46b65e687c3f53e6fc85d682d580cd5704541a24fea",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_queue_concurrency_v2.md": "e0e20142e54ecf0f0138bdbb3ccdf3ec6a1757170300763f6a61dfe145d5d1c4",
+    "/home/derp/cap/pc_cap/docs/more_input/pc_cap_coding_agent_guide (1).pdf": "4e82a741e4bd744aea3b63eecf41eb2802659eb6d2ee0863334861a4f6061cf0",
+    "/home/derp/cap/pc_cap/docs/more_input/pc_cap_joint_redesign_proposal (1).pdf": "e694d0cbce31d5e2f5147b1cff8c0e8664a20dc01a64ed29da3fd966ca4db96b",
+    "/home/derp/cap/pc_cap/docs/updated_plan9.md": "e8cd32b5a21991ba1178a3112f62c5a0bd6a4f91bbb4ec97d1df127ac91234c9",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_2.md": "c66f1cce9e8a2263fb12563996dbfc8cc7770e55f32962f9b8b01de72cb809db",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_3.md": "eee0a7a0e6838d41323fca360e3cc5fd03c41e622dbc077308f7e2ecfcdd9803",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8",
+    "/home/derp/cap/pc_cap/logs/r1_round39/d14-complete-final/analysis.json": "184d993835aa32f2187d4f519ee49a9f2cb87d87c735fff083c6f61f3c6f8e5b",
+    "/home/derp/cap/pc_cap/logs/r1_round39/report-rehearsal-final/report-data.json": "8c538f82ffca836f0d4fac76cd9541d6bdac9eb998213b93c6713d01137176b1",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_report_skeleton.md": "c607991844e9754174e64d1b48777dff9ad847eaa50eb9b6a334ee86f65ee776",
+    "/home/derp/cap/pc_cap/scripts/r1_d14_report.py": "60883aef8949f84e97a6f413d4c2371674c51333b6c35341c4190a2eb52f30f4",
+    "/home/derp/cap/pc_cap/scripts/r1_d14_figures.py": "ccda3521d5560aa7d204f59e90027fe0f137631f44c17145b9716eb4bdc1572e",
+    "/home/derp/cap/pc_cap/scripts/r1_75_analysis_stage4_v1.py": "0be380ed7b5adad70f296d3bc3532d6405263af4dfc67d296cb6577f5fc6caaf",
+    "/home/derp/cap/pc_cap/scripts/r1_49g_analyze.py": "4e3c0c32f038d14a336b0e90358becbbbb1178a7d5235964ccc1a03977085dbd",
+    "/home/derp/cap/pc_cap/scripts/r1_d9_receipts.py": "2eaa2d70ffd6828d0657e6d8b85acd95429a9b34a3160a9267ac64bf66cbadb5",
+    "/home/derp/cap/pc_cap/scripts/r1_77b_sealed_backend.py": "e3b4514dd097d10d59c479add9522c548db41ae830aed2c6f49fd622e3b4fd19",
+    "/home/derp/cap/pc_cap/docs/R1_U03_interpretation_memo.md": "6d26792487defdbb0643f899418924a215532c32a42a349119b429fbde559ce2",
+    "/home/derp/cap/pc_cap/scripts/r1_x21_report_audit.py": "4a8d726cecd2ad4e5f96bdff247cfcfb1b8a1f4c0dd339de826dd7f1d16e35a4",
+    "/home/derp/cap/pc_cap/results/R1/r1_d14_synthetic/d14-complete-final/43925e53c31860219a85ef90/attempt-0000/checkpoint-300.json": "05f467967cd630a9065c7dd2c0197cf188b003051ac1fe26ca54563018e6a7be"
+  },
+  "checks": {
+    "primary_rows": 63,
+    "mquake_unavailable_rows": 21,
+    "omissions": 75,
+    "declared_cells": 330,
+    "secondary_extension_source_contrasts": 8,
+    "secondary_extension_metric_rows": 24,
+    "secondary_extension_not_rendered": true,
+    "composition_synthetic_section_ignored": true,
+    "absent_full_tail_fields": [
+      "exp_mean_signed",
+      "exp_mean_signed_overflow",
+      "maximum_location",
+      "maximum_signed",
+      "maximum_tie_count",
+      "atom_zero_positive",
+      "atom_zero_signed"
+    ],
+    "absent_sample_tail_fields": [
+      "maximum_position",
+      "zero_positive_n",
+      "exp(mean_signed_nats) derived with overflow handling"
+    ],
+    "joint_cap_pass_not_rendered": true,
+    "U03_memo_hash_bound_by_formatter": false
+  },
+  "existing_files_changed": false,
+  "gpu_seconds": 0,
+  "real_payloads_opened": 0,
+  "launch_authorized": false
+}
