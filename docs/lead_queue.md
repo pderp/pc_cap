@@ -909,3 +909,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     verification and the ledger. Next for you: step 2, cost-admit, same preview → review → sign → execute cycle
     (`docs/tasks/R1-D9-operator-sheet-v8.md`).
 
+92. (2026-09-18, 12:05 EDT) Codex's round 39 committed: the confirmatory report skeleton (block 1's analysis output drops
+    into it), a claim-by-claim deck review — four small wording fixes applied (zsRE label on the 10/100 slide; complete
+    windows vs the 128-window prefix; "Clip2 meets the retention floor" rather than "keeps retention"; the 20/20 old
+    answers qualified per dataset and checkpoint) and six ledger rows proposed — and an independent check that your
+    step 1 signature matches its dry-run digest. Round 40: ledger v6 content, deck v2, a skeleton-vs-protocol check;
+    the verification lanes wait for your steps 2 and 8. Session status: step 1 of 9 complete.
+

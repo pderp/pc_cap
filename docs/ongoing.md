@@ -74,30 +74,33 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 39 (CPU; open now; posted 2026-09-18 11:20 EDT) — while the lead signs
+  +0.006## 3. Lanes for Codex — round 40 (CPU; open now; posted 2026-09-18 12:05 EDT) — ledger and deck v2; verification lanes wait for the session
 
-Round 38 is committed and mirrored. The lead's signing session is under way (step 1 of 9 complete). New files only;
-nothing bound by the operator's digests may change until the session ends. Priority order: **R1-D14 → HT-11 → X20
-(after the session) → HT-4f (after the cost signature).**
+Round 39 is committed and mirrored; the HT-11 wording patch is applied. New files only while the lead signs.
+Priority order: **HT-4g → HT-10b → X21 → X20 (after step 8) → HT-4f (after step 2).**
 
-### Lane R1-D14 — the confirmatory report skeleton, filled by the analysis (first)
+### Lane HT-4g — claim ledger v6 content (all but the cost signature)
 
-Run `r1_49g_analyze` / R1-75 on the round-38 synthetic completed matrix (D.4 layout, two cadences) and turn its
-output into `docs/R1_stage4_report_skeleton.md`: every table and figure the final report will contain (the 21
-contrasts × 3 metrics with intervals and classifier labels per dataset; the secondary benchmarks incl. the cap-fidelity
-labels and the watch summary; the DEC-052 inventory; the MQuAKE 300-edit descriptive block with the five omitted
-conditions stated; the S1 / U03 interpretation; the full-validation tail statistics), with placeholders bound to the
-analysis JSON keys so block 1's real output drops in. Tests: the skeleton fills from the synthetic output with no
-unbound placeholder.
+Build the v6 rows now: the six HT-11 proposed additions (programme / meeting, selection uncertainty, HT-6 full-validation
+cells with their eight exact numerical rows, DEC-064 policy, D.4 scope, plan-v3 cost scenario), the superseded
+`DEC060-scale` and `COST-matrix` rows marked, the four changed historical bindings re-bound (notes, decisions,
+inference, queue) with old / new hashes; leave the signed-cost binding as the single pending field the HT-4f
+publisher fills from the step-2 receipt.
 
-### Lane HT-11 — claim-by-claim review of deck v1 against the ledger
+### Lane HT-10b — deck v2 from ledger v6
 
-Each slide's claim traced to a ledger row and evidence file; any wording that outruns the evidence flagged with the
-replacement text; the DEC-054 framing checked on both κ slides; slides 10–11 marked prospective. Edit requests only.
+Regenerate the deck with the four wording fixes and the v6 rows bound; export PDF to
+`assets/presentation-materials/deck_v2/`; page review as v1.
+
+### Lane X21 — the report skeleton against protocol D.4
+
+Check every table / figure the skeleton promises against D.4's declared analyses (21 contrasts × 3 metrics, the
+secondary benchmarks, the DEC-052 inventory, the MQuAKE block with the five omitted conditions, U03, the full-validation
+tail) and the analysis JSON keys it binds; list gaps as edit requests.
 
 ### Lane X20 — post-session verification (after the lead's step 8)
 
-### Lane HT-4f — claim ledger v6 (after the signed cost receipt, step 2)
+### Lane HT-4f — publish ledger v6 (after the signed cost receipt, step 2)
 
 ## 4. Interfaces and coordination
 
