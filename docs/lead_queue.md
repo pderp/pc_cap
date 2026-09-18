@@ -1,5 +1,10 @@
 # Lead queue
 
+> **Signing procedure (the lead's acts):** `docs/tasks/R1-D9-operator-sheet-v8.md`, section "Ordered operator workflow" —
+> nine steps, one command each (`python -m scripts.r1_58g_operator <step> --inputs docs/tasks/R1-D9-inputs-v9.json`),
+> dry run first, then `--form <signed form> --execute`. Steps 6 (endpoints) and 9 (launch) are the orchestrator's; the
+> orchestrator prepares the freeze assembly inputs between steps 7 and 8. This banner is updated when the sheet version changes.
+
 Asynchronous questions for the lead (updated_plan2.md §1, four touchpoints T1–T4). The
 orchestrator continues with everything that does not depend on an answer. Answers are recorded
 in `docs/decisions.md`.
