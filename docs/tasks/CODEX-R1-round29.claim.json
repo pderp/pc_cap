@@ -1,0 +1,50 @@
+{
+  "task": "CODEX-R1-round29",
+  "agent": "Codex",
+  "status": "available_cpu_work_complete_owner_evidence_pending",
+  "started_utc": "2026-09-18T00:35:16.188091+00:00",
+  "head": "2613ed91f6368aba5f8989edcc14e5f8607ba68a",
+  "lanes": [
+    "R1-63j",
+    "R1-58i",
+    "R1-58j",
+    "X18",
+    "HT-4f"
+  ],
+  "constraints": [
+    "CPU only; no model/GPU execution",
+    "No production draw/seal/freeze/publication/signature",
+    "No edits to active driver or owner results",
+    "No staging or commits"
+  ],
+  "owner_active": "chain R full endpoint profiles",
+  "files_planned": [
+    "scripts/r1_63j_production_bundle.py",
+    "scripts/r1_58i_host_peaks.py",
+    "scripts/r1_58j_cost_receipt.py",
+    "scripts/r1_63j_candidate.py",
+    "scripts/r1_x18_review.py"
+  ],
+  "external_dependencies": [
+    "chain R completed results and direct time files",
+    "full validation endpoint profile if absent",
+    "lead admissions"
+  ],
+  "completed_utc": "2026-09-18T01:09:55.666175+00:00",
+  "lane_status": {
+    "R1-63j": "assembler_and_synthetic_rehearsal_delivered",
+    "R1-58i": "27_row_evidence_delivered_refresh_after_chain",
+    "R1-58j": "producers_and_unsigned_snapshot_delivered_final_evidence_pending",
+    "X18": "review_complete_not_ready",
+    "HT-4f": "blocked_on_complete_signed_cost"
+  },
+  "handoff": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/CODEX-R1-round29-handoff.md",
+    "sha256": "6be1b7e722e954793f3fa6bbc28b119f593a1bceb6c7f40fae19f32a3dd64fa5"
+  },
+  "validation": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round29/handoff-validation.json",
+    "sha256": "e238e8dfe075c8906e25a6278fa2c0824c56016dd5f043f7c9493f5803f0c94c"
+  },
+  "cpu_tests": 122
+}

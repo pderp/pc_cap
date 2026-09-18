@@ -669,9 +669,9 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("step", choices=STEPS)
-    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v7.json")
+    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v8.json")
     p.add_argument(
-        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v12.json"
+        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v13.json"
     )
     p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v5")
     p.add_argument("--form", type=Path)

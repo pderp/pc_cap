@@ -25,6 +25,10 @@ def validate(receipt):
         raise ValueError("typed cost schema v2 required")
     if receipt.get("pending_evidence"):
         raise ValueError("cost evidence pending: " + "; ".join(receipt["pending_evidence"]))
+    if receipt.get("receipt_revision") == 3:
+        from scripts.r1_58j_cost_receipt import validate_supplement
+
+        validate_supplement(receipt)
     sources = receipt["bindings"]
     for name, b in sources.items():
         if name == "cell_ceilings":

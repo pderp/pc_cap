@@ -12,7 +12,7 @@ from scripts.r1_d10a_review import ROOT
 
 
 def current():
-    c = json.loads((ROOT / "manifests/revision_v1/freeze_candidate_v12.json").read_text())
+    c = json.loads((ROOT / "manifests/revision_v1/freeze_candidate_v13.json").read_text())
     return c, d9.read_metadata(c["d9_inputs"])
 
 

@@ -9,7 +9,7 @@ from scripts import r1_63g_freeze_candidate as candidate
 
 @pytest.fixture(scope="module")
 def value():
-    return json.loads((candidate.ROOT / "manifests/revision_v1/freeze_candidate_v12.json").read_text())
+    return json.loads((candidate.ROOT / "manifests/revision_v1/freeze_candidate_v13.json").read_text())
 
 
 def test_current_candidate_and_three_unsigned_requests(value):
