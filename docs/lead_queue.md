@@ -933,3 +933,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     session at step 3**; I will post the exact command when the re-bound inputs exist. The prevention: the dry run
     will be made to run the same binding check as the execute (Codex, same lane).
 
+95. (2026-09-18, 15:45 EDT) **Delegation recorded (DEC-067) and applied.** The stale binding could not be fixed inside your
+    session (each step's plan comes from the previous step's derived inputs, bound by your cost receipt), so I opened
+    a fresh session (`logs/R1/operator_v9`) on inputs v10 (evidence re-bound, provenance refresh only), re-executed
+    steps 1 and 2 under the delegation with your original signed forms bound as their basis, and executed step 3
+    (clearance) with the exposure attestation. Your v8 session and forms are kept as history. **Step 4 needs your
+    master seed** — any integer; reply with it and I run steps 4 through 8 and report the frozen manifest hash.
+

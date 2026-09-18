@@ -28,6 +28,12 @@ Table 2 and its full cell appendix preserve every declared cell, missing checkpo
 
 {{INCOMPLETE}}
 
+`endpoint_complete` covers **full validation and sampled drift only**. The cell inventory separately reports primary-metric completeness, full-validation completeness, sampled-drift completeness and unreceipted checkpoints. Near-miss, revision and other challenge inventories retain their own planned/scored/missing counts; a complete validation assay does not establish their completion. Composition results remain unavailable until the upstream reporting adapter exists (X21-G6).
+
+The following execution-accounting section accepts a D11 or daily D13 snapshot, independently replays D11 against the same matrix and explicitly supplied queue receipt root, and binds the verified snapshot and source receipts. It retains both workers' process envelopes, uncovered driver costs, unknown-cost records, retries, explicit host-failure classifications and block reconciliation. Unknown cost is not zero; a processed boundary can still contain retry-exhausted incomplete cells. Without a supplied verified snapshot, this section is explicitly unavailable.
+
+{{ACCOUNTING}}
+
 ## Registered primary comparisons
 
 Table 3 contains all **21 dataset-specific comparisons × three metrics = 63 rows**, both interval types, three realization estimates, classifier labels, admission state and pairing issues. The seven MQuAKE checkpoint-1,000 comparisons / 21 intervals remain unavailable; measured 300-edit outcomes cannot replace them. Classifier labels apply to a comparison jointly across its three metrics, so their repetition across metric rows does not create extra decisions.
@@ -41,6 +47,10 @@ Figure 2 shows these same adjusted intervals without recomputing inference. Labe
 Tables 4–5 retain per-cell and equal-weight macro benchmarks, planned/scored denominators where provided, threshold operators, failed-cell inventories and reasons for unavailability. A passing macro cannot erase a failed cell. Resource ratios remain unavailable until the analysis has a compatible measurement/admitted-ceiling adapter; a signed cost receipt alone does not populate these rows.
 
 {{SECONDARY}}
+
+The optional historical-v2 package comparison is **secondary descriptive**. When admitted and available, its eight dataset/checkpoint contrasts give 24 metric rows, including three realization means and existing pointwise intervals. These rows do not join the 63-interval primary family or alter its alpha or classifier. Missing pairs remain unavailable; no MQuAKE-1,000 comparison is synthesized. An absent collection is reported as no bound rows, not as experimental equivalence.
+
+{{HISTORICAL}}
 
 {{NEAR}}
 
@@ -62,6 +72,8 @@ Matched update, v0_live_C1, v0_live_C2, S1_LM and S1_literal are prospectively n
 
 DEC-064 makes mean KL ≤0.001 and mean signed ΔNLL ≤0.01 nats secondary cap benchmarks, without vetoing primary comparisons. Both original-base and own-cap-off references remain separate even when their numbers coincide. A missing full assay cannot be called a pass. Table 7 and Figure 4 show both numeric values and labels.
 
+Table 7 also repeats the analyzer's joint cap-benchmark pass flag beside each reference, with scientific admission and full-validation completeness shown separately. Equality passes the numeric bounds. An unavailable joint flag stays unavailable; numeric failures do not change primary admission.
+
 {{FIDELITY}}
 
 Table 8 replays a bound watch journal snapshot. Breaches and creep alerts retain condition/dataset/reference identity and historical context. A new condition's first breach is not necessarily a creep alert; a watch event outside the exact matrix is labelled separately. Generation does not acknowledge notification delivery. Alerts require prompt owner relay; this report sends no messages.
@@ -71,6 +83,8 @@ Table 8 replays a bound watch journal snapshot. Breaches and creep alerts retain
 Table 9 and Figure 5 distinguish full validation from the fixed sample, loss change from KL(ref || cap), and each reference. Include planned/scored positions, signed and positive-part means, ES95/ES99, maxima and strict exceedance counts at .01/.1/1 nat. ES statistics include zero harm and use fractional empirical tail mass. They are descriptive finite-population quantities, not proof of a power law or a tail exponent. Matching sample overlap checks consistency, not representativeness.
 
 {{TAILS}}
+
+The tail appendix includes `exp(mean signed ΔNLL)` and its explicit overflow flag. Full-validation values copy the analyzer; the sample derives them from its bound signed mean using the same conservative overflow boundary (mean ≥709 gives unavailable exponential and overflow=true). KL rows have no ΔNLL exponential. Signed maxima, positive-part maxima, positions, tie counts and exact-zero atoms remain distinct. For full validation, the location is the first signed maximum in window/position order and the tie count uses exact equality. For the sample it is the first **positive-part** maximum in sample order; signed maximum, signed-zero atom and tie count are unavailable because the supplied sample summary does not report them. The sample's positive-zero count has its own scored-position denominator and never substitutes for the full population.
 
 Table 10 adds the concentration summaries: positions carrying half KL, top-mass fractions, Gini, near-zero target-loss fraction and window summaries. Zero total KL has undefined shares/half-mass count, not a fabricated zero count. Small target-token loss change neither proves an unchanged full distribution nor identifies reader firing.
 
