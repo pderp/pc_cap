@@ -1,0 +1,463 @@
+{
+  "GPU_seconds": 0,
+  "cost_projection": {
+    "combined": {
+      "ceiling_process_hours": 646.9599429496163,
+      "cells": 330,
+      "estimated_elapsed_hours_at_1p65_throughput": 227.30257108462587,
+      "headroom_to_750_at_ceiling_process_hours": 103.04005705038367,
+      "headroom_to_750_at_expected_process_hours": 318.69337136692246,
+      "historical_without_full_process_hours": 226.31999999999996,
+      "revised_without_full_process_hours": 262.7336409674086,
+      "solo_hours": 375.0492422896327,
+      "two_worker_process_hours": 431.30662863307754
+    },
+    "core": {
+      "ceiling_process_hours": 583.9075373972847,
+      "cells": 285,
+      "estimated_elapsed_hours_at_1p65_throughput": 205.14977159324894,
+      "headroom_to_750_at_ceiling_process_hours": 166.09246260271527,
+      "headroom_to_750_at_expected_process_hours": 360.7283084018102,
+      "historical_without_full_process_hours": 212.3475,
+      "revised_without_full_process_hours": 243.3920351739143,
+      "solo_hours": 338.4971231288607,
+      "two_worker_process_hours": 389.2716915981898
+    },
+    "extension": {
+      "ceiling_process_hours": 63.052405552331614,
+      "cells": 45,
+      "estimated_elapsed_hours_at_1p65_throughput": 22.152799491376943,
+      "headroom_to_750_at_ceiling_process_hours": 686.9475944476684,
+      "headroom_to_750_at_expected_process_hours": 707.9650629651122,
+      "historical_without_full_process_hours": 13.972499999999997,
+      "revised_without_full_process_hours": 19.341605793494285,
+      "solo_hours": 36.55211916077195,
+      "two_worker_process_hours": 42.03493703488774
+    }
+  },
+  "full_validation_recount": [
+    {
+      "ES99_positive_NLL": 0.5723378136132712,
+      "KL_pass": false,
+      "NLL_above_1": 485,
+      "NLL_pass": true,
+      "cell": "R1-64g-mquake-R1_learned_ff.recipe",
+      "max_positive_NLL": 8.187550349757514,
+      "mean_KL": 0.005543687619204748,
+      "mean_signed_NLL": 0.00560097637484533,
+      "positions": 245237,
+      "positive_NLL_positions": 820,
+      "reference": "original"
+    },
+    {
+      "ES99_positive_NLL": 0.0,
+      "KL_pass": true,
+      "NLL_above_1": 0,
+      "NLL_pass": true,
+      "cell": "R1-64g-mquake-v0_stable.recipe",
+      "max_positive_NLL": 0.0,
+      "mean_KL": 0.0,
+      "mean_signed_NLL": 0.0,
+      "positions": 245237,
+      "positive_NLL_positions": 0,
+      "reference": "original"
+    },
+    {
+      "ES99_positive_NLL": 0.23736345249392315,
+      "KL_pass": false,
+      "NLL_above_1": 189,
+      "NLL_pass": true,
+      "cell": "R1-64g-zsre-R1_learned_ff.recipe",
+      "max_positive_NLL": 9.944688650769267,
+      "mean_KL": 0.0022697245010713067,
+      "mean_signed_NLL": 0.0023100152852649995,
+      "positions": 245237,
+      "positive_NLL_positions": 313,
+      "reference": "original"
+    },
+    {
+      "ES99_positive_NLL": 0.09609963878022863,
+      "KL_pass": true,
+      "NLL_above_1": 47,
+      "NLL_pass": true,
+      "cell": "R1-64g-zsre-v0_stable.recipe",
+      "max_positive_NLL": 16.15929916947589,
+      "mean_KL": 0.0007885906766150196,
+      "mean_signed_NLL": 0.0008551620371875969,
+      "positions": 245237,
+      "positive_NLL_positions": 190,
+      "reference": "original"
+    }
+  ],
+  "inference": {
+    "adjusted_lower_tail_probability": 0.0003968253968253954,
+    "bootstrap_count_vectors": 10,
+    "bootstrap_ordered_index_sequences": 27,
+    "exact_distinct_means_in_example": 9,
+    "examples": [
+      {
+        "realization_means": [
+          -0.02,
+          0.03,
+          0.12
+        ],
+        "result": {
+          "adjusted_interval": {
+            "confidence": 0.9992063492063492,
+            "lower": -0.02,
+            "upper": 0.12
+          },
+          "cluster_n": 3,
+          "draws": 10000,
+          "estimate": 0.043333333333333335,
+          "interval": {
+            "confidence": 0.9992063492063492,
+            "lower": -0.02,
+            "upper": 0.12
+          },
+          "order_n": 5,
+          "realization_estimates": [
+            -0.02,
+            0.03,
+            0.12
+          ],
+          "seed": 0,
+          "status": "complete",
+          "unadjusted_interval": {
+            "confidence": 0.975,
+            "lower": -0.02,
+            "upper": 0.12
+          }
+        }
+      },
+      {
+        "realization_means": [
+          0.01,
+          0.06,
+          0.11
+        ],
+        "result": {
+          "adjusted_interval": {
+            "confidence": 0.9992063492063492,
+            "lower": 0.01,
+            "upper": 0.11000000000000003
+          },
+          "cluster_n": 3,
+          "draws": 10000,
+          "estimate": 0.06,
+          "interval": {
+            "confidence": 0.9992063492063492,
+            "lower": 0.01,
+            "upper": 0.11000000000000003
+          },
+          "order_n": 5,
+          "realization_estimates": [
+            0.01,
+            0.06,
+            0.11000000000000001
+          ],
+          "seed": 0,
+          "status": "complete",
+          "unadjusted_interval": {
+            "confidence": 0.975,
+            "lower": 0.01,
+            "upper": 0.11000000000000003
+          }
+        }
+      },
+      {
+        "realization_means": [
+          -0.15,
+          -0.07,
+          -0.01
+        ],
+        "result": {
+          "adjusted_interval": {
+            "confidence": 0.9992063492063492,
+            "lower": -0.15,
+            "upper": -0.01
+          },
+          "cluster_n": 3,
+          "draws": 10000,
+          "estimate": -0.07666666666666667,
+          "interval": {
+            "confidence": 0.9992063492063492,
+            "lower": -0.15,
+            "upper": -0.01
+          },
+          "order_n": 5,
+          "realization_estimates": [
+            -0.15,
+            -0.07,
+            -0.01
+          ],
+          "seed": 0,
+          "status": "complete",
+          "unadjusted_interval": {
+            "confidence": 0.975,
+            "lower": -0.15,
+            "upper": -0.01
+          }
+        }
+      },
+      {
+        "realization_means": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "result": {
+          "adjusted_interval": {
+            "confidence": 0.9992063492063492,
+            "lower": 0.0,
+            "upper": 0.0
+          },
+          "cluster_n": 3,
+          "draws": 10000,
+          "estimate": 0.0,
+          "interval": {
+            "confidence": 0.9992063492063492,
+            "lower": 0.0,
+            "upper": 0.0
+          },
+          "order_n": 5,
+          "realization_estimates": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seed": 0,
+          "status": "complete",
+          "unadjusted_interval": {
+            "confidence": 0.975,
+            "lower": 0.0,
+            "upper": 0.0
+          }
+        }
+      }
+    ],
+    "installed_draw_count": 10000,
+    "installed_seed0_extreme_counts": [
+      373,
+      391,
+      333
+    ],
+    "interpretation": "For the installed seed/draws, both displayed intervals are the observed realization range. Increasing draws does not repair three-cluster support.",
+    "method": {
+      "adjusted_confidence": 0.9992063492063492,
+      "checkpoint": 1000,
+      "clusters": 3,
+      "coverage": "nominal approximate bootstrap; three clusters do not establish exact familywise coverage",
+      "decision": "DEC-057",
+      "draws": 10000,
+      "dtype": "float64",
+      "family_alpha": 0.05,
+      "family_size": 63,
+      "method": "Bonferroni_percentile_realization_clusters",
+      "orders_per_cluster": 5,
+      "pointwise_confidence": 0.975,
+      "quantile_method": "linear",
+      "seed": 0,
+      "status": "admitted"
+    },
+    "pointwise_lower_tail_probability": 0.012500000000000011,
+    "probability_at_each_unique_extreme": 0.037037037037037035,
+    "symmetric_independent_three_cluster_model": {
+      "analytic_interval_coverage": 0.75,
+      "minimum_standard_two_sided_exact_signflip_p": 0.25,
+      "one_sided_exclusion_probability": 0.125,
+      "signflip_qualification": "Only under exchangeable paired signs; no test substituted for DEC-057.",
+      "true_effect": 0
+    },
+    "synthetic_monte_carlo": {
+      "cluster_standard_deviation": 0.1,
+      "dec058_positive_fraction_when_ES_LS_zero": 0.098005,
+      "interval_coverage": 0.751225,
+      "purpose": "Illustrate failure of nominal coverage, not predict actual experiment error rates.",
+      "seed": 20260918,
+      "trials": 200000
+    }
+  },
+  "no_new_experiments": true,
+  "pilot_arm_means": {
+    "clip2": {
+      "ES95": 0.10326553723535382,
+      "RET_GS": 0.7788888888888889
+    },
+    "kappa02": {
+      "ES95": 0.08363539222123162,
+      "RET_GS": 0.7544444444444444
+    },
+    "kappa05": {
+      "ES95": 0.06347597569009239,
+      "RET_GS": 0.7477777777777777
+    },
+    "ordinary": {
+      "ES95": 0.22292175313028212,
+      "RET_GS": 0.7961111111111111
+    }
+  },
+  "pilot_comparisons": {
+    "clip2": {
+      "retention_floor": 0.7761111111111111,
+      "retention_pass": true,
+      "tails": {
+        "es95": {
+          "difference": -0.11965621589492834,
+          "seed_spread": 0.3874714149585426,
+          "separated": false
+        },
+        "maximum": {
+          "difference": -1.6428897424808149,
+          "seed_spread": 4.439309019001485,
+          "separated": false
+        }
+      },
+      "unseen_by_dataset": {
+        "counterfact": {
+          "clip2": 0.0033333333333333335,
+          "ordinary": 0.0
+        },
+        "mquake": {
+          "clip2": 0.0,
+          "ordinary": 0.0
+        },
+        "zsre": {
+          "clip2": 0.04666666666666667,
+          "ordinary": 0.11666666666666665
+        }
+      },
+      "unseen_nonincrease": false,
+      "verdict": "descriptive control"
+    },
+    "kappa02": {
+      "retention_floor": 0.7761111111111111,
+      "retention_pass": false,
+      "tails": {
+        "es95": {
+          "difference": -0.13928636090905053,
+          "seed_spread": 0.3874714149585426,
+          "separated": false
+        },
+        "maximum": {
+          "difference": -2.5628348569174335,
+          "seed_spread": 4.439309019001485,
+          "separated": false
+        }
+      },
+      "unseen_by_dataset": {
+        "counterfact": {
+          "kappa02": 0.0,
+          "ordinary": 0.0
+        },
+        "mquake": {
+          "kappa02": 0.0,
+          "ordinary": 0.0
+        },
+        "zsre": {
+          "kappa02": 0.049999999999999996,
+          "ordinary": 0.11666666666666665
+        }
+      },
+      "unseen_nonincrease": true,
+      "verdict": "null result"
+    },
+    "kappa05": {
+      "retention_floor": 0.7761111111111111,
+      "retention_pass": false,
+      "tails": {
+        "es95": {
+          "difference": -0.15944577744018976,
+          "seed_spread": 0.3874714149585426,
+          "separated": false
+        },
+        "maximum": {
+          "difference": -2.660040557869831,
+          "seed_spread": 4.439309019001485,
+          "separated": false
+        }
+      },
+      "unseen_by_dataset": {
+        "counterfact": {
+          "kappa05": 0.0,
+          "ordinary": 0.0
+        },
+        "mquake": {
+          "kappa05": 0.0,
+          "ordinary": 0.0
+        },
+        "zsre": {
+          "kappa05": 0.04,
+          "ordinary": 0.11666666666666665
+        }
+      },
+      "unseen_nonincrease": true,
+      "verdict": "null result"
+    }
+  },
+  "scope": "scientific design review; saved development data plus labelled synthetic mathematical probes",
+  "scope_counts": {
+    "core": 285,
+    "extension": 45,
+    "nominal_primary_intervals": 63,
+    "omitted": 75,
+    "unavailable_MQuAKE_primary_intervals": 21
+  },
+  "signing_operations": 0,
+  "source_bindings_sha256": {
+    "/home/derp/cap/pc_cap/docs/R1_U03_interpretation_memo.md": "6d26792487defdbb0643f899418924a215532c32a42a349119b429fbde559ce2",
+    "/home/derp/cap/pc_cap/docs/R1_diagnosis.md": "a049602d1b1046558d5d3b083d215c2eed4daa872e045a9bd141a37042a8ead3",
+    "/home/derp/cap/pc_cap/docs/R1_execution_plan_v3.md": "f5b0f48aadc9d0bae36db5468983aa580742b9292fc88ebc810cf34f088e1034",
+    "/home/derp/cap/pc_cap/docs/R1_stage2_notes.md": "a85f2d815ab2011337f105fd1c0459d836e35260894478b750e859c2244316ec",
+    "/home/derp/cap/pc_cap/docs/R1_stage2_report.md": "b370a02d9b74f8bd616b28c01e080d35ac35016784ee72512090a989279c6569",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_U08_mquake_calibration_v3.md": "f7fa3b8b2707f12043f5fc0cab409f56aa41e9497782167aa4a36d2b122ecb5c",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_draft_v5_1.md": "de3891f47588c147f54295c74e590435f68abce92bdfdae43c1c59b34c9037f2",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_3.md": "eee0a7a0e6838d41323fca360e3cc5fd03c41e622dbc077308f7e2ecfcdd9803",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_protocol_v5_2_D_4.md": "0352b02bde127026c417bdd2b6c8d03660d8924694ee13d38cacc43008df86d8",
+    "/home/derp/cap/pc_cap/docs/decisions.md": "05d1be109e5e2e919e5cdf1fb537a2300e57fdc11ff4b3cd11dcbfdb847ab3ca",
+    "/home/derp/cap/pc_cap/docs/heavy_tail_counter_review.md": "7c214031a8f5db0e3c8d154942815af7a5849273f9cddf401075147c747e8e91",
+    "/home/derp/cap/pc_cap/docs/more_input/pc_cap_coding_agent_guide (1).pdf": "4e82a741e4bd744aea3b63eecf41eb2802659eb6d2ee0863334861a4f6061cf0",
+    "/home/derp/cap/pc_cap/docs/pc_cap_month_plan_readable.pdf": "9a2b64680452394a57da6d07536f00b215320bdd2e7deef65e9f3bec3d359080",
+    "/home/derp/cap/pc_cap/docs/presentation/talk_outline_v1.md": "8b367b982c194d43e315428f62f6696ff33a5f85d8f2112be8c705389fa89798",
+    "/home/derp/cap/pc_cap/docs/report.md": "f4b4b6fb18e8b9ce672daa6bc80fb429264c2d0fa5780f0fc354212a4f6ffb77",
+    "/home/derp/cap/pc_cap/docs/talk_claim_ledger_v6.md": "3fbb72229eabaab27b257627b2e1d933cdfe86dd99ac3a6162edd6d56dc75d40",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-73b.md": "4276037aaad732539c10fe417464864998f59a4ff35715ae197e1805e5f16791",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-X21-edit-requests.md": "2df1f90cfed6565a6cf199d01bd894c8ac7c96aec730c500407a06fe6c7e063a",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-cost-admission-receipt-v4.json": "7895bd719beb5f17d6bfc6c613a4f7b1d16839b49506aefab82a430e5db41aee",
+    "/home/derp/cap/pc_cap/docs/updated_plan9.md": "e8cd32b5a21991ba1178a3112f62c5a0bd6a4f91bbb4ec97d1df127ac91234c9",
+    "/home/derp/cap/pc_cap/logs/r1_round22/ht3e-independent-review-v2.json": "fac11b2260a5fd554d9b759926127bc0387b4719cd4335db5ecec1d48ae05a34",
+    "/home/derp/cap/pc_cap/logs/r1_round25/r1-x15-independent.json": "e10a61da97677d81645bd5fa5199fdd9df8b033db71262baeb60c213703c83db",
+    "/home/derp/cap/pc_cap/logs/r1_round35/chain-s-inventory.json": "faa758b5055eae48780ba0d0143c9492cae05fa11ede6def151d8893c89a5047",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_4.json": "c4f677ab61ba7caf494feee926c54264fcfc6f8bbc560ca45928bb8bc166b336",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-mquake-development_full_endpoints_R164f-seed64028-6c6436b6549e3119512c/attempt-0000/full-validation-300.npz": "65b089aec305ed0a29a8ae1091b40705584693feab06eed480ea4400b30af8d1",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development_full_endpoints_R164f-seed64028-c84c64b1149e74b70edb/attempt-0000/full-validation-300.npz": "1932ca5089a10b95db15b981e6b455a600b43876a5f12474088ef330ba11e4ae",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/v0_stable-mquake-development_full_endpoints_R164f-seed64028-d248d331cdc51471f490/attempt-0000/full-validation-300.npz": "930bec5e74802bb89fdc624f3aa07920852952c409063639ef36b8918d386b53",
+    "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/v0_stable-zsre-development_full_endpoints_R164f-seed64028-ffcdbb5f140bcf99a3f0/attempt-0000/full-validation-300.npz": "43210a37a2495f00759fffa7d9e29cba91f09c0c732458489948c751ef4598d6",
+    "/home/derp/cap/pc_cap/scripts/r1_49g_inference.py": "afddc97bb67efab38aa20bb9c62a11050d07f402e3953f59d10ac8ec1dd07399",
+    "/home/derp/cap/pc_cap/scripts/r1_scientific_design_review.py": "480d506374f887112492a5533f757011977be1c519b583419cd908b48f137638",
+    "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_adapters.py": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37"
+  },
+  "teacher_baseline": {
+    "counterfact": {
+      "empty": 0,
+      "empty_newline_one_step": 0,
+      "reviewed": 6121,
+      "teacher_pass": 6121,
+      "tokens_pass": 6121
+    },
+    "mquake": {
+      "empty": 0,
+      "empty_newline_one_step": 0,
+      "reviewed": 2214,
+      "teacher_pass": 2214,
+      "tokens_pass": 2214
+    },
+    "zsre": {
+      "empty": 6036,
+      "empty_newline_one_step": 6036,
+      "reviewed": 6084,
+      "teacher_pass": 6084,
+      "tokens_pass": 6084
+    }
+  }
+}

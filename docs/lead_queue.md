@@ -487,6 +487,8 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q16 (near-miss pair allocation) | **ANSWERED 2026-09-17: B** (DEC-062) — family-coordinated pair allocation for the near / neighbour roles, bound in the RNG admission. | — | unblocked: R1-D9f activation; the draw | — |
 | Q17 (fidelity limit scope) | **ANSWERED 2026-09-18: option 1** (DEC-064) — cap fidelity is a declared secondary benchmark (KL and NLL, pass / fail, concentration statistics), no veto; the continued-base gate unchanged. | — | unblocked: protocol v5.2-D.3 (R1-49m), candidate v14 | — |
 | Q18 (MQuAKE scope) | **ANSWERED 2026-09-18: B** (DEC-066) — MQuAKE core = primary + floor + v0_stable, 45 cells; the five radius-0 conditions recorded as determined by calibration v3. | — | unblocked: matrix / protocol D.4 with candidate v14 | — |
+| Q19 (inference with three realizations; review §2) | The registered DEC-057 bootstrap resamples three realization means; with three clusters both the 97.5 % and the Bonferroni-adjusted intervals collapse to the observed min–max of the three means (only 27 resampling sequences), whose coverage is 75 % under symmetric errors — a nominal label, not calibrated 95 % familywise control; more draws, Bonferroni or permutation tests cannot repair three clusters. Options: **(A)** keep the registered computation and classifier for traceability, relabel them as preliminary decision summaries, show every realization estimate and order dispersion, publish effects before category names, and make no claim of demonstrated 95 % error control or an established population-level effect; **(B)** add a fourth fresh realization for zsRE and CounterFact (capacity allows: margins 2,034 / 2,071; MQuAKE cannot) — ≈ +95 cells, ≈ +105 process-hours, still only four clusters (range coverage ≈ 87.5 %), the extension would have to go; **(C)** as A plus a pre-registered Student-t sensitivity interval (2 d.f.) reported alongside, labelled as assumption-dependent. | **A**, with C's t-interval as an explicit secondary display (no change to what is computed first) | protocol D.5 wording (Codex, in the re-bind) and the report skeleton; not the populations or the run | before launch |
+| Q20 (block order; review §8) | Amend DEC-051 so the primary / random-reader / v0_stable triplet is completed across all three realizations and datasets first (135 cells, ≈ 148 process-hours, ≈ 78 elapsed hours at two workers), then matched_update / v0_live C1–C2 across all realizations, then the S1 controls, then the optional extension. Same 285 cells, populations, settings and measurements; only the order changes, so the central replicated paired panel is complete after ≈ 3.5 days instead of after block 4 (≈ 150 elapsed hours). Stopping rules stay time / resource based, never outcome based. | **adopt** | matrix D.4.1's block numbers (Codex, in the re-bind); nothing else | before launch |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -948,4 +950,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     versioned pass and then the code tree is declared frozen until launch (lane R1-63o, urgent). I then re-run the
     session end to end on the re-bound inputs — automated, same seed, so the same reservations — and report the frozen
     manifest hash. Expect this evening or tomorrow morning; launch follows the same day.
+
+97. (2026-09-18, 17:05 EDT) Codex's programme review (`docs/scientific_program_review_2026-09-18.md`) — my reading: right on
+    both counts, and both should be settled before the re-bind so the package is emitted once. **Q19:** with three
+    fresh realizations the registered bootstrap cannot deliver calibrated 95 % intervals (it reduces to the min–max of
+    three numbers); the honest claim is replicated effect sizes with their dispersion, and the classifier labels as
+    preliminary decision summaries — my default A, with an assumption-labelled t-interval shown beside it. A fourth
+    realization (B) buys little (four clusters) and costs the extension. **Q20:** triplet-first ordering — adopt; it
+    secures the central paired panel in ≈ 78 elapsed hours instead of ≈ 150, at no scientific cost. Codex's other
+    points (defer the unperformed factorial branches explicitly; U03 qualification; effects before labels; keep the
+    κ null and the stress limits bounded) are already in the ledger and the protocol or go into D.5 with Q19.
 

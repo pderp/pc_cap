@@ -82,6 +82,14 @@ step 8) → HT-4f (after step 2).**
 
 ### Lane R1-63o — re-bind the ENTIRE live package to the current tree, then freeze the tree (URGENT; supersedes R1-D10i)
 
+**Sequencing (17:05 EDT):** proceed as soon as the lead answers Q19 and Q20 (lead queue). Fold both into the same
+versioned pass: protocol **D.5** (Q19: the three-cluster inference statement per review §2 — registered computation kept,
+relabelled as preliminary decision summaries, every realization estimate and order dispersion shown, effects before
+labels, no 95 % familywise claim; plus the assumption-labelled t-interval if the lead takes it; and §1's explicit
+deferral of the unperformed factorial / PC branches) and matrix **D.5** block numbers under the amended order (Q20:
+triplet across all realizations first, then matched / live, then S1, then the extension). One package, one rebind,
+then the tree freeze.
+
 The signing session (DEC-067: delegated to the orchestrator; session v9 on inputs v10) completed steps 1–5 — clearance,
 RNG admission with the lead's seed, draw (100 / 100 near-miss pairs matched in every dataset × realization) — and
 stopped at endpoints: `r1_d10c_endpoints construct` refuses ("review input changed: scripts/r1_d10c_endpoints.py")
