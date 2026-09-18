@@ -972,3 +972,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     **Launch (step 9) is yours to call**: say "launch" and I start the queue with two workers and the fidelity watch;
     the first block-boundary report follows after the triplet's first realization (≈ 26 h).
 
+100. (2026-09-18, 17:45 EDT) **Launched** on your "launch now": operator step 9 executed with the signed launch form
+    (frozen matrix + queue bindings, receipt root `logs/R1/final_queue`, two workers) under CUDA with the GPU lease held
+    for the run's lifetime. The queue dispatches the 330 cells in the DEC-068 order — the primary / random / v0_stable
+    triplet across all realizations first — with the fidelity watch after every certified cell. Reporting: a daily
+    status line here from the D13 tooling, the block-boundary report after each block (the first after the triplet's
+    first realization, ≈ 26 h), fidelity breaches at block boundaries, creep alerts immediately. Codex's X20
+    verification runs in parallel; if it finds a defect the queue is stopped at the next cell boundary and we resume
+    from the last certified checkpoint after the fix. The tree stays locked.
+
