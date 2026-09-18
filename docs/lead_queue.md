@@ -762,3 +762,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     tonight for the missing cost evidence. Realistic: candidate v12 and your sitting **September 18 afternoon**, launch
     September 19. No decision is open.
 
+73. (2026-09-17, 20:40 EDT) Codex's round 28 committed (`124f6bb`): the protocol amendment with the normative closure,
+    candidate v12 (1,408 bindings), the typed cost receipt producer, four full-endpoint development recipes (running
+    now on the GPU with host memory captured), and X17's re-review: still not ready, now for evidence rather than text —
+    measured host peaks per condition, zsRE / MQuAKE challenge-endpoint costs (tonight's runs), and one missing
+    producer (the assembler that turns a sealed draw into the production recipe bundle and the frozen manifest).
+    Round 29 is exactly those three plus a re-review. Your sitting moves to when candidate v13 exists — September 18
+    evening at the earliest, more likely the 19th morning; launch the 19th. No decision is open.
+

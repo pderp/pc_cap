@@ -74,51 +74,42 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 28 (CPU; open now; posted 2026-09-17 20:00 EDT) — X16 repairs
+  +0.006## 3. Lanes for Codex — round 29 (CPU; open now; posted 2026-09-17 20:40 EDT) — closing the evidence blockers
 
-Round 27 is committed and mirrored; the X16 notes patch is applied; DEC-062's wording now carries the lead's
-clarification (multiple disjoint pairs per family allowed). Priority order: **R1-49j → R1-58h → R1-64f → R1-63i →
-X17 → HT-4f.** Rules as in round 22.
+Round 28 is committed and mirrored; chain R (four full-endpoint cells, `/usr/bin/time -v` RSS and outer wall captured
+in `results/R1/stage4_dev_cell_r1_64f_*.time`) runs now. Priority order: **R1-63j → R1-58i → R1-58j → X18 → HT-4f.**
+Rules as in round 22.
 
-### Lane R1-49j — protocol amendment v5.2-D.1 and the normative closure (first)
+### Lane R1-63j — the whole final-recipe / freeze assembler (first; the one missing producer)
 
-Publish `docs/R1_stage4_protocol_v5_2_D_1.md` = the final v5.2-D text with X16 §2's DEC-062 paragraph (the
-multiple-pairs-per-family wording, no longer conditional) replacing the sentence that forbids coordinated allocation,
-and with every incorporated normative document (v5.1's statistical definitions and any other "incorporates" target)
-listed for binding; a change log; a candidate-builder check that the normative closure is bound and that changing
-any bound normative file fails verification (test).
+Per `R1-63i-production-bundle-interface.md`: implement the assembler that, from a sealed draw / endpoints / seal
+receipt set and the admitted matrix v5.2-D.1, emits the production recipe bundle (one sealed recipe per core cell +
+extension, bound to the sealed backend, calibration v3, the R1-68e driver identity and cell ceilings), the frozen
+manifest candidate for the lead's freeze act, and the queue bindings; dry-run on the synthetic rehearsal artifacts
+and on the real unsigned inputs (metadata only); tests including tamper / mismatch refusals. This is the last code
+gate before the lead's acts.
 
-### Lane R1-58h — typed cost admission receipt v2 (producer, from measured receipts)
+### Lane R1-58i — host peak evidence for every condition × dataset from the process-memory monitor
 
-Replace the orchestrator's receipt v1 with a producer `scripts/r1_58h_cost_receipt.py` that assembles the typed
-receipt the validator expects from measured evidence: per condition × dataset solo ceilings from
-`cell_ceilings_v1.json`; peak GPU memory from the profile receipts (measured: learned / v0 ≈ 700–780 MiB, S1 ≈
-1,210–1,270 MiB — two bases held) with a 1.5× ceiling; host MemAvailable floor 6 GiB per launch; full-endpoint
-evidence from the CounterFact cells (near-miss + revision ≈ 345 s) and, for zsRE / MQuAKE, from the R1-64f cells when
-they land (until then, an explicit placeholder that the validator reports as pending); the shared process-hour budget
-= 2 workers × 375 h = 750 process-hours, expected ≈ 255 incl. overlap; startup / validation overhead ≈ 30 s per
-cell; the failure policy; all hash-bound to plan v2 and concurrency v2; `lead_approved` left false for the sitting.
-Tests against the validator.
+X17 wants a measured host process peak per condition × dataset (27 entries). The monitor
+(`scripts/process_memory_monitor.py`, logs under `logs/process_memory/*.jsonl`, gitignored, on disk) has sampled every
+driver run since September 16. Write `scripts/r1_58i_host_peaks.py`: match each completed profile receipt (run
+directory, attempt start / end from the phase files) to the monitor samples of its driver process (pid / cmdline /
+time window) and emit the peak RSS per condition × dataset with the sample provenance; take chain R's `.time` files
+as the direct measurement for its four cells; state explicitly which entries are direct, which are matched from the
+monitor, and which are extrapolated (with the rule). Feed the result into the cost receipt producer (v3).
 
-### Lane R1-64f — full-endpoint development recipes for zsRE and MQuAKE (the orchestrator runs them tonight)
+### Lane R1-58j — cost receipt v3 with chain R and the full-validation split evidence
 
-The zsRE and MQuAKE development payloads carry no near-miss / revision rows, so those endpoint costs are only
-measured on CounterFact. Build, with the D10c constructor on the development slices (DEC-061 family; DEC-062 pairing
-for the dry allocation), four recipes on the current identity: zsRE and MQuAKE × R1_learned_ff (primary v5) and
-v0_stable, 300 edits, checkpoints 100 / 300, with 100 near-miss and 50 revision rows; inspection receipts and a run
-list. These also give the primary its first MQuAKE recipe (the DEC-056 occupancy diagnostic runs after).
+When chain R completes: ingest the four results (near-miss / revision costs for zsRE and MQuAKE; the MQuAKE primary
+profile), the host peaks (R1-58i), and the full-validation split evidence X17 lists (state what "full validation
+split" requires and produce it from the existing 128-window drift assays and the driver's validation phases, or say
+what run is missing); rebuild receipt v3 in a new path; refresh candidate v13 / forms v8 / sheet v7 digests. List any
+remaining blocker that is not a signature.
 
-### Lane R1-63i — candidate v12, inputs / forms v7, operator sheet v6 (after R1-49j and R1-58h)
+### Lane X18 — re-review of the v13 package
 
-Bind the amendment, the normative closure, cost receipt v2, the R1-64f results when present, and the production
-recipe bundle interface (list exactly what the bundle must contain and which producer emits it; if a producer is
-missing, say so — X16 §5). Refresh digests; print the open gates, which must then be signatures only.
-
-### Lane X17 — re-review after repairs
-
-Re-run X16 on the v12 package: verdict, residual risks.
-
-### Lane HT-4f — claim ledger v6 (after cost receipt v2 is signed)
+### Lane HT-4f — claim ledger v6 (after receipt v3 is signed)
 
 ## 4. Interfaces and coordination
 
