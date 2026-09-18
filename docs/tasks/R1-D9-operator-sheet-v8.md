@@ -46,6 +46,183 @@ PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
 
 `ACTUAL-REVIEWED-ASSEMBLY-INPUTS.json` above is an explicit placeholder for the future signed-input package; it has not been manufactured. Feed the resulting publication bundle and the same gate/schedule receipts into the operator freeze form. Synthetic fixtures validate the interfaces but cannot substitute for these artifacts.
 
+## Full commands for every lead step (added by the orchestrator, 2026-09-18)
+
+Each lead step is the same three-command cycle as step 1. Replace nothing but the step name and the form paths.
+Quote every text value in the forms (`"name": "charlie derr"`, `"date": "2026-09-18"`).
+
+### Step 2 — `cost-admit`
+
+```bash
+# (a) preview, write the unsigned form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator cost-admit \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --write-form docs/tasks/operator-v8/02-cost-preview.json
+# (b) after setting the review fields to true, preview again with the reviewed form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator cost-admit \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/02-cost-preview.json \
+  --write-form docs/tasks/operator-v8/02-cost-reviewed.json
+# (c) after setting lead_approved true with name and date in the reviewed form, execute
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator cost-admit \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/02-cost-reviewed.json \
+  --execute
+```
+
+### Step 3 — `clearance`
+
+```bash
+# (a) preview, write the unsigned form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator clearance \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --write-form docs/tasks/operator-v8/03-clearance-preview.json
+# (b) after setting the review fields to true, preview again with the reviewed form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator clearance \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/03-clearance-preview.json \
+  --write-form docs/tasks/operator-v8/03-clearance-reviewed.json
+# (c) after setting lead_approved true with name and date in the reviewed form, execute
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator clearance \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/03-clearance-reviewed.json \
+  --execute
+```
+
+### Step 4 — `rng-admit`
+
+```bash
+# (a) preview, write the unsigned form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator rng-admit \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --write-form docs/tasks/operator-v8/04-rng-preview.json
+# (b) after setting the review fields to true, preview again with the reviewed form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator rng-admit \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/04-rng-preview.json \
+  --write-form docs/tasks/operator-v8/04-rng-reviewed.json
+# (c) after setting lead_approved true with name and date in the reviewed form, execute
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator rng-admit \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/04-rng-reviewed.json \
+  --execute
+```
+
+### Step 5 — `draw`
+
+```bash
+# (a) preview, write the unsigned form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator draw \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --write-form docs/tasks/operator-v8/05-draw-preview.json
+# (b) after setting the review fields to true, preview again with the reviewed form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator draw \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/05-draw-preview.json \
+  --write-form docs/tasks/operator-v8/05-draw-reviewed.json
+# (c) after setting lead_approved true with name and date in the reviewed form, execute
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator draw \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/05-draw-reviewed.json \
+  --execute
+```
+
+### Step 7 — `seal`
+
+```bash
+# (a) preview, write the unsigned form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator seal \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --write-form docs/tasks/operator-v8/07-seal-preview.json
+# (b) after setting the review fields to true, preview again with the reviewed form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator seal \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/07-seal-preview.json \
+  --write-form docs/tasks/operator-v8/07-seal-reviewed.json
+# (c) after setting lead_approved true with name and date in the reviewed form, execute
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator seal \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/07-seal-reviewed.json \
+  --execute
+```
+
+### Step 8 — `freeze`
+
+```bash
+# (a) preview, write the unsigned form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator freeze \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --write-form docs/tasks/operator-v8/08-freeze-preview.json
+# (b) after setting the review fields to true, preview again with the reviewed form
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator freeze \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/08-freeze-preview.json \
+  --write-form docs/tasks/operator-v8/08-freeze-reviewed.json
+# (c) after setting lead_approved true with name and date in the reviewed form, execute
+PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= \
+  OPENBLAS_NUM_THREADS=1 ../venv/bin/python -m scripts.r1_58g_operator freeze \
+  --inputs docs/tasks/R1-D9-inputs-v9.json \
+  --candidate manifests/revision_v1/freeze_candidate_v14.json \
+  --session logs/R1/operator_v8 \
+  --form docs/tasks/operator-v8/08-freeze-reviewed.json \
+  --execute
+```
+
+Step 4 (`rng-admit`) additionally takes your master seed in its form (`master_seed`, an integer you choose and record).
+Steps 6 (`endpoints`) and 9 (`launch`) are the orchestrator's; step 8 (`freeze`) is preceded by the orchestrator's
+assembly-inputs run (R1-63n) after your step 7.
+
 ## Subsequent checkpoints
 
 After the actual cost v4 receipt is signed, HT-4f may build the final v6 claim ledger with `scripts.ht4f_claim_ledger --cost-receipt PATH-TO-ACTUAL-SIGNED-RECEIPT`. It now checks v4 against inputs v9 and uses D.4/plan v3. The unsigned source is deliberately refused; no final ledger was emitted in this round.
