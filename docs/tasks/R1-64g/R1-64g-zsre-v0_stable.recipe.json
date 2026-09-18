@@ -1,0 +1,199 @@
+{
+  "adapter_identity": {
+    "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "class": "pccap.revision_v1.v0_stable.StableCap",
+    "condition": "v0_stable",
+    "config_sha256": "bca3e21724ce67e0a670477631625024f07b13b20ec0d440af0b53740c01f0ee",
+    "locality_base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "params_sha256": null,
+    "rule": null
+  },
+  "admission": {
+    "condition_admitted": false,
+    "launch_authorized": false,
+    "lead_approved": false,
+    "protocol_frozen": false
+  },
+  "banner": "development, not confirmatory",
+  "cell": {
+    "condition": "v0_stable",
+    "dataset": "zsre",
+    "order": "seed64028",
+    "realization": "development_full_endpoints_R164f"
+  },
+  "checkpoints": [
+    100,
+    300
+  ],
+  "code_sha256": "7838c25d3d3eb5b43404a649ff827a4f10a75291a78681b932da394a108229d0",
+  "comparator_recipe": {
+    "S1_note": "historical two-pool continuation; final training-budget reconciliation remains open",
+    "bindings": {
+      "factory": {
+        "path": "/home/derp/cap/pc_cap/src/pccap/revision_v1/stage4_adapters.py",
+        "sha256": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37"
+      },
+      "producer": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_64b_comparator_recipes.py",
+        "sha256": "447cf5583a727c3581705c8fe4ce9d496418e3285ec210e6421d77accfa9012a"
+      },
+      "source_recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-68c-zsre-v5-full.recipe.json",
+        "sha256": "f39fe5a39b843d0be3b3993a767453ffc5d19d135799bc10420cc727bfe31851"
+      }
+    },
+    "calibration_note": "historical BP dataset radii/scales; MQuAKE and any final per-continued-base recalibration remain separate admission work",
+    "entry_point": "python -m scripts.r1_64b_comparator_recipes run",
+    "launch_authorized": false,
+    "method": "registered dataclass + NumPy tensor hashing; no model execution",
+    "source_reader_provenance": "inherited reader_provenance describes source payload recipe only; comparator identity and these bindings define this condition",
+    "task": "R1-64b"
+  },
+  "construction": {
+    "base": {
+      "files": {
+        "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+        "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+    },
+    "budget": {
+      "A": 0.3,
+      "R": 5,
+      "epsilon": 0.01,
+      "improvement_abs": 1e-08,
+      "improvement_rel": 1e-06,
+      "search_trials": 4,
+      "tau_edit": 0.1
+    },
+    "calibration": {
+      "bank_scales": {
+        "1": 70.70187377929688,
+        "2": 106.5766658782959,
+        "3": 425.5740661621094
+      },
+      "radii": {
+        "1": 0.2808128833770752,
+        "2": 0.4143741011619568,
+        "3": 0.18857809603214265
+      }
+    },
+    "seed": 0
+  },
+  "drift_batch_size": 16,
+  "drift_implementation": "v0_batched_v1",
+  "full_validation": {
+    "checkpoint_policy": "final_only_plus_sample_at_every_checkpoint",
+    "complete_windows": 1931,
+    "context_policy": "reset_every_window",
+    "expected_positions": 245237,
+    "kl_direction": "reference || cap",
+    "policy": "DEC-063-complete-windows-final-both-references-v1",
+    "references": [
+      "own_capoff",
+      "original_base"
+    ],
+    "sample_windows": 128,
+    "schema_version": 1,
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "source_inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "source_tokens": 247289,
+    "tail_policy": "drop_incomplete_trailing_window",
+    "trailing_tokens_dropped": 121,
+    "window_tokens": 128,
+    "windows_int64le_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b"
+  },
+  "integrity_batch_edits": 16,
+  "integrity_driver_bindings": {
+    "scripts/r1_68b_dev_cell.py": "a8dca04986085aebb53706439e76bf8ced083b4e86424fbf9965edc4105c9fc5",
+    "scripts/r1_68b_integrity_runtime.py": "ae66b70ddbef67d45dd590a8d73d763f976ef51f5c8cfd468849e30b6468d1d1",
+    "scripts/r1_68c_batched_drift.py": "bf2e879083bc3b67796824c5c66b695248c923a802b51d8c379d2dea5147bc24",
+    "scripts/r1_68c_dev_cell.py": "895094861ac5d40a440b56c65589a1b37380c8bee4d21b180b0d806994cdcc24",
+    "scripts/r1_68e_batched_drift_v0.py": "092364cab36cba3eea3f9c6aed4245a612228dd26cbb189cf2c58dd61c9c22c7",
+    "scripts/r1_68f_full_validation.py": "7e7301b9089326365e76d10d29d112d27029848627b66d1308120dfbd7368473"
+  },
+  "integrity_profile": "full",
+  "integrity_rebind": {
+    "model_executed": false,
+    "purpose": "development-only timing/behavioral comparison; same population and reader",
+    "source_code_sha256": "23efcc8dd7218acf1fedc044ce5692cb8847fbe71fbc2148bca614b00c16ce3c",
+    "source_recipe": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64f/R1-64f-zsre-v0_stable.recipe.json",
+      "sha256": "de5e8754e033c4ed61f0ce7f0a914380ab4a58efc234958db8ccc13d82427e01"
+    }
+  },
+  "max_new": 32,
+  "mode": "stage4_development_cell",
+  "payload": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_64f_round28/zsre/payload.json",
+    "sha256": "ef32d2abc1ab87eb62d6fa5491b1e84f2d3e30c3918c8e6998e7f18cae7ce79e"
+  },
+  "r1_64f": {
+    "allocation_contract": {
+      "backbone": "exact_independent_edit_outside_revision_allocations_all_realizations",
+      "constraints": "original_Hall_capacity_and_global_subject_fact_item_disjointness; no_outcomes_no_seed_retry",
+      "decision_required": "DEC-062",
+      "endpoint_pairing": "DEC061_lexical_repairing_within_reserved_roles; pair_units_select_membership_not_endpoint_slot_order",
+      "family": "DEC-061_NM-template-v1",
+      "namespace": "R1-D9-family-pairs-v1",
+      "pair_units": "within_family_role_exclusive_first_then_dual_role_pairs; source_permuted; distinct_subjects; no_reuse",
+      "pool": "cleared_representatives_after_removing_all_backbone_subjects",
+      "selection": "uniform_permutation_of_disjoint_pair_units; multiple_pairs_per_family_allowed",
+      "shortfall": "reserve_remaining_role_eligible_subjects_without_replacement; missing_pair_slots_keep_planned_denominator",
+      "version": 1
+    },
+    "allocation_seed": 64028,
+    "development_only": true,
+    "full_validation_split": false,
+    "note": "Exposed development and historical training pools; no fresh-confirmation or selected-reader independence claim",
+    "producer": {
+      "path": "/home/derp/cap/pc_cap/scripts/r1_64f_full_endpoints.py",
+      "sha256": "da26ba1a6bad0037f9850cf4fa270a20db09216d8973d9a1ea1bdfb91fce96af"
+    },
+    "source_recipe": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64e/R1-64e-zsre-v0_stable.recipe.json",
+      "sha256": "283f7cdd1aa15b8260b50ed73a590d12558cab549fd88f4bddcb82fe8f2e13df"
+    }
+  },
+  "reader_provenance": {
+    "calibration": {
+      "path": "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json",
+      "sha256": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f"
+    },
+    "identity_method": "NumPy base/checkpoint hashes and registered dataclass configuration; no base execution",
+    "primary": {
+      "path": "manifests/revision_v1/primary_condition_v5.json",
+      "sha256": "4bca8eb643872fe801a50b8665d492d5c16aa724645511945b97707bba4a5a72"
+    }
+  },
+  "schema_version": 1,
+  "source_bindings_sha256": {
+    "/home/derp/cap/assets/data/prepared/revision_v1/r1_d4_v1/composition.jsonl": "5bad38276be292cbd9aa27eca93419f56a371b3bfd60cc63c1da6d80d7c04865",
+    "/home/derp/cap/pc_cap/manifests/dev/counterfact_dev.json": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+    "/home/derp/cap/pc_cap/manifests/dev/mquake_dev.json": "7aa9f64b9f52cda882ecee234d76a8f6fed2890d09fda0d20fce57c999207089",
+    "/home/derp/cap/pc_cap/manifests/dev/mquake_dev_v3b.json": "9c4c75d62e6caae2bc5e948102a43e4ad7b413102efc57590be266a569b1b24d",
+    "/home/derp/cap/pc_cap/manifests/dev/zsre_dev.json": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/mquake_items_v1.json": "2cfaea61c1631b06a5036c298d4ecf5bb6c8b581d8560e32bcf55076430c9a25",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v2.json": "1b639bd5d10e0a29ecfe3fe58e22b1654e3c971ab55eedf5990baf4961afff90",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b",
+    "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+  },
+  "tokenizer_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+}
