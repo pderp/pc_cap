@@ -786,3 +786,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     therefore moves to **September 19**, launch the same day or the 20th. No decision is open unless you want to
     override DEC-063.
 
+76. (2026-09-18, 07:00 EDT) Codex's round 31 committed (`73ff6b0`): the production pipeline now carries the full-validation
+    endpoint end to end; protocol v5.2-D.2 is the text with DEC-063 in it. **A scientific finding you should see before
+    the sitting:** the first full-validation cell (primary v5, MQuAKE, 300 records, all 245,237 positions) gives a mean
+    KL of 0.0055 nats between the original base and the edited model — above the registered fidelity limit of 0.001 —
+    while the mean NLL increase is 0.0056, inside its 0.01 limit; tail: ES95 0.11, max 8.2 nats. Measurement integrity
+    passes. If the KL limit applies to the cap (not only to the continuation bases it was first used for), the primary
+    condition would fail fidelity in confirmatory cells, which the classifier reports as such. Codex is tracing the
+    limit's provenance now (R1-49l); if the current protocol extended it beyond what was registered, you get a Q17
+    with two options; otherwise it stands as registered and the result is what it is. Full-validation cost: 1,299 s
+    per cell (≈ 22 min), as extrapolated. Three cells to go; your sitting stays on September 19.
+

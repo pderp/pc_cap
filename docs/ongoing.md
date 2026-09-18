@@ -74,39 +74,38 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 31 (CPU; open now; posted 2026-09-18 06:15 EDT) — carry the endpoint through production
+  +0.006## 3. Lanes for Codex — round 32 (CPU; open now; posted 2026-09-18 07:00 EDT) — the fidelity gate
 
-Round 30 is committed; the R1-68f patch is applied (new driver + backend identities); the orchestrator rebuilds the
-four R1-64g recipes and runs them now (chain S). Priority order: **R1-63l → R1-49k → R1-58l → R1-63m → X19 → HT-4f.**
-Rules as in round 22; no edits to the driver / backend while chain S runs.
+Round 31 is committed and mirrored. Chain S (three cells left) runs until ≈ 08:30; the R1-63l backend patch is applied
+after it. Priority order: **R1-49l → HT-6 → R1-58l → R1-63m → X19 → HT-4f.** Rules as in round 22.
 
-### Lane R1-63l — production consumers carry `full_validation` (first)
+### Lane R1-49l — provenance and interpretation of the fidelity limit (first; decides whether the lead has a question)
 
-Your handoff: the assembler drops unknown runtime fields and the analysis reads only sampled drift. Make the
-production recipe assembler (R1-63j) emit the bound `full_validation` contract in every core / extension recipe
-(DEC-063 policy, source hash, complete-window inventory, both references), the sealed backend admit it (patched
-identity), the frozen-population and admission schemas include it, and `r1_49g_analyze` / R1-75 read the full
-endpoint (loss / KL vectors, coverage, exceedance counts, ES95 / max) at the final checkpoint alongside the sampled
-statistics; reports label full vs sampled. Synthetic rehearsal at both cadences; tests.
+Chain S shows the primary's full-validation mean KL 0.0055 nats against the registered KL ≤ 0.001. Trace the limit:
+DEC-033 D-R3 ("fidelity KL ≤ 1e-3, loss increase ≤ 0.01") and its use in DEC-047 (the S1 continuation
+certification), plan 9, and every protocol draft v1 → v5.2-D.2: was the KL limit registered as (a) a fidelity gate on
+the *continued base* only, (b) a drift gate on the *cap* (cap-on vs original base) at the final checkpoint, or (c)
+both? Quote the exact sentences. Then state what the current D.2 classifier does with a cap cell that fails (b):
+which label, whether the primary comparisons are still computed, and how the DEC-058 classifier interacts. If the
+registered meaning is (a) and D.2 silently extended it to (b), say so — that is a scope change the lead must decide
+(the orchestrator posts it as Q17 with the options: keep the extension as a declared secondary fidelity benchmark;
+or bind the cap drift gate at the NLL-increase limit ≤ 0.01 that the sampled assays have always used, with KL
+reported descriptively). No threshold is changed by this lane.
 
-### Lane R1-49k — protocol v5.2-D.2: the full-validation endpoint text
+### Lane HT-6 — full-validation fidelity report over chain S (after the four cells)
 
-DEC-063 into the protocol (population, tail policy, references, cadence, storage, the overlap gate, what is
-confirmatory vs descriptive), U08 / U16 updated, change log; the sampled 128-window tail statistics declared as the
-talk's descriptive population.
+For each of the four cells: mean KL and NLL increase against both references, ES95 / ES99 / max, exceedance
+counts, coverage, the overlap gate result, the phase cost; the same statistics on the sampled 128 windows for the
+same checkpoint (are the sample and the population consistent?); a short reading for the talk under the DEC-054
+framing (the tail statement on 245k positions), kept separate from the classifier question of R1-49l.
 
-### Lane R1-58l — cost receipt v4 with its typed validator (after chain S)
+### Lane R1-58l — cost receipt v4 (after chain S; as posted in round 31)
 
-Ingest the four full-validation measurements (per class: learned, v0-style; zsRE and MQuAKE measured, CounterFact
-by explicit transfer with the measured basis — sampled drift per position ratio), the intermediate-checkpoint
-sampled-drift cadence addition (now at every checkpoint), refresh cell ceilings v2 and the process-hour projection,
-list every remaining gap that is not a signature; the revision-4 validator.
+### Lane R1-63m — candidate v14, forms v9, sheet v8 (after R1-58l and the backend patch)
 
-### Lane R1-63m — candidate v14, forms v9, sheet v8 (after R1-63l / 49k / 58l)
+### Lane X19 — re-review
 
-### Lane X19 — re-review of the v14 package
-
-### Lane HT-4f — claim ledger v6 (after receipt v4 is signed)
+### Lane HT-4f — claim ledger v6
 
 ## 4. Interfaces and coordination
 
