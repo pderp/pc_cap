@@ -797,3 +797,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     with two options; otherwise it stands as registered and the result is what it is. Full-validation cost: 1,299 s
     per cell (≈ 22 min), as extrapolated. Three cells to go; your sitting stays on September 19.
 
+77. (2026-09-18, 07:25 EDT) Your question on the fidelity distribution, answered from the stored vectors of the first
+    full-validation cell: 99.6 % of positions untouched, 171 positions (0.07 %) carry half the KL, 83.5 % of windows
+    pass the limit on their own, 467 positions have KL > 1 nat. The loss is concentrated where the reader fires on
+    ordinary text. The per-position vectors are recorded for every cell already; the concentration summary becomes a
+    registered descriptive statistic in the reports and protocol (Codex lane HT-7). Presentation record:
+    `assets/presentation-materials/fidelity_concentration_v5.md`.
+

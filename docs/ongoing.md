@@ -77,7 +77,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 32 (CPU; open now; posted 2026-09-18 07:00 EDT) — the fidelity gate
 
 Round 31 is committed and mirrored. Chain S (three cells left) runs until ≈ 08:30; the R1-63l backend patch is applied
-after it. Priority order: **R1-49l → HT-6 → R1-58l → R1-63m → X19 → HT-4f.** Rules as in round 22.
+after it. Priority order: **R1-49l → HT-7 → HT-6 → R1-58l → R1-63m → X19 → HT-4f.** Rules as in round 22.
 
 ### Lane R1-49l — provenance and interpretation of the fidelity limit (first; decides whether the lead has a question)
 
@@ -91,6 +91,16 @@ registered meaning is (a) and D.2 silently extended it to (b), say so — that i
 (the orchestrator posts it as Q17 with the options: keep the extension as a declared secondary fidelity benchmark;
 or bind the cap drift gate at the NLL-increase limit ≤ 0.01 that the sampled assays have always used, with KL
 reported descriptively). No threshold is changed by this lane.
+
+### Lane HT-7 — concentration statistics for the full-validation endpoint (registered descriptive; small)
+
+The lead asks that every future cell record how the fidelity loss is distributed across contexts. The vectors are
+already stored; add to the R1-68f report, `r1_49g_analyze` / R1-75 and protocol D.2 (descriptive, no threshold):
+share of total KL (both references) in the top 0.1 % / 1 % of positions and top 1 % / 5 % / 10 % of windows; the
+number of positions carrying 50 % of KL; per-window mean-KL quantiles (median, p90, p99, max) and the counts of
+windows above 0.001 / 0.01 / 0.1; the untouched-position fraction (|Δloss| < 1e-6); a Gini over positions; the
+same for positive loss harm. Compute retroactively for the chain S cells (a CPU script over the NPZ files) and
+reproduce the orchestrator's numbers for cell 1 (notes §"How the full-validation fidelity loss is distributed").
 
 ### Lane HT-6 — full-validation fidelity report over chain S (after the four cells)
 

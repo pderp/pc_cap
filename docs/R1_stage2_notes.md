@@ -1364,3 +1364,26 @@ design implies: revision 4 / 50 and 1 / 50 (it cannot overwrite a stored fact), 
 These four receipts and the `.time` files are the direct host-peak and endpoint-cost evidence X17 asked for
 (R1-58i / R1-58j).
 
+## How the full-validation fidelity loss is distributed (primary v5, MQuAKE, 300 records; 2026-09-18, 07:20 EDT)
+
+From the stored full-validation vectors (`full-validation-300.npz`, 1,931 × 127 × 5; KL(original ‖ cap)):
+
+| statistic | value |
+| --- | ---: |
+| mean KL (the registered fidelity quantity) | 0.00554 nats (limit 0.001) |
+| positions with an unchanged prediction (\|Δloss\| < 1e-6) | 99.6 % |
+| positions carrying 50 % of total KL | 171 (0.07 %) |
+| share of total KL in the top 0.1 % / 1 % of positions | 63 % / 100 % |
+| positions with KL > 0.1 / > 1 nat | 839 / 467 |
+| windows (of 1,931) with mean KL ≤ 0.001 (pass alone) | 1,612 (83.5 %) |
+| windows with mean KL > 0.01 / > 0.1 | 215 / 22 |
+| share of total KL in the top 1 % / 5 % / 10 % of windows | 30 % / 72 % / 93 % |
+| per-window mean KL: median / p90 / p99 / max | 0 / 0.014 / 0.109 / 0.273 |
+| Gini over positions | 0.998 |
+
+The mean fails the limit because of ≈ 1,000 positions where the reader fired on ordinary text and rewrote the
+next-token distribution (KL > 1 nat at 467 of them), not because of a diffuse shift: the same concentration the
+128-window audit (HT-1b) and the stress panel showed, now on the complete population. Recorded as a registered
+descriptive statistic for every cell (lane HT-7): the vectors are already stored; the reports gain the concentration
+summary above. Whether the registered fidelity gate is a mean-KL gate on the cap is R1-49l's provenance question.
+
