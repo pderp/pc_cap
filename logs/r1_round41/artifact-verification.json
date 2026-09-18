@@ -1,0 +1,77 @@
+{
+  "task": "R1-round41-final-verification",
+  "reports": {
+    "complete": {
+      "report": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round41/rehearsal-v2/complete/report.md",
+        "sha256": "3cb398ddcffdbcf6d53ba4f08f387dab4292d83744da7ca102ad9e7a68a50052"
+      },
+      "data": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round41/rehearsal-v2/complete/report-data.json",
+        "sha256": "02c76bfcd38dc785ad3632aac629474f8af0d8bcdaf7d3495cfdac282e7e237e"
+      },
+      "source_bindings_verified": 3532,
+      "primary_rows": 63,
+      "historical_rows": 24,
+      "accounting": "verified_independent_D11_replay"
+    },
+    "partial": {
+      "report": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round41/rehearsal-v2/partial/report.md",
+        "sha256": "af386993fdc3e95b54aed7b6cb0bece02c98422bfc64ab49f5489dce48517847"
+      },
+      "data": {
+        "path": "/home/derp/cap/pc_cap/logs/r1_round41/rehearsal-v2/partial/report-data.json",
+        "sha256": "fb1938344d8bd4235aa40260552caee8d58c294e65bb02681627011f7e310aac"
+      },
+      "source_bindings_verified": 2857,
+      "primary_rows": 63,
+      "historical_rows": 24,
+      "accounting": "unavailable_not_supplied"
+    }
+  },
+  "figures": 18,
+  "png_identity_vs_previously_reviewed": [
+    {
+      "name": "disposition.png",
+      "same_as_previously_reviewed_round39_png": true
+    },
+    {
+      "name": "primary-intervals.png",
+      "same_as_previously_reviewed_round39_png": true
+    },
+    {
+      "name": "checkpoint-trajectories.png",
+      "same_as_previously_reviewed_round39_png": true
+    },
+    {
+      "name": "cap-fidelity.png",
+      "same_as_previously_reviewed_round39_png": true
+    },
+    {
+      "name": "full-validation-tails.png",
+      "same_as_previously_reviewed_round39_png": true
+    },
+    {
+      "name": "watch-sequence.png",
+      "same_as_previously_reviewed_round39_png": true
+    }
+  ],
+  "figure_manifest": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round41/rehearsal-v2/complete/figures/manifest.json",
+    "sha256": "b0b2cccd6fc7d180b4e8c0a496b3a0a1a7cad3af2f389d9a87bc20a97d109ba8"
+  },
+  "historical_ledger_sources_verified": 141,
+  "historical_ledger_manifest": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round41/ledger-v6-source-archive/manifest.json",
+    "sha256": "f8a91904a810b3a500ebd070f2a4cf7ac4c3e50ca83f61ece42f51a991972082"
+  },
+  "tests": {
+    "report_and_accounting_passed": 87,
+    "combined_passed": 93,
+    "combined_failed": 2,
+    "failures": "Existing round40 current-source checks reject concurrently appended DEC-067; historical bytes preserved separately."
+  },
+  "lint": "pass",
+  "gpu_seconds": 0
+}

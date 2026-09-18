@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_d14b_rehearsal.py", line 170, in <module>
+    print(json.dumps(run(parser.parse_args().name), indent=2))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d14b_rehearsal.py", line 74, in run
+    cells = d11.queue.ordered(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_77_queue.py", line 67, in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_75_analysis_stage4_v1.py", line 248, in validate_matrix
+    full_contract.validate(validation)
+  File "/home/derp/cap/pc_cap/scripts/r1_63l_full_validation_contract.py", line 78, in validate
+    raise ValueError("required DEC-063 full-validation contract missing or altered")
+ValueError: required DEC-063 full-validation contract missing or altered

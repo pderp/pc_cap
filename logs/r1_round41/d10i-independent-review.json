@@ -1,0 +1,125 @@
+{
+  "task": "R1-D10i-independent-review",
+  "checked_utc": "2026-09-18T19:23:46.004263+00:00",
+  "status": "provenance_refresh_and_prior_receipts_verified",
+  "old_inputs": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-inputs-v9.json",
+    "sha256": "02c819d894385100a0a25d4dcca087a755218bebbe8c9b6d4e7f471a433138e1"
+  },
+  "new_inputs": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-inputs-v10.json",
+    "sha256": "13c51342e95ec6488d63f0e76b85c00925056f407d8b682f718b1ec0ff94c6c9"
+  },
+  "original_evidence": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9e/round26_final/joint_evidence_DEC061.json",
+    "sha256": "1e2c7f93d80ad2db2cffb22d8b30cfb08a2fa969c02dc3b0442438a0a3d538d0"
+  },
+  "evidence": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9e/round41_rebound_v6/joint_evidence_DEC061.json",
+    "sha256": "901aa07b0a0d4718a8c68d9f7e0c3beae480e123cd7590c6b408bced21dc02f3"
+  },
+  "original_binding_entries": 865,
+  "stale_entries": 2,
+  "stale_unique_paths": 1,
+  "stale_bindings": [
+    {
+      "binding": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py",
+        "sha256": "a2c968b4ca98b23d5a8aeaa6238f45e5c197533679207fb141c782ed3b792135"
+      },
+      "current": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py",
+        "sha256": "9afe62215f979fd73027e4ea0b7373977ad772c8d15c3445ede4ce720c05ac67"
+      },
+      "matches": false
+    },
+    {
+      "binding": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py",
+        "sha256": "a2c968b4ca98b23d5a8aeaa6238f45e5c197533679207fb141c782ed3b792135"
+      },
+      "current": {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py",
+        "sha256": "9afe62215f979fd73027e4ea0b7373977ad772c8d15c3445ede4ce720c05ac67"
+      },
+      "matches": false
+    }
+  ],
+  "refreshed_binding_entries": 865,
+  "evidence_changed_keys": [
+    "evidence_bindings",
+    "rebinding_round41",
+    "schema_version",
+    "status"
+  ],
+  "unchanged_dispositions": 69146,
+  "changed_source_functions": [
+    "construct",
+    "main"
+  ],
+  "unchanged_clearance_functions": [
+    "role_plan",
+    "catalog_from_rows",
+    "build_roles",
+    "merge_roles",
+    "prepare"
+  ],
+  "source_interpretation": "DEC-063 checks/propagates the full-validation contract in postdraw construct/main. Role planning and clearance functions are AST-identical. Existing dispositions and scientific values are unchanged.",
+  "signed_receipts_valid_under_v10": {
+    "protocol_admission": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-58g-operator_v8/01-protocol-admit.receipt.json",
+      "sha256": "1edc4db23fd4246570483f7353459a6b3297159f661409773ef693f52beeb47e"
+    },
+    "chain_i_cell_ceilings": {
+      "path": "/home/derp/cap/pc_cap/docs/tasks/R1-58g-operator_v8/02-cost-admit.receipt.json",
+      "sha256": "2b208d578b4c59e18818dac3d15a8b88037573263391d09e6eed2f735234bc57"
+    }
+  },
+  "resign_steps_1_2_required": false,
+  "fresh_step3_signature_required": true,
+  "exhaustive_clearance": {
+    "task": "R1-D9a",
+    "stage": "clearance",
+    "dry_run": true,
+    "blocked": [
+      {
+        "gate": "owner_receipts",
+        "reason": "clearance_authorization: open or unapproved receipt"
+      }
+    ],
+    "rng_used": false,
+    "draws_emitted": 0,
+    "seals_emitted": 0,
+    "launch_authorized": false,
+    "nominal_subjects": {
+      "zsre": 52411,
+      "counterfact": 12246,
+      "mquake": 4218
+    },
+    "would_write": [
+      "/home/derp/cap/pc_cap/docs/tasks/R1-v14-clearance.receipt.json",
+      "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9_v14/clearance"
+    ],
+    "request_sha256": "2486a396c31531210de7d2c3f1e3cf538933b30f1b282975e7cc6d469ccce126",
+    "usable_subjects": {
+      "zsre": 6084,
+      "counterfact": 6121,
+      "mquake": 2161
+    },
+    "ready_for_owner_execution": false
+  },
+  "session_cautions": [
+    "The installed operator selects the last completed journal inputs, ignoring --inputs after step1. A v10 CLI argument alone does not rebase operator_v8.",
+    "A failed step3 left an authorization receipt at the original output path; original retry refuses overwrite.",
+    "Nested dry_run.blocked contains exhaustive failures while the original outer blocked can omit them. Orchestrator must reconcile the versioned session and propagate nested blockers before resuming."
+  ],
+  "full_X20_complete": false,
+  "draws": 0,
+  "seals": 0,
+  "signatures": 0,
+  "gpu_seconds": 0,
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_d10i_refresh_review.py",
+    "sha256": "3de575510e5a3b83ae51d96541d0d9546a6c203483304f7391b8fecdf003bd58"
+  }
+}

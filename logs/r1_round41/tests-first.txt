@@ -1,0 +1,33 @@
+..........................................F.                             [100%]
+=================================== FAILURES ===================================
+_______________ test_daily_d13_wrapper_and_explicit_unavailable ________________
+
+analysis = {'analysis_revision': 'R1-49n_DEC066_D4_prospective_scope', 'analysis_source_sha256': {'scripts/ht7_concentration.py':...': True, 'planned': 60, ...}, {'artifact_complete': 45, 'block_number': 6, 'complete': True, 'planned': 45, ...}], ...}
+fixture = {'root': PosixPath('/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/3d7201a88aa14f19bd179d6c7f51afc9')...th('/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/3d7201a88aa14f19bd179d6c7f51afc9/logs/queue'), ...}
+
+    def test_daily_d13_wrapper_and_explicit_unavailable(analysis, fixture):
+        f = fixture
+        _, a, snap = save_account(f)
+        # Real D13 emitter preserves its D11 digest and writes the separate binding.
+        doc = dict(task="R1-D13", version=1, mode="daily", d11=snap,
+                   health=dict(memory=dict(status="unavailable", read_issues=[]),
+                               gpu=dict(status="unavailable", read_issues=[])))
+>       path = daily.emit(doc, f["root"] / "logs/daily")["path"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_d14b_report.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+report = {'task': 'R1-D13', 'version': 1, 'mode': 'daily', 'd11': {'version': 1, 'task': 'R1-D11', 'generated_utc': '2026-09-18...sal_fixtures/round35/3d7201a88aa14f19bd179d6c7f51afc9/results/watch/observations.jsonl', 'workers': 2, ...}, ...}, ...}
+output = PosixPath('/home/derp/cap/assets/runs/pc_cap/R1/rehearsal_fixtures/round35/3d7201a88aa14f19bd179d6c7f51afc9/logs/daily')
+
+    def emit(report, output):
+        output = d11.local(output)
+        if not output.is_relative_to(ROOT / "logs"):
+>           raise ValueError("new output directory under repository logs required")
+E           ValueError: new output directory under repository logs required
+
+scripts/r1_d13_daily.py:224: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_d14b_report.py::test_daily_d13_wrapper_and_explicit_unavailable
+1 failed, 43 passed in 0.74s

@@ -940,3 +940,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (clearance) with the exposure attestation. Your v8 session and forms are kept as history. **Step 4 needs your
     master seed** — any integer; reply with it and I run steps 4 through 8 and report the frozen manifest hash.
 
+96. (2026-09-18, 16:20 EDT) With your seed: steps 4 and 5 done — RNG admission and the draw (all 100 near-miss pairs matched
+    in every dataset and realization; the seed 378462438976234321867 is recorded in the RNG admission). Step 6
+    (endpoints) refused on the same kind of stale hash, and a full scan shows the whole package has drifted: Codex kept
+    editing producer scripts after their outputs were bound (role plan, matrix D.4, all 27 runtime templates, cost
+    receipts). Patching them one at a time is how today went; instead Codex re-binds the entire live package in one
+    versioned pass and then the code tree is declared frozen until launch (lane R1-63o, urgent). I then re-run the
+    session end to end on the re-bound inputs — automated, same seed, so the same reservations — and report the frozen
+    manifest hash. Expect this evening or tomorrow morning; launch follows the same day.
+

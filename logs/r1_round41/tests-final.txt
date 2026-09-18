@@ -1,0 +1,49 @@
+........................................................................ [ 75%]
+...............F......F                                                  [100%]
+=================================== FAILURES ===================================
+______________ test_complete_content_has_only_signed_cost_pending ______________
+
+content = {'task': 'HT-4g', 'schema_version': 1, 'version': 'v6-content', 'created_utc': '2026-09-18T17:38:26.315503+00:00', ...}
+
+    def test_complete_content_has_only_signed_cost_pending(content):
+>       ledger.verify_sources(content)
+
+tests/revision_v1/test_ht4g_ledger_content.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+content = {'task': 'HT-4g', 'schema_version': 1, 'version': 'v6-content', 'created_utc': '2026-09-18T17:38:26.315503+00:00', ...}
+
+    def verify_sources(content):
+        for path, sha in content["sources_sha256"].items():
+            if ref(path)["sha256"] != sha:
+>               raise ValueError("ledger source changed: " + path)
+E               ValueError: ledger source changed: /home/derp/cap/pc_cap/docs/decisions.md
+
+scripts/ht4g_ledger_content.py:58: ValueError
+__________ test_v2_sources_notes_and_each_slide_bound_to_current_rows __________
+
+content = {'task': 'HT-4g', 'schema_version': 1, 'version': 'v6-content', 'created_utc': '2026-09-18T17:38:26.315503+00:00', ...}
+
+    def test_v2_sources_notes_and_each_slide_bound_to_current_rows(content):
+>       slides, _, lineage = deck.prepare()
+                             ^^^^^^^^^^^^^^
+
+tests/revision_v1/test_ht4g_ledger_content.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/ht10b_deck_v2.py:25: in prepare
+    ledger.verify_sources(content)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+content = {'task': 'HT-4g', 'schema_version': 1, 'version': 'v6-content', 'created_utc': '2026-09-18T17:38:26.315503+00:00', ...}
+
+    def verify_sources(content):
+        for path, sha in content["sources_sha256"].items():
+            if ref(path)["sha256"] != sha:
+>               raise ValueError("ledger source changed: " + path)
+E               ValueError: ledger source changed: /home/derp/cap/pc_cap/docs/decisions.md
+
+scripts/ht4g_ledger_content.py:58: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_ht4g_ledger_content.py::test_complete_content_has_only_signed_cost_pending
+FAILED tests/revision_v1/test_ht4g_ledger_content.py::test_v2_sources_notes_and_each_slide_bound_to_current_rows
+2 failed, 93 passed in 8.42s
