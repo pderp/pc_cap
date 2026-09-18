@@ -1,7 +1,7 @@
 # HT-6 — full-validation fidelity and tail report
 
-- Status: report generator and CPU checks complete; final four-cell report pending chain S. Latest saved output is an explicitly partial **2/4 preview** (round 33, below).
-- Agent: Codex, rounds 32–33.
+- Status: report generator and CPU checks complete; final four-cell report pending chain S. Latest saved output is an explicitly partial **3/4 preview** (round 34, below).
+- Agent: Codex, rounds 32–34.
 - Inputs: the four R1-64g recipes, completed immutable checkpoint/result/vector/GNU-time evidence, DEC-063 populations, DEC-054 framing and R1-49l's separate scope audit.
 - Outputs: `scripts/ht6_full_validation_report.py`, `scripts/ht6_plot.py`, `tests/revision_v1/test_ht6_full_validation_report.py`, `logs/r1_round32/ht6-partial-preview-v2/{report.json,report.md,curve-series.json,tail-survival.png,tail-survival.pdf,plot-environment.json}`.
 
@@ -53,3 +53,11 @@ The latest preview is `logs/r1_round33/ht6-partial-preview-v2/`: both completed 
 The plot now explicitly labels the all-zero survival case instead of leaving an apparently empty logarithmic panel. Its step direction remains the tested strict empirical survival definition. Visual inspection and the 79-test round-33 regression passed. The earlier round-33 preview remains an intermediate artifact; **v2** is the reviewed preview.
 
 After the other two profiles finish, build with no `--allow-partial`, inspect the four-cell report and figure, and copy the final figure plus a two-sentence qualified result to `assets/presentation-materials/`. That final export has not yet happened. See `HT-7.md` and `R1-round33-handoff.md`.
+
+## Round 34 update — watch integrated, third profile audited
+
+`logs/r1_round34/ht6-partial-preview/` is the latest reviewed preview. It adds learned-reader zsRE and automatically updates the DEC-064a fidelity watch. The report JSON/Markdown record the watch snapshot: three audited cells, two breaches, zero creep alerts. The new zsRE observation has mean KL .0022697245 (fail) and mean signed NLL increase .0023100153 (pass), ES95 positive loss .0474726905, maximum 9.94468865 and 64 positions carrying half KL. Both references and full/sample populations remain separate. The PNG was visually inspected; the fourth panel stays pending.
+
+The HT-6 CLI now writes the watch as well as its new report directory; the programmatic `build()` remains read-only. A repeat update on these three completed inputs adds zero entries and leaves watch Markdown unchanged. Source hashes in the report identify that watch snapshot; the live journal/Markdown continue growing. See `HT-8.md` for durability, queue hooks and orchestrator notification responsibilities.
+
+**Only v0 zsRE remains** before the final four-cell report. No final report or presentation export has been issued. Full focused regression: 78 passed, one older TinyBase case excluded, in `logs/r1_round34/final-tests.txt`.

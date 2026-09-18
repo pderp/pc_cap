@@ -13,6 +13,7 @@ from pathlib import Path
 
 import numpy as np
 from scripts import ht7_concentration as ht7
+from scripts import ht8_fidelity_watch as watch
 from scripts import r1_49m_fidelity_policy as fidelity_policy
 from scripts import r1_58l_measurement_inventory as measured
 from scripts import r1_63l_full_validation_contract as full
@@ -185,6 +186,7 @@ def build(*, allow_partial=False):
             full.ref(ROOT / "scripts/ht6_plot.py"),
             full.ref(ht7.__file__),
             full.ref(fidelity_policy.__file__),
+            full.ref(watch.__file__),
         ],
         framing="DEC-054: preliminary hints at what the architecture could provide; not the coupled free energy, not a test of the one-kappa conjecture; these cells do not compare kappa treatments",
         limits=[
@@ -207,6 +209,12 @@ def markdown(report):
         "",
         "Full validation is 1,931 complete 128-token windows / 245,237 predictions; 121 trailing tokens are dropped. The first 128 windows / 16,256 predictions are the fixed descriptive sample. Sample loss statistics use its separately saved rows; sample KL is derived from the matching full-vector prefix, not an independent sampled KL assay.",
     ]
+    if report.get("fidelity_watch"):
+        w = report["fidelity_watch"]
+        lines += [
+            "",
+            f"DEC-064a watch updated at report creation: {w['audited_cells']} audited cells, {w['breaches']} breaching cells, {w['alerts']} creep alerts ({len(w['new_alerts'])} new). See `docs/fidelity_watch.md`; the orchestrator delivers alerts to the lead. Watch file hashes in JSON identify this time's snapshot; those live registries continue to grow.",
+        ]
     for key, cell in report["cells"].items():
         lines += ["", f"## {key}", ""]
         if cell["status"] != "complete_development_measurement":
@@ -301,6 +309,7 @@ if __name__ == "__main__":
     if args.output.exists() or not args.output.resolve().is_relative_to(ROOT / "logs"):
         parser.error("new repository log directory required")
     report, curves = build(allow_partial=args.allow_partial)
+    report["fidelity_watch"] = watch.update_report(report)
     args.output.mkdir(parents=True)
     write_new(args.output / "report.json", report)
     (args.output / "report.md").write_text(markdown(report))

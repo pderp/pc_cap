@@ -19,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from scripts import ht8_fidelity_watch as fidelity_watch
 from scripts import r1_68c_dev_cell as driver
 from scripts import r1_75_analysis_stage4_v1 as analysis
 from scripts import r1_77b_sealed_backend as sealed
@@ -31,6 +32,15 @@ import pccap  # noqa: F401 -- determinism before importing the JAX driver
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKER_CEILING_FACTOR = {1: 1.0, 2: 1.15}
+
+
+def validate_watch(matrix):
+    return fidelity_watch.validate_queue_binding(matrix)
+
+
+def post_cell_watch(matrix, cell, bindings):
+    """After receipt certification; never changes scientific admission or scores."""
+    return fidelity_watch.post_cell(matrix, cell, bindings)
 
 
 def worker_factor(workers):
@@ -306,6 +316,7 @@ def verify_sealed_matrix(matrix, bindings):
     file hashes create a circular freeze dependency. Queue files remain immutable
     and hash-bound to each other throughout the invocation.
     """
+    validate_watch(matrix)
     cells = analysis.validate_matrix(matrix)
     frozen_binding = None
     frozen_contracts = None

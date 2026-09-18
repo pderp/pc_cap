@@ -102,6 +102,7 @@ def run_workers(namespace, matrix_path, bindings_path, *, receipt_root, stop_aft
     matrix_hash, binding_hash = q.sha(matrix_path), q.sha(bindings_path)
     producer_hash, scheduler_hash = q.sha(q.__file__), q.sha(__file__)
     matrix, bindings = q.read(matrix_path), q.read(bindings_path)
+    q.validate_watch(matrix)
     if matrix["scope"] not in ("development", "confirmatory"):
         raise PermissionError("explicit development or confirmatory matrix scope required")
     if bindings.get("matrix_sha256") != matrix_hash:
@@ -138,6 +139,7 @@ def run_workers(namespace, matrix_path, bindings_path, *, receipt_root, stop_aft
                     cost_basis=CEILING_DEFINITION["charged_budget"], **extra)
 
     def inputs_current():
+        q.validate_watch(matrix)
         if q.sha(matrix_path) != matrix_hash or q.sha(bindings_path) != binding_hash:
             raise ValueError("queue inputs changed")
         if q.sha(q.__file__) != producer_hash or q.sha(__file__) != scheduler_hash:
@@ -190,6 +192,11 @@ def run_workers(namespace, matrix_path, bindings_path, *, receipt_root, stop_aft
                         row = rows[cid]
                         if row["observed"]["artifact_complete"]:
                             q.verify_resume(cell, manifest)
+                            try:
+                                q.post_cell_watch(matrix, cell, bindings)
+                            except Exception as exc:
+                                stop = ("fidelity_watch_error_stop", {"cell_id": cid, "reason": str(exc)})
+                                break
                             pending.pop(0)
                             continue
                         failures = failure_history(namespace, cid, output, matrix_hash)
@@ -233,6 +240,7 @@ def run_workers(namespace, matrix_path, bindings_path, *, receipt_root, stop_aft
                         folder.mkdir()
                         start = dict(cell_id=cid, matrix_sha256=matrix_hash, bindings_sha256=binding_hash,
                                      recipe=binding, resume=resume, started_at=datetime.now(timezone.utc).isoformat(),
+                                     fidelity_watch_binding=matrix.get("fidelity_watch"),
                                      MemAvailable_MiB=mem, producer_sha256=producer_hash, scheduler_sha256=scheduler_hash,
                                      workers=workers, retry_policy=POLICY, previous_cell_failures=failures,
                                      solo_wall_ceiling_seconds=solo, effective_wall_ceiling_seconds=effective,
@@ -272,10 +280,19 @@ def run_workers(namespace, matrix_path, bindings_path, *, receipt_root, stop_aft
                             outcome = "paused_or_incomplete"
                         else:
                             outcome = "complete" if row["observed"]["artifact_complete"] else "host_stopped"
+                        watch = None
+                        if row["observed"]["artifact_complete"] and row["observed"]["status"] != "invalid":
+                            try:
+                                watch = q.post_cell_watch(matrix, cell, bindings)
+                            except Exception as exc:
+                                watch = dict(status="error", reason=str(exc), admission_veto=False)
+                                if stop is None:
+                                    stop = ("fidelity_watch_error_stop", {"cell_id": cid, "reason": str(exc)})
                         q.durable_json(result["folder"] / "decision.json", dict(
                             cell_id=cid, matrix_sha256=matrix_hash, retry_policy=POLICY,
                             finish_sha256=q.sha(result["folder"] / "finish.json"),
                             outcome=outcome, failed_attempts=failures,
+                            fidelity_watch=watch,
                             retained_other_workers=len(active)))
                     if stop and not active:
                         break
