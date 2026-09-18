@@ -87,7 +87,12 @@ costs; ceilings v2 = 1.5 × (measured or transferred solo cost incl. the full ph
 projection with both scenarios; host peaks (direct + monitor-matched); the failure-charging rule; the v4 validator;
 `lead_approved` false. List what is left that is not a signature — the target is nothing.
 
-### Lane R1-63m — candidate v14, forms v9, sheet v8 (finish)
+### Lane R1-63m — candidate v14, forms v9, sheet v8 (finish) — now on matrix / protocol v5.2-D.4 (DEC-066)
+
+DEC-066 (lead, 09:50 EDT): MQuAKE core = R1_learned_ff, R1_nonlearned, v0_stable only (45 cells); the other five
+MQuAKE conditions recorded as determined by calibration v3 and not run; extension unchanged. Emit matrix v5.2-D.4 (285
+core + 45 extension cells, block numbers under DEC-051 recomputed) and protocol D.4 (the MQuAKE section, U08 / U12 /
+U16, change log) with the same producers as D.3; everything downstream binds D.4.
 
 Fix in order: the rebinder's backend pin (post-63l identity), the extension recipes' full-validation contract (the
 failing `test_extension_also_carries_required_full_contract`), the operator `check_fields(cost-admit)` reading the

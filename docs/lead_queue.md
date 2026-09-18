@@ -481,7 +481,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q15 (near-miss family) | **ANSWERED 2026-09-17: adopt as proposed** (DEC-061). | — | unblocked: the near-miss rows of the draw / seal and protocol v5.2-D | — |
 | Q16 (near-miss pair allocation) | **ANSWERED 2026-09-17: B** (DEC-062) — family-coordinated pair allocation for the near / neighbour roles, bound in the RNG admission. | — | unblocked: R1-D9f activation; the draw | — |
 | Q17 (fidelity limit scope) | **ANSWERED 2026-09-18: option 1** (DEC-064) — cap fidelity is a declared secondary benchmark (KL and NLL, pass / fail, concentration statistics), no veto; the continued-base gate unchanged. | — | unblocked: protocol v5.2-D.3 (R1-49m), candidate v14 | — |
-| Q18 (MQuAKE scope, prospective; Codex's assessment + orchestrator analysis, item 87) | Calibration v3 gives every v0-style MQuAKE condition a firing radius of 0, so five of MQuAKE's eight conditions (v0_stable, matched_update, v0_live_C1 / C2, S1_LM, S1_literal) have retention 0 and near-zero fidelity by construction; MQuAKE contributes no primary intervals under DEC-060 (its 21 comparisons at 1,000 are unavailable); the 75 cells of those five conditions cost ≈ 62 process-hours. Options: **(A)** keep all 120 MQuAKE core cells as registered; **(B)** MQuAKE core = primary + random-reader floor + v0_stable (45 cells); the other five conditions recorded as determined by calibration v3 and not run; zsRE / CounterFact, the 63-interval family and the MQuAKE draw unchanged; buffer ≈ 1.4× → ≈ 1.65×; **(C)** drop MQuAKE from the matrix (not recommended). Decided before the draw, documented as a prospective reduction. | **B** | matrix v5.2-D.4 / protocol D.4 (Codex), candidate v14; not the draw populations | Sep 19 (before the sitting) |
+| Q18 (MQuAKE scope) | **ANSWERED 2026-09-18: B** (DEC-066) — MQuAKE core = primary + floor + v0_stable, 45 cells; the five radius-0 conditions recorded as determined by calibration v3. | — | unblocked: matrix / protocol D.4 with candidate v14 | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
 transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the self-contained v3 slices, 500 train / 100 dev).
@@ -876,4 +876,6 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     primary intervals anyway. Option B keeps everything MQuAKE contributes (the learned reader on a third edit family
     across three fresh realizations, one baseline) in 45 cells and returns ≈ 31 wall-clock hours to the buffer. It
     must be decided now to be prospective; the draw is unaffected either way.
+
+88. (2026-09-18, 09:50 EDT) Q18 recorded (DEC-066). No lead decision is open. The core matrix is now 285 cells (+ 45 extension); the buffer rises to ≈ 1.65×. Codex folds it into matrix / protocol D.4 with candidate v14.
 
