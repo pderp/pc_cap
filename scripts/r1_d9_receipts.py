@@ -79,6 +79,7 @@ def implementation_bindings():
         "scripts/r1_locality_contract.py",
         "scripts/r1_d9e_near_family.py",
         "scripts/r1_d9f_allocation.py",
+        "scripts/r1_58h_cost_contract.py",
         "scripts/r1_58_draw_streams.py",
         "scripts/r1_58c_draw_seal_preflight.py",
         "scripts/r1_d1i_register_v6.py",

@@ -70,6 +70,10 @@ def read_metadata(binding, *, parse=True):
 
 
 def check_receipt(name, r, spec):
+    if name == "chain_i_cell_ceilings" and r.get("cost_schema_version") == 2:
+        from scripts.r1_58h_cost_contract import validate as validate_cost_evidence
+
+        validate_cost_evidence(r)
     if r.get("status") != "closed" or r.get("lead_approved") is not True:
         raise ValueError("open or unapproved receipt")
     if r.get("register") != spec["register"]:

@@ -89,9 +89,16 @@ def fields_for(step, spec):
             queue_ceiling_and_failure_policy_reviewed=False,
             near_allocation=spec.get("near_allocation", "independent"),
             near_allocation_decision=spec.get("near_allocation_decision"),
-            family_pair_unit_policy_reviewed=False,
+            family_pair_unit_policy_reviewed=spec.get("family_pair_unit_policy_reviewed", False),
         )
     if step == "cost-admit":
+        source = cost_source(spec)
+        if source.get("cost_schema_version") == 2:
+            return dict(
+                shared_process_hours=source["shared_process_hours"],
+                full_endpoint_cost_basis_reviewed=False,
+                cells=copy.deepcopy(source["cells"]),
+            )
         ceilings = d9.read_metadata(d9.ref(ROOT / "manifests/revision_v1/cell_ceilings_v1.json"))
         return dict(
             shared_process_hours=None,
@@ -141,8 +148,12 @@ def common(spec):
     } | {"contract_version": 2}
 
 
-def cost_source():
-    value = d9.read_metadata(d9.ref(COST))
+def cost_binding(spec=None):
+    return (spec or {}).get("cost_admission_source_unsigned", d9.ref(COST))
+
+
+def cost_source(spec=None):
+    value = d9.read_metadata(cost_binding(spec))
     for b in value["bindings"].values():
         if d9.ref(ROOT / b["path"])["sha256"] != b["sha256"]:
             raise ValueError("cost admission v1 source changed")
@@ -197,7 +208,11 @@ def check_fields(step, fields, spec):
             decision,
         )
     elif step == "cost-admit":
-        cost_source()
+        source = cost_source(spec)
+        if source.get("cost_schema_version") == 2:
+            from scripts.r1_58h_cost_contract import validate as validate_cost_evidence
+
+            validate_cost_evidence(source)
         if fields.get("full_endpoint_cost_basis_reviewed") is not True:
             raise ValueError(
                 "full endpoint/process cost basis must be reviewed; padding is not a measurement"
@@ -224,6 +239,7 @@ def check_fields(step, fields, spec):
         preflight.check_receipt(
             "chain_i_cell_ceilings",
             {
+                **source,
                 **common(spec),
                 **fields,
                 "lead_approved": True,
@@ -398,7 +414,7 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
             step=step,
             inputs=state_binding,
             candidate=candidate_binding,
-            cost_admission_source=d9.ref(COST),
+            cost_admission_source=cost_binding(spec),
             fields=fields,
             receipt_output=str(receipt_path),
             next_inputs=str(next_path),
@@ -478,6 +494,9 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
                     workers=2,
                     ceiling_hours=spec["shared_process_hours"],
                 )
+                request["host_mem_available_floor_mib"] = d9.read_metadata(
+                    spec["receipts"]["chain_i_cell_ceilings"]
+                ).get("host_mem_available_floor_mib", 4096.0)
                 if dry["cost"]["unknown_attempts"]:
                     raise ValueError("unknown process costs require reconciliation")
             check_fields(step, fields, spec)
@@ -558,8 +577,10 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
                     )
                 plan["receipts"][key] = new_json(receipt_path, receipt)
             elif step == "cost-admit":
-                signed.update(failures_included=True, cost_admission_source=d9.ref(COST))
-                plan["receipts"]["chain_i_cell_ceilings"] = new_json(receipt_path, signed)
+                signed.update(failures_included=True, cost_admission_source=cost_binding(spec))
+                receipt = cost_source(spec) | signed
+                preflight.check_receipt("chain_i_cell_ceilings", receipt, spec)
+                plan["receipts"]["chain_i_cell_ceilings"] = new_json(receipt_path, receipt)
                 plan["shared_process_hours"] = fields["shared_process_hours"]
             elif step in ("clearance", "draw", "seal"):
                 signed.update(operation=step, request_sha256=d9.contract(plan, step))
@@ -608,6 +629,7 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
                     receipt_root=fields["receipt_root"],
                     workers=2,
                     ceiling_hours=spec["shared_process_hours"],
+                    min_memory_mib=request["host_mem_available_floor_mib"],
                 )
                 new_json(receipt_path, {**signed, "queue_result": result})
                 if result["status"] != "selected_blocks_complete":
@@ -647,9 +669,9 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("step", choices=STEPS)
-    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v6.json")
+    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v7.json")
     p.add_argument(
-        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v11.json"
+        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v12.json"
     )
     p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v5")
     p.add_argument("--form", type=Path)
