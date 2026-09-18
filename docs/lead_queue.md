@@ -916,3 +916,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     step 1 signature matches its dry-run digest. Round 40: ledger v6 content, deck v2, a skeleton-vs-protocol check;
     the verification lanes wait for your steps 2 and 8. Session status: step 1 of 9 complete.
 
+93. (2026-09-18, 15:05 EDT) Codex's round 40 committed in both repos: the ledger v6 content (only your step-2 cost signature
+    missing), deck v2 (`assets/presentation-materials/deck_v2/`), and an audit of the confirmatory report skeleton against
+    protocol D.4 that found four coverage gaps (tail fields, the joint cap-fidelity flag, the secondary historical
+    package comparison, the DEC-052 execution accounting) — round 41 closes them in the formatter. Session status:
+    step 1 signed; step 2 reviewed preview written at 14:57 (`02-cost-reviewed.json`); its execute is the next command
+    (`docs/tasks/R1-D9-operator-sheet-v8.md`, "Full commands for every lead step", step 2c).
+

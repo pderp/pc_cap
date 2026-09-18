@@ -74,33 +74,26 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 40 (CPU; open now; posted 2026-09-18 12:05 EDT) — ledger and deck v2; verification lanes wait for the session
+  +0.006## 3. Lanes for Codex — round 41 (CPU; open now; posted 2026-09-18 15:05 EDT) — report coverage; verification lanes wait
 
-Round 39 is committed and mirrored; the HT-11 wording patch is applied. New files only while the lead signs.
-Priority order: **HT-4g → HT-10b → X21 → X20 (after step 8) → HT-4f (after step 2).**
+Round 40 is committed and mirrored. New files only while the lead signs; `scripts/r1_d14_report.py` and its template are
+Codex's own and not bound by the operator's digests, so they may be edited. Priority order: **R1-D14b → X20 (after
+step 8) → HT-4f (after step 2).**
 
-### Lane HT-4g — claim ledger v6 content (all but the cost signature)
+### Lane R1-D14b — apply X21's four coverage gaps to the report formatter (first)
 
-Build the v6 rows now: the six HT-11 proposed additions (programme / meeting, selection uncertainty, HT-6 full-validation
-cells with their eight exact numerical rows, DEC-064 policy, D.4 scope, plan-v3 cost scenario), the superseded
-`DEC060-scale` and `COST-matrix` rows marked, the four changed historical bindings re-bound (notes, decisions,
-inference, queue) with old / new hashes; leave the signed-cost binding as the single pending field the HT-4f
-publisher fills from the step-2 receipt.
-
-### Lane HT-10b — deck v2 from ledger v6
-
-Regenerate the deck with the four wording fixes and the v6 rows bound; export PDF to
-`assets/presentation-materials/deck_v2/`; page review as v1.
-
-### Lane X21 — the report skeleton against protocol D.4
-
-Check every table / figure the skeleton promises against D.4's declared analyses (21 contrasts × 3 metrics, the
-secondary benchmarks, the DEC-052 inventory, the MQuAKE block with the five omitted conditions, U03, the full-validation
-tail) and the analysis JSON keys it binds; list gaps as edit requests.
+G1: the remaining v5.1 §5.2 / D.2 tail fields (exp(mean ΔNLL) with overflow handling, signed maximum with position
+and tie convention, zero-mass atoms; KL counterparts; sample fields bound from the analysis JSON, never invented);
+G2: the joint cap-fidelity benchmark flag beside the per-reference labels, with unavailable ≠ false; G3: the
+secondary historical-v2 package comparison table (eight secondary-role contrasts, 24 metric rows, `secondary_descriptive`,
+the 63-interval family untouched); G4: the DEC-052 execution-accounting section bound to a verified D11 / D13 report
+(process spend, unknown-cost records, retries, host failures, block reconciliation) or an explicit "unavailable"
+section. Acceptance fixtures as X21 lists; the 63 primary rows and classifiers identical before / after; the skeleton
+refilled from the synthetic output with no unbound placeholder.
 
 ### Lane X20 — post-session verification (after the lead's step 8)
 
-### Lane HT-4f — publish ledger v6 (after the signed cost receipt, step 2)
+### Lane HT-4f — publish ledger v6 (after the signed step-2 cost receipt)
 
 ## 4. Interfaces and coordination
 
