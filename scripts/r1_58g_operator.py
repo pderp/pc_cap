@@ -448,6 +448,11 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
                 request["producer_request_sha256"] = dry.get("request_sha256")
                 # Own unsigned authorization is expected at preview; other blockers remain visible.
                 dry["authorization_to_supply"] = step + "_authorization"
+                expected_unsigned = dict(gate="owner_receipts", reason=step + "_authorization: open or unapproved receipt")
+                blocked.extend(
+                    f"{issue['gate']}: {issue['reason']}"
+                    for issue in dry.get("blocked", []) if issue != expected_unsigned
+                )
             elif step == "endpoints":
                 construction = d9.read_metadata(
                     spec.get(
@@ -690,11 +695,11 @@ def run(step, *, inputs, candidate, session, form=None, execute=False, form_outp
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("step", choices=STEPS)
-    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v9.json")
+    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v11.json")
     p.add_argument(
-        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v14.json"
+        "--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v15.json"
     )
-    p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v8")
+    p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v10")
     p.add_argument("--form", type=Path)
     p.add_argument("--write-form", type=Path)
     p.add_argument("--execute", action="store_true")

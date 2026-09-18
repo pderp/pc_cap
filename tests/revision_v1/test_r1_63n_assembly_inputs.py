@@ -25,6 +25,11 @@ def signed_session():
     op.new_json(root / "docs/tasks/R1-D10c-construction-inputs-template-v4.json", {})
     candidate = json.loads((ROOT / "manifests/revision_v1/freeze_candidate_v14.json").read_text())
     candidate["d9_inputs"] = d9.ref(inputs)
+    # This synthetic session uses the installed implementation, not the old
+    # producer versions recorded by the historical v14 candidate.
+    candidate["bindings_sha256"] = {
+        path: d9.sha(path) for path in candidate["bindings_sha256"]
+    }
     cp = root / "candidate.json"
     op.new_json(cp, candidate)
     resource = dict(path="/synthetic/opaque/not-opened.json", sha256="a" * 64)

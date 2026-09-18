@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_63o_report_rehearsal.py", line 118, in <module>
+    print(json.dumps(run(args.output), indent=2))
+                     ^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_63o_report_rehearsal.py", line 94, in run
+    exports = figures.render(target / "report/report-data.json") if name == "complete" else None
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d14_figures.py", line 17, in render
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'

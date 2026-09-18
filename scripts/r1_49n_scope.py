@@ -25,7 +25,7 @@ def conditions(matrix):
     if not reduced:
         return {d: list(CORE_CONDITIONS) for d in ("zsre", "counterfact", "mquake")}
     if (
-        matrix.get("policy_revision") != "DEC066_D4"
+        matrix.get("policy_revision") not in ("DEC066_D4", "DEC068_DEC069_D5")
         or matrix.get("prospective_scope") != CONTRACT
         or matrix["axes"].get("core_conditions_by_dataset")
         != CONTRACT["core_conditions_by_dataset"]

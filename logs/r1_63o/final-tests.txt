@@ -1,0 +1,224 @@
+..............FFFFFFFsF..............................................    [100%]
+=================================== FAILURES ===================================
+_______________ test_signed_operator_chain_and_assembly_consumer _______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f229e7b5ac0>
+
+    def test_signed_operator_chain_and_assembly_consumer(signed_session, monkeypatch):
+        f = signed_session
+>       state = verified(f, monkeypatch)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    return build.verify_session(f["inputs"], f["candidate"], f["session"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f22b04db740>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+_____________ test_refuse_corruption_before_any_emission[unsigned] _____________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f229959ba10>
+case = 'unsigned'
+
+>   ???
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f229959b2c0>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+______________ test_refuse_corruption_before_any_emission[digest] ______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f2287fe7050>
+case = 'digest'
+
+>   ???
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f2287fe5370>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+_____________ test_refuse_corruption_before_any_emission[missing] ______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f229e5d4e00>
+case = 'missing'
+
+>   ???
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f229e5d4b60>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+______________ test_refuse_corruption_before_any_emission[stale] _______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f229e5d4f20>
+case = 'stale'
+
+>   ???
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f229e5d6e70>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+_______________ test_refuse_corruption_before_any_emission[torn] _______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f229e5d44d0>
+case = 'torn'
+
+>   ???
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f229e5d4770>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+______________ test_refuse_corruption_before_any_emission[failed] ______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f2287ea3500>
+case = 'failed'
+
+>   ???
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f2287ea23f0>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+______________ test_metadata_change_between_verification_and_emit ______________
+
+signed_session = {'root': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0'), 'session':...ate': PosixPath('/home/derp/cap/pc_cap/logs/r1_round38/operator-test-f6310f0383254f40aceca08a4eaa6cb0/candidate.json')}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f2299b0bfb0>
+
+    target = ROOT / "docs/tasks" / ("must-not-exist-" + uuid4().hex)
+>   assert build.main(["--output", str(target)]) == 2
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_63n_assembly_inputs.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/revision_v1/test_r1_63n_assembly_inputs.py:97: in verified
+    ???
+scripts/r1_63n_assembly_inputs.py:324: in verify_session
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <scripts.r1_63n_assembly_inputs.Snapshot object at 0x7f2299b082f0>
+
+                                    near_allocation=signed["near_allocation"])
+    elif step in d9.RECEIPT_NAMES:
+        producer_digest = request["producer_request_sha256"]
+>       if signed.get("operation") != step or signed.get("request_sha256") != producer_digest:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: assembly input changed during read: /home/derp/cap/pc_cap/scripts/r1_49g_analyze.py
+
+scripts/r1_63n_assembly_inputs.py:127: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_signed_operator_chain_and_assembly_consumer
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_refuse_corruption_before_any_emission[unsigned]
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_refuse_corruption_before_any_emission[digest]
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_refuse_corruption_before_any_emission[missing]
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_refuse_corruption_before_any_emission[stale]
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_refuse_corruption_before_any_emission[torn]
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_refuse_corruption_before_any_emission[failed]
+FAILED tests/revision_v1/test_r1_63n_assembly_inputs.py::test_metadata_change_between_verification_and_emit
+8 failed, 60 passed, 1 skipped in 474.38s (0:07:54)

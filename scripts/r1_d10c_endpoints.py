@@ -15,6 +15,7 @@ from pathlib import Path
 
 import numpy as np
 from scripts import r1_d9_receipt_core as core
+from scripts.r1_63o_locality import select as select_locality
 from scripts.r1_d9_receipts import planned_compositions, read_resource, ref, sha, source_rows
 from scripts.r1_d9e_near_family import CONTRACT as NEAR_CONTRACT
 from scripts.r1_d9e_near_family import near_key, pair_reserved
@@ -152,6 +153,7 @@ def construct(
     checkpoints=(100, 300, 1000),
     layout=None,
     full_validation=None,
+    exclude_locality_overlaps=False,
 ):
     if reservations.get("mode") != "unsealed_fact_reservations":
         raise ValueError("unsealed reservations required")
@@ -176,6 +178,7 @@ def construct(
         sample(full_validation, drift)
         inventory["full_validation"] = full_validation
     missing = []
+    locality_selection = []
     for cell in cells:
         ds, real = cell["dataset"], str(cell["realization"])
         counts = resolved[ds]["roles_per_realization"]
@@ -220,19 +223,26 @@ def construct(
                         "versions": versions,
                     }
                 )
-            loc, seen = [], set()
-            for row in sorted(roles["outside"], key=lambda r: r["item_id"]):
-                for prompt in row.get("locality_prompts", []):
-                    if prompt not in seen and len(loc) < locality_count:
-                        seen.add(prompt)
-                        loc.append(
-                            {
-                                "item_id": f"{gkey}:locality:{len(loc)}",
-                                "prompt": prompt,
-                                "source_outside_item_id": row["item_id"],
-                            }
-                        )
-            validate_locality(roles["edits"], loc)
+            if exclude_locality_overlaps:
+                loc, locality_review = select_locality(
+                    roles["edits"], roles["outside"], group=gkey, count=locality_count
+                )
+                locality_selection.append(locality_review)
+            else:
+                # Historical D.1 construction fails on a selected collision.
+                loc, seen = [], set()
+                for row in sorted(roles["outside"], key=lambda r: r["item_id"]):
+                    for prompt in row.get("locality_prompts", []):
+                        if prompt not in seen and len(loc) < locality_count:
+                            seen.add(prompt)
+                            loc.append(
+                                dict(
+                                    item_id=f"{gkey}:locality:{len(loc)}",
+                                    prompt=prompt,
+                                    source_outside_item_id=row["item_id"],
+                                )
+                            )
+                validate_locality(roles["edits"], loc)
             for i in range(len(loc), locality_count):
                 missing.append(
                     {
@@ -294,6 +304,7 @@ def construct(
         {
             "identities": identities,
             "missing": missing,
+            "locality_selection": locality_selection,
             "unique_payloads": len(payload_cache),
             "draws": 0,
             "seals": 0,
@@ -449,6 +460,7 @@ def main():
         drift,
         layout=layout if "dataset_layouts" in matrix else None,
         full_validation=matrix.get("full_validation"),
+        exclude_locality_overlaps=matrix.get("policy_revision") == "DEC068_DEC069_D5",
     )
     report.update(
         draw_receipt=spec["draw_receipt"],
@@ -472,7 +484,7 @@ def main():
             output / "independent_population.json", population
         )
         write_new(report_path, report)
-    print(json.dumps({k: v for k, v in report.items() if k != "identities"}, indent=2))
+    print(json.dumps(report, indent=2))
 
 
 if __name__ == "__main__":

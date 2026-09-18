@@ -232,8 +232,12 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
     }
     if len(costs) != len(receipts["chain_i_cell_ceilings"]["cells"]):
         raise ValueError("duplicate cost coordinates")
-    norm = closure() if normative is None else normative
-    if final_root == ROOT and norm != closure():
+    if declaration.get("policy_revision") == "DEC068_DEC069_D5":
+        from scripts.r1_49o_normative_closure import closure as selected_closure
+    else:
+        selected_closure = closure
+    norm = selected_closure() if normative is None else normative
+    if final_root == ROOT and norm != selected_closure():
         raise ValueError("production normative closure differs")
     metadata_bindings = {
         str(code_root / "requirements.lock"): d9.sha(code_root / "requirements.lock")
@@ -476,7 +480,7 @@ def assemble(spec, templates, staging, *, final_root=ROOT, code_root=ROOT, norma
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v9.json")
+    ap.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v11.json")
     ap.add_argument("--staging", type=Path)
     ap.add_argument("--templates", type=Path)
     ap.add_argument("--report", type=Path, required=True)

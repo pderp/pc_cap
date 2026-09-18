@@ -123,10 +123,18 @@ def analyze(matrix):
     if matrix.get("cap_fidelity_policy") is not None:
         report["analysis_revision"] = "R1-49m_DEC064_D3_cap_benchmark_no_veto"
         report["cap_fidelity_policy"] = matrix["cap_fidelity_policy"]
-    if matrix.get("policy_revision") == "DEC066_D4":
+    if matrix.get("policy_revision") in ("DEC066_D4", "DEC068_DEC069_D5"):
         report["analysis_revision"] = "R1-49n_DEC066_D4_prospective_scope"
         report["prospective_scope"] = matrix["prospective_scope"]
         report["prospectively_omitted_cells"] = matrix["prospectively_omitted_cells"]
+    if matrix.get("policy_revision") == "DEC068_DEC069_D5":
+        from scripts.r1_49o_sensitivity import CONTRACT
+
+        if matrix.get("inference_interpretation") != CONTRACT:
+            raise ValueError("exact DEC-069 interpretation required")
+        report["analysis_revision"] = "R1-49o_DEC068_DEC069_D5"
+        report["inference_interpretation"] = CONTRACT
+        report["limits"].append("DEC-069: preliminary decision summaries; no demonstrated 95% familywise control or established population effect. Secondary pointwise 95% t sensitivity assumes independent normal realization errors (df=2); it never changes classification.")
     report["limits"] = [x for x in report["limits"] if "U12 multiplicity" not in x]
     report["limits"] += [
         FAMILY["coverage"],
@@ -149,7 +157,7 @@ def markdown(report):
         "",
         "The 63 intervals use nominal Bonferroni allocation of 0.05 and three realization clusters; exact familywise coverage is not claimed.",
         "",
-        "| Dataset | Contrast | Classification | RET-GS realization estimates | Adjusted RET-GS interval |",
+        "| Dataset | Contrast | RET-GS realization estimates | Registered RET-GS interval | Preliminary classification |",
         "|---|---|---|---|---|",
     ]
     if report.get("prospective_scope"):
@@ -160,8 +168,14 @@ def markdown(report):
     for r in report["contrasts"]:
         gs = r["metrics"]["RET-GS"]
         lines.append(
-            f"| {r['dataset']} | {r['contrast']['id']} | {r['classification']} | {gs['realization_estimates']} | {gs['adjusted_interval']} |"
+            f"| {r['dataset']} | {r['contrast']['id']} | {gs['realization_estimates']} | {gs['adjusted_interval']} | {r['classification']} |"
         )
+    if report.get("inference_interpretation"):
+        lines += ["", "DEC-069: preliminary summaries, not established population effects or demonstrated 95% familywise control.", "", "| Dataset | Contrast | Metric | Realization/order dispersion | Secondary pointwise 95% t sensitivity (df=2; normal independent realization errors assumed) |", "|---|---|---|---|---|"]
+        for row in report["contrasts"] + report.get("historical_pointwise_contrasts", []):
+            for metric, stat in row["metrics"].items():
+                display = stat.get("preliminary", {})
+                lines.append(f"| {row['dataset']} | {row['contrast']['id']} (n={row['checkpoint']}) | {metric} | {display.get('order_dispersion')} | {display.get('t_sensitivity')} |")
     lines += [
         "",
         "Both adjusted and unadjusted intervals and all three realization estimates for every metric are in JSON.",
@@ -250,6 +264,8 @@ def run(matrix_path, output_prefix):
         "scripts/r1_49m_fidelity_policy.py",
         "scripts/ht7_concentration.py",
     ]
+    if report.get("analysis_revision") == "R1-49o_DEC068_DEC069_D5":
+        names += ["scripts/r1_49o_sensitivity.py", "scripts/r1_49n_scope.py"]
     report["analysis_source_sha256"] = {
         name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in names
     }

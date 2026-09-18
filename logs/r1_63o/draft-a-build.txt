@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_63o_package.py", line 320, in <module>
+    result = build(args.draft)
+             ^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_63o_package.py", line 295, in build
+    raise ValueError("native clearance failed: " + str(preview["blocked"]))
+ValueError: native clearance failed: [{'gate': 'bound_inputs_or_outputs', 'reason': 'receipt in docs/tasks; data resources in assets/runs/pc_cap/R1 required'}, {'gate': 'owner_receipts', 'reason': 'clearance_authorization: open or unapproved receipt'}]

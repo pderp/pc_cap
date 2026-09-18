@@ -26,7 +26,7 @@ STEP_KEYS = dict(zip(op.STEPS[:7], (
 ), strict=True))
 # Each row is a closure of pre-execution admissibility, not of future measurement.
 GATES = {
-    "U01": (("protocol-admit",), "D.4 comparisons, DEC-064 and explicit optional-extension choice."),
+    "U01": (("protocol-admit",), "Candidate-bound D.4/D.5 comparisons, DEC-064 and optional extension; D.5 additionally binds DEC-068/069 and the approved locality selection."),
     "U02": (("protocol-admit", "clearance", "seal"), "Primary v5/reference identities and sealed populations; retain zsRE empty-baseline disclosure."),
     "U03": (("protocol-admit", "clearance", "cost-admit"), "DEC-047 historical S1 certification and calibration; NOT exact-v5-compute-matched controls or exclusion of all continued-base explanations."),
     "U04": (("clearance", "draw"), "zsRE teacher/role clearance and current exposure through the actual draw."),
@@ -37,13 +37,13 @@ GATES = {
     "U09": (("protocol-admit", "rng-admit", "endpoints", "seal"), "DEC-061/062 family coordination, multiple disjoint pairs per family; reviewed missing slots remain missing."),
     "U10": (("protocol-admit", "endpoints"), "DEC-053 bounded-text scoring and termination/truncation diagnostics in the candidate-bound implementation."),
     "U11": (("protocol-admit", "clearance", "endpoints", "seal"), "Candidate-bound implementation and rebuilt runtime identities; production bundle still must pass whole-matrix backend validation before publication."),
-    "U12": (("protocol-admit", "endpoints", "seal"), "Nominal 63-interval family unchanged; 21 MQuAKE-1000 intervals unavailable, 75 prospectively omitted cells not imputed."),
+    "U12": (("protocol-admit", "endpoints", "seal"), "Registered 63-interval family unchanged; 21 MQuAKE-1000 intervals unavailable, 75 omitted cells not imputed. D.5: preliminary summaries, all realization/order dispersions and secondary pointwise t sensitivity; no demonstrated familywise coverage."),
     "U13": (("protocol-admit", "seal"), "DEC-064 cap benchmarks are labels, not admission vetoes; DEC-047 continuation admission remains separate."),
     "U14": (("protocol-admit", "endpoints", "seal", "cost-admit"), "DEC-059 zsRE/CounterFact secondary rule; MQuAKE actual-300 descriptive only, no transferred thresholds."),
     "U15": (("protocol-admit", "endpoints", "seal"), "Independent expected populations and missingness policy admitted; future results and incomplete cells remain to be measured and reported."),
-    "U16": (("protocol-admit", "cost-admit"), "Typed signed v4 costs, reviewed transfers, failure charging, single concurrency factor and host guard; estimates are not new measurements."),
+    "U16": (("protocol-admit", "cost-admit"), "Typed revision-4 signed costs, reviewed transfers, failure charging, single concurrency factor and host guard; estimates are not new measurements."),
     "U17": (op.STEPS[:7], "Prepublication dependencies bound; this derived receipt does not publish a freeze or authorize launch. Step 8 must validate and approve the exact bundle."),
-    "U18": (("protocol-admit", "cost-admit"), "Candidate-bound execution plan v3, D.4 scope, 750 process-hour cap and October 9 stop; forecasts are conditional."),
+    "U18": (("protocol-admit", "cost-admit"), "Candidate-bound execution plan, D.4/D.5 scope, 750 process-hour cap and October 9 stop; forecasts are conditional."),
 }
 
 
@@ -167,8 +167,8 @@ def verify_session(inputs, candidate, session):
     snap = Snapshot()
     initial, candidate_binding = d9.ref(inputs), d9.ref(candidate)
     spec, cand = snap.read(initial), snap.read(candidate_binding)
-    if cand["d9_inputs"] != initial or cand["schema_version"] != 14:
-        raise ValueError("candidate v14 must bind exact initial inputs")
+    if cand["d9_inputs"] != initial or cand["schema_version"] not in (14, 15):
+        raise ValueError("candidate v14/v15 must bind exact initial inputs")
     op.verify_candidate(cand)
     snap.bindings.update(cand["bindings_sha256"])
     if any(spec[k] != cand[k] for k in ("matrix", "protocol", "register")):
@@ -204,11 +204,11 @@ def verify_session(inputs, candidate, session):
         if name not in ("closed_gate_receipts", "september20_admission"):
             preflight.check_receipt(name, snap.read(spec["receipts"][name]), spec)
     cost = snap.read(spec["receipts"]["chain_i_cell_ceilings"])
-    if (cost.get("cost_schema_version") != 2 or cost.get("shared_process_hours") != 750
+    if (cost.get("cost_schema_version") != 2 or cost.get("receipt_revision") != 4 or cost.get("shared_process_hours") != 750
             or spec.get("shared_process_hours") != 750
             or spec["cost_admission_source_unsigned"]["path"] !=
-            str(ROOT / "docs/tasks/R1-cost-admission-receipt-v4.json")):
-        raise ValueError("this mapping requires typed v4 cost and the 750-hour admission")
+            str(ROOT / f"docs/tasks/R1-cost-admission-receipt-v{5 if cand['schema_version'] == 15 else 4}.json")):
+        raise ValueError("this mapping requires candidate-versioned typed revision-4 cost and the 750-hour admission")
     # Assembly's normal cross-receipt checks run after adding the derived wrappers.
     snap.verify()
     if journal.read_bytes() != raw:
@@ -253,7 +253,7 @@ def emit(state, output):
         dict(common, admission_date="2026-09-20", experimental_completion_date="2026-10-09",
              admission_date_semantics="legacy schema name for scheduled review milestone; actual signature dates are in inherited_approvals",
              full_scope_retained=True,
-             scope_semantics="all D.4 core cells plus only the explicitly admitted extension",
+             scope_semantics="all candidate-bound core cells plus only the explicitly admitted extension",
              execution_plan=state["execution_plan"], shared_process_hours=750,
              signed_cost=spec["receipts"]["chain_i_cell_ceilings"],
              inherited_approvals={s:state["approvals"][s] for s in ("protocol-admit", "cost-admit", "clearance")}))
@@ -276,9 +276,9 @@ def emit(state, output):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v9.json")
-    p.add_argument("--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v14.json")
-    p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v8")
+    p.add_argument("--inputs", type=Path, default=ROOT / "docs/tasks/R1-D9-inputs-v11.json")
+    p.add_argument("--candidate", type=Path, default=ROOT / "manifests/revision_v1/freeze_candidate_v15.json")
+    p.add_argument("--session", type=Path, default=ROOT / "logs/R1/operator_v10")
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args(argv)
     try:

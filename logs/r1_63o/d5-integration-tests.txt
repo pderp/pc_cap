@@ -1,0 +1,52 @@
+...........FF..................                                          [100%]
+=================================== FAILURES ===================================
+_________________ test_d5_whole_package_native_assembly[False] _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-47/test_d5_whole_package_native_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f49289bb7d0>
+extension = False
+
+    @pytest.mark.parametrize("extension", [False, True])
+    def test_d5_whole_package_native_assembly(tmp_path, monkeypatch, extension):
+        from types import SimpleNamespace
+    
+        from scripts import r1_63j_production_bundle as bundle
+        from scripts.r1_49o_normative_closure import closure
+        from scripts.r1_d10a_review import write_new
+    
+        from tests.revision_v1.r1_63l_patch_support import install
+        from tests.revision_v1.test_r1_63j_production_bundle import assembly_inputs
+    
+        matrix = matrix_producer.document()
+>       original_read = Path.read_text
+                        ^^^^
+E       NameError: name 'Path' is not defined
+
+tests/revision_v1/test_r1_63o_d5.py:213: NameError
+_________________ test_d5_whole_package_native_assembly[True] __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-47/test_d5_whole_package_native_a1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f49282b95e0>
+extension = True
+
+    @pytest.mark.parametrize("extension", [False, True])
+    def test_d5_whole_package_native_assembly(tmp_path, monkeypatch, extension):
+        from types import SimpleNamespace
+    
+        from scripts import r1_63j_production_bundle as bundle
+        from scripts.r1_49o_normative_closure import closure
+        from scripts.r1_d10a_review import write_new
+    
+        from tests.revision_v1.r1_63l_patch_support import install
+        from tests.revision_v1.test_r1_63j_production_bundle import assembly_inputs
+    
+        matrix = matrix_producer.document()
+>       original_read = Path.read_text
+                        ^^^^
+E       NameError: name 'Path' is not defined
+
+tests/revision_v1/test_r1_63o_d5.py:213: NameError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_63o_d5.py::test_d5_whole_package_native_assembly[False]
+FAILED tests/revision_v1/test_r1_63o_d5.py::test_d5_whole_package_native_assembly[True]
+2 failed, 29 passed in 1.04s

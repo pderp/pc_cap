@@ -1,0 +1,139 @@
+{
+  "catalog": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_d9e/round26_final/roles/composition_catalog.json",
+    "sha256": "c36e9b0530c188596d57003b49befec266ba6a60861ada5a04ce865854e7c9f5"
+  },
+  "dataset_layouts": {
+    "counterfact": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "mquake": {
+      "checkpoints": [
+        100,
+        300
+      ],
+      "demand_by_role": {
+        "edits": 900,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 650,
+      "demand_subjects": 1950,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 300,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    },
+    "zsre": {
+      "checkpoints": [
+        100,
+        300,
+        1000
+      ],
+      "demand_by_role": {
+        "edits": 3000,
+        "near_miss_neighbour": 300,
+        "near_miss_support": 300,
+        "outside": 300,
+        "revision": 150
+      },
+      "demand_per_realization": 1350,
+      "demand_subjects": 4050,
+      "realizations": [
+        0,
+        1,
+        2
+      ],
+      "roles_per_realization": {
+        "edits": 1000,
+        "near_miss_neighbour": 100,
+        "near_miss_support": 100,
+        "outside": 100,
+        "revision": 50
+      }
+    }
+  },
+  "draw_receipt": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-v15-draw.receipt.json",
+    "sha256": null
+  },
+  "drift": {
+    "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+    "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+  },
+  "extension_admitted": null,
+  "full_validation": {
+    "checkpoint_policy": "final_only_plus_sample_at_every_checkpoint",
+    "complete_windows": 1931,
+    "context_policy": "reset_every_window",
+    "expected_positions": 245237,
+    "kl_direction": "reference || cap",
+    "policy": "DEC-063-complete-windows-final-both-references-v1",
+    "references": [
+      "own_capoff",
+      "original_base"
+    ],
+    "sample_windows": 128,
+    "schema_version": 1,
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "source_inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "source_tokens": 247289,
+    "tail_policy": "drop_incomplete_trailing_window",
+    "trailing_tokens_dropped": 121,
+    "window_tokens": 128,
+    "windows_int64le_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b"
+  },
+  "layout_sha256": "bf71ff1d4523e5036b63a4352be716c03da4e59b3bb8722875c5e7234d89b36d",
+  "matrix": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_v5_2_D_5.json",
+    "sha256": "3325e26fc2fe3447219ec686a4f0f8b6708f1f473a0efc9809a3f2a77621681b"
+  },
+  "output": "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/endpoints",
+  "report": "/home/derp/cap/pc_cap/logs/r1_63o/final/endpoints-written.json",
+  "role_plan": {
+    "path": "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/role-plan-v2.json",
+    "sha256": "f6c33e0ea553c1ec1969c6829a4bcba4eba9a7824899d7c9dd5f60d4c31f79c1"
+  },
+  "status": "draw receipt/extension admission pending; no construction executed"
+}

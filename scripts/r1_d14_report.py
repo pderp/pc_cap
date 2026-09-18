@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import re
 from datetime import UTC, datetime
 from pathlib import Path
@@ -17,6 +18,7 @@ from scripts import ht8_fidelity_watch as watch
 from scripts import r1_49g_inference as inference
 from scripts import r1_63l_full_validation_contract as full
 from scripts import r1_d11_block_report as d11
+from scripts import r1_d14b_accounting as accounting
 
 ROOT = d11.ROOT
 TOKENS = {
@@ -37,6 +39,8 @@ TOKENS = {
     "S1",
     "FIGURES",
     "SOURCES",
+    "HISTORICAL",
+    "ACCOUNTING",
 }
 MISSING = object()
 
@@ -80,6 +84,20 @@ class Tables:
                     value = resolve(self.documents[source["document"]], source["pointer"])
                     if source.get("operation") == "length":
                         value = len(value)
+                    elif source.get("operation") in ("exp_below_709", "exp_overflow_at_709"):
+                        if value is not None and (
+                            type(value) not in (int, float) or not math.isfinite(value)
+                        ):
+                            raise ValueError("finite signed mean required")
+                        if source["operation"] == "exp_below_709":
+                            value = math.exp(value) if value is not None and value < 709 else None
+                        else:
+                            value = value >= 709 if value is not None else None
+                        # Materialized literal plus its checked derivation: older
+                        # binding readers can read the value; newer readers replay it.
+                        source = dict(source, literal=value, derived=True)
+                    elif source.get("operation") is not None:
+                        raise ValueError("unknown report derivation")
                 except (KeyError, IndexError, TypeError, ValueError):
                     raise ValueError("unbound report field: " + str(source)) from None
                 row[name], links[name] = value, source
@@ -89,12 +107,12 @@ class Tables:
         self.bindings.setdefault(table, []).append(links)
 
 
-def build(analysis, watch_document):
+def build(analysis, watch_document, accounting_document=None):
     if (
-        analysis.get("analysis_revision") != "R1-49n_DEC066_D4_prospective_scope"
+        analysis.get("analysis_revision") not in ("R1-49n_DEC066_D4_prospective_scope", "R1-49o_DEC068_DEC069_D5")
         or analysis.get("primary_family") != inference.FAMILY
     ):
-        raise ValueError("registered D4 / 63-interval analysis required")
+        raise ValueError("registered D4/D5 / 63-interval analysis required")
     contrasts = analysis["contrasts"]
     if len(contrasts) != 21 or any(set(c["metrics"]) != set(inference.METRICS) for c in contrasts):
         raise ValueError(
@@ -116,6 +134,10 @@ def build(analysis, watch_document):
                 realizations=at(m + "/realization_estimates"),
                 pointwise_interval=at(m + "/unadjusted_interval"),
                 adjusted_interval=at(m + "/adjusted_interval"),
+                **({"order_dispersion": at(m + "/preliminary/order_dispersion"),
+                    "t_sensitivity": at(m + "/preliminary/t_sensitivity"),
+                    "interpretation": at(m + "/preliminary/interpretation")}
+                   if "preliminary" in _c["metrics"][metric] else {}),
                 classification=at(p + "/classification"),
                 scientific_admission=at(p + "/scientific_admission"),
                 pairing_issues=at(p + "/pairing_issues"),
@@ -137,10 +159,27 @@ def build(analysis, watch_document):
             scientific_admission=at(p + "/scientific_admission"),
             endpoint_complete=at(p + "/endpoint_complete") if "endpoint_complete" in c else None,
             invalid_reason=at(p + "/reason") if "reason" in c else None,
+            endpoint_complete_scope="full_validation AND sampled_drift only",
+            **{
+                k: at(p + "/" + k) if k in c else None
+                for k in (
+                    "primary_metrics_complete",
+                    "full_validation_complete",
+                    "sampled_drift_complete",
+                    "unreceipted_checkpoints",
+                )
+            },
         )
         benchmark = c.get("cap_fidelity_benchmark", {})
         for reference in ("capoff", "original"):
             b = p + "/cap_fidelity_benchmark"
+            common_fidelity = dict(
+                joint_cap_benchmark_passes=at(b + "/passes") if "passes" in benchmark else None,
+                scientific_admission=at(p + "/scientific_admission"),
+                full_validation_complete=at(p + "/full_validation_complete")
+                if "full_validation_complete" in c
+                else None,
+            )
             if reference in benchmark.get("references", {}):
                 r = b + "/references/" + reference
                 tables.add(
@@ -148,6 +187,7 @@ def build(analysis, watch_document):
                     cell_id=at(p + "/cell_id"),
                     **identity,
                     reference=reference,
+                    **common_fidelity,
                     status=at(b + "/status"),
                     **{
                         k: at(r + "/" + k)
@@ -166,6 +206,7 @@ def build(analysis, watch_document):
                     cell_id=at(p + "/cell_id"),
                     **identity,
                     reference=reference,
+                    **common_fidelity,
                     status="unavailable",
                     mean_kl_nats=None,
                     mean_signed_nll_increase_nats=None,
@@ -224,6 +265,22 @@ def build(analysis, watch_document):
                                 ES99_positive=at(m + "/ES99_positive"),
                                 maximum_positive=at(m + "/maximum_positive"),
                                 exceedances_nats=at(m + "/exceedances_nats"),
+                                **{
+                                    k: at(m + "/" + k) if k in stats[metric] else None
+                                    for k in (
+                                        "exp_mean_signed",
+                                        "exp_mean_signed_overflow",
+                                        "maximum_signed",
+                                        "maximum_location",
+                                        "maximum_tie_count",
+                                        "atom_zero_signed",
+                                        "atom_zero_positive",
+                                    )
+                                },
+                                maximum_location_basis="signed maximum",
+                                maximum_tie_convention="first in producer window/position order; exact equality",
+                                zero_positive_n=None,
+                                zero_positive_denominator=None,
                             )
                     else:
                         tables.add(
@@ -243,6 +300,23 @@ def build(analysis, watch_document):
                             ES99_positive=at(r + "/ES99_positive_nats"),
                             maximum_positive=at(r + "/max_positive_nats"),
                             exceedances_nats=at(r + "/exceedances_nats"),
+                            exp_mean_signed=at(r + "/mean_signed_nats", operation="exp_below_709"),
+                            exp_mean_signed_overflow=at(
+                                r + "/mean_signed_nats", operation="exp_overflow_at_709"
+                            ),
+                            maximum_signed=None,
+                            maximum_location=at(r + "/maximum_position")
+                            if "maximum_position" in stats
+                            else None,
+                            maximum_tie_count=None,
+                            maximum_location_basis="positive-part maximum",
+                            maximum_tie_convention="first in producer sample order; tie count unavailable",
+                            atom_zero_signed=None,
+                            atom_zero_positive=None,
+                            zero_positive_n=at(r + "/zero_positive_n")
+                            if "zero_positive_n" in stats
+                            else None,
+                            zero_positive_denominator=at(v + "/scored_positions"),
                         )
                 concentration = sec.get("concentration")
                 if concentration:
@@ -265,6 +339,42 @@ def build(analysis, watch_document):
                                 )
                             },
                         )
+    for i, c in enumerate(analysis.get("historical_pointwise_contrasts", [])):
+        if c.get("contrast", {}).get("role") != "secondary":
+            continue
+        if c.get("classification") != "secondary_descriptive":
+            raise ValueError("historical comparison must remain secondary_descriptive")
+        p = f"/historical_pointwise_contrasts/{i}"
+        for metric in inference.METRICS:
+            m = p + "/metrics/" + metric
+            stats = c["metrics"][metric]
+            tables.add(
+                "historical_v2",
+                dataset=at(p + "/dataset"),
+                checkpoint=at(p + "/checkpoint"),
+                comparison=at(p + "/contrast"),
+                metric=metric,
+                **{
+                    k: at(m + "/" + k)
+                    for k in (
+                        "planned_pairs",
+                        "observed_pairs",
+                        "status",
+                        "estimate",
+                        "interval",
+                    )
+                },
+                realizations=at(m + "/bootstrap/realization_means")
+                if isinstance(stats.get("bootstrap"), dict)
+                and "realization_means" in stats["bootstrap"]
+                else None,
+                **({"order_dispersion": at(m + "/preliminary/order_dispersion"),
+                    "t_sensitivity": at(m + "/preliminary/t_sensitivity")}
+                   if "preliminary" in stats else {}),
+                classification=at(p + "/classification"),
+                pairing_issues=at(p + "/pairing_issues") if "pairing_issues" in c else None,
+                uncertainty=at(m + "/uncertainty") if "uncertainty" in stats else None,
+            )
     for i, c in enumerate(analysis["secondary_benchmarks"]["cells"]):
         p = f"/secondary_benchmarks/cells/{i}"
         identity = {
@@ -318,6 +428,7 @@ def build(analysis, watch_document):
             tables.add(
                 "watch_" + collection, **{k: at(f"/{collection}/{i}/{k}", "watch") for k in c}
             )
+    accounting.add_tables(tables, accounting_document, at)
     return dict(tables=tables.tables, bindings=tables.bindings)
 
 
@@ -437,7 +548,13 @@ def fill(template, values):
 
 
 def run(
-    analysis_path, output, *, journal=None, template=ROOT / "docs/R1_stage4_report_skeleton.md"
+    analysis_path,
+    output,
+    *,
+    journal=None,
+    accounting_report=None,
+    accounting_receipt_root=None,
+    template=ROOT / "docs/R1_stage4_report_skeleton.md",
 ):
     analysis_path = d11.local(analysis_path)
     output = d11.local(output)
@@ -461,12 +578,16 @@ def run(
         if full.sha(p) != h:
             raise ValueError("analysis source changed: " + p)
     ws = watch_snapshot(journal, report)
-    model = build(report, ws)
+    account = accounting.load(accounting_report, report, receipt_root=accounting_receipt_root)
+    sources.update(account["source_bindings_sha256"])
+    sources[str(Path(accounting.__file__).resolve())] = full.sha(accounting.__file__)
+    model = build(report, ws, account)
     model.update(
         task="R1-D14",
         synthetic=matrix.get("synthetic", False),
         analysis=analysis_ref,
         watch=ws,
+        accounting=account,
         source_bindings_sha256=sources,
         generated_utc=datetime.now(UTC).isoformat(),
         figures={
@@ -492,13 +613,16 @@ def run(
             else "**Receipt-bound analysis snapshot; inspect completion and admission before interpretation.**"
         ),
         "METHODS": (
-            "Bound validation contract: `"
+            ("DEC-069: effects before preliminary category labels. The registered intervals are the three realization means' range; no demonstrated 95% familywise control or established population effect. Secondary pointwise 95% Student-t intervals (df=2) assume independent normal realization errors, are not simultaneous and never change the classifier. Order dispersions retain all five paired differences per realization.\n\n" if report.get("inference_interpretation") else "")
+            + "Bound validation contract: `"
             + json.dumps(report["full_validation_contract"], sort_keys=True)
             + "`.\n\n"
             "Primary family: `" + json.dumps(report["primary_family"], sort_keys=True) + "`."
         ),
         "BLOCKS": sections.get("blocks", absent),
         "PRIMARY": sections.get("primary", absent),
+        "HISTORICAL": sections.get("historical_v2", absent),
+        "ACCOUNTING": "\n".join(sections[k] for k in sections if k.startswith("accounting_")),
         "SECONDARY": sections.get("secondary_macros", absent)
         + "\n"
         + sections.get("secondary_cells", absent)
@@ -532,7 +656,7 @@ def run(
         ),
         "SOURCES": "Analysis: `"
         + json.dumps(analysis_ref)
-        + "`. Every displayed data field is bound in [report-data.json](report-data.json), `bindings[table][row][column]`, to an analysis/watch JSON pointer or an explicit literal. Full source SHA inventory is included. Watch rows outside this exact matrix retain their scope.\n\n"
+        + "`. Every displayed data field is bound in [report-data.json](report-data.json), `bindings[table][row][column]`, to an analysis/watch/accounting JSON pointer or an explicit literal. Derived sample exponentials include their evaluated literal, input pointer and checked operation. Full source SHA inventory is included. Watch rows outside this exact matrix retain their scope.\n\n"
         + "\n".join("- " + s for s in report["limits"]),
     }
     text = fill(Path(template).read_text(), values)
@@ -541,6 +665,7 @@ def run(
             raise ValueError("source changed during rendering: " + p)
     if journal is not None and full.ref(journal) != ws["journal"]:
         raise ValueError("watch changed during rendering")
+    accounting.recheck(account)
     with (output / "report-data.json").open("x") as f:
         json.dump(model, f, indent=2, allow_nan=False)
     with (output / "report.md").open("x") as f:
@@ -560,5 +685,18 @@ if __name__ == "__main__":
     p.add_argument("--analysis", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--watch-journal", type=Path)
+    p.add_argument("--accounting-report", type=Path)
+    p.add_argument("--accounting-receipt-root", type=Path)
     a = p.parse_args()
-    print(json.dumps(run(a.analysis, a.output, journal=a.watch_journal), indent=2))
+    print(
+        json.dumps(
+            run(
+                a.analysis,
+                a.output,
+                journal=a.watch_journal,
+                accounting_report=a.accounting_report,
+                accounting_receipt_root=a.accounting_receipt_root,
+            ),
+            indent=2,
+        )
+    )

@@ -67,7 +67,7 @@ def render(data_path):
     save(
         fig,
         "disposition",
-        "D.4 block inventory",
+        "Registered block inventory",
         "Artifact completion is separate from scientific admission, endpoint coverage and benchmark labels. See cell inventory.",
     )
 
@@ -97,7 +97,7 @@ def render(data_path):
         fig,
         "primary-intervals",
         "All 63 registered adjusted intervals, including unavailable slots",
-        "Bonferroni family remains 63. Three realization clusters; nominal bootstrap coverage. Classifier labels and pointwise intervals: primary.csv.",
+        "Registered family remains 63. With three realization clusters, these are preliminary decision summaries; demonstrated familywise coverage is not claimed. Effects, order dispersion and assumption-labelled secondary t sensitivity (D.5): primary.csv.",
     )
 
     fig, axes = plt.subplots(3, 4, figsize=(15, 10), squeeze=False)

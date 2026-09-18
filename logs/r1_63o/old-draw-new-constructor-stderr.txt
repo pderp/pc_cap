@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py", line 479, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py", line 444, in main
+    payloads, population, report = construct(
+                                   ^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/scripts/r1_d10c_endpoints.py", line 235, in construct
+    validate_locality(roles["edits"], loc)
+  File "/home/derp/cap/pc_cap/scripts/r1_locality_contract.py", line 21, in validate_locality
+    raise ValueError("locality overlaps a reserved edit/paraphrase prompt")
+ValueError: locality overlaps a reserved edit/paraphrase prompt

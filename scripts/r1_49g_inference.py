@@ -51,7 +51,7 @@ def finite(value):
     )
 
 
-def cluster_intervals(grid, *, adjusted=True):
+def cluster_intervals(grid, *, adjusted=True, preliminary=False):
     if len(grid) != 3 or any(len(row) != 5 for row in grid):
         raise ValueError("exactly three realization clusters with five paired orders required")
     means = [
@@ -70,6 +70,10 @@ def cluster_intervals(grid, *, adjusted=True):
         "seed": 0,
         "draws": 10000,
     }
+    if preliminary:
+        from scripts.r1_49o_sensitivity import display
+
+        out["preliminary"] = display(grid)
     if any(v is None for v in means):
         return out
     values = np.asarray(means, np.float64)
@@ -189,6 +193,7 @@ def _population_ok(population):
 
 def primary_contrasts(matrix, loaded):
     contrasts = validate_family(matrix)
+    preliminary = matrix.get("policy_revision") == "DEC068_DEC069_D5"
     indexed = {old.coordinate(c): c for c in matrix["cells"]}
     output = []
     for dataset in DATASETS:
@@ -200,7 +205,7 @@ def primary_contrasts(matrix, loaded):
                         "checkpoint": 1000,
                         "contrast": contrast,
                         "metrics": {
-                            m: cluster_intervals([[None] * 5 for _ in range(3)]) for m in METRICS
+                            m: cluster_intervals([[None] * 5 for _ in range(3)], preliminary=preliminary) for m in METRICS
                         },
                         "classification": "unavailable",
                         "scientific_admission": False,
@@ -283,9 +288,13 @@ def primary_contrasts(matrix, loaded):
                 for a, b in itertools.combinations(populations, 2):
                     if (a[0] | a[1]) & (b[0] | b[1]):
                         issues.append({"reason": "overlapping realization populations"})
-            stats = {m: cluster_intervals(grids[m]) for m in METRICS}
+            stats = {m: cluster_intervals(grids[m], preliminary=preliminary) for m in METRICS}
             if issues:
-                for result in stats.values():
+                for metric, result in stats.items():
+                    if preliminary:
+                        from scripts.r1_49o_sensitivity import display
+
+                        result["preliminary"] = display(grids[metric], population_valid=False)
                     result.update(
                         status="population_unavailable",
                         interval=None,

@@ -14,7 +14,9 @@ from scripts.r1_d10a_review_core import digest
 
 def verify(candidate):
     if candidate.get("schema_version", 0) >= 12:
-        if candidate.get("schema_version", 0) >= 14:
+        if candidate.get("schema_version", 0) >= 15:
+            from scripts.r1_49o_normative_closure import verify as verify_normative
+        elif candidate.get("schema_version", 0) >= 14:
             from scripts.r1_49n_normative_closure import verify as verify_normative
         else:
             from scripts.r1_49j_normative_closure import verify as verify_normative

@@ -542,6 +542,10 @@ def pair_contrasts(matrix, loaded):
                         result["uncertainty"] = (
                             "overlapping realization data or inconsistent order membership; no independent cluster interval"
                         )
+                    if matrix.get("policy_revision") == "DEC068_DEC069_D5":
+                        from scripts.r1_49o_sensitivity import display
+
+                        result["preliminary"] = display(grid, population_valid=independent and not problems)
                     stats[metric] = result
                 final = n == max(checkpoints)
                 draft = classify(stats, admitted=True)
