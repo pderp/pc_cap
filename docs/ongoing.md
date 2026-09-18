@@ -77,8 +77,20 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   +0.006## 3. Lanes for Codex — round 41 (CPU; open now; posted 2026-09-18 15:05 EDT) — report coverage; verification lanes wait
 
 Round 40 is committed and mirrored. New files only while the lead signs; `scripts/r1_d14_report.py` and its template are
-Codex's own and not bound by the operator's digests, so they may be edited. Priority order: **R1-D14b → X20 (after
+Codex's own and not bound by the operator's digests, so they may be edited. Priority order: **R1-D10i (urgent) → R1-D14b → X20 (after
 step 8) → HT-4f (after step 2).**
+
+### Lane R1-D10i — clearance evidence re-bound to the current endpoint constructor (URGENT; blocks the lead's step 3)
+
+The lead's `clearance --execute` refuses with `exhaustive_clearance_review: clearance evidence binding changed`: the
+operative joint evidence (`assets/runs/pc_cap/R1/r1_d9e/round26_final/joint_evidence_DEC061.json`) lists
+`scripts/r1_d10c_endpoints.py` at its round-26 bytes (sha a2c968b4…) among its `evidence_bindings`, and round 31
+changed that file (now 9afe6221…; full-validation contract) — the dry run does not check the bindings, the execute
+path (`r1_d9_receipts.clearance_value`) does. The clearance rows themselves are untouched. Emit evidence v6 = v5 with
+that binding refreshed (and any other stale producer binding — run the check over all 865), a statement that the
+D10c edits since round 26 do not affect clearance, inputs v10 binding evidence v6, candidate v15, and say explicitly
+whether the signed step-1 / step-2 receipts stay valid under inputs v10 (see the orchestrator's finding on what the
+receipts bind, lead queue item 94) or must be re-signed. New files only; the lead's session is paused at step 3.
 
 ### Lane R1-D14b — apply X21's four coverage gaps to the report formatter (first)
 

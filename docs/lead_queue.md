@@ -923,3 +923,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     step 1 signed; step 2 reviewed preview written at 14:57 (`02-cost-reviewed.json`); its execute is the next command
     (`docs/tasks/R1-D9-operator-sheet-v8.md`, "Full commands for every lead step", step 2c).
 
+94. (2026-09-18, 15:25 EDT) **Session: step 2 is complete** (your retry at 19:00 UTC succeeded; the traceback you saw was
+    the attempt a minute earlier). **Step 3 (clearance) is blocked by a stale binding, not by anything you did:** the
+    clearance evidence lists the endpoint-constructor script among its provenance bindings at its round-26 bytes, and
+    Codex changed that script in round 31 (full-validation contract). The dry run does not check those bindings; the
+    execute does, hence the refusal after a clean preview. The clearance rows are untouched. Fix: Codex re-binds the
+    evidence (v6), inputs v10, candidate v15 — lane R1-D10i, urgent — and states whether your two signatures carry over
+    (the receipts bind per-step derived inputs, not the inputs file itself, so they likely do). **Please pause the
+    session at step 3**; I will post the exact command when the re-bound inputs exist. The prevention: the dry run
+    will be made to run the same binding check as the execute (Codex, same lane).
+
