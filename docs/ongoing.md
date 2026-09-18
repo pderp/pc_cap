@@ -74,42 +74,44 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 29 (CPU; open now; posted 2026-09-17 20:40 EDT) — closing the evidence blockers
+  +0.006## 3. Lanes for Codex — round 30 (CPU; open now; posted 2026-09-18 05:05 EDT) — the full-validation endpoint
 
-Round 28 is committed and mirrored; chain R (four full-endpoint cells, `/usr/bin/time -v` RSS and outer wall captured
-in `results/R1/stage4_dev_cell_r1_64f_*.time`) runs now. Priority order: **R1-63j → R1-58i → R1-58j → X18 → HT-4f.**
-Rules as in round 22.
+Round 29 is committed and mirrored. DEC-063 (decisions file) settles the full-validation policy: complete windows only
+(1,931 × 128, 245,237 predictions, 121 trailing tokens dropped), final checkpoint of every cell, both references,
+sampled 128 windows at intermediate checkpoints. Priority order: **R1-68f → R1-64g → R1-58k → R1-63k → X19 → HT-4f.**
+Rules as in round 22; the driver edit (R1-68f) is applied by the orchestrator at an idle boundary (the GPU is idle now,
+so immediately on delivery), followed by a rebuild of every recipe identity (your R1-64e rebinder).
 
-### Lane R1-63j — the whole final-recipe / freeze assembler (first; the one missing producer)
+### Lane R1-68f — full-validation drift phase in the driver (first)
 
-Per `R1-63i-production-bundle-interface.md`: implement the assembler that, from a sealed draw / endpoints / seal
-receipt set and the admitted matrix v5.2-D.1, emits the production recipe bundle (one sealed recipe per core cell +
-extension, bound to the sealed backend, calibration v3, the R1-68e driver identity and cell ceilings), the frozen
-manifest candidate for the lead's freeze act, and the queue bindings; dry-run on the synthetic rehearsal artifacts
-and on the real unsigned inputs (metadata only); tests including tamper / mismatch refusals. This is the last code
-gate before the lead's acts.
+Add to `scripts/r1_68c_dev_cell.py` (via patch + tests) a `full_validation` phase at the final checkpoint, recipe-bound:
+population = the complete-window inventory of the bound source with the DEC-063 tail policy and hash; batched drift
+path for every adapter family (RevisionCap and v0 / S1) with per-prefix selection; both references (original base;
+own cap-off, S1's continued base); outputs: finite per-position loss / KL vectors (stored compactly), coverage,
+exceedance counts and ES95 / max as in HT-1, checkpoint / state / source hashes, device peak, phase wall; the
+existing 128-window drift phase unchanged at every checkpoint. Memory: bounded by the batch (no retained 245k
+hidden states). TinyBase tests including parity of the first 128 windows with the sampled phase.
 
-### Lane R1-58i — host peak evidence for every condition × dataset from the process-memory monitor
+### Lane R1-64g — recipes to measure it (after R1-68f lands and identities are rebuilt)
 
-X17 wants a measured host process peak per condition × dataset (27 entries). The monitor
-(`scripts/process_memory_monitor.py`, logs under `logs/process_memory/*.jsonl`, gitignored, on disk) has sampled every
-driver run since September 16. Write `scripts/r1_58i_host_peaks.py`: match each completed profile receipt (run
-directory, attempt start / end from the phase files) to the monitor samples of its driver process (pid / cmdline /
-time window) and emit the peak RSS per condition × dataset with the sample provenance; take chain R's `.time` files
-as the direct measurement for its four cells; state explicitly which entries are direct, which are matched from the
-monitor, and which are extrapolated (with the rule). Feed the result into the cost receipt producer (v3).
+Four development recipes on the new identity: zsRE × {primary v5, v0_stable} and MQuAKE × {primary v5, v0_stable}
+with the full-validation phase enabled (300 edits, checkpoints 100 / 300, challenge sets as R1-64f), inspection
+receipts, run list. The orchestrator runs them and files the full-validation cost per class.
 
-### Lane R1-58j — cost receipt v3 with chain R and the full-validation split evidence
+### Lane R1-58k — cost receipt v4 and candidate v14 (after the four runs)
 
-When chain R completes: ingest the four results (near-miss / revision costs for zsRE and MQuAKE; the MQuAKE primary
-profile), the host peaks (R1-58i), and the full-validation split evidence X17 lists (state what "full validation
-split" requires and produce it from the existing 128-window drift assays and the driver's validation phases, or say
-what run is missing); rebuild receipt v3 in a new path; refresh candidate v13 / forms v8 / sheet v7 digests. List any
-remaining blocker that is not a signature.
+Ingest the full-validation costs (per class; state the cross-dataset transfer for CounterFact explicitly as a
+proposal with the measured basis), the complete chain R host / endpoint evidence, refresh candidate v14 / forms v9 /
+sheet v8; list remaining blockers, which must then be signatures only.
 
-### Lane X18 — re-review of the v13 package
+### Lane R1-63k — production assembler dry-run on the real unsigned inputs v9
 
-### Lane HT-4f — claim ledger v6 (after receipt v3 is signed)
+Exercise the assembler end to end on the real (unsigned) package to show the bundle it would emit, so the lead's
+sitting has no first-time surprises.
+
+### Lane X19 — re-review of the v14 package
+
+### Lane HT-4f — claim ledger v6 (after receipt v4 is signed)
 
 ## 4. Interfaces and coordination
 

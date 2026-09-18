@@ -775,3 +775,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     two workers against 19 GB free. First MQuAKE full profile of the primary: RET-GS 0.73, near-miss 100 / 100,
     revision 50 / 50. Codex's round 29 turns these into cost receipt v3 and candidate v13. GPU idle.
 
+75. (2026-09-18, 05:05 EDT) Codex's round 29 committed (`6840243`): the final recipe / freeze assembler exists and passed a
+    360-cell synthetic rehearsal; host peaks are inventoried for all 27 condition × dataset pairs; cost receipt v3 and
+    candidate v13 are built. X18 found **one genuinely missing experiment**: plan 9 requires the drift / fidelity
+    endpoint on the full validation split (245,237 predictions), and every development cell so far used the frozen
+    128-window sample (16,256). I have bound the policy as DEC-063 (full split at each cell's final checkpoint,
+    complete windows only, both references; the sample stays for intermediate checkpoints) — you may override. The
+    cost is ≈ 20 min per cell by extrapolation (+≈ 125 solo hours for the core → ≈ 205 wall-clock hours with two
+    workers, buffer ≈ 1.7×), to be measured today: Codex adds the phase to the driver, I run four cells. Your sitting
+    therefore moves to **September 19**, launch the same day or the 20th. No decision is open unless you want to
+    override DEC-063.
+
