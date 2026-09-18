@@ -812,3 +812,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     with an index and a reassembly command. The already-pushed large blobs stay in history (rewriting it would break
     the shared clones); they are under GitHub's hard limit and only warned.
 
+79. (2026-09-18, 08:15 EDT) Both repositories are now committed together on request. The assets repo needed a tracking
+    rule first: it holds ≈ 100 GB of model weights, environments, caches, raw data and multi-GB run outputs that cannot
+    live in git, so those are ignored there; the hash-bound evidence, receipts, populations, payload manifests and
+    presentation materials are tracked (2,290 files; the five evidence files above 45 MB are committed as split parts
+    with their originals kept on disk so the freeze bindings still resolve). Same 45 MB hook in both repos. If you want
+    the weights tracked too, that is a Git LFS decision rather than plain git.
+

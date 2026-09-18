@@ -2,7 +2,7 @@
 
 Usage:
   python scripts/repo_size_policy.py check            # staged files; exit 1 if any exceeds the limit (pre-commit hook)
-  python scripts/repo_size_policy.py split FILE.json  # split a large JSON file into FILE.part-NN.json + FILE.index.json, remove FILE
+  python scripts/repo_size_policy.py split FILE.json [--keep]  # split into FILE.part-NN.json + FILE.index.json; --keep leaves FILE in place (hash-bound evidence: the original stays on disk, untracked)
   python scripts/repo_size_policy.py join FILE.index.json OUT.json   # reassemble (byte-identical; sha256 checked)
 
 Splitting is only for JSON that genuinely belongs in the repository (results, manifests). Synthetic test fixtures and
@@ -37,7 +37,7 @@ def check() -> int:
     return 1
 
 
-def split(path: Path) -> int:
+def split(path: Path, keep: bool = False) -> int:
     raw = path.read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
     parts = [raw[i:i + PART] for i in range(0, len(raw), PART)]
@@ -48,7 +48,8 @@ def split(path: Path) -> int:
         names.append({"path": q.name, "bytes": len(chunk), "sha256": hashlib.sha256(chunk).hexdigest()})
     index = path.with_name(f"{path.stem}.index.json")
     index.write_text(json.dumps({"policy": "scripts/repo_size_policy.py split (byte parts; concatenate in order)", "original": path.name, "bytes": len(raw), "sha256": digest, "parts": names}, indent=1))
-    path.unlink()
+    if not keep:
+        path.unlink()
     print(f"split {path} ({len(raw) / 1e6:.1f} MB) into {len(parts)} parts; index {index}")
     return 0
 
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     if cmd == "check":
         raise SystemExit(check())
     if cmd == "split":
-        raise SystemExit(split(Path(sys.argv[2])))
+        raise SystemExit(split(Path(sys.argv[2]), keep="--keep" in sys.argv[3:]))
     if cmd == "join":
         raise SystemExit(join(Path(sys.argv[2]), Path(sys.argv[3])))
     raise SystemExit(__doc__)

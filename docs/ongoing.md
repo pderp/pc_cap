@@ -125,6 +125,10 @@ No committed file above 45 MB (GitHub warns at 50, refuses at 100). Enforced by 
 a genuine JSON artifact that must be in the repository is split with `scripts/repo_size_policy.py split FILE.json`
 (byte parts ≤ 40 MB + an index with the whole-file sha256; `join` reassembles). Codex: write fixture outputs only under
 the ignored directories or `assets/`, and name in the handoff any new directory that should be ignored.
+The assets repository (`/home/derp/cap/assets`, its own git) tracks hash-bound evidence / receipts / populations /
+payload manifests / presentation materials (files > 45 MB as `split --keep` parts, originals kept on disk for the
+bindings); weights, caches, environments, raw data and multi-GB run outputs are ignored there. The orchestrator commits
+both repositories when the lead asks for a commit.
 
 ## 4. Interfaces and coordination
 
