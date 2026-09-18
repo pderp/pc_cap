@@ -820,7 +820,7 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     with their originals kept on disk so the freeze bindings still resolve). Same 45 MB hook in both repos. If you want
     the weights tracked too, that is a Git LFS decision rather than plain git.
 
-80. (2026-09-18, 07:30 EDT) Codex's round 32 committed. **Q17 needs you today** (ledger above): the fidelity limit that the
+80. (2026-09-18, 07:10 EDT) Codex's round 32 committed. **Q17 needs you today** (ledger above): the fidelity limit that the
     primary "fails" on the full validation split was registered for certifying continuation bases, not for the cap;
     the current protocol text extended it and would void the primary's comparisons on any failing cell. My
     recommendation is option 1: report cap fidelity as a declared secondary benchmark (KL and NLL, pass / fail, with the
@@ -828,5 +828,5 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     v5.2-D.3 for whichever option you choose. Chain S is on its second cell (three to go); the sitting stays on
     September 19.
 
-81. (2026-09-18, 07:45 EDT) Q17 recorded (DEC-064, option 1). No lead decision is open. Codex binds it into protocol v5.2-D.3 and the analysis; candidate v14 and your sitting stay on September 19.
+81. (2026-09-18, 07:20 EDT) Q17 recorded (DEC-064, option 1). No lead decision is open. Codex binds it into protocol v5.2-D.3 and the analysis; candidate v14 and your sitting stay on September 19.
 

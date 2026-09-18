@@ -74,7 +74,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 33 (CPU; open now; posted 2026-09-18 07:35 EDT) — Q17 into the protocol; finish the package
+  +0.006## 3. Lanes for Codex — round 33 (CPU; open now; posted 2026-09-18 07:15 EDT) — Q17 into the protocol; finish the package
 
 Round 32 is committed and mirrored. Q17 is with the lead (default option 1). Chain S runs until ≈ 09:00; the R1-63l
 backend patch is applied by the orchestrator right after. Priority order: **R1-49m → HT-6 (final) → R1-58l → R1-63m →
@@ -85,7 +85,7 @@ X19 → HT-4f.** Rules as in round 22 and §3a (fixture outputs under `assets/ru
 For each Q17 option: the exact D.3 text (fidelity section, U13 / U16, change log) and the analysis behaviour
 (`r1_49g_analyze` / R1-75: under option 1 the cap fidelity result is a labelled secondary benchmark and never sets
 `scientific_admission = False`; under 2 the NLL bound is the admission inequality with KL descriptive; under 3 the
-current behaviour), each as a patch + tests on the synthetic family; publish D.3 for **option 1 — DEC-064 (lead, 07:45 EDT)**: cap fidelity as a labelled secondary benchmark with the
+current behaviour), each as a patch + tests on the synthetic family; publish D.3 for **option 1 — DEC-064 (lead, 07:20 EDT)**: cap fidelity as a labelled secondary benchmark with the
 concentration statistics, never setting `scientific_admission = False`; the other two options are recorded as
 considered, not built. Keep the continued-base gate (DEC-047) unchanged in all three.
 
