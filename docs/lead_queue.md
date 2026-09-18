@@ -893,3 +893,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     digest): protocol-admit, cost-admit, clearance, rng-admit (your master seed), draw, endpoints (mine), seal,
     freeze, launch (mine). I am running the dry-runs now so the digests are known and no step surprises us.
 
+90. (2026-09-18, 10:30 EDT) Codex's round 37 committed in both repos. For your signing session
+    (`docs/tasks/R1-D9-operator-sheet-v8.md`): the U03 memo you read at protocol-admit is `docs/R1_U03_interpretation_memo.md`
+    (one page; proposed protocol sentence included). For the talk: `assets/presentation-materials/talk_outline_v1.md`
+    (12 slides, each with its claim, evidence file, figure and qualification) and six figure sets under
+    `assets/presentation-materials/figures/ht9-v1/`. Round 38: the producer for the freeze assembly inputs (between
+    steps 7 and 8), the daily / block-boundary operations tooling, the post-session verification, the ledger, and a
+    first slide deck. No decision is open; the session can start whenever you like.
+

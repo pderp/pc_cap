@@ -74,42 +74,40 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 37 (CPU; open now; posted 2026-09-18 10:05 EDT) — the sitting, then the run
+  +0.006## 3. Lanes for Codex — round 38 (CPU; open now; posted 2026-09-18 10:30 EDT) — the freeze assembly, then run-time operations
 
-Round 36 is committed and mirrored; X19 finds the engineered package ready. The lead's sitting is September 19 on
-operator sheet v8. Priority order: **R1-49o → HT-9 → R1-D12 → X20 (after the sitting) → HT-4f (after the cost
-signature).** Rules as in round 22 and §3a.
+Round 37 is committed and mirrored. The lead's signing session (operator sheet v8) can start any time; steps 1–7 need
+nothing from Codex. Priority order: **R1-63n → R1-D13 → X20 (after the session) → HT-4f (after the cost signature)
+→ HT-10.** Rules as in round 22 and §3a. Do not edit any file bound by candidate v14 or the operator's request
+digests while the session may be running (new files only this round).
 
-### Lane R1-49o — U03 interpretation memo for the protocol admission (first; short)
+### Lane R1-63n — freeze assembly-inputs producer (first; needed between steps 7 and 8)
 
-X19: the retained S1 continuation bases pass their original fidelity certification and match current identities, but
-the historical continuation budget is not an established exact match to v5's training compute. Write the one-page
-memo the lead reads at `protocol-admit`: what was registered (DEC-040 / DEC-047), what the current S1 bases are, the
-accounting difference, what it means for the S1 contrasts' interpretation (a bounded statement, not a repair), and
-the exact sentence for the protocol's U03 entry. No new run is proposed unless it is cheap and decisive — if a
-budget-matched continuation would be, say what it costs.
+Operator sheet v8 §"After step 7" asks for a **new** assembly-input document derived from the operator's latest
+`*-inputs.json`, binding the genuine gate-closure receipts (the signed protocol / cost / clearance / RNG / draw /
+endpoint / seal receipts map onto U01–U18 — state the mapping explicitly, gate by gate, and which gates close by
+which receipt) and the schedule admission (plan v3 + receipt v4 signed). Write `scripts/r1_63n_assembly_inputs.py`
+that builds it from the operator session's receipts journal (`logs/R1/operator_v8/receipts.jsonl`) and the inputs
+v9, refuses on any missing or unsigned receipt, prints the gate table, and emits the document the staging command in
+the sheet consumes; rehearse on the synthetic session; tests. The orchestrator runs it after step 7.
 
-### Lane HT-9 — presentation package v1 (parallel to the run)
+### Lane R1-D13 — run-time operations (before launch)
 
-From `docs/heavy_tail_counter_review.md` §8 (slide shape), the four presentation records, the claim ledger, the HT-6
-final figure, the selection figure and the tail-audit figures: a slide-by-slide outline (title, one-sentence claim,
-the evidence file and figure, the qualification) as `assets/presentation-materials/talk_outline_v1.md`, plus a list of
-figures still to be made (with the script that would make each from existing data). No new experiments; every claim
-carries its DEC-054 framing where it applies. This is for the lead to start building slides while the matrix runs.
+(a) A `scripts/r1_d13_daily.py` that the orchestrator runs each morning: queue status, hours spent / projected,
+fidelity-watch new entries and alerts since the last run, host / GPU health from the monitors, and the lead-queue
+text block; (b) the block-boundary procedure as one command chaining D11 report → D12 re-pricing proposal → the
+text block, with the "globally idle snapshot" check D12 needs; (c) a resume checklist for a crash (what to verify
+before `run --execute --resume`). Tests on the synthetic queue.
 
-### Lane R1-D12 — block-boundary operations (before block 1 ends)
-
-Extend the D11 block report with the re-pricing step: at each block boundary, measured cell costs replace the plan-v3
-transfers for that class, plan v4+ is emitted with the updated projection and buffer, the fidelity-watch summary and
-the DEC-052 inventory are attached, and the text block for the lead queue is produced. Rehearse on the synthetic queue.
-
-### Lane X20 — post-sitting verification (after the lead signs)
-
-Verify every signed receipt against its dry-run digest and the candidate, the draw against the RNG admission
-(reproduce the reservations from the master seed), the seal against the endpoint inventory, the frozen manifest
-against candidate v14; a plain statement that the run may launch.
+### Lane X20 — post-session verification (as posted; after the lead signs)
 
 ### Lane HT-4f — claim ledger v6 (after the signed cost receipt)
+
+### Lane HT-10 — first slide deck from the outline (low priority; parallel)
+
+A Markdown / reveal-style deck built from `talk_outline_v1.md` with the exported figures, one slide per outline row,
+speaker notes carrying each claim's qualification; exported to PDF under `assets/presentation-materials/deck_v1/`.
+The lead restyles; the content stays bound to the ledger.
 
 ## 4. Interfaces and coordination
 
