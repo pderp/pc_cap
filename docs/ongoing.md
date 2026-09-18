@@ -131,7 +131,13 @@ the 63-interval family untouched); G4: the DEC-052 execution-accounting section 
 section. Acceptance fixtures as X21 lists; the 63 primary rows and classifiers identical before / after; the skeleton
 refilled from the synthetic output with no unbound placeholder.
 
-### Lane X20 — post-session verification (after the lead's step 8)
+### Lane X20 — post-session verification (NOW: session v10 complete; freeze published)
+
+Verify: every signed receipt in `logs/R1/operator_v10/receipts.jsonl` against its dry-run digest and form; the RNG
+admission and draw (reproduce the reservations from seed 378462438976234321867 and the register); the endpoint
+construction and seal against the independent populations; the frozen manifest (`frozen_stage4.json`) against
+candidate v15 and the staged bundle; the queue bindings against the final matrix and the content lock. A plain
+statement that the run may launch, or the exact defect. New files under `logs/`; the tree is locked.
 
 ### Lane HT-4f — publish ledger v6 (after the signed step-2 cost receipt)
 

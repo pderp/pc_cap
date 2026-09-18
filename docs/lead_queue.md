@@ -963,3 +963,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 98. (2026-09-18, 17:30 EDT) Q19 recorded (DEC-069) and Q20 (DEC-068). Both go into protocol / matrix D.5 inside Codex's single re-bind (R1-63o), after which the tree is frozen and I run the session end to end on the re-bound inputs with your seed. No lead decision is open.
 
+99. (2026-09-18, 17:20 EDT) **The confirmatory experiment is frozen.** Session v10 completed all eight steps under your
+    delegation on the re-bound package: protocol D.5 (your Q17–Q20 answers in), cost admission, clearance, RNG admission
+    with your seed, draw (100 / 100 near-miss pairs everywhere), endpoints (50 / 50 locality prompts in every group,
+    zero shortfalls), seal, and the freeze — `manifests/revision_v1/frozen_stage4.json`, sha256 `60f2c09461330852…`, with 330
+    sealed cell recipes and the final matrix in the DEC-068 order (DEC-071). Codex's X20 now verifies every receipt
+    against its digest and the frozen manifest against candidate v15; the content lock is re-verified before launch.
+    **Launch (step 9) is yours to call**: say "launch" and I start the queue with two workers and the fidelity watch;
+    the first block-boundary report follows after the triplet's first realization (≈ 26 h).
+
