@@ -1,0 +1,64 @@
+..F..................................................................... [ 90%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+__ test_one_step_requires_signature_and_failure_cannot_sign_downstream[False] __
+
+tmp_path = PosixPath('/home/derp/cap/pc_cap/logs/r1_round27/test-work-DEC062/test_one_step_requires_signatu0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4999eb1fa0>
+coordinated = False
+
+    @pytest.mark.parametrize("coordinated", [False, True])
+    def test_one_step_requires_signature_and_failure_cannot_sign_downstream(
+        tmp_path, monkeypatch, coordinated
+    ):
+        monkeypatch.setattr(op, "ROOT", tmp_path)
+        monkeypatch.setattr(op, "verify_candidate", lambda _: None)
+        base = REPO / f"docs/tasks/R1-D9-inputs-v{6 if coordinated else 4}.json"
+        candidate = REPO / "manifests/revision_v1/freeze_candidate_v9.json"
+        session = tmp_path / "logs/session"
+        args = dict(inputs=base, candidate=candidate, session=session)
+        early = op.run("draw", **args)
+        assert early["blocked"] and "next unsigned step" in early["blocked"][0]
+        initial = op.run("protocol-admit", **args)
+        assert initial["blocked"]
+        form = initial["lead_sets"]
+        form["fields"].update(
+            extension_admitted=False,
+            near_family_reviewed=True,
+            zsre_empty_baseline_reviewed=True,
+            queue_ceiling_and_failure_policy_reviewed=True,
+            family_pair_unit_policy_reviewed=coordinated,
+            synthetic=True,
+        )
+        ready = op.run("protocol-admit", form=form, **args)
+        assert not ready["blocked"]
+        with pytest.raises(PermissionError):
+            op.run("protocol-admit", form=form, execute=True, **args)
+        result = op.run("protocol-admit", form=sign(ready), execute=True, **args)
+        assert result["status"] == "complete"
+        new_spec = d9.read_metadata(result["inputs"])
+        assert d9.read_metadata(new_spec["receipts"]["protocol_admission"])["lead_approved"]
+>       assert not d9.read_metadata(new_spec["receipts"]["rng_admission"])["lead_approved"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_58g_operator.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+binding = {'path': '/home/derp/cap/pc_cap/docs/tasks/R1-D9-rng-admission-template-v4.json', 'sha256': 'bae8f83cfce70f9235ff6261e2868d19177a93714f29645687ddfec6a0309cac'}
+parse = True
+
+    def read_metadata(binding, *, parse=True):
+        p = Path(binding["path"]).resolve()
+        if "confirm" in p.parts or not any(
+            p.is_relative_to(ROOT / n) for n in ("docs", "manifests/revision_v1", "logs")
+        ):
+            raise PermissionError("repo admission metadata only; no payload access")
+        raw = p.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != binding["sha256"]:
+>           raise ValueError("metadata identity mismatch")
+E           ValueError: metadata identity mismatch
+
+scripts/r1_58c_draw_seal_preflight.py:68: ValueError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_58g_operator.py::test_one_step_requires_signature_and_failure_cannot_sign_downstream[False]
+1 failed, 79 passed in 38.57s

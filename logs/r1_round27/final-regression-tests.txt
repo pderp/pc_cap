@@ -1,0 +1,161 @@
+..FFF................................................................... [ 90%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+__ test_one_step_requires_signature_and_failure_cannot_sign_downstream[False] __
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-22/test_one_step_requires_signatu0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fba3e5b6b40>
+coordinated = False
+
+    @pytest.mark.parametrize("coordinated", [False, True])
+    def test_one_step_requires_signature_and_failure_cannot_sign_downstream(
+        tmp_path, monkeypatch, coordinated
+    ):
+        monkeypatch.setattr(op, "ROOT", tmp_path)
+        monkeypatch.setattr(op, "verify_candidate", lambda _: None)
+        base = REPO / f"docs/tasks/R1-D9-inputs-v{6 if coordinated else 4}.json"
+        candidate = REPO / "manifests/revision_v1/freeze_candidate_v9.json"
+        session = tmp_path / "logs/session"
+        args = dict(inputs=base, candidate=candidate, session=session)
+        early = op.run("draw", **args)
+        assert early["blocked"] and "next unsigned step" in early["blocked"][0]
+        initial = op.run("protocol-admit", **args)
+        assert initial["blocked"]
+        form = initial["lead_sets"]
+        form["fields"].update(
+            extension_admitted=False,
+            near_family_reviewed=True,
+            zsre_empty_baseline_reviewed=True,
+            queue_ceiling_and_failure_policy_reviewed=True,
+            family_pair_unit_policy_reviewed=coordinated,
+            synthetic=True,
+        )
+        ready = op.run("protocol-admit", form=form, **args)
+        assert not ready["blocked"]
+        with pytest.raises(PermissionError):
+            op.run("protocol-admit", form=form, execute=True, **args)
+        result = op.run("protocol-admit", form=sign(ready), execute=True, **args)
+        assert result["status"] == "complete"
+>       new_spec = d9.read_metadata(result["inputs"])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_58g_operator.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+binding = {'path': '/tmp/pytest-of-derp/pytest-22/test_one_step_requires_signatu0/docs/tasks/R1-58g-session/01-inputs.json', 'sha256': '3a9c305759e11633c58333c7ef0b36bb71b8336406e94e58999cfd228cb696d9'}
+parse = True
+
+    def read_metadata(binding, *, parse=True):
+        p = Path(binding["path"]).resolve()
+        if "confirm" in p.parts or not any(
+            p.is_relative_to(ROOT / n) for n in ("docs", "manifests/revision_v1", "logs")
+        ):
+>           raise PermissionError("repo admission metadata only; no payload access")
+E           PermissionError: repo admission metadata only; no payload access
+
+scripts/r1_58c_draw_seal_preflight.py:65: PermissionError
+__ test_one_step_requires_signature_and_failure_cannot_sign_downstream[True] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-22/test_one_step_requires_signatu1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fba3e5b6d20>
+coordinated = True
+
+    @pytest.mark.parametrize("coordinated", [False, True])
+    def test_one_step_requires_signature_and_failure_cannot_sign_downstream(
+        tmp_path, monkeypatch, coordinated
+    ):
+        monkeypatch.setattr(op, "ROOT", tmp_path)
+        monkeypatch.setattr(op, "verify_candidate", lambda _: None)
+        base = REPO / f"docs/tasks/R1-D9-inputs-v{6 if coordinated else 4}.json"
+        candidate = REPO / "manifests/revision_v1/freeze_candidate_v9.json"
+        session = tmp_path / "logs/session"
+        args = dict(inputs=base, candidate=candidate, session=session)
+        early = op.run("draw", **args)
+        assert early["blocked"] and "next unsigned step" in early["blocked"][0]
+        initial = op.run("protocol-admit", **args)
+        assert initial["blocked"]
+        form = initial["lead_sets"]
+        form["fields"].update(
+            extension_admitted=False,
+            near_family_reviewed=True,
+            zsre_empty_baseline_reviewed=True,
+            queue_ceiling_and_failure_policy_reviewed=True,
+            family_pair_unit_policy_reviewed=coordinated,
+            synthetic=True,
+        )
+        ready = op.run("protocol-admit", form=form, **args)
+        assert not ready["blocked"]
+        with pytest.raises(PermissionError):
+            op.run("protocol-admit", form=form, execute=True, **args)
+        result = op.run("protocol-admit", form=sign(ready), execute=True, **args)
+        assert result["status"] == "complete"
+>       new_spec = d9.read_metadata(result["inputs"])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/revision_v1/test_r1_58g_operator.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+binding = {'path': '/tmp/pytest-of-derp/pytest-22/test_one_step_requires_signatu1/docs/tasks/R1-58g-session/01-inputs.json', 'sha256': 'cf385ff2c8c653afc144aefe4eaf1d2589ec480ad02dc3c63521da3012b4d641'}
+parse = True
+
+    def read_metadata(binding, *, parse=True):
+        p = Path(binding["path"]).resolve()
+        if "confirm" in p.parts or not any(
+            p.is_relative_to(ROOT / n) for n in ("docs", "manifests/revision_v1", "logs")
+        ):
+>           raise PermissionError("repo admission metadata only; no payload access")
+E           PermissionError: repo admission metadata only; no payload access
+
+scripts/r1_58c_draw_seal_preflight.py:65: PermissionError
+__________ test_freeze_publication_failure_rolls_back_only_new_files ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-22/test_freeze_publication_failur0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fba3e5b7020>
+
+    def test_freeze_publication_failure_rolls_back_only_new_files(tmp_path, monkeypatch):
+        monkeypatch.setattr(op, "ROOT", tmp_path)
+        source = tmp_path / "docs/tasks/source.json"
+        binding = op.new_json(source, dict(synthetic=True))
+        preexisting = tmp_path / "docs/tasks/keep.json"
+        preexisting.write_text("untouched")
+        target = tmp_path / "docs/tasks/new.json"
+        frozen = tmp_path / op.backend.FROZEN_RELATIVE
+        bundle = {
+            "artifacts": [
+                dict(destination=str(frozen), source=binding),
+                dict(destination=str(target), source=binding),
+            ]
+        }
+        seen = []
+    
+        def fail(_):
+            seen.append(frozen.is_file() and target.is_file())
+            raise ValueError("synthetic validation failure")
+    
+        with pytest.raises(ValueError):
+>           op.publish_bundle(bundle, validator=fail)
+
+tests/revision_v1/test_r1_58g_operator.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/r1_58g_operator.py:350: in publish_bundle
+    source = d9.read_metadata(a["source"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+binding = {'path': '/tmp/pytest-of-derp/pytest-22/test_freeze_publication_failur0/docs/tasks/source.json', 'sha256': 'efa82530f0281abdf7bff98dbf617ee4427f964100fa5fe3f2e8673792b268cf'}
+parse = True
+
+    def read_metadata(binding, *, parse=True):
+        p = Path(binding["path"]).resolve()
+        if "confirm" in p.parts or not any(
+            p.is_relative_to(ROOT / n) for n in ("docs", "manifests/revision_v1", "logs")
+        ):
+>           raise PermissionError("repo admission metadata only; no payload access")
+E           PermissionError: repo admission metadata only; no payload access
+
+scripts/r1_58c_draw_seal_preflight.py:65: PermissionError
+=========================== short test summary info ============================
+FAILED tests/revision_v1/test_r1_58g_operator.py::test_one_step_requires_signature_and_failure_cannot_sign_downstream[False]
+FAILED tests/revision_v1/test_r1_58g_operator.py::test_one_step_requires_signature_and_failure_cannot_sign_downstream[True]
+FAILED tests/revision_v1/test_r1_58g_operator.py::test_freeze_publication_failure_rolls_back_only_new_files
+3 failed, 77 passed in 38.54s

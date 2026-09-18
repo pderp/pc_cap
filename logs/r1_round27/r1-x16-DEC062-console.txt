@@ -1,0 +1,83 @@
+{
+  "task": "X16",
+  "verdict": "NOT_READY_FOR_LEAD_SIGNATURE_OR_LAUNCH",
+  "supersedes_status_only": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round27/r1-x16-audit.json",
+    "sha256": "d7738eb47e9b23bc153c755203eadfb6b102d802d9d50b2ddf2acd3c8e5614a2"
+  },
+  "erratum": "Initial X16-04 and diagnostic metadata incorrectly called DEC-062 pending. DEC-062 already records option B; its source row is preserved here. Numerical two-mode diagnostics remain valid. The unresolved detail is whether 100 denotes pair slots or distinct families, not the accepted B choice.",
+  "decision": "DEC-062",
+  "decision_source": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round27/source_snapshot/decisions-DEC062.md",
+    "sha256": "42a808e78d056a42fd7191bd8d9f7f74a54ea90ccfed8da1a73cdec74b192f6d"
+  },
+  "decision_row": "| DEC-062 | 2026-09-17 | **Q16: option B** (lead): the near and neighbour roles are drawn as support\u2013neighbour pairs by exact template family (DEC-061) from the cleared pool after the edit / outside / revision roles are allocated, with their own receipted RNG stream, global disjointness and Hall checks unchanged, fixed before any outcome; when fewer than 100 families yield pairs the planned denominator stays 100 and the shortfall is listed; selected by the RNG admission field `near_allocation = family_coordinated`. All other roles keep independent draws. | `docs/lead_queue.md` Q16; `logs/r1_round26/near_final/r1-d9e-real-pool-review.json`. | Lead decision. Implemented by Codex R1-D9f; the RNG admission form binds the mode. |",
+  "candidate": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/freeze_candidate_v11.json",
+    "sha256": "c3a220c4bd0aee81d961558d7fddef87c348611e00df684c576bfe0332c47156"
+  },
+  "current_verification": {
+    "task": "R1-63g",
+    "bindings": 772,
+    "open_gates": [
+      "U01",
+      "U02",
+      "U03",
+      "U04",
+      "U05",
+      "U06",
+      "U07",
+      "U08",
+      "U09",
+      "U11",
+      "U12",
+      "U13",
+      "U14",
+      "U15",
+      "U16",
+      "U17",
+      "U18"
+    ],
+    "context_adjudication_admitted": true,
+    "teacher_roles_complete": true,
+    "frozen": false,
+    "launch_authorized": false
+  },
+  "inputs": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9-inputs-v6.json",
+    "sha256": "971b54e88b834a4e2f7deff8e9c11f366f0003a83ee2c3dbaae450db54c34e30"
+  },
+  "allocation_contract": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-D9f-allocation-contract-unsigned.json",
+    "sha256": "50865683c9b872bf2173477411cb88aa3a18e4fdc5ceab36e502ad2c2b5e10b3"
+  },
+  "near_allocation": "family_coordinated",
+  "contract_lead_review_pending": true,
+  "inherited_normative_text_bound": false,
+  "cost_lead_approved": false,
+  "HT4f": "blocked; no final ledger published",
+  "original_numerical_report": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_round27/r1-x16-audit.json",
+    "sha256": "d7738eb47e9b23bc153c755203eadfb6b102d802d9d50b2ddf2acd3c8e5614a2"
+  },
+  "findings": [
+    "X16-01 inherited normative v5.1 text is not hash-bound in either candidate",
+    "X16-02 cost receipt v1 is unsigned and not the typed schema accepted by freeze/HT-4f",
+    "X16-03 memory ceilings, explicit process-hour budget, full validation/endpoint cost evidence are absent",
+    "X16-04 DEC-062 B is recorded and bound; exact multiple-pairs-per-family interpretation awaits review",
+    "X16-05 old v9/form digests changed under authorized draw hook; use new unsigned operator package after review",
+    "X16-06 no production final-freeze/recipe publication bundle exists yet; operator validates/publishes but cannot invent it",
+    "X16-07 notes206/125/+16 are stale; authoritative table gives209.4/126.91/+12.15",
+    "X16-08 signature readiness still includes17open gates plus actual population operations",
+    "X16-09 six v0/S1 corrected profiles have100unavailable firing rows, not the0/100reported in ChainQ notes"
+  ],
+  "note": "v9/v10 are historical; v11/v6 bind the changed code and v4 choice. No X16 owner-document repairs applied.",
+  "gpu_seconds": 0,
+  "actual_draws": 0,
+  "seals": 0,
+  "signatures": 0,
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_x16_dec062_addendum.py",
+    "sha256": "9dedd07c61a9e85106f7ffb5229089616d7e1eefda653f6fbb847b0d48a5834b"
+  }
+}
