@@ -879,3 +879,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 88. (2026-09-18, 09:50 EDT) Q18 recorded (DEC-066). No lead decision is open. The core matrix is now 285 cells (+ 45 extension); the buffer rises to ≈ 1.65×. Codex folds it into matrix / protocol D.4 with candidate v14.
 
+89. (2026-09-18, 10:05 EDT) Codex's round 36 committed in both repos: the typed cost receipt v4 (expected ≈ 431
+    process-hours, ≈ 647 if every cell hit its ceiling, against the 750 cap), plan v3, matrix and protocol D.4 with your
+    MQuAKE decision, candidate v14, forms v9 and operator sheet v8; X19 finds the engineered package ready — what
+    remains is your signatures and one scientific interpretation (U03: the S1 continuation bases' historical training
+    budget is not an exact match to v5's training compute; Codex writes the one-page memo you read at protocol-admit).
+    **Your sitting tomorrow, in order** (operator sheet v8, one command each, dry-run first, then sign the printed
+    digest): protocol-admit, cost-admit, clearance, rng-admit (your master seed), draw, endpoints (mine), seal,
+    freeze, launch (mine). I am running the dry-runs now so the digests are known and no step surprises us.
+

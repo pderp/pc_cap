@@ -74,37 +74,42 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
   zsRE unseen 10/100, Wilson 95 % 5.5–17.4 %; occupancy flatness unproved because the outside sets differ), R1-68c
   instrumented driver with batched drift (owner re-profile running), R1-72 schedule scenarios (331–452 GPU h vs 306
   available), HT-1b v5 tail audit (v5 zsRE mean +0.0022 nats but max 8.7 nats and 17 positions > 0.1; CounterFact
-  +0.006## 3. Lanes for Codex — round 36 (CPU; open now; posted 2026-09-18 09:05 EDT) — receipt v4 and candidate v14, no more gaps
+  +0.006## 3. Lanes for Codex — round 37 (CPU; open now; posted 2026-09-18 10:05 EDT) — the sitting, then the run
 
-Round 35 is committed and mirrored; the D11 assembler patch is applied. DEC-065 (decisions file) states the cost
-transfers explicitly so the typed receipt can bind them. Priority order: **R1-58l (finish) → R1-63m (finish) → X19 →
-HT-4f.** Rules as in round 22 and §3a. The orchestrator is not editing any script now; every file is yours to fix.
+Round 36 is committed and mirrored; X19 finds the engineered package ready. The lead's sitting is September 19 on
+operator sheet v8. Priority order: **R1-49o → HT-9 → R1-D12 → X20 (after the sitting) → HT-4f (after the cost
+signature).** Rules as in round 22 and §3a.
 
-### Lane R1-58l — cost receipt v4, typed validator, ceilings v2 (finish)
+### Lane R1-49o — U03 interpretation memo for the protocol admission (first; short)
 
-Bind DEC-065's transfers (i)–(iv) as reviewed transfers; ingest the four chain S donors and the 27 sampled-phase
-costs; ceilings v2 = 1.5 × (measured or transferred solo cost incl. the full phase); the revised process-hour
-projection with both scenarios; host peaks (direct + monitor-matched); the failure-charging rule; the v4 validator;
-`lead_approved` false. List what is left that is not a signature — the target is nothing.
+X19: the retained S1 continuation bases pass their original fidelity certification and match current identities, but
+the historical continuation budget is not an established exact match to v5's training compute. Write the one-page
+memo the lead reads at `protocol-admit`: what was registered (DEC-040 / DEC-047), what the current S1 bases are, the
+accounting difference, what it means for the S1 contrasts' interpretation (a bounded statement, not a repair), and
+the exact sentence for the protocol's U03 entry. No new run is proposed unless it is cheap and decisive — if a
+budget-matched continuation would be, say what it costs.
 
-### Lane R1-63m — candidate v14, forms v9, sheet v8 (finish) — now on matrix / protocol v5.2-D.4 (DEC-066)
+### Lane HT-9 — presentation package v1 (parallel to the run)
 
-DEC-066 (lead, 09:50 EDT): MQuAKE core = R1_learned_ff, R1_nonlearned, v0_stable only (45 cells); the other five
-MQuAKE conditions recorded as determined by calibration v3 and not run; extension unchanged. Emit matrix v5.2-D.4 (285
-core + 45 extension cells, block numbers under DEC-051 recomputed) and protocol D.4 (the MQuAKE section, U08 / U12 /
-U16, change log) with the same producers as D.3; everything downstream binds D.4.
+From `docs/heavy_tail_counter_review.md` §8 (slide shape), the four presentation records, the claim ledger, the HT-6
+final figure, the selection figure and the tail-audit figures: a slide-by-slide outline (title, one-sentence claim,
+the evidence file and figure, the qualification) as `assets/presentation-materials/talk_outline_v1.md`, plus a list of
+figures still to be made (with the script that would make each from existing data). No new experiments; every claim
+carries its DEC-054 framing where it applies. This is for the lead to start building slides while the matrix runs.
 
-Fix in order: the rebinder's backend pin (post-63l identity), the extension recipes' full-validation contract (the
-failing `test_extension_also_carries_required_full_contract`), the operator `check_fields(cost-admit)` reading the
-typed receipt's bound ceilings, and `scripts/r1_63l_prepare_backend.py` (used by
-`test_whole_synthetic_package_passes_actual_queue_and_backend`), which still expects the pre-patch backend anchor
-("sealed admission patch anchor changed") — make it recognise the installed post-63l backend as R1-77d's helper does; rebuild every recipe identity; rehearse D9 → endpoints → seal → freeze candidate →
-queue dry-run with two workers and the watch on the real unsigned inputs; emit candidate v14 / forms v9 / sheet v8
-with the open gates listed (signatures only).
+### Lane R1-D12 — block-boundary operations (before block 1 ends)
 
-### Lane X19 — re-review of the v14 package
+Extend the D11 block report with the re-pricing step: at each block boundary, measured cell costs replace the plan-v3
+transfers for that class, plan v4+ is emitted with the updated projection and buffer, the fidelity-watch summary and
+the DEC-052 inventory are attached, and the text block for the lead queue is produced. Rehearse on the synthetic queue.
 
-### Lane HT-4f — claim ledger v6 (after receipt v4 is signed)
+### Lane X20 — post-sitting verification (after the lead signs)
+
+Verify every signed receipt against its dry-run digest and the candidate, the draw against the RNG admission
+(reproduce the reservations from the master seed), the seal against the endpoint inventory, the frozen manifest
+against candidate v14; a plain statement that the run may launch.
+
+### Lane HT-4f — claim ledger v6 (after the signed cost receipt)
 
 ## 4. Interfaces and coordination
 
