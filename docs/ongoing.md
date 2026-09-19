@@ -131,6 +131,17 @@ the 63-interval family untouched); G4: the DEC-052 execution-accounting section 
 section. Acceptance fixtures as X21 lists; the 63 primary rows and classifiers identical before / after; the skeleton
 refilled from the synthetic output with no unbound placeholder.
 
+### Lane R1-77g — post-freeze ceilings amendment: two-worker factor from block-1 measurements (urgent; prepare, do not apply)
+
+Block 1 measured the two-worker slowdown at 1.6–2.4× on the full-validation phase (primary zsRE 4,450 s vs 2,858 s
+solo estimate; v0_stable CounterFact 9,680 s vs 5,900 s), against the admitted 1.15. Two classes ran at 90–96 % of
+their effective ceilings. Prepare, as a versioned post-freeze amendment (DEC-028 style: a new bindings version bound
+to the block-1 finish records as evidence, the frozen matrix unchanged): `docs/tasks/R1-final-queue-bindings-v2.json`
+with the two-worker factor 1.7 (measured max 1.64 + margin) applied to the full-validation-bearing classes, the exact
+resume procedure that swaps bindings at a cell boundary without breaking the receipt chain (per D13's resume
+checklist; state whether the launch receipt must be re-signed), and the Q21 text for the lead (it changes an admitted
+number). Also: does the queue read bindings only at launch? Say so. New files only; the tree stays locked.
+
 ### Lane X20 — post-session verification (NOW: session v10 complete; freeze published)
 
 Verify: every signed receipt in `logs/R1/operator_v10/receipts.jsonl` against its dry-run digest and form; the RNG

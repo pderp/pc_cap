@@ -998,3 +998,19 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     hold their ceilings, i.e. completion around September 27 with the October 9 stop as the buffer. First
     block-boundary report after the triplet's realization 0 (45 cells, ≈ 28 h in).
 
+103. (2026-09-19, 17:25 EDT) **Block 1 complete — the triplet on realization 0, 45 cells, 23.8 hours, zero failures, zero
+    ceiling stops.** Measured cost per cell under two workers (charged seconds): primary zsRE 4,450 / CounterFact 4,270 /
+    MQuAKE 2,100; random reader 2,160 / 2,120 / 1,330; v0_stable 4,710 / 9,680 / 2,890. Rate ≈ 1.9 cells per hour →
+    the remaining 285 cells project to ≈ 6.5 days (≈ September 26) if the later classes behave like these.
+    **The one risk:** two classes finished at 90–96 % of their per-cell ceilings — primary zsRE (91 %) and v0_stable
+    CounterFact (95–96 %, 2.7 h per cell). The cause is measured: the full-validation phase runs 1.6–2.4× slower with
+    two workers than solo, and the admitted two-worker factor was 1.15 from probes that had no full-validation phase.
+    Blocks 2–3 repeat these classes; a cell that crosses its ceiling is stopped, retried once, then reported incomplete
+    (DEC-052). I am not stopping the run for this; Codex prepares the versioned post-freeze amendment (queue bindings
+    v2 with a measured two-worker factor of 1.7) to apply at the next resume point, and I will bring it to you as Q21
+    before it is applied since it changes an admitted number. **Fidelity watch (block 1):** five new running maxima,
+    none an admission matter (DEC-064): primary zsRE 0.00238 (+5 % vs dev), primary MQuAKE 0.0071 (vs 0.0055 dev —
+    a fresh realization, same 300 records), v0_stable zsRE now 0.00185 (dev 0.00079: the quiet baseline also crosses
+    the old 0.001 line on fresh draws), random reader CounterFact 0.060 (fires everywhere, as designed). Full ledger:
+    `docs/fidelity_watch.md`.
+
