@@ -992,3 +992,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     class (S1) could touch its ceiling. I am watching every finish; if a cell is stopped at its ceiling, the retry
     policy applies and I bring you a ceilings amendment or a one-worker switch rather than let cells go incomplete.
 
+102. (2026-09-18, 22:30 EDT) Run status: 8 cells complete in the first 4.9 hours (all primary-reader cells of block 1 so
+    far; 4,270–4,480 s each, zsRE at ≈ 90 % of its ceiling, CounterFact at ≈ 32 %), no failures, no ceiling stops,
+    launcher healthy, GPU ≈ 70 %. At ≈ 1.6 cells per hour the 330 cells project to ≈ 8.5 days if the heavier classes
+    hold their ceilings, i.e. completion around September 27 with the October 9 stop as the buffer. First
+    block-boundary report after the triplet's realization 0 (45 cells, ≈ 28 h in).
+
