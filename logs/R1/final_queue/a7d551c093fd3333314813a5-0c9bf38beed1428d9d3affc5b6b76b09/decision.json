@@ -1,0 +1,76 @@
+{
+  "cell_id": "a7d551c093fd3333314813a5",
+  "failed_attempts": 0,
+  "fidelity_watch": {
+    "admission_veto": false,
+    "alert_log": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/alerts.jsonl",
+      "sha256": "3f04e612959661dba31f4c93ff0afaf259cb79f9e319b71ad92927ee0d01454b"
+    },
+    "alerts": 7,
+    "audited_cells": 70,
+    "breaches": 47,
+    "document": {
+      "path": "/home/derp/cap/pc_cap/docs/fidelity_watch.md",
+      "sha256": "8e245d11a8978117e4d8b13379aec3ff312edafb510685cce3d8d80a85b00bf0"
+    },
+    "entries": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/entries.jsonl",
+      "sha256": "63596f5c7aa5b0b303db79afce390222c806c554b6fd51a260e5912be9d66680"
+    },
+    "journal": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/observations.jsonl",
+      "sha256": "78ef688cb6de799900baf07952db40f300c36924a9db326e12314bea8d0a6fe3"
+    },
+    "new_alerts": [
+      {
+        "admission_veto": false,
+        "cell_id": "666cb086004ef1c5d7de1bbb07995ecef72fafed67e0a894f9243f167ff6612d",
+        "delivery": "pending_orchestrator_notification",
+        "group": "R1_nonlearned:counterfact",
+        "reasons": [
+          {
+            "compared_cell_id": "f893001ebfca1f3cc4c00a1783eca0ea39a99fdf2f2c564952274f80d28d41b9",
+            "compared_value": 0.05978057548689135,
+            "kind": "new_running_maximum",
+            "metric": "mean_kl",
+            "reference": "capoff",
+            "value": 0.08933935659883886
+          },
+          {
+            "compared_cell_id": "f893001ebfca1f3cc4c00a1783eca0ea39a99fdf2f2c564952274f80d28d41b9",
+            "compared_value": 0.05953122235103673,
+            "kind": "new_running_maximum",
+            "metric": "mean_signed_nll_increase",
+            "reference": "capoff",
+            "value": 0.08823741174386562
+          },
+          {
+            "compared_cell_id": "f893001ebfca1f3cc4c00a1783eca0ea39a99fdf2f2c564952274f80d28d41b9",
+            "compared_value": 0.05978057548689135,
+            "kind": "new_running_maximum",
+            "metric": "mean_kl",
+            "reference": "original",
+            "value": 0.08933935659883886
+          },
+          {
+            "compared_cell_id": "f893001ebfca1f3cc4c00a1783eca0ea39a99fdf2f2c564952274f80d28d41b9",
+            "compared_value": 0.05953122235103673,
+            "kind": "new_running_maximum",
+            "metric": "mean_signed_nll_increase",
+            "reference": "original",
+            "value": 0.08823741174386562
+          }
+        ],
+        "recorded_utc": "2026-09-20T06:50:56.903962+00:00"
+      }
+    ],
+    "new_cells": 1,
+    "status": "updated"
+  },
+  "finish_sha256": "bf658751ea05d76fc4ea0335a5954c753b654bde36fa266d16ead1f449c87914",
+  "matrix_sha256": "06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb",
+  "outcome": "complete",
+  "retained_other_workers": 1,
+  "retry_policy": "R1-77f-retry-once-v1"
+}

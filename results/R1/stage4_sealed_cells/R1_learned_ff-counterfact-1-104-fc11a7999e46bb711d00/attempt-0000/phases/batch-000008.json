@@ -1,0 +1,3598 @@
+{
+  "intent": {
+    "path": "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-counterfact-1-104-fc11a7999e46bb711d00/attempt-0000/phases/batch-000008.intent.json",
+    "sha256": "d2778e1a19344e170dd74713f8513ced321dc21040db9ba80292045553e75366"
+  },
+  "previous_sha256": "bbc53054143804d0052ad9c015f44a38831ab0188ea2af513b625f25f97953c9",
+  "rows": [
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0021020780550315976,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.040350190887693316,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 107,
+          "wall_seconds": 0.040350190887693316
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.040350190887693316,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 107,
+          "wall_seconds": 0.040350190887693316
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": "full_rebuild",
+          "method": "import_state"
+        },
+        {
+          "changed": [
+            "counterfact:cf-5408:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-5408:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.09706437098793685,
+      "phase": "edit:101",
+      "phase_index": 204,
+      "phase_wall_seconds": 0.10377510194666684,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-5408",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.01760754582937807,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 69,
+            "wall_seconds": 0.01760754582937807
+          }
+        }
+      ],
+      "state_after_operation": "f28e71623a518c671784aa763c7092cdefd62694ed834eefae5da4f08635fc18",
+      "state_after_restore": "f28e71623a518c671784aa763c7092cdefd62694ed834eefae5da4f08635fc18",
+      "state_before": "b030006408c2f37ff69c8e37993f073161d0a73358ccfd95c8b4aaf354c4c8f4",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09826620400417596
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002099843928590417,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.022259000048507005,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 182,
+          "wall_seconds": 0.022259000048507005
+        },
+        "total": {
+          "accel_seconds": 0.022259000048507005,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 182,
+          "wall_seconds": 0.022259000048507005
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.0583537730271928,
+      "phase": "immediate:101",
+      "phase_index": 205,
+      "phase_wall_seconds": 0.06586484803119674,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006776196940336376,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 30,
+            "wall_seconds": 0.006776196940336376
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.008189375046640635,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 86,
+            "wall_seconds": 0.008189375046640635
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.007293428061529994,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 66,
+            "wall_seconds": 0.007293428061529994
+          }
+        }
+      ],
+      "state_after_operation": "66c21709732d8734c8a9f1980c32098dd916bf9045b412c0f303e52500cd3960",
+      "state_after_restore": "66c21709732d8734c8a9f1980c32098dd916bf9045b412c0f303e52500cd3960",
+      "state_before": "66c21709732d8734c8a9f1980c32098dd916bf9045b412c0f303e52500cd3960",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06326591700781137
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019763869349844754,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.02679064404219389,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 127,
+          "wall_seconds": 0.02679064404219389
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.02679064404219389,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 127,
+          "wall_seconds": 0.02679064404219389
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-6655:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-6655:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.07932204898679629,
+      "phase": "edit:102",
+      "phase_index": 206,
+      "phase_wall_seconds": 0.08154124103020877,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-6655",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.012272009043954313,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 85,
+            "wall_seconds": 0.012272009043954313
+          }
+        }
+      ],
+      "state_after_operation": "1e02eaf2c9997f138638b1eba1e2ae0da78d421eb202a8fdea4778ee31713c39",
+      "state_after_restore": "1e02eaf2c9997f138638b1eba1e2ae0da78d421eb202a8fdea4778ee31713c39",
+      "state_before": "f28e71623a518c671784aa763c7092cdefd62694ed834eefae5da4f08635fc18",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.08058651100145653
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002264540991745889,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.01770967908669263,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 170,
+          "wall_seconds": 0.01770967908669263
+        },
+        "total": {
+          "accel_seconds": 0.01770967908669263,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 170,
+          "wall_seconds": 0.01770967908669263
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.05402825400233269,
+      "phase": "immediate:102",
+      "phase_index": 207,
+      "phase_wall_seconds": 0.061961536994203925,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.0055831290083006024,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 42,
+            "wall_seconds": 0.0055831290083006024
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006518743059132248,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 62,
+            "wall_seconds": 0.006518743059132248
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005607807019259781,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 66,
+            "wall_seconds": 0.005607807019259781
+          }
+        }
+      ],
+      "state_after_operation": "a59097c88f671ae45f9c93c560b2337b30487c0a02b7dc77ded47e7a9c86aee1",
+      "state_after_restore": "a59097c88f671ae45f9c93c560b2337b30487c0a02b7dc77ded47e7a9c86aee1",
+      "state_before": "a59097c88f671ae45f9c93c560b2337b30487c0a02b7dc77ded47e7a9c86aee1",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.05928511801175773
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002091268019285053,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.04457114415708929,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 77,
+          "wall_seconds": 0.04457114415708929
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.04457114415708929,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 77,
+          "wall_seconds": 0.04457114415708929
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-1374:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-1374:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.10154876502929255,
+      "phase": "edit:103",
+      "phase_index": 208,
+      "phase_wall_seconds": 0.10391499998513609,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-1374",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.018561455071903765,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 50,
+            "wall_seconds": 0.018561455071903765
+          }
+        }
+      ],
+      "state_after_operation": "719c5b470ba6d098108ebfcd7de97887c3ed0e7343ea6f01c4c2b4eea0156cd2",
+      "state_after_restore": "719c5b470ba6d098108ebfcd7de97887c3ed0e7343ea6f01c4c2b4eea0156cd2",
+      "state_before": "1e02eaf2c9997f138638b1eba1e2ae0da78d421eb202a8fdea4778ee31713c39",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.10291284904815257
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002130724024027586,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.018531233014073223,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 150,
+          "wall_seconds": 0.018531233014073223
+        },
+        "total": {
+          "accel_seconds": 0.018531233014073223,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 150,
+          "wall_seconds": 0.018531233014073223
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.054466052970383316,
+      "phase": "immediate:103",
+      "phase_index": 209,
+      "phase_wall_seconds": 0.06198772799689323,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005793492018710822,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 22,
+            "wall_seconds": 0.005793492018710822
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.0058396809617988765,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 78,
+            "wall_seconds": 0.0058396809617988765
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.0068980600335635245,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 50,
+            "wall_seconds": 0.0068980600335635245
+          }
+        }
+      ],
+      "state_after_operation": "bd97d5ea553ad9d63e8c97b7193d76c46bb7cf810a87e5f67ea73238f9563b39",
+      "state_after_restore": "bd97d5ea553ad9d63e8c97b7193d76c46bb7cf810a87e5f67ea73238f9563b39",
+      "state_before": "bd97d5ea553ad9d63e8c97b7193d76c46bb7cf810a87e5f67ea73238f9563b39",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.059427331027109176
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.001951750018633902,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.027370475872885436,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 67,
+          "wall_seconds": 0.027370475872885436
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.027370475872885436,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 67,
+          "wall_seconds": 0.027370475872885436
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-5353:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-5353:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.07964106003055349,
+      "phase": "edit:104",
+      "phase_index": 210,
+      "phase_wall_seconds": 0.08183830097550526,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-5353",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.012630546931177378,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 45,
+            "wall_seconds": 0.012630546931177378
+          }
+        }
+      ],
+      "state_after_operation": "d33c6f79fbdb8bdf556912b13dee96f043d5a6e39c9906d6ae1ca4824dbf10ae",
+      "state_after_restore": "d33c6f79fbdb8bdf556912b13dee96f043d5a6e39c9906d6ae1ca4824dbf10ae",
+      "state_before": "719c5b470ba6d098108ebfcd7de97887c3ed0e7343ea6f01c4c2b4eea0156cd2",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.08088344102725387
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0020383159862831235,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.01785709208343178,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 158,
+          "wall_seconds": 0.01785709208343178
+        },
+        "total": {
+          "accel_seconds": 0.01785709208343178,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 158,
+          "wall_seconds": 0.01785709208343178
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.05449132196372375,
+      "phase": "immediate:104",
+      "phase_index": 211,
+      "phase_wall_seconds": 0.061916500970255584,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005788172013126314,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 22,
+            "wall_seconds": 0.005788172013126314
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.0061856250977143645,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 74,
+            "wall_seconds": 0.0061856250977143645
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005883294972591102,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 62,
+            "wall_seconds": 0.005883294972591102
+          }
+        }
+      ],
+      "state_after_operation": "45779a07554e8159694725595168305480081110ef973246e280d92d359fddce",
+      "state_after_restore": "45779a07554e8159694725595168305480081110ef973246e280d92d359fddce",
+      "state_before": "45779a07554e8159694725595168305480081110ef973246e280d92d359fddce",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.05941756197717041
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002269417978823185,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.030402345990296453,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 163,
+          "wall_seconds": 0.030402345990296453
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.030402345990296453,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 163,
+          "wall_seconds": 0.030402345990296453
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-6544:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-6544:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.08442454697797075,
+      "phase": "edit:105",
+      "phase_index": 212,
+      "phase_wall_seconds": 0.0869798949570395,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-6544",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.013543506036512554,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 109,
+            "wall_seconds": 0.013543506036512554
+          }
+        }
+      ],
+      "state_after_operation": "72d091dc257b48795fa39033bbddbb28127fbce48637b7ba075f9fc66e7efbe8",
+      "state_after_restore": "72d091dc257b48795fa39033bbddbb28127fbce48637b7ba075f9fc66e7efbe8",
+      "state_before": "d33c6f79fbdb8bdf556912b13dee96f043d5a6e39c9906d6ae1ca4824dbf10ae",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.08573787502245978
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0020194000098854303,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.02258658700156957,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 258,
+          "wall_seconds": 0.02258658700156957
+        },
+        "total": {
+          "accel_seconds": 0.02258658700156957,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 258,
+          "wall_seconds": 0.02258658700156957
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.05833752203034237,
+      "phase": "immediate:105",
+      "phase_index": 213,
+      "phase_wall_seconds": 0.06599435699172318,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006345219968352467,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 54,
+            "wall_seconds": 0.006345219968352467
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006901506043504924,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 66,
+            "wall_seconds": 0.006901506043504924
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.009339860989712179,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 138,
+            "wall_seconds": 0.009339860989712179
+          }
+        }
+      ],
+      "state_after_operation": "5904b13954e84b5ff152034c928b584524eec94341baa73a8c43f3d37b8666f6",
+      "state_after_restore": "5904b13954e84b5ff152034c928b584524eec94341baa73a8c43f3d37b8666f6",
+      "state_before": "5904b13954e84b5ff152034c928b584524eec94341baa73a8c43f3d37b8666f6",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06349781103199348
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002006414928473532,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0271389790577814,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 103,
+          "wall_seconds": 0.0271389790577814
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.0271389790577814,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 103,
+          "wall_seconds": 0.0271389790577814
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-1868:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-1868:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.07948008103994653,
+      "phase": "edit:106",
+      "phase_index": 214,
+      "phase_wall_seconds": 0.08172196801751852,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-1868",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.012034893094096333,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 69,
+            "wall_seconds": 0.012034893094096333
+          }
+        }
+      ],
+      "state_after_operation": "df7870f76e1bf81310baba5f3041a9bdd76014e92dda0c2cb022687f0a932a38",
+      "state_after_restore": "df7870f76e1bf81310baba5f3041a9bdd76014e92dda0c2cb022687f0a932a38",
+      "state_before": "72d091dc257b48795fa39033bbddbb28127fbce48637b7ba075f9fc66e7efbe8",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.08069400698877871
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0018928279750980437,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.018581101903691888,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 154,
+          "wall_seconds": 0.018581101903691888
+        },
+        "total": {
+          "accel_seconds": 0.018581101903691888,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 154,
+          "wall_seconds": 0.018581101903691888
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.05602109298342839,
+      "phase": "immediate:106",
+      "phase_index": 215,
+      "phase_wall_seconds": 0.0634504109621048,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006575943902134895,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 34,
+            "wall_seconds": 0.006575943902134895
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006092276016715914,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 58,
+            "wall_seconds": 0.006092276016715914
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.0059128819848410785,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 62,
+            "wall_seconds": 0.0059128819848410785
+          }
+        }
+      ],
+      "state_after_operation": "3324994e31852a5158956c30effb73b857e61abc990f8d7e29fe3e0addb8fc94",
+      "state_after_restore": "3324994e31852a5158956c30effb73b857e61abc990f8d7e29fe3e0addb8fc94",
+      "state_before": "3324994e31852a5158956c30effb73b857e61abc990f8d7e29fe3e0addb8fc94",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06106058100704104
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002300218038726598,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.028622323996387422,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 91,
+          "wall_seconds": 0.028622323996387422
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.028622323996387422,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 91,
+          "wall_seconds": 0.028622323996387422
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-2919:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-2919:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.08355629298603162,
+      "phase": "edit:107",
+      "phase_index": 216,
+      "phase_wall_seconds": 0.08611003798432648,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-2919",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.012660312990192324,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 61,
+            "wall_seconds": 0.012660312990192324
+          }
+        }
+      ],
+      "state_after_operation": "6326a4285e4991b579fb0983efcea67fba9452f48f3b61d0e54304a6f70ec87d",
+      "state_after_restore": "6326a4285e4991b579fb0983efcea67fba9452f48f3b61d0e54304a6f70ec87d",
+      "state_before": "df7870f76e1bf81310baba5f3041a9bdd76014e92dda0c2cb022687f0a932a38",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.08480934402905405
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002021833963226527,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.021549779921770096,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 158,
+          "wall_seconds": 0.021549779921770096
+        },
+        "total": {
+          "accel_seconds": 0.021549779921770096,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 158,
+          "wall_seconds": 0.021549779921770096
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.061663767031859607,
+      "phase": "immediate:107",
+      "phase_index": 217,
+      "phase_wall_seconds": 0.06933403701987118,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006971611932385713,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 30,
+            "wall_seconds": 0.006971611932385713
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005655698012560606,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 46,
+            "wall_seconds": 0.005655698012560606
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.008922469976823777,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 82,
+            "wall_seconds": 0.008922469976823777
+          }
+        }
+      ],
+      "state_after_operation": "4c66e94349790788e4fe23020ce25b8e92e982b0416db0bbd7ebe1e97c430c94",
+      "state_after_restore": "4c66e94349790788e4fe23020ce25b8e92e982b0416db0bbd7ebe1e97c430c94",
+      "state_before": "4c66e94349790788e4fe23020ce25b8e92e982b0416db0bbd7ebe1e97c430c94",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06686106801498681
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0021347119472920895,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.03195013100048527,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 115,
+          "wall_seconds": 0.03195013100048527
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.03195013100048527,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 115,
+          "wall_seconds": 0.03195013100048527
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-8927:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-8927:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.08924252103315666,
+      "phase": "edit:108",
+      "phase_index": 218,
+      "phase_wall_seconds": 0.09162128897150978,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-8927",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.015281136089470237,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 77,
+            "wall_seconds": 0.015281136089470237
+          }
+        }
+      ],
+      "state_after_operation": "7bb37743e07c7f943cd100707a256a4d47d68cd59b9b94826cdec4e09b3d0bda",
+      "state_after_restore": "7bb37743e07c7f943cd100707a256a4d47d68cd59b9b94826cdec4e09b3d0bda",
+      "state_before": "6326a4285e4991b579fb0983efcea67fba9452f48f3b61d0e54304a6f70ec87d",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09046431200113147
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019172640168108046,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.06888888782123104,
+          "full_forwards": 27,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 4,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 755,
+          "wall_seconds": 0.06888888782123104
+        },
+        "total": {
+          "accel_seconds": 0.06888888782123104,
+          "full_forwards": 27,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 4,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 755,
+          "wall_seconds": 0.06888888782123104
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.12211123300949112,
+      "phase": "immediate:108",
+      "phase_index": 219,
+      "phase_wall_seconds": 0.1295335470349528,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.007627257029525936,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 38,
+            "wall_seconds": 0.007627257029525936
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.009977990994229913,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 50,
+            "wall_seconds": 0.009977990994229913
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.05128363979747519,
+            "full_forwards": 23,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 667,
+            "wall_seconds": 0.05128363979747519
+          }
+        }
+      ],
+      "state_after_operation": "e0b51163ad81212a9c12c54ec5529917f7ff5a0f635db6d7a83a70341f57cac4",
+      "state_after_restore": "e0b51163ad81212a9c12c54ec5529917f7ff5a0f635db6d7a83a70341f57cac4",
+      "state_before": "e0b51163ad81212a9c12c54ec5529917f7ff5a0f635db6d7a83a70341f57cac4",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.12713326700031757
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002694856026209891,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0345803540549241,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.0345803540549241
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.0345803540549241,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.0345803540549241
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-5622:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-5622:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.08962984301615506,
+      "phase": "edit:109",
+      "phase_index": 220,
+      "phase_wall_seconds": 0.09265998000046238,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-5622",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.01415965799242258,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 68,
+            "wall_seconds": 0.01415965799242258
+          }
+        }
+      ],
+      "state_after_operation": "cca4f88d21f93477768d1ae86a5e786cc3d5cf3913fa464d5abcd964e0328010",
+      "state_after_restore": "cca4f88d21f93477768d1ae86a5e786cc3d5cf3913fa464d5abcd964e0328010",
+      "state_before": "7bb37743e07c7f943cd100707a256a4d47d68cd59b9b94826cdec4e09b3d0bda",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09161270299227908
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0025489049148745835,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.02016951492987573,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 194,
+          "wall_seconds": 0.02016951492987573
+        },
+        "total": {
+          "accel_seconds": 0.02016951492987573,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 194,
+          "wall_seconds": 0.02016951492987573
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.057704649050720036,
+      "phase": "immediate:109",
+      "phase_index": 221,
+      "phase_wall_seconds": 0.0660586390295066,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.00619755795923993,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 30,
+            "wall_seconds": 0.00619755795923993
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006217755028046668,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 86,
+            "wall_seconds": 0.006217755028046668
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.007754201942589134,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 78,
+            "wall_seconds": 0.007754201942589134
+          }
+        }
+      ],
+      "state_after_operation": "4f4da5825ea4b3d8437eb3c8fe792754d71934767a498e93add9e8388ebb5a83",
+      "state_after_restore": "4f4da5825ea4b3d8437eb3c8fe792754d71934767a498e93add9e8388ebb5a83",
+      "state_before": "4f4da5825ea4b3d8437eb3c8fe792754d71934767a498e93add9e8388ebb5a83",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06273936800425872
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.001977339037694037,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.03484556108014658,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.03484556108014658
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.03484556108014658,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.03484556108014658
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-6465:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-6465:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.0905803149798885,
+      "phase": "edit:110",
+      "phase_index": 222,
+      "phase_wall_seconds": 0.09280638000927866,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-6465",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.014497414114885032,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 68,
+            "wall_seconds": 0.014497414114885032
+          }
+        }
+      ],
+      "state_after_operation": "875b1d5cdfaf5e39503b09d657d1f3a24eda54a58fa0e474c611d26b5e08a002",
+      "state_after_restore": "875b1d5cdfaf5e39503b09d657d1f3a24eda54a58fa0e474c611d26b5e08a002",
+      "state_before": "cca4f88d21f93477768d1ae86a5e786cc3d5cf3913fa464d5abcd964e0328010",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09182666300330311
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0023366279783658683,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.017736330919433385,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 138,
+          "wall_seconds": 0.017736330919433385
+        },
+        "total": {
+          "accel_seconds": 0.017736330919433385,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 138,
+          "wall_seconds": 0.017736330919433385
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.05883342301240191,
+      "phase": "immediate:110",
+      "phase_index": 223,
+      "phase_wall_seconds": 0.06712798797525465,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005960282927844673,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 30,
+            "wall_seconds": 0.005960282927844673
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005836006021127105,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 66,
+            "wall_seconds": 0.005836006021127105
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005940041970461607,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 42,
+            "wall_seconds": 0.005940041970461607
+          }
+        }
+      ],
+      "state_after_operation": "0d5368fccd8da24a0988d83deedda7da3d3e425375b8f6bec8bdd5f9b024b490",
+      "state_after_restore": "0d5368fccd8da24a0988d83deedda7da3d3e425375b8f6bec8bdd5f9b024b490",
+      "state_before": "0d5368fccd8da24a0988d83deedda7da3d3e425375b8f6bec8bdd5f9b024b490",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06469617795664817
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.001938064000569284,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.036613559059333056,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.036613559059333056
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.036613559059333056,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.036613559059333056
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-10246:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-10246:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.09165273001417518,
+      "phase": "edit:111",
+      "phase_index": 224,
+      "phase_wall_seconds": 0.09382880997145548,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-10246",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.01612835907144472,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 68,
+            "wall_seconds": 0.01612835907144472
+          }
+        }
+      ],
+      "state_after_operation": "78608ce8ca712c78f3950323cc297def261307a998794e33523b9aaf08e38729",
+      "state_after_restore": "78608ce8ca712c78f3950323cc297def261307a998794e33523b9aaf08e38729",
+      "state_before": "875b1d5cdfaf5e39503b09d657d1f3a24eda54a58fa0e474c611d26b5e08a002",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09288697503507137
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019087380496785045,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.05202767113223672,
+          "full_forwards": 23,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 2,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 450,
+          "wall_seconds": 0.05202767113223672
+        },
+        "total": {
+          "accel_seconds": 0.05202767113223672,
+          "full_forwards": 23,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 2,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 450,
+          "wall_seconds": 0.05202767113223672
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.09678483504103497,
+      "phase": "immediate:111",
+      "phase_index": 225,
+      "phase_wall_seconds": 0.10446586599573493,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.0078905820264481,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 30,
+            "wall_seconds": 0.0078905820264481
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.026423341070767492,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 287,
+            "wall_seconds": 0.026423341070767492
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.017713748035021126,
+            "full_forwards": 7,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 133,
+            "wall_seconds": 0.017713748035021126
+          }
+        }
+      ],
+      "state_after_operation": "d53a46b4960dbb46496422381fecb000724fdf7d52c2adf819265f28b66b69c0",
+      "state_after_restore": "d53a46b4960dbb46496422381fecb000724fdf7d52c2adf819265f28b66b69c0",
+      "state_before": "d53a46b4960dbb46496422381fecb000724fdf7d52c2adf819265f28b66b69c0",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.10201148199848831
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.002061199920717627,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.033848309074528515,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.033848309074528515
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.033848309074528515,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 105,
+          "wall_seconds": 0.033848309074528515
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-7984:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-7984:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.0896240120055154,
+      "phase": "edit:112",
+      "phase_index": 226,
+      "phase_wall_seconds": 0.09196100098779425,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-7984",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.01453695009695366,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 68,
+            "wall_seconds": 0.01453695009695366
+          }
+        }
+      ],
+      "state_after_operation": "c0b813362c7d61de11e1b2840865fdc13690a29bde891b6ccf72749a47f46879",
+      "state_after_restore": "c0b813362c7d61de11e1b2840865fdc13690a29bde891b6ccf72749a47f46879",
+      "state_before": "78608ce8ca712c78f3950323cc297def261307a998794e33523b9aaf08e38729",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09089265298098326
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019159330404363573,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.018596789916045964,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 178,
+          "wall_seconds": 0.018596789916045964
+        },
+        "total": {
+          "accel_seconds": 0.018596789916045964,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 178,
+          "wall_seconds": 0.018596789916045964
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.05571251199580729,
+      "phase": "immediate:112",
+      "phase_index": 227,
+      "phase_wall_seconds": 0.06340238900156692,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.00606455298839137,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 30,
+            "wall_seconds": 0.00606455298839137
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005764565954450518,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 74,
+            "wall_seconds": 0.005764565954450518
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006767670973204076,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 74,
+            "wall_seconds": 0.006767670973204076
+          }
+        }
+      ],
+      "state_after_operation": "e9409cba40bb396668f347e0c39b58f907627797a028fce08bab2820f8c615bd",
+      "state_after_restore": "e9409cba40bb396668f347e0c39b58f907627797a028fce08bab2820f8c615bd",
+      "state_before": "e9409cba40bb396668f347e0c39b58f907627797a028fce08bab2820f8c615bd",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06093149300431833
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.001982791000045836,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.03393642988521606,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 175,
+          "wall_seconds": 0.03393642988521606
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.03393642988521606,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 175,
+          "wall_seconds": 0.03393642988521606
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-8395:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-8395:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.08892788802040741,
+      "phase": "edit:113",
+      "phase_index": 228,
+      "phase_wall_seconds": 0.09115853201365098,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-8395",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.014747394889127463,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 113,
+            "wall_seconds": 0.014747394889127463
+          }
+        }
+      ],
+      "state_after_operation": "940c9615bc3ffbad45917e59cb3a71bbb95f9f2fc1a2144cf4ebd761330c9a81",
+      "state_after_restore": "940c9615bc3ffbad45917e59cb3a71bbb95f9f2fc1a2144cf4ebd761330c9a81",
+      "state_before": "c0b813362c7d61de11e1b2840865fdc13690a29bde891b6ccf72749a47f46879",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09018295304849744
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019012739649042487,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.01958649593871087,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 166,
+          "wall_seconds": 0.01958649593871087
+        },
+        "total": {
+          "accel_seconds": 0.01958649593871087,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 166,
+          "wall_seconds": 0.01958649593871087
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.059969839989207685,
+      "phase": "immediate:113",
+      "phase_index": 229,
+      "phase_wall_seconds": 0.0676075880182907,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.00693828595103696,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 50,
+            "wall_seconds": 0.00693828595103696
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.005870790977496654,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 70,
+            "wall_seconds": 0.005870790977496654
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006777419010177255,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 46,
+            "wall_seconds": 0.006777419010177255
+          }
+        }
+      ],
+      "state_after_operation": "0cb7c9e5abbd268fc01ef1762d22eeca10a6ad4abc214e2fea4cb7781a7e3b06",
+      "state_after_restore": "0cb7c9e5abbd268fc01ef1762d22eeca10a6ad4abc214e2fea4cb7781a7e3b06",
+      "state_before": "0cb7c9e5abbd268fc01ef1762d22eeca10a6ad4abc214e2fea4cb7781a7e3b06",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06509767699753866
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.001948634977452457,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.03455436212243512,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 133,
+          "wall_seconds": 0.03455436212243512
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.03455436212243512,
+          "full_forwards": 14,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 5,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 133,
+          "wall_seconds": 0.03455436212243512
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-9851:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-9851:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.09146617201622576,
+      "phase": "edit:114",
+      "phase_index": 230,
+      "phase_wall_seconds": 0.09365959599381313,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-9851",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.015181997034233063,
+            "full_forwards": 14,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 5,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 86,
+            "wall_seconds": 0.015181997034233063
+          }
+        }
+      ],
+      "state_after_operation": "512751ed15553ac34a6f4b2351f119671738238dc5ecbd0d486a94c55447df0f",
+      "state_after_restore": "512751ed15553ac34a6f4b2351f119671738238dc5ecbd0d486a94c55447df0f",
+      "state_before": "940c9615bc3ffbad45917e59cb3a71bbb95f9f2fc1a2144cf4ebd761330c9a81",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.09268661099486053
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0020806670072488487,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.019783374154940248,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 250,
+          "wall_seconds": 0.019783374154940248
+        },
+        "total": {
+          "accel_seconds": 0.019783374154940248,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 250,
+          "wall_seconds": 0.019783374154940248
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.06276021798839793,
+      "phase": "immediate:114",
+      "phase_index": 231,
+      "phase_wall_seconds": 0.07094305998180062,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006001482077408582,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 38,
+            "wall_seconds": 0.006001482077408582
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006709799054078758,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 138,
+            "wall_seconds": 0.006709799054078758
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.007072093023452908,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 74,
+            "wall_seconds": 0.007072093023452908
+          }
+        }
+      ],
+      "state_after_operation": "10bb447b391f3ed4e7baf6efd97885e5bd89d9c96d36f087585a0bb53575b0e7",
+      "state_after_restore": "10bb447b391f3ed4e7baf6efd97885e5bd89d9c96d36f087585a0bb53575b0e7",
+      "state_before": "10bb447b391f3ed4e7baf6efd97885e5bd89d9c96d36f087585a0bb53575b0e7",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.06843656697310507
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019496660097502172,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.029162978986278176,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 103,
+          "wall_seconds": 0.029162978986278176
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.029162978986278176,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 103,
+          "wall_seconds": 0.029162978986278176
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-8356:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-8356:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.08084933500504121,
+      "phase": "edit:115",
+      "phase_index": 232,
+      "phase_wall_seconds": 0.0830442929873243,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-8356",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.01313362893415615,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 69,
+            "wall_seconds": 0.01313362893415615
+          }
+        }
+      ],
+      "state_after_operation": "c713427f5555f6bd46d38edccd8d64263f3ae161a6de8abda5eba89d219e2c0b",
+      "state_after_restore": "c713427f5555f6bd46d38edccd8d64263f3ae161a6de8abda5eba89d219e2c0b",
+      "state_before": "512751ed15553ac34a6f4b2351f119671738238dc5ecbd0d486a94c55447df0f",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.08209396997699514
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0018775489879772067,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.06349688215414062,
+          "full_forwards": 28,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 2,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 749,
+          "wall_seconds": 0.06349688215414062
+        },
+        "total": {
+          "accel_seconds": 0.06349688215414062,
+          "full_forwards": 28,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 2,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 749,
+          "wall_seconds": 0.06349688215414062
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.10875190998194739,
+      "phase": "immediate:115",
+      "phase_index": 233,
+      "phase_wall_seconds": 0.11643463297514245,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006219488976057619,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 34,
+            "wall_seconds": 0.006219488976057619
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.007804497028701007,
+            "full_forwards": 5,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 85,
+            "wall_seconds": 0.007804497028701007
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.049472896149381995,
+            "full_forwards": 21,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 630,
+            "wall_seconds": 0.049472896149381995
+          }
+        }
+      ],
+      "state_after_operation": "5842f820885177bfb75347d6773f180817b890fb8d709eb3f733554bc3f67514",
+      "state_after_restore": "5842f820885177bfb75347d6773f180817b890fb8d709eb3f733554bc3f67514",
+      "state_before": "5842f820885177bfb75347d6773f180817b890fb8d709eb3f733554bc3f67514",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.11395336902933195
+    },
+    {
+      "borrowed_readonly_state": false,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019629120361059904,
+      "learning": true,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.03315881505841389,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 211,
+          "wall_seconds": 0.03315881505841389
+        },
+        "query": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "total": {
+          "accel_seconds": 0.03315881505841389,
+          "full_forwards": 12,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 4,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 211,
+          "wall_seconds": 0.03315881505841389
+        }
+      },
+      "mutation_inventory": [
+        {
+          "changed": [
+            "counterfact:cf-2137:r1"
+          ],
+          "method": "add",
+          "removed": []
+        },
+        {
+          "changed": [
+            "counterfact:cf-2137:r1"
+          ],
+          "method": "set_delta",
+          "removed": []
+        }
+      ],
+      "operation_seconds": 0.17737473297165707,
+      "phase": "edit:116",
+      "phase_index": 234,
+      "phase_wall_seconds": 0.17960463697090745,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "code": "accepted",
+          "codes": [
+            "accepted"
+          ],
+          "item_id": "cf-2137",
+          "original_code": "accepted",
+          "phase": "learning",
+          "returned_cost": {
+            "accel_seconds": 0.01526053505949676,
+            "full_forwards": 12,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 0,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "learning",
+            "prefix_microsteps": 0,
+            "reverses": 4,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 141,
+            "wall_seconds": 0.01526053505949676
+          }
+        }
+      ],
+      "state_after_operation": "7ab51f39957927438e13309117a83a15d8d967bcebd23c94d39e2f8c6cf14300",
+      "state_after_restore": "7ab51f39957927438e13309117a83a15d8d967bcebd23c94d39e2f8c6cf14300",
+      "state_before": "c713427f5555f6bd46d38edccd8d64263f3ae161a6de8abda5eba89d219e2c0b",
+      "state_hash_convention": "record-digest-v1",
+      "status": "ok",
+      "wall_seconds": 0.17864757200004533
+    },
+    {
+      "borrowed_readonly_state": true,
+      "cost_policy": "shared ledger and returned counters separate; all failed work retained",
+      "error": null,
+      "failure_recovery": "abort; resume only from the last verified durable checkpoint",
+      "identity_check_kind": "in_memory_structure_and_configuration",
+      "identity_check_seconds": 0.0019737620023079216,
+      "learning": false,
+      "ledger_delta": {
+        "learning": {
+          "accel_seconds": 0.0,
+          "full_forwards": 0,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 0,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 0,
+          "wall_seconds": 0.0
+        },
+        "query": {
+          "accel_seconds": 0.025165978993754834,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 282,
+          "wall_seconds": 0.025165978993754834
+        },
+        "total": {
+          "accel_seconds": 0.025165978993754834,
+          "full_forwards": 6,
+          "memory_search_seconds": 0.0,
+          "partial_forwards": 6,
+          "prefix_microsteps": 0,
+          "reverses": 0,
+          "router_probes": 0,
+          "search_candidates": 0,
+          "settle_iters": 0,
+          "tokens": 282,
+          "wall_seconds": 0.025165978993754834
+        }
+      },
+      "mutation_inventory": [],
+      "operation_seconds": 0.06968045001849532,
+      "phase": "immediate:116",
+      "phase_index": 235,
+      "phase_wall_seconds": 0.07773974596057087,
+      "restore_required": false,
+      "returned_events": [
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.010011155973188579,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 70,
+            "wall_seconds": 0.010011155973188579
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.00820887100417167,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 114,
+            "wall_seconds": 0.00820887100417167
+          }
+        },
+        {
+          "model": "cap",
+          "phase": "query",
+          "returned_cost": {
+            "accel_seconds": 0.006945952016394585,
+            "full_forwards": 2,
+            "memory_search_seconds": 0.0,
+            "partial_forwards": 2,
+            "peak_mem_mib": 737.489013671875,
+            "phase": "query",
+            "prefix_microsteps": 0,
+            "reverses": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "settle_iters": 0,
+            "tokens": 98,
+            "wall_seconds": 0.006945952016394585
+          }
+        }
+      ],
+      "state_after_operation": "bae8d3b9e31cb8acd261262ea20271429fbca310517e5cfe6e304cbe1570cb1b",
+      "state_after_restore": "bae8d3b9e31cb8acd261262ea20271429fbca310517e5cfe6e304cbe1570cb1b",
+      "state_before": "bae8d3b9e31cb8acd261262ea20271429fbca310517e5cfe6e304cbe1570cb1b",
+      "state_hash_convention": "legacy-state-sha256",
+      "status": "ok",
+      "wall_seconds": 0.07517276698490605
+    }
+  ],
+  "schema_version": 1
+}
