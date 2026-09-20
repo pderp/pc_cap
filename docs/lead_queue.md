@@ -1023,3 +1023,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     for the talk), the claim ledger v6 (the cost receipt is now signed), and an independent audit of block 1's receipt
     chain.
 
+
+105. (2026-09-20, 07:40 EDT) Fidelity watch, DEC-064a relay (six entries since item 103; none is an admission veto; all
+    numbers are full-validation means against both references, which agree to 5 decimals):
+    - **Creep, v0_stable / zsRE, realization 1**: two cells above twice the development reference (mean KL 0.00274 and
+      0.00210 nats vs the development 0.00158; mean NLL increase 0.00277 and 0.00208 vs 0.00171). The running maximum for
+      this group has risen across realizations: 0.00116 (dev) → 0.00185 (r0) → 0.00274 (r1). Still 2–3× the old 0.001
+      critical bound, and 99.7 % of positions untouched, but this is the one series to keep watching at r2.
+    - New running maxima only (small increments): primary zsRE 0.00238 → 0.00245 KL; nonlearned CounterFact 0.0598 → 0.0893
+      KL (the lossy control, expected); nonlearned MQuAKE NLL increase 0.01205 → 0.01209; v0_stable zsRE NLL increase
+      0.00155 → 0.00159.
