@@ -131,26 +131,24 @@ the 63-interval family untouched); G4: the DEC-052 execution-accounting section 
 section. Acceptance fixtures as X21 lists; the 63 primary rows and classifiers identical before / after; the skeleton
 refilled from the synthetic output with no unbound placeholder.
 
-### Lane R1-77g — post-freeze ceilings amendment: two-worker factor from block-1 measurements (urgent; prepare, do not apply)
+### Lane R1-D14c — first partial confirmatory report from block 1 (first)
 
-Block 1 measured the two-worker slowdown at 1.6–2.4× on the full-validation phase (primary zsRE 4,450 s vs 2,858 s
-solo estimate; v0_stable CounterFact 9,680 s vs 5,900 s), against the admitted 1.15. Two classes ran at 90–96 % of
-their effective ceilings. Prepare, as a versioned post-freeze amendment (DEC-028 style: a new bindings version bound
-to the block-1 finish records as evidence, the frozen matrix unchanged): `docs/tasks/R1-final-queue-bindings-v2.json`
-with the two-worker factor 1.7 (measured max 1.64 + margin) applied to the full-validation-bearing classes, the exact
-resume procedure that swaps bindings at a cell boundary without breaking the receipt chain (per D13's resume
-checklist; state whether the launch receipt must be re-signed), and the Q21 text for the lead (it changes an admitted
-number). Also: does the queue read bindings only at launch? Say so. New files only; the tree stays locked.
+Run the D.5 analysis (`r1_49g_analyze` / R1-75 / the D14 report) on the 45 completed block-1 cells (the triplet on
+realization 0, three datasets): every table and figure the skeleton promises, filled where data exist and marked
+unavailable where not (no classifier labels without three realizations; the primary contrasts as realization-0
+estimates with order dispersion only; fidelity benchmarks and concentration statistics per cell; the DEC-052
+inventory; the watch summary). Output under `logs/R1/reports/block1/` + `docs/R1_stage4_report_block1_partial.md`; a copy
+of any figure worth a slide to `assets/presentation-materials/figures/block1/`. Read-only on the run.
 
-### Lane X20 — post-session verification (NOW: session v10 complete; freeze published)
+### Lane HT-4f — claim ledger v6 (publish now: the cost receipt is signed in session v10, step 2)
 
-Verify: every signed receipt in `logs/R1/operator_v10/receipts.jsonl` against its dry-run digest and form; the RNG
-admission and draw (reproduce the reservations from seed 378462438976234321867 and the register); the endpoint
-construction and seal against the independent populations; the frozen manifest (`frozen_stage4.json`) against
-candidate v15 and the staged bundle; the queue bindings against the final matrix and the content lock. A plain
-statement that the run may launch, or the exact defect. New files under `logs/`; the tree is locked.
+### Lane X22 — block-1 receipt-chain audit
 
-### Lane HT-4f — publish ledger v6 (after the signed step-2 cost receipt)
+Every finish / decision / receipt under `logs/R1/final_queue/` for the 45 cells against the frozen recipes, the sealed
+payload hashes, the checkpoint receipts in `results/R1/stage4_sealed_cells/`, the charged process time (no double
+counting) and the fidelity-watch observations; a plain integrity statement or the exact defect. Read-only.
+
+### Lane R1-77g — post-freeze ceilings amendment (delivered; awaiting Q21) — keep the resume procedure ready for the block-2 boundary
 
 ## 4. Interfaces and coordination
 

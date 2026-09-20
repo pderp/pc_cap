@@ -488,6 +488,7 @@ Rule you asked for: a task that depends on one of these answers does not commenc
 | Q17 (fidelity limit scope) | **ANSWERED 2026-09-18: option 1** (DEC-064) — cap fidelity is a declared secondary benchmark (KL and NLL, pass / fail, concentration statistics), no veto; the continued-base gate unchanged. | — | unblocked: protocol v5.2-D.3 (R1-49m), candidate v14 | — |
 | Q18 (MQuAKE scope) | **ANSWERED 2026-09-18: B** (DEC-066) — MQuAKE core = primary + floor + v0_stable, 45 cells; the five radius-0 conditions recorded as determined by calibration v3. | — | unblocked: matrix / protocol D.4 with candidate v14 | — |
 | Q19 (three-realization inference) | **ANSWERED 2026-09-18: A + C's t-interval display** (DEC-069). | — | unblocked: protocol D.5 in the re-bind (R1-63o) | — |
+| Q21 (post-freeze execution allowance; `docs/tasks/R1-77g-Q21.md`) | Replace the two-worker ceiling multiplier 1.15 → 1.7 (measured block-1 maximum 1.66) on the unchanged solo ceilings for future dispatch, keeping the frozen matrix, recipes, populations, scoring, the 1.5 solo factor, the 750 process-hour cap and the October 9 stop; applied by draining the queue at the block-2 boundary (stop-after 2), reconciling while idle, and resuming under a new signed resume request bound to bindings v2. Options: **(A)** all 330 cells (ceiling-sum scenario 894 h > 750 cap — a worst case, not a forecast; expected spend ≈ 350 h; the cap check is per dispatch, so it only bites if actual spend approaches 750); **(B)** the two observed classes only (primary zsRE, v0_stable CounterFact; 30 cells; scenario 640 h) — but the unobserved CounterFact controls and S1 classes share the same full-validation load and would likely also hit 1.15× ceilings. | **A**, with the resume delegated to the orchestrator as in DEC-067 | dispatch after block 2; nothing scientific | before the block-2 boundary (today ≈ 13:00) |
 | Q20 (block order) | **ANSWERED 2026-09-18: adopt** (DEC-068) — triplet across all realizations first. | — | unblocked: matrix D.5 block numbers in the re-bind | — |
 
 Answered or superseded: sysctl/kdump root commands (held off, item 30); MQuAKE training vs transfer-only (settled by evidence:
@@ -1013,4 +1014,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     a fresh realization, same 300 records), v0_stable zsRE now 0.00185 (dev 0.00079: the quiet baseline also crosses
     the old 0.001 line on fresh draws), random reader CounterFact 0.060 (fires everywhere, as designed). Full ledger:
     `docs/fidelity_watch.md`.
+
+104. (2026-09-20, 07:35 EDT) Run: 78 / 330 cells at 38 h (≈ 2.0 per hour), no failures, no ceiling stops; block 2 boundary
+    expected ≈ 13:00. Codex's amendment package is ready (bindings v2 with factor 1.7, the drain-and-resume procedure,
+    the Q21 text): **Q21 is above, my recommendation A with the resume delegated to me**; answering before ≈ 13:00 lets
+    me stop the queue at the block-2 boundary and resume with the new ceilings without losing a cell. X20 verified
+    session v10 (see its report). Codex's next lanes: a first partial confirmatory report from block 1 (descriptive,
+    for the talk), the claim ledger v6 (the cost receipt is now signed), and an independent audit of block 1's receipt
+    chain.
 
