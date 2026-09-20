@@ -56,7 +56,7 @@ then AW-B to the exploratory ≤ 8 h version on known checkpoints. AW-G and AW-D
   not a matched-compute adapter comparison or a test of CD readers or PC learning; our KL assay is behaviour on a
   declared population, not the report's worst-case distance; the memory-versus-access analogy is an analogy.
 
-## 3. The one open decision: who gets the fresh subjects (question for the lead)
+## 3. Population allocation — decided: A (lead, 2026-09-20; DEC-073)
 
 The certified margins are the same pool for Option R and for fresh AW-L/AW-B evaluation streams. After Option R takes
 1,350 per dataset, about 684 zsRE and 721 CounterFact subjects remain before further exclusions, which cannot supply
@@ -72,7 +72,7 @@ three fresh 300-edit streams plus endpoint roles. The choices:
 - **C.** Split: shorter fresh streams (100 edits × 3) for the interventions and no Option R, or Option R plus
   interventions on development streams only (exploratory operating curves). Weakest of the three for the talk.
 
-CPU implementation proceeds under A; the choice only changes manifests, not code.
+Adopted: A. Manifests are built accordingly.
 
 ## 4. Implementation plan and status
 

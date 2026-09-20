@@ -1041,3 +1041,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     resume on the same receipt root. The original step-9 record will show as interrupted; that is expected and preserved.
     Observations in `logs/R1/operations/Q21_cutover/`.
 
+107. (2026-09-20, 15:30 EDT) Additional work: lead decided allocation A (DEC-073). Final plan `docs/additional_work_plan_final.md`;
+    code under `aw/` (oracle + generation wrapper, 11 CPU tests passing). Codex lanes opened in `docs/ongoing.md` §3
+    (AW-R0 allocation check and extension matrix, AW-L0/L1 identity audit and tap screen, AW-L3 masks, AW-L
+    pre-registration draft); the orchestrator takes the streamed scorer, the AW-B and R pre-registrations, and the
+    queue cutover. Run: 87 started / 85 finished; drain watcher armed for the 90th start.
+

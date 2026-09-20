@@ -131,7 +131,62 @@ the 63-interval family untouched); G4: the DEC-052 execution-accounting section 
 section. Acceptance fixtures as X21 lists; the 63 primary rows and classifiers identical before / after; the skeleton
 refilled from the synthetic output with no unbound placeholder.
 
-**No new Codex lanes are assigned in this round (lead, 2026-09-20): the lead is giving Codex a separate task directly. The tree lock and the no-simultaneous-edits rule still apply.**
+## Round 43 — additional work (DEC-073), Codex lanes (2026-09-20)
+
+Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`), no file under `scripts/` or
+`src/pccap/` is added or edited (content lock; the resume consumer re-verifies it), no large cache builds while the
+queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
+`docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
+usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+### Lane AW-R0 — portfolio allocation check and the Option R extension matrix (first)
+
+Under DEC-073 the certified fresh subjects go to Option R: one additional untouched realization (index 3) of the
+primary triplet (`R1_learned_ff`, `R1_nonlearned`, `v0_stable`) on zsRE and CounterFact, five orders each = 30 cells,
+1,000 edits, the selected artifact unchanged (no reader retraining). Deliver: (1) the allocation check with the real
+population constructor and the frozen exclusions — subject-disjointness from realizations 0–2 and from every training,
+selection and development identity, template-family feasibility, all endpoint roles (outside, near-support,
+near-neighbour, revision, locality per DEC-070, question-null family per DEC-061/062) — with a plain yes/no per dataset
+and the remaining margin after allocation; (2) if yes, the sealed realization-3 populations and payloads under
+`assets/runs/pc_cap/R1/additional_work/R/` and an extension matrix `manifests/additional_work/run_matrix_R_v1.json`
+built with the existing builders (recipes identity-bound as in R1, new receipt root `logs/additional_work/R/`,
+`block_number` 6, ceilings from the per-condition means of the finished R1 cells under the 1.7 factor), plus the
+cell recipes under `docs/tasks/AW-R-cell-recipes/`; (3) a one-page note on what the extension can and cannot say
+(reported beside DEC-069, never inside it). No launch, no GPU. Files: `docs/tasks/AW-R0*.md`, the manifests above,
+`aw/r_extension.py` if code is needed.
+
+### Lane AW-L0 / AW-L1 — identity audit and cheap tap screen (second)
+
+L0: inspect the frozen constructor and the saved v5 reader metadata; record tap indices (banks after blocks 4, 8, 12;
+bank 3 pre-`ln_f`), pre/post-normalisation convention, write sites, the acquisition rule and the active `single_site`
+value; verify all-site reconstruction of a saved development checkpoint (prediction agreement on 64 development
+prefixes). L1: on cached development observations (existing caches only; no new cache build), per-tap norm/variance
+and retrieval/null discrimination for read sets {1,2,3}, {2,3}, {3}, {2}, identical small probes split by
+subject/template family, the lexical-only feature as a diagnostic control; paired retrieval/false-fire tables with the
+explicit caveat that probe quality is not editing quality. Files: `docs/tasks/AW-L0.md`, `docs/tasks/AW-L1.md`,
+`aw/tap_screen.py`, `aw/tests/test_tap_screen.py`, results under `results/additional_work/L1/`.
+
+### Lane AW-L3 — explicit read/write sets (third)
+
+`aw/interface.py`: a supplemental learner configuration with explicit `read_taps` and `write_sites` such that
+acquisition (`adapt.py`'s delta routine), the fallback controller writes, stored deltas, deployment and memory
+accounting all obey one mask — masked before gradient normalisation, updates and projection; inactive sites exactly
+zero throughout; the aggregate write allowance and the five-step acquisition budget unchanged for every write set (no
+budget multiplication when sites are removed); query/JIT caches cleared on identity change. Subclass or wrap, never
+edit, the locked modules. Tests in `aw/tests/test_interface.py` on the tiny base: inactive writes are exactly zero in
+acquisition and deployment; `{1,2,3}`/`{1,2,3}` reproduces `RevisionCap` to the bit (logits and cost counters,
+cf. `aw/tests/test_wrapper.py`); dropping a read tap removes the corresponding projection parameters and the count is
+reported. Files: `aw/interface.py`, `aw/tests/test_interface.py`, `docs/tasks/AW-L3.md`.
+
+### Lane AW-L-prereg — AW-L pre-registration draft (fourth)
+
+`docs/additional_work/AW-L.md`, one page: hypothesis, the 2×2 arms (read {1,2,3},{2,3} × write {1,2,3},{3}), three
+paired reader-training seeds, zsRE and CounterFact, 300 edits, one order, the sealed realization-0 confirmatory
+streams as the evaluation population (DEC-073, labelled post hoc/exposed), endpoints (ES, RET-ES, RET-GS, LS,
+near-miss, revision at 100 and 300; full ordinary-text fidelity at 300 with the tail statistics of the final plan),
+the descriptive 0.02 tolerance rule, resource accounting (training, acquisition, corrected-pass cost per fired query,
+observation pass), the L4 pilot gate and the 48-hour ceiling. Draft for the lead's review; the orchestrator writes
+`AW-B.md` and `R.md`.
 
 ### Lane R1-D14c — first partial confirmatory report from block 1 (done, 2026-09-20; `docs/R1_stage4_report_block1_partial.md`)
 
