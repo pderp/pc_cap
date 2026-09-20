@@ -1,0 +1,58 @@
+{
+  "actual_costs_changed": false,
+  "amended_v2_projection": {
+    "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback. R1-77g replaces the remaining two-worker ceiling factor once; actual historical envelopes are unchanged.",
+    "ceiling_amendment": "R1-77g-ceiling-amendment-v2",
+    "ceiling_hours": 750,
+    "known_attempt_hours": 46.80529544058245,
+    "projected_total_hours": null,
+    "projected_within_ceiling": null,
+    "projection_workers": 2,
+    "remaining_cell_ceiling_multiplier": 1.7,
+    "scenario_fallback_cell_seconds": null,
+    "unknown_attempts": [
+      "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-zsre-1-100-8ab8ea177d1c51e1c50a/attempt-0000",
+      "/home/derp/cap/pc_cap/logs/R1/final_queue/6b089d284c00a4418a1d3af4-b97d224bfd784306ba3c8f9abb83266f/start.json",
+      "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-zsre-1-101-420e68bed62c87bf2e81/attempt-0000",
+      "/home/derp/cap/pc_cap/logs/R1/final_queue/47dac9d968ffe594faac0a14-51ecaf863e2742a2ab4af431d4b47dc8/start.json"
+    ]
+  },
+  "amendment": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings-v2.json",
+    "sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
+  },
+  "canonical_D11_modified": false,
+  "consumer": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_77g/consumer.py",
+    "sha256": "660cdd1feca4e15962e64d6d711ac4d72cfb25a0da2c91881a4ad946f62a0780"
+  },
+  "d11_report": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operator_reports/20260919-block1-try1/report.json",
+    "sha256": "85955b0221c1138606378b4430f2eb18674d86afde8c379e6a23d86b6778760a"
+  },
+  "frozen_v1_projection": {
+    "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback.",
+    "ceiling_hours": 750,
+    "known_attempt_hours": 46.80529544058245,
+    "projected_total_hours": null,
+    "projected_within_ceiling": null,
+    "projection_workers": 2,
+    "remaining_cell_ceiling_multiplier": 1.15,
+    "scenario_fallback_cell_seconds": null,
+    "unknown_attempts": [
+      "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-zsre-1-100-8ab8ea177d1c51e1c50a/attempt-0000",
+      "/home/derp/cap/pc_cap/logs/R1/final_queue/6b089d284c00a4418a1d3af4-b97d224bfd784306ba3c8f9abb83266f/start.json",
+      "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-zsre-1-101-420e68bed62c87bf2e81/attempt-0000",
+      "/home/derp/cap/pc_cap/logs/R1/final_queue/47dac9d968ffe594faac0a14-51ecaf863e2742a2ab4af431d4b47dc8/start.json"
+    ]
+  },
+  "note": "Use the v2 projection with its explicit authorization/snapshot date; canonical D11/D13 remain the frozen v1 forecast. Unknown live cost remains unknown. This is not an experimental result or a launch.",
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_77g/accounting.py",
+    "sha256": "0870f3e921a6669da02600fc38d47eaf37a1b01d264f5e966918eb625eeb6851"
+  },
+  "resume_authorization": null,
+  "schema_version": 1,
+  "status": "unsigned_scenario_only",
+  "task": "R1-77g-accounting"
+}

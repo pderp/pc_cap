@@ -1,0 +1,152 @@
+{
+  "checks": {
+    "clearance": {
+      "exact_register_and_review_replay": true,
+      "usable_subjects": {
+        "counterfact": 6121,
+        "mquake": 2161,
+        "zsre": 6084
+      }
+    },
+    "content_lock_initial": {
+      "content_lock_verified": true,
+      "resources": 916,
+      "scripts": 446
+    },
+    "derived_gates": {
+      "count": 18,
+      "deadline": "2026-10-09",
+      "exact_inheritance": true,
+      "process_hour_cap": 750
+    },
+    "draw": {
+      "allocation_groups": 45,
+      "exact_serialized_reservations": true,
+      "near_allocation": "family_coordinated",
+      "paired_orders": 45,
+      "seed": 378462438976234321867
+    },
+    "endpoints": {
+      "cells": 330,
+      "exact_independent_population": true,
+      "groups": [
+        {
+          "composition": 0,
+          "dataset": "zsre",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 0,
+          "revision": 50
+        },
+        {
+          "composition": 0,
+          "dataset": "zsre",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 1,
+          "revision": 50
+        },
+        {
+          "composition": 0,
+          "dataset": "zsre",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 2,
+          "revision": 50
+        },
+        {
+          "composition": 0,
+          "dataset": "counterfact",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 0,
+          "revision": 50
+        },
+        {
+          "composition": 0,
+          "dataset": "counterfact",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 1,
+          "revision": 50
+        },
+        {
+          "composition": 0,
+          "dataset": "counterfact",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 2,
+          "revision": 50
+        },
+        {
+          "composition": 80,
+          "dataset": "mquake",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 0,
+          "revision": 50
+        },
+        {
+          "composition": 85,
+          "dataset": "mquake",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 1,
+          "revision": 50
+        },
+        {
+          "composition": 89,
+          "dataset": "mquake",
+          "locality": 50,
+          "near_miss": 100,
+          "realization": 2,
+          "revision": 50
+        }
+      ],
+      "shortfalls": 0,
+      "unique_payloads": 45
+    },
+    "signed_requests": {
+      "count": 8,
+      "digests": {
+        "clearance": "99907939adedaff411842ec9e27c189628a85c731a13cf51e3a613eaf1fd50e7",
+        "cost-admit": "b8b9ed00a50262f97bf767c5ff4fedcbaba807b4bcd97dbec2516d4a7aaf7105",
+        "draw": "6d75525c2c7176e13a268069b40d862ebe94ed43aeb730f250f9dbf13e090421",
+        "endpoints": "71e8964f0e131fdfa4d9c1567df3fc5e6a8aac8fa3f866a9a7182e3e7ca9c109",
+        "freeze": "1716a41f2e2b0f2a4bc0770c32affc55e945792d5847a5c366445d9b475004da",
+        "protocol-admit": "28b49d752a5c9089a1d8d232f084abf7df4e9cf2a99b02531748155832706495",
+        "rng-admit": "1f7090364da393847247bf84f1fb5aae53d9b9dd0128709c041f1e2a0a719393",
+        "seal": "8e5d888cf502633ec3c4ee0d86facba2124f8486cec928df76268350ebed5dbc"
+      },
+      "exact_forms_receipts_previews_transitions": true
+    }
+  },
+  "defect": "sealed payload/reservation parsing refused",
+  "elapsed_seconds": 57.27211265900405,
+  "finished_utc": "2026-09-18T21:30:45.295909+00:00",
+  "journal_prefix": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operator_v10/receipts.jsonl",
+    "rows": 26,
+    "sha256": "50035d10b9b74d19c7a3e3ea950af2bca4ad868f16ed4cfe50c1d750f9842f45"
+  },
+  "launch_performed": false,
+  "limitations": [
+    "Validates recorded DEC-067 delegated approvals; does not authenticate a human identity independently.",
+    "Replays admitted selection rules; does not re-judge semantic teacher/alias clearance.",
+    "Technical verification is not a new signature, GPU lease, launch, or experimental result."
+  ],
+  "negative_checks": [
+    "changed signed seed",
+    "draw seed differs from admission"
+  ],
+  "peak_process_rss_mib": 1206.76171875,
+  "session": "operator_v10",
+  "started_utc": "2026-09-18T21:29:48.023895+00:00",
+  "status": "blocked",
+  "task": "X20",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/derp/cap/pc_cap/logs/r1_x20_v10/verify.py\", line 316, in main\n    seal_inventory = snap.read(seal[\"payload_inventory\"])\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/derp/cap/pc_cap/logs/r1_x20_v10/verify.py\", line 83, in read\n    require(not (p.parent.name == \"seal\" and\n  File \"/home/derp/cap/pc_cap/logs/r1_x20_v10/verify.py\", line 43, in require\n    raise ValueError(message)\nValueError: sealed payload/reservation parsing refused\n",
+  "verifier": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_x20_v10/verify.py",
+    "sha256": "efcced5bd7f6433653e1834b4c8f4c4be43649b24faf5e713496b6caa91d4a72"
+  }
+}

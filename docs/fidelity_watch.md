@@ -20,7 +20,7 @@ No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, develop
 
 Manual notes above are preserved. This source-bound table is regenerated from the locked journal; one entry per recipe cell. Both references are shown. Near-zero target-token loss does not establish unchanged predictions or reader inactivity.
 
-Audited cells: 49; breaching cells: 31; creep alerts: 5. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
+Audited cells: 82; breaching cells: 59; creep alerts: 11. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
 
 | Cell identity / scope | Condition / dataset / realization / order | Actual records / checkpoint | Reference | Mean KL | NLL increase | ES95 loss | Max loss | Positions for half KL | Near-zero loss fraction | Creep |
 |---|---|---|---|---:|---:|---:|---:|---|---:|---|
@@ -86,6 +86,62 @@ Audited cells: 49; breaching cells: 31; creep alerts: 5. Development and confirm
 | `685514501811adc9afc20d226ff93abfd11726f859fe4d753b48bd3602dab50d` / confirmatory | v0_stable / zsre / 0 / 103 | unavailable / 1000 | original | 0.00145363992 | 0.00120613705 | 0.0288660776 | 27.6841654 | 13 | 0.99829553 | none |
 | `947c0ba01d50c65eef575f552e86683faec1adbfee18d0215513ee1e881587a4` / confirmatory | v0_stable / zsre / 0 / 104 | unavailable / 1000 | capoff | 0.00153617076 | 0.00116742865 | 0.0272186768 | 27.6841654 | 11 | 0.99865029 | none |
 | `947c0ba01d50c65eef575f552e86683faec1adbfee18d0215513ee1e881587a4` / confirmatory | v0_stable / zsre / 0 / 104 | unavailable / 1000 | original | 0.00153617076 | 0.00116742865 | 0.0272186768 | 27.6841654 | 11 | 0.99865029 | none |
+| `788fc3046698451f32df7b489b2150526d8d5080f82147d620ad3ba08b6b2174` / confirmatory | R1_learned_ff / zsre / 1 / 101 | 1000 / 1000 | capoff | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | new_running_maximum |
+| `788fc3046698451f32df7b489b2150526d8d5080f82147d620ad3ba08b6b2174` / confirmatory | R1_learned_ff / zsre / 1 / 101 | 1000 / 1000 | original | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | new_running_maximum |
+| `b8ca8fa09960f1222629410233a15d331041ebe19b73a900f51b5b6668e50cef` / confirmatory | R1_learned_ff / zsre / 1 / 100 | 1000 / 1000 | capoff | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `b8ca8fa09960f1222629410233a15d331041ebe19b73a900f51b5b6668e50cef` / confirmatory | R1_learned_ff / zsre / 1 / 100 | 1000 / 1000 | original | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `517482bb58ab506cfcdccc5f835744f9f769edfc063ee823e01fdf1905f2b667` / confirmatory | R1_learned_ff / zsre / 1 / 103 | 1000 / 1000 | capoff | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `517482bb58ab506cfcdccc5f835744f9f769edfc063ee823e01fdf1905f2b667` / confirmatory | R1_learned_ff / zsre / 1 / 103 | 1000 / 1000 | original | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `fc5386b1a98a7163dedad1e0c64dfb8de2d3a86cf9adce1f71d3e58a00ef1cd3` / confirmatory | R1_learned_ff / zsre / 1 / 102 | 1000 / 1000 | capoff | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `fc5386b1a98a7163dedad1e0c64dfb8de2d3a86cf9adce1f71d3e58a00ef1cd3` / confirmatory | R1_learned_ff / zsre / 1 / 102 | 1000 / 1000 | original | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `36fb69ba8be3d4b4ac163996a38f73540e279be0a9c8052b667663dacc6f3fc8` / confirmatory | R1_learned_ff / counterfact / 1 / 100 | 1000 / 1000 | capoff | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `36fb69ba8be3d4b4ac163996a38f73540e279be0a9c8052b667663dacc6f3fc8` / confirmatory | R1_learned_ff / counterfact / 1 / 100 | 1000 / 1000 | original | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `4ea3b2f7cfdf30bfa69d1dffc5528f179ef340905649f75249f6000d7b410241` / confirmatory | R1_learned_ff / zsre / 1 / 104 | 1000 / 1000 | capoff | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `4ea3b2f7cfdf30bfa69d1dffc5528f179ef340905649f75249f6000d7b410241` / confirmatory | R1_learned_ff / zsre / 1 / 104 | 1000 / 1000 | original | 0.00244796963 | 0.00255302086 | 0.0532629347 | 8.95398757 | 69 | 0.99808756 | none |
+| `c0e12f6055c86cfac87e85eaeceac83d196ba2c5f4264ee94a2662d537b3eb05` / confirmatory | R1_learned_ff / counterfact / 1 / 101 | 1000 / 1000 | capoff | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `c0e12f6055c86cfac87e85eaeceac83d196ba2c5f4264ee94a2662d537b3eb05` / confirmatory | R1_learned_ff / counterfact / 1 / 101 | 1000 / 1000 | original | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `a58139698bae0bfe15d28ae24a5919880d531d87a1a9df1bf0db9ac16a11caef` / confirmatory | R1_learned_ff / counterfact / 1 / 102 | 1000 / 1000 | capoff | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `a58139698bae0bfe15d28ae24a5919880d531d87a1a9df1bf0db9ac16a11caef` / confirmatory | R1_learned_ff / counterfact / 1 / 102 | 1000 / 1000 | original | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `9c7cc51100cb0ee89162bdeb5f7fed3d243bb3837dd0cd671c2cce688aab0af2` / confirmatory | R1_learned_ff / counterfact / 1 / 103 | 1000 / 1000 | capoff | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `9c7cc51100cb0ee89162bdeb5f7fed3d243bb3837dd0cd671c2cce688aab0af2` / confirmatory | R1_learned_ff / counterfact / 1 / 103 | 1000 / 1000 | original | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `473baae2a5774af27349c0346ea80025d027fe07543de9c3056cc97b14af6b84` / confirmatory | R1_learned_ff / counterfact / 1 / 104 | 1000 / 1000 | capoff | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `473baae2a5774af27349c0346ea80025d027fe07543de9c3056cc97b14af6b84` / confirmatory | R1_learned_ff / counterfact / 1 / 104 | 1000 / 1000 | original | 0.00472786236 | 0.00462080141 | 0.0959752583 | 11.3657683 | 116 | 0.99696212 | none |
+| `f1bb49a6e02ac00681607530869d3868dea177c21d7e1f7c63d8437b6363c9cf` / confirmatory | R1_learned_ff / mquake / 1 / 100 | 300 / 300 | capoff | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `f1bb49a6e02ac00681607530869d3868dea177c21d7e1f7c63d8437b6363c9cf` / confirmatory | R1_learned_ff / mquake / 1 / 100 | 300 / 300 | original | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `0bde4df4a3d739d1cee83f7580d1c4349db90011892af1ec8db36b92a5def5be` / confirmatory | R1_learned_ff / mquake / 1 / 101 | 300 / 300 | capoff | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `0bde4df4a3d739d1cee83f7580d1c4349db90011892af1ec8db36b92a5def5be` / confirmatory | R1_learned_ff / mquake / 1 / 101 | 300 / 300 | original | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `48aa860271bc8898c2414c12436e49be358f7372eccb08b28b154dca92abc05c` / confirmatory | R1_learned_ff / mquake / 1 / 102 | 300 / 300 | capoff | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `48aa860271bc8898c2414c12436e49be358f7372eccb08b28b154dca92abc05c` / confirmatory | R1_learned_ff / mquake / 1 / 102 | 300 / 300 | original | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `54ca6d27a6bd891f27ba834cd00cbf986c4dce999f6e95020f880b3cf7ea0bd6` / confirmatory | R1_learned_ff / mquake / 1 / 103 | 300 / 300 | capoff | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `54ca6d27a6bd891f27ba834cd00cbf986c4dce999f6e95020f880b3cf7ea0bd6` / confirmatory | R1_learned_ff / mquake / 1 / 103 | 300 / 300 | original | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `89da55caaf379cf26c266cb7569884f17e8c35fb7dd0c19ba8b0c8b57e41dee9` / confirmatory | R1_learned_ff / mquake / 1 / 104 | 300 / 300 | capoff | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `89da55caaf379cf26c266cb7569884f17e8c35fb7dd0c19ba8b0c8b57e41dee9` / confirmatory | R1_learned_ff / mquake / 1 / 104 | 300 / 300 | original | 0.00693695516 | 0.0069390173 | 0.142018983 | 17.0605331 | 177 | 0.9960528 | none |
+| `666cb086004ef1c5d7de1bbb07995ecef72fafed67e0a894f9243f167ff6612d` / confirmatory | R1_nonlearned / counterfact / 1 / 100 | 1000 / 1000 | capoff | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | new_running_maximum |
+| `666cb086004ef1c5d7de1bbb07995ecef72fafed67e0a894f9243f167ff6612d` / confirmatory | R1_nonlearned / counterfact / 1 / 100 | 1000 / 1000 | original | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | new_running_maximum |
+| `308253fc6b6a87df0d9b8cfbd9fea6fa1acfb8a0319093eeae63aa7f4bc99da3` / confirmatory | R1_nonlearned / counterfact / 1 / 101 | 1000 / 1000 | capoff | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `308253fc6b6a87df0d9b8cfbd9fea6fa1acfb8a0319093eeae63aa7f4bc99da3` / confirmatory | R1_nonlearned / counterfact / 1 / 101 | 1000 / 1000 | original | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `6ddc968b4f936bd8f69844e8be8f083798788a95f87abff1de54e749ce1016ff` / confirmatory | R1_nonlearned / counterfact / 1 / 102 | 1000 / 1000 | capoff | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `6ddc968b4f936bd8f69844e8be8f083798788a95f87abff1de54e749ce1016ff` / confirmatory | R1_nonlearned / counterfact / 1 / 102 | 1000 / 1000 | original | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `f936343cced5b97235c48ef9861a4a91bb9811fd3b45465b4701900d54b62f62` / confirmatory | R1_nonlearned / counterfact / 1 / 103 | 1000 / 1000 | capoff | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `f936343cced5b97235c48ef9861a4a91bb9811fd3b45465b4701900d54b62f62` / confirmatory | R1_nonlearned / counterfact / 1 / 103 | 1000 / 1000 | original | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `e0e9e45e8bfdfa00bb9413e080626f0e8e042918e9168681ec736510770cb08b` / confirmatory | R1_nonlearned / mquake / 1 / 100 | 300 / 300 | capoff | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | new_running_maximum |
+| `e0e9e45e8bfdfa00bb9413e080626f0e8e042918e9168681ec736510770cb08b` / confirmatory | R1_nonlearned / mquake / 1 / 100 | 300 / 300 | original | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | new_running_maximum |
+| `f565376f11e4e9e45fa13592c062b2a8d2de477c996f9f7c7ca65449bf72e75b` / confirmatory | R1_nonlearned / counterfact / 1 / 104 | 1000 / 1000 | capoff | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `f565376f11e4e9e45fa13592c062b2a8d2de477c996f9f7c7ca65449bf72e75b` / confirmatory | R1_nonlearned / counterfact / 1 / 104 | 1000 / 1000 | original | 0.0893393566 | 0.0882374117 | 1.77904595 | 17.4515216 | 1621 | 0.97540339 | none |
+| `047ea51c0ee12ce18e253bc19e562c8fda5a8ff5d117e0369cd0c832d4e005f4` / confirmatory | R1_nonlearned / mquake / 1 / 101 | 300 / 300 | capoff | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `047ea51c0ee12ce18e253bc19e562c8fda5a8ff5d117e0369cd0c832d4e005f4` / confirmatory | R1_nonlearned / mquake / 1 / 101 | 300 / 300 | original | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `179f3ef7bbc1bbe33d684273047aaf7ca564a404929ddd11b531c156d20bde6a` / confirmatory | R1_nonlearned / mquake / 1 / 102 | 300 / 300 | capoff | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `179f3ef7bbc1bbe33d684273047aaf7ca564a404929ddd11b531c156d20bde6a` / confirmatory | R1_nonlearned / mquake / 1 / 102 | 300 / 300 | original | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `443d7b892866260a5a5f459003a3e8040d686de89d2fd624b9b97b01e6e73c58` / confirmatory | R1_nonlearned / mquake / 1 / 103 | 300 / 300 | capoff | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `443d7b892866260a5a5f459003a3e8040d686de89d2fd624b9b97b01e6e73c58` / confirmatory | R1_nonlearned / mquake / 1 / 103 | 300 / 300 | original | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `98a32b5b70a82335d9722492fc3e834f38ffdf63ed51a2be1cda6797a3fd4c91` / confirmatory | R1_nonlearned / mquake / 1 / 104 | 300 / 300 | capoff | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `98a32b5b70a82335d9722492fc3e834f38ffdf63ed51a2be1cda6797a3fd4c91` / confirmatory | R1_nonlearned / mquake / 1 / 104 | 300 / 300 | original | 0.0121116549 | 0.0120871469 | 0.244793496 | 12.7709463 | 263 | 0.99574289 | none |
+| `618e04a4e37f06ab8b265c56e5f36f764a847a205846d8eba505f12af22e6093` / confirmatory | v0_stable / zsre / 1 / 100 | unavailable / 1000 | capoff | 0.00157182194 | 0.00159125899 | 0.036107991 | 26.2876213 | 15 | 0.99860543 | new_running_maximum |
+| `618e04a4e37f06ab8b265c56e5f36f764a847a205846d8eba505f12af22e6093` / confirmatory | v0_stable / zsre / 1 / 100 | unavailable / 1000 | original | 0.00157182194 | 0.00159125899 | 0.036107991 | 26.2876213 | 15 | 0.99860543 | new_running_maximum |
+| `e98993bf16d389b4b5ffa2f6d5da0a9b7f12e6ddde814a2db606545329d8ac5b` / confirmatory | v0_stable / zsre / 1 / 101 | unavailable / 1000 | capoff | 0.00274030374 | 0.00277312077 | 0.0623577226 | 26.2876213 | 21 | 0.99692542 | above_twice_development_reference, new_running_maximum |
+| `e98993bf16d389b4b5ffa2f6d5da0a9b7f12e6ddde814a2db606545329d8ac5b` / confirmatory | v0_stable / zsre / 1 / 101 | unavailable / 1000 | original | 0.00274030374 | 0.00277312077 | 0.0623577226 | 26.2876213 | 21 | 0.99692542 | above_twice_development_reference, new_running_maximum |
+| `e37d83e73da8240ae82352db0a1f5fe8176fe58d7e0cecc3cb04a13255bd79a2` / confirmatory | v0_stable / zsre / 1 / 102 | unavailable / 1000 | capoff | 0.00210475478 | 0.00207833317 | 0.0472570692 | 26.2876213 | 21 | 0.99812426 | above_twice_development_reference |
+| `e37d83e73da8240ae82352db0a1f5fe8176fe58d7e0cecc3cb04a13255bd79a2` / confirmatory | v0_stable / zsre / 1 / 102 | unavailable / 1000 | original | 0.00210475478 | 0.00207833317 | 0.0472570692 | 26.2876213 | 21 | 0.99812426 | above_twice_development_reference |
 
 ### Running maxima (all audited cells, including no-breach cells)
 
@@ -95,20 +151,20 @@ Audited cells: 49; breaching cells: 31; creep alerts: 5. Development and confirm
 | R1_learned_ff:counterfact | original | 0.00576537791 | 0.00584962582 | `unavailable` |
 | R1_learned_ff:mquake | capoff | 0.00712334183 | 0.00714615798 | `e71244c94a79d03e28e59d421680063cf1a96e822a1c36f077c4d1289670fbe4` |
 | R1_learned_ff:mquake | original | 0.00712334183 | 0.00714615798 | `e71244c94a79d03e28e59d421680063cf1a96e822a1c36f077c4d1289670fbe4` |
-| R1_learned_ff:zsre | capoff | 0.00238149242 | 0.00245022572 | `b66aedc82924b7a83016a07aa0723803bfd8ff1360f4a2aebbd4acb4f624a8a1` |
-| R1_learned_ff:zsre | original | 0.00238149242 | 0.00245022572 | `b66aedc82924b7a83016a07aa0723803bfd8ff1360f4a2aebbd4acb4f624a8a1` |
-| R1_nonlearned:counterfact | capoff | 0.0597805755 | 0.0595312224 | `unavailable` |
-| R1_nonlearned:counterfact | original | 0.0597805755 | 0.0595312224 | `unavailable` |
-| R1_nonlearned:mquake | capoff | 0.0121762507 | 0.0120472241 | `unavailable` |
-| R1_nonlearned:mquake | original | 0.0121762507 | 0.0120472241 | `unavailable` |
-| R1_nonlearned:zsre | capoff | 0.000314584493 | 0.000316561304 | `unavailable` |
-| R1_nonlearned:zsre | original | 0.000314584493 | 0.000316561304 | `unavailable` |
+| R1_learned_ff:zsre | capoff | 0.00244796963 | 0.00255302086 | `b66aedc82924b7a83016a07aa0723803bfd8ff1360f4a2aebbd4acb4f624a8a1` |
+| R1_learned_ff:zsre | original | 0.00244796963 | 0.00255302086 | `b66aedc82924b7a83016a07aa0723803bfd8ff1360f4a2aebbd4acb4f624a8a1` |
+| R1_nonlearned:counterfact | capoff | 0.0893393566 | 0.0882374117 | `unavailable` |
+| R1_nonlearned:counterfact | original | 0.0893393566 | 0.0882374117 | `unavailable` |
+| R1_nonlearned:mquake | capoff | 0.0121762507 | 0.0120871469 | `unavailable` |
+| R1_nonlearned:mquake | original | 0.0121762507 | 0.0120871469 | `unavailable` |
+| R1_nonlearned:zsre | capoff | 0.000742548613 | 0.0007165783 | `unavailable` |
+| R1_nonlearned:zsre | original | 0.000742548613 | 0.0007165783 | `unavailable` |
 | v0_stable:counterfact | capoff | 0 | 0 | `unavailable` |
 | v0_stable:counterfact | original | 0 | 0 | `unavailable` |
 | v0_stable:mquake | capoff | 0 | 0 | `29efe01659d59eafa4daf6c07dbbd45ba7ef97f1aee549ca95763aa0df8eba61` |
 | v0_stable:mquake | original | 0 | 0 | `29efe01659d59eafa4daf6c07dbbd45ba7ef97f1aee549ca95763aa0df8eba61` |
-| v0_stable:zsre | capoff | 0.00185172225 | 0.00155231076 | `d9cbf00f433af01b870b7e6a880e41c74689ecef4ac9e8ebcf90be639735fd77` |
-| v0_stable:zsre | original | 0.00185172225 | 0.00155231076 | `d9cbf00f433af01b870b7e6a880e41c74689ecef4ac9e8ebcf90be639735fd77` |
+| v0_stable:zsre | capoff | 0.00274030374 | 0.00277312077 | `d9cbf00f433af01b870b7e6a880e41c74689ecef4ac9e8ebcf90be639735fd77` |
+| v0_stable:zsre | original | 0.00274030374 | 0.00277312077 | `d9cbf00f433af01b870b7e6a880e41c74689ecef4ac9e8ebcf90be639735fd77` |
 
 ### Creep alerts — orchestrator delivery queue
 
@@ -117,6 +173,12 @@ Audited cells: 49; breaching cells: 31; creep alerts: 5. Development and confirm
 - **CREEP** `f893001ebfca1f3cc4c00a1783eca0ea39a99fdf2f2c564952274f80d28d41b9` (R1_nonlearned:counterfact): capoff mean_kl 0.0597805755 > 0.0597793412 (new_running_maximum); capoff mean_signed_nll_increase 0.0595312224 > 0.0595263036 (new_running_maximum); original mean_kl 0.0597805755 > 0.0597793412 (new_running_maximum); original mean_signed_nll_increase 0.0595312224 > 0.0595263036 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 - **CREEP** `13fc72b7ad0725721d24a35bd33fdd0cb8a612192b6e179e23aa4ef92cb4e0de` (v0_stable:zsre): capoff mean_kl 0.00116430329 > 0.000788590677 (new_running_maximum); capoff mean_signed_nll_increase 0.000860380696 > 0.000855162037 (new_running_maximum); original mean_kl 0.00116430329 > 0.000788590677 (new_running_maximum); original mean_signed_nll_increase 0.000860380696 > 0.000855162037 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 - **CREEP** `1567dd5e5134d3c3bfabe3c800c867950a8b9cfaf1c221af51da540e17bcaf79` (v0_stable:zsre): capoff mean_kl 0.00185172225 > 0.00116430329 (new_running_maximum); capoff mean_kl 0.00185172225 > 0.00157718135 (above_twice_development_reference); capoff mean_signed_nll_increase 0.00155231076 > 0.000860380696 (new_running_maximum); original mean_kl 0.00185172225 > 0.00116430329 (new_running_maximum); original mean_kl 0.00185172225 > 0.00157718135 (above_twice_development_reference); original mean_signed_nll_increase 0.00155231076 > 0.000860380696 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `788fc3046698451f32df7b489b2150526d8d5080f82147d620ad3ba08b6b2174` (R1_learned_ff:zsre): capoff mean_kl 0.00244796963 > 0.00238149242 (new_running_maximum); capoff mean_signed_nll_increase 0.00255302086 > 0.00245022572 (new_running_maximum); original mean_kl 0.00244796963 > 0.00238149242 (new_running_maximum); original mean_signed_nll_increase 0.00255302086 > 0.00245022572 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `666cb086004ef1c5d7de1bbb07995ecef72fafed67e0a894f9243f167ff6612d` (R1_nonlearned:counterfact): capoff mean_kl 0.0893393566 > 0.0597805755 (new_running_maximum); capoff mean_signed_nll_increase 0.0882374117 > 0.0595312224 (new_running_maximum); original mean_kl 0.0893393566 > 0.0597805755 (new_running_maximum); original mean_signed_nll_increase 0.0882374117 > 0.0595312224 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `e0e9e45e8bfdfa00bb9413e080626f0e8e042918e9168681ec736510770cb08b` (R1_nonlearned:mquake): capoff mean_signed_nll_increase 0.0120871469 > 0.0120472241 (new_running_maximum); original mean_signed_nll_increase 0.0120871469 > 0.0120472241 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `618e04a4e37f06ab8b265c56e5f36f764a847a205846d8eba505f12af22e6093` (v0_stable:zsre): capoff mean_signed_nll_increase 0.00159125899 > 0.00155231076 (new_running_maximum); original mean_signed_nll_increase 0.00159125899 > 0.00155231076 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `e98993bf16d389b4b5ffa2f6d5da0a9b7f12e6ddde814a2db606545329d8ac5b` (v0_stable:zsre): capoff mean_kl 0.00274030374 > 0.00185172225 (new_running_maximum); capoff mean_kl 0.00274030374 > 0.00157718135 (above_twice_development_reference); capoff mean_signed_nll_increase 0.00277312077 > 0.00159125899 (new_running_maximum); capoff mean_signed_nll_increase 0.00277312077 > 0.00171032407 (above_twice_development_reference); original mean_kl 0.00274030374 > 0.00185172225 (new_running_maximum); original mean_kl 0.00274030374 > 0.00157718135 (above_twice_development_reference); original mean_signed_nll_increase 0.00277312077 > 0.00159125899 (new_running_maximum); original mean_signed_nll_increase 0.00277312077 > 0.00171032407 (above_twice_development_reference). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `e37d83e73da8240ae82352db0a1f5fe8176fe58d7e0cecc3cb04a13255bd79a2` (v0_stable:zsre): capoff mean_kl 0.00210475478 > 0.00157718135 (above_twice_development_reference); capoff mean_signed_nll_increase 0.00207833317 > 0.00171032407 (above_twice_development_reference); original mean_kl 0.00210475478 > 0.00157718135 (above_twice_development_reference); original mean_signed_nll_increase 0.00207833317 > 0.00171032407 (above_twice_development_reference). Orchestrator reports immediately; this is not an admission veto.
 
 <!-- HT-8 managed watch: end -->
 Creep alert 2026-09-18 18:42 EDT (confirmatory, cell 233ef059…, primary v5 zsRE r0 order 100, 1,000 records): mean KL 0.002381 / NLL Δ 0.002450 (both references) vs the development reference 0.002270 / 0.002310 (300 records) — new running maximum for zsRE · R1_learned_ff; relayed to the lead (lead queue item 101).

@@ -1,0 +1,250 @@
+FFFFF...                                                                 [100%]
+=================================== FAILURES ===================================
+_____________ test_factor_once_actual_budget_and_history_preserved _____________
+
+fake = {'ns': {'__file__': '/home/derp/cap/pc_cap/scripts/r1_77_queue.py', 'ROOT': PosixPath('/home/derp/cap/pc_cap/logs/r1_7...e_actual_budget0/bindings-v2.json', 'sha256': '74c964426b78b389fad297b304628c7f311ca34262e67aee2b13133c003d9e24'}, ...}
+
+    def test_factor_once_actual_budget_and_history_preserved(fake):
+>       one=fake["run"](stop_after=1)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+logs/r1_77g/test_consumer.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+logs/r1_77g/test_consumer.py:79: in run
+    return scheduler.run_workers(namespace or ns,mp["path"],(path or bp)["path"],**args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:170: in run_workers
+    observed = inventory()
+               ^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:132: in inventory
+    return q.inventory(matrix, stop_after=stop_after, ceiling_hours=ceiling_hours,
+logs/r1_77g/test_consumer.py:58: in inventory
+    for cell in q.ordered(m,stop_after):
+                ^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:67: in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'cells': [{'block_number': 1, 'ceilings': {'wall_seconds': 100.0}, 'cell_id': '0', 'checkpoints': [1], ...}, {'block_...erlap_and_failures', 'maximum_cell_failures': 2, 'solo_safety_factor': 1.5, 'version': 1, ...}, 'scope': 'development'}
+
+    def validate_matrix(matrix):
+        cells = all_cells(matrix)
+        fidelity_policy.validate_matrix(matrix, cells)
+        validation = matrix.get("full_validation")
+        if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+            full_contract.validate(validation)
+            for cell in cells:
+                population = cell.get("population")
+                if (
+                    cell.get("full_validation") != validation
+                    or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
+                    or (population is not None and population.get("full_validation") != validation)
+                ):
+                    raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+        if not cells:
+            raise ValueError("nonempty independently declared matrix required")
+        identities = [coordinate(c) for c in cells]
+        if len(set(identities)) != len(cells) or len({c["cell_id"] for c in cells}) != len(cells):
+            raise ValueError("duplicate expected cell coordinate or ID")
+        for c in cells:
+            if c["cell_id"] != coordinate_id(c):
+>               raise ValueError("unstable cell coordinate identity")
+E               ValueError: unstable cell coordinate identity
+
+scripts/r1_75_analysis_stage4_v1.py:264: ValueError
+_________________ test_reservations_prevent_shared_cap_overrun _________________
+
+fake = {'ns': {'__file__': '/home/derp/cap/pc_cap/scripts/r1_77_queue.py', 'ROOT': PosixPath('/home/derp/cap/pc_cap/logs/r1_7...ns_prevent_shar0/bindings-v2.json', 'sha256': '1fe67490ff7eba25b2a6d8ce7622c1f3cfa27bc90ed106ffe03f0fafbc89d2e2'}, ...}
+
+    def test_reservations_prevent_shared_cap_overrun(fake):
+>       result=fake["run"](amended(fake),fake["vp"],ceiling_hours=0.04,
+                           executor=lambda *a,**k:pytest.fail("170s reservation cannot fit 144s cap"))
+
+logs/r1_77g/test_consumer.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+logs/r1_77g/test_consumer.py:79: in run
+    return scheduler.run_workers(namespace or ns,mp["path"],(path or bp)["path"],**args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:170: in run_workers
+    observed = inventory()
+               ^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:132: in inventory
+    return q.inventory(matrix, stop_after=stop_after, ceiling_hours=ceiling_hours,
+logs/r1_77g/consumer.py:107: in inventory
+    return project(original["inventory"](matrix, **kwargs), matrix, kwargs["workers"])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+logs/r1_77g/test_consumer.py:58: in inventory
+    for cell in q.ordered(m,stop_after):
+                ^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:67: in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'cells': [{'block_number': 1, 'ceilings': {'wall_seconds': 100.0}, 'cell_id': '0', 'checkpoints': [1], ...}, {'block_...erlap_and_failures', 'maximum_cell_failures': 2, 'solo_safety_factor': 1.5, 'version': 1, ...}, 'scope': 'development'}
+
+    def validate_matrix(matrix):
+        cells = all_cells(matrix)
+        fidelity_policy.validate_matrix(matrix, cells)
+        validation = matrix.get("full_validation")
+        if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+            full_contract.validate(validation)
+            for cell in cells:
+                population = cell.get("population")
+                if (
+                    cell.get("full_validation") != validation
+                    or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
+                    or (population is not None and population.get("full_validation") != validation)
+                ):
+                    raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+        if not cells:
+            raise ValueError("nonempty independently declared matrix required")
+        identities = [coordinate(c) for c in cells]
+        if len(set(identities)) != len(cells) or len({c["cell_id"] for c in cells}) != len(cells):
+            raise ValueError("duplicate expected cell coordinate or ID")
+        for c in cells:
+            if c["cell_id"] != coordinate_id(c):
+>               raise ValueError("unstable cell coordinate identity")
+E               ValueError: unstable cell coordinate identity
+
+scripts/r1_75_analysis_stage4_v1.py:264: ValueError
+________________ test_unknown_costs_block_mixed_binding_resume _________________
+
+fake = {'ns': {'__file__': '/home/derp/cap/pc_cap/scripts/r1_77_queue.py', 'ROOT': PosixPath('/home/derp/cap/pc_cap/logs/r1_7...sts_block_mixed0/bindings-v2.json', 'sha256': 'c6f2f983b4f9de6c4c60cfb6bf8af81ddd497641e40e1e690bffce94f9d6aac0'}, ...}
+
+    def test_unknown_costs_block_mixed_binding_resume(fake):
+        put(fake["receipts"]/"lost"/"start.json",dict(cell_id="0",matrix_sha256=fake["mp"]["sha256"]))
+>       with pytest.raises(ValueError,match="unknown attempt costs"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'unknown attempt costs'
+E         Actual message: 'unstable cell coordinate identity'
+
+logs/r1_77g/test_consumer.py:116: AssertionError
+___________________ test_retry_count_survives_policy_version ___________________
+
+fake = {'ns': {'__file__': '/home/derp/cap/pc_cap/scripts/r1_77_queue.py', 'ROOT': PosixPath('/home/derp/cap/pc_cap/logs/r1_7...t_survives_poli0/bindings-v2.json', 'sha256': 'e269bb08bdbcf73d3b86ce540e83ba1d7a318a1ac3d45cf19ddd0de08aa31eb2'}, ...}
+
+    def test_retry_count_survives_policy_version(fake):
+        live=[True]
+        def fail(*a,**kw):
+            live[0]=False
+            return 7
+>       fake["run"](executor=fail,workers=1,lease_reader=lambda:{"pid":1} if live[0] else None)
+
+logs/r1_77g/test_consumer.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+logs/r1_77g/test_consumer.py:79: in run
+    return scheduler.run_workers(namespace or ns,mp["path"],(path or bp)["path"],**args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:170: in run_workers
+    observed = inventory()
+               ^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:132: in inventory
+    return q.inventory(matrix, stop_after=stop_after, ceiling_hours=ceiling_hours,
+logs/r1_77g/test_consumer.py:58: in inventory
+    for cell in q.ordered(m,stop_after):
+                ^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:67: in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'cells': [{'block_number': 1, 'ceilings': {'wall_seconds': 100.0}, 'cell_id': '0', 'checkpoints': [1], ...}, {'block_...erlap_and_failures', 'maximum_cell_failures': 2, 'solo_safety_factor': 1.5, 'version': 1, ...}, 'scope': 'development'}
+
+    def validate_matrix(matrix):
+        cells = all_cells(matrix)
+        fidelity_policy.validate_matrix(matrix, cells)
+        validation = matrix.get("full_validation")
+        if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+            full_contract.validate(validation)
+            for cell in cells:
+                population = cell.get("population")
+                if (
+                    cell.get("full_validation") != validation
+                    or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
+                    or (population is not None and population.get("full_validation") != validation)
+                ):
+                    raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+        if not cells:
+            raise ValueError("nonempty independently declared matrix required")
+        identities = [coordinate(c) for c in cells]
+        if len(set(identities)) != len(cells) or len({c["cell_id"] for c in cells}) != len(cells):
+            raise ValueError("duplicate expected cell coordinate or ID")
+        for c in cells:
+            if c["cell_id"] != coordinate_id(c):
+>               raise ValueError("unstable cell coordinate identity")
+E               ValueError: unstable cell coordinate identity
+
+scripts/r1_75_analysis_stage4_v1.py:264: ValueError
+______ test_parent_only_interrupt_drains_threads_without_killing_workers _______
+
+fake = {'ns': {'__file__': '/home/derp/cap/pc_cap/scripts/r1_77_queue.py', 'ROOT': PosixPath('/home/derp/cap/pc_cap/logs/r1_7...y_interrupt_dra0/bindings-v2.json', 'sha256': 'e0a0453a22c3924761d9e675b6a5b0f70e5a9c1e68cd469eddeb5a8a015e00b8'}, ...}
+
+    def test_parent_only_interrupt_drains_threads_without_killing_workers(fake):
+        # Signals THIS test process only; never a live queue or process group.
+        started=[]
+        lock=threading.Lock()
+        def execute(*a,**kw):
+            with lock:
+                started.append(a[1]["cid"])
+                if len(started)==2:
+                    os.kill(os.getpid(),signal.SIGINT)
+            time.sleep(0.1)
+            return fake["execute"](*a,**kw)
+        with pytest.raises(KeyboardInterrupt):
+>           fake["run"](executor=execute)
+
+logs/r1_77g/test_consumer.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+logs/r1_77g/test_consumer.py:79: in run
+    return scheduler.run_workers(namespace or ns,mp["path"],(path or bp)["path"],**args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:170: in run_workers
+    observed = inventory()
+               ^^^^^^^^^^^
+scripts/r1_77f_scheduler.py:132: in inventory
+    return q.inventory(matrix, stop_after=stop_after, ceiling_hours=ceiling_hours,
+logs/r1_77g/test_consumer.py:58: in inventory
+    for cell in q.ordered(m,stop_after):
+                ^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:67: in ordered
+    cells = analysis.validate_matrix(matrix)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+matrix = {'cells': [{'block_number': 1, 'ceilings': {'wall_seconds': 100.0}, 'cell_id': '0', 'checkpoints': [1], ...}, {'block_...erlap_and_failures', 'maximum_cell_failures': 2, 'solo_safety_factor': 1.5, 'version': 1, ...}, 'scope': 'development'}
+
+    def validate_matrix(matrix):
+        cells = all_cells(matrix)
+        fidelity_policy.validate_matrix(matrix, cells)
+        validation = matrix.get("full_validation")
+        if matrix.get("endpoint_contract_version") == 1 or validation is not None:
+            full_contract.validate(validation)
+            for cell in cells:
+                population = cell.get("population")
+                if (
+                    cell.get("full_validation") != validation
+                    or (population is None and (cell.get("admitted") or cell.get("launch_allowed")))
+                    or (population is not None and population.get("full_validation") != validation)
+                ):
+                    raise ValueError("matrix/cell/frozen population DEC-063 contract mismatch")
+        if not cells:
+            raise ValueError("nonempty independently declared matrix required")
+        identities = [coordinate(c) for c in cells]
+        if len(set(identities)) != len(cells) or len({c["cell_id"] for c in cells}) != len(cells):
+            raise ValueError("duplicate expected cell coordinate or ID")
+        for c in cells:
+            if c["cell_id"] != coordinate_id(c):
+>               raise ValueError("unstable cell coordinate identity")
+E               ValueError: unstable cell coordinate identity
+
+scripts/r1_75_analysis_stage4_v1.py:264: ValueError
+=========================== short test summary info ============================
+FAILED logs/r1_77g/test_consumer.py::test_factor_once_actual_budget_and_history_preserved
+FAILED logs/r1_77g/test_consumer.py::test_reservations_prevent_shared_cap_overrun
+FAILED logs/r1_77g/test_consumer.py::test_unknown_costs_block_mixed_binding_resume
+FAILED logs/r1_77g/test_consumer.py::test_retry_count_survives_policy_version
+FAILED logs/r1_77g/test_consumer.py::test_parent_only_interrupt_drains_threads_without_killing_workers
+5 failed, 3 passed in 0.57s
