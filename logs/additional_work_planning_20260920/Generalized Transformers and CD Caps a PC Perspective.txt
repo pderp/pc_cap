@@ -1,0 +1,260 @@
+A research program, and where predictive coding fits in it
+
+
+
+
+Generalized
+Transformers
+Compression-driven structure, settling as inference, and caps that keep
+learning after deployment
+
+
+
+Ben Goertzel and colleagues · September 2026
+What fitting a fixed architecture leaves out
+1 Continual learning                        Learn a new domain and keep the old skill. Storing knowledge and still being
+                                            able to reach it are separate things.
+
+2 Learning during use                       Predict, adjust state, update weights and find new structure together, each
+                                            on its own timescale.
+
+3 Exchange of capabilities                  Hand a learned skill to another system as a small module that can be tested
+                                            before it is trusted.
+
+4 Neural–symbolic links                     Let a reasoner or a program supply typed evidence to the same workspace
+                                            the network reads.
+
+5 Creativity off-distribution               Build and test a new composition when the familiar computations fail.
+
+
+
+
+02 · Generalized transformers and CD caps
+A transformer layer does six jobs. Attention plus
+an MLP is one way of doing them.
+Name the jobs and the alternatives become design choices: lookups, small
+programs, explicit records, and an inference step that settles.
+One layer, six jobs
+ 1                         2                    3                  4                   5                    6
+ Need                      Route                Transport          Lift                Reconcile            Re-encode
+ What should               Which sources?       Bring back         Add features that   Settle conflicting   Keep what later
+ this position             Weights a sum        evidence, tagged   make a relation     evidence: the        computations
+ answer next?              to one over          with where it      cheap to use.       map S.               need, at a cost
+                           permitted            came from.         Nothing is                               you can afford.
+                           sources.                                dropped.
+
+
+
+
+     x    = R( S( [ x , {                   a    · (j, V(x )) } ] ) )
+
+
+A standard block is the special case: jobs 1–3 are attention with an immediate average, 4 is the MLP, 6 is residual
+plus norm, and 5 is the identity. Job 5 is where predictive coding enters: a finite settling map over the lifted state.
+
+
+
+
+04 · Generalized transformers and CD caps
+Averaging too early loses the binding
+“The captain is Mira. The cook is Leo. The captain is ____”
+
+  Memory A                                  Memory B                Uniform average of the records
+  captain – Mira                            captain – Leo           Encode each record as one-hot role plus one-hot name and
+  cook – Leo                                cook – Mira             average. A and B give the same vector. Which roles and names
+                                                                    occur survives; who holds which is gone, and no later nonlinearity
+                                                                    can bring it back.
+
+
+
+
+The binding survives if the layer routes selectively, or lifts a joint role-and-name feature before it aggregates. In the
+framework, evidence arrives as a weighted collection that remembers its sources, and taking the barycenter is a
+choice made in the open.
+
+
+
+
+05 · Generalized transformers and CD caps
+What a compressed state must keep
+   d_C(z, z ) = sup over continuations c of TV( p_c(· | z), p_c(· | z ) )
+
+
+
+Two states may share one code exactly when no declared later computation can tell
+them apart.
+
+  The price of merging                        Precision from later use                     CD as a GT layer
+  Give two states at behavioral distance      Locally the cost of moving the state is ½    Its re-encoding approximates this quotient:
+  one code, and some later computation errs     G(z) , with G the Fisher matrix of later   reusable rules, the exceptions they
+  by at least /2, whatever the decoder.       predictions. Using it to weight PC errors    miss, and an index, under memory and
+                                              is untried.                                  work budgets.
+
+
+
+
+06 · Generalized transformers and CD caps
+Three ways to respond to an error
+  Revise the answer                           Revise the habit                            Revise the machinery
+  Temporary activities settle against the     Persistent weights change after outcomes    Add, remove or compose readers and
+  evidence at hand. Perhaps the copy reader   arrive. Perhaps the gate should generally   features; refit; keep what measurably
+  deserves more trust on this prefix.         trust that reader in contexts like this.    helps. A record of past searches proposes
+                                                                                          where to look next.
+  Predictive-coding inference. Fast,          PC local rule, or BP on the
+  every token.                                same computation.                           CD structural search. Slow, in
+                                                                                          the background.
+
+
+
+
+PC already separates the first two. CD adds the third, and persistent structured residuals from settling are a natural
+signal for it. All of it can sit in a cap on a frozen transformer, so the new machinery only has to improve on a model
+that already works.
+
+
+
+
+07 · Generalized transformers and CD caps
+The energy view, in familiar terms
+   E (z) = _v ½               z_v       f_v( z_pa(v) ; _v ) ²_ v + E_evidence(z ; x)
+
+   E_ (z) = E (z) +                · C(z, y)
+
+    _ C(z ) = lim                  0 [ _ E (z_ )            _ E (z ) ] /
+
+
+
+
+  Free phase predicts                          The graph is not fixed                      A matched BP control
+  Evidence terms use only what is observed     CD may propose new nodes, edges and         CD–BP differentiates through the same K
+  at prediction time. The target enters        readers. After each structural change the   settling steps. Inference is identical in both
+  the nudged phase alone, so scores are        affected parameters are refitted and        arms, so a difference can be credited to the
+  never contaminated.                          compared with a control.                    learning rule.
+
+
+
+
+08 · Generalized transformers and CD caps
+H2: a small cap on a frozen transformer
+  Frozen base                               13 readers                       Gate prior                      Settle, then mix
+  2 blocks, width 64, byte-                 Base, 8 suffix-count models,     u = W f(x) + b from the         24 steps on E , then p =
+  level, 120,576 parameters                 4 copy readers. Each reports     hidden state and reader         w (z) q
+                                            a full next-byte distribution.   statistics. 1,521 parameters.
+
+
+
+
+   E (z ; x) = ½               z     u_ (x) ² +                  · (1/m) _s log             w (z) q ,s
+
+
+q ,s is what reader j predicted for the byte that then occurred at past step s, over the last m = 16 bytes. The learned
+prior proposes trust; recent prediction errors revise it. CD search chooses which 5 of the 13 readers stay active, by
+fitting all and pruning.
+
+
+
+
+09 · Generalized transformers and CD caps
+Where the gain comes from
+                                             bits per byte on held-out Shakespeare, five-seed mean. The
+
+2.90 2.34                                    controls below say which part of the system earns which part of
+                                             the gain.
+
+
+ Condition                                               bpb    What it isolates
+
+ Frozen transformer                                   2.8962    the base
+
+ Global mixture of all 13 readers, no gate            2.4285    richer evidence does most of the work
+
+ Fixed five readers, PC, 1,056 updates                2.3460    a learned, context-sensitive gate
+
+ Compression-first CD–PC, five readers                2.3357    structure search: 0.0102 better, 5/5 seeds
+
+ All 13 readers, PC                                   2.3323    the accuracy reference
+
+
+
+
+10 · Generalized transformers and CD caps
+What predictive coding did, and did not do
+
+   0.0008                                   +0.0025                                        +0.0048
+   bpb by which the matched CD–BP arm       bpb lost when settling is switched off at      extra forgetting on Shakespeare after
+   beat CD–PC. As a learning rule PC        prediction time, in 5 of 5 seeds. Feeding it   adapting to a new domain (Alice) when
+   ties with BP here, and its updates       another example's recent evidence costs        settling is switched off: 0.0660 becomes
+   track BP gradients as shrinks and        +0.0023, so the benefit comes from the         0.0708. Inference gives some protection
+   settling lengthens.                      evidence and not from extra compute.           to old skills.
+
+
+
+
+So far PC earns its place here as inference: reconciling trust in readers with recent evidence. The effects are small
+and consistent, on a gate with 1,521 parameters. Whether they grow with richer graphs and real hierarchies is the
+open question, and it is a PC question.
+
+
+
+
+11 · Generalized transformers and CD caps
+Forgetting under domain shift
+Share of the cap’s Shakespeare advantage erased after 1,024 updates on the new domain
+                                                                                               Plasticity    is kept
+                                                                                               With replay the cap still gets 97.7% and 99.3% of the new-domain gain.
+Alice, PC                                                                    11.8%
+                                                                                               PC   and BP curves coincide
+Alice, PC + 10% replay                                       6.9%                              The learning rule makes no visible difference to forgetting.
+
+
+
+
+                                                                                        14.1
+Python, PC
+                                                                                        %
+
+Python, PC + 10% replay                                             8.8%
+
+Readers and dictionary were frozen; only the gate moved. The knowledge stayed available and access to it drifted:
+the library kept its books while the librarian picked up new habits.
+
+
+
+
+12 · Generalized transformers and CD caps
+Open problems where PC expertise counts
+  Caps as summed energies                        Precision from later use                      Residuals guide search
+  E_A = E_B +     E over active modules.         Weight state errors by the Fisher matrix of   Persistent structured errors suggest a
+  A unique minimum? Does settling order          later predictions, so the energy attends to   missing observer. Rank candidates by ½
+  change the answer? How to train subsets        directions that change behavior.              g (H + I) ¹g, then refit against a control.
+  to cooperate?
+
+
+
+
+  Affordable settling                            Locality and retention                        Learning while serving
+  Warm starts, a learned predictor of the        Do local updates let protected, versioned     Fast settling, slower local updates,
+  settled state, settling only when uncertain.   modules grow without disturbing old           background structure search, atomic
+  In the first cap PC ran several times slower   routing? Only replay is measured so far.      version publishing. Designed, not
+  than BP.                                                                                     yet benchmarked.
+
+
+
+
+13 · Generalized transformers and CD caps
+A learner that can preserve, reach, revise and
+share structure while it runs
+
+
+
+Now                                    Next                            Then                                 Later
+Replicate H2 on fresh small corpora.   A 10M–100M base on one          A 0.1B–3B open base with             Module exchange between workers
+Growing readers, retained gates,       accelerator, against a strong   composable caps, symbolic readers,   with different data; a frontier-base
+strict memory ceilings, longer         ordinary adapter at matched     and held-out compositions as a       cap; a standalone GT/CD learner
+task streams.                          memory and compute.             creativity test.                     only if the smaller steps hold.
+
+
+
+
+The full report, with proofs, algorithms and the evidence bundle behind every number, is available on request.
+
