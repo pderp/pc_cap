@@ -1,0 +1,119 @@
+verified 1/45 61348508e40d54351613ab14
+verified 2/45 88af67fa5945b642e8ba7974
+verified 3/45 915f97b05f3fa2a81de09cdf
+verified 4/45 4aa4849ba414edab2504f56b
+verified 5/45 9ebc93cc7912bd5d1c929418
+verified 6/45 ce0d0ffc2a58a60e27c460d9
+verified 7/45 95dfb24c6361b2d38dd60e9b
+verified 8/45 6d0915056b1e76d8ee8795ff
+verified 9/45 7c9675a69d832a772070cb2d
+verified 10/45 95016bc16e89cfcccccc40b8
+verified 11/45 43925e53c31860219a85ef90
+verified 12/45 c29ee18fb21ba6b387ede6e8
+verified 13/45 54879da4dcdb0f106f98080a
+verified 14/45 78ebbc03946239c1d637154c
+verified 15/45 b1d1e53944241333ec5603d4
+verified 16/45 f3dbf1a3d5860a628e7d68ef
+verified 17/45 be44dfb501724b72adcbd747
+verified 18/45 5263d61e569d7cb4ceb4e617
+verified 19/45 81b1e9cb4e216a6cd1cd565a
+verified 20/45 deb5f473d9ca2ed544926204
+verified 21/45 0b6ade77641a02c1c85574b0
+verified 22/45 ee67c592789829e7dd808ede
+verified 23/45 8be432675ed4dc57f9108bd4
+verified 24/45 78928f2782d91d888ef24d52
+verified 25/45 de785feed05c9f4c2a9e9273
+verified 26/45 de0b9612418e6d573ed77679
+verified 27/45 be37e2a1ff4a079e56efe268
+verified 28/45 1e6b766c4139230c18547234
+verified 29/45 c0a54c5fbf1ce7776efc983e
+verified 30/45 7499c19b813dcada2c67ae39
+verified 31/45 39c7fd4929721e8dcba56b94
+verified 32/45 b887b1046cd563d990765e01
+verified 33/45 435235a6719279d1cc87ad66
+verified 34/45 aaed1cf9e8ce7cf1cf3749fa
+verified 35/45 92a5ef6855124ffc5a8d6163
+verified 36/45 baa601113af675024e73bc30
+verified 37/45 b6b271f3383f85fb19e49836
+verified 38/45 6c0124a2d35b8b4bf8d2a321
+verified 39/45 37c2ba2be995719ac8972cf1
+verified 40/45 d93ed5de9d4401cb3345c7bd
+verified 41/45 c2f9d3102987f746f4f31b8d
+verified 42/45 a23ae9063b37c21cfe657d47
+verified 43/45 5a6f61e06de0bca53b4a7377
+verified 44/45 03426d6e61fb6b41145c5d8e
+verified 45/45 19f5d8535235334ffe1595e8
+{
+  "task": "X22",
+  "status": "pass",
+  "generated_utc": "2026-09-20T15:55:25.593961+00:00",
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/reports/block1/audit_receipts.py",
+    "sha256": "b388e9a363dcdb41d760776c4f1a04d3d6f2e3d5cf656236e257a72f100b94ba"
+  },
+  "matrix": {
+    "path": "/home/derp/cap/pc_cap/manifests/revision_v1/run_matrix_final.json",
+    "sha256": "06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb"
+  },
+  "bindings": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings.json",
+    "sha256": "2253977220fd5752f81d0d0cef4bfda2e52d9f6f562f752cfb29aba08b6305e5"
+  },
+  "cells": 45,
+  "checkpoint_receipts": 120,
+  "opaque_payloads_hashed": 15,
+  "phase_rows": 69660,
+  "process_hours": 46.80529544058245,
+  "process_count": 45,
+  "failed_attempts": 0,
+  "unknown_cost_records": 0,
+  "uncovered_driver_seconds": 0,
+  "watch_prefix": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/reports/block1/watch-block1.jsonl",
+    "sha256": "5a018e936a6f75ae8087f53d49ab56a4a15ea7f760155d2d7bf69eaa05dde0a8"
+  },
+  "watch_prefix_original_path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/observations.jsonl",
+  "watch_events": 49,
+  "block1_breach_cells": 29,
+  "block1_creep_alert_cells": 5,
+  "historical_watch_document_contexts": {
+    "d5d1d9c95a9c5670458237e7f334d1b8b4afd96fb9c716b1e8283dd8bee43286": {
+      "before": "# Fidelity watch (DEC-064a)\n\nEvery completed cell whose cap fidelity on the full validation split would have failed the formerly critical bounds\n(mean KL > 0.001 nats or mean NLL increase > 0.01, either reference) is listed here with its numbers; the running\nmaximum per condition \u00d7 dataset is kept so the lead can see whether it creeps. Entries are appended by the watch\n(HT-8) after each cell; the orchestrator reports new entries at block boundaries and creep alerts immediately.\nLabels are the DEC-064 secondary benchmark; nothing here vetoes a primary comparison.\n\n| date | cell | dataset | condition | records | realization | KL (orig \u2016 cap) | NLL \u0394 | ES95 | max | positions for 50 % KL | untouched | creep |\n| --- | --- | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |\n| 2026-09-18 | R1-64g mquake R1_learned_ff (chain S) | MQuAKE | R1_learned_ff (primary v5) | 300 | development | 0.00554 | +0.00560 | 0.114 | 8.19 | 171 (0.07 %) | 99.6 % | first entry; development reference |\n\nRunning maxima (KL): MQuAKE \u00b7 R1_learned_ff 0.00554.\n\nNo-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, development): zero observed loss / KL change on all 245,237 positions (radius-0 cap never fires on ordinary text) \u2014 no entry.\n\n",
+      "after": "Creep alert 2026-09-18 18:42 EDT (confirmatory, cell 233ef059\u2026, primary v5 zsRE r0 order 100, 1,000 records): mean KL 0.002381 / NLL \u0394 0.002450 (both references) vs the development reference 0.002270 / 0.002310 (300 records) \u2014 new running maximum for zsRE \u00b7 R1_learned_ff; relayed to the lead (lead queue item 101).\n\n",
+      "commit": "9c0fa871a8dd4a49973da953ab2a2a3a023d35fb"
+    },
+    "482ad457c0d91fa82b86f5c13bd6733c85ff8b1cd8c5a70aedd966a1b7b1b238": {
+      "before": "# Fidelity watch (DEC-064a)\n\nEvery completed cell whose cap fidelity on the full validation split would have failed the formerly critical bounds\n(mean KL > 0.001 nats or mean NLL increase > 0.01, either reference) is listed here with its numbers; the running\nmaximum per condition \u00d7 dataset is kept so the lead can see whether it creeps. Entries are appended by the watch\n(HT-8) after each cell; the orchestrator reports new entries at block boundaries and creep alerts immediately.\nLabels are the DEC-064 secondary benchmark; nothing here vetoes a primary comparison.\n\n| date | cell | dataset | condition | records | realization | KL (orig \u2016 cap) | NLL \u0394 | ES95 | max | positions for 50 % KL | untouched | creep |\n| --- | --- | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |\n| 2026-09-18 | R1-64g mquake R1_learned_ff (chain S) | MQuAKE | R1_learned_ff (primary v5) | 300 | development | 0.00554 | +0.00560 | 0.114 | 8.19 | 171 (0.07 %) | 99.6 % | first entry; development reference |\n\nRunning maxima (KL): MQuAKE \u00b7 R1_learned_ff 0.00554.\n\nNo-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, development): zero observed loss / KL change on all 245,237 positions (radius-0 cap never fires on ordinary text) \u2014 no entry.\n\n",
+      "after": "",
+      "commit": "e52fb0027877b8b480a42ec695fd659213c331c8"
+    }
+  },
+  "qualifications": [
+    "No payload/snapshot deserialization or model execution; state identity is receipt-bound, not replayed numerically.",
+    "Historical watch view hashes are reproduced from their exact original journal prefixes.",
+    "No inference about current global spend or completion beyond block 1."
+  ]
+}
+	Command being timed: "../venv/bin/python logs/R1/reports/block1/audit_receipts.py"
+	User time (seconds): 52.75
+	System time (seconds): 3.35
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:57.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 753152
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6
+	Minor (reclaiming a frame) page faults: 531214
+	Voluntary context switches: 2626
+	Involuntary context switches: 1015
+	Swaps: 0
+	File system inputs: 3551280
+	File system outputs: 13416
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
