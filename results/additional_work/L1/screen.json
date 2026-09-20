@@ -1,0 +1,669 @@
+{
+  "cache_builds": 0,
+  "datasets": {
+    "counterfact": {
+      "bank": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/banks/train_pool_counterfact_v1_1000.pkl",
+        "sha256": "f32884120deb59f59e73a893de9dfb1a47c3c827a941d81e1da90f3130f01503"
+      },
+      "bank_identity": {
+        "base_checksum": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "builder_version": 2,
+        "encoder_version": 1,
+        "logits_dtype": "float16",
+        "max_locality": 2,
+        "max_paraphrases": 2,
+        "n_items": 1000,
+        "pool_content_sha256": "2239bd259a63981438c4267c0834cbd5486d9878342b4c13084714ac4dc7312e",
+        "taps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "excluded_missing_family": [],
+      "metrics": {
+        "123": {
+          "false_fire": 0.17142857142857143,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.2857142857142857,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 0.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.14285714285714285,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.9795918367346939
+        },
+        "123-no-lex": {
+          "false_fire": 1.0,
+          "forced_retrieval": 0.7857142857142857,
+          "gated_retrieval": 0.7142857142857143,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 1.0,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 1.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 1.0,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.3979591836734694
+        },
+        "2": {
+          "false_fire": 0.17142857142857143,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.2857142857142857,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 0.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.14285714285714285,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.9795918367346939
+        },
+        "2-no-lex": {
+          "false_fire": 0.9428571428571428,
+          "forced_retrieval": 0.6428571428571429,
+          "gated_retrieval": 0.5,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 1.0,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 1.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.8571428571428571,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.3673469387755102
+        },
+        "23": {
+          "false_fire": 0.17142857142857143,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.2857142857142857,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 0.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.14285714285714285,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.9795918367346939
+        },
+        "23-no-lex": {
+          "false_fire": 0.9142857142857143,
+          "forced_retrieval": 0.7857142857142857,
+          "gated_retrieval": 0.6428571428571429,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.9285714285714286,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 1.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.8571428571428571,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.4
+        },
+        "3": {
+          "false_fire": 0.17142857142857143,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.2857142857142857,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 0.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.14285714285714285,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.9795918367346939
+        },
+        "3-no-lex": {
+          "false_fire": 0.8857142857142857,
+          "forced_retrieval": 0.7857142857142857,
+          "gated_retrieval": 0.6428571428571429,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.9285714285714286,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 1.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.7857142857142857,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.45102040816326533
+        },
+        "lexical": {
+          "false_fire": 0.17142857142857143,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.2857142857142857,
+              "n": 14
+            },
+            "outside": {
+              "false_fire": 0.0,
+              "n": 7
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.14285714285714285,
+              "n": 14
+            }
+          },
+          "null_queries": 35,
+          "positive_queries": 14,
+          "retrieval_vs_null_auc": 0.9795918367346939
+        }
+      },
+      "norms": {
+        "key_last": {
+          "1": {
+            "mean_coordinate_variance": 1.4942631519622276,
+            "mean_norm": 63.85060514000914,
+            "norm_sd": 4.023749796436873
+          },
+          "2": {
+            "mean_coordinate_variance": 4.381470627833353,
+            "mean_norm": 100.49155156265248,
+            "norm_sd": 5.2457284440393845
+          },
+          "3": {
+            "mean_coordinate_variance": 26.032543659474754,
+            "mean_norm": 472.1538927589677,
+            "norm_sd": 53.17327162581197
+          }
+        },
+        "key_span": {
+          "1": {
+            "mean_coordinate_variance": 18.048597641955276,
+            "mean_norm": 408.31101505112815,
+            "norm_sd": 115.8430287341196
+          },
+          "2": {
+            "mean_coordinate_variance": 23.39086555794812,
+            "mean_norm": 477.77167402016164,
+            "norm_sd": 130.103554108289
+          },
+          "3": {
+            "mean_coordinate_variance": 5.4545023318999855,
+            "mean_norm": 351.7893612533272,
+            "norm_sd": 29.31297771378412
+          }
+        }
+      },
+      "paired_against_123": {
+        "123-no-lex": {
+          "false_fire_only_arm": 29,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 4
+        },
+        "2": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        },
+        "2-no-lex": {
+          "false_fire_only_arm": 28,
+          "false_fire_only_full": 1,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 7
+        },
+        "23": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        },
+        "23-no-lex": {
+          "false_fire_only_arm": 27,
+          "false_fire_only_full": 1,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 5
+        },
+        "3": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        },
+        "3-no-lex": {
+          "false_fire_only_arm": 26,
+          "false_fire_only_full": 1,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 5
+        },
+        "lexical": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        }
+      },
+      "pool": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+        "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+      },
+      "split": {
+        "components": 30,
+        "family_overlap": 0,
+        "subject_overlap": 0,
+        "test": 14,
+        "train": 86
+      },
+      "test_memory": 7,
+      "test_queries": 49,
+      "train_memory": 43,
+      "train_queries": 301
+    },
+    "zsre": {
+      "bank": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/banks/train_pool_zsre_v1_1000.pkl",
+        "sha256": "9b432438d78179249a478e3b3849d98715b0616a5e960cdfc111df559c9f02b9"
+      },
+      "bank_identity": {
+        "base_checksum": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "builder_version": 2,
+        "encoder_version": 1,
+        "logits_dtype": "float16",
+        "max_locality": 2,
+        "max_paraphrases": 2,
+        "n_items": 1000,
+        "pool_content_sha256": "141e048854890634978eb57e5595540f522c3717ee0a7279f80bcec8830fccfc",
+        "taps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "excluded_missing_family": [],
+      "metrics": {
+        "123": {
+          "false_fire": 0.0425531914893617,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.0625,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.0625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 1.0
+        },
+        "123-no-lex": {
+          "false_fire": 0.3404255319148936,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 0.9333333333333333,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.4375,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.5625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 0.9347517730496454
+        },
+        "2": {
+          "false_fire": 0.0425531914893617,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.0625,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.0625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 1.0
+        },
+        "2-no-lex": {
+          "false_fire": 0.6382978723404256,
+          "forced_retrieval": 0.8666666666666667,
+          "gated_retrieval": 0.8666666666666667,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.9375,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.9375,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 0.8524822695035461
+        },
+        "23": {
+          "false_fire": 0.0425531914893617,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.0625,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.0625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 1.0
+        },
+        "23-no-lex": {
+          "false_fire": 0.3404255319148936,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 0.9333333333333333,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.4375,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.5625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 0.9333333333333333
+        },
+        "3": {
+          "false_fire": 0.0425531914893617,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.0625,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.0625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 1.0
+        },
+        "3-no-lex": {
+          "false_fire": 0.3404255319148936,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 0.9333333333333333,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.4375,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.5625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 0.9347517730496454
+        },
+        "lexical": {
+          "false_fire": 0.0425531914893617,
+          "forced_retrieval": 1.0,
+          "gated_retrieval": 1.0,
+          "null_by_role": {
+            "locality": {
+              "false_fire": 0.0,
+              "n": 15
+            },
+            "outside": {
+              "false_fire": 0.0625,
+              "n": 16
+            },
+            "outside_paraphrase": {
+              "false_fire": 0.0625,
+              "n": 16
+            }
+          },
+          "null_queries": 47,
+          "positive_queries": 15,
+          "retrieval_vs_null_auc": 1.0
+        }
+      },
+      "norms": {
+        "key_last": {
+          "1": {
+            "mean_coordinate_variance": 0.26356667324963673,
+            "mean_norm": 65.287712075708,
+            "norm_sd": 2.2225102731762254
+          },
+          "2": {
+            "mean_coordinate_variance": 1.3715101810472727,
+            "mean_norm": 101.88375202366795,
+            "norm_sd": 2.847652142505533
+          },
+          "3": {
+            "mean_coordinate_variance": 11.962709217637814,
+            "mean_norm": 514.0590187903352,
+            "norm_sd": 27.401914367420602
+          }
+        },
+        "key_span": {
+          "1": {
+            "mean_coordinate_variance": 4.237343031349216,
+            "mean_norm": 287.27340563448837,
+            "norm_sd": 54.45417114172345
+          },
+          "2": {
+            "mean_coordinate_variance": 6.045283038185951,
+            "mean_norm": 342.4023507686021,
+            "norm_sd": 61.91763471559351
+          },
+          "3": {
+            "mean_coordinate_variance": 4.413342442418976,
+            "mean_norm": 358.96093142446875,
+            "norm_sd": 20.446691503591968
+          }
+        }
+      },
+      "paired_against_123": {
+        "123-no-lex": {
+          "false_fire_only_arm": 14,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 1
+        },
+        "2": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        },
+        "2-no-lex": {
+          "false_fire_only_arm": 28,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 2
+        },
+        "23": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        },
+        "23-no-lex": {
+          "false_fire_only_arm": 14,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 1
+        },
+        "3": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        },
+        "3-no-lex": {
+          "false_fire_only_arm": 14,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 1
+        },
+        "lexical": {
+          "false_fire_only_arm": 0,
+          "false_fire_only_full": 0,
+          "retrieval_only_arm": 0,
+          "retrieval_only_full": 0
+        }
+      },
+      "pool": {
+        "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+        "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+      },
+      "split": {
+        "components": 86,
+        "family_overlap": 0,
+        "subject_overlap": 0,
+        "test": 31,
+        "train": 69
+      },
+      "test_memory": 15,
+      "test_queries": 62,
+      "train_memory": 34,
+      "train_queries": 138
+    }
+  },
+  "gpu_seconds": 0,
+  "interpretation": "development-only similarity probe; not editing quality or a layer selection rule",
+  "model_calls": 0,
+  "probe": {
+    "features": "per-tap cosine of independently layer-normalized last/span concatenation, plus fixed lexical overlap",
+    "fold": "connected subject/template components; fixed hash 70/30; held-out bank suffix only",
+    "memory": "hash-ordered first half within each probe fold",
+    "model": "balanced logistic ridge",
+    "newton_steps": 40,
+    "ridge": 0.01,
+    "secondary_diagnostic": "tap-only probes added after initial lexical control matched all combined arms; exploratory, no selection",
+    "threshold_logit": 0
+  },
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/aw/tap_screen.py",
+    "sha256": "aef3f41990b90e2a75c101101dbc4862c6a1d7e51a482c97796c1d8cedfe253c"
+  },
+  "task": "AW-L1"
+}
