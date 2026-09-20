@@ -20,7 +20,7 @@ No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, develop
 
 Manual notes above are preserved. This source-bound table is regenerated from the locked journal; one entry per recipe cell. Both references are shown. Near-zero target-token loss does not establish unchanged predictions or reader inactivity.
 
-Audited cells: 82; breaching cells: 59; creep alerts: 11. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
+Audited cells: 86; breaching cells: 61; creep alerts: 11. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
 
 | Cell identity / scope | Condition / dataset / realization / order | Actual records / checkpoint | Reference | Mean KL | NLL increase | ES95 loss | Max loss | Positions for half KL | Near-zero loss fraction | Creep |
 |---|---|---|---|---:|---:|---:|---:|---|---:|---|
@@ -142,6 +142,10 @@ Audited cells: 82; breaching cells: 59; creep alerts: 11. Development and confir
 | `e98993bf16d389b4b5ffa2f6d5da0a9b7f12e6ddde814a2db606545329d8ac5b` / confirmatory | v0_stable / zsre / 1 / 101 | unavailable / 1000 | original | 0.00274030374 | 0.00277312077 | 0.0623577226 | 26.2876213 | 21 | 0.99692542 | above_twice_development_reference, new_running_maximum |
 | `e37d83e73da8240ae82352db0a1f5fe8176fe58d7e0cecc3cb04a13255bd79a2` / confirmatory | v0_stable / zsre / 1 / 102 | unavailable / 1000 | capoff | 0.00210475478 | 0.00207833317 | 0.0472570692 | 26.2876213 | 21 | 0.99812426 | above_twice_development_reference |
 | `e37d83e73da8240ae82352db0a1f5fe8176fe58d7e0cecc3cb04a13255bd79a2` / confirmatory | v0_stable / zsre / 1 / 102 | unavailable / 1000 | original | 0.00210475478 | 0.00207833317 | 0.0472570692 | 26.2876213 | 21 | 0.99812426 | above_twice_development_reference |
+| `d81aa8935ab2260f9dc8d288513aa3dd9ea0f2018235d205cdb533e78114a9a1` / confirmatory | v0_stable / zsre / 1 / 103 | unavailable / 1000 | capoff | 0.00150803199 | 0.00157451785 | 0.0346569587 | 26.2876213 | 13 | 0.99867883 | none |
+| `d81aa8935ab2260f9dc8d288513aa3dd9ea0f2018235d205cdb533e78114a9a1` / confirmatory | v0_stable / zsre / 1 / 103 | unavailable / 1000 | original | 0.00150803199 | 0.00157451785 | 0.0346569587 | 26.2876213 | 13 | 0.99867883 | none |
+| `88dc8fa9a632a73b6dab19d61442c9f1f5353a4b05cef6713309cfea60e443a7` / confirmatory | v0_stable / zsre / 1 / 104 | unavailable / 1000 | capoff | 0.00147808841 | 0.00145741336 | 0.0331197478 | 26.2876213 | 13 | 0.99853203 | none |
+| `88dc8fa9a632a73b6dab19d61442c9f1f5353a4b05cef6713309cfea60e443a7` / confirmatory | v0_stable / zsre / 1 / 104 | unavailable / 1000 | original | 0.00147808841 | 0.00145741336 | 0.0331197478 | 26.2876213 | 13 | 0.99853203 | none |
 
 ### Running maxima (all audited cells, including no-breach cells)
 

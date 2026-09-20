@@ -148,7 +148,7 @@ Every finish / decision / receipt under `logs/R1/final_queue/` for the 45 cells 
 payload hashes, the checkpoint receipts in `results/R1/stage4_sealed_cells/`, the charged process time (no double
 counting) and the fidelity-watch observations; a plain integrity statement or the exact defect. Read-only.
 
-### Lane R1-77g — post-freeze ceilings amendment (delivered; awaiting Q21) — keep the resume procedure ready for the block-2 boundary
+### Lane R1-77g — post-freeze ceilings amendment (delivered; Q21 answered A, DEC-072; the orchestrator is executing the drain-and-resume at the block-2 boundary — no Codex action)
 
 ## 4. Interfaces and coordination
 
