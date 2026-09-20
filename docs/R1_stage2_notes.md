@@ -1410,3 +1410,14 @@ differs from reviewed R1-68f bytes") — it must be re-pinned to the post-63l id
 and two assembler tests fail after the successor patch (`test_extension_also_carries_required_full_contract`), so the
 extension recipes' full-validation contract needs the fix before candidate v14.
 
+## Chain T — Q21 / DEC-072 cutover (2026-09-20, 16:26–17:23 EDT)
+
+Drain by one SIGINT to the verified queue parent (pid 2825007, start-time and boot-id checked) at the 90th start
+receipt; active cells finished (ceiling use 0.58 / 0.54); parent exited 17:11 with `KeyboardInterrupt` in the
+scheduler's wait, exactly as Codex's CPU rehearsal predicted; lease released. Idle reconciliation: every start has a
+finish, no failures; two watch observations missing for the last two cells (the interrupted parent's duty) were
+verified read-only and applied with `scripts.ht8_fidelity_watch`; their `decision.json` files are absent by design.
+D13 boundary (block 2) ready with no gaps; v2 accounting supplement `Q21_IDLE_REPORT/ceiling-v2.json`. Resume via
+`logs/r1_77g/consumer.py run --execute --stop-after 6` under a fresh external lease (`R1-final-queue-resume`);
+first new receipts show ratio 1.7 and the v2 provenance. Observations in `logs/R1/operations/Q21_cutover/`.
+

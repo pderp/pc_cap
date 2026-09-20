@@ -1,0 +1,51 @@
+{
+  "actual_costs_changed": false,
+  "amended_v2_projection": {
+    "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback. R1-77g replaces the remaining two-worker ceiling factor once; actual historical envelopes are unchanged.",
+    "ceiling_amendment": "R1-77g-ceiling-amendment-v2",
+    "ceiling_hours": 750,
+    "known_attempt_hours": 93.91328347312017,
+    "projected_total_hours": 831.7504405638206,
+    "projected_within_ceiling": false,
+    "projection_workers": 2,
+    "remaining_cell_ceiling_multiplier": 1.7,
+    "scenario_fallback_cell_seconds": null,
+    "unknown_attempts": []
+  },
+  "amendment": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings-v2.json",
+    "sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
+  },
+  "canonical_D11_modified": false,
+  "consumer": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_77g/consumer.py",
+    "sha256": "660cdd1feca4e15962e64d6d711ac4d72cfb25a0da2c91881a4ad946f62a0780"
+  },
+  "d11_report": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operations/Q21_IDLE_REPORT/d11-report.json",
+    "sha256": "6b3f50885bc7247c89c5b05de2d74935d392f413970bde9f7471d3e0d6f8dedf"
+  },
+  "frozen_v1_projection": {
+    "basis": "Driver attempt wall times once each, replaced by full child-process time when a queue receipt covers that attempt. Older cells exclude construction; missing process receipts make spend unknown. Remaining cells use whole-cell ceilings (conservative on partial cells), or the explicitly labeled scenario fallback.",
+    "ceiling_hours": 750,
+    "known_attempt_hours": 93.91328347312017,
+    "projected_total_hours": 593.0384191521234,
+    "projected_within_ceiling": true,
+    "projection_workers": 2,
+    "remaining_cell_ceiling_multiplier": 1.15,
+    "scenario_fallback_cell_seconds": null,
+    "unknown_attempts": []
+  },
+  "note": "Use the v2 projection with its explicit authorization/snapshot date; canonical D11/D13 remain the frozen v1 forecast. Unknown live cost remains unknown. This is not an experimental result or a launch.",
+  "producer": {
+    "path": "/home/derp/cap/pc_cap/logs/r1_77g/accounting.py",
+    "sha256": "0870f3e921a6669da02600fc38d47eaf37a1b01d264f5e966918eb625eeb6851"
+  },
+  "resume_authorization": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operations/Q21_RESUME/resume-authorization.json",
+    "sha256": "6dff5c6aa470373428e34a289ab692d7ed21fc3f6271cbeddd2500e44ba8374f"
+  },
+  "schema_version": 1,
+  "status": "authorized_amendment_view",
+  "task": "R1-77g-accounting"
+}

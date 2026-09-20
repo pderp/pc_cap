@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-20 17:30** — block 2 complete (90 / 330, 0 failures); Q21 cutover done (drain, idle reconciliation, signed resume); queue running under bindings v2 (factor 1.7, stop-after 6) since 17:16; block-3 watcher armed. Additional work: DEC-073, `aw/` namespace, Codex lanes AW-R0 / AW-L0-L1 / AW-L3 / AW-L-prereg open.
+
 - **v0 closed** (close-out identity `cb04d5e`); the lead's T4 review of the report/memo is still outstanding.
 - **Revision v1, Stage 2 is done on the development side.** The learned reader (tied cosine + pairwise null + lexical
   overlap, stable observations, per-position deltas) with ordinary-text null training is reference condition v2; with the

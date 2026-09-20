@@ -1047,3 +1047,18 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     pre-registration draft); the orchestrator takes the streamed scorer, the AW-B and R pre-registrations, and the
     queue cutover. Run: 87 started / 85 finished; drain watcher armed for the 90th start.
 
+108. (2026-09-20, 17:30 EDT) **Block 2 complete and the Q21 / DEC-072 cutover executed.** The drain watcher sent one
+    SIGINT to the queue parent at the 90th start (16:26); the two active cells finished under their old ceilings; the
+    parent exited at 17:11 (the original step-9 record now reads `failed: KeyboardInterrupt`, preserved as the intended
+    interruption). Reconciliation while idle: 90 / 90 starts have finish receipts, 0 failures, 0 retries; the two cells
+    the interrupted parent never processed (v0_stable · MQuAKE · r1 · orders 103, 104) had their watch observations
+    repaired through the hash-checking watch tool (read-only verified, then applied; no breach) and keep no
+    `decision.json`, disclosed as such. Idle boundary report `logs/R1/operations/Q21_IDLE_REPORT/` (boundary ready,
+    no gaps): 93.9 process-hours charged through block 2, expected total 424 h, the unsigned D12 re-pricing proposal
+    would put ceilings at 591 h (not applied; kept for reference). Resume request digest `ff55f56d…` signed under the
+    delegation (`Q21_REQUEST/reviewed-form.json`), executed 17:16 (`Q21_RESUME/resume-authorization.json`); the first
+    new start receipts (cells 91, 92, 17:23) carry bindings v2 (`c6f88c56…`), `ceiling_amendment`,
+    `resume_authorization` and an effective / solo ceiling ratio of exactly 1.7; same receipt root, same matrix,
+    stop-after 6 (all remaining blocks). Fidelity watch: no new alerts since item 105 (11 total). Watcher armed for the
+    block-3 boundary (225 cells, ≈ 3 days).
+
