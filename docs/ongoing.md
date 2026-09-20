@@ -131,7 +131,9 @@ the 63-interval family untouched); G4: the DEC-052 execution-accounting section 
 section. Acceptance fixtures as X21 lists; the 63 primary rows and classifiers identical before / after; the skeleton
 refilled from the synthetic output with no unbound placeholder.
 
-### Lane R1-D14c — first partial confirmatory report from block 1 (first)
+**No new Codex lanes are assigned in this round (lead, 2026-09-20): the lead is giving Codex a separate task directly. The tree lock and the no-simultaneous-edits rule still apply.**
+
+### Lane R1-D14c — first partial confirmatory report from block 1 (done, 2026-09-20; `docs/R1_stage4_report_block1_partial.md`)
 
 Run the D.5 analysis (`r1_49g_analyze` / R1-75 / the D14 report) on the 45 completed block-1 cells (the triplet on
 realization 0, three datasets): every table and figure the skeleton promises, filled where data exist and marked
@@ -140,9 +142,9 @@ estimates with order dispersion only; fidelity benchmarks and concentration stat
 inventory; the watch summary). Output under `logs/R1/reports/block1/` + `docs/R1_stage4_report_block1_partial.md`; a copy
 of any figure worth a slide to `assets/presentation-materials/figures/block1/`. Read-only on the run.
 
-### Lane HT-4f — claim ledger v6 (publish now: the cost receipt is signed in session v10, step 2)
+### Lane HT-4f — claim ledger v6 (done, 2026-09-20: v6 was already published against the v8 cost; a session-v10 supplement was delivered instead, `docs/talk_claim_ledger_v6_session_v10.md`)
 
-### Lane X22 — block-1 receipt-chain audit
+### Lane X22 — block-1 receipt-chain audit (done, 2026-09-20: PASS, all 45 cells; 46.805 h charged, matching the D11 block-1 report)
 
 Every finish / decision / receipt under `logs/R1/final_queue/` for the 45 cells against the frozen recipes, the sealed
 payload hashes, the checkpoint receipts in `results/R1/stage4_sealed_cells/`, the charged process time (no double
