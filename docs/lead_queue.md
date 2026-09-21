@@ -1062,3 +1062,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     stop-after 6 (all remaining blocks). Fidelity watch: no new alerts since item 105 (11 total). Watcher armed for the
     block-3 boundary (225 cells, ≈ 3 days).
 
+
+109. (2026-09-21, 16:55 EDT) Run: 134 / 330 complete, 1 running (the last block-3 cell), 0 failures, 0 ceiling stops;
+    the 44 cells finished under bindings v2 used at most 65 % of their 1.7× ceilings. Charged 140 h of 750. The second
+    worker has been idle since 16:32 because the scheduler runs blocks as groups (block 4 starts only when block 3 is
+    fully finished; the same barrier cost nothing at the earlier boundaries because the last cells finished together);
+    it resumes with two workers on block 4 (matched_update / v0_live, 90 cells) in under an hour. Fidelity watch, DEC-064a
+    relay (six entries since item 105, none a veto): **v0_stable / zsRE creep continues at realization 2** — four cells
+    above twice the development reference (mean KL 0.00162–0.00185 vs 0.00158; NLL increase up to 0.00178 vs 0.00171),
+    all *below* the realization-1 running maximum of 0.00274, so the series has not risen further; two small new running
+    maxima elsewhere (learned CounterFact 0.00577 → 0.00578 KL; nonlearned MQuAKE 0.01218 → 0.01223). Block-3 boundary
+    report follows when the last cell finishes.
