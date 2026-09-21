@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-21 17:25** — block 3 complete (135 / 330, the whole triplet); block 4 running with two workers under bindings v2; Codex lane R1-D14d (triplet confirmatory analysis) opened ahead of the additional-work lanes.
+
 - **2026-09-20 17:30** — block 2 complete (90 / 330, 0 failures); Q21 cutover done (drain, idle reconciliation, signed resume); queue running under bindings v2 (factor 1.7, stop-after 6) since 17:16; block-3 watcher armed. Additional work: DEC-073, `aw/` namespace, Codex lanes AW-R0 / AW-L0-L1 / AW-L3 / AW-L-prereg open.
 
 - **v0 closed** (close-out identity `cb04d5e`); the lead's T4 review of the report/memo is still outstanding.
@@ -140,6 +142,18 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+### Lane R1-D14d — triplet confirmatory analysis on complete data (now first; ahead of the AW lanes)
+
+Blocks 1–3 are complete: `R1_learned_ff`, `R1_nonlearned`, `v0_stable` × zsRE, CounterFact, MQuAKE × realizations
+0–2 × five orders (135 cells). Run the registered D.5 analysis exactly as frozen (R1-49g / R1-75 / the D14 skeleton)
+on those cells: the primary contrasts with the registered DEC-057/058 computations and classifier labels kept as
+preliminary decision summaries, the DEC-069 t-interval (2 d.f.) secondary display beside the min–max bootstrap, every
+realization visible, the cap-fidelity benchmark and concentration statistics per cell, the DEC-052 inventory, the
+watch summary, and the comparator slots marked unavailable until blocks 4–5 finish. Read-only on the run and on the
+sealed cells; no re-scoring. Output `logs/R1/reports/triplet/` + `docs/R1_stage4_report_triplet.md`, figures worth a
+slide to `assets/presentation-materials/figures/triplet/`. Supersedes the block-1 partial report's tables where the
+triplet is complete; say what changed between r0-only and r0–r2.
 
 ### Lane AW-R0 — portfolio allocation check and the Option R extension matrix (first)
 

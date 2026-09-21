@@ -1073,3 +1073,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     all *below* the realization-1 running maximum of 0.00274, so the series has not risen further; two small new running
     maxima elsewhere (learned CounterFact 0.00577 → 0.00578 KL; nonlearned MQuAKE 0.01218 → 0.01223). Block-3 boundary
     report follows when the last cell finishes.
+
+110. (2026-09-21, 17:25 EDT) **Block 3 complete: the primary triplet exists on all three realizations and all three
+    datasets (135 / 330 cells, 0 failures, 0 retries).** Block-3 report `logs/R1/operator_reports/20260921-block3-try1/`
+    (boundary ready, no gaps; 141.0 process-hours known; the v2 ceiling view is in `ceiling-v2.json` beside it). Block
+    4 (matched_update, v0_live C1 / C2; 90 cells) started at 17:19 with two workers under the 1.7 ceilings. Fidelity
+    watch this block: 30 entries (every learned cell, as in blocks 1–2, plus the v0_stable zsRE cells named in item
+    109); no new alerts since item 109; no veto. The registered triplet analysis can now run on complete data: Codex
+    lane R1-D14d opened (§3 of `docs/ongoing.md`), read-only, reported with the DEC-069 display.
+
