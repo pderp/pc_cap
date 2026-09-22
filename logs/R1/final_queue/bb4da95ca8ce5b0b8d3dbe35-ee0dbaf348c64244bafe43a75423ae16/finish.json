@@ -1,0 +1,89 @@
+{
+  "MemAvailable_MiB": 15725.15625,
+  "admitted_other_reservations_seconds": 15105.335325882701,
+  "admitted_prior_charged_seconds": 579510.9470071587,
+  "base_queue_producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+    "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+  },
+  "bindings_sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c",
+  "ceiling_amendment": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings-v2.json",
+    "sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
+  },
+  "cell_id": "bb4da95ca8ce5b0b8d3dbe35",
+  "charged_process_wall_seconds": 9357.792754074093,
+  "effective_wall_ceiling_seconds": 15105.335325882701,
+  "exception": null,
+  "exit_code": 0,
+  "failure_class": null,
+  "fidelity_watch_binding": {
+    "implementations": [
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/ht8_fidelity_watch.py",
+        "sha256": "d129b756d864456a9d62de00ef19a21ab34bee76b8aff1800730747406958c85"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_63l_full_validation_contract.py",
+        "sha256": "bdd1be0ed58e04af4c6f449b47e191555573b8bac21ca650e5b535d4c93d667f"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_49m_fidelity_policy.py",
+        "sha256": "f96862b9778acc734e954944a895b2939f8d550d7ac6ccf02cff2ed4f0986216"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/ht7_concentration.py",
+        "sha256": "3d1ab4de890dfa0780a7380675edf29a43ae392f52d2b994946a25eb8f06b2c5"
+      }
+    ],
+    "policy": {
+      "admission_veto": false,
+      "bounds_nats": {
+        "mean_kl": 0.001,
+        "mean_signed_nll_increase": 0.01
+      },
+      "breach": "strictly above either bound against either reference",
+      "creep": "a breaching entry strictly exceeds a previous maximum or twice its frozen development reference, per reference/metric",
+      "decision": "DEC-064a",
+      "development_reference": "first verified development observation per condition x dataset, frozen by journal order",
+      "identity": "digest of mode, recipe SHA256 and declared cell coordinates",
+      "maxima": "all verified observations; condition x dataset x reference x metric",
+      "reporting": "immediate local alert; orchestrator conveys alerts immediately and entries at block boundaries",
+      "version": 1
+    }
+  },
+  "lease_identity": {
+    "pid": 3641890,
+    "stage": "Stage4",
+    "started": "2026-09-20T21:16:29Z",
+    "task": "R1-final-queue-resume"
+  },
+  "matrix_sha256": "06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb",
+  "new_attempts": [
+    "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/matched_update-counterfact-0-102-ec2ee1bf840958e430f2/attempt-0000"
+  ],
+  "previous_cell_failures": 0,
+  "producer_sha256": "660cdd1feca4e15962e64d6d711ac4d72cfb25a0da2c91881a4ad946f62a0780",
+  "recipe": {
+    "backend": {
+      "module": "scripts.r1_77b_sealed_backend",
+      "path": "/home/derp/cap/pc_cap/scripts/r1_77b_sealed_backend.py",
+      "sha256": "e3b4514dd097d10d59c479add9522c548db41ae830aed2c6f49fd622e3b4fd19"
+    },
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/bb4da95ca8ce5b0b8d3dbe35.json",
+    "sha256": "95ff0819e76e104f55ac4d7faef71a6b75222a53004f291711ca205728e90250"
+  },
+  "required_MemAvailable_MiB": 6144.0,
+  "resume": false,
+  "resume_authorization": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operations/Q21_RESUME/resume-authorization.json",
+    "sha256": "6dff5c6aa470373428e34a289ab692d7ed21fc3f6271cbeddd2500e44ba8374f"
+  },
+  "retry_policy": "R1-77f-retry-once-v1",
+  "scheduler_sha256": "6b3e7d2bf677bf5476c6662568d5f3fbd42beb6efcabec2fc7f58a795a756e40",
+  "solo_wall_ceiling_seconds": 8885.491368166295,
+  "start_sha256": "981cf66396315761ef89e6e0630be3448a7c09f5da7152992bae1ac0441cfb5f",
+  "started_at": "2026-09-22T08:02:47.122288+00:00",
+  "status": "process_exited",
+  "workers": 2
+}

@@ -1,0 +1,80 @@
+{
+  "MemAvailable_MiB": 15098.84375,
+  "admitted_other_reservations_seconds": 8959.987148367822,
+  "admitted_prior_charged_seconds": 515950.7389366706,
+  "base_queue_producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+    "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+  },
+  "bindings_sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c",
+  "ceiling_amendment": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings-v2.json",
+    "sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
+  },
+  "cell_id": "d1690029ea53ae03b3705536",
+  "effective_wall_ceiling_seconds": 8959.987148367822,
+  "fidelity_watch_binding": {
+    "implementations": [
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/ht8_fidelity_watch.py",
+        "sha256": "d129b756d864456a9d62de00ef19a21ab34bee76b8aff1800730747406958c85"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_63l_full_validation_contract.py",
+        "sha256": "bdd1be0ed58e04af4c6f449b47e191555573b8bac21ca650e5b535d4c93d667f"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/r1_49m_fidelity_policy.py",
+        "sha256": "f96862b9778acc734e954944a895b2939f8d550d7ac6ccf02cff2ed4f0986216"
+      },
+      {
+        "path": "/home/derp/cap/pc_cap/scripts/ht7_concentration.py",
+        "sha256": "3d1ab4de890dfa0780a7380675edf29a43ae392f52d2b994946a25eb8f06b2c5"
+      }
+    ],
+    "policy": {
+      "admission_veto": false,
+      "bounds_nats": {
+        "mean_kl": 0.001,
+        "mean_signed_nll_increase": 0.01
+      },
+      "breach": "strictly above either bound against either reference",
+      "creep": "a breaching entry strictly exceeds a previous maximum or twice its frozen development reference, per reference/metric",
+      "decision": "DEC-064a",
+      "development_reference": "first verified development observation per condition x dataset, frozen by journal order",
+      "identity": "digest of mode, recipe SHA256 and declared cell coordinates",
+      "maxima": "all verified observations; condition x dataset x reference x metric",
+      "reporting": "immediate local alert; orchestrator conveys alerts immediately and entries at block boundaries",
+      "version": 1
+    }
+  },
+  "lease_identity": {
+    "pid": 3641890,
+    "stage": "Stage4",
+    "started": "2026-09-20T21:16:29Z",
+    "task": "R1-final-queue-resume"
+  },
+  "matrix_sha256": "06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb",
+  "previous_cell_failures": 0,
+  "producer_sha256": "660cdd1feca4e15962e64d6d711ac4d72cfb25a0da2c91881a4ad946f62a0780",
+  "recipe": {
+    "backend": {
+      "module": "scripts.r1_77b_sealed_backend",
+      "path": "/home/derp/cap/pc_cap/scripts/r1_77b_sealed_backend.py",
+      "sha256": "e3b4514dd097d10d59c479add9522c548db41ae830aed2c6f49fd622e3b4fd19"
+    },
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/d1690029ea53ae03b3705536.json",
+    "sha256": "5122a7fe52ccdc467401d672d9fe69aeaad4f14f2b1cadc9186044670b35c507"
+  },
+  "required_MemAvailable_MiB": 6144.0,
+  "resume": false,
+  "resume_authorization": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operations/Q21_RESUME/resume-authorization.json",
+    "sha256": "6dff5c6aa470373428e34a289ab692d7ed21fc3f6271cbeddd2500e44ba8374f"
+  },
+  "retry_policy": "R1-77f-retry-once-v1",
+  "scheduler_sha256": "6b3e7d2bf677bf5476c6662568d5f3fbd42beb6efcabec2fc7f58a795a756e40",
+  "solo_wall_ceiling_seconds": 5270.580675510483,
+  "started_at": "2026-09-21T22:30:26.118814+00:00",
+  "workers": 2
+}
