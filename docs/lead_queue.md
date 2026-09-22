@@ -1082,3 +1082,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     109); no new alerts since item 109; no veto. The registered triplet analysis can now run on complete data: Codex
     lane R1-D14d opened (§3 of `docs/ongoing.md`), read-only, reported with the DEC-069 display.
 
+
+111. (2026-09-22, 16:15 EDT) Daily: 160 / 330 complete (block 4 at 25 / 90), 0 failures, 0 ceiling stops; block-4 cells
+    so far use ≤ 62 % of their ceilings; 184 process-hours charged of 750. Forecast from measured class costs: the 125
+    remaining matrix cells need ≈ 92 wall-hours at two workers (v0_live and S1 classes still on plan-v3 estimates),
+    plus the 45 extension cells → **release ≈ September 27**, as the additional-work plan assumed. Fidelity watch,
+    DEC-064a relay (two entries, no veto): the **matched_update comparator on zsRE** opens its own series above the old
+    bound — mean KL 0.00195 then 0.00295 nats (NLL increase 0.00188 / 0.00297), i.e. the plain matched adapter harms
+    ordinary text about as much as the learned cap does on zsRE (running maximum 0.00245). Worth a sentence in the
+    comparator slide once the class is complete.
