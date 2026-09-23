@@ -1,0 +1,88 @@
+{
+  "base_queue_producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+    "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+  },
+  "ceiling_amendment": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings-v2.json",
+    "sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
+  },
+  "cell_id": "baa8eccee6a4f8c27c11a09c",
+  "failed_attempts": 0,
+  "fidelity_watch": {
+    "admission_veto": false,
+    "alert_log": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/alerts.jsonl",
+      "sha256": "729f79b71a6e89ee5b6d6cfa3185cbdefda70feb46b49fb7c6be235a35eec0f3"
+    },
+    "alerts": 22,
+    "audited_cells": 173,
+    "breaches": 109,
+    "document": {
+      "path": "/home/derp/cap/pc_cap/docs/fidelity_watch.md",
+      "sha256": "e1c80e1ec21fd9b6eeee3cd8b45d1172eeac21cc06878a914135f831161a2da7"
+    },
+    "entries": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/entries.jsonl",
+      "sha256": "44ff76bcbf718d54852f13f479a9912bbae249b7cb09d9395aaf69f0f3915ea6"
+    },
+    "journal": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/observations.jsonl",
+      "sha256": "fcf8d33e25e9a58303594c0539069758b22715dadaa5aa715b3a4f761ae649e5"
+    },
+    "new_alerts": [
+      {
+        "admission_veto": false,
+        "cell_id": "3136dcc07dfa84af7fe5cc5fe025d8ea343b85a5db1d51d5307dde79d420311c",
+        "delivery": "pending_orchestrator_notification",
+        "group": "v0_live_C1:zsre",
+        "reasons": [
+          {
+            "compared_cell_id": "05850adf20790b90d48ec1fde99272c745073bf1f34692c879999df747aa7c3a",
+            "compared_value": 0.0020115795384492152,
+            "kind": "new_running_maximum",
+            "metric": "mean_kl",
+            "reference": "capoff",
+            "value": 0.0023836879951867947
+          },
+          {
+            "compared_cell_id": "05850adf20790b90d48ec1fde99272c745073bf1f34692c879999df747aa7c3a",
+            "compared_value": 0.0017406884060218411,
+            "kind": "new_running_maximum",
+            "metric": "mean_signed_nll_increase",
+            "reference": "capoff",
+            "value": 0.002038853741065816
+          },
+          {
+            "compared_cell_id": "05850adf20790b90d48ec1fde99272c745073bf1f34692c879999df747aa7c3a",
+            "compared_value": 0.0020115795384492152,
+            "kind": "new_running_maximum",
+            "metric": "mean_kl",
+            "reference": "original",
+            "value": 0.0023836879951867947
+          },
+          {
+            "compared_cell_id": "05850adf20790b90d48ec1fde99272c745073bf1f34692c879999df747aa7c3a",
+            "compared_value": 0.0017406884060218411,
+            "kind": "new_running_maximum",
+            "metric": "mean_signed_nll_increase",
+            "reference": "original",
+            "value": 0.002038853741065816
+          }
+        ],
+        "recorded_utc": "2026-09-23T04:49:46.358321+00:00"
+      }
+    ],
+    "new_cells": 1,
+    "status": "updated"
+  },
+  "finish_sha256": "77e15ef727b9d2b69f2e5510973ad6590b15e6837e8694133cb91325208ee143",
+  "matrix_sha256": "06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb",
+  "outcome": "complete",
+  "resume_authorization": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operations/Q21_RESUME/resume-authorization.json",
+    "sha256": "6dff5c6aa470373428e34a289ab692d7ed21fc3f6271cbeddd2500e44ba8374f"
+  },
+  "retained_other_workers": 1,
+  "retry_policy": "R1-77f-retry-once-v1"
+}

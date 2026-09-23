@@ -1091,3 +1091,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     bound — mean KL 0.00195 then 0.00295 nats (NLL increase 0.00188 / 0.00297), i.e. the plain matched adapter harms
     ordinary text about as much as the learned cap does on zsRE (running maximum 0.00245). Worth a sentence in the
     comparator slide once the class is complete.
+
+112. (2026-09-23, 15:30 EDT) Daily: 185 / 330 complete (block 4 at 50 / 90), 0 failures, 0 ceiling stops; block-4
+    classes use ≤ 64 % of their ceilings; 230 process-hours charged of 750; release forecast unchanged (≈ September 27).
+    Fidelity watch, DEC-064a relay (six entries, all `v0_live_C1 / zsRE`, no veto): the live v0 comparator's running
+    maximum climbed through its first cells to mean KL 0.00356 nats (NLL increase 0.00359) — above the learned cap's
+    zsRE maximum (0.00245) and the matched-update comparator's (0.00295). On zsRE every learned or live comparator
+    breaches the old 0.001 bound; only the frozen `v0_stable` and `R1_nonlearned` stay near it. This is the comparator
+    slide's second sentence. No Codex deliverables since the AW-L draft.
