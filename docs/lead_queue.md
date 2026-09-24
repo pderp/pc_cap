@@ -1124,3 +1124,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     or (d) none? Recommendation: (a) or (d). Codex's round-43 deliverables (AW-R0 allocation and Option R matrix, AW-L0/L1,
     AW-L3, AW-L pre-registration) are on disk and tracked.
 
+115. (2026-09-24, 15:35 EDT) DEC-074a recorded (caveat form (c); the talk carries the PC results). GPU order after the
+    225 drain (ETA 03:00–05:00 Friday): idle reconciliation and the block-4 boundary report → S1_LM zsRE by queue resume
+    (≈ 10 h) → S1_literal zsRE out of queue (≈ 10 h) while Codex builds the v0 runner and solver regression → corrected
+    SE-E vs SE-A on v0 → fixed-v5 acquisition credit → paired harm readout. Codex lanes re-cut in `docs/ongoing.md` §3
+    (PC-1 v0 runner + regression, PC-2 v1 acquisition seam, R1-D14d retained); the orchestrator executes the S1 caveat,
+    the drains and resumes, the paired scoring and the specification.
+

@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-24 15:35** — DEC-074/074a: halt at 225 (trigger armed), then S1 zsRE only (LM by queue, literal out of queue), then the PC refocus; Codex round 43 delivered (AW-R0, AW-L0/L1/L3, AW-L prereg) and superseded in priority by the PC lanes below.
+
 - **2026-09-21 17:25** — block 3 complete (135 / 330, the whole triplet); block 4 running with two workers under bindings v2; Codex lane R1-D14d (triplet confirmatory analysis) opened ahead of the additional-work lanes.
 
 - **2026-09-20 17:30** — block 2 complete (90 / 330, 0 failures); Q21 cutover done (drain, idle reconciliation, signed resume); queue running under bindings v2 (factor 1.7, stop-after 6) since 17:16; block-3 watcher armed. Additional work: DEC-073, `aw/` namespace, Codex lanes AW-R0 / AW-L0-L1 / AW-L3 / AW-L-prereg open.
@@ -143,7 +145,39 @@ queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrappe
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
 
-### Lane R1-D14d — triplet confirmatory analysis on complete data (now first; ahead of the AW lanes)
+## Round 44 — PC refocus (DEC-074a), Codex lanes (2026-09-24)
+
+Same ground rules as round 43 (CPU only; nothing under `scripts/` or `src/pccap/`; Codex-owned files only; the
+orchestrator owns `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py`, the S1 caveat execution, drains/resumes, and
+`docs/additional_work/PC-v0.md`). Specification of record: `docs/additional_work_pc_refocus.md` §§2–5 with
+`_review.md` §3 sequencing and `_response.md`; decisions DEC-074/074a.
+
+### Lane PC-1 — v0 corrected-credit runner and the actual-solver regression (first)
+
+`aw/pc_v0.py`: a small runner that builds the original v0 C1 cap on the regenerated ePC checkpoint
+(`EPCBase.from_npz` on `assets/models/epc/epc-50m/checkpoints/final-009766/params.npz`, SHA-256 `ea4c561d…`; never
+the default constructor), with `credit="adjoint"` (SE-A) or `credit="error"`, `credit_iters=8`, error lr 0.1 (SE-E,
+corrected energy), fresh empty memory per arm, the archived S5 v2 calibration and stream-selection rules, old S5
+scoring (ES, RET-ES, RET-GS, LS) plus the bounded-text score as a separate secondary column, cost counters (nine
+forwards + nine reverses per eight-step credit), new output directories under `results/additional_work/PC-v0/`.
+Tests in `aw/tests/test_pc_v0.py` against the **real solver** on the tiny base: with nonzero writes, the one-step site
+error from zero error equals −0.1 × adjoint within tolerance (the check that catches SD-24); zero-error forward
+identity; unchanged base weights; independent empty memories; target clamped only for the taught support answer.
+Deliver also the 1/8/32-iteration diagnostic (energy, gradient residual, cosine, norm) on a fixed development prefix
+sample, and a timing-profile command for the 12-cell scope (two credit rules × zsRE, CounterFact × realizations 0–2 ×
+one preselected order; 1,000 / 300 edits). No GPU: the profile runs after release under the orchestrator.
+
+### Lane PC-2 — fixed-v5 acquisition-credit seam (second)
+
+`aw/pc_v1_acquire.py`: an isolated variant of `revision_v1/adapt.py`'s delta acquisition that replaces the adjoint
+direction by the corrected eight-step error credit while keeping the real feedforward loss for acceptance,
+initialisation, bounds, stopping and cost accounting (no hard-coded one-reverse cost); adjoint mode must reproduce
+the v5 path to the bit on the tiny base (cf. `aw/tests/test_wrapper.py` for the pattern). Populations: the exposed
+realization-0 zsRE/CounterFact streams, 300 edits, one order, paired arms. Tests in `aw/tests/test_pc_v1_acquire.py`.
+
+### Lane R1-D14d — triplet confirmatory analysis (retained; after PC-1)
+
+### Lane R1-D14d — triplet confirmatory analysis on complete data (see round 44)
 
 Blocks 1–3 are complete: `R1_learned_ff`, `R1_nonlearned`, `v0_stable` × zsRE, CounterFact, MQuAKE × realizations
 0–2 × five orders (135 cells). Run the registered D.5 analysis exactly as frozen (R1-49g / R1-75 / the D14 skeleton)
