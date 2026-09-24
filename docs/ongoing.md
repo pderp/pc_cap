@@ -29,7 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
-- **2026-09-24 15:35** — DEC-074/074a: halt at 225 (trigger armed), then S1 zsRE only (LM by queue, literal out of queue), then the PC refocus; Codex round 43 delivered (AW-R0, AW-L0/L1/L3, AW-L prereg) and superseded in priority by the PC lanes below.
+- **2026-09-24 15:55** — DEC-074/074b: the queue runs through block 4 and block-5 positions 1–45 (S1_LM both datasets, S1_literal zsRE), halt trigger armed at the 270th start (≈ Saturday evening); then the PC refocus; Codex round 43 delivered (AW-R0, AW-L0/L1/L3, AW-L prereg) and superseded in priority by the PC lanes below.
 
 - **2026-09-21 17:25** — block 3 complete (135 / 330, the whole triplet); block 4 running with two workers under bindings v2; Codex lane R1-D14d (triplet confirmatory analysis) opened ahead of the additional-work lanes.
 

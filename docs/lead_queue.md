@@ -1131,3 +1131,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (PC-1 v0 runner + regression, PC-2 v1 acquisition seam, R1-D14d retained); the orchestrator executes the S1 caveat,
     the drains and resumes, the paired scoring and the specification.
 
+116. (2026-09-24, 15:55 EDT) DEC-074b: form (b). The 225 trigger is disarmed; a single trigger at the **270th start**
+    (block-5 position 45 dispatched) is armed, so the queue runs on without a drain-and-resume cycle at 225. ETA for
+    the halt: block 4 completes ≈ 04:00 Friday, the 45 block-5 cells ≈ 36 wall-hours → the trigger fires ≈ Saturday
+    16:00–20:00 EDT and the last two cells finish ≈ 2 h later. GPU order afterwards: idle reconciliation and the
+    boundary report → corrected SE-E vs SE-A on v0 (Codex lane PC-1 must be ready by then) → fixed-v5 acquisition
+    credit (PC-2) → paired harm readout.
+
