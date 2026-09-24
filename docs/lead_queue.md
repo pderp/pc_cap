@@ -1109,3 +1109,7 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     the watcher survived the September 20 exit-and-resume unharmed, so the risk is low at any time, and the zero-risk
     moment is after the queue's final receipt; the orchestrator posts the reminder here and in chat when that
     notification arrives.
+
+114. (2026-09-24, 10:45 EDT) The lead restarted Claude Code for the pending update. Verified afterwards: the queue
+    parent, both workers and the GPU lease are intact (206 / 330 finished, 208 started, cells still completing); the
+    orchestrator's boundary watcher was the only casualty and has been re-armed. Nothing to reconcile.
