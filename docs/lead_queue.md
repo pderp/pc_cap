@@ -1099,3 +1099,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     zsRE maximum (0.00245) and the matched-update comparator's (0.00295). On zsRE every learned or live comparator
     breaches the old 0.001 bound; only the frozen `v0_stable` and `R1_nonlearned` stay near it. This is the comparator
     slide's second sentence. No Codex deliverables since the AW-L draft.
+
+113. (2026-09-24, 09:10 EDT) Daily: 203 / 330 complete (block 4 at 68 / 90), 0 failures, 0 ceiling stops; block-4
+    classes use ≤ 65 % of their ceilings; 267 process-hours charged of 750; 127 cells remain (22 of block 4, the 60 S1
+    cells of block 5, the 45 extension cells) ≈ 81 wall-hours at two workers → **release ≈ September 27, evening**.
+    Fidelity relay (two entries, `v0_live_C2 / zsRE`, no veto): running maximum mean KL 0.00553 nats (NLL increase
+    0.00564), now the largest of any condition on zsRE (learned cap 0.00245, matched_update 0.00295, v0_live_C1
+    0.00356). **Restart reminder for the lead:** a Claude Code restart is pending an update; the queue, its lease and
+    the watcher survived the September 20 exit-and-resume unharmed, so the risk is low at any time, and the zero-risk
+    moment is after the queue's final receipt; the orchestrator posts the reminder here and in chat when that
+    notification arrives.

@@ -1,0 +1,72 @@
+{
+  "base_queue_producer": {
+    "path": "/home/derp/cap/pc_cap/scripts/r1_77_queue.py",
+    "sha256": "66ad04dda4d35792b848cd508f2eb19bb3b0f00fb3cf0952279695f7d5da9a4a"
+  },
+  "ceiling_amendment": {
+    "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-queue-bindings-v2.json",
+    "sha256": "c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
+  },
+  "cell_id": "68da09e4a00f4fe8d8b054fd",
+  "failed_attempts": 0,
+  "fidelity_watch": {
+    "admission_veto": false,
+    "alert_log": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/alerts.jsonl",
+      "sha256": "bf6ffb773d5acabd3037ea2417067f2e3ed35d1f919ac3f6e9058142b39e2905"
+    },
+    "alerts": 26,
+    "audited_cells": 200,
+    "breaches": 121,
+    "document": {
+      "path": "/home/derp/cap/pc_cap/docs/fidelity_watch.md",
+      "sha256": "d13be02b81861d1f42f5da5f0073d434af49a36e4a3c551496874b31467c1b16"
+    },
+    "entries": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/entries.jsonl",
+      "sha256": "100468223e0af9d91c3f48ab1276a75ca1b5254b292d80b1d41acd6701a1824d"
+    },
+    "journal": {
+      "path": "/home/derp/cap/pc_cap/results/R1/fidelity_watch/observations.jsonl",
+      "sha256": "6b7c4f93a717573dd402c57ccd31e5cd5ae46a96e27ad3848df24439e0c20e85"
+    },
+    "new_alerts": [
+      {
+        "admission_veto": false,
+        "cell_id": "cb94f827b3fd31b21e65f57dfcb19ea572df8af2417c2cccc0e4cf5c370b8365",
+        "delivery": "pending_orchestrator_notification",
+        "group": "v0_live_C2:zsre",
+        "reasons": [
+          {
+            "compared_cell_id": "1ab4076295268093159975d877003ff071b3c57c08e46f4049af26a0733f5b65",
+            "compared_value": 0.002637139319585642,
+            "kind": "new_running_maximum",
+            "metric": "mean_signed_nll_increase",
+            "reference": "capoff",
+            "value": 0.002872663221600925
+          },
+          {
+            "compared_cell_id": "1ab4076295268093159975d877003ff071b3c57c08e46f4049af26a0733f5b65",
+            "compared_value": 0.002637139319585642,
+            "kind": "new_running_maximum",
+            "metric": "mean_signed_nll_increase",
+            "reference": "original",
+            "value": 0.002872663221600925
+          }
+        ],
+        "recorded_utc": "2026-09-24T08:36:53.106167+00:00"
+      }
+    ],
+    "new_cells": 1,
+    "status": "updated"
+  },
+  "finish_sha256": "1f1800dd0d66b0151c48a4432f61689c90b4f3bddff551530823c48e878b5c7f",
+  "matrix_sha256": "06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb",
+  "outcome": "complete",
+  "resume_authorization": {
+    "path": "/home/derp/cap/pc_cap/logs/R1/operations/Q21_RESUME/resume-authorization.json",
+    "sha256": "6dff5c6aa470373428e34a289ab692d7ed21fc3f6271cbeddd2500e44ba8374f"
+  },
+  "retained_other_workers": 1,
+  "retry_policy": "R1-77f-retry-once-v1"
+}
