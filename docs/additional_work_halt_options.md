@@ -72,3 +72,34 @@ the most overdue.
 
 Codex's parallel proposal and this one differ mainly on block 5 and on adding G and I; where they agree (A first, B
 second, E kept small, AW-L and the extension deferred) the lead can treat the point as settled.
+
+## 7. Corrections after Codex's response (2026-09-24, 15:10 EDT)
+
+Codex's `additional_work_pc_refocus_response.md` is right on three points, and §2–§4 above should be read with them:
+
+1. **Block 5 is not an edit-fine-tuning baseline.** S1_LM is the base continued with ordinary next-token training on
+   OpenWebText; S1_literal is same-teacher self-distillation (a numerical negative control). Both continued checkpoints
+   are then evaluated with the **stable v0 cap**; neither trains the base on the edit stream (verified in the sealed
+   recipe: `r1_24_lm_v3_lr1e-8/continued_params.npz`, `StableCap`). Block 5 completes a registered comparison against
+   those continued bases; it does not answer "why not fine-tune on the edits". My §2 overstated its value.
+2. **Hours.** Fri 06:00 → Mon Oct 6 00:00 is 258 wall-hours, ≈ 219 usable at the 15 % allowance, not 280 / 240; the
+   P1 scenario's slack is ≈ 68 hours, not ≥ 90.
+3. **G and I are stretch items**, not commitments: G's surrogate is not a drop-in for the v5 recipe and its runtime
+   factor is unmeasured; I needs a population and capacity check that the 1,000-edit recipes do not supply. Option R's
+   preparation (allocation check, populations, matrix, recipes) is already delivered in the round-43 handoff.
+
+**Consequence for the block-5 caveat.** The lead's decision (halt at 225, but first the zsRE half of block 5) was
+taken on my wording. With the correction, the zsRE half buys the S1 continuation comparison on one dataset for the
+stable cap, a narrow registered control. Its execution is also constrained by the frozen dispatch order (S1_LM zsRE
+1–15, S1_LM CounterFact 16–30, S1_literal zsRE 31–45, S1_literal CounterFact 46–60): the scheduler cannot skip cells,
+so the choices are
+
+| option | cells | wall-h | receipts |
+|---|---:|---:|---|
+| (a) S1_LM zsRE only: resume stop-after 5, drain at the 15th block-5 start | 15 | ≈ 10 | queue receipts, one drain |
+| (b) positions 1–45 (S1_LM both datasets + S1_literal zsRE): drain at the 45th start | 45 | ≈ 36 | queue receipts, one drain |
+| (c) (a) plus S1_literal zsRE run cell by cell through the sealed backend outside the queue | 30 | ≈ 20 | 15 cells without queue receipts; manual cost and watch posting |
+| (d) none: full halt at 225 | 0 | 0 | — |
+
+Recommendation given the correction: (a) if any S1 evidence is wanted for the registered report, otherwise (d);
+(b) only if the CounterFact S1_LM comparison is wanted too; (c) not recommended. The choice is the lead's.

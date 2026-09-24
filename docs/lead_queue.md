@@ -1113,3 +1113,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 114. (2026-09-24, 10:45 EDT) The lead restarted Claude Code for the pending update. Verified afterwards: the queue
     parent, both workers and the GPU lease are intact (206 / 330 finished, 208 started, cells still completing); the
     orchestrator's boundary watcher was the only casualty and has been re-armed. Nothing to reconcile.
+
+114. (2026-09-24, 15:15 EDT) **DEC-074 recorded: halt at 225.** Trigger armed 14:47 (one SIGINT to the scheduler at the
+    225th start; ETA 03:00–05:00 Friday). Codex's response to my review accepted the sequencing and corrected me on
+    three points, recorded in `additional_work_halt_options.md` §7: block 5 is the S1 *continued-base* control with the
+    stable v0 cap, not an edit-fine-tuning baseline (I had it wrong); the window is 258 wall-hours (≈ 219 usable), not
+    280; G and I are stretch items. **Question for the lead:** given the correction, and given that the frozen dispatch
+    order cannot skip the S1_LM CounterFact cells, does the zsRE caveat stand, and in which form — (a) S1_LM zsRE only
+    (15 cells, ≈ 10 h, one drain), (b) positions 1–45 (≈ 36 h), (c) S1_literal zsRE outside the queue (not recommended),
+    or (d) none? Recommendation: (a) or (d). Codex's round-43 deliverables (AW-R0 allocation and Option R matrix, AW-L0/L1,
+    AW-L3, AW-L pre-registration) are on disk and tracked.
+
