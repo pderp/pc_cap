@@ -1138,3 +1138,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     boundary report → corrected SE-E vs SE-A on v0 (Codex lane PC-1 must be ready by then) → fixed-v5 acquisition
     credit (PC-2) → paired harm readout.
 
+117. (2026-09-25, 05:45 EDT) **Block 4 complete: 225 / 330, 0 failures, 0 retries; the comparator blocks (matched_update,
+    v0_live C1 / C2) exist on both datasets and all realizations.** Block-4 report `logs/R1/operator_reports/20260925-block4-try1/` (boundary ready: True;
+    gaps: []; 308.4 process-hours known; v2 ceiling view beside it). Block 5 started at ≈ 04:00 with two workers on
+    S1_LM zsRE; the halt trigger at the 270th start stands (ETA Saturday evening). Fidelity watch this block:
+    43 entries, 10 alerts (all already relayed in items 111–113); no veto. Codex's PC-1 / PC-2 /
+    triplet-report files are on disk (uncommitted until the lead says the round is finished).

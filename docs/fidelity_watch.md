@@ -20,7 +20,7 @@ No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, develop
 
 Manual notes above are preserved. This source-bound table is regenerated from the locked journal; one entry per recipe cell. Both references are shown. Near-zero target-token loss does not establish unchanged predictions or reader inactivity.
 
-Audited cells: 217; breaching cells: 134; creep alerts: 27. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
+Audited cells: 229; breaching cells: 134; creep alerts: 27. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
 
 | Cell identity / scope | Condition / dataset / realization / order | Actual records / checkpoint | Reference | Mean KL | NLL increase | ES95 loss | Max loss | Positions for half KL | Near-zero loss fraction | Creep |
 |---|---|---|---|---:|---:|---:|---:|---|---:|---|
