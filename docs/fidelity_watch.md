@@ -20,7 +20,7 @@ No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, develop
 
 Manual notes above are preserved. This source-bound table is regenerated from the locked journal; one entry per recipe cell. Both references are shown. Near-zero target-token loss does not establish unchanged predictions or reader inactivity.
 
-Audited cells: 257; breaching cells: 149; creep alerts: 29. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
+Audited cells: 266; breaching cells: 155; creep alerts: 32. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
 
 | Cell identity / scope | Condition / dataset / realization / order | Actual records / checkpoint | Reference | Mean KL | NLL increase | ES95 loss | Max loss | Positions for half KL | Near-zero loss fraction | Creep |
 |---|---|---|---|---:|---:|---:|---:|---|---:|---|
@@ -322,6 +322,18 @@ Audited cells: 257; breaching cells: 149; creep alerts: 29. Development and conf
 | `380bd58d158e4d68f3f7bf2ecb05cdf697d4733b5d7088cbd549c1f161206419` / confirmatory | S1_LM / zsre / 2 / 103 | unavailable / 1000 | original | 0.00200275621 | -0.0020193818 | 0.086938079 | 23.5375203 | 27 | 0.0012803941 | none |
 | `dc5602a4b9dc8ef374f484899deba4fb74f8a77d0d277415132267e5adef279b` / confirmatory | S1_LM / zsre / 2 / 104 | unavailable / 1000 | capoff | 0.00162011152 | 0.00151530489 | 0.035357674 | 23.5327239 | 17 | 0.99847494 | none |
 | `dc5602a4b9dc8ef374f484899deba4fb74f8a77d0d277415132267e5adef279b` / confirmatory | S1_LM / zsre / 2 / 104 | unavailable / 1000 | original | 0.00181003687 | -0.00231868353 | 0.0814357121 | 23.5375203 | 21 | 0.0012803941 | none |
+| `16ef7d6f3528d92e7e0c4f58b2d2a17442f701473824d6539e06504d313e87b3` / confirmatory | S1_literal / zsre / 0 / 100 | unavailable / 1000 | capoff | 0.00116482068 | 0.000851688429 | 0.0212524047 | 25.8449511 | 13 | 0.99867475 | none |
+| `16ef7d6f3528d92e7e0c4f58b2d2a17442f701473824d6539e06504d313e87b3` / confirmatory | S1_literal / zsre / 0 / 100 | unavailable / 1000 | original | 0.00119393674 | 0.00115598989 | 0.04296208 | 25.8442531 | 13 | 0.0013782586 | none |
+| `41efc9e78b1ef47d51875c5c4b6138442d5ad01211c171efb4529b06f7fabd4b` / confirmatory | S1_literal / zsre / 0 / 101 | unavailable / 1000 | capoff | 0.00188529585 | 0.00156512037 | 0.0386475992 | 27.6882977 | 20 | 0.99714154 | new_running_maximum |
+| `41efc9e78b1ef47d51875c5c4b6138442d5ad01211c171efb4529b06f7fabd4b` / confirmatory | S1_literal / zsre / 0 / 101 | unavailable / 1000 | original | 0.00191522153 | 0.00186942183 | 0.0601339181 | 27.7025599 | 20 | 0.0013782586 | new_running_maximum |
+| `bc93681bfd6bfed6cf2501e9c484f679c5b8b0e783c4aa732e821f480561d4ec` / confirmatory | S1_literal / zsre / 0 / 103 | unavailable / 1000 | capoff | 0.00146269039 | 0.00120361508 | 0.0289585361 | 27.6882977 | 13 | 0.99828737 | none |
+| `bc93681bfd6bfed6cf2501e9c484f679c5b8b0e783c4aa732e821f480561d4ec` / confirmatory | S1_literal / zsre / 0 / 103 | unavailable / 1000 | original | 0.001493871 | 0.00150791654 | 0.0506155043 | 27.7025599 | 14 | 0.0013782586 | none |
+| `54378fc79a923990d24d81542c787e920201f3e145dabe06449cf9e3aa3a5142` / confirmatory | S1_literal / zsre / 0 / 104 | unavailable / 1000 | capoff | 0.00154752962 | 0.00117519173 | 0.0274717777 | 27.6882977 | 12 | 0.99864213 | none |
+| `54378fc79a923990d24d81542c787e920201f3e145dabe06449cf9e3aa3a5142` / confirmatory | S1_literal / zsre / 0 / 104 | unavailable / 1000 | original | 0.00157835947 | 0.00147949319 | 0.0491840565 | 27.7025599 | 12 | 0.0013782586 | none |
+| `4001c341ffc3d72de95408490a243ebee5d0e6d0f8accbfce56940ed3d65d133` / confirmatory | S1_literal / zsre / 1 / 100 | unavailable / 1000 | capoff | 0.0015837119 | 0.00160444703 | 0.036369355 | 26.3442491 | 16 | 0.99860951 | new_running_maximum |
+| `4001c341ffc3d72de95408490a243ebee5d0e6d0f8accbfce56940ed3d65d133` / confirmatory | S1_literal / zsre / 1 / 100 | unavailable / 1000 | original | 0.00161191161 | 0.00190874849 | 0.0580366731 | 26.3516128 | 16 | 0.0013782586 | new_running_maximum |
+| `f34d023caf148aef769491a399e567cde0be4d8a31ade1bb930789ade68ea69c` / confirmatory | S1_literal / zsre / 1 / 101 | unavailable / 1000 | capoff | 0.00271355977 | 0.00274716088 | 0.0618325494 | 26.3442491 | 21 | 0.99692135 | new_running_maximum |
+| `f34d023caf148aef769491a399e567cde0be4d8a31ade1bb930789ade68ea69c` / confirmatory | S1_literal / zsre / 1 / 101 | unavailable / 1000 | original | 0.00274182293 | 0.00305146233 | 0.0832256178 | 26.3516128 | 22 | 0.0013782586 | new_running_maximum |
 
 ### Running maxima (all audited cells, including no-breach cells)
 
@@ -343,6 +355,8 @@ Audited cells: 257; breaching cells: 149; creep alerts: 29. Development and conf
 | S1_LM:counterfact | original | 0.000189545785 | -0.00383398842 | `unavailable` |
 | S1_LM:zsre | capoff | 0.00272681993 | 0.00275051779 | `unavailable` |
 | S1_LM:zsre | original | 0.00291445692 | -0.00108347063 | `unavailable` |
+| S1_literal:zsre | capoff | 0.00271355977 | 0.00274716088 | `unavailable` |
+| S1_literal:zsre | original | 0.00274182293 | 0.00305146233 | `unavailable` |
 | matched_update:counterfact | capoff | 0 | 0 | `unavailable` |
 | matched_update:counterfact | original | 0 | 0 | `unavailable` |
 | matched_update:zsre | capoff | 0.00294680114 | 0.00297092361 | `unavailable` |
@@ -393,6 +407,9 @@ Audited cells: 257; breaching cells: 149; creep alerts: 29. Development and conf
 - **CREEP** `61c5f0139af65d530ee5df321f6836add009448e33bff842bbf97e1dbdf7f923` (v0_live_C2:zsre): capoff mean_kl 0.0055263108 > 0.00304642004 (new_running_maximum); capoff mean_signed_nll_increase 0.00563944129 > 0.00287266322 (new_running_maximum); original mean_kl 0.0055263108 > 0.00304642004 (new_running_maximum); original mean_signed_nll_increase 0.00563944129 > 0.00287266322 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 - **CREEP** `b8f5817b057410c605fb3d49742f6622ee794d885a762be06145dfa5da215e8e` (S1_LM:zsre): capoff mean_signed_nll_increase 0.00164128331 > 0.00155182671 (new_running_maximum); original mean_signed_nll_increase -0.00219270511 > -0.00228216171 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 - **CREEP** `e9c085ae1d5ad9b8f36967c3b7531484c755b1ba9743369982defed8260cda8a` (S1_LM:zsre): capoff mean_kl 0.00272681993 > 0.00185270859 (new_running_maximum); capoff mean_signed_nll_increase 0.00275051779 > 0.00164128331 (new_running_maximum); original mean_kl 0.00291445692 > 0.00203840528 (new_running_maximum); original mean_signed_nll_increase -0.00108347063 > -0.00219270511 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `41efc9e78b1ef47d51875c5c4b6138442d5ad01211c171efb4529b06f7fabd4b` (S1_literal:zsre): capoff mean_kl 0.00188529585 > 0.00116482068 (new_running_maximum); capoff mean_signed_nll_increase 0.00156512037 > 0.000851688429 (new_running_maximum); original mean_kl 0.00191522153 > 0.00119393674 (new_running_maximum); original mean_signed_nll_increase 0.00186942183 > 0.00115598989 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `4001c341ffc3d72de95408490a243ebee5d0e6d0f8accbfce56940ed3d65d133` (S1_literal:zsre): capoff mean_signed_nll_increase 0.00160444703 > 0.00156512037 (new_running_maximum); original mean_signed_nll_increase 0.00190874849 > 0.00186942183 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `f34d023caf148aef769491a399e567cde0be4d8a31ade1bb930789ade68ea69c` (S1_literal:zsre): capoff mean_kl 0.00271355977 > 0.00188529585 (new_running_maximum); capoff mean_signed_nll_increase 0.00274716088 > 0.00160444703 (new_running_maximum); original mean_kl 0.00274182293 > 0.00191522153 (new_running_maximum); original mean_signed_nll_increase 0.00305146233 > 0.00190874849 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 
 <!-- HT-8 managed watch: end -->
 Creep alert 2026-09-18 18:42 EDT (confirmatory, cell 233ef059…, primary v5 zsRE r0 order 100, 1,000 records): mean KL 0.002381 / NLL Δ 0.002450 (both references) vs the development reference 0.002270 / 0.002310 (300 records) — new running maximum for zsRE · R1_learned_ff; relayed to the lead (lead queue item 101).

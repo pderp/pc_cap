@@ -43,3 +43,13 @@ Prepare the PC-v0 report after the actual runs, with `--orders 1` or `5` matchin
 Repeat `--run` for nonoverlapping run groups; duplicate coordinates are rejected rather than chosen by outcome. Partial cells stay visible, but only complete paired endpoints enter the comparison. The generator verifies source/model/data identities and binds the observed input bytes; the runner does not provide historical signatures on metrics. Raw diagnostic rows remain in the report JSON.
 
 When regenerating the deck export, pass the chosen comparator snapshot to `aw.presentation_prepare` and use a new output directory. The initial `deck_v3` remains a dated preparation snapshot. Update the canonical outline and ledger with the actual experimental reports before producing final slides; do not present a pending image or CPU smoke as a measured PC result.
+
+## Round 46 explanatory drafts
+
+`docs/presentation/deck_v3/diagram-specs.json` and the four per-slide Markdown files are the editable sources. Export without regenerating measured claim rows:
+
+```bash
+JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 ../venv/bin/python -m aw.presentation_prepare --explanatory-only --output /home/derp/cap/assets/presentation-materials/deck_v3/NEW_DRAFT_EXPORT
+```
+
+The four SVGs and speaker text export together. Slide 6 names the HT-13 survival figure; the exporter uses an explicit draft slot while its ES99/title corrections are outstanding. This is a temporary unavailable figure, not a zero-valued result. See `docs/tasks/HT-13-round46-review.md`. Re-export after Capstan repairs it and regenerates the reconciled 270-cell figures. The broader refresh command is in `docs/tasks/R1-D14f.md`; it preserves PC results and conceptual claim rows.

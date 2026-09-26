@@ -130,9 +130,16 @@ def ledger(comparators):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--comparators',required=True)
+    p.add_argument('--comparators')
+    p.add_argument('--explanatory-only',action='store_true',help='Export PRES-2 drafts without regenerating measured ledger rows')
     p.add_argument('--output',required=True)
     a=p.parse_args()
+    if a.explanatory_only:
+        from aw.presentation_slides import export
+        print(json.dumps(export(a.output)))
+        return
+    if not a.comparators:
+        p.error('--comparators required unless --explanatory-only')
     out=Path(a.output).resolve()
     out.mkdir(parents=True,exist_ok=False)
     figs=out/'figures'

@@ -1,0 +1,136 @@
+{
+  "draft": true,
+  "slides": [
+    {
+      "number": "02",
+      "title": "From active inference to our testbed",
+      "status": "Implemented components; proposed policy loop",
+      "claims": [
+        "AI-loop",
+        "AI-testbed",
+        "AI-programme"
+      ],
+      "panels": [
+        {
+          "title": "Environment / observations",
+          "lines": [
+            "Supplied factual corrections",
+            "Questions and ordinary text",
+            "Tested predictions"
+          ]
+        },
+        {
+          "title": "Adaptive cap",
+          "lines": [
+            "Memory + reader / null gate",
+            "Bounded residual writes",
+            "Acquisition credit"
+          ]
+        },
+        {
+          "title": "Frozen transformer",
+          "lines": [
+            "Features and predictions",
+            "Main-condition weights fixed",
+            "Generative substrate"
+          ]
+        }
+      ],
+      "footer": "PROPOSED: preferences + policy inference + information-seeking audits",
+      "notes": "Two implemented interfaces do not establish a Markov blanket. HT-14 map pending."
+    },
+    {
+      "number": "03",
+      "title": "Predictive coding supplies acquisition credit",
+      "status": "Mechanism tested; comparative efficacy, harm and cost pending",
+      "claims": [
+        "PC-mechanism",
+        "PC-SD24",
+        "PC-v0",
+        "PC-fixed-v5"
+      ],
+      "panels": [
+        {
+          "title": "Same teaching problem",
+          "lines": [
+            "Prefix x, taught target y",
+            "Same fixed base and cap",
+            "Writes w held fixed in settling"
+          ]
+        },
+        {
+          "title": "SE-A: adjoint",
+          "lines": [
+            "Compute task-loss derivative",
+            "Negative normalized gradient",
+            "Then common bounded update"
+          ]
+        },
+        {
+          "title": "SE-E: inferred errors",
+          "lines": [
+            "E = 1/2 sum ||e||^2 + loss_y",
+            "Zero e; 8 steps; step size 0.1",
+            "Use normalized site error"
+          ]
+        }
+      ],
+      "footer": "SD-24: penalize e before adding w; old write-site prior penalized e + w.",
+      "notes": "9 forward + 9 reverse evaluations per 8-step inference; JAX autodiff. Compare efficacy, harm, cost."
+    },
+    {
+      "number": "06",
+      "title": "Why look past the mean?",
+      "status": "Measured empirical survival; tail family unestablished",
+      "claims": [
+        "HT-readout",
+        "HT13-empirical",
+        "R1-fidelity"
+      ],
+      "figure": "assets/presentation-materials/figures/tails/survival_by_dataset.png",
+      "panels": [],
+      "footer": "P(delta NLL > x), including unchanged positions in the denominator; own-cap-off reference.",
+      "notes": "HT-13 is descriptive pooling over repeated positions/cells. ES99 = mean of worst 1%, not percentile."
+    },
+    {
+      "number": "11",
+      "title": "What should the agent do next?",
+      "status": "Proposed active-inference extension; no new pre-October-9 commitment",
+      "claims": [
+        "AI-programme",
+        "AI-next",
+        "HT13-empirical",
+        "PC-v0",
+        "PC-fixed-v5"
+      ],
+      "panels": [
+        {
+          "title": "Implemented / measured",
+          "lines": [
+            "Acquire bounded corrections",
+            "Test retention and locality",
+            "Measure harm distribution"
+          ]
+        },
+        {
+          "title": "PROPOSED policy model",
+          "lines": [
+            "Beliefs + observations + actions",
+            "Preferences: pragmatic value",
+            "Information: epistemic value"
+          ]
+        },
+        {
+          "title": "PROPOSED comparison",
+          "lines": [
+            "Policy-guided vs fixed audits",
+            "Equal audit / compute budget",
+            "Utility, information, harm, cost"
+          ]
+        }
+      ],
+      "footer": "Learning from observed failures motivates an experiment on autonomous information seeking.",
+      "notes": "Coupled free energy, kappa-porous blankets and the one-kappa conjecture remain proposed."
+    }
+  ]
+}

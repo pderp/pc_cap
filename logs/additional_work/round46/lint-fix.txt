@@ -1,0 +1,119 @@
+E702 Multiple statements on one line (semicolon)
+   --> aw/pc_harm_readout.py:195:46
+    |
+193 |     rows=[]
+194 |     for c in report['cells']:
+195 |         s=c['readout']['summary']['original']; loss=s['loss']; exc=loss['exceedance']
+    |                                              ^
+196 |         rows.append([c['dataset'],c['realization'],c['order'],c['arm'],s['kl']['mean_signed'],loss['mean_signed'],
+197 |                      loss['es99_positive'],loss['maximum_signed'],loss['maximum_location'],
+    |
+
+E702 Multiple statements on one line (semicolon)
+   --> aw/pc_harm_readout.py:195:62
+    |
+193 |     rows=[]
+194 |     for c in report['cells']:
+195 |         s=c['readout']['summary']['original']; loss=s['loss']; exc=loss['exceedance']
+    |                                                              ^
+196 |         rows.append([c['dataset'],c['realization'],c['order'],c['arm'],s['kl']['mean_signed'],loss['mean_signed'],
+197 |                      loss['es99_positive'],loss['maximum_signed'],loss['maximum_location'],
+    |
+
+E702 Multiple statements on one line (semicolon)
+   --> aw/pc_harm_readout.py:240:29
+    |
+238 |             raise ValueError('readout source differs from acquisition drift source')
+239 |     out.mkdir(parents=True,exist_ok=False)
+240 |     started=time.monotonic(); cost=dict(status='failed',smoke=smoke,cost_scope='readout only',shared_ceiling_seconds=28800)
+    |                             ^
+241 |     report=dict(smoke=smoke,selection=meta,cells=[],pairs=[],sources_sha256=bindings)
+242 |     try:
+    |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/refresh_after_halt.py:59:21
+   |
+58 |     from aw import tail_figures
+59 |     x=np.zeros(1000); x[0]=10
+   |                     ^
+60 |     s=tail_figures.statistics(x)
+61 |     if not np.isclose(s.get('es99_positive',float('nan')),1.):
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_pc_harm_readout.py:23:20
+   |
+22 | def test_fractional_es_not_percentile_and_ties():
+23 |     x=np.zeros(250); x[:3]=[10,10,5]
+   |                    ^
+24 |     s=h.tails(x,5)
+25 |     assert s['es99_positive']==9  # (10+10+0.5*5)/2.5; 99th percentile is 2.55
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_pc_harm_readout.py:37:27
+   |
+36 | def test_selected_populations():
+37 |     a,ma=h.selection('v0'); b,mb=h.selection('v5')
+   |                           ^
+38 |     assert a.shape==(32,128) and ma['positions']==4064
+39 |     assert b.shape==(1931,128) and mb['positions']==245237
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_pc_harm_readout.py:49:24
+   |
+47 |     windows=np.int32([[4,11,17,9],[4,12,17,7]])
+48 |     meta=dict(mode='cpu_smoke',positions=6,windows_sha256=h.window_hash(windows))
+49 |     base=TinyBatchEPC(); results=[]
+   |                        ^
+50 |     for row in rows:
+51 |         cap=h.restore_v0(base,row,{},smoke=True)
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_pc_harm_readout.py:73:34
+   |
+71 |     np.testing.assert_array_equal(v,e-a)
+72 |     assert p['positionwise']['original']['loss']['mean_signed']==pytest.approx((e[:,:,0]-a[:,:,0]).mean())
+73 |     bad=copy.deepcopy(results[1]); bad['selection']['positions']=5
+   |                                  ^
+74 |     with pytest.raises(ValueError,match='identities'):
+75 |         h.pair(results[0],bad,tmp_path/'bad.npz')
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_refresh_after_halt.py:36:43
+   |
+34 | def test_dry_run_never_writes(tmp_path,monkeypatch):
+35 |     cells,report=fixture()
+36 |     inv=copy.deepcopy(report['inventory']); inv['cost']['unknown_attempts']=['live']
+   |                                           ^
+37 |     monkeypatch.setattr(r,'current_inventory',lambda:(cells,inv,[str(i) for i in range(252)]))
+38 |     out=tmp_path/'must-not-exist'
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_refresh_after_halt.py:58:29
+   |
+56 |     c['contrast']['control']='S1_LM'
+57 |     native['contrasts'].append(c)
+58 |     p=tmp_path/'native.json'; p.write_text(json.dumps(native))
+   |                             ^
+59 |     report['analysis']=dict(path=str(p),sha256=r.sha(p))
+60 |     f=tmp_path/'report.json'; f.write_text(json.dumps(report))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> aw/tests/test_refresh_after_halt.py:60:29
+   |
+58 |     p=tmp_path/'native.json'; p.write_text(json.dumps(native))
+59 |     report['analysis']=dict(path=str(p),sha256=r.sha(p))
+60 |     f=tmp_path/'report.json'; f.write_text(json.dumps(report))
+   |                             ^
+61 |     rows=read_rows(refresh_text(original,f))
+62 |     assert any(row[0]==f"comparator-{c['dataset']}-S1_LM" for row in rows)
+   |
+
+Found 15 errors (4 fixed, 11 remaining).

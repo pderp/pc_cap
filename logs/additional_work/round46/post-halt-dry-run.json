@@ -1,0 +1,50 @@
+{
+  "mode": "dry-run",
+  "observed_complete_cells": 253,
+  "target_complete_cells": 270,
+  "missing_prefix_cells": [
+    "5c5511653f8d590c63a39794",
+    "7cbec59a4f05afaa8ebed3fb",
+    "b1a17c1fb747eef11f253278",
+    "edb61534cb4ec7a4187ebbdb",
+    "78360f37e3cd5a3eb5cc2b3e",
+    "46d6404412a25fbdd2965880",
+    "50af2a28b866c26021d83b01",
+    "22a5ac50d5ca3c952b8b1e34",
+    "7d93e4d997ec1f974bb6c71a",
+    "0f466b21fb4514acd9d1ff1e",
+    "151bacf1f85b74f88864784e",
+    "330479ee3f94e169b8496e0b",
+    "e4019672011694d495923c6f",
+    "bf89e6ad180b60ad56c35a7e",
+    "70aacd394ef41b887377260a",
+    "b3f4ad21a596171a9a43e0aa",
+    "6885c03ed3db8fb41a5e20dd"
+  ],
+  "unknown_cost_records": 4,
+  "output": "/home/derp/cap/pc_cap/logs/R1/reports/comparators-270",
+  "writes_performed": false,
+  "prerequisite": "Owner reconciliation note + current verified D11 block-5 report, exact 270 completed; queue remains stopped",
+  "expected_block5_unprocessed": 15,
+  "reason_note": "DEC-074b omits S1_literal CounterFact and extension; DEC-066 already omitted MQuAKE comparators and its 1000-edit endpoint.",
+  "steps": [
+    "analyze comparator prefix 270 into a NEW directory",
+    "publish with changes since 225 into staged report",
+    "regenerate comparator figures",
+    "regenerate HT-13 tails from unchanged full-validation vectors",
+    "refresh only comparator-dependent claim rows, preserving PC and conceptual rows",
+    "publish comparator document and ledger after validation; split oversized JSON; retain unavailable.csv"
+  ],
+  "commands": {
+    "tails": [
+      "/home/derp/cap/pc_cap/../venv/bin/python",
+      "-m",
+      "aw.tail_figures",
+      "--out",
+      "/home/derp/cap/assets/presentation-materials/figures/tails"
+    ]
+  },
+  "tail_helper": "HT-13 ES99 is still a percentile; Claude must repair tail_figures before refresh publication",
+  "boundary": "owner report pending",
+  "reconciliation": "owner note pending"
+}
