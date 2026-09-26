@@ -1163,3 +1163,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     real-solver SD-24 regression) and PC-2 (fixed-v5 acquisition seam) are also committed; the specification of record
     for tonight's runs is `docs/additional_work/PC-v0.md`.
 
+
+120. (2026-09-26, 12:00 EDT) **Feedback deadlines for the external reviewers** (all EDT; every supplemental job runs in
+    cells of ≤ 2 h with outputs kept, so these are the points after which a change costs GPU time, not the points after
+    which it is impossible): the halt scope — tonight 20:00 (afterwards reversible by a signed resume, ≈ 1 h admin plus
+    the 23–43 GPU-hours of the unrun cells); the PC-v0 replication design — tonight 23:00 (afterwards a 3–15 h rerun);
+    the harm readout — Sunday noon (< 8 h rerun); **the fixed-v5 credit run design — Monday 09:00**, the orchestrator
+    holds its start until then unless told otherwise (afterwards ≈ 8 h rerun); stretch items and portfolio changes —
+    Wednesday October 1 (anything needing > 3 GPU-days no longer fits before the October 6 last-fits line).
