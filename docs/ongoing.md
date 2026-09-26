@@ -152,7 +152,7 @@ orchestrator owns `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py`, the S1 cave
 `docs/additional_work/PC-v0.md`). Specification of record: `docs/additional_work_pc_refocus.md` §§2–5 with
 `_review.md` §3 sequencing and `_response.md`; decisions DEC-074/074a.
 
-### Lane PC-1 — v0 corrected-credit runner and the actual-solver regression (first)
+### Lane PC-1 — v0 corrected-credit runner and the actual-solver regression (delivered 2026-09-25, e5b7446; GPU steps are the orchestrator's after the halt)
 
 `aw/pc_v0.py`: a small runner that builds the original v0 C1 cap on the regenerated ePC checkpoint
 (`EPCBase.from_npz` on `assets/models/epc/epc-50m/checkpoints/final-009766/params.npz`, SHA-256 `ea4c561d…`; never
@@ -167,7 +167,7 @@ Deliver also the 1/8/32-iteration diagnostic (energy, gradient residual, cosine,
 sample, and a timing-profile command for the 12-cell scope (two credit rules × zsRE, CounterFact × realizations 0–2 ×
 one preselected order; 1,000 / 300 edits). No GPU: the profile runs after release under the orchestrator.
 
-### Lane PC-2 — fixed-v5 acquisition-credit seam (second)
+### Lane PC-2 — fixed-v5 acquisition-credit seam (delivered 2026-09-25, e5b7446; real-base parity and profile after the halt)
 
 `aw/pc_v1_acquire.py`: an isolated variant of `revision_v1/adapt.py`'s delta acquisition that replaces the adjoint
 direction by the corrected eight-step error credit while keeping the real feedforward loss for acceptance,
@@ -175,7 +175,7 @@ initialisation, bounds, stopping and cost accounting (no hard-coded one-reverse 
 the v5 path to the bit on the tiny base (cf. `aw/tests/test_wrapper.py` for the pattern). Populations: the exposed
 realization-0 zsRE/CounterFact streams, 300 edits, one order, paired arms. Tests in `aw/tests/test_pc_v1_acquire.py`.
 
-### Lane R1-D14d — triplet confirmatory analysis (retained; after PC-1)
+### Lane R1-D14d — triplet confirmatory analysis (delivered 2026-09-25; `docs/R1_stage4_report_triplet.md`)
 
 ### Lane R1-D14d — triplet confirmatory analysis on complete data (see round 44)
 

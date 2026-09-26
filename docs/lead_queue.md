@@ -1151,3 +1151,15 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     trigger fires ≈ 20:00–21:00 tonight, last cells done ≈ 22:00–23:00. Fidelity relay (two entries, `S1_LM / zsRE`,
     no veto): the continued-base control with the stable v0 cap also breaches the old bound (running maximum mean KL
     0.00273, NLL increase 0.00275), in the same range as the learned cap and the other comparators on zsRE.
+
+119. (2026-09-26, 05:40 EDT) **Triplet analysis on complete data (Codex R1-D14d, `docs/R1_stage4_report_triplet.md`,
+    committed by the lead in e5b7446).** Learned reader's mean final paraphrase retention across the three realizations:
+    zsRE 0.960, CounterFact 0.678, MQuAKE 0.716 (300 edits); the advantage recurs in every realization. Of the four
+    registered contrasts available at 1,000 edits, three are preliminarily positive (zsRE vs random reader, zsRE vs
+    v0_stable, CounterFact vs random reader) and CounterFact vs v0_stable is inconclusive (RET-GS +0.678 but the LS
+    range dips to −0.04 in r2). Registered min–max intervals and the DEC-069 t-sensitivity shown side by side. All 45
+    learned cells fail the mean-KL benchmark; largest positive ΔNLL 17.06 nats; zsRE near-miss preservation 86 / 92 / 87
+    of 100 with perfect locality. MQuAKE's 21 slots stay unavailable at 1,000 edits by design. Codex's PC-1 (v0 runner +
+    real-solver SD-24 regression) and PC-2 (fixed-v5 acquisition seam) are also committed; the specification of record
+    for tonight's runs is `docs/additional_work/PC-v0.md`.
+
