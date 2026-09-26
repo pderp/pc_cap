@@ -1144,3 +1144,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     S1_LM zsRE; the halt trigger at the 270th start stands (ETA Saturday evening). Fidelity watch this block:
     43 entries, 10 alerts (all already relayed in items 111–113); no veto. Codex's PC-1 / PC-2 /
     triplet-report files are on disk (uncommitted until the lead says the round is finished).
+
+118. (2026-09-26, 05:10 EDT) Daily: 248 / 330 complete (block 5 at 23 / 45 of the DEC-074b scope), 0 failures, 0 ceiling
+    stops; S1_LM cells take 1.4 h (zsRE) and 2.75 h (CounterFact) and use ≤ 58 % of their ceilings; 352 process-hours
+    charged of 750. Remaining before the halt: 5 S1_LM CounterFact + 15 S1_literal zsRE ≈ 17–18 wall-hours → the
+    trigger fires ≈ 20:00–21:00 tonight, last cells done ≈ 22:00–23:00. Fidelity relay (two entries, `S1_LM / zsRE`,
+    no veto): the continued-base control with the stable v0 cap also breaches the old bound (running maximum mean KL
+    0.00273, NLL increase 0.00275), in the same range as the learned cap and the other comparators on zsRE.

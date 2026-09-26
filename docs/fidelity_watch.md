@@ -20,7 +20,7 @@ No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, develop
 
 Manual notes above are preserved. This source-bound table is regenerated from the locked journal; one entry per recipe cell. Both references are shown. Near-zero target-token loss does not establish unchanged predictions or reader inactivity.
 
-Audited cells: 229; breaching cells: 134; creep alerts: 27. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
+Audited cells: 252; breaching cells: 149; creep alerts: 29. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
 
 | Cell identity / scope | Condition / dataset / realization / order | Actual records / checkpoint | Reference | Mean KL | NLL increase | ES95 loss | Max loss | Positions for half KL | Near-zero loss fraction | Creep |
 |---|---|---|---|---:|---:|---:|---:|---|---:|---|
@@ -292,6 +292,36 @@ Audited cells: 229; breaching cells: 134; creep alerts: 27. Development and conf
 | `1ada802ac0f5e47e6875bd9b0d51d4419196256d789dc14f07fb351fe4174621` / confirmatory | v0_live_C2 / zsre / 2 / 103 | unavailable / 1000 | original | 0.00506942905 | 0.00524466863 | 0.104982768 | 50.5974664 | 23 | 0.99966563 | none |
 | `14af25e93c16a7074e05dc015e3e060efe438614a7bd4c6973997cab62f81627` / confirmatory | v0_live_C2 / zsre / 2 / 104 | unavailable / 1000 | capoff | 0.00301804878 | 0.0030098935 | 0.0603573234 | 50.5974664 | 12 | 0.99984097 | none |
 | `14af25e93c16a7074e05dc015e3e060efe438614a7bd4c6973997cab62f81627` / confirmatory | v0_live_C2 / zsre / 2 / 104 | unavailable / 1000 | original | 0.00301804878 | 0.0030098935 | 0.0603573234 | 50.5974664 | 12 | 0.99984097 | none |
+| `068337d54e38792e7d6baf54452ac9e87377e58b05a0f16dc2d4afdbf473ad46` / confirmatory | S1_LM / zsre / 0 / 101 | unavailable / 1000 | capoff | 0.00185270859 | 0.00155182671 | 0.0379849035 | 27.6054603 | 19 | 0.99719863 | none |
+| `068337d54e38792e7d6baf54452ac9e87377e58b05a0f16dc2d4afdbf473ad46` / confirmatory | S1_LM / zsre / 0 / 101 | unavailable / 1000 | original | 0.00203840528 | -0.00228216171 | 0.0835557149 | 27.5918345 | 23 | 0.0012803941 | none |
+| `349f4beb727e9ca54aeabac833d1c4a4bb6bd8beeb719db692f953c0011b7b06` / confirmatory | S1_LM / zsre / 0 / 100 | unavailable / 1000 | capoff | 0.00116170877 | 0.000848816588 | 0.0211976716 | 25.8852695 | 13 | 0.99867067 | none |
+| `349f4beb727e9ca54aeabac833d1c4a4bb6bd8beeb719db692f953c0011b7b06` / confirmatory | S1_LM / zsre / 0 / 100 | unavailable / 1000 | original | 0.00135123302 | -0.00298517184 | 0.0673424155 | 25.8845515 | 17 | 0.0012803941 | none |
+| `6b7961e19302105cc4371a3513a91c3fdac9b19afa0eb941bda765ca7b5db210` / confirmatory | S1_LM / zsre / 0 / 102 | unavailable / 1000 | capoff | 0.000815818477 | 0.000630912139 | 0.016831661 | 25.8852695 | 17 | 0.99859728 | none |
+| `6b7961e19302105cc4371a3513a91c3fdac9b19afa0eb941bda765ca7b5db210` / confirmatory | S1_LM / zsre / 0 / 102 | unavailable / 1000 | original | 0.00100491751 | -0.00320307629 | 0.0629754935 | 25.8845515 | 29 | 0.0012803941 | none |
+| `fb63963e8dd7142de07447d82039a571b4d588fddf2e2ff4279cfc262aa052c9` / confirmatory | S1_LM / zsre / 0 / 103 | unavailable / 1000 | capoff | 0.00145930461 | 0.00120000979 | 0.0288828359 | 27.6054603 | 13 | 0.99828329 | none |
+| `fb63963e8dd7142de07447d82039a571b4d588fddf2e2ff4279cfc262aa052c9` / confirmatory | S1_LM / zsre / 0 / 103 | unavailable / 1000 | original | 0.00164650365 | -0.00263397864 | 0.074896304 | 27.5918345 | 18 | 0.0012803941 | none |
+| `28eb967cce04f79c5781946c90ddad292050f910d4e892cd93b0fa71d9f810dd` / confirmatory | S1_LM / zsre / 0 / 104 | unavailable / 1000 | capoff | 0.00158472176 | 0.00120159969 | 0.0280064839 | 27.6054603 | 12 | 0.99863805 | none |
+| `28eb967cce04f79c5781946c90ddad292050f910d4e892cd93b0fa71d9f810dd` / confirmatory | S1_LM / zsre / 0 / 104 | unavailable / 1000 | original | 0.00177234686 | -0.00263238874 | 0.0741082229 | 27.5918345 | 14 | 0.0012803941 | none |
+| `b8f5817b057410c605fb3d49742f6622ee794d885a762be06145dfa5da215e8e` / confirmatory | S1_LM / zsre / 1 / 100 | unavailable / 1000 | capoff | 0.00162092391 | 0.00164128331 | 0.0371005827 | 26.2937602 | 16 | 0.99859728 | new_running_maximum |
+| `b8f5817b057410c605fb3d49742f6622ee794d885a762be06145dfa5da215e8e` / confirmatory | S1_LM / zsre / 1 / 100 | unavailable / 1000 | original | 0.00181021295 | -0.00219270511 | 0.0831353638 | 26.293843 | 20 | 0.0012803941 | new_running_maximum |
+| `e9c085ae1d5ad9b8f36967c3b7531484c755b1ba9743369982defed8260cda8a` / confirmatory | S1_LM / zsre / 1 / 101 | unavailable / 1000 | capoff | 0.00272681993 | 0.00275051779 | 0.061964325 | 26.2937602 | 21 | 0.99691319 | new_running_maximum |
+| `e9c085ae1d5ad9b8f36967c3b7531484c755b1ba9743369982defed8260cda8a` / confirmatory | S1_LM / zsre / 1 / 101 | unavailable / 1000 | original | 0.00291445692 | -0.00108347063 | 0.107288962 | 26.293843 | 24 | 0.0012803941 | new_running_maximum |
+| `65880af8b723251f377c646e7caf338c824bf3da3a4e27179cc8610dacd833e5` / confirmatory | S1_LM / zsre / 1 / 102 | unavailable / 1000 | capoff | 0.00213860893 | 0.00212110394 | 0.0480690072 | 26.2937602 | 22 | 0.99809572 | none |
+| `65880af8b723251f377c646e7caf338c824bf3da3a4e27179cc8610dacd833e5` / confirmatory | S1_LM / zsre / 1 / 102 | unavailable / 1000 | original | 0.00232814018 | -0.00171288449 | 0.0939506987 | 26.293843 | 25 | 0.0012803941 | none |
+| `228f33ed2bdc6f91ad25a778937e8d4392ea6e12dc9c81d6fbd72dcb47cdf948` / confirmatory | S1_LM / zsre / 1 / 103 | unavailable / 1000 | capoff | 0.00155333811 | 0.00163480396 | 0.0358504836 | 26.2937602 | 14 | 0.99866252 | none |
+| `228f33ed2bdc6f91ad25a778937e8d4392ea6e12dc9c81d6fbd72dcb47cdf948` / confirmatory | S1_LM / zsre / 1 / 103 | unavailable / 1000 | original | 0.00174434319 | -0.00219918446 | 0.0819801242 | 26.293843 | 17 | 0.0012803941 | none |
+| `de25dd852a586fae19dfd9ec9d4aeb4fb39a1a7dd426d831ccf445e7006ee986` / confirmatory | S1_LM / zsre / 1 / 104 | unavailable / 1000 | capoff | 0.00151582569 | 0.00149830876 | 0.0339407362 | 26.2937602 | 14 | 0.99851164 | none |
+| `de25dd852a586fae19dfd9ec9d4aeb4fb39a1a7dd426d831ccf445e7006ee986` / confirmatory | S1_LM / zsre / 1 / 104 | unavailable / 1000 | original | 0.00170613203 | -0.00233567967 | 0.0799951218 | 26.293843 | 17 | 0.0012803941 | none |
+| `2d82b8fdfdb291aca9cce8a997b7a3327fe5c74848649eceb9d8b7ab5d61d1da` / confirmatory | S1_LM / zsre / 2 / 100 | unavailable / 1000 | capoff | 0.00176826546 | 0.00178864168 | 0.0409738963 | 19.3620099 | 24 | 0.99835261 | none |
+| `2d82b8fdfdb291aca9cce8a997b7a3327fe5c74848649eceb9d8b7ab5d61d1da` / confirmatory | S1_LM / zsre / 2 / 100 | unavailable / 1000 | original | 0.00196062065 | -0.00204534675 | 0.0869520671 | 19.3607565 | 30 | 0.0012803941 | none |
+| `98c80c8290ecbebd8f78966dc3d7f1ff939f4faecbdce708a1429d0f792d84d1` / confirmatory | S1_LM / zsre / 2 / 101 | unavailable / 1000 | capoff | 0.00183146366 | 0.001764422 | 0.0409373709 | 23.5327239 | 23 | 0.99828737 | none |
+| `98c80c8290ecbebd8f78966dc3d7f1ff939f4faecbdce708a1429d0f792d84d1` / confirmatory | S1_LM / zsre / 2 / 101 | unavailable / 1000 | original | 0.00202370256 | -0.00206956643 | 0.0868464815 | 23.5375203 | 29 | 0.0012803941 | none |
+| `df8408f4b51dc90d01a85a152aa069b9fdc9f6972634f9e7e063c639788ac174` / confirmatory | S1_LM / zsre / 2 / 102 | unavailable / 1000 | capoff | 0.00146734244 | 0.00141864528 | 0.0335085961 | 23.5327239 | 21 | 0.99849126 | none |
+| `df8408f4b51dc90d01a85a152aa069b9fdc9f6972634f9e7e063c639788ac174` / confirmatory | S1_LM / zsre / 2 / 102 | unavailable / 1000 | original | 0.00165869811 | -0.00241534314 | 0.0795525937 | 23.5375203 | 27 | 0.0012803941 | none |
+| `380bd58d158e4d68f3f7bf2ecb05cdf697d4733b5d7088cbd549c1f161206419` / confirmatory | S1_LM / zsre / 2 / 103 | unavailable / 1000 | capoff | 0.00181146197 | 0.00181460663 | 0.0409278151 | 23.5327239 | 23 | 0.99849533 | none |
+| `380bd58d158e4d68f3f7bf2ecb05cdf697d4733b5d7088cbd549c1f161206419` / confirmatory | S1_LM / zsre / 2 / 103 | unavailable / 1000 | original | 0.00200275621 | -0.0020193818 | 0.086938079 | 23.5375203 | 27 | 0.0012803941 | none |
+| `dc5602a4b9dc8ef374f484899deba4fb74f8a77d0d277415132267e5adef279b` / confirmatory | S1_LM / zsre / 2 / 104 | unavailable / 1000 | capoff | 0.00162011152 | 0.00151530489 | 0.035357674 | 23.5327239 | 17 | 0.99847494 | none |
+| `dc5602a4b9dc8ef374f484899deba4fb74f8a77d0d277415132267e5adef279b` / confirmatory | S1_LM / zsre / 2 / 104 | unavailable / 1000 | original | 0.00181003687 | -0.00231868353 | 0.0814357121 | 23.5375203 | 21 | 0.0012803941 | none |
 
 ### Running maxima (all audited cells, including no-breach cells)
 
@@ -309,6 +339,10 @@ Audited cells: 229; breaching cells: 134; creep alerts: 27. Development and conf
 | R1_nonlearned:mquake | original | 0.0122293305 | 0.012170898 | `unavailable` |
 | R1_nonlearned:zsre | capoff | 0.000742548613 | 0.0007165783 | `unavailable` |
 | R1_nonlearned:zsre | original | 0.000742548613 | 0.0007165783 | `unavailable` |
+| S1_LM:counterfact | capoff | 0 | 0 | `unavailable` |
+| S1_LM:counterfact | original | 0.000189545785 | -0.00383398842 | `unavailable` |
+| S1_LM:zsre | capoff | 0.00272681993 | 0.00275051779 | `unavailable` |
+| S1_LM:zsre | original | 0.00291445692 | -0.00108347063 | `unavailable` |
 | matched_update:counterfact | capoff | 0 | 0 | `unavailable` |
 | matched_update:counterfact | original | 0 | 0 | `unavailable` |
 | matched_update:zsre | capoff | 0.00294680114 | 0.00297092361 | `unavailable` |
@@ -357,6 +391,8 @@ Audited cells: 229; breaching cells: 134; creep alerts: 27. Development and conf
 - **CREEP** `527ae675e2d22bd7936725e3e608ca627f3b3d66cb898970fb8a97c1c8a92c40` (v0_live_C1:zsre): capoff mean_kl 0.00355726558 > 0.00301647378 (new_running_maximum); capoff mean_signed_nll_increase 0.00358599299 > 0.00301616427 (new_running_maximum); original mean_kl 0.00355726558 > 0.00301647378 (new_running_maximum); original mean_signed_nll_increase 0.00358599299 > 0.00301616427 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 - **CREEP** `cb94f827b3fd31b21e65f57dfcb19ea572df8af2417c2cccc0e4cf5c370b8365` (v0_live_C2:zsre): capoff mean_signed_nll_increase 0.00287266322 > 0.00263713932 (new_running_maximum); original mean_signed_nll_increase 0.00287266322 > 0.00263713932 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 - **CREEP** `61c5f0139af65d530ee5df321f6836add009448e33bff842bbf97e1dbdf7f923` (v0_live_C2:zsre): capoff mean_kl 0.0055263108 > 0.00304642004 (new_running_maximum); capoff mean_signed_nll_increase 0.00563944129 > 0.00287266322 (new_running_maximum); original mean_kl 0.0055263108 > 0.00304642004 (new_running_maximum); original mean_signed_nll_increase 0.00563944129 > 0.00287266322 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `b8f5817b057410c605fb3d49742f6622ee794d885a762be06145dfa5da215e8e` (S1_LM:zsre): capoff mean_signed_nll_increase 0.00164128331 > 0.00155182671 (new_running_maximum); original mean_signed_nll_increase -0.00219270511 > -0.00228216171 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
+- **CREEP** `e9c085ae1d5ad9b8f36967c3b7531484c755b1ba9743369982defed8260cda8a` (S1_LM:zsre): capoff mean_kl 0.00272681993 > 0.00185270859 (new_running_maximum); capoff mean_signed_nll_increase 0.00275051779 > 0.00164128331 (new_running_maximum); original mean_kl 0.00291445692 > 0.00203840528 (new_running_maximum); original mean_signed_nll_increase -0.00108347063 > -0.00219270511 (new_running_maximum). Orchestrator reports immediately; this is not an admission veto.
 
 <!-- HT-8 managed watch: end -->
 Creep alert 2026-09-18 18:42 EDT (confirmatory, cell 233ef059…, primary v5 zsRE r0 order 100, 1,000 records): mean KL 0.002381 / NLL Δ 0.002450 (both references) vs the development reference 0.002270 / 0.002310 (300 records) — new running maximum for zsRE · R1_learned_ff; relayed to the lead (lead queue item 101).
