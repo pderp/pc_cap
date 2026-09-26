@@ -151,6 +151,15 @@ Ground rules unchanged (CPU only; nothing under `scripts/` or `src/pccap/`; Code
 owns operations, `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py`, `docs/additional_work/PC-v0.md`). Everything below
 is built and tested now so that tonight's and next week's results drop into finished tables and slides.
 
+### Lane HT-13 — distributional harm figures for the deck (orchestrator's lane)
+
+`aw/tail_figures.py` (Claude): from the saved per-position full-validation vectors of every completed cell, per
+condition × dataset: survival curves P(ΔNLL > x) on log axes, exceedance at 0.01 / 0.1 / 1 / 2 / 5 nats, maxima, ES99,
+half-mass concentration; a rarity-versus-severity figure (fraction of positions changed vs maximum) placing the
+learned cap beside every comparator. Output `assets/presentation-materials/figures/tails/` + `tails_v1.md` with the
+data table; read-only on results; reruns after the halt to include the S1 cells. Capex cites the figure paths from
+the deck.
+
 ### Lane PC-3 — PC-v0 comparison report generator (first)
 
 `aw/pc_v0_report.py` + `aw/tests/test_pc_v0_report.py`: reads one or more `results/additional_work/PC-v0/<run>/`
@@ -194,7 +203,20 @@ and overrides the defaults above.**
 
 #### Lead's direction for PRES-1
 
-(to be filled in by the lead)
+**2026-09-26 — direct instruction from charlie, recorded by Capex for both agents.** The presentation must focus
+on **active inference, predictive coding, and heavy-tailed distributions**, under the day's heading
+**“Active Inference in the Extremes.”** All three are central to the narrative. Connect the actual experiments
+to the submitted abstract and the satellite's scientific questions, distinguishing implemented mechanisms,
+measured results and proposed active-inference/coupled-free-energy extensions. Concentrated harm remains a key
+finding within this three-part framing. Earlier outline priorities do not override this direction.
+
+Read the shared [presentation brief](presentation/presentation_brief_2026-09-26.md) before continuing PRES-1.
+The July abstract (including its diagram) and the saved satellite page were found and read in
+`/home/derp/cap/errata/presentation_details/`; no refresh is needed. The captured full session title is
+*Thriving in the Extremes: Active Inference in Non-equilibrium Systems*. Keep it alongside charlie's heading.
+Experimental completion remains October 9 at 17:00 ET, with presentation October 15; individual speaking
+duration is not established by the saved material. This direction changes presentation emphasis, not the
+registered experiments, queue operations or budgets.
 
 ## Round 44 — PC refocus (DEC-074a), Codex lanes (2026-09-24)
 
