@@ -31,16 +31,50 @@ LABEL = {
 }
 
 
-def collect(pattern: str) -> dict[tuple[str, str], list[np.ndarray]]:
+def completed_attempts(receipt_root: Path) -> set[str] | None:
+    """Attempt directories of cells with a queue finish receipt (the reconciled inventory), or None if no receipts."""
+    done: set[str] = set()
+    for f in receipt_root.glob("*-*/finish.json"):
+        try:
+            for a in json.load(open(f)).get("new_attempts", []):
+                done.add(str(Path(a).resolve()))
+        except (OSError, ValueError):
+            continue
+    return done or None
+
+
+def collect(pattern: str, receipt_root: Path | None = None) -> dict[tuple[str, str], list[np.ndarray]]:
+    """Pool per-position loss changes by condition × dataset, restricted to attempts with a finish receipt.
+
+    A live cell may already have a full-validation file before its final receipt; only receipted attempts count.
+    """
+    done = completed_attempts(receipt_root) if receipt_root else None
     pooled: dict[tuple[str, str], list[np.ndarray]] = defaultdict(list)
     for f in sorted(glob.glob(pattern)):
         m = CELL_RE.search(f)
         if not m:
             continue
+        if done is not None and str(Path(f).resolve().parent) not in done:
+            continue
         cond, ds, _, _ = m.groups()
         v = np.load(f)["values"]
         pooled[(cond, ds)].append((v[:, :, 0] - v[:, :, 1]).ravel())
     return pooled
+
+
+def expected_shortfall(values, q: float = 0.99) -> float:
+    """Mean of the worst ``(1 - q)`` fraction (fractional boundary, zero mass retained); same as ``aw.scoring``."""
+    x = np.sort(np.asarray(values, np.float64).ravel())[::-1]
+    n = x.size
+    if n == 0:
+        return float("nan")
+    k = (1.0 - q) * n
+    if k <= 0:
+        return float(x[0])
+    whole = int(np.floor(k))
+    frac = k - whole
+    total = float(x[:whole].sum()) + (float(x[whole]) * frac if whole < n and frac > 0 else 0.0)
+    return total / k
 
 
 def statistics(d: np.ndarray) -> dict:
@@ -54,7 +88,7 @@ def statistics(d: np.ndarray) -> dict:
         "mean_signed": float(d.mean()),
         "exceedance": {str(t): float((d > t).mean()) for t in THRESHOLDS},
         "max": float(d.max()),
-        "es99_positive": float(np.quantile(pos, 0.99)),
+        "es99_positive": expected_shortfall(pos, 0.99),  # mean of the worst 1 % of positions, zeros included
         "half_mass_positions": half,
         "half_mass_fraction": float(half / d.size) if d.size else None,
     }
@@ -68,12 +102,14 @@ def survival(d: np.ndarray, grid: np.ndarray) -> np.ndarray:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pattern", default=str(ROOT / "results/R1/stage4_sealed_cells/*/attempt-0000/full-validation-*.npz"))
+    ap.add_argument("--receipt-root", default=str(ROOT / "logs/R1/final_queue"),
+                    help="queue receipt root; only attempts with a finish receipt are pooled")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
 
-    pooled = collect(args.pattern)
+    pooled = collect(args.pattern, Path(args.receipt_root))
     grid = np.logspace(-3, np.log10(60), 200)
     table = {}
     curves = {}
@@ -101,7 +137,8 @@ def main() -> None:
         ax.grid(True, which="both", alpha=0.25)
         ax.legend(fontsize=6.5, loc="lower left")
     axes[0].set_ylabel("P(loss increase > x) over all validation positions")
-    fig.suptitle("Ordinary-text harm is rare and heavy-tailed: survival of the per-token loss increase, all completed cells pooled")
+    fig.suptitle("Rare severe ordinary-text harm: empirical survival of token loss increases (receipted cells pooled; "
+                 "reference = each cap's own cap-off base; zero survival is floored for display)", fontsize=9.5)
     fig.tight_layout()
     fig.savefig(out / "survival_by_dataset.png", dpi=160)
     plt.close(fig)
@@ -127,7 +164,7 @@ def main() -> None:
     ax.set_xscale("log")
     ax.set_xlabel("fraction of positions with loss increase > 0.01 nats (rarity)")
     ax.set_ylabel("maximum token loss increase (nats) (severity)")
-    ax.set_title("Rarity versus severity of unintended harm, by condition")
+    ax.set_title("Rarity versus severity of unintended harm, by condition (own cap-off reference)", fontsize=10)
     ax.grid(True, which="both", alpha=0.25)
     fig.tight_layout()
     fig.savefig(out / "rarity_vs_severity.png", dpi=160)

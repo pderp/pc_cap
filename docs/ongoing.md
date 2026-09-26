@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-26 19:10** — Capex round 46 committed (PC-5 harm driver, R1-D14f refresh, PRES-2 drafts for slides 2/3/6/11); Capstan fixed HT-13 per Capex's review (ES99 → expected shortfall in `aw/scoring.py` and `aw/tail_figures.py`, receipt-filtered collection, title and reference caveats; `tails_v1.md` v1.1). Halt trigger at the 270th start tonight; round 47 lanes below.
+
 - **2026-09-26 11:00** — Capex round 45 committed (PC-3 report generator, PC-4 dev-checkpoint parity, R1-D14e comparator report at 225, PRES-1 brief / deck v3 outline / figure pipeline / claim ledger v7); 65 `aw` tests pass; HT-13 tail figures in assets. Queue at 252 / 330, halt trigger at the 270th start tonight. Round 46 lanes below.
 
 - **2026-09-24 15:55** — DEC-074/074b: the queue runs through block 4 and block-5 positions 1–45 (S1_LM both datasets, S1_literal zsRE), halt trigger armed at the 270th start (≈ Saturday evening); then the PC refocus; Codex round 43 delivered (AW-R0, AW-L0/L1/L3, AW-L prereg) and superseded in priority by the PC lanes below.
@@ -146,6 +148,37 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 47 — remaining slides, fixed-v5 readout adapter, per-cell tails (2026-09-26, 19:10)
+
+Ground rules unchanged. HT-13 is repaired (ES99 is now the fractional expected shortfall in both helpers; collection
+uses the receipted inventory; title and reference caveats added); `aw.refresh_after_halt` may publish once the halt
+is reconciled. The fixed-v5 credit run is held until Monday 09:00 (lead queue 120).
+
+### Lane PRES-3 — speaker drafts for the remaining slides that do not wait for PC results (first)
+
+Slides 1, 4, 5, 7, 8 and 12 of `deck_v3_outline.md`, in the PRES-2 format (one file per slide under
+`docs/presentation/deck_v3/`, claim-ledger links, renderable specs; SVG where a diagram is needed). Slide 5 uses the
+triplet and 225-cell comparator reports; slide 7 uses the corrected HT-13 figures and table (v1.1); slide 8 the κ
+pilot page (`assets/presentation-materials/kappa_pilot_v5.md`); slide 12 leaves the PC takeaway as a visible slot.
+The lead reviews wording; nothing is final.
+
+### Lane PC-6 — fixed-v5 harm-readout adapter (second)
+
+The checkpoint / batch-reader adapter PC-5 needs for the fixed-v5 credit run (Capex's handoff: "not a bypass of the
+frozen reader's exact-class guard"): restore a `PCRevisionCap` (adjoint or error mode) from a saved supplemental
+checkpoint, expose the same base/cap logit pair per position that `aw/pc_harm_readout.py` consumes, and prove on the
+saved development checkpoint (PC-4's fixture) that the adjoint-mode adapter reproduces the registered reader's
+logits to the bit. CPU tests; the GPU pass is the orchestrator's on Monday.
+
+### Lane HT-15 — per-cell tail statistics with realization spread (third)
+
+Extend `aw.refresh_after_halt` (or a sibling `aw/tail_cells.py`) with a per-cell table: for every receipted cell,
+ES99+ (fractional), maximum with location, exceedance at 0.01 / 1 / 5 nats and half-mass count, then per condition ×
+dataset the mean over cells with the three realization means and the min–max range, so the pooled HT-13 numbers have
+a spread beside them. Import `aw.tail_figures.expected_shortfall`; do not copy it. Output beside the HT-13 table in
+`assets/presentation-materials/figures/tails/`, and a paragraph for `tails_v1.md` §"What the pooled tails show"
+that Capstan merges.
 
 ## Round 46 — harm readout driver, post-halt refresh, explanatory slides (2026-09-26, 11:00)
 

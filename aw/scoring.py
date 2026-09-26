@@ -44,6 +44,24 @@ def wrapped_logits(on, off, config: Config) -> np.ndarray:
     return bounded.WRAPPERS[kind](lp0, lp1, float(param))
 
 
+def expected_shortfall(values, q: float = 0.99) -> float:
+    """Mean of the worst ``(1 - q)`` fraction of ``values`` (zero mass retained, fractional boundary).
+
+    ``ES99`` of 1,000 positions with a single loss increase of 10 nats is 1.0 nat; the 99th percentile would be 0.
+    """
+    x = np.sort(np.asarray(values, np.float64).ravel())[::-1]
+    n = x.size
+    if n == 0:
+        return float("nan")
+    k = (1.0 - q) * n  # number of positions in the tail, possibly fractional
+    if k <= 0:
+        return float(x[0])
+    whole = int(np.floor(k))
+    frac = k - whole
+    total = float(x[:whole].sum()) + (float(x[whole]) * frac if whole < n and frac > 0 else 0.0)
+    return total / k
+
+
 def score_configs(on, off, original, targets, configs: list[Config]) -> dict[str, np.ndarray]:
     """Per-position metric rows (68f layout) for every configuration, from one batch of logits."""
     on, off, original = (np.asarray(x, np.float64) for x in (on, off, original))
@@ -80,7 +98,7 @@ class Accumulator:
                 mean_kl_original=float(v[:, 4].mean()),
                 mean_signed_delta_capoff=float(d.mean()),
                 max_delta=float(d.max()),
-                es99=float(np.quantile(pos, 0.99)),
+                es99=expected_shortfall(pos, 0.99),  # mean of the worst 1 % of positions, zero mass included
                 exceed_0_01=float((d > 0.01).mean()),
                 exceed_0_1=float((d > 0.1).mean()),
                 exceed_1=float((d > 1.0).mean()),
