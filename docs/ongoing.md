@@ -145,6 +145,57 @@ queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrappe
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
 
+## Round 45 — plug-in analysis and presentation preparation, Codex lanes (2026-09-26)
+
+Ground rules unchanged (CPU only; nothing under `scripts/` or `src/pccap/`; Codex-owned files only; the orchestrator
+owns operations, `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py`, `docs/additional_work/PC-v0.md`). Everything below
+is built and tested now so that tonight's and next week's results drop into finished tables and slides.
+
+### Lane PC-3 — PC-v0 comparison report generator (first)
+
+`aw/pc_v0_report.py` + `aw/tests/test_pc_v0_report.py`: reads one or more `results/additional_work/PC-v0/<run>/`
+directories produced by `aw.pc_v0 run` (Codex knows the format), verifies identities (config, source, model, data
+hashes; `finish.json` complete/partial), and writes `docs/additional_work/PC-v0_report.md` + `logs/additional_work/PC-v0/report/`:
+the paired SE-E − SE-A table per dataset × realization (ES, RET-ES, RET-GS, LS; the secondary bounded-text score in
+its own column), the mean difference with the three realization values and the min–max range (no interval treats
+tokens as replicates), the historical defective-energy row as reference, the cost table (process time, forwards,
+reverses per credit) and the 1/8/32 diagnostic table. Include a figure (efficacy vs cost, both arms; realizations as
+points) written to `assets/presentation-materials/figures/pc_v0/`. Test on the runner's CPU smoke output so the
+generator is proven before real results exist. Partial runs render with the missing cells marked, never dropped.
+
+### Lane PC-4 — PC-2 parity on a saved development checkpoint (second)
+
+Before Tuesday's GPU run: on CPU, load a saved v5 development checkpoint (as AW-L0 did for its 64-prefix
+reconstruction) with the real GPT-2 base, run `PCRevisionCap` in adjoint mode against `RevisionCap` on a handful of
+development prefixes and one short acquisition, and show bit-equality of predictions, memory state and cost counters;
+then run PC mode once on the same items to confirm it executes end to end on the real base (no claim about quality).
+Record timings so the GPU profile has a CPU reference. Files: `aw/tests/test_pc_v1_devcheckpoint.py` (skipped when
+the checkpoint is absent), `docs/tasks/PC-4.md`.
+
+### Lane R1-D14e — comparator report generator (third; runs now on block 4, reruns after the halt)
+
+`aw/comparator_report.py`: the registered comparator tables (matched_update, v0_live C1/C2 — complete; S1_LM both
+datasets and S1_literal zsRE — after the halt), same endpoints and display rules as the triplet report, the fidelity
+benchmark and concentration columns, the DEC-052 inventory listing every unavailable contrast (S1_literal CounterFact,
+the extension, MQuAKE comparator slots) with its reason (DEC-074b), and a figure per dataset placing every condition on
+retention-versus-harm axes. Output `docs/R1_stage4_report_comparators.md`; read-only on results. Run it on the current
+225-cell state now; rerun on Sunday and mark what changed.
+
+### Lane PRES-1 — deck v3 skeleton, figure pipeline and claim ledger v7 (fourth; the lead will add direction)
+
+Under `assets/presentation-materials/deck_v3/`: an outline that reflects DEC-054's framing (small mean drift hides
+concentrated local harm), the completed triplet, the comparators, the fidelity/concentration results, the corrected
+PC results (slots), the "what it is not" section (DEC-054, Matthew Ikle's review), and the resource story; each slide
+lists its figure/table source file and which report fills it. A `figures/pipeline.md` mapping every figure to the
+generator command that produces it. A claim ledger v7 (`docs/talk_claim_ledger_v7.md`) with columns measured result /
+population / control / supports / does not support, seeded from the triplet report and the block-4 comparators, with
+empty rows for PC-v0 and the fixed-v5 credit test. **The lead's direction for this lane goes in the subsection below
+and overrides the defaults above.**
+
+#### Lead's direction for PRES-1
+
+(to be filled in by the lead)
+
 ## Round 44 — PC refocus (DEC-074a), Codex lanes (2026-09-24)
 
 Same ground rules as round 43 (CPU only; nothing under `scripts/` or `src/pccap/`; Codex-owned files only; the
