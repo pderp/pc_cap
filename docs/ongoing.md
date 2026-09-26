@@ -408,6 +408,8 @@ counting) and the fidelity-watch observations; a plain integrity statement or th
 
 ### Lane R1-77g — post-freeze ceilings amendment (delivered; Q21 answered A, DEC-072; the orchestrator is executing the drain-and-resume at the block-2 boundary — no Codex action)
 
+
+- **2026-09-26 (assets):** sealed-cell learner snapshots (`*.snapshot`, ≈ 100 MB per cell, 27 GB in total) are no longer tracked in the assets repo: the unpushed commits were rewritten without them (backup ref `backup/master-before-snapshot-prune`), `*.snapshot` is ignored, the files stay on disk, and their SHA-256 values remain in the checkpoint receipts and `.snapshot.json` sidecars. GitHub refuses packs over 2 GiB; the remaining unpushed volume is 67 MB.
 ## 4. Interfaces and coordination
 
 As before: `pccap.contracts`, `pccap.bases.gpt2_jax`, `pccap.bases.bp.BPBase`, `pccap.harness.arms.make_learner/
