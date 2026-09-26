@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-26 11:00** — Capex round 45 committed (PC-3 report generator, PC-4 dev-checkpoint parity, R1-D14e comparator report at 225, PRES-1 brief / deck v3 outline / figure pipeline / claim ledger v7); 65 `aw` tests pass; HT-13 tail figures in assets. Queue at 252 / 330, halt trigger at the 270th start tonight. Round 46 lanes below.
+
 - **2026-09-24 15:55** — DEC-074/074b: the queue runs through block 4 and block-5 positions 1–45 (S1_LM both datasets, S1_literal zsRE), halt trigger armed at the 270th start (≈ Saturday evening); then the PC refocus; Codex round 43 delivered (AW-R0, AW-L0/L1/L3, AW-L prereg) and superseded in priority by the PC lanes below.
 
 - **2026-09-21 17:25** — block 3 complete (135 / 330, the whole triplet); block 4 running with two workers under bindings v2; Codex lane R1-D14d (triplet confirmatory analysis) opened ahead of the additional-work lanes.
@@ -144,6 +146,49 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 46 — harm readout driver, post-halt refresh, explanatory slides (2026-09-26, 11:00)
+
+Ground rules unchanged. Round 45 is delivered and committed (c.f. §1). The orchestrator runs the halt, reconciliation
+and the PC-v0 GPU steps tonight, and takes HT-14 below.
+
+### Lane PC-5 — paired harm readout driver for the PC arms (first)
+
+`aw/pc_harm_readout.py` + `aw/tests/test_pc_harm_readout.py`: for a completed PC-v0 run (and later the fixed-v5 credit
+run), take each arm's final memory/checkpoint and the preselected ordinary-text validation positions (the legacy S5
+drift subset for v0; the full 245,237-position inventory for v5), compute base and cap logits per position once per
+arm, and score with `aw.scoring` **unchanged** (import it; do not copy it): the 68f-layout vectors, mean KL, signed
+ΔNLL, ES99, maximum with location, exceedance at 0.01 / 0.1 / 1 nat, half-mass concentration, paired SE-E − SE-A per
+position. Output under `results/additional_work/PC-v0/harm/`; a table block that `aw/pc_v0_report.py` can include
+(same section format as its efficacy table). CPU tests on the smoke outputs; the GPU pass is the orchestrator's, within
+the 8-hour readout ceiling. Cost counted separately from the replication.
+
+### Lane R1-D14f — post-halt refresh, prepared now, run Sunday (second)
+
+A single command (or `aw/refresh_after_halt.py`) that, once the orchestrator has reconciled the halted queue and
+posted the block-5 boundary report, regenerates: the comparator report on the final 270-cell state
+(`docs/R1_stage4_report_comparators.md`, superseding the 225 snapshot and saying what changed), the HT-13 figures
+(`python3 -m aw.tail_figures --out /home/derp/cap/assets/presentation-materials/figures/tails`), the claim-ledger v7
+rows that depend on comparators, and the DEC-052 inventory of unavailable contrasts (S1_literal CounterFact, the
+extension, MQuAKE comparator slots) with DEC-074b as the reason. Dry-run it on the 252-cell state now; leave the
+outputs untouched until the halt is reconciled.
+
+### Lane PRES-2 — explanatory slides that do not wait for results (third; the lead's direction applies)
+
+Draft the full speaker text and diagram specifications for outline slides 2, 3, 6 and 11 (active inference → testbed;
+what predictive coding contributes, with the corrected energy, the eight-step credit and SD-24 in one figure; why look
+past the mean, using the HT-13 survival figure; returning to active inference), under `docs/presentation/deck_v3/`
+(one file per slide, plus diagram specs as SVG or a description Capex's `presentation_prepare.py` can render). Keep
+measured / proposed labels visible; every assertion maps to a claim-ledger row. The lead reviews the text; nothing
+here is final wording.
+
+### Lane HT-14 — abstract-to-testbed map (orchestrator's lane)
+
+`docs/presentation/abstract_to_testbed.md`: for each idea in the July abstract (frozen prior, residual agent, two
+κ-porous interfaces, coupled free energy, expected-free-energy policy choice, pragmatic/epistemic value,
+uncertainty-directed audits, coupling–boundary–interference conjecture, learning from failure) and each satellite
+objective: implemented (where, in which decision), measured (which result, which population), or proposed (what it
+would take). Checked against `decisions.md`. Claude writes it; Capex cites it from slides 2 and 11.
 
 ## Round 45 — plug-in analysis and presentation preparation, Codex lanes (2026-09-26)
 
