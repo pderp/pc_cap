@@ -1171,3 +1171,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     the harm readout — Sunday noon (< 8 h rerun); **the fixed-v5 credit run design — Monday 09:00**, the orchestrator
     holds its start until then unless told otherwise (afterwards ≈ 8 h rerun); stretch items and portfolio changes —
     Wednesday October 1 (anything needing > 3 GPU-days no longer fits before the October 6 last-fits line).
+
+121. (2026-09-26, 19:05 EDT) Lead: "proceed with all steps as soon as you're able to get to them. Don't hold anything
+    that can be done unless you hear from me otherwise." The Monday 09:00 hold on the fixed-v5 credit run (item 120) is
+    lifted: after the halt and reconciliation the chain runs without gaps — PC-v0 diagnostic → profile → replication
+    (12 or 60 by the profile rule) → paired harm readout (PC-5) → fixed-v5 real-base profile and paired credit run
+    (PC-2/PC-4) → its harm readout — each starting as soon as the previous finishes. Reviewer feedback that arrives
+    mid-chain is applied by rerunning the affected job (each is ≤ 8–15 GPU-hours); nothing waits for it.
