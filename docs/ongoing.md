@@ -157,6 +157,20 @@ Ground rules unchanged. HT-13 is repaired (ES99 is now the fractional expected s
 uses the receipted inventory; title and reference caveats added); `aw.refresh_after_halt` may publish once the halt
 is reconciled. The fixed-v5 credit run is held until Monday 09:00 (lead queue 120).
 
+### Lane PC-7 — fixed-v5 paired credit experiment driver (now first; critical path for the second PC result)
+
+PC-2 delivered the acquisition seam (`PCRevisionCap`, adjoint mode bit-equal to the registered learner; PC-4 proved it on
+the saved development checkpoint), but no driver runs the paired experiment. `aw/pc_v1_run.py` (+ `aw/tests/test_pc_v1_run.py`,
+`docs/tasks/PC-7.md`): mirror `aw/pc_v0.py`'s shape (plan / profile / run / cell; `--execute`; the narrowed occupancy
+guard from `aw/pc_v0.blocking_cuda_processes`, imported not copied; new output directories; cost ledger; per-cell
+`finish.json`). Arms: adjoint (registered path) vs corrected eight-step error credit, everything else identical (selected
+v5 recipe and theta, original BP base, calibration, gate, seeds, fresh memory per cell). Populations: the exposed
+realization-0 zsRE and CounterFact confirmatory streams, 300 edits, order 100 (the same items the block-1 cells used),
+labelled post hoc / exposed. Endpoints through the installed outcome functions exactly as R1 defines them (ES, RET-ES,
+RET-GS, LS bounded-text, near-miss, revision at 100 and 300); save the checkpoint snapshots at 100 and 300 in the form
+`aw/pc_v1_readout.py` (PC-6) restores, so the harm readout runs on them. Profile: 10 items per arm on the development
+payloads before the run. CPU smoke on the tiny base; the GPU steps are Capstan's on Sunday evening.
+
 ### Lane PRES-3 — speaker drafts for the remaining slides that do not wait for PC results (first)
 
 Slides 1, 4, 5, 7, 8 and 12 of `deck_v3_outline.md`, in the PRES-2 format (one file per slide under
