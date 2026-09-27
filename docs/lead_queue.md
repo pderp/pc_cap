@@ -1206,3 +1206,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     reconciled 270-cell state. Round 48 lanes: PC-7 first (the missing fixed-v5 experiment driver), PRES-4 result-slide
     templates, HT-15b refreshed per-cell tails, PC-8 the PC-v0 report from real data.
 
+
+125. (2026-09-27, 13:55 EDT) **PC-v0 replication complete: 60 / 60 cells, every cell `complete`, no errors, 13.76 process-hours
+    (00:05 → 13:50).** Run directory `results/additional_work/PC-v0/replication-60-20260927/` (committed). The paired
+    harm readout (PC-5) started 13:53 on the GPU (`results/additional_work/PC-v0/harm/pc-v0-60-20260927/`, ≤ 4 h).
+    PC-8 (Capex) can start on the efficacy report now; the harm block follows when the readout finishes. The PC-7
+    fixed-v5 profile and run follow the readout on the GPU.
