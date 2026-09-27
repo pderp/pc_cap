@@ -1212,3 +1212,19 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     harm readout (PC-5) started 13:53 on the GPU (`results/additional_work/PC-v0/harm/pc-v0-60-20260927/`, ≤ 4 h).
     PC-8 (Capex) can start on the efficacy report now; the harm block follows when the readout finishes. The PC-7
     fixed-v5 profile and run follow the readout on the GPU.
+
+126. (2026-09-27, 14:10 EDT) **PC-v0 preliminary result (efficacy only; Capstan's read of the completed 60 cells via
+    Capex's generator, `logs/additional_work/PC-v0/preliminary-report-20260927/`; PC-8 writes the report of record;
+    harm readout still running).** Corrected eight-step error credit (SE-E) versus adjoint (SE-A), same ePC base and v0
+    cap, fresh memories, historical S5 populations, five orders × three realizations:
+    - zsRE (1,000 edits): ES 0.9991 vs 0.9985 (paired +0.0006); RET-ES 0.542 vs 0.522 (**+0.020 in every
+      realization**: +0.022 / +0.020 / +0.019); RET-GS 0.135 vs 0.138 (−0.003, mixed signs); LS complete-answer
+      0.983 vs 0.963 (+0.02, realization range −0.006 to +0.038). The defective-energy loss of acquisition (ES −0.34)
+      is gone.
+    - CounterFact (300 edits): both arms saturated and identical (ES 1.0, RET-ES 1.0, RET-GS 0.0, LS 1.0) — no
+      discrimination, as the historical paraphrase floor predicted.
+    - Cost per zsRE cell: learning wall 619 s vs 276 s (2.2×; 98k vs 11k reverses, 87k settling iterations), whole
+      cell 1,352 s vs 997 s (1.36×); CounterFact 505 vs 438 s.
+    Reading: with SD-24 fixed, predictive-coding credit acquires and generalises like adjoint on this cap and retains
+    own-prompt answers slightly better, at about twice the learning cost. Descriptive; three realizations; exposed
+    populations; nothing here is a PC-vs-BP superiority claim.
