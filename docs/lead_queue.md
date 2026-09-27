@@ -1249,3 +1249,16 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     rule; PC credit transfers without loss and without gain, at 1.2–1.35× cost. One order, one realization,
     exposed populations: a direction, not an interval. Harm readout on these four cells started 14:53 (full
     245,237-position inventory).
+
+129. (2026-09-27, 16:25 EDT) **Fixed-v5 harm readout done — the GPU chain is complete.** Full inventory (1,931 windows,
+    245,237 positions per arm), own cap-off reference, 1.4 h; `results/additional_work/PC-v1/harm/pc-v1-4-20260927/`.
+    zsRE: mean KL 0.00186 (SE-A) vs 0.00170 (SE-E); mean ΔNLL 0.00181 vs 0.00167; ES99+ 0.196 vs 0.182; maximum 9.26 vs
+    12.27 nats (single positions); P(> 1 nat) 0.062 % vs 0.059 %. CounterFact: mean KL 0.00418 vs 0.00431; ES99+ 0.459
+    vs 0.470; maximum 11.74 vs 12.23. Paired mean changes at identical positions: −0.00016 (zsRE) and +0.00013
+    (CounterFact) nats. Reading: with the reader fixed, the credit rule leaves ordinary-text harm unchanged to within
+    the position noise, in both directions across the two datasets, consistent with the identical efficacy (item 128).
+    One integration defect: the driver omitted a key the table writer needs, so the table was generated afterwards
+    from the unchanged report (`cost-repair.json`); the table's population caption is PC-5's fixed v0 text and is
+    wrong for this readout (245,237 positions, not 4,064) — PC-10 corrects the caption. Both PC results, their harm
+    readouts and the v0 diagnostic/profile are committed; Capex's PC-8 can now fill both result slots.
+

@@ -62,6 +62,7 @@ def run(run_dir: str, output: str, *, wall_seconds: int, batch_size: int) -> dic
     started = time.monotonic()
     cost = dict(status="failed", cost_scope="fixed-v5 harm readout only", shared_ceiling_seconds=28800, run=str(run_path))
     report = dict(
+        smoke=False,  # required by table_block
         run=str(run_path), checkpoint=CHECKPOINT, population=spec["population"], selection=None, cells=[], pairs=[],
         sources_sha256={}, note="Fixed-v5 credit arms restored from their checkpoint-300 snapshots; own cap-off reference "
         "(original base = cap-off base for this intervention); descriptive paired positions.",

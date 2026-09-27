@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 127, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 122, in main
+    r = run(a.run, a.output, wall_seconds=a.wall_seconds, batch_size=a.batch_size)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 102, in run
+    (out / "table.md").write_text(table_block(report))
+                                  ^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/pc_harm_readout.py", line 266, in table_block
+    text += "CPU fixture only; not an experimental result.\n\n" if report["smoke"] else ""
+                                                                   ~~~~~~^^^^^^^^^
+KeyError: 'smoke'
