@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-27 08:35** — Capex round 49 committed (Stage-4 report assembled; X23 PASS on cells 136–270). Reviewer primer in `assets/presentation-materials/review-data/README.md`. PC-v0 replication 26 / 60. Round 50 lanes below.
+
 - **2026-09-27 08:10** — Capex round 48 committed (PC-7 fixed-v5 driver, PRES-4 result slides, HT-15b, PC-8 checklist). PC-v0 replication 25 / 60. Capstan's GPU chain: replication → PC-5 harm readout → PC-7 profile (4 development cells) → PC-7 run (4 exposed cells) → PC-6 harm readout. Round 49 lanes below; PC-8 stays pending the run.
 
 - **2026-09-27 07:00** — Capex round 47 committed (PRES-3, PC-6, HT-15); HT-15 paragraph and wording corrections merged into `tails_v1.md`; HT-14 written (`docs/presentation/abstract_to_testbed.md`); post-halt refresh run (R1-D14f). PC-v0 replication 19 / 60 cells done, ETA ≈ 14:15. Round 48 lanes below; PC-7 remains first.
@@ -154,6 +156,35 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 50 — contingencies wired, results scaffold, talk timing (2026-09-27, 08:35)
+
+Ground rules unchanged. PC-8 still waits for the run (≈ 14:00) and the harm readout; Capstan posts the paths.
+
+### Lane PC-9 — contingency variants wired but unrun (first)
+
+So that Tuesday's choice (`review-data/README.md` §5) needs no new code: (a) in `aw/pc_v0.py`, a `--credit-iters`
+option (8 default; 16, 32 admitted) and an `--error-lr` option for the SE-E arm, passed through to the cap config and
+recorded in every cell's `config.json` and `finish.json`; (b) the same two options in `aw/pc_v1_run.py`; (c) a `plan`
+output that prints the projected cost of a sweep from the profile records. CPU tests only; the running replication's
+source is not edited until it finishes (make the change on a copy or wait for the finish receipt, then apply; Capstan
+confirms the finish in the lead queue). No GPU.
+
+### Lane REV-2 — results scaffold and reviewer Q&A (second)
+
+(a) `assets/presentation-materials/review-data/results.md` as a scaffold with the exact tables the PC-8 report and
+the harm readouts will fill (rows for PC-v0 per dataset × realization, the fixed-v5 four cells, the paired harm
+summaries), each cell marked pending with its source path; Capstan fills it Monday. (b) `docs/presentation/qa.md`:
+the twenty questions a predictive-coding or active-inference audience is most likely to ask, each with a two-sentence
+answer bound to a claim-ledger row or an explicit "not established" — including the SD-24 history, why the reader is
+BP-trained, what "error-optimization PC" is and is not, why three realizations, why the halt at 270, what the tail
+figures do and do not show, and the coupled-free-energy status.
+
+### Lane PRES-5 — timed scripts (third; the lead's direction applies)
+
+From the twelve slide drafts, two timed speaking scripts under `docs/presentation/deck_v3/`: 15 minutes and 25
+minutes, with the cut lines the outline already names, each slide's speaking time, and the result slots left as
+slots. No new claims; wording remains the lead's to review.
 
 ## Round 49 — Stage-4 report assembly and receipt audit (2026-09-27, 08:10)
 
