@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-27 11:05** — Capex round 50 committed (PC-9 contingency patch staged on copies, REV-2 Q&A + results scaffold, PRES-5 timed scripts). PC-v0 replication 39 / 60 (CounterFact cells running), ETA ≈ 13:30. Round 51 lanes below.
+
 - **2026-09-27 08:35** — Capex round 49 committed (Stage-4 report assembled; X23 PASS on cells 136–270). Reviewer primer in `assets/presentation-materials/review-data/README.md`. PC-v0 replication 26 / 60. Round 50 lanes below.
 
 - **2026-09-27 08:10** — Capex round 48 committed (PC-7 fixed-v5 driver, PRES-4 result slides, HT-15b, PC-8 checklist). PC-v0 replication 25 / 60. Capstan's GPU chain: replication → PC-5 harm readout → PC-7 profile (4 development cells) → PC-7 run (4 exposed cells) → PC-6 harm readout. Round 49 lanes below; PC-8 stays pending the run.
@@ -156,6 +158,38 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 51 — variant-aware reporting, replication audit, Tuesday outline (2026-09-27, 11:05)
+
+Ground rules unchanged. PC-8 starts when Capstan posts the completed run and harm-readout paths (this afternoon).
+
+### Lane PC-10 — variant-aware report and readout integration (first)
+
+Capex's PC-9 note: the PC-v0 report generator and the harm readout assume the eight-step treatment. Make both
+variant-aware on copies (`aw/pc_v0_report.py`, `aw/pc_harm_readout.py`, `aw/pc_v1_readout.py` are Capex-owned;
+`aw/scoring.py` stays untouched): read the treatment record (credit iterations, error rate) from each cell's
+`config.json` / `finish.json`, group and label by treatment, refuse to pool cells with different treatments into one
+arm, and render a sweep table when several treatments exist. Tests on the round-50 smoke fixtures plus a synthetic
+two-treatment fixture. Apply the PC-9 patch and this integration only after the running chain's reports exist;
+until then keep them under `docs/tasks/PC-9-candidate/` and state the exact apply command.
+
+### Lane X24 — audit of the PC-v0 replication cells as they complete (second; read-only)
+
+For every finished cell in `results/additional_work/PC-v0/replication-60-20260927/`: the two arms of a pair used
+identical items in identical order (item IDs and order from `items.jsonl`), identical calibration and seeds, the same
+base hash before and after (`finish.json`), fresh memories (no cross-cell state), the credit rule recorded as planned
+(SE-A adjoint, SE-E eight-step error), scoring on the old S5 definitions with the secondary column present, and the
+cost ledger consistent with nine forwards / nine reverses per SE-E credit. Report the population's exposure label.
+No efficacy numbers are read or reported by this lane; it certifies the pairs before PC-8 reads them. Output
+`logs/r1_x24/report.md`, rerun on the complete set at the end.
+
+### Lane REV-3 — `final-experiments.md` skeleton for Tuesday (third)
+
+`assets/presentation-materials/review-data/final-experiments.md` (canonical copy in `docs/presentation/`): the
+decision tree of `review-data/README.md` §5 as a form to be filled on Tuesday — for each candidate experiment its
+question, design, population and exposure label, cost from the delivered profiles or estimates, the reviewer
+feedback deadline, what it would add to which theme, and a blank "decision / owner / start" line. No preferences;
+the lead, the human reviewers, Capex and Capstan fill it together.
 
 ## Round 50 — contingencies wired, results scaffold, talk timing (2026-09-27, 08:35)
 
