@@ -1,0 +1,111 @@
+{
+  "status": "complete",
+  "cost_scope": "harm readout only; separate from acquisition/replication",
+  "selection": {
+    "mode": "v0",
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "windows": 32,
+    "window_tokens": 128,
+    "positions": 4064,
+    "windows_sha256": "fc2a1b935a8db2d515b5e358a483fee99da5ab6525d1d4d2c85a655114225656",
+    "context": "reset every window",
+    "order": "window then target position, starting at target position 1"
+  },
+  "state_before": "61ecebadab13435f69d9d8226b99ad66afb0da159b656c2e3b2308c92bea9da6",
+  "base_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "positions_completed": 4064,
+  "elapsed_process_seconds": 23.93803530500736,
+  "query_costs": {
+    "shared_capoff_selection": {
+      "phase": "query",
+      "model": "shared_capoff_selection",
+      "batches": 254,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 4064,
+        "partial_forwards": 0,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 3.7582966070622206,
+        "accel_seconds": 3.7582966070622206,
+        "peak_mem_mib": 0,
+        "tokens": 260096,
+        "phase": "query"
+      }
+    },
+    "cap_partial_bank_2": {
+      "phase": "query",
+      "model": "cap_partial_bank_2",
+      "batches": 5,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 0,
+        "partial_forwards": 80,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 0.01785384409595281,
+        "accel_seconds": 0.01785384409595281,
+        "peak_mem_mib": 0,
+        "tokens": 1448,
+        "phase": "query"
+      }
+    },
+    "cap_partial_bank_1": {
+      "phase": "query",
+      "model": "cap_partial_bank_1",
+      "batches": 2,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 0,
+        "partial_forwards": 32,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 0.01134164398536086,
+        "accel_seconds": 0.01134164398536086,
+        "peak_mem_mib": 0,
+        "tokens": 528,
+        "phase": "query"
+      }
+    },
+    "cap_partial_bank_3": {
+      "phase": "query",
+      "model": "cap_partial_bank_3",
+      "batches": 2,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 0,
+        "partial_forwards": 32,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 0.0032385961385443807,
+        "accel_seconds": 0.0032385961385443807,
+        "peak_mem_mib": 0,
+        "tokens": 3024,
+        "phase": "query"
+      }
+    }
+  }
+}
