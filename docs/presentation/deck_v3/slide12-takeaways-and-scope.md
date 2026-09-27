@@ -16,9 +16,15 @@ mechanistic question is how an agent would choose informative actions or audits
 using beliefs, preferences and an action model. That loop remains proposed.”
 [`AI-testbed`, `AI-next`]
 
-“For predictive coding: **insert the completed SE-E versus SE-A result here**,
-including the paired efficacy, harm and cost, and then the fixed-v5 transfer
-result or its explicit unavailable status. The historical defective-energy run
+“For predictive coding: the completed SE-E minus SE-A paraphrase-retention
+differences are {{v0.zsre.ret_gs}} and {{v0.counterfact.ret_gs}} for the exposed
+S5 zsRE and CounterFact streams. The fixed-v5 differences are
+{{v1.zsre.ret_gs}} and {{v1.counterfact.ret_gs}} on the single exposed R1
+realization. The corresponding differences in positive-harm ES99 are
+{{v0.zsre.harm_es99_difference}} / {{v0.counterfact.harm_es99_difference}}
+and {{v1.zsre.harm_es99_difference}} / {{v1.counterfact.harm_es99_difference}}
+nats. These values stay PENDING until their completed sources exist. Read them
+alongside the process and operation costs on the preceding slides. The historical defective-energy run
 and CPU readiness checks do not fill this slot. A null or adverse result should
 be stated just as directly as an improvement.” [`PC-v0`, `PC-fixed-v5`, `PC-SD24`]
 
@@ -29,10 +35,10 @@ severity and concentration beside retention. This is empirical evidence about
 our finite test population, not a proof of a heavy-tail family or future
 robustness.” [`HT13-corrected`, `HT-readout`]
 
-“The cost and scope also belong with these conclusions. The completed 225-cell
-snapshot accounts for about 308.37 process-hours. Two workers overlap, so this
-is not 308.37 elapsed GPU hours. The later 270-cell report and separate PC
-acquisition/readout costs should replace that snapshot figure before the talk.
+“The cost and scope also belong with these conclusions. The reconciled 270-cell
+snapshot accounts for about 392.42 process-hours. Two workers overlap, so this
+is not 392.42 elapsed GPU hours. Separate PC acquisition/readout costs must
+be included alongside it before the talk.
 The report retains unavailable comparisons rather than assigning them zero
 effect.” [`resources`, `unavailable`]
 
@@ -56,5 +62,5 @@ labels on the individual statements, not just in a footnote. Sources:
 [comparator report](../../R1_stage4_report_comparators.md),
 [PC report](../../additional_work/PC-v0_report.md), and
 [shared brief](../presentation_brief_2026-09-26.md). Before finalization update the
-explicit 225-cell resource snapshot, verify PC source populations and costs,
+resource and PC cost snapshots, verify PC source populations and costs,
 and confirm the allotted speaking time. No experiment is promised by this close.

@@ -58,9 +58,8 @@ to explain and potentially regulate.” [`HT13-empirical`, `AI-next`]
 
 **HT-13 corrected in v1.1:** the generator now computes fractional ES99 and labels
 the figure as empirical survival. The [earlier review](../../tasks/HT-13-round46-review.md)
-is historical. The round-47 export uses the corrected 262-cell snapshot; its new
-source identities are in `claim-additions-round47.json`. Rerender from the
-reconciled 270-cell inventory before final presentation. No tail-family inference
+is historical. The round-48 export uses the corrected 270-cell snapshot; current source identities are recorded in the round-48 export manifest.
+The round-47 source identities remain historical. No tail-family inference
 is implied by the repair. [`HT13-corrected`]
 
 The figure compares cap-on with **each condition's own cap-off base**. For S1,

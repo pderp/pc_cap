@@ -76,7 +76,7 @@
         }
       ],
       "footer": "PROPOSED: preferences + policy inference + information-seeking audits",
-      "notes": "Two implemented interfaces do not establish a Markov blanket. HT-14 map pending."
+      "notes": "Two implemented interfaces do not establish a Markov blanket. HT-14 map available; policy loop proposed."
     },
     {
       "number": "03",
@@ -159,7 +159,7 @@
     {
       "number": "05",
       "title": "Retention improves, with limits to specificity",
-      "status": "Completed triplet + 225-cell comparator snapshot; preliminary three-realization analysis",
+      "status": "Completed triplet + 270-cell comparator snapshot; preliminary three-realization analysis",
       "claims": [
         "R1-triplet-summary",
         "R1-specificity",
@@ -190,7 +190,7 @@
     {
       "number": "07",
       "title": "Similar small means can hide different consequences",
-      "status": "HT-13 corrected v1.1: 262 receipted cells; own-cap-off reference",
+      "status": "HT-13 corrected v1.1: 270 receipted cells; own-cap-off reference",
       "claims": [
         "HT13-corrected",
         "HT-readout",
@@ -218,6 +218,84 @@
       "requires_tail_gate": false,
       "footer": "κ arms reduce ES95 descriptively but miss the retention floor and declared tail-separation rule.",
       "notes": "DEC-054: not coupled free energy, a coupled blanket, or a one-κ test. This is a loss-level pilot."
+    },
+    {
+      "number": "09",
+      "title": "Corrected PC-v0: efficacy, harm and cost",
+      "status": "Exposed historical S5; 3 realizations × 5 orders; result slots await completed sources",
+      "claims": [
+        "PC-v0",
+        "PC-SD24",
+        "HT-readout"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Paraphrase retention: Δ",
+          "lines": [
+            "zsRE: {{v0.zsre.ret_gs}}",
+            "CounterFact: {{v0.counterfact.ret_gs}}",
+            "Higher favors SE-E"
+          ]
+        },
+        {
+          "title": "Positive-harm ES99: Δ",
+          "lines": [
+            "zsRE: {{v0.zsre.harm_es99_difference}}",
+            "CounterFact: {{v0.counterfact.harm_es99_difference}}",
+            "Lower favors SE-E"
+          ]
+        },
+        {
+          "title": "Acquisition + assay cost",
+          "lines": [
+            "SE-A process s: {{v0.SE-A.seconds}}",
+            "SE-E process s: {{v0.SE-E.seconds}}",
+            "Harm readout s: {{v0.harm.seconds}}"
+          ]
+        }
+      ],
+      "footer": "All differences: corrected eight-step SE-E minus SE-A. Readout uses 4,064 fixed positions per arm.",
+      "notes": "Supplemental defect-correction replication; old S5 primary scoring. No fresh confirmation or general PC claim."
+    },
+    {
+      "number": "10",
+      "title": "Does PC credit transfer to the fixed v5 reader?",
+      "status": "One exposed R1 realization per dataset; 300 edits; paired credit-rule intervention",
+      "claims": [
+        "PC-fixed-v5",
+        "PC-mechanism",
+        "HT-readout"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Paraphrase retention: Δ",
+          "lines": [
+            "zsRE: {{v1.zsre.ret_gs}}",
+            "CounterFact: {{v1.counterfact.ret_gs}}",
+            "100-edit values in notes"
+          ]
+        },
+        {
+          "title": "Positive-harm ES99: Δ",
+          "lines": [
+            "zsRE: {{v1.zsre.harm_es99_difference}}",
+            "CounterFact: {{v1.counterfact.harm_es99_difference}}",
+            "Full 245,237-position readout"
+          ]
+        },
+        {
+          "title": "Acquisition + assay cost",
+          "lines": [
+            "SE-A stream s: {{v1.SE-A.seconds}}",
+            "SE-E stream s: {{v1.SE-E.seconds}}",
+            "Harm readout s: {{v1.harm.seconds}}"
+          ]
+        }
+      ],
+      "footer": "Same BP base, trained reader, gates, memory capacity and stream; fresh memory for each arm.",
+      "notes": "Only delta acquisition credit changes. Reader training remains BP; active-inference policy choice is proposed."
     },
     {
       "number": "11",
@@ -284,9 +362,9 @@
         {
           "title": "Predictive coding",
           "lines": [
-            "SE-E versus SE-A result",
-            "Paired efficacy, harm and cost",
-            "RESULT SLOT — PENDING"
+            "v0 ΔGS (zsRE): {{v0.zsre.ret_gs}}",
+            "v5 ΔGS (zsRE): {{v1.zsre.ret_gs}}",
+            "Harm + cost, both datasets"
           ]
         },
         {
@@ -298,7 +376,7 @@
           ]
         }
       ],
-      "footer": "225-cell snapshot: 308.37 process-hours, not elapsed GPU hours. Final report and PC costs pending.",
+      "footer": "270-cell snapshot: 392.42 process-hours, not elapsed GPU hours. PC costs reported separately.",
       "notes": "Experiments end October 9, 17:00 ET. Presentation October 15. Unavailable comparisons stay explicit."
     }
   ]

@@ -1,0 +1,31 @@
+{
+  "note": "Configured FUTURE output locations, not claims that these files exist. Absent sources render PENDING. Update the path if Capstan chooses a different output namespace; re-export automatically resolves completed sources.",
+  "sources": {
+    "v0_report": {
+      "path": "logs/additional_work/PC-v0/report-60-20260927/report.json",
+      "schema": "aw.pc_v0_report: aggregates (dataset,metric) mean/realizations/minimum/maximum; cells finish cost"
+    },
+    "v0_harm": {
+      "path": "results/additional_work/PC-v0/harm/replication-60-20260927/report.json",
+      "schema": "aw.pc_harm_readout: pairs difference_of_arm_es99.original, positionwise.original.loss.mean_signed; cells readout.summary.original; sibling cost.json"
+    },
+    "v1_run": {
+      "path": "results/additional_work/PC-v1/replication-4-20260927",
+      "schema": "aw.pc_v1_run: each cell checkpoint-100/300.json metrics.<metric>.value; finish.json elapsed_process_seconds"
+    },
+    "v1_harm": {
+      "path": "results/additional_work/PC-v1/harm/replication-4-20260927/report.json",
+      "schema": "PC-5 shared read_arm/pair schema, selection.positions=245237; four arms and two pairs, final 300 checkpoint only"
+    }
+  },
+  "slots": {
+    "v0.<dataset>.<es|ret_es|ret_gs|ls>": "PC-3 aggregates selector dataset + ES/RET-ES/RET-GS/LS, mean; suffix .realizations / .range reads realization values / min,max",
+    "v0.<SE-A|SE-E>.seconds": "sum PC-3 cells[*].finish.elapsed_process_seconds for arm (30 cells)",
+    "v1.<dataset>.<100|300>.<metric>": "SE-E minus SE-A checkpoint metrics.<ES|RET-ES|RET-GS|LS|near_miss|revision>.value; short key omits 300",
+    "v1.<SE-A|SE-E>.seconds": "sum PC-7 finish.elapsed_process_seconds for arm (2 cells; stream-engine seconds)",
+    "<v0|v1>.<dataset>.harm_es99_difference": "mean pairs[*].difference_of_arm_es99.original; difference of arm ES99s, not ES99 of paired losses",
+    "<v0|v1>.<dataset>.harm_mean_difference": "mean pairs[*].positionwise.original.loss.mean_signed",
+    "<v0|v1>.<dataset>.<SE-A|SE-E>.<es99|mean_kl>": "mean cells[*].readout.summary.original.loss.es99_positive or .kl.mean_signed",
+    "<v0|v1>.harm.seconds": "sibling cost.json elapsed_process_seconds, readout only"
+  }
+}

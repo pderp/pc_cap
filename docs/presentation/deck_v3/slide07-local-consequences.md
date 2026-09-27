@@ -54,12 +54,9 @@ is a finite set of observed loss changes.” [`HT-readout`, `HT13-corrected`]
 Figure: `assets/presentation-materials/figures/tails/rarity_vs_severity.png`;
 data: `tails.json`, `table.md`; explanatory source:
 `assets/presentation-materials/tails_v1.md` v1.1 (all paths relative to
-`/home/derp/cap`). The plotted snapshot has 262 receipted cells; S1_literal zsRE
-has seven, while each named main comparison above has fifteen. Do not compare
-pooled totals as if those incomplete groups had equal replication. HT-15 adds
-realization spread and distinguishes it from the pooled tail.
+`/home/derp/cap`). The plotted snapshot has 270 receipted cells and all eighteen observed
+condition/dataset groups have fifteen cells. HT-15b adds realization spread and
+distinguishes it from the pooled tail. Unrun groups remain unavailable.
 
-The linked page's phrase “losses are bounded by the vocabulary” is not used as
-a justification here. The figure also omits zero-harm points on its logarithmic
-axis; they remain in the source table. Sources are bound in the round-47 claim
-additions; [claim ledger](../../talk_claim_ledger_v7.md).
+The earlier vocabulary-bound wording has been corrected in the linked page. The figure also omits zero-harm points on its logarithmic
+axis; they remain in the source table. Current sources are bound in the round-48 export; [claim ledger](../../talk_claim_ledger_v7.md).

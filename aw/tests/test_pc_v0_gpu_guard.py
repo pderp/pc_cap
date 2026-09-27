@@ -1,16 +1,26 @@
-"""The GPU-occupancy guard blocks on project compute processes only; desktop CUDA contexts are reported, not blocking."""
-import os
-import sys
+"""Occupancy classification uses commands, independent of PID namespaces."""
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from aw.pc_v0 import blocking_cuda_processes  # noqa: E402
+from pathlib import Path
+
+from aw.pc_v0 import blocking_cuda_processes
 
 
-def test_own_python_process_blocks_and_init_does_not():
-    apps = [{"pid": str(os.getpid()), "used_memory": "10 MiB"}, {"pid": "1", "used_memory": "5 MiB"},
-            {"pid": "999999999", "used_memory": "1 MiB"}]
+def test_project_and_python_block_but_desktop_and_vanished_do_not(monkeypatch):
+    commands = {
+        "10": b"/usr/bin/python3\0train.py\0",
+        "11": b"/home/derp/cap/assets/native-compute\0",
+        "12": b"/usr/bin/gnome-shell\0",
+    }
+
+    def cmdline(path):
+        if path.parent.name not in commands:
+            raise FileNotFoundError(path)
+        return commands[path.parent.name]
+
+    monkeypatch.setattr(Path, "read_bytes", cmdline)
+    apps = [{"pid": pid, "used_memory": "10 MiB"} for pid in ("10", "11", "12", "13")]
     blocking = blocking_cuda_processes(apps)
-    assert [b["pid"] for b in blocking] == [str(os.getpid())]  # this interpreter counts; pid 1 and a dead pid do not
+    assert [b["pid"] for b in blocking] == ["10", "11"]
     assert "cmdline" in blocking[0]
 
 

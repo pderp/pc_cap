@@ -17,8 +17,6 @@ from aw.pc_harm_smoke import TinyBatchEPC
 from aw.pc_v0_report import load_group
 from pccap.revision_v1.stage4_adapters import CellAdapter
 
-SMOKE = h.ROOT / "results/additional_work/PC-v0/cpu-smoke-round45"
-
 
 def test_fractional_es_not_percentile_and_ties():
     x = np.zeros(250)
@@ -43,10 +41,8 @@ def test_selected_populations():
     assert np.array_equal(a, b[:32])
 
 
-def test_real_smoke_checkpoints_and_scalar_predictions(tmp_path):
-    if not SMOKE.exists():
-        pytest.skip("generate aw.pc_v0_smoke first")
-    rows = load_group(SMOKE, {}, smoke=True)
+def test_real_smoke_checkpoints_and_scalar_predictions(tmp_path, pc_v0_smoke):
+    rows = load_group(pc_v0_smoke, {}, smoke=True)
     windows = np.int32([[4, 11, 17, 9], [4, 12, 17, 7]])
     meta = dict(mode="cpu_smoke", positions=6, windows_sha256=h.window_hash(windows))
     base = TinyBatchEPC()
@@ -90,9 +86,9 @@ def test_real_smoke_checkpoints_and_scalar_predictions(tmp_path):
         h.pair(*results, tmp_path / "bad2.npz")
 
 
-def test_failure_retains_cost_without_publishing_vectors(tmp_path):
+def test_failure_retains_cost_without_publishing_vectors(tmp_path, pc_v0_smoke):
     base = TinyBatchEPC()
-    row = load_group(SMOKE, {}, smoke=True)[0]
+    row = load_group(pc_v0_smoke, {}, smoke=True)[0]
     cap = h.restore_v0(base, row, {}, smoke=True)
     reader = V0PositionBatchReader(CellAdapter(cap, "v0_live_C1"), batch_size=2)
 

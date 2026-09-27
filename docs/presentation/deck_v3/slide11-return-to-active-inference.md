@@ -70,8 +70,4 @@ proposed theoretical interpretation. [`AI-programme`, `AI-next`]
 Sources: [shared brief](../presentation_brief_2026-09-26.md), July abstract,
 DEC-054, [current schedule](../../plan_from_saturday.md),
 [claim ledger](../../talk_claim_ledger_v7.md).
-**HT-14 cross-reference:** Claude's assigned `docs/presentation/abstract_to_testbed.md`
-was not yet present when drafted. Before finalization, reconcile this return
-slide with that map's treatment of policy choice, audits, two κ interfaces and
-the coupling–boundary–interference conjecture. This is a pending source, not a
-claim that the document already exists.
+**HT-14 cross-reference:** The [abstract-to-testbed map](../abstract_to_testbed.md) is now available. Policy choice, epistemic audits, formal coupled blankets and the one-κ relation remain proposed. This slide describes a future experiment, not a completed active-inference agent.

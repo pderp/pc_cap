@@ -49,7 +49,7 @@ from this GPT-2 reader study.” [`R1-design`, `PC-v0`]
 Use an edit / state / evaluation diagram. Put the shared base, fixed reader and
 adaptive memory labels inside the state panel. Label exact-text locality and
 probability-level drift separately. Sources: [triplet report](../../R1_stage4_report_triplet.md),
-[225-cell comparator report](../../R1_stage4_report_comparators.md),
+[270-cell comparator report](../../R1_stage4_report_comparators.md),
 [PC-v0 specification](../../additional_work/PC-v0.md),
 [claim ledger](../../talk_claim_ledger_v7.md). No real fact or answer needs to be
 displayed; “a supplied correction” is enough for this explanation.

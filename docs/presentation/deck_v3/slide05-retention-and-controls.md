@@ -1,6 +1,6 @@
 # Slide 5 — Useful retention, with limits on specificity
 
-**Draft speaker text for charlie's review; measured 135-cell triplet / 225-cell
+**Draft speaker text for charlie's review; measured 135-cell triplet / 270-cell
 comparator snapshots.**
 
 **On screen:** triplet behavior plot, with each realization visible. Headline
@@ -56,6 +56,5 @@ The nine-panel `logs/R1/reports/triplet/slide-figures/behavior-by-realization.pn
 (path relative to `/home/derp/cap`). Sources:
 [triplet report](../../R1_stage4_report_triplet.md),
 [comparator report](../../R1_stage4_report_comparators.md),
-[claim ledger](../../talk_claim_ledger_v7.md). Keep the 225-cell snapshot label
-until the reconciled 270-cell refresh; S1 results are not silently added here.
+[claim ledger](../../talk_claim_ledger_v7.md). Use the reconciled 270-cell snapshot label; S1 results are not silently added here.
 Detailed t-sensitivity intervals and the five order values belong in backup.

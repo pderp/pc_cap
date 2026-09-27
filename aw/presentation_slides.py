@@ -5,7 +5,6 @@ from __future__ import annotations
 import base64
 import html
 import json
-import shutil
 from pathlib import Path
 
 from aw.pc_v0_report import ROOT, sha
@@ -121,6 +120,10 @@ def export(output):
     if not out.is_relative_to(ROOT.parent / "assets/presentation-materials"):
         raise ValueError("presentation exports belong under assets/presentation-materials")
     specs = json.loads((SOURCE / "diagram-specs.json").read_bytes())
+    from aw.presentation_pc import resolve, substitute
+
+    pc = resolve()
+    specs = substitute(specs, pc["slots"])
     ids = {row[0] for row in read_rows((ROOT / "docs/talk_claim_ledger_v7.md").read_text())}
     if any(c not in ids for spec in specs["slides"] for c in spec["claims"]):
         raise ValueError("diagram claim not in ledger")
@@ -139,13 +142,14 @@ def export(output):
         exports.append(dict(path=str(target), sha256=sha(target)))
     for p in sorted(SOURCE.glob("*.md")):
         q = out / p.name
-        shutil.copyfile(p, q)
+        q.write_text(substitute(p.read_text(), pc["slots"]))
         exports.append(dict(path=str(q), sha256=sha(q)))
     sources = [
         *SOURCE.glob("*.json"),
         *SOURCE.glob("*.md"),
         Path(__file__),
         ROOT / "aw/presentation_prepare.py",
+        ROOT / "aw/presentation_pc.py",
         ROOT / "docs/talk_claim_ledger_v7.md",
         *[ROOT.parent / spec["figure"] for spec in specs["slides"] if "figure" in spec],
         *[
@@ -160,7 +164,8 @@ def export(output):
     report = dict(
         draft=True,
         lead_review_required=True,
-        pc_experimental_results_inserted=False,
+        pc_experimental_results_inserted=bool(pc["slots"]),
+        pc_result_sources=pc,
         existing_measured_results_included=True,
         ht13_image_included=allow_tail,
         ht14="available; author review still needed"
@@ -169,5 +174,9 @@ def export(output):
         sources_sha256={str(p): sha(p) for p in sources},
         exports=exports,
     )
+    report["sources_sha256"].update(pc["sources_sha256"])
+    resolved = out / "resolved-diagram-specs.json"
+    resolved.write_text(json.dumps(specs, indent=2) + "\n")
+    exports.append(dict(path=str(resolved), sha256=sha(resolved)))
     (out / "manifest.json").write_text(json.dumps(report, indent=2) + "\n")
     return report

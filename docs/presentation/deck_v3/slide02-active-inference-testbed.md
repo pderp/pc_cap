@@ -53,8 +53,4 @@ describes the main condition, not the S1 continued-base controls. [`AI-testbed`]
 Sources: [shared brief](../presentation_brief_2026-09-26.md),
 [claim ledger](../../talk_claim_ledger_v7.md),
 [implemented main-condition report](../../R1_stage4_report_triplet.md).
-**HT-14 cross-reference:** Claude's assigned `docs/presentation/abstract_to_testbed.md`
-was not present at drafting. This is an explicit pending source, not an existing
-document link. Before finalization, check these component labels against its
-implemented / measured / proposed map. No additional experimental commitment is
-made by this slide.
+**HT-14 cross-reference:** The [abstract-to-testbed map](../abstract_to_testbed.md) is now available. It agrees on the implemented interfaces and the proposed policy loop. The frozen-base description here refers to the main condition; S1 includes base continuation as a control. No additional experimental commitment is made by this slide.

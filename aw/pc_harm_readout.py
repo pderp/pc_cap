@@ -23,7 +23,7 @@ from scripts import r1_68f_full_validation as fv
 from scripts.r1_68e_batched_drift_v0 import V0PositionBatchReader
 
 from aw import scoring
-from aw.pc_v0 import CUTOFF, archive, build_cap, dump, wall_limit
+from aw.pc_v0 import CUTOFF, archive, blocking_cuda_processes, build_cap, dump, wall_limit
 from aw.pc_v0_report import ROOT, compare, load_group, sha, table
 from pccap.harness.snapshot import restore
 from pccap.revision_v1.stage4_adapters import CellAdapter
@@ -393,8 +393,12 @@ def run(group, output, *, smoke=False, wall_seconds=28800, batch_size=16):
             raise ValueError("experimental cutoff reached")
         with context as lease, wall_limit(allowance):
             if not smoke:
-                if lease.other_cuda_processes() or not any(
-                    d.platform == "gpu" for d in jax.devices()
+                others = lease.other_cuda_processes()
+                cost["other_cuda_processes"] = others
+                if (
+                    any("error" in row for row in others)
+                    or blocking_cuda_processes(others)
+                    or not any(d.platform == "gpu" for d in jax.devices())
                 ):
                     raise RuntimeError("owner needs released CUDA device")
                 from pccap.bases.epc import EPCBase

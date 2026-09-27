@@ -1,0 +1,151 @@
+{
+  "cell": {
+    "dataset": "zsre",
+    "realization": 0,
+    "order": 100,
+    "arm": "SE-E",
+    "items": 2
+  },
+  "population": "cpu_smoke",
+  "sources": {
+    "aw/pc_v1_run.py": "bad90a9aef1753b6df9d13fe6ba279aa400394b0633b4e01d719fc85363252d2",
+    "requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "aw/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+    "aw/pc_v1_acquire.py": "70ffd8be4f54f869b94227924c34b4138b7710e75efef62e9cd8e421287966c0",
+    "aw/pc_v1_readout.py": "c465cb173166037c96e85fba808f763dbe4ccb60f4fc0094052f27ca54fbefff",
+    "scripts/r1_61_cell_driver.py": "ed1b96147cf40fe1d0571815d819b7b2292cb39915045bd2e288ec8633d0dc22",
+    "scripts/r1_49g_secondary.py": "91d8cf73ba4bd321959d46bf98110a9d7ebc29a2b394379b61fa6b88be8aa8e6",
+    "scripts/r1_75_analysis_stage4_v1.py": "3a1c353a30b598d7a521d45774adc188d49db3f25d26cfe19fdd14c335ca9549",
+    "scripts/r1_49g_inference.py": "09e81dc884bb44727fb8daba9899c893c677dca7cb0a81b8f9009d69d0b3febc",
+    "src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "src/pccap/contracts.py": "daa7f294e00cc73d08436c4e165b96f5763706f566ed974586e5b3100f352390",
+    "src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "src/pccap/data/tokenize.py": "09a0a1d3384a4b34474539c8fdd70b783ae43a608d83d4509af054f63276875d",
+    "src/pccap/harness/ledger.py": "0d7b5a2be60739414122b6ff5af78c71a6e13605b01d3365a62f70a90c304ca3",
+    "src/pccap/harness/lease.py": "3bf728cd93a072780b52201f845cf87fa760a0efc28068aefcfa9d79cd6b2d82",
+    "src/pccap/harness/snapshot.py": "0597be625a5a6a95e0215e5a2b2cded90ce49b7c6c2837b7729d229664e0dd9e",
+    "src/pccap/revision_v1/__init__.py": "81c2ce8582b2c134cc2286772f035908f38b56156a4fc2d244b08bdc40feb7aa",
+    "src/pccap/revision_v1/adapt.py": "c40fca3264486fbd6386387e19b305a7d9ca486ffe6452d2cbdd75a2a83cf793",
+    "src/pccap/revision_v1/analysis.py": "b9a40ac1081f1eee28e941d341d1adb91f304654e327bb2e1ce639450006bff2",
+    "src/pccap/revision_v1/analysis_stage4.py": "dd459f706afb04f578361f43163a86d9ac24c93b434e71669b60cf3c8ed1da8a",
+    "src/pccap/revision_v1/checkpoint_identity.py": "084b018eb606bd74893ab82ccb648d52827d8524eb62bf1add461c01fc550775",
+    "src/pccap/revision_v1/contracts.py": "01f55b4c70d1ffa36db8404e76d060c04741fe5992f3e7a118d59272c1a5993e",
+    "src/pccap/revision_v1/controller.py": "17940440ae37d8248ac4403d8b5bf5caa4141fdb02ebc4cae862c7253373a292",
+    "src/pccap/revision_v1/dev_loader.py": "363ba12f790c8cfb973439d6ebb83e2b14352487400c1f6bb664801cb09b26b1",
+    "src/pccap/revision_v1/development_cell.py": "5f50698c1c43e2bf218e0d5a9f763e233363623369c4776e3815cccfad5674da",
+    "src/pccap/revision_v1/endpoints.py": "60ce20ac934aa09d5dca1a88f957925dcc06b4c446d601b11f47e711c1f6e840",
+    "src/pccap/revision_v1/endpoints_composition.py": "ea7b1aa6d15a5821275eb4caa5207f612851d14cd3e3fa203d89da58cc889ff1",
+    "src/pccap/revision_v1/endpoints_unseen.py": "62193770bc3f898dedfdfaed820bf0660d795192f60c254d7c54e91859585d3c",
+    "src/pccap/revision_v1/epc_train.py": "38a6620e4dc513d12a22f9a189c59daf6701ddab548b5c10e7709aae31117e5f",
+    "src/pccap/revision_v1/episodes.py": "b1d66ac7a620b0571d4eb895e7a6a0e8459b877af952371cc8156e7d17eeb80b",
+    "src/pccap/revision_v1/final_namespace.py": "8f028c96320ba455c3d39537e21788e090de94e91825122769da2d47e6812df7",
+    "src/pccap/revision_v1/incremental_integrity.py": "4eb79988a2b9ccd685cd8adeae3b0f95bd38aada3be330c7a28b20adecdf8652",
+    "src/pccap/revision_v1/learner.py": "639c10e3da55f52101634d45da08670dacaae5944672f5a96b91ffb0ccd97117",
+    "src/pccap/revision_v1/matched_update.py": "ec7451386f751ddc86d4fe8945791a176760a89e32f5bc78928f80534c97bbc6",
+    "src/pccap/revision_v1/memory.py": "1af390068efcaca8d15e9d81912a9459310f76965e762ee9a066e58609141a54",
+    "src/pccap/revision_v1/observations.py": "eae45d586303bdb7e8dc16cd965922c2af0666f12c528b51eaaa4c618d75b150",
+    "src/pccap/revision_v1/reader.py": "9abc9b2a22bdbf9a39aafa65e1a3f0aa0b9aa0e5e86b60d9640a496377010018",
+    "src/pccap/revision_v1/selection_trace.py": "5024d9134c40f306d7eefd8f87a922de42fb3acd87b0be7299657f8f393381a2",
+    "src/pccap/revision_v1/stage4_adapters.py": "8df52d8549d120dea09b07ca72c560642dbcbe6a591c246fdde43d0e7f312e37",
+    "src/pccap/revision_v1/stage4_assays.py": "af4b050dfeaa165c8d4af9ab8893322a6e22421d32baec5f21cdd66f8a9b89b5",
+    "src/pccap/revision_v1/stage4_cell.py": "be4d5914702a570bf556ccb20a3a84ce1215a5c590dbfa564507984c2c9dde1f",
+    "src/pccap/revision_v1/stream_train.py": "6b392f94a1d3d80c9ff81286031aa951c69d5558dad106fcbd6a99112335473f",
+    "src/pccap/revision_v1/train.py": "edad4388790381d92d14a30802260d1d3a480ffd86c389610c452dfd9c63b911",
+    "src/pccap/revision_v1/train_fast.py": "b37f9512c0da9b305ad750bad61c759524a38e2181b3f6f70b14d258650ec265",
+    "src/pccap/revision_v1/v0_stable.py": "aa508dc4bbc2003a321cca4ac2d24e912e772f1cde1e5dff73e39429f93c7a76"
+  },
+  "item_ids": [
+    "item-0",
+    "item-1"
+  ],
+  "endpoints_sha256": "96895ea155af547de2328672607993d59661f9a5e0283eaa9493a4e63e1821c5",
+  "initial_state": "0aac63f747bc6969a356b5e6317d19e5c5d65f4704e421623f5fedc159565fee",
+  "initial_inference_state": "ab9a1eb5a06f66685b94bff2d6d8258422d03f561c08b25538aed4bed77344af",
+  "base_sha256": "e08435c622b74af1047891f1f1bb21a260e28278430aa847e22c4dae43158032",
+  "reader_sha256": "945328f2c776b91dcd3615bcb75dfa1b1269c589f334dd3b342f8ed656060981",
+  "max_new": 2,
+  "semantic_config": {
+    "base": "e08435c622b74af1047891f1f1bb21a260e28278430aa847e22c4dae43158032",
+    "binary_mass": true,
+    "cache_prompt_pass": true,
+    "ceiling_bytes": 67108864,
+    "controller": {
+      "A": 0.3,
+      "bank_scales": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "d": 16,
+      "d_code": 6,
+      "delta_replaces_controller": true,
+      "hidden": 8,
+      "n_banks": 3,
+      "width": 8
+    },
+    "encoder_version": 1,
+    "fast": {
+      "code_norm_max": null,
+      "delta_lr": 0.1,
+      "delta_steps": 1,
+      "improvement_abs": 1e-08,
+      "lr": 0.01,
+      "steps": 0,
+      "tau": 0.1
+    },
+    "hard_top1": true,
+    "min_score": null,
+    "null_threshold": 1.01,
+    "pc_acquisition": {
+      "credit": "error",
+      "energy": "SD-24 corrected",
+      "error_lr": 0.1,
+      "iters": 8
+    },
+    "rare_df_max": 2,
+    "rare_overlap_min": null,
+    "reader": {
+      "cosine": true,
+      "d": 16,
+      "d_code": 6,
+      "hidden": 8,
+      "lex_idf": false,
+      "lexical": true,
+      "null_bias": 0.0,
+      "pairwise_null": true,
+      "query_null": true,
+      "score_scale": 10.0,
+      "stop_tokens": [],
+      "taps": [
+        1,
+        2,
+        3
+      ],
+      "temperature": 1.0,
+      "tie_heads": true,
+      "top_k": 2,
+      "width": 8
+    },
+    "single_site": false
+  },
+  "checkpoints": [
+    1,
+    2
+  ],
+  "determinism": {
+    "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+    "omp_num_threads": "2",
+    "jax_default_matmul_precision": "highest",
+    "jax_enable_x64": false,
+    "jax_threefry_partitionable": false,
+    "jax_version": "0.11.1",
+    "backend": "cpu",
+    "devices": [
+      "cpu:0"
+    ]
+  }
+}

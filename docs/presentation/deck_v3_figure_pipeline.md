@@ -2,6 +2,12 @@
 
 Canonical outline: `docs/presentation/deck_v3_outline.md`. Export directory: `/home/derp/cap/assets/presentation-materials/deck_v3/`. Run commands from `/home/derp/cap/pc_cap`. No command below executes a model, changes a registered result or dispatches the queue. Data sources and hashes for exported files are recorded in the deck's `manifest.json`.
 
+**Current (round 48):** use `--explanatory-only` and a new output directory as
+described below. The reviewed export is `assets/presentation-materials/deck_v3/round48-reviewed/`.
+The main snapshot now contains 270 cells; the comparator refresh commands have
+already run. The older preparation table records historical recipes and must
+not be rerun to regenerate the expanded claim ledger.
+
 Use the project Python for analysis and the existing plotting environment for rendering:
 
 ```bash
@@ -21,7 +27,7 @@ export MPLCONFIGDIR=/home/derp/cap/assets/test_scratch/triplet-report-mpl
 | PC-v0 efficacy vs cost / 9 | `PLOT_PYTHON -m aw.pc_v0_report plot --report NEW_REPORT_DIR/report.json --output NEW_FIGURE_DIR` | Corrected-run groups only. Current `logs/additional_work/PC-v0/report/report.json` has 0/12 completed cells, so its figure honestly says results pending. Keep CPU-smoke figures outside the presentation. |
 | Fixed-v5 PC comparison and paired harm / 9–10 | Generator/report to be supplied with Claude's experimental output; no such figure is represented as existing | Pending measured experiments. `PC-4` is implementation validation only. Bind population, reference, endpoint and operation costs before rendering. |
 
-Prepare a new comparator snapshot after the orchestrator reconciles the halt:
+Historical comparator refresh (already completed at 270 cells):
 
 ```bash
 ../venv/bin/python -m aw.comparator_report analyze --through 270 --output logs/R1/reports/comparators-270
@@ -32,17 +38,22 @@ Prepare a new comparator snapshot after the orchestrator reconciles the halt:
   --output /home/derp/cap/assets/presentation-materials/figures/comparators-270
 ```
 
-Prepare the PC-v0 report after the actual runs, with `--orders 1` or `5` matching the choice made from development profiling:
+Prepare the PC-v0 report after all sixty cells and their harm readout finish.
+The selected design uses **five orders**; see `docs/tasks/PC-8.md` for harm integration:
 
 ```bash
 ../venv/bin/python -m aw.pc_v0_report build --run NEW_RUN_GROUP \
-  --diagnostic-group DEVELOPMENT_DIAGNOSTIC_GROUP --orders 1 \
+  --diagnostic-group DEVELOPMENT_DIAGNOSTIC_GROUP --orders 5 \
   --output NEW_REPORT_DIR --document docs/additional_work/PC-v0_report.md
 ```
 
 Repeat `--run` for nonoverlapping run groups; duplicate coordinates are rejected rather than chosen by outcome. Partial cells stay visible, but only complete paired endpoints enter the comparison. The generator verifies source/model/data identities and binds the observed input bytes; the runner does not provide historical signatures on metrics. Raw diagnostic rows remain in the report JSON.
 
-When regenerating the deck export, pass the chosen comparator snapshot to `aw.presentation_prepare` and use a new output directory. The initial `deck_v3` remains a dated preparation snapshot. Update the canonical outline and ledger with the actual experimental reports before producing final slides; do not present a pending image or CPU smoke as a measured PC result.
+When regenerating the deck export, use `aw.presentation_prepare --explanatory-only`
+with a new output directory. The initial `deck_v3` remains a dated preparation
+snapshot. Update the canonical outline and ledger with the actual experimental
+reports before producing final slides; do not present a pending image or CPU
+smoke as a measured PC result.
 
 ## Round 47 speaker drafts and figures
 
@@ -63,3 +74,22 @@ Slide 5 now uses the simpler three-panel retention figure from the same triplet 
 ```
 
 Its JSON manifest includes all plotted values and source hashes. The earlier nine-panel figure remains backup.
+
+## Round 48 — automatic PC result slots
+
+All twelve speaker drafts and SVG specifications now exist. Use the same
+`--explanatory-only` command with a new export directory. The source Markdown
+retains `{{v0...}}` / `{{v1...}}` tokens; exported notes and SVGs resolve them
+from `docs/presentation/deck_v3/pc-result-sources.json`. That register explicitly
+lists **future output paths**, not results already available. If Capstan chooses
+a different directory, update its path once. Re-export after the producer and
+harm readout finish; no numerical transcription is required. Missing results
+stay PENDING, missing endpoint values stay UNAVAILABLE, and smoke data are
+refused. Source hashes and resolution statuses are included in the manifest.
+
+PC-v0 requires all sixty cells and retains three realization means. Fixed-v5
+requires all four cells and binds both checkpoints, with the final 300-edit
+state required for its harm readout. Differences are SE-E minus SE-A; no
+favorable/adverse verdict is auto-written. Readout costs remain separate from
+acquisition/evaluation process costs. The main R1 slides now use the reconciled
+270-cell snapshot and HT-14, while historical round-47 exports remain unchanged.

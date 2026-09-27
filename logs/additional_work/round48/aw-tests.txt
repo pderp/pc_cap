@@ -1,0 +1,193 @@
+...........................FF........F...FFF............................ [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+______________ test_real_smoke_checkpoints_and_scalar_predictions ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-76/test_real_smoke_checkpoints_an0')
+
+    def test_real_smoke_checkpoints_and_scalar_predictions(tmp_path):
+        if not SMOKE.exists():
+            pytest.skip("generate aw.pc_v0_smoke first")
+>       rows = load_group(SMOKE, {}, smoke=True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_pc_harm_readout.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/pc_v0_report.py:67: in load_group
+    verify(name, digest, bindings)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/derp/cap/pc_cap/aw/pc_v0.py')
+expected = 'd75ef8ca7079e5ba979400ad5161dc409c1ae9ff44572713f7ca5bb076252a25'
+bindings = {'/home/derp/cap/pc_cap/results/additional_work/PC-v0/cpu-smoke-round45/plan.json': 'e15abf12c2502d82520d3f972f91b4961...7ea197', '/home/derp/cap/pc_cap/aw/pc_v0_smoke.py': '751bd75b4bb9a996268d0e51e71798c89a9bca9309882a04ce17904e561c5c4d'}
+
+    def verify(path, expected, bindings):
+        path = Path(path)
+        if not path.is_absolute():
+            path = ROOT / path
+        if bindings.get(str(path)) == expected:
+            return
+        if sha(path) != expected:
+>           raise ValueError(f'identity mismatch: {path}')
+E           ValueError: identity mismatch: /home/derp/cap/pc_cap/aw/pc_v0.py
+
+aw/pc_v0_report.py:36: ValueError
+_____________ test_failure_retains_cost_without_publishing_vectors _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-76/test_failure_retains_cost_with0')
+
+    def test_failure_retains_cost_without_publishing_vectors(tmp_path):
+        base = TinyBatchEPC()
+>       row = load_group(SMOKE, {}, smoke=True)[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_pc_harm_readout.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/pc_v0_report.py:67: in load_group
+    verify(name, digest, bindings)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/derp/cap/pc_cap/aw/pc_v0.py')
+expected = 'd75ef8ca7079e5ba979400ad5161dc409c1ae9ff44572713f7ca5bb076252a25'
+bindings = {'/home/derp/cap/pc_cap/results/additional_work/PC-v0/cpu-smoke-round45/plan.json': 'e15abf12c2502d82520d3f972f91b4961...7ea197', '/home/derp/cap/pc_cap/aw/pc_v0_smoke.py': '751bd75b4bb9a996268d0e51e71798c89a9bca9309882a04ce17904e561c5c4d'}
+
+    def verify(path, expected, bindings):
+        path = Path(path)
+        if not path.is_absolute():
+            path = ROOT / path
+        if bindings.get(str(path)) == expected:
+            return
+        if sha(path) != expected:
+>           raise ValueError(f'identity mismatch: {path}')
+E           ValueError: identity mismatch: /home/derp/cap/pc_cap/aw/pc_v0.py
+
+aw/pc_v0_report.py:36: ValueError
+_______________ test_own_python_process_blocks_and_init_does_not _______________
+
+    def test_own_python_process_blocks_and_init_does_not():
+        apps = [{"pid": str(os.getpid()), "used_memory": "10 MiB"}, {"pid": "1", "used_memory": "5 MiB"},
+                {"pid": "999999999", "used_memory": "1 MiB"}]
+        blocking = blocking_cuda_processes(apps)
+>       assert [b["pid"] for b in blocking] == [str(os.getpid())]  # this interpreter counts; pid 1 and a dead pid do not
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert ['22', '1'] == ['22']
+E         
+E         Left contains one more item: '1'
+E         Use -v to get more diff
+
+aw/tests/test_pc_v0_gpu_guard.py:13: AssertionError
+_______________ test_actual_runner_smoke_output_and_hash_checks ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-76/test_actual_runner_smoke_outpu0')
+
+    def test_actual_runner_smoke_output_and_hash_checks(tmp_path):
+        assert SMOKE.exists(), 'Generate the CPU runner smoke first (documented PC-3 command)'
+>       rows = load_group(SMOKE,{},smoke=True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_pc_v0_report.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/pc_v0_report.py:67: in load_group
+    verify(name, digest, bindings)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/derp/cap/pc_cap/aw/pc_v0.py')
+expected = 'd75ef8ca7079e5ba979400ad5161dc409c1ae9ff44572713f7ca5bb076252a25'
+bindings = {'/home/derp/cap/pc_cap/results/additional_work/PC-v0/cpu-smoke-round45/plan.json': 'e15abf12c2502d82520d3f972f91b4961...7ea197', '/home/derp/cap/pc_cap/aw/pc_v0_smoke.py': '751bd75b4bb9a996268d0e51e71798c89a9bca9309882a04ce17904e561c5c4d'}
+
+    def verify(path, expected, bindings):
+        path = Path(path)
+        if not path.is_absolute():
+            path = ROOT / path
+        if bindings.get(str(path)) == expected:
+            return
+        if sha(path) != expected:
+>           raise ValueError(f'identity mismatch: {path}')
+E           ValueError: identity mismatch: /home/derp/cap/pc_cap/aw/pc_v0.py
+
+aw/pc_v0_report.py:36: ValueError
+__________________ test_missing_finish_and_corrupt_completion __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-76/test_missing_finish_and_corrup0')
+
+    def test_missing_finish_and_corrupt_completion(tmp_path):
+        import shutil
+        copied=tmp_path/'incomplete'
+        shutil.copytree(SMOKE,copied)
+        finish=copied/'zsre-r0-o100-SE-E/finish.json'
+        value=json.loads(finish.read_text())
+        finish.unlink()
+>       rows=load_group(copied,{},smoke=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_pc_v0_report.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/pc_v0_report.py:67: in load_group
+    verify(name, digest, bindings)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/derp/cap/pc_cap/aw/pc_v0.py')
+expected = 'd75ef8ca7079e5ba979400ad5161dc409c1ae9ff44572713f7ca5bb076252a25'
+bindings = {'/tmp/pytest-of-derp/pytest-76/test_missing_finish_and_corrup0/incomplete/plan.json': 'e15abf12c2502d82520d3f972f91b4...7ea197', '/home/derp/cap/pc_cap/aw/pc_v0_smoke.py': '751bd75b4bb9a996268d0e51e71798c89a9bca9309882a04ce17904e561c5c4d'}
+
+    def verify(path, expected, bindings):
+        path = Path(path)
+        if not path.is_absolute():
+            path = ROOT / path
+        if bindings.get(str(path)) == expected:
+            return
+        if sha(path) != expected:
+>           raise ValueError(f'identity mismatch: {path}')
+E           ValueError: identity mismatch: /home/derp/cap/pc_cap/aw/pc_v0.py
+
+aw/pc_v0_report.py:36: ValueError
+________ test_real_solver_diagnostics_render_and_reject_missing_horizon ________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-76/test_real_solver_diagnostics_r0')
+
+    def test_real_solver_diagnostics_render_and_reject_missing_horizon(tmp_path):
+        import shutil
+        copied=tmp_path/'diagnostic'
+        shutil.copytree(SMOKE,copied)
+        plan=json.loads((copied/'plan.json').read_bytes())
+        plan['cells']=plan['cells'][:1]
+        (copied/'plan.json').write_text(json.dumps(plan))
+        dest=copied/'zsre-r0-o100-SE-A'
+        rows=json.loads((copied/'tiny-diagnostic.json').read_bytes())
+        value={'rows':[{'item_id':'synthetic-0','prefix_ids':[4,11],'target':17,'writes':'zero','diagnostics':rows}]}
+        (dest/'diagnostics.json').write_text(json.dumps(value))
+>       result=build([SMOKE],tmp_path/'out',tmp_path/'report.md',smoke=True,diagnostics=[copied])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_pc_v0_report.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/pc_v0_report.py:202: in build
+    rows = [r for p in groups for r in load_group(p, bindings, smoke=smoke)]
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+aw/pc_v0_report.py:67: in load_group
+    verify(name, digest, bindings)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/derp/cap/pc_cap/aw/pc_v0.py')
+expected = 'd75ef8ca7079e5ba979400ad5161dc409c1ae9ff44572713f7ca5bb076252a25'
+bindings = {'/home/derp/cap/pc_cap/results/additional_work/PC-v0/cpu-smoke-round45/plan.json': 'e15abf12c2502d82520d3f972f91b4961...7ea197', '/home/derp/cap/pc_cap/aw/pc_v0_smoke.py': '751bd75b4bb9a996268d0e51e71798c89a9bca9309882a04ce17904e561c5c4d'}
+
+    def verify(path, expected, bindings):
+        path = Path(path)
+        if not path.is_absolute():
+            path = ROOT / path
+        if bindings.get(str(path)) == expected:
+            return
+        if sha(path) != expected:
+>           raise ValueError(f'identity mismatch: {path}')
+E           ValueError: identity mismatch: /home/derp/cap/pc_cap/aw/pc_v0.py
+
+aw/pc_v0_report.py:36: ValueError
+=========================== short test summary info ============================
+FAILED aw/tests/test_pc_harm_readout.py::test_real_smoke_checkpoints_and_scalar_predictions
+FAILED aw/tests/test_pc_harm_readout.py::test_failure_retains_cost_without_publishing_vectors
+FAILED aw/tests/test_pc_v0_gpu_guard.py::test_own_python_process_blocks_and_init_does_not
+FAILED aw/tests/test_pc_v0_report.py::test_actual_runner_smoke_output_and_hash_checks
+FAILED aw/tests/test_pc_v0_report.py::test_missing_finish_and_corrupt_completion
+FAILED aw/tests/test_pc_v0_report.py::test_real_solver_diagnostics_render_and_reject_missing_horizon
+6 failed, 89 passed, 2 deselected in 30.50s

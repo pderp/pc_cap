@@ -20,6 +20,8 @@ def test_all_speaker_and_diagram_claims_exist():
         "06",
         "07",
         "08",
+        "09",
+        "10",
         "11",
         "12",
     ]
