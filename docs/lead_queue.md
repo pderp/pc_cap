@@ -1237,3 +1237,15 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     harm is the same order as adjoint's and slightly larger on the frequent-small side, with the same maximum; together
     with item 126, PC credit buys +0.02 own-prompt retention for ≈ 2× learning cost and no reduction in harm. The
     fixed-v5 profile started 14:18 on the GPU, the paired four-cell run follows automatically.
+
+128. (2026-09-27, 14:55 EDT) **Fixed-v5 credit result (four exposed cells, realization 0, order 100, 300 edits; Capstan's
+    read of `results/additional_work/PC-v1/replication-4-20260927/checkpoint-300.json`; PC-8 writes the report).** With
+    the selected v5 reader, base, gate, calibration and seeds held fixed and only the delta-acquisition credit changed
+    (adjoint vs corrected eight-step error), the two arms are **indistinguishable on every endpoint**: zsRE ES 1.0 /
+    1.0, RET-ES 1.0 / 1.0, RET-GS 0.9833 / 0.9833, LS 1.0 / 1.0, near-miss 76 / 76 of 100, revision 50 / 50;
+    CounterFact identical except RET-GS 0.8067 vs 0.8033 (one paraphrase of 300). Cost: 422 vs 312 s per zsRE cell
+    (1.35×; 29k vs 5.7k reverses), 355 vs 293 s on CounterFact. Profile (10 items/arm) passed first. Reading: on the
+    reader that works, the five-step delta acquisition reaches the same accepted corrections under either credit
+    rule; PC credit transfers without loss and without gain, at 1.2–1.35× cost. One order, one realization,
+    exposed populations: a direction, not an interval. Harm readout on these four cells started 14:53 (full
+    245,237-position inventory).
