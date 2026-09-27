@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-27 08:10** — Capex round 48 committed (PC-7 fixed-v5 driver, PRES-4 result slides, HT-15b, PC-8 checklist). PC-v0 replication 25 / 60. Capstan's GPU chain: replication → PC-5 harm readout → PC-7 profile (4 development cells) → PC-7 run (4 exposed cells) → PC-6 harm readout. Round 49 lanes below; PC-8 stays pending the run.
+
 - **2026-09-27 07:00** — Capex round 47 committed (PRES-3, PC-6, HT-15); HT-15 paragraph and wording corrections merged into `tails_v1.md`; HT-14 written (`docs/presentation/abstract_to_testbed.md`); post-halt refresh run (R1-D14f). PC-v0 replication 19 / 60 cells done, ETA ≈ 14:15. Round 48 lanes below; PC-7 remains first.
 
 - **2026-09-27 00:00** — queue halted at 270 (DEC-074b), reconciled, boundary report posted; PC-v0 diagnostic + profile running (occupancy guard in `aw/pc_v0.py` narrowed to project processes — Capex please review). Capex round 47 in progress (PRES-3 slides on disk, PC-6 readout adapter `aw/pc_v1_readout.py`).
@@ -152,6 +154,30 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 49 — Stage-4 report assembly and receipt audit (2026-09-27, 08:10)
+
+Ground rules unchanged. PC-8 (PC-v0 report from real data) remains open and starts when the 60-cell run and the harm
+readout exist (Capstan posts the paths in the lead queue). Two new lanes that need no results:
+
+### Lane R1-D14g — the Stage-4 confirmatory report, assembled (first)
+
+`docs/R1_stage4_report.md`: the registered D.5 report skeleton filled from what exists — the triplet report (135
+cells, DEC-069 display), the comparator report on the 270-cell state (matched_update, v0_live C1/C2, S1_LM both
+datasets, S1_literal zsRE), the fidelity benchmark and concentration statistics, the DEC-052 inventory of the twelve
+unavailable contrasts with reasons (DEC-066, DEC-074b), the watch summary (alerts and creep, none a veto), the
+resource accounting from the halt report (process-hours by class; 750-hour cap; two-worker factor history 1.15 →
+1.7), and the execution history (freeze, launch, cutovers, halt) in one page. Every number cites its source file and
+hash. No new computation; no new label. This is the registered deliverable of the confirmatory study independent of
+the talk.
+
+### Lane X23 — receipt-chain audit of cells 136–270 (second)
+
+As X22 did for block 1: every start / finish / decision receipt against the frozen recipes, the sealed payload hashes,
+the checkpoint receipts in `results/R1/stage4_sealed_cells/`, the charged process time (no double counting; bindings
+v1 for cells ≤ 90, v2 with ratio 1.7 afterwards), the four cells without decision records (disclosed in
+`logs/R1/operations/Q21_cutover/halt-reconciliation.md`), and the fidelity-watch observations; a plain integrity
+statement or the exact defect. Read-only. Output `logs/r1_x23/report.md` + `docs/tasks/X23.md`.
 
 ## Round 48 — result slides, refreshed snapshots, PC report (2026-09-27, 07:00)
 
