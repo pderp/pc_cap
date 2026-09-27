@@ -1178,3 +1178,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (12 or 60 by the profile rule) → paired harm readout (PC-5) → fixed-v5 real-base profile and paired credit run
     (PC-2/PC-4) → its harm readout — each starting as soon as the previous finishes. Reviewer feedback that arrives
     mid-chain is applied by rerunning the affected job (each is ≤ 8–15 GPU-hours); nothing waits for it.
+
+122. (2026-09-27, 00:00 EDT) **Queue halted at 270 / 330 per DEC-074b.** SIGINT at the 270th start (22:19), scheduler exit
+    23:43, 270 / 270 finishes, 0 failures, 0 retries; four cells lack `decision.json` (the two v0_stable MQuAKE cells
+    from the block-2 cutover and the two S1_literal zsRE cells active at this drain), disclosed; the latter two had their
+    watch observations verified and applied (both breach the old 0.001 bound like every zsRE S1 cell; no veto). Halt
+    boundary report `logs/R1/operations/HALT_REPORT/` (block 4 as the last complete block; 270 cells known; no gaps).
+    Unrun and reported unavailable: S1_literal CounterFact (15) and the extension (45). Both repos committed.
+    PC-v0 chain: the first diagnostic start was refused by the runner's occupancy guard because of the desktop's CUDA
+    contexts (compositor, Chrome, nautilus); guard narrowed to project processes (`PC-v0.md` change log), diagnostic
+    and profile relaunched 23:58, replication follows by the profile rule.
+

@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-27 00:00** — queue halted at 270 (DEC-074b), reconciled, boundary report posted; PC-v0 diagnostic + profile running (occupancy guard in `aw/pc_v0.py` narrowed to project processes — Capex please review). Capex round 47 in progress (PRES-3 slides on disk, PC-6 readout adapter `aw/pc_v1_readout.py`).
+
 - **2026-09-26 19:10** — Capex round 46 committed (PC-5 harm driver, R1-D14f refresh, PRES-2 drafts for slides 2/3/6/11); Capstan fixed HT-13 per Capex's review (ES99 → expected shortfall in `aw/scoring.py` and `aw/tail_figures.py`, receipt-filtered collection, title and reference caveats; `tails_v1.md` v1.1). Halt trigger at the 270th start tonight; round 47 lanes below.
 
 - **2026-09-26 11:00** — Capex round 45 committed (PC-3 report generator, PC-4 dev-checkpoint parity, R1-D14e comparator report at 225, PRES-1 brief / deck v3 outline / figure pipeline / claim ledger v7); 65 `aw` tests pass; HT-13 tail figures in assets. Queue at 252 / 330, halt trigger at the 270th start tonight. Round 46 lanes below.

@@ -205,6 +205,27 @@ def load_inputs(dataset, realization, order, population, n):
         "manifest": str(path), "manifest_sha256": sha(path), "named_seeds": seeds}
 
 
+def blocking_cuda_processes(apps: list[dict]) -> list[dict]:
+    """Project compute processes among the lease's "other" CUDA apps.
+
+    The lease reports every other CUDA compute process, including the desktop compositor, the browser's GPU process
+    and file managers, which hold small contexts permanently on this workstation (the R1 queue ran beside them for a
+    week). Only processes that run our code block PC execution: a command line under ``/home/derp/cap/`` or a Python
+    interpreter. Desktop processes are returned by the caller in the finish record, not treated as occupancy.
+    (Capstan, 2026-09-26 23:55 EDT, under the lead's "don't hold anything" instruction; recorded in PC-v0.md.)
+    """
+    blocking = []
+    for a in apps:
+        pid = a.get("pid")
+        try:
+            cmd = Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace").strip()
+        except OSError:
+            cmd = ""
+        if cmd and ("/home/derp/cap/" in cmd or "python" in cmd.split(" ")[0]):
+            blocking.append(dict(a, cmdline=cmd[:200]))
+    return blocking
+
+
 def run_cell(args):
     import jax
 
@@ -223,8 +244,11 @@ def run_cell(args):
     outcome = {"status": "failed", "dataset": args.dataset, "arm": args.arm}
     try:
         with wall_limit(allowance), gpu_lease("PC-1", stage="additional_work", projected_seconds=allowance, exclusive=True) as lease:
-            if lease.other_cuda_processes():
-                raise RuntimeError("GPU is occupied; release is required before PC execution")
+            others = lease.other_cuda_processes()
+            blocking = blocking_cuda_processes(others)
+            if blocking:
+                raise RuntimeError(f"GPU is occupied by project processes {[b.get('pid') for b in blocking]}; release is required before PC execution")
+            outcome["desktop_cuda_processes"] = [{k: a.get(k) for k in ("pid", "used_memory", "process_name") if k in a} for a in others]
             if not any(d.platform == "gpu" for d in jax.devices()):
                 raise RuntimeError("real-base execution requires JAX CUDA; use CPU only for tiny tests")
             f = archive()

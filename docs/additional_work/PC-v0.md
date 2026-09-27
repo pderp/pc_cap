@@ -66,3 +66,5 @@ one comparison table with efficacy, harm and cost together; a negative result is
 ## Change log
 
 - 2026-09-26: specification written from the agreed design; no changes.
+- 2026-09-26 23:55: the runner's GPU-occupancy guard refused to start because the desktop compositor, the browser's GPU process and a file manager hold small CUDA contexts permanently (they did throughout the R1 queue). `aw/pc_v0.py` now blocks only on project compute processes (command line under `/home/derp/cap/` or a Python interpreter) and records the desktop processes in each cell's finish record (`blocking_cuda_processes`, test `aw/tests/test_pc_v0_gpu_guard.py`). No change to arms, populations, credit, scoring or cost accounting. Capstan, under lead-queue item 121; Capex to review.
+
