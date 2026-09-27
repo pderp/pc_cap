@@ -1197,3 +1197,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     and ≈ 450–550 s (CounterFact), i.e. ≈ 16 h for all 60 cells (five orders) against the 22 h left of the 24 h ceiling.
     By the pre-registered rule (commit to 60 before any outcome is seen if the profile fits) the run is 60 cells,
     started 00:08, `results/additional_work/PC-v0/replication-60-20260927/`. Harm readout and the fixed-v5 steps follow.
+
+124. (2026-09-27, 07:05 EDT) Daily: PC-v0 replication 19 / 60 cells complete, 0 failures (zsRE SE-A ≈ 985 s, SE-E ≈ 1,338 s
+    per cell; CounterFact cells start next); ETA ≈ 14:15, inside the 22 h wall limit. Capex round 47 committed
+    (PRES-3 six more slide drafts, PC-6 fixed-v5 readout adapter with exact real-checkpoint logits, HT-15 per-cell
+    tails with realization spread); its paragraph and three wording corrections merged into `tails_v1.md`; HT-14
+    (`docs/presentation/abstract_to_testbed.md`) written for slides 2 and 11; the post-halt refresh (R1-D14f) run on the
+    reconciled 270-cell state. Round 48 lanes: PC-7 first (the missing fixed-v5 experiment driver), PRES-4 result-slide
+    templates, HT-15b refreshed per-cell tails, PC-8 the PC-v0 report from real data.
+

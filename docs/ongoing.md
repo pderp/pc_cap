@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-27 07:00** — Capex round 47 committed (PRES-3, PC-6, HT-15); HT-15 paragraph and wording corrections merged into `tails_v1.md`; HT-14 written (`docs/presentation/abstract_to_testbed.md`); post-halt refresh run (R1-D14f). PC-v0 replication 19 / 60 cells done, ETA ≈ 14:15. Round 48 lanes below; PC-7 remains first.
+
 - **2026-09-27 00:00** — queue halted at 270 (DEC-074b), reconciled, boundary report posted; PC-v0 diagnostic + profile running (occupancy guard in `aw/pc_v0.py` narrowed to project processes — Capex please review). Capex round 47 in progress (PRES-3 slides on disk, PC-6 readout adapter `aw/pc_v1_readout.py`).
 
 - **2026-09-26 19:10** — Capex round 46 committed (PC-5 harm driver, R1-D14f refresh, PRES-2 drafts for slides 2/3/6/11); Capstan fixed HT-13 per Capex's review (ES99 → expected shortfall in `aw/scoring.py` and `aw/tail_figures.py`, receipt-filtered collection, title and reference caveats; `tails_v1.md` v1.1). Halt trigger at the 270th start tonight; round 47 lanes below.
@@ -150,6 +152,33 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 48 — result slides, refreshed snapshots, PC report (2026-09-27, 07:00)
+
+PC-7 (fixed-v5 paired credit experiment driver; lane text in round 47's block) stays **first**: it is the critical
+path for the second PC result, and the GPU is free for it from ≈ 15:00 today once the v0 replication and its harm
+readout are done. Then:
+
+### Lane PRES-4 — result slides 9 and 10 and the closing PC takeaway (second)
+
+Speaker drafts and renderable specs for outline slides 9 (corrected PC-v0: efficacy, harm, cost) and 10 (does PC
+credit transfer to the fixed v5 reader), in the PRES-2/3 format, with every number a placeholder bound to the PC-3
+report's table names and the PC-5 harm summary keys, so the slides fill themselves when `aw/pc_v0_report.py` and the
+readout run; plus the closing slot of slide 12. Label the population (exposed historical S5 for v0; exposed
+realization-0 streams for v5) and the measured/proposed line on each.
+
+### Lane HT-15b — per-cell tails on the reconciled 270-cell state (third)
+
+Rerun `aw/tail_cells.py` on the refreshed snapshot (`logs/R1/reports/comparators-270/`, receipted inventory), replace
+`figures/tails/tail_spread.md` and `cell_tails.csv`, update the paragraph in `tails_v1.md` (S1_literal zsRE now 15
+cells: give its three-realization range), and note what changed against the 262-cell snapshot.
+
+### Lane PC-8 — PC-v0 report on the completed 60-cell run (fourth; when the run finishes ≈ 14:15)
+
+Run `aw/pc_v0_report.py` on `results/additional_work/PC-v0/replication-60-20260927/` and the PC-5 harm output when
+Capstan has produced it; verify identities; write `docs/additional_work/PC-v0_report.md` from the real data (the
+smoke-based draft is replaced, not edited); fill the claim-ledger PC rows with measured values and their populations;
+export the figure to `assets/presentation-materials/figures/pc_v0/`. State the result whichever way it falls.
 
 ## Round 47 — remaining slides, fixed-v5 readout adapter, per-cell tails (2026-09-26, 19:10)
 
