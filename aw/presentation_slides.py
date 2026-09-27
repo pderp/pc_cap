@@ -1,4 +1,4 @@
-"""Render PRES-2 source specifications and export draft speaker files; no claim regeneration."""
+"""Render presentation sources and export draft speaker files; no claim regeneration."""
 
 from __future__ import annotations
 
@@ -70,15 +70,16 @@ def diagram(spec, *, allow_tail=False):
             )
             body.append(text(x + 18, 254, p["title"], 26, "bold"))
             body.extend(text(x + 18, 316 + 51 * j, line, 23) for j, line in enumerate(p["lines"]))
-        body.extend(
-            [
-                '<path d="M496 342 H520 M981 342 H1005" stroke="#314753" stroke-width="3"/>',
-                '<path d="M1240 490 V543 H267 V490" stroke="#526675" stroke-width="3" stroke-dasharray="9 6" fill="none"/>',
-            ]
-        )
+        if spec.get("connections", True):
+            body.extend(
+                [
+                    '<path d="M496 342 H520 M981 342 H1005" stroke="#314753" stroke-width="3"/>',
+                    '<path d="M1240 490 V543 H267 V490" stroke="#526675" stroke-width="3" stroke-dasharray="9 6" fill="none"/>',
+                ]
+            )
     else:
         figure = ROOT.parent / spec["figure"]
-        if allow_tail:
+        if allow_tail or not spec.get("requires_tail_gate", True):
             encoded = base64.b64encode(figure.read_bytes()).decode()
             body.append(
                 f'<image x="30" y="181" width="1440" height="455" href="data:image/png;base64,{encoded}"/>'
@@ -88,13 +89,13 @@ def diagram(spec, *, allow_tail=False):
             for y, t in (
                 (
                     270,
-                    "HT-13 survival figure slot — source exists; scientific-label corrections pending",
+                    "HT-13 figure slot — source requires validation before this export",
                 ),
                 (
                     331,
-                    "The current image asserts a heavy-tail family and its companion ES99 uses a percentile.",
+                    "Check the expected-shortfall implementation and descriptive empirical labels.",
                 ),
-                (392, "Regenerate after owner repair and the reconciled 270-cell halt."),
+                (392, "Use a verified snapshot; refresh again after the reconciled 270-cell halt."),
                 (
                     453,
                     "Source: figures/tails/survival_by_dataset.png in assets/presentation-materials",
@@ -146,6 +147,12 @@ def export(output):
         Path(__file__),
         ROOT / "aw/presentation_prepare.py",
         ROOT / "docs/talk_claim_ledger_v7.md",
+        *[ROOT.parent / spec["figure"] for spec in specs["slides"] if "figure" in spec],
+        *[
+            ROOT.parent / spec["figure_manifest"]
+            for spec in specs["slides"]
+            if "figure_manifest" in spec
+        ],
     ]
     mapping = ROOT / "docs/presentation/abstract_to_testbed.md"
     if mapping.exists():
@@ -153,7 +160,8 @@ def export(output):
     report = dict(
         draft=True,
         lead_review_required=True,
-        experimental_results_inserted=False,
+        pc_experimental_results_inserted=False,
+        existing_measured_results_included=True,
         ht13_image_included=allow_tail,
         ht14="available; author review still needed"
         if mapping.exists()

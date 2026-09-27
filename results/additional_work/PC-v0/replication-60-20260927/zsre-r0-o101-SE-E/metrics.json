@@ -1,0 +1,203 @@
+{
+ "stage": "additional_work",
+ "arm": "SE-E",
+ "base": "EPC",
+ "status": "complete",
+ "items_completed": 1000,
+ "items_planned": 1000,
+ "metrics": {
+  "es_immediate": {
+   "value": 0.999,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "gs_immediate": {
+   "value": 0.332,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "threshold_acquisition": {
+   "value": 0.999,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_es_end": {
+   "value": 0.53,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "ret_gs_end": {
+   "value": 0.14,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 1000,
+   "strata": {},
+   "exclusions": []
+  },
+  "survival_conditional_end": {
+   "value": 0.5305305305305306,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 999,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_complete_answer_end": {
+   "value": 0.995,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_first_token_end": {
+   "value": 1.0,
+   "status": "ok",
+   "units": "fraction",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "ls_kl_end": {
+   "value": 0.0,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 200,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_loss_difference": {
+   "value": 0.0029824066647874403,
+   "status": "ok",
+   "units": "nats",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "lm_drift_perplexity_ratio": {
+   "value": 1.0029868584641364,
+   "status": "ok",
+   "units": "ratio",
+   "numerator": null,
+   "denominator": null,
+   "n": 4064,
+   "strata": {},
+   "exclusions": []
+  },
+  "memory_occupied_bytes": {
+   "value": 38682624.0,
+   "status": "ok",
+   "units": "bytes",
+   "numerator": null,
+   "denominator": null,
+   "n": 1,
+   "strata": {},
+   "exclusions": []
+  }
+ },
+ "strata": {
+  "answer_length": {
+   "2": 335,
+   "3": 194,
+   "4": 220,
+   "5": 106,
+   "6": 59,
+   "7": 38,
+   "8": 21,
+   "9": 9,
+   "10": 9,
+   "11": 4,
+   "12": 1,
+   "14": 1,
+   "15": 1,
+   "16": 1,
+   "18": 1
+  }
+ },
+ "base_hash_before": null,
+ "base_hash_after": null,
+ "wall_seconds": 1320.0523993968964,
+ "ledger_totals": {
+  "query": {
+   "phase": "query",
+   "full_forwards": 63076,
+   "partial_forwards": 98238,
+   "reverses": 0,
+   "settle_iters": 0,
+   "prefix_microsteps": 0,
+   "router_probes": 0,
+   "search_candidates": 0,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 233.6979415762471,
+   "accel_seconds": 233.6979415762471,
+   "peak_mem_mib": 1289.19384765625,
+   "tokens": 3245433
+  },
+  "learning": {
+   "phase": "learning",
+   "full_forwards": 160516,
+   "partial_forwards": 129977,
+   "reverses": 98019,
+   "settle_iters": 87128,
+   "prefix_microsteps": 3682,
+   "router_probes": 0,
+   "search_candidates": 44184,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 619.407221987145,
+   "accel_seconds": 619.407221987145,
+   "peak_mem_mib": 1289.19384765625,
+   "tokens": 2546721
+  },
+  "total": {
+   "phase": "total",
+   "full_forwards": 223592,
+   "partial_forwards": 228215,
+   "reverses": 98019,
+   "settle_iters": 87128,
+   "prefix_microsteps": 3682,
+   "router_probes": 0,
+   "search_candidates": 44184,
+   "memory_search_seconds": 0.0,
+   "wall_seconds": 853.1051635633921,
+   "accel_seconds": 853.1051635633921,
+   "peak_mem_mib": 1289.19384765625,
+   "tokens": 5792154
+  },
+  "events": 232571,
+  "elapsed_wall_seconds": 1348.6562886238098,
+  "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+ },
+ "resource_stop_seconds": 2400.0
+}

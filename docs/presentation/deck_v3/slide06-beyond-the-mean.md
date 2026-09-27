@@ -56,12 +56,12 @@ to explain and potentially regulate.” [`HT13-empirical`, `AI-next`]
 
 ## Figure preparation and exact qualifications
 
-**HT-13 correction pending:** the current generator's field called ES99 is a
-99th percentile, and its title asserts “heavy-tailed.” Neither is used as an
-established result here. [Review handoff](../../tasks/HT-13-round46-review.md)
-records the correction for Claude. The export has a draft figure slot until
-those issues are repaired; the actual HT-13 survival figure remains the specified
-source. Rerender from the reconciled 270-cell inventory before final presentation.
+**HT-13 corrected in v1.1:** the generator now computes fractional ES99 and labels
+the figure as empirical survival. The [earlier review](../../tasks/HT-13-round46-review.md)
+is historical. The round-47 export uses the corrected 262-cell snapshot; its new
+source identities are in `claim-additions-round47.json`. Rerender from the
+reconciled 270-cell inventory before final presentation. No tail-family inference
+is implied by the repair. [`HT13-corrected`]
 
 The figure compares cap-on with **each condition's own cap-off base**. For S1,
 this omits the effect of base continuation; use the companion original-base

@@ -44,12 +44,22 @@ Repeat `--run` for nonoverlapping run groups; duplicate coordinates are rejected
 
 When regenerating the deck export, pass the chosen comparator snapshot to `aw.presentation_prepare` and use a new output directory. The initial `deck_v3` remains a dated preparation snapshot. Update the canonical outline and ledger with the actual experimental reports before producing final slides; do not present a pending image or CPU smoke as a measured PC result.
 
-## Round 46 explanatory drafts
+## Round 47 speaker drafts and figures
 
-`docs/presentation/deck_v3/diagram-specs.json` and the four per-slide Markdown files are the editable sources. Export without regenerating measured claim rows:
+`docs/presentation/deck_v3/diagram-specs.json` and the ten per-slide Markdown files are the editable sources. Export without regenerating measured claim rows:
 
 ```bash
 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 ../venv/bin/python -m aw.presentation_prepare --explanatory-only --output /home/derp/cap/assets/presentation-materials/deck_v3/NEW_DRAFT_EXPORT
 ```
 
-The four SVGs and speaker text export together. Slide 6 names the HT-13 survival figure; the exporter uses an explicit draft slot while its ES99/title corrections are outstanding. This is a temporary unavailable figure, not a zero-valued result. See `docs/tasks/HT-13-round46-review.md`. Re-export after Capstan repairs it and regenerates the reconciled 270-cell figures. The broader refresh command is in `docs/tasks/R1-D14f.md`; it preserves PC results and conceptual claim rows.
+The ten SVGs and speaker texts export together (slides 1–8, 11–12). Slides 9–10 await actual PC results. The round-47 export at `assets/presentation-materials/deck_v3/round47-reviewed/` uses the corrected HT-13 v1.1 figures; no correction is currently pending. Figure files are included in the export's source hashes. The embedded tail figures describe 262 receipted cells; the comparator claims describe the completed 225-cell snapshot. These distinct snapshots are labeled. Re-export after the reconciled 270-cell refresh. The refresh command is in `docs/tasks/R1-D14f.md`; it preserves PC results and conceptual claim rows.
+
+For later explanatory exports, use the `--explanatory-only` command above: the older preparation command in the historical table regenerates an earlier ledger and is not the update path for these expanded claims.
+
+Slide 5 now uses the simpler three-panel retention figure from the same triplet summary:
+
+```bash
+../venv/bin/python -m aw.presentation_retention --output /home/derp/cap/assets/presentation-materials/figures/NEW_RETENTION_EXPORT
+```
+
+Its JSON manifest includes all plotted values and source hashes. The earlier nine-panel figure remains backup.

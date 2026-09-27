@@ -11,7 +11,18 @@ from aw.presentation_claims import append_concepts, read_rows
 def test_all_speaker_and_diagram_claims_exist():
     claims = {row[0] for row in read_rows((s.ROOT / "docs/talk_claim_ledger_v7.md").read_text())}
     specs = json.loads((s.SOURCE / "diagram-specs.json").read_text())["slides"]
-    assert [x["number"] for x in specs] == ["02", "03", "06", "11"]
+    assert [x["number"] for x in specs] == [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "11",
+        "12",
+    ]
     for spec in specs:
         assert set(spec["claims"]) <= claims
         ET.fromstring(s.diagram(spec, allow_tail=False))

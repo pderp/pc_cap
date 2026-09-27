@@ -2,6 +2,45 @@
   "draft": true,
   "slides": [
     {
+      "number": "01",
+      "title": "Three questions for Active Inference in the Extremes",
+      "status": "charlie derr · October 15, 2026 · Binghamton · draft opening",
+      "claims": [
+        "AI-programme",
+        "PC-v0",
+        "HT-readout"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Active inference",
+          "lines": [
+            "What should the agent do next?",
+            "Beliefs, preferences, information",
+            "PROGRAMME"
+          ]
+        },
+        {
+          "title": "Predictive coding",
+          "lines": [
+            "How should a correction learn?",
+            "Iterative error-inference credit",
+            "EXPERIMENT PENDING"
+          ]
+        },
+        {
+          "title": "Heavy-tailed distributions",
+          "lines": [
+            "Where do consequences fall?",
+            "Frequency, severity, concentration",
+            "MEASURED TESTBED EVIDENCE"
+          ]
+        }
+      ],
+      "footer": "Frozen transformer prior + adaptive residual cap: implemented testbed for a broader proposal.",
+      "notes": "Submitted title retained in speaker source. A coupled agent and a heavy-tail family remain unestablished."
+    },
+    {
       "number": "02",
       "title": "From active inference to our testbed",
       "status": "Implemented components; proposed policy loop",
@@ -79,6 +118,62 @@
       "notes": "9 forward + 9 reverse evaluations per 8-step inference; JAX autodiff. Compare efficacy, harm, cost."
     },
     {
+      "number": "04",
+      "title": "A correction testbed with distinct controls",
+      "status": "Three realizations × five dependent orders; endpoint depends on dataset",
+      "claims": [
+        "R1-design",
+        "R1-controls",
+        "R1-fidelity"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Learned-reader condition",
+          "lines": [
+            "Frozen GPT-2 base",
+            "Fixed BP-trained reader",
+            "Adaptive bounded memory"
+          ]
+        },
+        {
+          "title": "Controlled comparisons",
+          "lines": [
+            "Random reader / stable cap",
+            "Live cap / matched update",
+            "S1 continued-base controls"
+          ]
+        },
+        {
+          "title": "Separate questions",
+          "lines": [
+            "Acquisition and retention",
+            "Locality and near misses",
+            "Ordinary-text probability harm"
+          ]
+        }
+      ],
+      "footer": "zsRE / CounterFact: 1,000 edits. MQuAKE: descriptive at 300. This reader study uses BP, not PC credit.",
+      "notes": "50 locality prompts do not exhaust specificity. Five orders within a realization are dependent."
+    },
+    {
+      "number": "05",
+      "title": "Retention improves, with limits to specificity",
+      "status": "Completed triplet + 225-cell comparator snapshot; preliminary three-realization analysis",
+      "claims": [
+        "R1-triplet-summary",
+        "R1-specificity",
+        "R1-retention-zsre",
+        "R1-retention-counterfact"
+      ],
+      "panels": [],
+      "figure": "assets/presentation-materials/figures/retention-round47/paraphrase-retention.png",
+      "requires_tail_gate": false,
+      "footer": "Mean paraphrase retention: zsRE .9603; CounterFact .6780; MQuAKE .7156 (300 edits).",
+      "notes": "CounterFact vs stable: inconclusive. zsRE near-miss passes: 86 / 92 / 87 out of 100.",
+      "figure_manifest": "assets/presentation-materials/figures/retention-round47/manifest.json"
+    },
+    {
       "number": "06",
       "title": "Why look past the mean?",
       "status": "Measured empirical survival; tail family unestablished",
@@ -91,6 +186,38 @@
       "panels": [],
       "footer": "P(delta NLL > x), including unchanged positions in the denominator; own-cap-off reference.",
       "notes": "HT-13 is descriptive pooling over repeated positions/cells. ES99 = mean of worst 1%, not percentile."
+    },
+    {
+      "number": "07",
+      "title": "Similar small means can hide different consequences",
+      "status": "HT-13 corrected v1.1: 262 receipted cells; own-cap-off reference",
+      "claims": [
+        "HT13-corrected",
+        "HT-readout",
+        "R1-specificity"
+      ],
+      "panels": [],
+      "figure": "assets/presentation-materials/figures/tails/rarity_vs_severity.png",
+      "requires_tail_gate": true,
+      "footer": "zsRE learned / live C2: maximum 11.05 / 50.60 nats; ES99+ .260 / .321 nats.",
+      "notes": "Means .002486 / .003198 nats are not an equivalence result. S1 base-continuation effects excluded."
+    },
+    {
+      "number": "08",
+      "title": "The κ pilot measures a retention–tail trade-off",
+      "status": "Development evidence: preliminary hints; declared gain not established",
+      "claims": [
+        "kappa-design",
+        "kappa-ordinary",
+        "kappa-kappa02",
+        "kappa-kappa05",
+        "kappa-clip2"
+      ],
+      "panels": [],
+      "figure": "pc_cap/logs/r1_round37/presentation-figures-v2/kappa-tradeoff.png",
+      "requires_tail_gate": false,
+      "footer": "κ arms reduce ES95 descriptively but miss the retention floor and declared tail-separation rule.",
+      "notes": "DEC-054: not coupled free energy, a coupled blanket, or a one-κ test. This is a loss-level pilot."
     },
     {
       "number": "11",
@@ -131,6 +258,48 @@
       ],
       "footer": "Learning from observed failures motivates an experiment on autonomous information seeking.",
       "notes": "Coupled free energy, kappa-porous blankets and the one-kappa conjecture remain proposed."
+    },
+    {
+      "number": "12",
+      "title": "What we learned, what remains, what it took",
+      "status": "Three themes; measured, proposed and pending claims kept visible",
+      "claims": [
+        "AI-next",
+        "PC-v0",
+        "PC-fixed-v5",
+        "HT13-corrected",
+        "resources",
+        "talk-scope"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Active inference",
+          "lines": [
+            "Concrete correction testbed",
+            "Autonomous audit policy",
+            "REMAINS PROPOSED"
+          ]
+        },
+        {
+          "title": "Predictive coding",
+          "lines": [
+            "SE-E versus SE-A result",
+            "Paired efficacy, harm and cost",
+            "RESULT SLOT — PENDING"
+          ]
+        },
+        {
+          "title": "Extremes",
+          "lines": [
+            "Concentrated prediction loss",
+            "Frequency beside severity",
+            "MEASURED; FAMILY UNPROVEN"
+          ]
+        }
+      ],
+      "footer": "225-cell snapshot: 308.37 process-hours, not elapsed GPU hours. Final report and PC costs pending.",
+      "notes": "Experiments end October 9, 17:00 ET. Presentation October 15. Unavailable comparisons stay explicit."
     }
   ]
 }
