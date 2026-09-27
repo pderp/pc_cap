@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/aw/pc_v0.py", line 375, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/aw/pc_v0.py", line 368, in main
+    result = run_cell(a) if a.command == "cell" else run_group(a)
+             ^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/pc_v0.py", line 227, in run_cell
+    raise RuntimeError("GPU is occupied; release is required before PC execution")
+RuntimeError: GPU is occupied; release is required before PC execution

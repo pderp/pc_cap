@@ -1,0 +1,134 @@
+{
+  "observed_utc": "2026-09-27T03:52:40.711396+00:00",
+  "freshness_limit_seconds": 120,
+  "memory": {
+    "status": "fresh",
+    "timestamp": "2026-09-27T03:52:32.763737+00:00",
+    "age_seconds": 7.947659,
+    "boot_id": "d53f420c-3b8e-4a9b-ba80-58e323dd49ed",
+    "mem_available_mib": 18483.51171875,
+    "mem_total_mib": 31655.8046875,
+    "below_launch_floor": false,
+    "swap_used_mib": 7405.015625,
+    "monitor_alerts": [
+      "swap_at_least_80_percent"
+    ],
+    "coverage": {
+      "visible": 598,
+      "sampled": 598,
+      "unreadable": 0,
+      "raced": 0,
+      "malformed": 0
+    },
+    "psi": {
+      "memory": {
+        "some": {
+          "avg10": 0.0,
+          "avg60": 0.0,
+          "avg300": 0.02,
+          "total": 400673382
+        },
+        "full": {
+          "avg10": 0.0,
+          "avg60": 0.0,
+          "avg300": 0.02,
+          "total": 400199965
+        }
+      },
+      "io": {
+        "some": {
+          "avg10": 0.18,
+          "avg60": 0.06,
+          "avg300": 0.21,
+          "total": 3022621218
+        },
+        "full": {
+          "avg10": 0.18,
+          "avg60": 0.06,
+          "avg300": 0.19,
+          "total": 2784192260
+        }
+      },
+      "cpu": {
+        "some": {
+          "avg10": 0.0,
+          "avg60": 0.0,
+          "avg300": 0.0,
+          "total": 1446057103
+        },
+        "full": {
+          "avg10": 0.0,
+          "avg60": 0.0,
+          "avg300": 0.0,
+          "total": 0
+        }
+      }
+    },
+    "rss_unavailable_processes": 278,
+    "top_rss": [
+      {
+        "pid": 2225451,
+        "start_ticks": 97940872,
+        "rss_kib": 1015764,
+        "swap_kib": 0
+      },
+      {
+        "pid": 2080091,
+        "start_ticks": 14691919,
+        "rss_kib": 528380,
+        "swap_kib": 90648
+      },
+      {
+        "pid": 21983,
+        "start_ticks": 125479,
+        "rss_kib": 478776,
+        "swap_kib": 211996
+      },
+      {
+        "pid": 940502,
+        "start_ticks": 75913255,
+        "rss_kib": 477424,
+        "swap_kib": 40960
+      },
+      {
+        "pid": 2244,
+        "start_ticks": 2906,
+        "rss_kib": 392376,
+        "swap_kib": 308516
+      }
+    ],
+    "source": {
+      "path": "/home/derp/cap/pc_cap/logs/process_memory/memory-20260927T030912.748491Z-5028c55a0d4c4e9688bfe44d762f7868-00120.jsonl",
+      "offset": 23291431,
+      "bytes": 87857,
+      "line_sha256": "4f626f839eb80b96f4cf3964481d4f9958fbdfe880009c9f3c5bee41d1855d70"
+    },
+    "read_issues": [],
+    "process_labels": "PID/start_ticks only; no guessed command identity or argv"
+  },
+  "gpu": {
+    "status": "fresh",
+    "timestamp": "2026-09-26T23:52:34-04:00",
+    "age_seconds": 6.711396,
+    "utilization_percent": 0.0,
+    "memory_used_mib": 900.0,
+    "memory_total_mib": 12227.0,
+    "temperature_c": 30.0,
+    "power_w": 4.54,
+    "clock_mhz": 187.0,
+    "throttle_mask": "0x0000000000000000",
+    "pstate": "P8",
+    "gpu_processes": "2042,87;22030,266;3578885,26;",
+    "kernel_clues": "",
+    "source": {
+      "path": "/home/derp/cap/pc_cap/logs/sysmon/sysmon-20260926.log",
+      "offset": 4050283,
+      "bytes": 440,
+      "line_sha256": "5453544bced78690903c472e8fc90c17d8dc0755b99009ea5cc99d77bbda83e8"
+    },
+    "boot_identity": "not recorded by sysmon; timestamp freshness only",
+    "read_issues": [],
+    "interpretation": "Saved observations, not a crash diagnosis or launch clearance; throttle mask is preserved, not classified."
+  },
+  "source_policy": "Bounded complete-line tails from two segments; missing/stale/partial data explicitly reported; no live GPU query."
+}

@@ -20,7 +20,7 @@ No-breach log: 2026-09-18 R1-64g mquake v0_stable (chain S, 300 records, develop
 
 Manual notes above are preserved. This source-bound table is regenerated from the locked journal; one entry per recipe cell. Both references are shown. Near-zero target-token loss does not establish unchanged predictions or reader inactivity.
 
-Audited cells: 266; breaching cells: 155; creep alerts: 32. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
+Audited cells: 274; breaching cells: 163; creep alerts: 32. Development and confirmatory observations remain labelled; benchmarks never veto primary comparisons.
 
 | Cell identity / scope | Condition / dataset / realization / order | Actual records / checkpoint | Reference | Mean KL | NLL increase | ES95 loss | Max loss | Positions for half KL | Near-zero loss fraction | Creep |
 |---|---|---|---|---:|---:|---:|---:|---|---:|---|
@@ -334,6 +334,22 @@ Audited cells: 266; breaching cells: 155; creep alerts: 32. Development and conf
 | `4001c341ffc3d72de95408490a243ebee5d0e6d0f8accbfce56940ed3d65d133` / confirmatory | S1_literal / zsre / 1 / 100 | unavailable / 1000 | original | 0.00161191161 | 0.00190874849 | 0.0580366731 | 26.3516128 | 16 | 0.0013782586 | new_running_maximum |
 | `f34d023caf148aef769491a399e567cde0be4d8a31ade1bb930789ade68ea69c` / confirmatory | S1_literal / zsre / 1 / 101 | unavailable / 1000 | capoff | 0.00271355977 | 0.00274716088 | 0.0618325494 | 26.3442491 | 21 | 0.99692135 | new_running_maximum |
 | `f34d023caf148aef769491a399e567cde0be4d8a31ade1bb930789ade68ea69c` / confirmatory | S1_literal / zsre / 1 / 101 | unavailable / 1000 | original | 0.00274182293 | 0.00305146233 | 0.0832256178 | 26.3516128 | 22 | 0.0013782586 | new_running_maximum |
+| `110fb797bcd22b44394c6fa7b0bb9ff53321bc0916f99a18ab0bd48c5fac2cc5` / confirmatory | S1_literal / zsre / 1 / 102 | unavailable / 1000 | capoff | 0.00210770625 | 0.00207632256 | 0.0471811475 | 26.3442491 | 22 | 0.99810795 | none |
+| `110fb797bcd22b44394c6fa7b0bb9ff53321bc0916f99a18ab0bd48c5fac2cc5` / confirmatory | S1_literal / zsre / 1 / 102 | unavailable / 1000 | original | 0.00213622275 | 0.00238062402 | 0.0687893159 | 26.3516128 | 22 | 0.0013782586 | none |
+| `8e01011e63bf0810fab4b3071ea01c31f3337eec74ad54b4a2272cf8d26e7695` / confirmatory | S1_literal / zsre / 1 / 103 | unavailable / 1000 | capoff | 0.00150625525 | 0.00157074589 | 0.0346233336 | 26.3442491 | 13 | 0.99867475 | none |
+| `8e01011e63bf0810fab4b3071ea01c31f3337eec74ad54b4a2272cf8d26e7695` / confirmatory | S1_literal / zsre / 1 / 103 | unavailable / 1000 | original | 0.00153456646 | 0.00187504734 | 0.0563104911 | 26.3516128 | 13 | 0.0013782586 | none |
+| `f58fc0606c766f9af0243fc5742efc7d2070935efcb398bade925e2a1826c377` / confirmatory | S1_literal / zsre / 1 / 104 | unavailable / 1000 | capoff | 0.00147650996 | 0.001454688 | 0.0330731947 | 26.3442491 | 13 | 0.99853611 | none |
+| `f58fc0606c766f9af0243fc5742efc7d2070935efcb398bade925e2a1826c377` / confirmatory | S1_literal / zsre / 1 / 104 | unavailable / 1000 | original | 0.00150454504 | 0.00175898945 | 0.0547568087 | 26.3516128 | 14 | 0.0013782586 | none |
+| `69a5b4a9e3f1c68aa3a82b80899f0c170080755846476c7b3d7edcb04dc6c3c9` / confirmatory | S1_literal / zsre / 2 / 100 | unavailable / 1000 | capoff | 0.00177114837 | 0.0017817335 | 0.0410284711 | 19.3436049 | 24 | 0.998373 | none |
+| `69a5b4a9e3f1c68aa3a82b80899f0c170080755846476c7b3d7edcb04dc6c3c9` / confirmatory | S1_literal / zsre / 2 / 100 | unavailable / 1000 | original | 0.0018009734 | 0.00208603495 | 0.0626964779 | 19.344792 | 25 | 0.0013782586 | none |
+| `f40801cf418528aada6b88918d92cf41ad1bf50b09f93915f43c39fbf09b15d9` / confirmatory | S1_literal / zsre / 2 / 101 | unavailable / 1000 | capoff | 0.00184990558 | 0.00175298885 | 0.0407431453 | 23.5088112 | 24 | 0.99831591 | none |
+| `f40801cf418528aada6b88918d92cf41ad1bf50b09f93915f43c39fbf09b15d9` / confirmatory | S1_literal / zsre / 2 / 101 | unavailable / 1000 | original | 0.00187997874 | 0.00205729031 | 0.0623848089 | 23.5131139 | 25 | 0.0013782586 | none |
+| `425f3b386ba27e5f3ebabf70970735fa04d1ab49cf96ad0934e2988740f65321` / confirmatory | S1_literal / zsre / 2 / 102 | unavailable / 1000 | capoff | 0.00146446055 | 0.00141085928 | 0.0333932722 | 23.5088112 | 21 | 0.99849126 | none |
+| `425f3b386ba27e5f3ebabf70970735fa04d1ab49cf96ad0934e2988740f65321` / confirmatory | S1_literal / zsre / 2 / 102 | unavailable / 1000 | original | 0.00149427458 | 0.00171516074 | 0.0550822773 | 23.5131139 | 22 | 0.0013782586 | none |
+| `b57aec7a883cb783684abea459626f8eb32b0865cc9c2f759dc73af7833023cd` / confirmatory | S1_literal / zsre / 2 / 104 | unavailable / 1000 | capoff | 0.00161452472 | 0.00152769544 | 0.0355785787 | 23.5088112 | 17 | 0.99851164 | none |
+| `b57aec7a883cb783684abea459626f8eb32b0865cc9c2f759dc73af7833023cd` / confirmatory | S1_literal / zsre / 2 / 104 | unavailable / 1000 | original | 0.00164372151 | 0.00183199689 | 0.0572836503 | 23.5131139 | 17 | 0.0013782586 | none |
+| `bbc4324ec28dc36b324b814799798a38be5a218a938bb151cec3c3b469e221a7` / confirmatory | S1_literal / zsre / 2 / 103 | unavailable / 1000 | capoff | 0.00184752973 | 0.00184103191 | 0.0415003972 | 23.5088112 | 21 | 0.99851572 | none |
+| `bbc4324ec28dc36b324b814799798a38be5a218a938bb151cec3c3b469e221a7` / confirmatory | S1_literal / zsre / 2 / 103 | unavailable / 1000 | original | 0.00187753773 | 0.00214533337 | 0.063179025 | 23.5131139 | 22 | 0.0013782586 | none |
 
 ### Running maxima (all audited cells, including no-breach cells)
 
