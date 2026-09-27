@@ -1228,3 +1228,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     Reading: with SD-24 fixed, predictive-coding credit acquires and generalises like adjoint on this cap and retains
     own-prompt answers slightly better, at about twice the learning cost. Descriptive; three realizations; exposed
     populations; nothing here is a PC-vs-BP superiority claim.
+
+127. (2026-09-27, 14:20 EDT) **PC-v0 paired harm readout done** (23 min; legacy S5 drift subset, 4,064 positions per cell,
+    own cap-off reference; `results/additional_work/PC-v0/harm/pc-v0-60-20260927/`, committed). zsRE, means over 15
+    cells per arm: mean ΔNLL 0.00160 (SE-A) vs 0.00176 (SE-E); mean KL 0.00165 vs 0.00193; ES99+ 0.173 vs 0.189 nats;
+    maximum 3.67 vs 3.49; P(> 0.01) 0.089 % vs 0.100 %; P(> 1 nat) 0.052 % vs 0.067 %. CounterFact: zero in both arms
+    (the v0 cap does not touch ordinary text there). Reading: on this subset the corrected PC credit's ordinary-text
+    harm is the same order as adjoint's and slightly larger on the frequent-small side, with the same maximum; together
+    with item 126, PC credit buys +0.02 own-prompt retention for ≈ 2× learning cost and no reduction in harm. The
+    fixed-v5 profile started 14:18 on the GPU, the paired four-cell run follows automatically.
