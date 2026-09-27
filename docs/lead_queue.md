@@ -1189,3 +1189,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     contexts (compositor, Chrome, nautilus); guard narrowed to project processes (`PC-v0.md` change log), diagnostic
     and profile relaunched 23:58, replication follows by the profile rule.
 
+
+123. (2026-09-27, 00:10 EDT) **PC-v0 development steps passed; replication launched at the 60-cell scope.** Diagnostic
+    (66 s): with the corrected energy the one-step site error is −0.1 × adjoint to 1e-8 at every bank (cosine 1.000,
+    norm ratio 0.100), base hash unchanged. Profile (10 items, 476 s): learning wall 7 / 17 s (zsRE SE-A / SE-E) and
+    3 / 8 s (CounterFact), evaluation and compilation ≈ 65–113 s per cell; projected full cells ≈ 1,000–1,900 s (zsRE)
+    and ≈ 450–550 s (CounterFact), i.e. ≈ 16 h for all 60 cells (five orders) against the 22 h left of the 24 h ceiling.
+    By the pre-registered rule (commit to 60 before any outcome is seen if the profile fits) the run is 60 cells,
+    started 00:08, `results/additional_work/PC-v0/replication-60-20260927/`. Harm readout and the fixed-v5 steps follow.
