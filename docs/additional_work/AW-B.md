@@ -1,7 +1,8 @@
 # AW-B — bounded correction and stricter gating: pre-registration (draft for the lead's review)
 
 Drafted 2026-09-21 by Claude (orchestrator). Binding plan: `docs/additional_work_plan_final.md` (DEC-073). Status:
-**draft; no GPU call before the lead's review.** Supplemental, post hoc; nothing here touches the registered study.
+**approved by the lead 2026-09-28 (DEC-076); calibration runs after the DEC-075 controls.** Sub-choices settled: MQuAKE is
+excluded from calibration; the gate steps are 0.4 / 0.3 / 0.2 (t₀ = 0.5). Supplemental, post hoc; nothing here touches the registered study.
 
 ## Question
 

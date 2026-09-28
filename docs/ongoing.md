@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-28 17:50** — DEC-076: AW-B pre-registration approved; calibration follows the settling-depth controls on the GPU. Lane AW-B3 (calibration driver) opened first; PC-12 second.
+
 - **2026-09-28 18:00** — DEC-075: three PC-v0 controls approved (settling depth 1/32, random-direction credit, compute-matched adjoint); no base control. Capstan applies the staged PC-9/PC-10 patch tonight (old versions kept) and runs the settling-depth control; lanes PC-12 (the two new credit arms) and PC-8 below.
 
 - **2026-09-28 17:20** — Capex round 51 committed (PC-10 staged, X24 pass on 44 cells, REV-3 Tuesday form). The PC chain finished Sunday 16:13 (both efficacy runs and both harm readouts; lead queue 126–129). Round 52 lanes below: PC-8 is unblocked.
@@ -170,6 +172,28 @@ The GPU chain is complete: `results/additional_work/PC-v0/replication-60-2026092
 `results/additional_work/PC-v1/replication-4-20260927/` (4 cells), `results/additional_work/PC-v1/harm/pc-v1-4-20260927/`
 (full inventory, 245,237 positions per arm; see its `cost-repair.json`: the table was generated after a driver
 KeyError and its population caption is the fixed v0 text). Capstan's preliminary reads are lead-queue items 126–129.
+
+### Lane AW-B3 — bounded-correction calibration driver (first; DEC-076; GPU dispatch by Capstan after the controls)
+
+`aw/aw_b_calibrate.py` + tests. Inputs: the pre-registration `docs/additional_work/AW-B.md` (approved), Capstan's
+`aw/bounded.py` (oracle), `aw/wrapper.py` (`BoundedCap`, generation-time wrapper; unrestricted equals the registered
+learner to the bit), `aw/scoring.py` (`Accumulator`: every wrapper configuration from one base/cap pass, expected-
+shortfall ES99). Per dataset (zsRE, CounterFact): restore one qualified v5 development memory (the saved 300-edit
+development snapshot AW-L0 / PC-4 used for zsRE; identify or produce the CounterFact equivalent from its development
+payload with the registered acquisition, and record which); then (1) the **fixed-prefix assay**: one streamed pass over
+the full validation inventory (`selection("v5")`) through the registered batch reader (PC-6's adapter pattern),
+scoring all thirteen numerical configurations at once with `Accumulator`, plus one further pass per gate threshold
+(0.4, 0.3, 0.2 via `dataclasses.replace(cfg, null_threshold=t)`), writing per-configuration vectors in the 68f layout
+and the summary table (mean KL, signed ΔNLL, ES99+, maximum with location, exceedance 0.01 / 0.1 / 1, half-mass,
+changed fraction) plus gate-firing telemetry; (2) the **efficacy assay**: for each of the sixteen settings, wrap the
+restored memory in `BoundedCap` (or the threshold replacement) and run the installed endpoint functions on the
+development stream's items (ES on re-query, RET-ES, RET-GS, LS bounded-text, near-miss, revision) — no new
+acquisition; (3) the **selection**: apply the pre-registered rule mechanically and write `selection.json` naming at most
+one bound and one comparator with the numbers that chose them; (4) cost ledger and identities (memory, base, reader,
+wrapper source hashes). Output under `results/additional_work/AW-B/calibration-<date>/`; CPU smoke on the tiny base;
+the exclusive lease and the project-only occupancy guard as in the PC runners; ceiling 8 GPU-hours for calibration.
+The final evaluation on the sealed realization-0 streams is a second command (`evaluate`) that takes `selection.json`
+and runs the four arms on the five orders; ceiling 16 GPU-hours.
 
 ### Lane PC-12 — random-direction and compute-matched credit arms (now first; DEC-075)
 
