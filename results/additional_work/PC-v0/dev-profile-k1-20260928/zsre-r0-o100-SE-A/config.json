@@ -1,0 +1,77 @@
+{
+  "command": "cell",
+  "credit_iters": 8,
+  "error_lr": 0.1,
+  "sweep_error_lrs": null,
+  "profile": null,
+  "orders": 1,
+  "output": "/home/derp/cap/pc_cap/results/additional_work/PC-v0/dev-profile-k1-20260928/zsre-r0-o100-SE-A",
+  "execute": true,
+  "wall_seconds": 3599.9999993888196,
+  "items": 10,
+  "dataset": "zsre",
+  "arm": "SE-A",
+  "realization": 0,
+  "order": 100,
+  "population": "development",
+  "diagnostic": false,
+  "selection_seed": 21,
+  "manifest_sha256": "b3d36d9383caf6d070b748bd7f0643c1b29ae5089cc5134b5ac4febdb18f1870",
+  "weights_sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51",
+  "sources": {
+    "aw/pc_v0.py": "311cc337635d625cd4ec743805d69311a8b247df7502903cf9cbc4c8812c4286",
+    "aw/pc_sweep.py": "f5245304d7aa2fd414c39e0c15ae2aecfa296951eadf895433a3fdfdbe04a42d",
+    "manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+  },
+  "initial_state": "40a155b747dd7bc17729ba9d326d9f0362ee821a175ad9699a55e64d405866b3",
+  "item_ids": [
+    "zsre-eval-12303",
+    "zsre-eval-12728",
+    "zsre-eval-2524",
+    "zsre-eval-4960",
+    "zsre-eval-12983",
+    "zsre-eval-6923",
+    "zsre-eval-3384",
+    "zsre-eval-17900",
+    "zsre-eval-11021",
+    "zsre-eval-3648"
+  ],
+  "error_solver_active": false,
+  "requested_credit_iters": 1,
+  "requested_error_lr": 0.1,
+  "scoring": "unchanged S5 primary; bounded text secondary",
+  "drift": {
+    "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+    "shape": [
+      247289
+    ],
+    "dtype": "int32",
+    "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+  },
+  "locality_prompts_sha256": "1181195264c60d57df45ca334afa7ce9bdc3ec60fec3c06386e8ae552f9cc9f3",
+  "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "determinism": {
+    "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+    "omp_num_threads": "16",
+    "jax_default_matmul_precision": "highest",
+    "jax_enable_x64": false,
+    "jax_threefry_partitionable": false,
+    "jax_version": "0.11.1",
+    "backend": "gpu",
+    "devices": [
+      "cuda:0"
+    ]
+  }
+}
