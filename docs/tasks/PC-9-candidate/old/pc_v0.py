@@ -25,7 +25,6 @@ from zoneinfo import ZoneInfo
 
 import numpy as np
 
-from aw.pc_sweep import add_options, projected_sweep, settings
 from pccap.bases import gpt2_jax as g
 from pccap.bases.epc import EPCBase
 from pccap.cap.cap import Cap, CapConfig
@@ -75,14 +74,13 @@ def design(orders=1):
             for order in f["order_seeds"][:orders] for arm in ARMS]
 
 
-def build_cap(base, dataset, arm, seed, frozen=None, *, credit_iters=8):
+def build_cap(base, dataset, arm, seed, frozen=None):
     f = archive() if frozen is None else frozen
     if arm not in ARMS:
         raise ValueError("expected SE-A or SE-E")
-    solver = settings(arm, credit_iters)
     cal = f["calibration"]["EPC"]
     return Cap(base, CapConfig(
-        arm="C1", read="h", d=base.d, seed=seed, credit=ARMS[arm], credit_iters=solver["credit_iters"],
+        arm="C1", read="h", d=base.d, seed=seed, credit=ARMS[arm], credit_iters=8,
         radii={int(k): float(v) for k, v in cal["radii"][dataset].items()},
         bank_scales={int(k): float(v) for k, v in cal["b_m"].items()},
     ), base.ledger)
@@ -145,7 +143,7 @@ def credit_diagnostics(base, ids, target, writes, horizons=(1, 8, 32)):
 
 
 def source_identities():
-    files = [Path(__file__), ROOT / "aw/pc_sweep.py", ARCHIVE, ROOT / "requirements.lock"]
+    files = [Path(__file__), ARCHIVE, ROOT / "requirements.lock"]
     files += [ROOT / x for x in (
         "src/pccap/bases/epc.py", "src/pccap/bases/bp.py", "src/pccap/bases/gpt2_jax.py",
         "src/pccap/pc/epc_inference.py", "src/pccap/pc/nodes.py", "src/pccap/cap/learn.py",
@@ -240,11 +238,10 @@ def run_cell(args):
     allowance = min(args.wall_seconds, CUTOFF - time.time())
     if allowance <= 0:
         raise ValueError("experimental cutoff or wall allowance reached")
-    solver = settings(args.arm, args.credit_iters, args.error_lr)
     out = _new_output(args.output)
     started = time.monotonic()
     ledger = Ledger()
-    outcome = {"status": "failed", "dataset": args.dataset, "arm": args.arm, **solver}
+    outcome = {"status": "failed", "dataset": args.dataset, "arm": args.arm}
     try:
         with wall_limit(allowance), gpu_lease("PC-1", stage="additional_work", projected_seconds=allowance, exclusive=True) as lease:
             others = lease.other_cuda_processes()
@@ -261,7 +258,7 @@ def run_cell(args):
             tok = GPT2Tokenizer()
             if sha(g.DEFAULT_SNAPSHOT / "tokenizer.json") != f["tokenizer_rev"]["tokenizer_json_sha256"]:
                 raise ValueError("S5 tokenizer identity mismatch")
-            base = EPCBase.from_npz(weights, ledger=ledger, error_lr=solver["error_lr"])
+            base = EPCBase.from_npz(weights, ledger=ledger, error_lr=0.1)
             before = base.checksum(recompute=True)
             items, unrelated, cap_seed, router_seed, population = load_inputs(
                 args.dataset, args.realization, args.order, args.population, args.items)
@@ -269,10 +266,10 @@ def run_cell(args):
             drift_binding = drift_manifest["files"]["drift_tokens"]
             if sha(drift_binding["path"]) != drift_binding["sha256"]:
                 raise ValueError("drift source mismatch")
-            cap = build_cap(base, args.dataset, args.arm, cap_seed, f, credit_iters=args.credit_iters)
+            cap = build_cap(base, args.dataset, args.arm, cap_seed, f)
             config = {**vars(args), **population, "weights_sha256": WEIGHTS_SHA,
                       "sources": source_identities(), "initial_state": cap.state_hash(),
-                      "item_ids": [x.item_id for x in items], **solver,
+                      "item_ids": [x.item_id for x in items], "error_lr": 0.1, "credit_iters": 8,
                       "scoring": "unchanged S5 primary; bounded text secondary", "drift": drift_binding,
                       "locality_prompts_sha256": hashlib.sha256(json.dumps(unrelated).encode()).hexdigest(),
                       "base_hash_before": before, "determinism": pccap.determinism_report()}
@@ -340,7 +337,7 @@ def run_group(args):
              if development else design(args.orders))
     dump(out / "plan.json", {"population": "development" if development else "exposed S5", "cells": cells,
                              "replication_design": design(args.orders),
-                             "wall_seconds": args.wall_seconds, "credit": {a: settings(a, args.credit_iters, args.error_lr) for a in ARMS}, "sources": source_identities()})
+                             "wall_seconds": args.wall_seconds, "sources": source_identities()})
     start = time.monotonic()
     completed = []
     try:
@@ -351,7 +348,6 @@ def run_group(args):
             dest = out / f"{c['dataset']}-r{c['realization']}-o{c['order']}-{c['arm']}"
             cmd = [sys.executable, "-m", "aw.pc_v0", "cell", "--execute", "--output", str(dest),
                    "--population", "development" if development else "replication", "--wall-seconds", str(remaining)]
-            cmd += ["--credit-iters", str(args.credit_iters), "--error-lr", str(args.error_lr)]
             for k, v in c.items():
                 cmd += ["--" + k, str(v)]
             if args.command == "diagnose":
@@ -372,8 +368,6 @@ def run_group(args):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("command", choices=("plan", "profile", "diagnose", "run", "cell"))
-    add_options(p)
-    p.add_argument("--profile", help="plan-only completed development profile for cost projection")
     p.add_argument("--orders", type=int, choices=(1, 5), default=1)
     p.add_argument("--output", type=str)
     p.add_argument("--execute", action="store_true")
@@ -388,12 +382,8 @@ def main():
     a = p.parse_args()
     if not np.isfinite(a.wall_seconds) or a.wall_seconds <= 0 or a.items < 1:
         p.error("positive finite wall allowance and item count required")
-    if a.command != "plan" and (a.profile or a.sweep_error_lrs):
-        p.error("--profile and --sweep-error-lrs are plan-only; no sweep is launched")
     if a.command == "plan":
-        result = {"cells": design(a.orders), "source": str(ARCHIVE), "model_execution": False,
-                  "credit": {arm: settings(arm, a.credit_iters, a.error_lr) for arm in ARMS},
-                  "sweep_cost": projected_sweep(a.profile, design(a.orders), a.sweep_error_lrs or [a.error_lr])}
+        result = {"cells": design(a.orders), "source": str(ARCHIVE), "model_execution": False}
     else:
         if not a.output or not a.execute:
             p.error("a new --output directory and --execute are required after GPU release")

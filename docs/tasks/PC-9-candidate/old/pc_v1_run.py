@@ -19,7 +19,6 @@ from pathlib import Path
 
 import numpy as np
 
-from aw.pc_sweep import add_options, projected_sweep, settings
 from aw.pc_v0 import ARMS, CUTOFF, blocking_cuda_processes, dump, sha, wall_limit
 from aw.pc_v1_acquire import PCRevisionCap
 from aw.pc_v1_readout import query_view
@@ -71,7 +70,7 @@ def bound_recipe(dataset, *, development=False):
 
 
 def sources():
-    files = [Path(__file__), ROOT / "aw/pc_sweep.py", ROOT / "requirements.lock"]
+    files = [Path(__file__), ROOT / "requirements.lock"]
     files += [
         ROOT / name
         for name in (
@@ -107,8 +106,7 @@ def design(development=False):
     ]
 
 
-def plan(development=False, *, credit_iters=8, error_lr=0.1):
-    settings("SE-E", credit_iters, error_lr)
+def plan(development=False):
     recipes = {}
     for ds in RECIPES:
         m, binding = bound_recipe(ds)
@@ -131,8 +129,7 @@ def plan(development=False, *, credit_iters=8, error_lr=0.1):
         sources=sources(),
         model_execution=False,
         payload_opened=False,
-        credit=dict(arms=ARMS, iters=credit_iters, error_lr=error_lr, energy="SD-24 corrected",
-                    arm_settings={a: settings(a, credit_iters, error_lr) for a in ARMS}),
+        credit=dict(arms=ARMS, iters=8, error_lr=0.1, energy="SD-24 corrected"),
         endpoint_policy="R1 installed scoring; near-miss/revision at both 100 and 300 as supplemental cadence",
         excluded_assays="unseen/composition and ordinary-text harm are not run here; harm is separately costed",
         per_cell_wall_ceiling_seconds=7200,
@@ -159,13 +156,12 @@ def load_payload(spec, n):
     return items, endpoints
 
 
-def construct(spec, arm, *, credit_iters=8, error_lr=0.1):
+def construct(spec, arm):
     import jax
     from scripts.r1_61_cell_driver import construct_owner_adapter
 
     from pccap.bases.epc import EPCBase
 
-    solver = settings(arm, credit_iters, error_lr)
     recipe = checked(spec["construction_recipe"])
     original, tokenizer = construct_owner_adapter(recipe)
     if original.identity() != recipe["adapter_identity"]:
@@ -175,7 +171,7 @@ def construct(spec, arm, *, credit_iters=8, error_lr=0.1):
         params_np=jax.tree_util.tree_map(np.asarray, original.base.params),
         cfg=original.base.cfg,
         ledger=original.ledger,
-        error_lr=solver["error_lr"],
+        error_lr=0.1,
     )
     if base.checksum(recompute=True) != original_hash:
         raise ValueError("EPC interface changed original BP weights")
@@ -185,7 +181,7 @@ def construct(spec, arm, *, credit_iters=8, error_lr=0.1):
         base.ledger,
         params=original.learner.params,
         acquisition_credit=ARMS[arm],
-        credit_iters=solver["credit_iters"],
+        credit_iters=8,
     )
     if cap.store.records or params_hash(cap.params) != original.learner.params_hash:
         raise ValueError("fresh memory and identical selected reader required")
@@ -210,7 +206,6 @@ def snapshot(cap, path):
         reader_sha256=params_hash(cap.params),
         credit=cap.acquisition_credit,
         iters=cap.credit_iters,
-        error_lr=cap.base.error_lr,
     )
 
 
@@ -261,11 +256,7 @@ def execute_stream(
     initial = cap.state_hash()
     assays = CellAssays(adapter, tokenizer, max_new=max_new)
     history, completed = [], []
-    solver = dict(credit_iters=cap.credit_iters, error_lr=cap.base.error_lr,
-                  error_solver_active=cap.acquisition_credit == "error")
     finish = dict(
-        **solver,
-        requested_solver=config.get("solver"),
         status="failed",
         items_completed=0,
         items_planned=len(items),
@@ -276,7 +267,6 @@ def execute_stream(
     )
     configuration = dict(
         config,
-        **solver,
         item_ids=[x.item_id for x in items],
         endpoints_sha256=digest(endpoints),
         initial_state=initial,
@@ -398,10 +388,10 @@ def new_path(path):
     return path, resources
 
 
-def validate_profile(path, *, credit_iters=8, error_lr=0.1):
+def validate_profile(path):
     path = Path(path).resolve()
     p = json.loads((path / "plan.json").read_bytes())
-    if p != plan(True, credit_iters=credit_iters, error_lr=error_lr):
+    if p != plan(True):
         raise ValueError("completed development profile must match the current design and code")
     refs = {str(path / "plan.json"): sha(path / "plan.json")}
     for c in design(True):
@@ -434,15 +424,14 @@ def run_cell(args):
     if not args.execute:
         raise ValueError("real execution requires --execute")
     development = args.population == "development"
-    p = plan(development, credit_iters=args.credit_iters, error_lr=args.error_lr)
+    p = plan(development)
     c = next(x for x in p["cells"] if x["dataset"] == args.dataset and x["arm"] == args.arm)
-    profile = None if development else validate_profile(args.profile, credit_iters=args.credit_iters, error_lr=args.error_lr)
+    profile = None if development else validate_profile(args.profile)
     out, resources = new_path(args.output)
     allowance = min(args.wall_seconds, 7200, CUTOFF - time.time())
     if allowance <= 0:
         raise ValueError("deadline/allowance exhausted")
     started = time.monotonic()
-    solver = settings(c["arm"], args.credit_iters, args.error_lr)
     context = {}
     try:
         with (
@@ -464,11 +453,10 @@ def run_cell(args):
                 )
             spec = p["recipes"][c["dataset"]]
             rows, endpoints = load_payload(spec, c["items"])
-            adapter, tok = construct(spec, c["arm"], credit_iters=args.credit_iters, error_lr=args.error_lr)
+            adapter, tok = construct(spec, c["arm"])
             items = [as_edit(r, tok) for r in rows]
             cfg = dict(
                 cell=c,
-                solver=solver,
                 population=p["population"],
                 sources=p["sources"],
                 inputs=spec,
@@ -486,7 +474,6 @@ def run_cell(args):
                 out / "finish.json",
                 dict(
                     status="failed",
-                    **solver,
                     error=repr(exc),
                     items_completed=0,
                     cell=c,
@@ -512,9 +499,9 @@ def run_group(args):
     if not args.execute:
         raise ValueError("real execution requires --execute")
     development = args.command == "profile"
-    p = plan(development, credit_iters=args.credit_iters, error_lr=args.error_lr)
+    p = plan(development)
     if not development:
-        validate_profile(args.profile, credit_iters=args.credit_iters, error_lr=args.error_lr)
+        validate_profile(args.profile)
     out, _ = new_path(args.output)
     out.mkdir(parents=True)
     dump(out / "plan.json", p)
@@ -544,7 +531,6 @@ def run_group(args):
                 "--population",
                 "development" if development else "replication",
             ]
-            cmd += ["--credit-iters", str(args.credit_iters), "--error-lr", str(args.error_lr)]
             if not development:
                 cmd += ["--profile", str(Path(args.profile).resolve())]
             with (out / (dest.name + ".log")).open("x") as log:
@@ -571,7 +557,6 @@ def run_group(args):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("command", choices=("plan", "profile", "run", "cell"))
-    add_options(ap)
     ap.add_argument("--execute", action="store_true")
     ap.add_argument("--output")
     ap.add_argument("--profile", help="completed four-cell development profile directory")
@@ -582,11 +567,8 @@ def main():
     args = ap.parse_args()
     if not np.isfinite(args.wall_seconds) or not 0 < args.wall_seconds <= 28800:
         ap.error("positive allowance <= 28,800 seconds required; each cell <= 7,200")
-    if args.command != "plan" and args.sweep_error_lrs:
-        ap.error("--sweep-error-lrs is plan-only; no sweep is launched")
     if args.command == "plan":
-        result = plan(args.population == "development", credit_iters=args.credit_iters, error_lr=args.error_lr)
-        result["sweep_cost"] = projected_sweep(args.profile, result["cells"], args.sweep_error_lrs or [args.error_lr])
+        result = plan(args.population == "development")
     else:
         if not args.output or not args.execute:
             ap.error("--execute and a new --output are required")

@@ -22,8 +22,8 @@ def positive_rate(value):
 
 
 def settings(arm, credit_iters=8, error_lr=0.1):
-    if arm not in ("SE-A", "SE-E") or credit_iters not in (8, 16, 32):
-        raise ValueError("expected SE-A/SE-E and 8, 16 or 32 credit iterations")
+    if arm not in ("SE-A", "SE-E") or credit_iters not in (1, 8, 16, 32):  # 1 admitted for the DEC-075 settling-depth control
+        raise ValueError("expected SE-A/SE-E and 1, 8, 16 or 32 credit iterations")
     rate = positive_rate(error_lr)
     return dict(
         credit_iters=credit_iters if arm == "SE-E" else 8,
@@ -35,7 +35,7 @@ def settings(arm, credit_iters=8, error_lr=0.1):
 
 
 def add_options(parser):
-    parser.add_argument("--credit-iters", type=int, choices=(8, 16, 32), default=8)
+    parser.add_argument("--credit-iters", type=int, choices=(1, 8, 16, 32), default=8)
     parser.add_argument("--error-lr", type=positive_rate, default=0.1)
     parser.add_argument("--sweep-error-lrs", type=positive_rate, nargs="+",
                         help="plan-only rates; defaults to --error-lr; no sweep is launched")

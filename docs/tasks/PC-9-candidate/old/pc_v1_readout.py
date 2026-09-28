@@ -18,7 +18,6 @@ from pathlib import Path
 import numpy as np
 from scripts.r1_68c_batched_drift import PositionBatchReader
 
-from aw import pc_treatments as treatment
 from aw.pc_v0_report import sha
 from aw.pc_v1_acquire import PCRevisionCap
 from pccap.harness.snapshot import restore
@@ -92,30 +91,14 @@ class PCPositionBatchReader:
         self.checkpoint = None
 
     @classmethod
-    def from_checkpoint(cls, base, cfg, params, binding, *, batch_size=16, config=None, finish=None):
+    def from_checkpoint(cls, base, cfg, params, binding, *, batch_size=16):
         """Binding: path, sha256, state_sha256, base_sha256, reader_sha256, credit, iters.
 
         The caller constructs the original BP base with the EPC interface. This
         function never chooses weights from the v0 ePC replication checkpoint.
         """
-        if binding["credit"] not in ("adjoint", "error"):
-            raise ValueError("supplemental credit must be adjoint/error")
-        actual = treatment.normalized(binding["iters"], binding.get("error_lr", 0.1))
-        if (config is None) != (finish is None):
-            raise ValueError("supply both config and finish for treatment validation")
-        if config is None:
-            if actual != treatment.DEFAULT:
-                raise ValueError("variant snapshot requires its config and finish")
-            selected = dict(treatment.DEFAULT)
-        else:
-            record = treatment.recorded(config, finish)
-            solver, selected = record["solver"], record["treatment"]
-            if actual != {k: solver[k] for k in treatment.DEFAULT}:
-                raise ValueError("checkpoint and recorded solver differ")
-            if binding["credit"] != ("error" if solver["error_solver_active"] else "adjoint"):
-                raise ValueError("checkpoint and recorded credit arm differ")
-        if base.error_lr != actual["error_lr"]:
-            raise ValueError("construct EPCBase with the recorded error learning rate before restoration")
+        if binding["credit"] not in ("adjoint", "error") or binding["iters"] != 8:
+            raise ValueError("supplemental fixed-v5 credit must be adjoint/error with eight steps")
         path = Path(binding["path"]).resolve()
         if sha(path) != binding["sha256"]:
             raise ValueError("supplemental snapshot file hash differs")
@@ -138,7 +121,6 @@ class PCPositionBatchReader:
             raise ValueError("restored state differs")
         reader = cls(cap, batch_size=batch_size)
         reader.checkpoint = dict(binding, path=str(path))
-        reader.treatment = selected
         return reader
 
     def last_logits_batch(self, seqs, phase="query"):

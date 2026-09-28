@@ -22,7 +22,6 @@ import numpy as np
 from scripts import r1_68f_full_validation as fv
 from scripts.r1_68e_batched_drift_v0 import V0PositionBatchReader
 
-from aw import pc_treatments as treatment
 from aw import scoring
 from aw.pc_v0 import CUTOFF, archive, blocking_cuda_processes, build_cap, dump, wall_limit
 from aw.pc_v0_report import ROOT, compare, load_group, sha, table
@@ -160,7 +159,6 @@ def read_arm(reader, windows, metadata, output):
         with (out / "vectors.npz").open("xb") as f:
             np.savez_compressed(f, values=values)
         result = dict(
-            treatment=getattr(reader, "treatment", dict(treatment.DEFAULT)),
             summary=summarize(values),
             selection=metadata,
             fields=list(scoring.FIELDS),
@@ -221,10 +219,6 @@ def pair(left, right, output):
 def restore_v0(base, row, bindings, *, smoke=False):
     dest = Path(row["directory"])
     cfg = json.loads((dest / "config.json").read_bytes())
-    saved_finish = json.loads((dest / "finish.json").read_bytes())
-    solver = treatment.recorded(cfg, saved_finish)["solver"]
-    if base.error_lr != solver["error_lr"]:
-        raise ValueError("readout base rate differs from acquisition configuration")
     records = json.loads((dest / "checkpoints.json").read_bytes())
     final = [r for r in records if r["tag"] == "end"]
     if len(final) != 1 or final[0]["items"] != row["items_completed"]:
@@ -244,14 +238,14 @@ def restore_v0(base, row, bindings, *, smoke=False):
                 d=base.d,
                 arm="C1",
                 credit="adjoint" if row["arm"] == "SE-A" else "error",
-                credit_iters=solver["credit_iters"],
+                credit_iters=8,
                 radii={m: 0.5 for m in (1, 2, 3)},
                 bank_scales={m: 1.0 for m in (1, 2, 3)},
             ),
             base.ledger,
         )
     else:
-        cap = build_cap(base, row["dataset"], row["arm"], int(cfg["named_seeds"]["seed_cap_init"]), credit_iters=solver["credit_iters"])
+        cap = build_cap(base, row["dataset"], row["arm"], int(cfg["named_seeds"]["seed_cap_init"]))
     cap.import_state(st)
     if (
         cap.state_hash() != final[0]["state_hash"]
@@ -353,7 +347,6 @@ def run(group, output, *, smoke=False, wall_seconds=28800, batch_size=16):
         raise ValueError("readout allowance must fit shared 8-hour ceiling; batch size 1..32")
     bindings = {}
     rows = load_group(group, bindings, smoke=smoke)
-    selected = treatment.homogeneous(rows)
     expected = json.loads((Path(group) / "plan.json").read_bytes())["cells"]
     _, pairs, _ = compare(rows, expected)  # same paired initial state, stream, calibration and base
     if not rows or any(r["status"] != "complete" for r in rows):
@@ -393,7 +386,7 @@ def run(group, output, *, smoke=False, wall_seconds=28800, batch_size=16):
     cost = dict(
         status="failed", smoke=smoke, cost_scope="readout only", shared_ceiling_seconds=28800
     )
-    report = dict(smoke=smoke, treatment=selected, treatment_label=treatment.label(selected), selection=meta, cells=[], pairs=[], sources_sha256=bindings)
+    report = dict(smoke=smoke, selection=meta, cells=[], pairs=[], sources_sha256=bindings)
     try:
         allowance = min(wall_seconds, CUTOFF - time.time())
         if allowance <= 0:
@@ -413,25 +406,15 @@ def run(group, output, *, smoke=False, wall_seconds=28800, batch_size=16):
                 base = EPCBase.from_npz(archive()["base_checkpoints"]["epc"]["path"], error_lr=0.1)
             paired = {}
             for row in rows:
-                rate = row["solver"]["error_lr"]
-                if base.error_lr != rate:
-                    from pccap.bases.epc import EPCBase
-
-                    # Preserve tiny-fixture batch methods as well as production params.
-                    replacement = object.__new__(type(base))
-                    EPCBase.__init__(replacement, params_np=jax.tree_util.tree_map(np.asarray, base.params),
-                                     cfg=base.cfg, ledger=base.ledger, error_lr=rate)
-                    base = replacement
                 cap = restore_v0(base, row, bindings, smoke=smoke)
                 reader = V0PositionBatchReader(
                     CellAdapter(cap, "v0_live_C1"), batch_size=batch_size
                 )
                 name = f"{row['dataset']}-r{row['realization']}-o{row['order']}-{row['arm']}"
-                reader.treatment = selected
                 result = read_arm(reader, windows, meta, out / name)
                 report["cells"].append(
                     {k: row[k] for k in ("dataset", "realization", "order", "arm", "directory")}
-                    | dict(readout=result, treatment=selected, solver=row["solver"])
+                    | dict(readout=result)
                 )
                 key = (row["dataset"], row["realization"], row["order"])
                 paired.setdefault(key, {})[row["arm"]] = result
@@ -441,7 +424,6 @@ def run(group, output, *, smoke=False, wall_seconds=28800, batch_size=16):
                 report["pairs"].append(
                     dict(
                         dataset=ds,
-                        treatment=selected,
                         realization=r,
                         order=o,
                         **pair(arms["SE-A"], arms["SE-E"], out / f"{ds}-r{r}-o{o}-paired.npz"),
@@ -454,14 +436,13 @@ def run(group, output, *, smoke=False, wall_seconds=28800, batch_size=16):
                 raise ValueError("position source changed during readout")
             for path in (
                 Path(__file__),
-                Path(treatment.__file__),
                 ROOT / "aw/scoring.py",
                 ROOT / "scripts/r1_68f_full_validation.py",
                 ROOT / "scripts/r1_68e_batched_drift_v0.py",
             ):
                 bindings[str(path)] = sha(path)
             dump(out / "report.json", report)
-            (out / "table.md").write_text("Treatment: " + treatment.label(selected) + "\n\n" + table_block(report))
+            (out / "table.md").write_text(table_block(report))
             cost["status"] = "complete"
     finally:
         cost.update(

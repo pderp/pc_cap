@@ -9,8 +9,6 @@ import math
 import statistics
 from pathlib import Path
 
-from aw import pc_treatments as treatment
-
 ROOT = Path(__file__).resolve().parents[1]
 METRICS = {'ES': 'es_immediate', 'RET-ES': 'ret_es_end', 'RET-GS': 'ret_gs_end',
            'LS': 'ls_complete_answer_end'}
@@ -71,7 +69,7 @@ def load_group(path, bindings, *, smoke=False, diagnostic=False):
     for c in plan['cells']:
         ds, r, o, a = coordinate(c)
         dest = path / f'{ds}-r{r}-o{o}-{a}'
-        row = dict(c, status='missing', metrics={}, secondary={}, directory=str(dest.resolve()), treatment=treatment.planned(plan))
+        row = dict(c, status='missing', metrics={}, secondary={}, directory=str(dest.resolve()))
         cfg_path, finish_path = dest / 'config.json', dest / 'finish.json'
         if not cfg_path.exists():
             if finish_path.exists():
@@ -92,14 +90,13 @@ def load_group(path, bindings, *, smoke=False, diagnostic=False):
             raise ValueError('config population differs')
         for name, digest in cfg['sources'].items():
             verify(name, digest, bindings)
-        row.update(treatment.recorded(cfg, plan=plan))
         if smoke:
             verify(cfg['weights_path'], cfg['weights_sha256'], bindings)
         else:
             from aw.pc_v0 import ARCHIVE, ARCHIVE_SHA, WEIGHTS_SHA
             verify(ARCHIVE, ARCHIVE_SHA, bindings)
             archive = json.loads(ARCHIVE.read_bytes())
-            if cfg['weights_sha256'] != WEIGHTS_SHA:
+            if cfg['weights_sha256'] != WEIGHTS_SHA or cfg['credit_iters'] != 8 or cfg['error_lr'] != .1:
                 raise ValueError('model or credit settings differ from specification')
             verify(archive['base_checkpoints']['epc']['path'], WEIGHTS_SHA, bindings)
             from pccap.bases import gpt2_jax as g
@@ -109,14 +106,13 @@ def load_group(path, bindings, *, smoke=False, diagnostic=False):
         verify(cfg['drift']['path'], cfg['drift']['sha256'], bindings)
         row['pair_identity'] = {k: cfg[k] for k in ('weights_sha256', 'manifest_sha256', 'sources', 'item_ids',
                                                     'locality_prompts_sha256', 'base_hash_before', 'initial_state',
-                                                    'drift')}
+                                                    'error_lr', 'credit_iters', 'drift')}
         row['pair_identity']['named_seeds'] = cfg.get('named_seeds')
         if not finish_path.exists():
             row['status'] = 'unfinished'
             rows.append(row)
             continue
         finish = read(finish_path, bindings)
-        row.update(treatment.recorded(cfg, finish, plan))
         row.update(status=finish['status'], finish=finish)
         if finish.get('base_hash_after') is not None and not (finish['base_hash_after'] == finish['base_hash_before'] == cfg['base_hash_before']):
             raise ValueError('base changed within cell')
@@ -162,7 +158,6 @@ def load_group(path, bindings, *, smoke=False, diagnostic=False):
 
 
 def compare(rows, expected):
-    treatment.homogeneous(rows)
     indexed = {coordinate(r): r for r in rows}
     if len(indexed) != len(rows):
         raise ValueError('duplicate cell across run groups; select a single attempt explicitly')
@@ -209,19 +204,12 @@ def build(groups, output, document, *, orders=1, smoke=False, diagnostics=()):
     if smoke and groups:
         # Tiny runner smoke has a deliberately small, explicitly synthetic design.
         expected = read(Path(groups[0]) / 'plan.json', bindings)['cells']
-    variants = {treatment.key(r["treatment"]) for r in rows}
-    if variants - {treatment.key(treatment.DEFAULT)} and Path(document).resolve() == ROOT / "docs/additional_work/PC-v0_report.md":
-        raise ValueError("variant needs a separate document, not the original result slot")
-    if len(variants) > 1:
-        return treatment.build_sweep(groups, output, document, build, read, orders=orders, smoke=smoke, diagnostics=diagnostics)
-    selected = treatment.homogeneous(rows)
     cells, pairs, aggregates = compare(rows, expected)
     diagnostic_rows = [r for p in diagnostics for r in load_group(p, bindings, smoke=smoke, diagnostic=True)]
     spec = ROOT / 'docs/additional_work/PC-v0.md'
     bindings[str(spec)] = sha(spec)
     bindings[str(Path(__file__).resolve())] = sha(__file__)
-    bindings[str(Path(treatment.__file__).resolve())] = sha(treatment.__file__)
-    report = dict(smoke=smoke, treatment=selected, treatment_label=treatment.label(selected), cells=cells, pairs=pairs, aggregates=aggregates, diagnostics=diagnostic_rows,
+    report = dict(smoke=smoke, cells=cells, pairs=pairs, aggregates=aggregates, diagnostics=diagnostic_rows,
                   sources_sha256=bindings, expected_cells=len(expected), historical=dict(ES=-.336, RET_GS=.019,
                   scope='Historical defective-energy reference, zsRE; not pooled with corrected results', source=str(spec)))
     output, document = Path(output), Path(document)
@@ -235,7 +223,6 @@ def build(groups, output, document, *, orders=1, smoke=False, diagnostics=()):
             writer.writerows({k: json.dumps(v) if isinstance(v, (dict, list)) else v for k, v in row.items()} for row in values)
     title = '# PC-v0 corrected-credit comparison' + (' — CPU SMOKE ONLY' if smoke else '')
     text = title + '\n\n' + ('Synthetic tiny-model smoke; no research result.\n\n' if smoke else '')
-    text += "Treatment: " + treatment.label(selected) + "\n\n"
     text += f"{sum(c['status'] == 'complete' for c in cells)}/{len(cells)} planned cells complete. Missing/partial cells remain explicit. Complete-pair differences only; no partial-prefix scores enter the paired estimate.\n\n"
     text += 'SE-E minus SE-A; old S5 scoring. Secondary bounded-text scores remain separate. Exposed S5 populations are supplemental defect-correction replication, not fresh confirmation.\n\n'
     text += 'Presentation context: this credit-rule comparison is a measured component toward the active-inference programme. It does not implement expected-free-energy policy selection. Heavy-tailed-distribution questions require the companion distributional harm measurements; editing accuracy alone cannot answer them. See docs/presentation/presentation_brief_2026-09-26.md.\n\n'
@@ -243,7 +230,7 @@ def build(groups, output, document, *, orders=1, smoke=False, diagnostics=()):
     text += '## Realization summaries\n\nOrder differences are averaged within each realization. Only a complete three-realization design receives an overall mean/range. The range is descriptive, not a confidence interval; tokens and orders are not independent replicates.\n\n'
     text += table(['Dataset', 'metric', 'r0, r1, r2', 'mean', 'min', 'max'], [[a['dataset'], a['metric'], a['realizations'], a['mean'], a['minimum'], a['maximum']] for a in aggregates])
     text += '## Historical reference and limitations\n\nDefective-energy historical zsRE SE-E − SE-A: ES −0.336, RET-GS +0.019 (specification of record, docs/additional_work/PC-v0.md). It is not a corrected-energy control or fresh replication. CounterFact had a historical paraphrase floor of zero. No κ, coupled-free-energy, or general PC-superiority claim follows.\n\n'
-    text += '## Cost\n\nProcess seconds include startup/compilation; sums are not GPU elapsed hours. Counts are actual ledger totals. Error credit at k steps requires k+1 forwards + k+1 reverses per inference call; an adjoint call costs 1 forward + 1 reverse. Totals also include prediction, acceptance and diagnostics. Operation totals do not identify the number of credit calls.\n\n'
+    text += '## Cost\n\nProcess seconds include startup/compilation; sums are not GPU elapsed hours. Counts are actual ledger totals. Eight-step error credit requires 9 forwards + 9 reverses per inference call; an adjoint call costs 1 forward + 1 reverse. Totals also include prediction, acceptance and diagnostics. Operation totals do not identify the number of credit calls.\n\n'
     cost_rows = []
     for c in cells:
         f = c.get('finish', {})
@@ -265,12 +252,10 @@ def build(groups, output, document, *, orders=1, smoke=False, diagnostics=()):
 
 
 def plot(report_path, output):
-    report = json.loads(Path(report_path).read_bytes())
-    if report.get("schema") == "pc-treatment-sweep-v1":
-        raise ValueError("plot an individual treatment report; never pool sweep arms")
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    report = json.loads(Path(report_path).read_bytes())
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharey=True)
@@ -291,7 +276,7 @@ def plot(report_path, output):
         ax.set(title=ds, xlabel='Mean process seconds / cell', ylim=(-.04, 1.04))
         ax.legend()
     axes[0].set_ylabel('RET-GS (fraction)')
-    fig.suptitle('PC-v0: ' + treatment.label(report.get('treatment', treatment.DEFAULT)) + (' — CPU SMOKE' if report['smoke'] else ''))
+    fig.suptitle('PC-v0: efficacy and measured cost' + (' — CPU SMOKE' if report['smoke'] else ''))
     fig.tight_layout()
     exports = []
     for ext in ('png', 'pdf', 'svg'):
@@ -315,7 +300,7 @@ def main():
     a = p.parse_args()
     if a.command == 'build':
         r = build(a.run, a.output, a.document, orders=a.orders, smoke=a.smoke, diagnostics=a.diagnostic_group)
-        print(json.dumps({'treatments': len(r['treatments'])} if 'treatments' in r else {'cells': len(r['cells']), 'complete': sum(c['status']=='complete' for c in r['cells'])}))
+        print(json.dumps({'cells': len(r['cells']), 'complete': sum(c['status']=='complete' for c in r['cells'])}))
     else:
         plot(a.report, a.output)
 
