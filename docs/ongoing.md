@@ -183,6 +183,16 @@ Fill the claim-ledger PC rows with measured values and populations; export figur
 `assets/presentation-materials/figures/pc_v0/` and `figures/pc_v1/`; fill `review-data/results.md` from the same
 sources (Capstan checks it against items 126–129). State each result whichever way it falls, with the cost columns.
 
+### Lane R-1 — supplemental execution consumer for Option R (fourth; prepared now, run only if Tuesday says so)
+
+AW-R0 sealed the realization-3 populations, matrix (`manifests/additional_work/run_matrix_R_v1.json`) and 30 recipes,
+but the frozen primary backend admits only its original cells. Build `aw/r_run.py`: a runner in the shape of
+`aw/pc_v1_run.py` that executes an extension recipe with the same sealed-cell logic (construction, stream, checkpoints
+at 100 / 300 / 1,000, full validation, fidelity-watch observation), writes start / finish receipts of the queue's
+shape under `logs/additional_work/R/queue/`, honours per-cell ceilings from AW-R0 (1.7 factor), two workers, the
+memory floor and the October 9 cutoff, and a `plan` output with the schedule (38 process-hours projected). CPU smoke
+on the tiny base; no GPU. The lead decides on Tuesday whether it runs.
+
 ### Lane PC-11 — apply the combined PC-9/PC-10 patch (third, after PC-8's exports exist)
 
 Capstan confirms the idle boundary (the GPU is idle now; Option R may run on it, which does not touch these files).

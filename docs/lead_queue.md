@@ -1262,3 +1262,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     wrong for this readout (245,237 positions, not 4,064) — PC-10 corrects the caption. Both PC results, their harm
     readouts and the v0 diagnostic/profile are committed; Capex's PC-8 can now fill both result slots.
 
+130. (2026-09-28, 17:30 EDT) Capex round 51 committed (PC-10 staged, X24 passes 44 cells, REV-3 Tuesday form at
+    `review-data/final-experiments.md`); round 52 opened (X24-final, PC-8 reports from real data, PC-11 patch apply).
+    **Correction to item 129's Option R proposal: it cannot start yet.** AW-R0's record states that the frozen primary
+    backend admits only its original cells, so the realization-3 recipes need a supplemental execution consumer
+    (owner/Capex work, ≈ 1 CPU day, opened as lane R-1 below the PC lanes), and its projected cost is 38 process-hours
+    (64.7 h of 1.7× ceilings), not the 24–30 h I quoted. Nothing was launched; the GPU has been idle since Sunday
+    16:13. Option R stays a Tuesday decision with an honest cost line.
+
