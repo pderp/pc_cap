@@ -206,7 +206,7 @@ shape under `logs/additional_work/R/queue/`, honours per-cell ceilings from AW-R
 memory floor and the October 9 cutoff, and a `plan` output with the schedule (38 process-hours projected). CPU smoke
 on the tiny base; no GPU. The lead decides on Tuesday whether it runs.
 
-### Lane PC-11 — apply the combined PC-9/PC-10 patch (third, after PC-8's exports exist)
+### Lane PC-11 — patch applied by Capstan 2026-09-28 17:22 (old files under `PC-9-candidate/old/`); remaining for Capex: update `test_pc9`, `test_pc10` and `test_comparator_report` to the applied state and regenerate the PC reports with the treatment-aware generator
 
 Capstan confirms the idle boundary (the GPU is idle now; Option R may run on it, which does not touch these files).
 Apply the exact commands in PC-10.md, keep the old versions under `docs/tasks/PC-9-candidate/old/`, rerun the

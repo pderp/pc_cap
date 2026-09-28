@@ -1270,3 +1270,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (64.7 h of 1.7× ceilings), not the 24–30 h I quoted. Nothing was launched; the GPU has been idle since Sunday
     16:13. Option R stays a Tuesday decision with an honest cost line.
 
+131. (2026-09-28, 17:35 EDT) DEC-075 recorded (three PC-v0 controls; no base control). To get the GPU going tonight
+    Capstan applied Capex's combined PC-9/PC-10 patch with the exact documented command (old files kept under
+    `docs/tasks/PC-9-candidate/old/`; 126 tests pass, three patch-consistency/comparator tests now need updating —
+    Capex), admitted one credit iteration (the patch offered 8/16/32), and launched the **settling-depth control**:
+    profile then the 12-cell run for k = 1, then for k = 32 (`results/additional_work/PC-v0/control-k{1,32}-20260928/`),
+    ≈ 9–10 h in total. The random-direction and compute-matched arms are Capex's lane PC-12; they run when delivered.
+    **The bounded-correction calibration (AW-B) still awaits the lead's sign-off on its pre-registration** (item 130,
+    §2 of the 28 September answer); it is the one GPU job that could follow the controls without further code.
+
