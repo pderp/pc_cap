@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-28 18:00** — DEC-075: three PC-v0 controls approved (settling depth 1/32, random-direction credit, compute-matched adjoint); no base control. Capstan applies the staged PC-9/PC-10 patch tonight (old versions kept) and runs the settling-depth control; lanes PC-12 (the two new credit arms) and PC-8 below.
+
 - **2026-09-28 17:20** — Capex round 51 committed (PC-10 staged, X24 pass on 44 cells, REV-3 Tuesday form). The PC chain finished Sunday 16:13 (both efficacy runs and both harm readouts; lead queue 126–129). Round 52 lanes below: PC-8 is unblocked.
 
 - **2026-09-27 11:05** — Capex round 50 committed (PC-9 contingency patch staged on copies, REV-2 Q&A + results scaffold, PRES-5 timed scripts). PC-v0 replication 39 / 60 (CounterFact cells running), ETA ≈ 13:30. Round 51 lanes below.
@@ -168,6 +170,17 @@ The GPU chain is complete: `results/additional_work/PC-v0/replication-60-2026092
 `results/additional_work/PC-v1/replication-4-20260927/` (4 cells), `results/additional_work/PC-v1/harm/pc-v1-4-20260927/`
 (full inventory, 245,237 positions per arm; see its `cost-repair.json`: the table was generated after a driver
 KeyError and its population caption is the fixed v0 text). Capstan's preliminary reads are lead-queue items 126–129.
+
+### Lane PC-12 — random-direction and compute-matched credit arms (now first; DEC-075)
+
+Two new arms for `aw/pc_v0.py` at the 12-cell scope, implemented as private variants in `aw/` (the locked
+`src/pccap/cap/learn.py` is not edited): (a) `credit=random`: at each credit call draw an isotropic random direction
+per site and scale it to the norm the true (adjoint or eight-step error) credit would have had, everything else
+identical; (b) `credit=adjoint-matched`: adjoint credit with the per-record step budget raised until its ledger cost
+(forwards + reverses) equals the eight-step error credit's nine forwards + nine reverses, the matching rule recorded
+in the treatment record. Treatment recorded in every cell's `config.json` / `finish.json` as PC-9 does; the
+treatment-aware report labels them. CPU tests on the tiny base (random arm reproduces its seed; matched arm's ledger
+equals SE-E's within one call). Capstan runs both on the GPU when delivered; the settling-depth arms run tonight.
 
 ### Lane X24-final — rerun the replication audit with `--require-complete` (first, short)
 
