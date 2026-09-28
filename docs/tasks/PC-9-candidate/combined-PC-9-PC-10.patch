@@ -1,0 +1,846 @@
+--- a/aw/pc_v0.py
++++ b/aw/pc_v0.py
+@@ -25,6 +25,7 @@
+ 
+ import numpy as np
+ 
++from aw.pc_sweep import add_options, projected_sweep, settings
+ from pccap.bases import gpt2_jax as g
+ from pccap.bases.epc import EPCBase
+ from pccap.cap.cap import Cap, CapConfig
+@@ -74,13 +75,14 @@
+             for order in f["order_seeds"][:orders] for arm in ARMS]
+ 
+ 
+-def build_cap(base, dataset, arm, seed, frozen=None):
++def build_cap(base, dataset, arm, seed, frozen=None, *, credit_iters=8):
+     f = archive() if frozen is None else frozen
+     if arm not in ARMS:
+         raise ValueError("expected SE-A or SE-E")
++    solver = settings(arm, credit_iters)
+     cal = f["calibration"]["EPC"]
+     return Cap(base, CapConfig(
+-        arm="C1", read="h", d=base.d, seed=seed, credit=ARMS[arm], credit_iters=8,
++        arm="C1", read="h", d=base.d, seed=seed, credit=ARMS[arm], credit_iters=solver["credit_iters"],
+         radii={int(k): float(v) for k, v in cal["radii"][dataset].items()},
+         bank_scales={int(k): float(v) for k, v in cal["b_m"].items()},
+     ), base.ledger)
+@@ -143,7 +145,7 @@
+ 
+ 
+ def source_identities():
+-    files = [Path(__file__), ARCHIVE, ROOT / "requirements.lock"]
++    files = [Path(__file__), ROOT / "aw/pc_sweep.py", ARCHIVE, ROOT / "requirements.lock"]
+     files += [ROOT / x for x in (
+         "src/pccap/bases/epc.py", "src/pccap/bases/bp.py", "src/pccap/bases/gpt2_jax.py",
+         "src/pccap/pc/epc_inference.py", "src/pccap/pc/nodes.py", "src/pccap/cap/learn.py",
+@@ -238,10 +240,11 @@
+     allowance = min(args.wall_seconds, CUTOFF - time.time())
+     if allowance <= 0:
+         raise ValueError("experimental cutoff or wall allowance reached")
++    solver = settings(args.arm, args.credit_iters, args.error_lr)
+     out = _new_output(args.output)
+     started = time.monotonic()
+     ledger = Ledger()
+-    outcome = {"status": "failed", "dataset": args.dataset, "arm": args.arm}
++    outcome = {"status": "failed", "dataset": args.dataset, "arm": args.arm, **solver}
+     try:
+         with wall_limit(allowance), gpu_lease("PC-1", stage="additional_work", projected_seconds=allowance, exclusive=True) as lease:
+             others = lease.other_cuda_processes()
+@@ -258,7 +261,7 @@
+             tok = GPT2Tokenizer()
+             if sha(g.DEFAULT_SNAPSHOT / "tokenizer.json") != f["tokenizer_rev"]["tokenizer_json_sha256"]:
+                 raise ValueError("S5 tokenizer identity mismatch")
+-            base = EPCBase.from_npz(weights, ledger=ledger, error_lr=0.1)
++            base = EPCBase.from_npz(weights, ledger=ledger, error_lr=solver["error_lr"])
+             before = base.checksum(recompute=True)
+             items, unrelated, cap_seed, router_seed, population = load_inputs(
+                 args.dataset, args.realization, args.order, args.population, args.items)
+@@ -266,10 +269,10 @@
+             drift_binding = drift_manifest["files"]["drift_tokens"]
+             if sha(drift_binding["path"]) != drift_binding["sha256"]:
+                 raise ValueError("drift source mismatch")
+-            cap = build_cap(base, args.dataset, args.arm, cap_seed, f)
++            cap = build_cap(base, args.dataset, args.arm, cap_seed, f, credit_iters=args.credit_iters)
+             config = {**vars(args), **population, "weights_sha256": WEIGHTS_SHA,
+                       "sources": source_identities(), "initial_state": cap.state_hash(),
+-                      "item_ids": [x.item_id for x in items], "error_lr": 0.1, "credit_iters": 8,
++                      "item_ids": [x.item_id for x in items], **solver,
+                       "scoring": "unchanged S5 primary; bounded text secondary", "drift": drift_binding,
+                       "locality_prompts_sha256": hashlib.sha256(json.dumps(unrelated).encode()).hexdigest(),
+                       "base_hash_before": before, "determinism": pccap.determinism_report()}
+@@ -337,7 +340,7 @@
+              if development else design(args.orders))
+     dump(out / "plan.json", {"population": "development" if development else "exposed S5", "cells": cells,
+                              "replication_design": design(args.orders),
+-                             "wall_seconds": args.wall_seconds, "sources": source_identities()})
++                             "wall_seconds": args.wall_seconds, "credit": {a: settings(a, args.credit_iters, args.error_lr) for a in ARMS}, "sources": source_identities()})
+     start = time.monotonic()
+     completed = []
+     try:
+@@ -348,6 +351,7 @@
+             dest = out / f"{c['dataset']}-r{c['realization']}-o{c['order']}-{c['arm']}"
+             cmd = [sys.executable, "-m", "aw.pc_v0", "cell", "--execute", "--output", str(dest),
+                    "--population", "development" if development else "replication", "--wall-seconds", str(remaining)]
++            cmd += ["--credit-iters", str(args.credit_iters), "--error-lr", str(args.error_lr)]
+             for k, v in c.items():
+                 cmd += ["--" + k, str(v)]
+             if args.command == "diagnose":
+@@ -368,6 +372,8 @@
+ def main():
+     p = argparse.ArgumentParser(description=__doc__)
+     p.add_argument("command", choices=("plan", "profile", "diagnose", "run", "cell"))
++    add_options(p)
++    p.add_argument("--profile", help="plan-only completed development profile for cost projection")
+     p.add_argument("--orders", type=int, choices=(1, 5), default=1)
+     p.add_argument("--output", type=str)
+     p.add_argument("--execute", action="store_true")
+@@ -382,8 +388,12 @@
+     a = p.parse_args()
+     if not np.isfinite(a.wall_seconds) or a.wall_seconds <= 0 or a.items < 1:
+         p.error("positive finite wall allowance and item count required")
++    if a.command != "plan" and (a.profile or a.sweep_error_lrs):
++        p.error("--profile and --sweep-error-lrs are plan-only; no sweep is launched")
+     if a.command == "plan":
+-        result = {"cells": design(a.orders), "source": str(ARCHIVE), "model_execution": False}
++        result = {"cells": design(a.orders), "source": str(ARCHIVE), "model_execution": False,
++                  "credit": {arm: settings(arm, a.credit_iters, a.error_lr) for arm in ARMS},
++                  "sweep_cost": projected_sweep(a.profile, design(a.orders), a.sweep_error_lrs or [a.error_lr])}
+     else:
+         if not a.output or not a.execute:
+             p.error("a new --output directory and --execute are required after GPU release")
+--- a/aw/pc_v1_run.py
++++ b/aw/pc_v1_run.py
+@@ -19,6 +19,7 @@
+ 
+ import numpy as np
+ 
++from aw.pc_sweep import add_options, projected_sweep, settings
+ from aw.pc_v0 import ARMS, CUTOFF, blocking_cuda_processes, dump, sha, wall_limit
+ from aw.pc_v1_acquire import PCRevisionCap
+ from aw.pc_v1_readout import query_view
+@@ -70,7 +71,7 @@
+ 
+ 
+ def sources():
+-    files = [Path(__file__), ROOT / "requirements.lock"]
++    files = [Path(__file__), ROOT / "aw/pc_sweep.py", ROOT / "requirements.lock"]
+     files += [
+         ROOT / name
+         for name in (
+@@ -106,7 +107,8 @@
+     ]
+ 
+ 
+-def plan(development=False):
++def plan(development=False, *, credit_iters=8, error_lr=0.1):
++    settings("SE-E", credit_iters, error_lr)
+     recipes = {}
+     for ds in RECIPES:
+         m, binding = bound_recipe(ds)
+@@ -129,7 +131,8 @@
+         sources=sources(),
+         model_execution=False,
+         payload_opened=False,
+-        credit=dict(arms=ARMS, iters=8, error_lr=0.1, energy="SD-24 corrected"),
++        credit=dict(arms=ARMS, iters=credit_iters, error_lr=error_lr, energy="SD-24 corrected",
++                    arm_settings={a: settings(a, credit_iters, error_lr) for a in ARMS}),
+         endpoint_policy="R1 installed scoring; near-miss/revision at both 100 and 300 as supplemental cadence",
+         excluded_assays="unseen/composition and ordinary-text harm are not run here; harm is separately costed",
+         per_cell_wall_ceiling_seconds=7200,
+@@ -156,12 +159,13 @@
+     return items, endpoints
+ 
+ 
+-def construct(spec, arm):
++def construct(spec, arm, *, credit_iters=8, error_lr=0.1):
+     import jax
+     from scripts.r1_61_cell_driver import construct_owner_adapter
+ 
+     from pccap.bases.epc import EPCBase
+ 
++    solver = settings(arm, credit_iters, error_lr)
+     recipe = checked(spec["construction_recipe"])
+     original, tokenizer = construct_owner_adapter(recipe)
+     if original.identity() != recipe["adapter_identity"]:
+@@ -171,7 +175,7 @@
+         params_np=jax.tree_util.tree_map(np.asarray, original.base.params),
+         cfg=original.base.cfg,
+         ledger=original.ledger,
+-        error_lr=0.1,
++        error_lr=solver["error_lr"],
+     )
+     if base.checksum(recompute=True) != original_hash:
+         raise ValueError("EPC interface changed original BP weights")
+@@ -181,7 +185,7 @@
+         base.ledger,
+         params=original.learner.params,
+         acquisition_credit=ARMS[arm],
+-        credit_iters=8,
++        credit_iters=solver["credit_iters"],
+     )
+     if cap.store.records or params_hash(cap.params) != original.learner.params_hash:
+         raise ValueError("fresh memory and identical selected reader required")
+@@ -206,6 +210,7 @@
+         reader_sha256=params_hash(cap.params),
+         credit=cap.acquisition_credit,
+         iters=cap.credit_iters,
++        error_lr=cap.base.error_lr,
+     )
+ 
+ 
+@@ -256,7 +261,11 @@
+     initial = cap.state_hash()
+     assays = CellAssays(adapter, tokenizer, max_new=max_new)
+     history, completed = [], []
++    solver = dict(credit_iters=cap.credit_iters, error_lr=cap.base.error_lr,
++                  error_solver_active=cap.acquisition_credit == "error")
+     finish = dict(
++        **solver,
++        requested_solver=config.get("solver"),
+         status="failed",
+         items_completed=0,
+         items_planned=len(items),
+@@ -267,6 +276,7 @@
+     )
+     configuration = dict(
+         config,
++        **solver,
+         item_ids=[x.item_id for x in items],
+         endpoints_sha256=digest(endpoints),
+         initial_state=initial,
+@@ -388,10 +398,10 @@
+     return path, resources
+ 
+ 
+-def validate_profile(path):
++def validate_profile(path, *, credit_iters=8, error_lr=0.1):
+     path = Path(path).resolve()
+     p = json.loads((path / "plan.json").read_bytes())
+-    if p != plan(True):
++    if p != plan(True, credit_iters=credit_iters, error_lr=error_lr):
+         raise ValueError("completed development profile must match the current design and code")
+     refs = {str(path / "plan.json"): sha(path / "plan.json")}
+     for c in design(True):
+@@ -424,14 +434,15 @@
+     if not args.execute:
+         raise ValueError("real execution requires --execute")
+     development = args.population == "development"
+-    p = plan(development)
++    p = plan(development, credit_iters=args.credit_iters, error_lr=args.error_lr)
+     c = next(x for x in p["cells"] if x["dataset"] == args.dataset and x["arm"] == args.arm)
+-    profile = None if development else validate_profile(args.profile)
++    profile = None if development else validate_profile(args.profile, credit_iters=args.credit_iters, error_lr=args.error_lr)
+     out, resources = new_path(args.output)
+     allowance = min(args.wall_seconds, 7200, CUTOFF - time.time())
+     if allowance <= 0:
+         raise ValueError("deadline/allowance exhausted")
+     started = time.monotonic()
++    solver = settings(c["arm"], args.credit_iters, args.error_lr)
+     context = {}
+     try:
+         with (
+@@ -453,10 +464,11 @@
+                 )
+             spec = p["recipes"][c["dataset"]]
+             rows, endpoints = load_payload(spec, c["items"])
+-            adapter, tok = construct(spec, c["arm"])
++            adapter, tok = construct(spec, c["arm"], credit_iters=args.credit_iters, error_lr=args.error_lr)
+             items = [as_edit(r, tok) for r in rows]
+             cfg = dict(
+                 cell=c,
++                solver=solver,
+                 population=p["population"],
+                 sources=p["sources"],
+                 inputs=spec,
+@@ -474,6 +486,7 @@
+                 out / "finish.json",
+                 dict(
+                     status="failed",
++                    **solver,
+                     error=repr(exc),
+                     items_completed=0,
+                     cell=c,
+@@ -499,9 +512,9 @@
+     if not args.execute:
+         raise ValueError("real execution requires --execute")
+     development = args.command == "profile"
+-    p = plan(development)
++    p = plan(development, credit_iters=args.credit_iters, error_lr=args.error_lr)
+     if not development:
+-        validate_profile(args.profile)
++        validate_profile(args.profile, credit_iters=args.credit_iters, error_lr=args.error_lr)
+     out, _ = new_path(args.output)
+     out.mkdir(parents=True)
+     dump(out / "plan.json", p)
+@@ -531,6 +544,7 @@
+                 "--population",
+                 "development" if development else "replication",
+             ]
++            cmd += ["--credit-iters", str(args.credit_iters), "--error-lr", str(args.error_lr)]
+             if not development:
+                 cmd += ["--profile", str(Path(args.profile).resolve())]
+             with (out / (dest.name + ".log")).open("x") as log:
+@@ -557,6 +571,7 @@
+ def main():
+     ap = argparse.ArgumentParser(description=__doc__)
+     ap.add_argument("command", choices=("plan", "profile", "run", "cell"))
++    add_options(ap)
+     ap.add_argument("--execute", action="store_true")
+     ap.add_argument("--output")
+     ap.add_argument("--profile", help="completed four-cell development profile directory")
+@@ -567,8 +582,11 @@
+     args = ap.parse_args()
+     if not np.isfinite(args.wall_seconds) or not 0 < args.wall_seconds <= 28800:
+         ap.error("positive allowance <= 28,800 seconds required; each cell <= 7,200")
++    if args.command != "plan" and args.sweep_error_lrs:
++        ap.error("--sweep-error-lrs is plan-only; no sweep is launched")
+     if args.command == "plan":
+-        result = plan(args.population == "development")
++        result = plan(args.population == "development", credit_iters=args.credit_iters, error_lr=args.error_lr)
++        result["sweep_cost"] = projected_sweep(args.profile, result["cells"], args.sweep_error_lrs or [args.error_lr])
+     else:
+         if not args.output or not args.execute:
+             ap.error("--execute and a new --output are required")
+--- a/aw/pc_v0_report.py
++++ b/aw/pc_v0_report.py
+@@ -8,6 +8,8 @@
+ import math
+ import statistics
+ from pathlib import Path
++
++from aw import pc_treatments as treatment
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ METRICS = {'ES': 'es_immediate', 'RET-ES': 'ret_es_end', 'RET-GS': 'ret_gs_end',
+@@ -69,7 +71,7 @@
+     for c in plan['cells']:
+         ds, r, o, a = coordinate(c)
+         dest = path / f'{ds}-r{r}-o{o}-{a}'
+-        row = dict(c, status='missing', metrics={}, secondary={}, directory=str(dest.resolve()))
++        row = dict(c, status='missing', metrics={}, secondary={}, directory=str(dest.resolve()), treatment=treatment.planned(plan))
+         cfg_path, finish_path = dest / 'config.json', dest / 'finish.json'
+         if not cfg_path.exists():
+             if finish_path.exists():
+@@ -90,13 +92,14 @@
+             raise ValueError('config population differs')
+         for name, digest in cfg['sources'].items():
+             verify(name, digest, bindings)
++        row.update(treatment.recorded(cfg, plan=plan))
+         if smoke:
+             verify(cfg['weights_path'], cfg['weights_sha256'], bindings)
+         else:
+             from aw.pc_v0 import ARCHIVE, ARCHIVE_SHA, WEIGHTS_SHA
+             verify(ARCHIVE, ARCHIVE_SHA, bindings)
+             archive = json.loads(ARCHIVE.read_bytes())
+-            if cfg['weights_sha256'] != WEIGHTS_SHA or cfg['credit_iters'] != 8 or cfg['error_lr'] != .1:
++            if cfg['weights_sha256'] != WEIGHTS_SHA:
+                 raise ValueError('model or credit settings differ from specification')
+             verify(archive['base_checkpoints']['epc']['path'], WEIGHTS_SHA, bindings)
+             from pccap.bases import gpt2_jax as g
+@@ -106,13 +109,14 @@
+         verify(cfg['drift']['path'], cfg['drift']['sha256'], bindings)
+         row['pair_identity'] = {k: cfg[k] for k in ('weights_sha256', 'manifest_sha256', 'sources', 'item_ids',
+                                                     'locality_prompts_sha256', 'base_hash_before', 'initial_state',
+-                                                    'error_lr', 'credit_iters', 'drift')}
++                                                    'drift')}
+         row['pair_identity']['named_seeds'] = cfg.get('named_seeds')
+         if not finish_path.exists():
+             row['status'] = 'unfinished'
+             rows.append(row)
+             continue
+         finish = read(finish_path, bindings)
++        row.update(treatment.recorded(cfg, finish, plan))
+         row.update(status=finish['status'], finish=finish)
+         if finish.get('base_hash_after') is not None and not (finish['base_hash_after'] == finish['base_hash_before'] == cfg['base_hash_before']):
+             raise ValueError('base changed within cell')
+@@ -158,6 +162,7 @@
+ 
+ 
+ def compare(rows, expected):
++    treatment.homogeneous(rows)
+     indexed = {coordinate(r): r for r in rows}
+     if len(indexed) != len(rows):
+         raise ValueError('duplicate cell across run groups; select a single attempt explicitly')
+@@ -204,12 +209,19 @@
+     if smoke and groups:
+         # Tiny runner smoke has a deliberately small, explicitly synthetic design.
+         expected = read(Path(groups[0]) / 'plan.json', bindings)['cells']
++    variants = {treatment.key(r["treatment"]) for r in rows}
++    if variants - {treatment.key(treatment.DEFAULT)} and Path(document).resolve() == ROOT / "docs/additional_work/PC-v0_report.md":
++        raise ValueError("variant needs a separate document, not the original result slot")
++    if len(variants) > 1:
++        return treatment.build_sweep(groups, output, document, build, read, orders=orders, smoke=smoke, diagnostics=diagnostics)
++    selected = treatment.homogeneous(rows)
+     cells, pairs, aggregates = compare(rows, expected)
+     diagnostic_rows = [r for p in diagnostics for r in load_group(p, bindings, smoke=smoke, diagnostic=True)]
+     spec = ROOT / 'docs/additional_work/PC-v0.md'
+     bindings[str(spec)] = sha(spec)
+     bindings[str(Path(__file__).resolve())] = sha(__file__)
+-    report = dict(smoke=smoke, cells=cells, pairs=pairs, aggregates=aggregates, diagnostics=diagnostic_rows,
++    bindings[str(Path(treatment.__file__).resolve())] = sha(treatment.__file__)
++    report = dict(smoke=smoke, treatment=selected, treatment_label=treatment.label(selected), cells=cells, pairs=pairs, aggregates=aggregates, diagnostics=diagnostic_rows,
+                   sources_sha256=bindings, expected_cells=len(expected), historical=dict(ES=-.336, RET_GS=.019,
+                   scope='Historical defective-energy reference, zsRE; not pooled with corrected results', source=str(spec)))
+     output, document = Path(output), Path(document)
+@@ -223,6 +235,7 @@
+             writer.writerows({k: json.dumps(v) if isinstance(v, (dict, list)) else v for k, v in row.items()} for row in values)
+     title = '# PC-v0 corrected-credit comparison' + (' — CPU SMOKE ONLY' if smoke else '')
+     text = title + '\n\n' + ('Synthetic tiny-model smoke; no research result.\n\n' if smoke else '')
++    text += "Treatment: " + treatment.label(selected) + "\n\n"
+     text += f"{sum(c['status'] == 'complete' for c in cells)}/{len(cells)} planned cells complete. Missing/partial cells remain explicit. Complete-pair differences only; no partial-prefix scores enter the paired estimate.\n\n"
+     text += 'SE-E minus SE-A; old S5 scoring. Secondary bounded-text scores remain separate. Exposed S5 populations are supplemental defect-correction replication, not fresh confirmation.\n\n'
+     text += 'Presentation context: this credit-rule comparison is a measured component toward the active-inference programme. It does not implement expected-free-energy policy selection. Heavy-tailed-distribution questions require the companion distributional harm measurements; editing accuracy alone cannot answer them. See docs/presentation/presentation_brief_2026-09-26.md.\n\n'
+@@ -230,7 +243,7 @@
+     text += '## Realization summaries\n\nOrder differences are averaged within each realization. Only a complete three-realization design receives an overall mean/range. The range is descriptive, not a confidence interval; tokens and orders are not independent replicates.\n\n'
+     text += table(['Dataset', 'metric', 'r0, r1, r2', 'mean', 'min', 'max'], [[a['dataset'], a['metric'], a['realizations'], a['mean'], a['minimum'], a['maximum']] for a in aggregates])
+     text += '## Historical reference and limitations\n\nDefective-energy historical zsRE SE-E − SE-A: ES −0.336, RET-GS +0.019 (specification of record, docs/additional_work/PC-v0.md). It is not a corrected-energy control or fresh replication. CounterFact had a historical paraphrase floor of zero. No κ, coupled-free-energy, or general PC-superiority claim follows.\n\n'
+-    text += '## Cost\n\nProcess seconds include startup/compilation; sums are not GPU elapsed hours. Counts are actual ledger totals. Eight-step error credit requires 9 forwards + 9 reverses per inference call; an adjoint call costs 1 forward + 1 reverse. Totals also include prediction, acceptance and diagnostics. Operation totals do not identify the number of credit calls.\n\n'
++    text += '## Cost\n\nProcess seconds include startup/compilation; sums are not GPU elapsed hours. Counts are actual ledger totals. Error credit at k steps requires k+1 forwards + k+1 reverses per inference call; an adjoint call costs 1 forward + 1 reverse. Totals also include prediction, acceptance and diagnostics. Operation totals do not identify the number of credit calls.\n\n'
+     cost_rows = []
+     for c in cells:
+         f = c.get('finish', {})
+@@ -252,10 +265,12 @@
+ 
+ 
+ def plot(report_path, output):
++    report = json.loads(Path(report_path).read_bytes())
++    if report.get("schema") == "pc-treatment-sweep-v1":
++        raise ValueError("plot an individual treatment report; never pool sweep arms")
+     import matplotlib
+     matplotlib.use('Agg')
+     import matplotlib.pyplot as plt
+-    report = json.loads(Path(report_path).read_bytes())
+     output = Path(output)
+     output.mkdir(parents=True, exist_ok=False)
+     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharey=True)
+@@ -276,7 +291,7 @@
+         ax.set(title=ds, xlabel='Mean process seconds / cell', ylim=(-.04, 1.04))
+         ax.legend()
+     axes[0].set_ylabel('RET-GS (fraction)')
+-    fig.suptitle('PC-v0: efficacy and measured cost' + (' — CPU SMOKE' if report['smoke'] else ''))
++    fig.suptitle('PC-v0: ' + treatment.label(report.get('treatment', treatment.DEFAULT)) + (' — CPU SMOKE' if report['smoke'] else ''))
+     fig.tight_layout()
+     exports = []
+     for ext in ('png', 'pdf', 'svg'):
+@@ -300,7 +315,7 @@
+     a = p.parse_args()
+     if a.command == 'build':
+         r = build(a.run, a.output, a.document, orders=a.orders, smoke=a.smoke, diagnostics=a.diagnostic_group)
+-        print(json.dumps({'cells': len(r['cells']), 'complete': sum(c['status']=='complete' for c in r['cells'])}))
++        print(json.dumps({'treatments': len(r['treatments'])} if 'treatments' in r else {'cells': len(r['cells']), 'complete': sum(c['status']=='complete' for c in r['cells'])}))
+     else:
+         plot(a.report, a.output)
+ 
+--- a/aw/pc_harm_readout.py
++++ b/aw/pc_harm_readout.py
+@@ -22,6 +22,7 @@
+ from scripts import r1_68f_full_validation as fv
+ from scripts.r1_68e_batched_drift_v0 import V0PositionBatchReader
+ 
++from aw import pc_treatments as treatment
+ from aw import scoring
+ from aw.pc_v0 import CUTOFF, archive, blocking_cuda_processes, build_cap, dump, wall_limit
+ from aw.pc_v0_report import ROOT, compare, load_group, sha, table
+@@ -159,6 +160,7 @@
+         with (out / "vectors.npz").open("xb") as f:
+             np.savez_compressed(f, values=values)
+         result = dict(
++            treatment=getattr(reader, "treatment", dict(treatment.DEFAULT)),
+             summary=summarize(values),
+             selection=metadata,
+             fields=list(scoring.FIELDS),
+@@ -219,6 +221,10 @@
+ def restore_v0(base, row, bindings, *, smoke=False):
+     dest = Path(row["directory"])
+     cfg = json.loads((dest / "config.json").read_bytes())
++    saved_finish = json.loads((dest / "finish.json").read_bytes())
++    solver = treatment.recorded(cfg, saved_finish)["solver"]
++    if base.error_lr != solver["error_lr"]:
++        raise ValueError("readout base rate differs from acquisition configuration")
+     records = json.loads((dest / "checkpoints.json").read_bytes())
+     final = [r for r in records if r["tag"] == "end"]
+     if len(final) != 1 or final[0]["items"] != row["items_completed"]:
+@@ -238,14 +244,14 @@
+                 d=base.d,
+                 arm="C1",
+                 credit="adjoint" if row["arm"] == "SE-A" else "error",
+-                credit_iters=8,
++                credit_iters=solver["credit_iters"],
+                 radii={m: 0.5 for m in (1, 2, 3)},
+                 bank_scales={m: 1.0 for m in (1, 2, 3)},
+             ),
+             base.ledger,
+         )
+     else:
+-        cap = build_cap(base, row["dataset"], row["arm"], int(cfg["named_seeds"]["seed_cap_init"]))
++        cap = build_cap(base, row["dataset"], row["arm"], int(cfg["named_seeds"]["seed_cap_init"]), credit_iters=solver["credit_iters"])
+     cap.import_state(st)
+     if (
+         cap.state_hash() != final[0]["state_hash"]
+@@ -347,6 +353,7 @@
+         raise ValueError("readout allowance must fit shared 8-hour ceiling; batch size 1..32")
+     bindings = {}
+     rows = load_group(group, bindings, smoke=smoke)
++    selected = treatment.homogeneous(rows)
+     expected = json.loads((Path(group) / "plan.json").read_bytes())["cells"]
+     _, pairs, _ = compare(rows, expected)  # same paired initial state, stream, calibration and base
+     if not rows or any(r["status"] != "complete" for r in rows):
+@@ -386,7 +393,7 @@
+     cost = dict(
+         status="failed", smoke=smoke, cost_scope="readout only", shared_ceiling_seconds=28800
+     )
+-    report = dict(smoke=smoke, selection=meta, cells=[], pairs=[], sources_sha256=bindings)
++    report = dict(smoke=smoke, treatment=selected, treatment_label=treatment.label(selected), selection=meta, cells=[], pairs=[], sources_sha256=bindings)
+     try:
+         allowance = min(wall_seconds, CUTOFF - time.time())
+         if allowance <= 0:
+@@ -406,15 +413,25 @@
+                 base = EPCBase.from_npz(archive()["base_checkpoints"]["epc"]["path"], error_lr=0.1)
+             paired = {}
+             for row in rows:
++                rate = row["solver"]["error_lr"]
++                if base.error_lr != rate:
++                    from pccap.bases.epc import EPCBase
++
++                    # Preserve tiny-fixture batch methods as well as production params.
++                    replacement = object.__new__(type(base))
++                    EPCBase.__init__(replacement, params_np=jax.tree_util.tree_map(np.asarray, base.params),
++                                     cfg=base.cfg, ledger=base.ledger, error_lr=rate)
++                    base = replacement
+                 cap = restore_v0(base, row, bindings, smoke=smoke)
+                 reader = V0PositionBatchReader(
+                     CellAdapter(cap, "v0_live_C1"), batch_size=batch_size
+                 )
+                 name = f"{row['dataset']}-r{row['realization']}-o{row['order']}-{row['arm']}"
++                reader.treatment = selected
+                 result = read_arm(reader, windows, meta, out / name)
+                 report["cells"].append(
+                     {k: row[k] for k in ("dataset", "realization", "order", "arm", "directory")}
+-                    | dict(readout=result)
++                    | dict(readout=result, treatment=selected, solver=row["solver"])
+                 )
+                 key = (row["dataset"], row["realization"], row["order"])
+                 paired.setdefault(key, {})[row["arm"]] = result
+@@ -424,6 +441,7 @@
+                 report["pairs"].append(
+                     dict(
+                         dataset=ds,
++                        treatment=selected,
+                         realization=r,
+                         order=o,
+                         **pair(arms["SE-A"], arms["SE-E"], out / f"{ds}-r{r}-o{o}-paired.npz"),
+@@ -436,13 +454,14 @@
+                 raise ValueError("position source changed during readout")
+             for path in (
+                 Path(__file__),
++                Path(treatment.__file__),
+                 ROOT / "aw/scoring.py",
+                 ROOT / "scripts/r1_68f_full_validation.py",
+                 ROOT / "scripts/r1_68e_batched_drift_v0.py",
+             ):
+                 bindings[str(path)] = sha(path)
+             dump(out / "report.json", report)
+-            (out / "table.md").write_text(table_block(report))
++            (out / "table.md").write_text("Treatment: " + treatment.label(selected) + "\n\n" + table_block(report))
+             cost["status"] = "complete"
+     finally:
+         cost.update(
+--- a/aw/pc_v1_readout.py
++++ b/aw/pc_v1_readout.py
+@@ -18,6 +18,7 @@
+ import numpy as np
+ from scripts.r1_68c_batched_drift import PositionBatchReader
+ 
++from aw import pc_treatments as treatment
+ from aw.pc_v0_report import sha
+ from aw.pc_v1_acquire import PCRevisionCap
+ from pccap.harness.snapshot import restore
+@@ -91,14 +92,30 @@
+         self.checkpoint = None
+ 
+     @classmethod
+-    def from_checkpoint(cls, base, cfg, params, binding, *, batch_size=16):
++    def from_checkpoint(cls, base, cfg, params, binding, *, batch_size=16, config=None, finish=None):
+         """Binding: path, sha256, state_sha256, base_sha256, reader_sha256, credit, iters.
+ 
+         The caller constructs the original BP base with the EPC interface. This
+         function never chooses weights from the v0 ePC replication checkpoint.
+         """
+-        if binding["credit"] not in ("adjoint", "error") or binding["iters"] != 8:
+-            raise ValueError("supplemental fixed-v5 credit must be adjoint/error with eight steps")
++        if binding["credit"] not in ("adjoint", "error"):
++            raise ValueError("supplemental credit must be adjoint/error")
++        actual = treatment.normalized(binding["iters"], binding.get("error_lr", 0.1))
++        if (config is None) != (finish is None):
++            raise ValueError("supply both config and finish for treatment validation")
++        if config is None:
++            if actual != treatment.DEFAULT:
++                raise ValueError("variant snapshot requires its config and finish")
++            selected = dict(treatment.DEFAULT)
++        else:
++            record = treatment.recorded(config, finish)
++            solver, selected = record["solver"], record["treatment"]
++            if actual != {k: solver[k] for k in treatment.DEFAULT}:
++                raise ValueError("checkpoint and recorded solver differ")
++            if binding["credit"] != ("error" if solver["error_solver_active"] else "adjoint"):
++                raise ValueError("checkpoint and recorded credit arm differ")
++        if base.error_lr != actual["error_lr"]:
++            raise ValueError("construct EPCBase with the recorded error learning rate before restoration")
+         path = Path(binding["path"]).resolve()
+         if sha(path) != binding["sha256"]:
+             raise ValueError("supplemental snapshot file hash differs")
+@@ -121,6 +138,7 @@
+             raise ValueError("restored state differs")
+         reader = cls(cap, batch_size=batch_size)
+         reader.checkpoint = dict(binding, path=str(path))
++        reader.treatment = selected
+         return reader
+ 
+     def last_logits_batch(self, seqs, phase="query"):
+--- /dev/null
++++ b/aw/pc_treatments.py
+@@ -0,0 +1,243 @@
++"""PC-10: explicit treatment identity; separate reports for solver contingencies.
++
++Staged for aw/pc_treatments.py. Metadata only; never selects or executes a sweep.
++"""
++
++from __future__ import annotations
++
++import argparse
++import hashlib
++import json
++from pathlib import Path
++
++from aw.pc_sweep import settings
++
++DEFAULT = dict(credit_iters=8, error_lr=0.1)
++
++
++def normalized(iters, rate):
++    if isinstance(iters, bool) or not isinstance(iters, int) or isinstance(rate, bool):
++        raise ValueError("integer treatment iterations required")
++    s = settings("SE-E", iters, rate)
++    return {k: s[k] for k in DEFAULT}
++
++
++def label(t):
++    t = normalized(t["credit_iters"], t["error_lr"])
++    return f"SE-E k={t['credit_iters']}, lr={t['error_lr']!r}; SE-A unchanged"
++
++
++def key(t):
++    t = normalized(t["credit_iters"], t["error_lr"])
++    return f"k{t['credit_iters']}-lr{t['error_lr']!r}"
++
++
++def planned(plan):
++    credit = plan.get("credit")
++    if credit is None:
++        return dict(DEFAULT)
++    arms = credit.get("arm_settings", credit)
++    if set(arms) != {"SE-A", "SE-E"}:
++        raise ValueError("plan must specify both treatment arms")
++    e = arms["SE-E"]
++    t = normalized(e["requested_credit_iters"], e["requested_error_lr"])
++    for arm in arms:
++        if arms[arm] != settings(arm, **t):
++            raise ValueError("planned effective/requested settings disagree")
++    return t
++
++
++def recorded(cfg, finish=None, plan=None):
++    """Legacy missing finish metadata is allowed only for the original 8/.1 run."""
++    arm = cfg.get("arm", cfg.get("cell", {}).get("arm"))
++    s = cfg.get("solver", cfg)
++    effective = normalized(s["credit_iters"], s["error_lr"])
++    has_requested = "requested_credit_iters" in s or "requested_error_lr" in s
++    if has_requested:
++        t = normalized(s["requested_credit_iters"], s["requested_error_lr"])
++        expected = settings(arm, **t)
++        if any(s.get(k) != v for k, v in expected.items()):
++            raise ValueError("cell effective/requested treatment differs")
++    else:
++        if effective != DEFAULT:
++            raise ValueError("nondefault treatment needs explicit requested settings")
++        t, expected = dict(DEFAULT), settings(arm)
++    if plan is not None and t != planned(plan):
++        raise ValueError("cell treatment differs from plan")
++    if finish is not None:
++        actual = {k: finish.get(k) for k in DEFAULT}
++        if all(v is None for v in actual.values()) and not has_requested:
++            pass  # historical default finish format, validated from config
++        elif actual != effective:
++            raise ValueError("config/finish treatment differs")
++        if has_requested:
++            saved = finish.get("requested_solver", finish)
++            if any(saved.get(k) != v for k, v in expected.items()):
++                raise ValueError("finish lacks matching requested treatment")
++            if finish.get("error_solver_active") != expected["error_solver_active"]:
++                raise ValueError("finish active credit flag differs")
++    return dict(treatment=t, solver=expected)
++
++
++def homogeneous(rows):
++    variants = {key(r.get("treatment", DEFAULT)): r.get("treatment", DEFAULT) for r in rows}
++    if len(variants) > 1:
++        raise ValueError("mixed treatments cannot be pooled into one arm; build a sweep report")
++    return next(iter(variants.values()), dict(DEFAULT))
++
++
++def build_sweep(groups, output, document, build, read, *, orders, smoke, diagnostics):
++    """One normal child report per treatment; no cross-treatment efficacy mean."""
++    if diagnostics:
++        raise ValueError("attach diagnostics to individual treatments, not to a pooled sweep")
++    output, document = Path(output), Path(document)
++    output.mkdir(parents=True, exist_ok=False)
++    groupings, bindings = {}, {}
++    for group in groups:
++        t = planned(read(Path(group) / "plan.json", bindings))
++        entry = groupings.setdefault(key(t), dict(treatment=t, groups=[]))
++        entry["groups"].append(group)
++    reports, lines = [], []
++    for ident, entry in sorted(groupings.items()):
++        child = output / ident
++        r = build(entry["groups"], child, output / (ident + ".md"), orders=orders, smoke=smoke)
++        reports.append(
++            dict(treatment=entry["treatment"], report=str((child / "report.json").resolve()))
++        )
++        for a in r["aggregates"]:
++            vals = [
++                label(entry["treatment"]),
++                a["dataset"],
++                a["metric"],
++                a["realizations"],
++                a["mean"],
++            ]
++            lines.append(
++                "| " + " | ".join("unavailable" if x is None else str(x) for x in vals) + " |"
++            )
++        bindings.update(r["sources_sha256"])
++        bindings[str((child / "report.json").resolve())] = file_sha(child / "report.json")
++    result = dict(
++        schema="pc-treatment-sweep-v1",
++        smoke=smoke,
++        treatments=reports,
++        sources_sha256=bindings,
++        pooling="none; paired effects within each declared treatment only",
++    )
++    (output / "report.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
++    document.parent.mkdir(parents=True, exist_ok=True)
++    document.write_text(
++        "# PC contingency sweep — separate treatments\n\n"
++        + (
++            "CPU SMOKE ONLY; synthetic outcomes.\n\n"
++            if smoke
++            else "Exposed S5; exploratory solver contingency, not fresh confirmation.\n\n"
++        )
++        + "No pooled arm or selected best-treatment claim; each child retains missing slots and secondary scores.\n\n"
++        + "| Treatment | Dataset | Metric | Realization differences | Mean SE-E − SE-A |\n"
++        + "| --- | --- | --- | --- | --- |\n"
++        + "\n".join(lines)
++        + "\n"
++    )
++    return result
++
++
++def file_sha(path):
++    with Path(path).open("rb") as f:
++        return hashlib.file_digest(f, "sha256").hexdigest()
++
++
++def harm_sweep(paths, output, document):
++    """Read completed readouts; display each treatment/coordinate without pooling."""
++    refs, entries, lines, seen = {}, [], [], set()
++    population = None
++    for path in map(Path, paths):
++        report = json.loads(path.read_text())
++        cost_path = path.parent / "cost.json"
++        cost = json.loads(cost_path.read_text())
++        if cost["status"] != "complete":
++            raise ValueError("complete harm readout required")
++        for p, h in report["sources_sha256"].items():
++            if file_sha(p) != h:
++                raise ValueError("harm input identity differs")
++            refs[p] = h
++        identity = (report["smoke"], report["selection"])
++        if population is not None and identity != population:
++            raise ValueError("different populations/position inventories cannot share a sweep")
++        population = identity
++        t = homogeneous(report["cells"])
++        if t != report.get("treatment", DEFAULT):
++            raise ValueError("harm group/cell treatment differs")
++        if any(c["readout"].get("treatment", DEFAULT) != t for c in report["cells"]):
++            raise ValueError("nested readout treatment differs")
++        cells = {(c["dataset"], c["realization"], c["order"], c["arm"]) for c in report["cells"]}
++        if len(cells) != len(report["cells"]):
++            raise ValueError("duplicate harm cell")
++        covered = set()
++        for p in report["pairs"]:
++            coord = (p["dataset"], p["realization"], p["order"])
++            if (key(t), *coord) in seen or p.get("treatment", DEFAULT) != t:
++                raise ValueError("duplicate pair or mixed treatment in harm sweep")
++            seen.add((key(t), *coord))
++            for arm in ("SE-A", "SE-E"):
++                if (*coord, arm) not in cells:
++                    raise ValueError("missing matched harm arm")
++                covered.add((*coord, arm))
++            delta = p["positionwise"]["original"]["loss"]["mean_signed"]
++            es = p["difference_of_arm_es99"]["original"]
++            lines.append(f"| {label(t)} | {coord[0]} | {coord[1]} | {coord[2]} | {delta} | {es} |")
++        if covered != cells or not cells:
++            raise ValueError("incomplete harm pairing")
++        refs[str(path.resolve())], refs[str(cost_path.resolve())] = (
++            file_sha(path),
++            file_sha(cost_path),
++        )
++        entries.append(
++            dict(
++                treatment=t,
++                report=str(path.resolve()),
++                readout_process_seconds=cost["elapsed_process_seconds"],
++            )
++        )
++    if not entries:
++        raise ValueError("at least one complete readout required")
++    result = dict(
++        schema="pc-harm-sweep-v1",
++        smoke=population[0],
++        selection=population[1],
++        treatments=entries,
++        sources_sha256=refs,
++        pooling="none",
++    )
++    with Path(output).open("x") as f:
++        json.dump(result, f, indent=2, allow_nan=False)
++        f.write("\n")
++    with Path(document).open("x") as f:
++        f.write(
++            "# Harm sweep — separate treatments\n\n"
++            + (
++                "CPU SMOKE ONLY.\n\n"
++                if result["smoke"]
++                else "Exposed supplemental populations; no treatment selection or pooled estimate.\n\n"
++            )
++            + "Positive differences favor SE-A for harm; difference of arm ES99 is not ES99 of positionwise differences.\n\n"
++            + "| Treatment | Dataset | Realization | Order | Mean paired ΔNLL | Difference of arm ES99 |\n"
++            + "| --- | --- | --- | --- | --- | --- |\n"
++            + "\n".join(lines)
++            + "\n"
++        )
++    return result
++
++
++def main():
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument("command", choices=("harm-sweep",))
++    p.add_argument("--report", action="append", required=True)
++    p.add_argument("--output", required=True)
++    p.add_argument("--document", required=True)
++    a = p.parse_args()
++    harm_sweep(a.report, a.output, a.document)
++
++
++if __name__ == "__main__":
++    main()
