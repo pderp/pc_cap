@@ -173,6 +173,12 @@ The GPU chain is complete: `results/additional_work/PC-v0/replication-60-2026092
 (full inventory, 245,237 positions per arm; see its `cost-repair.json`: the table was generated after a driver
 KeyError and its population caption is the fixed v0 text). Capstan's preliminary reads are lead-queue items 126–129.
 
+**Note for Capex (2026-09-28 18:10):** the round-52 list you acknowledged predates two additions: **AW-B3 below is now
+first** (the calibration is the next GPU job after tonight's controls), then PC-12, then PC-8 / X24-final / R-1. The
+applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
+against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
+edits in new files or after the chain's finish is posted in the lead queue.
+
 ### Lane AW-B3 — bounded-correction calibration driver (first; DEC-076; GPU dispatch by Capstan after the controls)
 
 `aw/aw_b_calibrate.py` + tests. Inputs: the pre-registration `docs/additional_work/AW-B.md` (approved), Capstan's
