@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-28 17:20** — Capex round 51 committed (PC-10 staged, X24 pass on 44 cells, REV-3 Tuesday form). The PC chain finished Sunday 16:13 (both efficacy runs and both harm readouts; lead queue 126–129). Round 52 lanes below: PC-8 is unblocked.
+
 - **2026-09-27 11:05** — Capex round 50 committed (PC-9 contingency patch staged on copies, REV-2 Q&A + results scaffold, PRES-5 timed scripts). PC-v0 replication 39 / 60 (CounterFact cells running), ETA ≈ 13:30. Round 51 lanes below.
 
 - **2026-09-27 08:35** — Capex round 49 committed (Stage-4 report assembled; X23 PASS on cells 136–270). Reviewer primer in `assets/presentation-materials/review-data/README.md`. PC-v0 replication 26 / 60. Round 50 lanes below.
@@ -158,6 +160,34 @@ Ground rules for every lane: CPU only (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`
 queue runs, Codex-owned files only (listed per lane; `aw/bounded.py`, `aw/wrapper.py`, `aw/scoring.py` and
 `docs/additional_work/{AW-B,R}.md` are the orchestrator's), task record `docs/tasks/AW-<lane>.md` + completion JSON as
 usual. Plans: `docs/additional_work_plan_final.md` (binding), `additional_work_plan{,2,3}.md` (history).
+
+## Round 52 — reports from real data (2026-09-28, 17:20)
+
+The GPU chain is complete: `results/additional_work/PC-v0/replication-60-20260927/` (60 cells),
+`results/additional_work/PC-v0/harm/pc-v0-60-20260927/` (legacy S5 subset, 4,064 positions per arm),
+`results/additional_work/PC-v1/replication-4-20260927/` (4 cells), `results/additional_work/PC-v1/harm/pc-v1-4-20260927/`
+(full inventory, 245,237 positions per arm; see its `cost-repair.json`: the table was generated after a driver
+KeyError and its population caption is the fixed v0 text). Capstan's preliminary reads are lead-queue items 126–129.
+
+### Lane X24-final — rerun the replication audit with `--require-complete` (first, short)
+
+On the complete 60-cell set and the four fixed-v5 cells (extend the checks to the v5 run's `checkpoint-300.json`
+bindings, base/reader hashes and identical item order across arms). Output `logs/r1_x24/final/`.
+
+### Lane PC-8 — the PC reports from real data (second)
+
+`docs/additional_work/PC-v0_report.md` from the 60-cell run and its harm readout, and a companion
+`docs/additional_work/PC-v1_report.md` for the fixed-v5 four cells and their full-inventory harm readout (use the
+staged treatment-aware generator on copies if the live one cannot label the v5 selection correctly, and say so).
+Fill the claim-ledger PC rows with measured values and populations; export figures to
+`assets/presentation-materials/figures/pc_v0/` and `figures/pc_v1/`; fill `review-data/results.md` from the same
+sources (Capstan checks it against items 126–129). State each result whichever way it falls, with the cost columns.
+
+### Lane PC-11 — apply the combined PC-9/PC-10 patch (third, after PC-8's exports exist)
+
+Capstan confirms the idle boundary (the GPU is idle now; Option R may run on it, which does not touch these files).
+Apply the exact commands in PC-10.md, keep the old versions under `docs/tasks/PC-9-candidate/old/`, rerun the
+tests, and regenerate the two PC reports with the treatment-aware generator to show they reproduce the PC-8 numbers.
 
 ## Round 51 — variant-aware reporting, replication audit, Tuesday outline (2026-09-27, 11:05)
 
