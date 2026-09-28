@@ -25,8 +25,13 @@ Thirteen numerical configurations plus three gate settings; b = 0 and b = ∞ ar
 
 ## Populations (DEC-073, allocation A)
 
-- **Calibration:** the development payloads `r16_zsre_v5` and `r16_counterfact_v5` (300 items each; exposed
-  development data), one qualified v5 development memory per dataset.
+- **Calibration:** the saved AW-L0 / PC-4 zsRE memory's actual full-endpoint payload
+  `stage4_dev_payloads/r1_64f_round28/zsre/payload.json` (recipe
+  `docs/tasks/R1-64g-post63l/R1-64g-zsre-R1_learned_ff.recipe.json`) and
+  CounterFact's `r16_counterfact_v5` payload (300 items each; exposed development
+  data), one qualified v5 development memory per dataset. charlie approved this
+  population correction on 2026-09-28 before calibration; the older named zsRE
+  payload does not match the saved memory and has no near-miss/revision cases.
 - **Evaluation:** the sealed realization-0 confirmatory streams of the primary triplet on zsRE and CounterFact (five
   orders each), which the selected artifact has already seen in R1: **post hoc evaluation on exposed confirmatory
   populations**, paired cell for cell with the block-1 report; no selection is performed on them. MQuAKE only if both
@@ -52,6 +57,12 @@ and whose LS and near-miss preservation do not decrease, choose at most **one bo
 maximum, ties broken by ES99) and **one comparator** (the best of shrink and gate by the same criterion). Those two,
 v5 and cap-off are the final arms: 4 arms × 2 datasets × 5 orders = 40 paired evaluations (plus the fixed-prefix
 assay for all 16 configurations, which costs one pass).
+
+Cross-dataset ranking, approved by charlie on 2026-09-28 before calibration:
+use the **smaller** of the zsRE and CounterFact maximum-harm reductions; break
+ties by the **smaller** of their ES99 reductions. Complete numerical ties use
+the listed configuration order. If a category has no eligible candidate, omit
+it explicitly rather than select an ineligible arm.
 
 A wrapper is reported as useful when, on the evaluation streams, it lowers the paired maximum and ES99 against v5 in
 every order and dataset while staying inside the 0.02 retention tolerance; otherwise the result is the operating
