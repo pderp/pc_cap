@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-29 06:50** — DEC-077: no external review; all remaining work proceeds on defaults. GPU queue after the controls: fixed-v5 credit settings → Option R (go decision `docs/additional_work/R_decision.md`) → PC-trained reader → upper-layer 2×2 → scaling. Round 54 lanes below for the runners still missing.
+
 - **2026-09-29 06:35** — Capex round 52 committed (AW-B3, PC-12, X24-final PASS, PC-8 reports, PC-11 tests, R-1 consumer). GPU: settling-depth control done (items 132–133); AW-B calibration done, mixture ρ = e⁻¹ selected (item 134); AW-B evaluation running since 05:24; PC-12 random and matched controls queued behind it. Round 53 lanes below.
 
 - **2026-09-28 17:50** — DEC-076: AW-B pre-registration approved; calibration follows the settling-depth controls on the GPU. Lane AW-B3 (calibration driver) opened first; PC-12 second.
@@ -180,6 +182,33 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 54 — the runners the default portfolio still needs (2026-09-29, 06:50; DEC-077)
+
+Order for Capex: PC-13 and AW-B4 (round 53) remain first because the talk needs them; then the three runners below in
+this order, each CPU-validated on the tiny base and handed off with owner commands. Capstan dispatches on the GPU as
+each lands, behind the queue (controls → v5 credit settings → Option R).
+
+### Lane PC-15 — PC-trained reader runner
+
+`aw/pc_reader_train.py`: train the selected v5 reader recipe (same data pools, steps, optimiser, seeds, checkpoint
+policy) with the corrected ePC surrogate (`revision_v1/epc_train.py`, imported not copied) instead of BP, three seeds
+per rule (BP re-trained under the same runner as the control, so the comparison is within-runner), then evaluate each
+of the six readers on the exposed realization-0 streams (300 edits, order 100, zsRE and CounterFact) with the R1
+endpoints, adjoint acquisition in all arms (the credit rule is not varied here), and a harm readout hook. Record
+training cost. Pre-registration paragraph in `docs/additional_work/PC-reader.md` (Capex drafts; defaults apply).
+
+### Lane AW-L5 — upper-layer trained 2×2 runner
+
+`aw/aw_l_train.py`: the AW-L pre-registration as written (read sets {1,2,3} / {2,3} × write sets {1,2,3} / {3},
+three paired seeds, six trained readers, 24 evaluations on the exposed realization-0 streams at 300 edits), using
+`aw/interface.py` (AW-L3) for the masks and the same training recipe as PC-15's BP control; profile step first.
+
+### Lane HT-16 — 3,000-edit scaling: population check and recipe
+
+Can a 3,000-edit zsRE stream be built for realization 0 without touching Option R's subjects or any exposed
+identity outside realization 0? If yes, a recipe with checkpoints at 1,000 / 2,000 / 3,000 and the full-validation
+assay at each, three orders; if no, a one-paragraph note and the lane closes.
 
 ## Round 53 — fold the new results into the record (2026-09-29, 06:35)
 

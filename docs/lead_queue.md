@@ -1328,3 +1328,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     control → matched control (queued automatically). Round 53 lanes: PC-13 settling-depth report and figure, AW-B4
     bounded-correction report, PRES-6 deck update.
 
+136. (2026-09-29, 06:55 EDT) DEC-077 recorded: no external review; everything proceeds on defaults. GPU queue set: AW-B
+    evaluation (running) → random control → matched control → fixed-v5 credit settings (32 iterations; error rate 0.05
+    and 0.2) with their profiles and harm readouts → **Option R** (go decision `docs/additional_work/R_decision.md`, ≈ 38
+    process-hours at two workers) → PC-trained reader, upper-layer 2×2 and the scaling study as their runners land
+    (round 54 lanes for Capex). Budget: ≈ 160 wall-hours to October 6; the queue above uses ≈ 45 before the runners.
+
