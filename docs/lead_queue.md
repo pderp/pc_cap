@@ -1279,3 +1279,21 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     **The bounded-correction calibration (AW-B) still awaits the lead's sign-off on its pre-registration** (item 130,
     §2 of the 28 September answer); it is the one GPU job that could follow the controls without further code.
 
+
+132. (2026-09-28, 23:55 EDT) **Settling-depth control done (DEC-075 control 1): the SE-E gain is a dose–response in the
+    settling.** 12 cells per depth (order 100 × three realizations × two datasets), all complete; zsRE means, SE-A
+    identical across runs (deterministic):
+
+    | credit | ES | RET-ES | RET-GS | LS | learning s / zsRE cell |
+    |---|---:|---:|---:|---:|---:|
+    | SE-A (adjoint) | 0.9983 | 0.5153 | 0.1307 | 0.970 | 281 |
+    | SE-E, 1 step | 0.9983 | 0.5153 | 0.1307 | 0.970 | 341 |
+    | SE-E, 8 steps (treatment) | 0.9990 | 0.5340 | 0.1310 | 0.977 | 614 |
+    | SE-E, 32 steps | 0.9990 | 0.5650 | 0.1220 | 0.997 | 1,525 |
+
+    One-step error credit reproduces adjoint **exactly** on every endpoint (the one-step site error is −0.1 × adjoint,
+    so the normalised write is the same): the +0.02 own-prompt retention at 8 steps is not a scale artefact. At 32 steps
+    own-prompt retention rises to +0.050 and locality to +0.027 while paraphrase retention drops 0.009, at 5.4× the
+    adjoint learning cost. CounterFact saturated and identical at every depth. Reading: more settling buys own-prompt
+    retention, not generalisation, and the price grows faster than the gain; the credit rule's content matters.
+    Harm readouts for both depths run next (≈ 25 min each), then the AW-B calibration once Capex's driver is handed off.
