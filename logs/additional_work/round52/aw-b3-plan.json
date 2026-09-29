@@ -1,0 +1,140 @@
+{
+  "inputs": {
+    "zsre": {
+      "recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64g-post63l/R1-64g-zsre-R1_learned_ff.recipe.json",
+        "sha256": "4b29cd82cd685e8f674abb5c5540c5273e96c1da7a9fae95b0eecfabe42db39d"
+      },
+      "payload": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r1_64f_round28/zsre/payload.json",
+        "sha256": "ef32d2abc1ab87eb62d6fa5491b1e84f2d3e30c3918c8e6998e7f18cae7ce79e"
+      },
+      "checkpoint": {
+        "path": "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-zsre-development_full_endpoints_R164f-seed64028-c84c64b1149e74b70edb/attempt-0000/checkpoint-300.json",
+        "sha256": "b6de713075df226f7e40185d15638032d98151a6f83642b0997f23a5e1736718"
+      },
+      "metadata": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_cells/R1_learned_ff-zsre-development_full_endpoints_R164f-seed64028-c84c64b1149e74b70edb/attempt-0000/checkpoint-300.snapshot.json",
+        "sha256": "e10806a8570aef866ef5b38c66607229f25489baa1c9574497312cb977e9e3f5"
+      },
+      "snapshot": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_cells/R1_learned_ff-zsre-development_full_endpoints_R164f-seed64028-c84c64b1149e74b70edb/attempt-0000/checkpoint-300.snapshot",
+        "sha256": "a9a21cb3c83683201d7e805295dac3912f7a0bb9b2536f362ae17ee2b2492fc5"
+      },
+      "state_sha256": "11f2b31f7fe0ec29f39baeb89943c33144371a64725af9c3cf0a89e4bf379a6a",
+      "population": "exposed development: r1_64f_round28/zsre full endpoints",
+      "cell": {
+        "condition": "R1_learned_ff",
+        "dataset": "zsre",
+        "order": "seed64028",
+        "realization": "development_full_endpoints_R164f"
+      },
+      "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+      "memory_origin": "existing registered-acquisition 300-edit snapshot; no new training"
+    },
+    "counterfact": {
+      "recipe": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/R1-64-counterfact-v5.recipe.json",
+        "sha256": "13340760cfa3aecc31dd4cc42e27e8bdce79916780b45bdc63c9bcbec7c09394"
+      },
+      "payload": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_payloads/r16_counterfact_v5/payload.json",
+        "sha256": "e5fb5317868679ab314178f8ef2c41c19c0ed53062204cf79e8fcc19bd1770a4"
+      },
+      "checkpoint": {
+        "path": "/home/derp/cap/pc_cap/results/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.json",
+        "sha256": "d702493ab5bc81eabfa49923cbec224aef4027333190212f1bf6a91021933ee0"
+      },
+      "metadata": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.snapshot.json",
+        "sha256": "15e08c045cabb378608aed87d83244c0af0926ad1a4b6ba57d1e9849114e814c"
+      },
+      "snapshot": {
+        "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_cells/R1_learned_ff-counterfact-development-source-bc285b69b70dff8514a4/attempt-0000/checkpoint-300.snapshot",
+        "sha256": "2854e92a5ac1418c9dd94339880178fd7c7037b85e7484299d3377e2ba282f44"
+      },
+      "state_sha256": "f7d09c7b0f38bb14b2ea4a2a0b13c7120793cd4af6e292904ae52dd476aba839",
+      "population": "exposed development: r16_counterfact_v5",
+      "cell": {
+        "condition": "R1_learned_ff",
+        "dataset": "counterfact",
+        "order": "source",
+        "realization": "development"
+      },
+      "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+      "memory_origin": "existing registered-acquisition 300-edit snapshot; no new training"
+    }
+  },
+  "configs": [
+    [
+      "v5",
+      null
+    ],
+    [
+      "capoff",
+      null
+    ],
+    [
+      "clip",
+      0.5
+    ],
+    [
+      "mixture",
+      0.36787944117144233
+    ],
+    [
+      "clip",
+      1
+    ],
+    [
+      "mixture",
+      0.1353352832366127
+    ],
+    [
+      "clip",
+      2
+    ],
+    [
+      "mixture",
+      0.01831563888873418
+    ],
+    [
+      "clip",
+      4
+    ],
+    [
+      "mixture",
+      0.00033546262790251185
+    ],
+    [
+      "shrink",
+      0.25
+    ],
+    [
+      "shrink",
+      0.5
+    ],
+    [
+      "shrink",
+      0.75
+    ],
+    [
+      "gate",
+      0.4
+    ],
+    [
+      "gate",
+      0.3
+    ],
+    [
+      "gate",
+      0.2
+    ]
+  ],
+  "calibration_ceiling_seconds": 28800,
+  "evaluation_ceiling_seconds": 57600,
+  "model_execution": false,
+  "selection_ranking": "minimum: charlie approved 2026-09-28"
+}
