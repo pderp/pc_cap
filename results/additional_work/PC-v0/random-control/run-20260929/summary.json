@@ -1,0 +1,211 @@
+{
+  "planned": 12,
+  "finished": [
+    {
+      "cell": {
+        "dataset": "zsre",
+        "realization": 0,
+        "order": 100,
+        "arm": "SE-A",
+        "items": 1000
+      },
+      "exit_code": 0,
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "error_lr": 0.1,
+          "orientation": "independent isotropic Gaussian direction per bank per credit call",
+          "norm": "reference raw site-error norm before unchanged unit-direction transport",
+          "rng": "NumPy PCG64, SeedSequence([cap_seed, 0x50433132]); separately snapshotted",
+          "matching": "same true eight-step error computation; 9 forwards + 9 reverses per credit call",
+          "update_rule": "unchanged transactional line search, thresholds and R=5 per-prefix budget",
+          "role": "adjoint_control"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 989.7377778028604,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 63141,
+            "partial_forwards": 98909,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 236.72042375523597,
+            "accel_seconds": 236.72042375523597,
+            "peak_mem_mib": 1258.958984375,
+            "tokens": 3256947
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 76489,
+            "partial_forwards": 138802,
+            "reverses": 11334,
+            "settle_iters": 0,
+            "prefix_microsteps": 3853,
+            "router_probes": 0,
+            "search_candidates": 46236,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 275.5258568068966,
+            "accel_seconds": 275.5258568068966,
+            "peak_mem_mib": 1258.958984375,
+            "tokens": 2682892
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 139630,
+            "partial_forwards": 237711,
+            "reverses": 11334,
+            "settle_iters": 0,
+            "prefix_microsteps": 3853,
+            "router_probes": 0,
+            "search_candidates": 46236,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 512.2462805621326,
+            "accel_seconds": 512.2462805621326,
+            "peak_mem_mib": 1258.958984375,
+            "tokens": 5939839
+          },
+          "events": 244420,
+          "elapsed_wall_seconds": 989.737797498703,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "cell": {
+        "dataset": "zsre",
+        "realization": 0,
+        "order": 100,
+        "arm": "SE-R",
+        "items": 1000
+      },
+      "exit_code": 0,
+      "finish": {
+        "status": "resource_stop",
+        "dataset": "zsre",
+        "arm": "SE-R",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": true,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "random",
+          "arm": "SE-R",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "error_lr": 0.1,
+          "orientation": "independent isotropic Gaussian direction per bank per credit call",
+          "norm": "reference raw site-error norm before unchanged unit-direction transport",
+          "rng": "NumPy PCG64, SeedSequence([cap_seed, 0x50433132]); separately snapshotted",
+          "matching": "same true eight-step error computation; 9 forwards + 9 reverses per credit call",
+          "update_rule": "unchanged transactional line search, thresholds and R=5 per-prefix budget",
+          "role": "random_direction"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 993,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 3727.431497309124,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 35946,
+            "partial_forwards": 42349,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 113.73186257435009,
+            "accel_seconds": 113.73186257435009,
+            "peak_mem_mib": 1276.92431640625,
+            "tokens": 1856172
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 605316,
+            "partial_forwards": 672989,
+            "reverses": 340155,
+            "settle_iters": 302360,
+            "prefix_microsteps": 17423,
+            "router_probes": 0,
+            "search_candidates": 209076,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 2297.8562451465987,
+            "accel_seconds": 2297.8562451465987,
+            "peak_mem_mib": 1276.92431640625,
+            "tokens": 12502425
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 641262,
+            "partial_forwards": 715338,
+            "reverses": 340155,
+            "settle_iters": 302360,
+            "prefix_microsteps": 17423,
+            "router_probes": 0,
+            "search_candidates": 209076,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 2411.5881077209488,
+            "accel_seconds": 2411.5881077209488,
+            "peak_mem_mib": 1276.92431640625,
+            "tokens": 14358597
+          },
+          "events": 1004321,
+          "elapsed_wall_seconds": 3727.431524038315,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    }
+  ],
+  "elapsed_process_seconds": 4721.201896759216,
+  "complete": false
+}

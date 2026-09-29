@@ -1,0 +1,90 @@
+{
+  "command": "cell",
+  "execute": true,
+  "output": "/home/derp/cap/pc_cap/results/additional_work/PC-v0/random-control/profile-20260929/counterfact-r0-o100-SE-R",
+  "dataset": "counterfact",
+  "realization": 0,
+  "order": 100,
+  "arm": "SE-R",
+  "population": "development",
+  "items": 10,
+  "wall_seconds": 7200.0,
+  "credit_iters": 8,
+  "error_lr": 0.1,
+  "diagnostic": false,
+  "selection_seed": 21,
+  "manifest_sha256": "6106a2a2e6cedfe828dec099288d20deccf33afcb2613d5c95ab53c24ae82bd8",
+  "weights_sha256": "ea4c561d3963ffd89f866337ef5e789a4ef15b7558b4c717594dbef88cd26f51",
+  "sources": {
+    "aw/pc_v0.py": "311cc337635d625cd4ec743805d69311a8b247df7502903cf9cbc4c8812c4286",
+    "aw/pc_sweep.py": "f5245304d7aa2fd414c39e0c15ae2aecfa296951eadf895433a3fdfdbe04a42d",
+    "manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+    "aw/pc_random_run.py": "301fa776695b80c8a9a18e26d55b2757c552329044d33085a197979591e7007d",
+    "aw/pc_random_credit.py": "4d8d625e3d3992d26829d21ddc3e9a0fe918fb5fcde2972d747285d6e8f7ee7b",
+    "aw/pc_historical.py": "ed8e217b9e64066ef79f439965fbfb74130d2326313025e5d593550bf6565c1e"
+  },
+  "initial_state": "64c69788751f386f53b5c3edf6a5764643416a01bd9e6ee7fb776e9af4831f08",
+  "item_ids": [
+    "cf-1284",
+    "cf-1099",
+    "cf-4550",
+    "cf-9957",
+    "cf-5854",
+    "cf-684",
+    "cf-4376",
+    "cf-18842",
+    "cf-15226",
+    "cf-2440"
+  ],
+  "error_solver_active": true,
+  "requested_credit_iters": 8,
+  "requested_error_lr": 0.1,
+  "control_treatment": {
+    "credit": "random",
+    "arm": "SE-R",
+    "reference_credit": "error",
+    "reference_credit_iters": 8,
+    "error_lr": 0.1,
+    "orientation": "independent isotropic Gaussian direction per bank per credit call",
+    "norm": "reference raw site-error norm before unchanged unit-direction transport",
+    "rng": "NumPy PCG64, SeedSequence([cap_seed, 0x50433132]); separately snapshotted",
+    "matching": "same true eight-step error computation; 9 forwards + 9 reverses per credit call",
+    "update_rule": "unchanged transactional line search, thresholds and R=5 per-prefix budget",
+    "role": "random_direction"
+  },
+  "scoring": "unchanged S5 primary; bounded text secondary",
+  "drift": {
+    "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+    "shape": [
+      247289
+    ],
+    "dtype": "int32",
+    "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+  },
+  "locality_prompts_sha256": "a498e2e9a0bfb0ae54c86fa75fd0a8e1409abf1513680ee638b3201dc05e05d9",
+  "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "determinism": {
+    "xla_flags": "--xla_gpu_deterministic_ops=true --xla_gpu_autotune_level=0",
+    "omp_num_threads": "16",
+    "jax_default_matmul_precision": "highest",
+    "jax_enable_x64": false,
+    "jax_threefry_partitionable": false,
+    "jax_version": "0.11.1",
+    "backend": "gpu",
+    "devices": [
+      "cuda:0"
+    ]
+  }
+}

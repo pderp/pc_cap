@@ -1,0 +1,92 @@
+{
+  "status": "complete",
+  "dataset": "counterfact",
+  "arm": "SE-R",
+  "credit_iters": 8,
+  "error_lr": 0.1,
+  "error_solver_active": true,
+  "requested_credit_iters": 8,
+  "requested_error_lr": 0.1,
+  "control_treatment": {
+    "credit": "random",
+    "arm": "SE-R",
+    "reference_credit": "error",
+    "reference_credit_iters": 8,
+    "error_lr": 0.1,
+    "orientation": "independent isotropic Gaussian direction per bank per credit call",
+    "norm": "reference raw site-error norm before unchanged unit-direction transport",
+    "rng": "NumPy PCG64, SeedSequence([cap_seed, 0x50433132]); separately snapshotted",
+    "matching": "same true eight-step error computation; 9 forwards + 9 reverses per credit call",
+    "update_rule": "unchanged transactional line search, thresholds and R=5 per-prefix budget",
+    "role": "random_direction"
+  },
+  "desktop_cuda_processes": [
+    {
+      "pid": "2042",
+      "used_memory": "94 MiB"
+    },
+    {
+      "pid": "22030",
+      "used_memory": "262 MiB"
+    },
+    {
+      "pid": "3578885",
+      "used_memory": "26 MiB"
+    }
+  ],
+  "items_completed": 10,
+  "items_planned": 10,
+  "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "elapsed_process_seconds": 152.12678991095163,
+  "ledger": {
+    "query": {
+      "phase": "query",
+      "full_forwards": 18246,
+      "partial_forwards": 270,
+      "reverses": 0,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 113.21826444915496,
+      "accel_seconds": 113.21826444915496,
+      "peak_mem_mib": 1222.11474609375,
+      "tokens": 731188
+    },
+    "learning": {
+      "phase": "learning",
+      "full_forwards": 2757,
+      "partial_forwards": 2244,
+      "reverses": 1323,
+      "settle_iters": 1176,
+      "prefix_microsteps": 100,
+      "router_probes": 0,
+      "search_candidates": 1200,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 13.576937613077462,
+      "accel_seconds": 13.576937613077462,
+      "peak_mem_mib": 1222.11474609375,
+      "tokens": 30701
+    },
+    "total": {
+      "phase": "total",
+      "full_forwards": 21003,
+      "partial_forwards": 2514,
+      "reverses": 1323,
+      "settle_iters": 1176,
+      "prefix_microsteps": 100,
+      "router_probes": 0,
+      "search_candidates": 1200,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 126.79520206223242,
+      "accel_seconds": 126.79520206223242,
+      "peak_mem_mib": 1222.11474609375,
+      "tokens": 761889
+    },
+    "events": 4802,
+    "elapsed_wall_seconds": 152.1268093585968,
+    "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  }
+}

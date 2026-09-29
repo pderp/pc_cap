@@ -1346,3 +1346,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (lower maximum and ES99+, retention within two points, on every dataset and order) is met. Framing per DEC-078:
     an intervention beside the κ pilot. AW-B4's report covers the evaluation stage next (Capex); the GPU moved on to
     the random-direction control at 11:16.
+
+139. (2026-09-29, 12:55 EDT) **Random-direction control (DEC-075 control 2) answered by its first pair and closed (DEC-079).**
+    The random-credit cell stopped at the archived S5 resource allowance after 993 / 1,000 items with immediate edit
+    success **0.003** (adjoint pair: 0.998), having spent 641k forwards against 140k for adjoint — random directions
+    are rejected by the acceptance rule almost every time, so nothing is acquired and the compute budget is exhausted.
+    The remaining eleven random cells are not run; the group is reported as stopped by rule with partial metrics.
+    Reading: the credit direction is doing the work; acceptance-by-loss cannot acquire on its own. The compute-matched
+    control (DEC-075 control 3) is running now; the v5 credit settings and Option R follow it automatically.
+
