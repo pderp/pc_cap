@@ -1297,3 +1297,10 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     adjoint learning cost. CounterFact saturated and identical at every depth. Reading: more settling buys own-prompt
     retention, not generalisation, and the price grows faster than the gain; the credit rule's content matters.
     Harm readouts for both depths run next (≈ 25 min each), then the AW-B calibration once Capex's driver is handed off.
+
+133. (2026-09-29, 00:05 EDT) Control harm readouts done (legacy S5 subset, 4,064 positions, zsRE order 100, means over
+    three realizations, own cap-off reference): adjoint mean ΔNLL 0.00145 / ES99+ 0.156 / max 3.65 nats; one-step PC
+    identical to adjoint; eight-step 0.00157 / 0.167 / 2.40; 32-step 0.00221 / 0.236 / 4.37. So harm also rises with
+    settling depth (+8 % at 8 steps, +52 % at 32), alongside the retention gain of item 132: deeper settling buys
+    own-prompt retention with more ordinary-text harm and more compute. The AW-B calibration started at 00:00
+    (`results/additional_work/AW-B/calibration-20260929/`, ceiling 8 h).
