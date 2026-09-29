@@ -79,7 +79,7 @@ Bounded-text secondary differences:
 
 At zero inferred error, the first gradient step gives e₁ = −η·adjoint; here η=0.1. In exact arithmetic, the unchanged unit-direction transport removes this positive scale. The actual-solver diagnostic verifies this to floating-point tolerance even with nonzero writes. **All recorded primary and bounded-text secondary endpoints match exactly for the six one-step pairs.** This is a mechanism check, not an independent scientific advantage.
 
-| Dataset | r | Primary + secondary exact | Harm vectors bitwise equal | Max |harm-vector difference| |
+| Dataset | r | Primary + secondary exact | Harm vectors bitwise equal | Maximum absolute harm-vector difference |
 | --- | --- | --- | --- | --- |
 | zsre | 0 | True | False | 0.000345071 |
 | zsre | 1 | True | False | 2.08926e-05 |
