@@ -1334,3 +1334,5 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     process-hours at two workers) → PC-trained reader, upper-layer 2×2 and the scaling study as their runners land
     (round 54 lanes for Capex). Budget: ≈ 160 wall-hours to October 6; the queue above uses ≈ 45 before the runners.
 
+137. (2026-09-29, 07:00 EDT) DEC-078: bounded-correction framing settled for both outcomes of the sealed-stream evaluation (intervention beside the κ pilot; a non-replication is shown as such). No further input needed at 11:00.
+
