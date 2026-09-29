@@ -227,7 +227,7 @@ check; one figure for slide 9 with own-prompt retention, paraphrase retention, E
 (`assets/presentation-materials/figures/pc_v0/controls/`); claim-ledger rows; the reviewer table in `review-data/results.md`.
 Use the treatment-aware generator; do not pool depths.
 
-### Lane AW-B4 — bounded-correction report (second; starts when the evaluation finishes)
+### Lane AW-B4 — bounded-correction report (second; the evaluation finished 11:16 and met the success rule — fold `results/additional_work/AW-B/evaluation-20260929/` into the report, ledger and slide 8 now)
 
 `docs/additional_work/AW-B_report.md` from the calibration and evaluation outputs: the sixteen-setting development
 table (why every clip fails, why the mixture holds), the mechanical selection with its rule, the sealed-stream
