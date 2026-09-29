@@ -1,37 +1,15 @@
-# PC-8 — final PC-v0 report awaits completed inputs
+# PC-8 — completed PC reports, figures and presentation data
 
-Capex, 2026-09-27, 07:13 EDT. **Waiting on the experiment and harm readout.**
-At the recorded check, 21/60 cells had completed successfully in
-`results/additional_work/PC-v0/replication-60-20260927/`; no other finished
-dispositions were present. The planned production harm report did not yet exist.
-See `logs/additional_work/round48/pc8-readiness.json`. This is a snapshot of
-completion, not a forecast or a partial result claim. The live source-bound
-runner and its output files were not changed.
+2026-09-28, Capex. **Complete.** The 60-cell v0 experiment and four-cell fixed-v5 transfer check, plus their matched-position harm readouts, are now incorporated into `docs/additional_work/PC-v0_report.md` and `PC-v1_report.md`.
 
-After Capstan finishes the 60-cell run and matched-position PC-5 readout:
+`aw/pc_complete_report.py` verifies the final X24 audit, all harm vector identities, exact numerical reproduction of every per-arm and paired statistic, paired reference equality and final-memory bindings. Both original and treatment-aware v0 generators produce identical pairs and aggregates. The original and current fixed-v5 scorers reproduce all eight saved checkpoint metric dictionaries exactly. Full sources, statistics and cost records are in `logs/additional_work/PC-v0/report-60-20260927/` and `logs/additional_work/PC-v1/report-4-20260927/`.
 
-1. Verify all 60 final cells, 30 paired coordinates and recorded input/source
-   identities. Use `aw.pc_v0_report` with **orders=5**, and include the completed
-   development 1/8/32 diagnostic group. Its native report verifies paired inputs
-   and keeps failed/missing pairs out of effects. The current intended diagnostic
-   input is `results/additional_work/PC-v0/dev-diagnostic-20260927/`.
-2. Generate the real report in a new directory, replacing the text of the existing
-   smoke-based `docs/additional_work/PC-v0_report.md`. The presentation register
-   proposes `logs/additional_work/PC-v0/report-60-20260927/report.json`; this
-   **does not exist yet**. The report generator currently leaves the harm section
-   unavailable: integrate PC-5's verified `table_block` and its vector/source
-   bindings before publishing the combined report. Do not leave its unavailable
-   sentence beside measured harm, or fail to refresh the document publication hash.
-3. Require all 60 harm readouts and 30 pairs on the fixed 4,064 positions, plus
-   complete readout cost accounting. Retain both references and distinguish
-   differences of arm ES99 from the paired-position distribution. PC-v0 remains
-   exposed historical S5 with old primary scoring; it is supplemental corrected-
-   algorithm evidence, regardless of which arm wins.
-4. Fill the PC-v0 claim-ledger row from those outputs, export the efficacy/cost
-   figure under `assets/presentation-materials/figures/pc_v0/`, and re-export
-   slide 9/closing slots using PRES-4. Include the three realization estimates,
-   harm and actual cost; do not relabel orders or tokens as independent replicates.
+Main result: v0 zsRE own-prompt retention improves **2.033 percentage points** with SE-E; paraphrase retention changes **−0.28 points**, with mixed realization signs, and cost rises. CounterFact own-prompt scores are saturated while paraphrase retention is at zero, limiting that comparison. The fixed-v5 arms have identical zsRE paraphrase retention (0.98333); CounterFact is 0.80667 for SE-A versus 0.80333 for SE-E, one paraphrase worse. This single-realization transfer check does not establish equivalence or general superiority. The fixed-v5 maximum ordinary-text loss increase is larger under SE-E on both datasets, despite its lower mean on zsRE.
 
-No final report, measured PC claim or research figure has been published early.
-The existing native report/harm readers and the new slot resolver have CPU
-coverage; actual experimental completion is the remaining prerequisite.
+Populations remain explicit: v0 harm uses **4,064 positions per cell**; fixed-v5 uses **245,237**. Orders and positions are not independent realizations. Error-based acquisition credit is measured; the reader/base remain BP-trained, and no expected-free-energy action policy or proven power-law tail is claimed. This preserves the talk's active-inference motivation, predictive-coding experiment and extreme-harm question without conflating them.
+
+The fixed-v5 harm driver originally failed while generating its final table (`KeyError('smoke')`). Its original failed cost receipt and wrong-caption table remain unchanged. All four arm receipts, both paired arrays and every statistic pass independent reconstruction. A separate reviewed completion receipt in the report directory records the original failure and its limited scope; original execution success is not fabricated.
+
+The claim ledger (`docs/talk_claim_ledger_v7.md`) and PC result-source map are filled. `aw/pc_reviewer_results.py` fills all reviewer tables from the same reports: canonical `docs/presentation/review-results.md`, exported `assets/presentation-materials/review-data/results.md`. No numeric PENDING slots remain. `aw/pc_result_figures.py` exports PNG/PDF/SVG charts and source manifests under `assets/presentation-materials/figures/pc_v{0,1}/completed-20260928/`; charts were visually reviewed. The presentation export contains 27 files under `assets/presentation-materials/deck_v3/completed-pc-final-20260928/`, with measured slots resolved; speaker review remains appropriate.
+
+Validation logs: `logs/additional_work/round52/pc8-*`, `pc11-fixed-v5-replay.log`, and `final-tests.log`. Everything was CPU-only. New DEC-075 control results are not mixed into these completed default-eight-step reports.

@@ -1,0 +1,44 @@
+......F                                                                  [100%]
+=================================== FAILURES ===================================
+________________ test_queue_receipt_supersedes_driver_cost_once ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-derp/pytest-99/test_queue_receipt_supersedes_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fb70def0920>
+
+    def test_queue_receipt_supersedes_driver_cost_once(tmp_path,monkeypatch):
+        output=tmp_path/'results';receipts=tmp_path/'queue';session=receipts/'s'
+        monkeypatch.setattr(r,'OUTPUT',output);monkeypatch.setattr(r,'RECEIPTS',receipts)
+        monkeypatch.setattr(r,'sources',lambda:{})
+        c=dict(cell_id='tiny',recipe={'path':'fixture','sha256':'a'*64},ceilings=dict(wall_seconds=17))
+        def launch(cmd,**kw):
+            assert 0<kw['timeout']<=17
+            attempt=output/'tiny/attempt-0000';attempt.mkdir(parents=True)
+            (attempt/'result.json').write_text(json.dumps(dict(status='complete',attempt_wall_seconds=5)))
+            return type('Result',(),{'returncode':0})()
+        monkeypatch.setattr(r.subprocess,'run',launch)
+        result=r.dispatch(c,{'integrity_profile':'full'},session,{}, {},{},100)
+>       state=r.status(c,r.native.sha(r.MATRIX))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_r_run.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/r_run.py:304: in status
+    cost = queue.charged_cost(c, queue.cell_cost(c["result_dir"]), RECEIPTS, matrix_hash)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/r1_77_queue.py:132: in cell_cost
+    obj = read(endings[0])
+          ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-derp/pytest-99/test_queue_receipt_supersedes_0/results/tiny/attempt-0000/result.json')
+
+    def read(path):
+        path = Path(path).resolve()
+        if "confirm" in path.parts or not path.is_relative_to(ROOT.parent):
+>           raise PermissionError("unsealed local metadata only")
+E           PermissionError: unsealed local metadata only
+
+scripts/r1_77_queue.py:59: PermissionError
+=========================== short test summary info ============================
+FAILED aw/tests/test_r_run.py::test_queue_receipt_supersedes_driver_cost_once
+1 failed, 6 passed in 10.74s

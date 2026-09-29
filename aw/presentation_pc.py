@@ -87,7 +87,15 @@ def v1_values(directory, slots, bindings):
     if p.get("population") != POPULATION:
         raise ValueError("fixed-v5 slide requires exposed realization-0 population")
     if p != plan(False):
-        raise ValueError("fixed-v5 design/code differs from installed experiment")
+        # PC-9/10 was applied after this completed default experiment. Resolve
+        # only the explicitly preserved, hash-bound originals, not arbitrary drift.
+        from aw.pc_historical import Sources
+
+        historical = Sources()
+        if p != historical.module("pc_v1_run").plan(False):
+            raise ValueError("fixed-v5 design/code differs from installed or archived experiment")
+        historical.check(p["sources"])
+        bindings.update(historical.bindings)
     reports = {}
     identity = {}
     for c in p["cells"]:

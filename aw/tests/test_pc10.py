@@ -33,7 +33,8 @@ def test_combined_patch_applies_exactly_to_disposable_copies(tmp_path):
     (tmp_path / "aw").mkdir()
     for name, record in records.items():
         if record["before_sha256"]:
-            shutil.copyfile(ROOT / name, tmp_path / name)
+            from aw.pc_historical import Sources
+            shutil.copyfile(Sources().resolve(name, record["before_sha256"]), tmp_path / name)
     subprocess.run(
         ["git", "apply", str(DEST / "combined-PC-9-PC-10.patch")],
         cwd=tmp_path,

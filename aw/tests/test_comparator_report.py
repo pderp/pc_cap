@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 
 from aw.comparator_report import groups, unavailable_reason
+from aw.pc_historical import Sources
 from aw.pc_v0_report import sha
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -25,7 +26,7 @@ def test_boundary_and_all_comparator_slots(analysis):
     assert all(not c['checkpoints'] for c in analysis['cells'] if c['block_number']>4)
     assert sum(len(c['metrics']) for c in analysis['contrasts'])==63
     for source,expected in analysis['analysis_source_sha256'].items():
-        assert sha(ROOT/source)==expected
+        assert sha(Sources().resolve(ROOT/source,expected))==expected
 
 
 def test_registered_inference_and_unchanged_triplet(analysis):

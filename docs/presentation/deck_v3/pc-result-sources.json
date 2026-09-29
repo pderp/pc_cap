@@ -1,12 +1,12 @@
 {
-  "note": "Configured FUTURE output locations, not claims that these files exist. Absent sources render PENDING. Update the path if Capstan chooses a different output namespace; re-export automatically resolves completed sources.",
+  "note": "Completed default-treatment outputs verified by X24-final and PC-8 on 2026-09-28. The harm report copies resolve preserved historical source bytes and carry independent full-vector reconstruction; original readouts and the fixed-v5 final-table failure remain unchanged in results/additional_work/PC-v*/harm/pc-v*-20260927 namespaces. Later DEC-075 controls are separate treatments.",
   "sources": {
     "v0_report": {
       "path": "logs/additional_work/PC-v0/report-60-20260927/report.json",
       "schema": "aw.pc_v0_report: aggregates (dataset,metric) mean/realizations/minimum/maximum; cells finish cost"
     },
     "v0_harm": {
-      "path": "results/additional_work/PC-v0/harm/replication-60-20260927/report.json",
+      "path": "logs/additional_work/PC-v0/report-60-20260927/harm/report.json",
       "schema": "aw.pc_harm_readout: pairs difference_of_arm_es99.original, positionwise.original.loss.mean_signed; cells readout.summary.original; sibling cost.json"
     },
     "v1_run": {
@@ -14,7 +14,7 @@
       "schema": "aw.pc_v1_run: each cell checkpoint-100/300.json metrics.<metric>.value; finish.json elapsed_process_seconds"
     },
     "v1_harm": {
-      "path": "results/additional_work/PC-v1/harm/replication-4-20260927/report.json",
+      "path": "logs/additional_work/PC-v1/report-4-20260927/harm/report.json",
       "schema": "PC-5 shared read_arm/pair schema, selection.positions=245237; four arms and two pairs, final 300 checkpoint only"
     }
   },

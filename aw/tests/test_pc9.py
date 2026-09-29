@@ -46,7 +46,9 @@ def base(rate):
 def test_exact_patch_still_matches_live_bytes_and_generator():
     record = json.loads((pc9_stage.DEST / "sources.json").read_text())
     for name, transform in (("pc_v0.py", pc9_stage.v0), ("pc_v1_run.py", pc9_stage.v1)):
-        before = (pc9_stage.ROOT / "aw" / name).read_bytes()
+        # PC-11 applied the patch; verify the exact preserved pre-application bytes.
+        from aw.pc_historical import Sources
+        before = Sources().resolve("aw/" + name, record["aw/"+name]["before_sha256"]).read_bytes()
         candidate = (pc9_stage.DEST / name).read_bytes()
         assert hashlib.sha256(before).hexdigest() == record["aw/"+name]["before_sha256"]
         assert transform(before.decode()).encode() == candidate

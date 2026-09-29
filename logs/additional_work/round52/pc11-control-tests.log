@@ -1,0 +1,21 @@
+....F..............................                                      [100%]
+=================================== FAILURES ===================================
+___________ test_allowance_measured_from_actual_eight_step_reference ___________
+
+    def test_allowance_measured_from_actual_eight_step_reference():
+        base = TinyEPC()
+        reference = Cap(base, CapConfig(d=base.d, credit="error", credit_iters=8,
+                        radii={m: 0.5 for m in (1, 2, 3)}), base.ledger)
+        out = reference.update_item(item(), make_router("C1"), Budget(R=1, A=0.3, tau_edit=0))
+        allowance = units(out.cost)
+        matched = cap(allowance)
+        got = matched.update_item(item(), make_router("C1"), Budget(R=1, A=0.3, tau_edit=0))
+>       assert got.rounds_used > out.rounds_used
+E       AssertionError: assert 1 > 1
+E        +  where 1 = ItemOutcome(item_id='tiny', code='acquisition_failure', acquired_threshold_all_prefixes=False, prefix_outcomes=[{'pref...51672166213393, peak_mem_mib=0.0, tokens=192), codes=['accepted:1', 'accepted:2', 'accepted:3', 'operation_allowance']).rounds_used
+E        +  and   1 = ItemOutcome(item_id='tiny', code='acquisition_failure', acquired_threshold_all_prefixes=False, prefix_outcomes=[{'pref...nds=0.0, wall_seconds=0.006827262230217457, accel_seconds=0.006827262230217457, peak_mem_mib=0.0, tokens=94), codes=[]).rounds_used
+
+aw/tests/test_pc_matched_credit.py:81: AssertionError
+=========================== short test summary info ============================
+FAILED aw/tests/test_pc_matched_credit.py::test_allowance_measured_from_actual_eight_step_reference
+1 failed, 34 passed in 34.17s
