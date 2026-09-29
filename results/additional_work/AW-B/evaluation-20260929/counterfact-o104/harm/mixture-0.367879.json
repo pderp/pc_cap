@@ -1,0 +1,195 @@
+{
+  "summary": {
+    "capoff": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.0019571842306274046,
+        "mean_positive": 0.002166619035028941,
+        "es99_positive": 0.21666190350289036,
+        "maximum_signed": 0.9999863656716954,
+        "maximum_positive": 0.9999863656716954,
+        "maximum_location": "w737:p32",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 285,
+        "half_mass_fraction": 0.0011621411124748712,
+        "positive_mass": 531.335152293382,
+        "exceedance": {
+          "0.01": {
+            "count": 930,
+            "fraction": 0.0037922499459706327
+          },
+          "0.1": {
+            "count": 863,
+            "fraction": 0.003519044842336189
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.00193710888659071,
+        "mean_positive": 0.00193710888659071,
+        "es99_positive": 0.19371088865906724,
+        "maximum_signed": 0.9983405660778686,
+        "maximum_positive": 0.9983405660778686,
+        "maximum_location": "w540:p46",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 264,
+        "half_mass_fraction": 0.001076509662081986,
+        "positive_mass": 475.0507720208354,
+        "exceedance": {
+          "0.01": {
+            "count": 1058,
+            "fraction": 0.004314194024555838
+          },
+          "0.1": {
+            "count": 896,
+            "fraction": 0.003653608550096437
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      }
+    },
+    "original": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.0019571842306274046,
+        "mean_positive": 0.002166619035028941,
+        "es99_positive": 0.21666190350289036,
+        "maximum_signed": 0.9999863656716954,
+        "maximum_positive": 0.9999863656716954,
+        "maximum_location": "w737:p32",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 285,
+        "half_mass_fraction": 0.0011621411124748712,
+        "positive_mass": 531.335152293382,
+        "exceedance": {
+          "0.01": {
+            "count": 930,
+            "fraction": 0.0037922499459706327
+          },
+          "0.1": {
+            "count": 863,
+            "fraction": 0.003519044842336189
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.00193710888659071,
+        "mean_positive": 0.00193710888659071,
+        "es99_positive": 0.19371088865906724,
+        "maximum_signed": 0.9983405660778686,
+        "maximum_positive": 0.9983405660778686,
+        "maximum_location": "w540:p46",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 264,
+        "half_mass_fraction": 0.001076509662081986,
+        "positive_mass": 475.0507720208354,
+        "exceedance": {
+          "0.01": {
+            "count": 1058,
+            "fraction": 0.004314194024555838
+          },
+          "0.1": {
+            "count": 896,
+            "fraction": 0.003653608550096437
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      }
+    }
+  },
+  "changed_fraction": 0.004342737841353466,
+  "telemetry": {
+    "logical_positions": 245237,
+    "hard_null": 244172,
+    "selected": 1065,
+    "corrected_positions": 1065
+  },
+  "vectors": {
+    "path": "/home/derp/cap/assets/runs/additional_work/AW-B/evaluation-20260929/counterfact-o104/mixture-0.367879.npz",
+    "sha256": "983af486c59641a3f7051ca22dc805e4aea910ab8df47f053185f3c953911809"
+  },
+  "selection": {
+    "mode": "v5",
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "windows": 1931,
+    "window_tokens": 128,
+    "positions": 245237,
+    "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+    "context": "reset every window",
+    "order": "window then target position, starting at target position 1"
+  },
+  "pass_key": "v5",
+  "pass_process_seconds": 1648.8645281139761,
+  "returned_events": {
+    "shared_capoff_selection": {
+      "phase": "query",
+      "model": "shared_capoff_selection",
+      "batches": 15328,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 245248,
+        "partial_forwards": 0,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 242.3432433991693,
+        "accel_seconds": 242.3432433991693,
+        "peak_mem_mib": 0,
+        "tokens": 15696565,
+        "phase": "query"
+      }
+    },
+    "cap_corrected_batch": {
+      "phase": "query",
+      "model": "cap_corrected_batch",
+      "batches": 766,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 0,
+        "partial_forwards": 12256,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 6.948167260037735,
+        "accel_seconds": 6.948167260037735,
+        "peak_mem_mib": 0,
+        "tokens": 682207,
+        "phase": "query"
+      }
+    }
+  },
+  "cost_note": "shared pass charged once, not once per numerical configuration"
+}

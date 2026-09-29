@@ -1,0 +1,912 @@
+{
+  "harm": {
+    "v5": {
+      "summary": {
+        "capoff": {
+          "loss": {
+            "positions": 245237,
+            "mean_signed": 0.005473106663036925,
+            "mean_positive": 0.00564283935141402,
+            "es99_positive": 0.564283935141402,
+            "maximum_signed": 11.744237842903047,
+            "maximum_positive": 11.744237842903047,
+            "maximum_location": "w737:p32",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 123,
+            "half_mass_fraction": 0.0005015556380154707,
+            "positive_mass": 1383.83299402272,
+            "exceedance": {
+              "0.01": {
+                "count": 647,
+                "fraction": 0.002638264209723655
+              },
+              "0.1": {
+                "count": 624,
+                "fraction": 0.002544477383102876
+              },
+              "1.0": {
+                "count": 383,
+                "fraction": 0.001561754547641669
+              }
+            }
+          },
+          "kl": {
+            "positions": 245237,
+            "mean_signed": 0.0053200047410865235,
+            "mean_positive": 0.0053200047410865235,
+            "es99_positive": 0.5320004741086524,
+            "maximum_signed": 11.60299525990636,
+            "maximum_positive": 11.60299525990636,
+            "maximum_location": "w737:p32",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 122,
+            "half_mass_fraction": 0.0004974779499015238,
+            "positive_mass": 1304.6620026898358,
+            "exceedance": {
+              "0.01": {
+                "count": 730,
+                "fraction": 0.002976712323181249
+              },
+              "0.1": {
+                "count": 686,
+                "fraction": 0.002797294046167585
+              },
+              "1.0": {
+                "count": 365,
+                "fraction": 0.0014883561615906245
+              }
+            }
+          }
+        },
+        "original": {
+          "loss": {
+            "positions": 245237,
+            "mean_signed": 0.005473106663036925,
+            "mean_positive": 0.00564283935141402,
+            "es99_positive": 0.564283935141402,
+            "maximum_signed": 11.744237842903047,
+            "maximum_positive": 11.744237842903047,
+            "maximum_location": "w737:p32",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 123,
+            "half_mass_fraction": 0.0005015556380154707,
+            "positive_mass": 1383.83299402272,
+            "exceedance": {
+              "0.01": {
+                "count": 647,
+                "fraction": 0.002638264209723655
+              },
+              "0.1": {
+                "count": 624,
+                "fraction": 0.002544477383102876
+              },
+              "1.0": {
+                "count": 383,
+                "fraction": 0.001561754547641669
+              }
+            }
+          },
+          "kl": {
+            "positions": 245237,
+            "mean_signed": 0.0053200047410865235,
+            "mean_positive": 0.0053200047410865235,
+            "es99_positive": 0.5320004741086524,
+            "maximum_signed": 11.60299525990636,
+            "maximum_positive": 11.60299525990636,
+            "maximum_location": "w737:p32",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 122,
+            "half_mass_fraction": 0.0004974779499015238,
+            "positive_mass": 1304.6620026898358,
+            "exceedance": {
+              "0.01": {
+                "count": 730,
+                "fraction": 0.002976712323181249
+              },
+              "0.1": {
+                "count": 686,
+                "fraction": 0.002797294046167585
+              },
+              "1.0": {
+                "count": 365,
+                "fraction": 0.0014883561615906245
+              }
+            }
+          }
+        }
+      },
+      "changed_fraction": 0.002997100763750984,
+      "telemetry": {
+        "logical_positions": 245237,
+        "hard_null": 244502,
+        "selected": 735,
+        "corrected_positions": 735
+      },
+      "vectors": {
+        "path": "/home/derp/cap/assets/runs/additional_work/AW-B/evaluation-20260929/counterfact-o103/v5.npz",
+        "sha256": "e7f4530864cc47e1a8024398d2a7025a1721144c926ec5dfd10169dfcb7a4c51"
+      },
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "pass_key": "v5",
+      "pass_process_seconds": 1625.6388459070586,
+      "returned_events": {
+        "shared_capoff_selection": {
+          "phase": "query",
+          "model": "shared_capoff_selection",
+          "batches": 15328,
+          "failed_batches": 0,
+          "returned_cost": {
+            "full_forwards": 245248,
+            "partial_forwards": 0,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 241.44116788660176,
+            "accel_seconds": 241.44116788660176,
+            "peak_mem_mib": 0,
+            "tokens": 15696565,
+            "phase": "query"
+          }
+        },
+        "cap_corrected_batch": {
+          "phase": "query",
+          "model": "cap_corrected_batch",
+          "batches": 565,
+          "failed_batches": 0,
+          "returned_cost": {
+            "full_forwards": 0,
+            "partial_forwards": 9040,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 5.2087784158065915,
+            "accel_seconds": 5.2087784158065915,
+            "peak_mem_mib": 0,
+            "tokens": 516206,
+            "phase": "query"
+          }
+        }
+      },
+      "cost_note": "shared pass charged once, not once per numerical configuration"
+    },
+    "capoff": {
+      "summary": {
+        "capoff": {
+          "loss": {
+            "positions": 245237,
+            "mean_signed": 0.0,
+            "mean_positive": 0.0,
+            "es99_positive": 0.0,
+            "maximum_signed": 0.0,
+            "maximum_positive": 0.0,
+            "maximum_location": "w0:p1",
+            "maximum_ties": 245237,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": null,
+            "half_mass_fraction": null,
+            "positive_mass": 0.0,
+            "exceedance": {
+              "0.01": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "0.1": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          },
+          "kl": {
+            "positions": 245237,
+            "mean_signed": 0.0,
+            "mean_positive": 0.0,
+            "es99_positive": 0.0,
+            "maximum_signed": 0.0,
+            "maximum_positive": 0.0,
+            "maximum_location": "w0:p1",
+            "maximum_ties": 245237,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": null,
+            "half_mass_fraction": null,
+            "positive_mass": 0.0,
+            "exceedance": {
+              "0.01": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "0.1": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          }
+        },
+        "original": {
+          "loss": {
+            "positions": 245237,
+            "mean_signed": 0.0,
+            "mean_positive": 0.0,
+            "es99_positive": 0.0,
+            "maximum_signed": 0.0,
+            "maximum_positive": 0.0,
+            "maximum_location": "w0:p1",
+            "maximum_ties": 245237,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": null,
+            "half_mass_fraction": null,
+            "positive_mass": 0.0,
+            "exceedance": {
+              "0.01": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "0.1": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          },
+          "kl": {
+            "positions": 245237,
+            "mean_signed": 0.0,
+            "mean_positive": 0.0,
+            "es99_positive": 0.0,
+            "maximum_signed": 0.0,
+            "maximum_positive": 0.0,
+            "maximum_location": "w0:p1",
+            "maximum_ties": 245237,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": null,
+            "half_mass_fraction": null,
+            "positive_mass": 0.0,
+            "exceedance": {
+              "0.01": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "0.1": {
+                "count": 0,
+                "fraction": 0.0
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          }
+        }
+      },
+      "changed_fraction": 0.0,
+      "telemetry": {
+        "logical_positions": 245237,
+        "hard_null": 244502,
+        "selected": 735,
+        "corrected_positions": 735
+      },
+      "vectors": {
+        "path": "/home/derp/cap/assets/runs/additional_work/AW-B/evaluation-20260929/counterfact-o103/capoff.npz",
+        "sha256": "2bb76e5e51f6021ce7c642afcf95c9b1b19feb7575730d6db9d241a5944d135d"
+      },
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "pass_key": "v5",
+      "pass_process_seconds": 1625.7137549170293,
+      "returned_events": {
+        "shared_capoff_selection": {
+          "phase": "query",
+          "model": "shared_capoff_selection",
+          "batches": 15328,
+          "failed_batches": 0,
+          "returned_cost": {
+            "full_forwards": 245248,
+            "partial_forwards": 0,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 241.44116788660176,
+            "accel_seconds": 241.44116788660176,
+            "peak_mem_mib": 0,
+            "tokens": 15696565,
+            "phase": "query"
+          }
+        },
+        "cap_corrected_batch": {
+          "phase": "query",
+          "model": "cap_corrected_batch",
+          "batches": 565,
+          "failed_batches": 0,
+          "returned_cost": {
+            "full_forwards": 0,
+            "partial_forwards": 9040,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 5.2087784158065915,
+            "accel_seconds": 5.2087784158065915,
+            "peak_mem_mib": 0,
+            "tokens": 516206,
+            "phase": "query"
+          }
+        }
+      },
+      "cost_note": "shared pass charged once, not once per numerical configuration"
+    },
+    "mixture:0.367879": {
+      "summary": {
+        "capoff": {
+          "loss": {
+            "positions": 245237,
+            "mean_signed": 0.0014848042278219273,
+            "mean_positive": 0.001609004201403179,
+            "es99_positive": 0.1609004201403142,
+            "maximum_signed": 0.9999863656716954,
+            "maximum_positive": 0.9999863656716954,
+            "maximum_location": "w737:p32",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 205,
+            "half_mass_fraction": 0.0008359260633591179,
+            "positive_mass": 394.5873633394999,
+            "exceedance": {
+              "0.01": {
+                "count": 646,
+                "fraction": 0.0026341865216097083
+              },
+              "0.1": {
+                "count": 609,
+                "fraction": 0.0024833120613936724
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          },
+          "kl": {
+            "positions": 245237,
+            "mean_signed": 0.001447097150193446,
+            "mean_positive": 0.001447097150193446,
+            "es99_positive": 0.14470971501934096,
+            "maximum_signed": 0.9977924166954383,
+            "maximum_positive": 0.9977924166954383,
+            "maximum_location": "w386:p59",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 190,
+            "half_mass_fraction": 0.0007747607416499142,
+            "positive_mass": 354.8817638219795,
+            "exceedance": {
+              "0.01": {
+                "count": 728,
+                "fraction": 0.0029685569469533554
+              },
+              "0.1": {
+                "count": 593,
+                "fraction": 0.0024180690515705214
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          }
+        },
+        "original": {
+          "loss": {
+            "positions": 245237,
+            "mean_signed": 0.0014848042278219273,
+            "mean_positive": 0.001609004201403179,
+            "es99_positive": 0.1609004201403142,
+            "maximum_signed": 0.9999863656716954,
+            "maximum_positive": 0.9999863656716954,
+            "maximum_location": "w737:p32",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 205,
+            "half_mass_fraction": 0.0008359260633591179,
+            "positive_mass": 394.5873633394999,
+            "exceedance": {
+              "0.01": {
+                "count": 646,
+                "fraction": 0.0026341865216097083
+              },
+              "0.1": {
+                "count": 609,
+                "fraction": 0.0024833120613936724
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          },
+          "kl": {
+            "positions": 245237,
+            "mean_signed": 0.001447097150193446,
+            "mean_positive": 0.001447097150193446,
+            "es99_positive": 0.14470971501934096,
+            "maximum_signed": 0.9977924166954383,
+            "maximum_positive": 0.9977924166954383,
+            "maximum_location": "w386:p59",
+            "maximum_ties": 1,
+            "tie_policy": "first in window/target order",
+            "half_mass_positions": 190,
+            "half_mass_fraction": 0.0007747607416499142,
+            "positive_mass": 354.8817638219795,
+            "exceedance": {
+              "0.01": {
+                "count": 728,
+                "fraction": 0.0029685569469533554
+              },
+              "0.1": {
+                "count": 593,
+                "fraction": 0.0024180690515705214
+              },
+              "1.0": {
+                "count": 0,
+                "fraction": 0.0
+              }
+            }
+          }
+        }
+      },
+      "changed_fraction": 0.002997100763750984,
+      "telemetry": {
+        "logical_positions": 245237,
+        "hard_null": 244502,
+        "selected": 735,
+        "corrected_positions": 735
+      },
+      "vectors": {
+        "path": "/home/derp/cap/assets/runs/additional_work/AW-B/evaluation-20260929/counterfact-o103/mixture-0.367879.npz",
+        "sha256": "ce7cbf345908bec1cb9d7089366e7a294df963899881b339534da6196b8339bc"
+      },
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "pass_key": "v5",
+      "pass_process_seconds": 1625.7873285280075,
+      "returned_events": {
+        "shared_capoff_selection": {
+          "phase": "query",
+          "model": "shared_capoff_selection",
+          "batches": 15328,
+          "failed_batches": 0,
+          "returned_cost": {
+            "full_forwards": 245248,
+            "partial_forwards": 0,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 241.44116788660176,
+            "accel_seconds": 241.44116788660176,
+            "peak_mem_mib": 0,
+            "tokens": 15696565,
+            "phase": "query"
+          }
+        },
+        "cap_corrected_batch": {
+          "phase": "query",
+          "model": "cap_corrected_batch",
+          "batches": 565,
+          "failed_batches": 0,
+          "returned_cost": {
+            "full_forwards": 0,
+            "partial_forwards": 9040,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 5.2087784158065915,
+            "accel_seconds": 5.2087784158065915,
+            "peak_mem_mib": 0,
+            "tokens": 516206,
+            "phase": "query"
+          }
+        }
+      },
+      "cost_note": "shared pass charged once, not once per numerical configuration"
+    }
+  },
+  "efficacy": {
+    "v5": {
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 299.0,
+          "value": 0.9966666666666667,
+          "evaluated_value": 0.9966666666666667,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 299.0,
+          "value": 0.9966666666666667,
+          "evaluated_value": 0.9966666666666667,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 227.5,
+          "value": 0.7583333333333333,
+          "evaluated_value": 0.7583333333333333,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 100.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "elapsed_process_seconds": 138.74476611008868
+    },
+    "capoff": {
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 0.0,
+          "value": 0.0,
+          "evaluated_value": 0.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 0.0,
+          "value": 0.0,
+          "evaluated_value": 0.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 0.0,
+          "value": 0.0,
+          "evaluated_value": 0.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 100.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 0.0,
+          "value": 0.0,
+          "evaluated_value": 0.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 0.0,
+          "value": 0.0,
+          "evaluated_value": 0.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "elapsed_process_seconds": 189.42114361701533
+    },
+    "mixture:0.367879": {
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 299.0,
+          "value": 0.9966666666666667,
+          "evaluated_value": 0.9966666666666667,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 299.0,
+          "value": 0.9966666666666667,
+          "evaluated_value": 0.9966666666666667,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 224.5,
+          "value": 0.7483333333333333,
+          "evaluated_value": 0.7483333333333333,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 100.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "elapsed_process_seconds": 140.02516345400363
+    }
+  },
+  "elapsed_process_seconds": 2098.289002615027,
+  "ledger": {
+    "query": {
+      "phase": "query",
+      "full_forwards": 297813,
+      "partial_forwards": 15441,
+      "reverses": 0,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 306.80955534335226,
+      "accel_seconds": 306.80955534335226,
+      "peak_mem_mib": 759.980224609375,
+      "tokens": 17557052
+    },
+    "learning": {
+      "phase": "learning",
+      "full_forwards": 7572,
+      "partial_forwards": 0,
+      "reverses": 2586,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 16.798745431238785,
+      "accel_seconds": 16.798745431238785,
+      "peak_mem_mib": 759.980224609375,
+      "tokens": 63642
+    },
+    "total": {
+      "phase": "total",
+      "full_forwards": 305385,
+      "partial_forwards": 15441,
+      "reverses": 2586,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 323.60830077459104,
+      "accel_seconds": 323.60830077459104,
+      "peak_mem_mib": 759.980224609375,
+      "tokens": 17620694
+    },
+    "events": 82431,
+    "elapsed_wall_seconds": 2097.964955806732,
+    "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  },
+  "memory_sha256": "31584df47f8834bafa98c69d754e2ed3378ca24e825f9768ab425c5b1c55962c",
+  "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+  "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862"
+}

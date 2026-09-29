@@ -1336,3 +1336,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
 
 137. (2026-09-29, 07:00 EDT) DEC-078: bounded-correction framing settled for both outcomes of the sealed-stream evaluation (intervention beside the κ pilot; a non-replication is shown as such). No further input needed at 11:00.
 
+
+138. (2026-09-29, 11:20 EDT) **The mixture bound replicates on the sealed realization-0 streams (AW-B evaluation, 5.9 h,
+    ten memories, full 245,237-position inventory; `results/additional_work/AW-B/evaluation-20260929/`).** Per order, in
+    every one of the ten: efficacy endpoints unchanged on zsRE (ES, RET-ES, RET-GS, LS, near-miss, revision identical);
+    on CounterFact RET-GS −0.007 to −0.012 (within the 0.02 tolerance), the rest identical; maximum token loss
+    9.3–15.4 → 1.00 nats; ES99+ and mean KL both cut by 3.2–3.5×; zsRE mean KL 0.0015–0.0020 → 0.00045–0.00065, under
+    the old 0.001 line in all five orders; CounterFact 0.0042–0.0069 → 0.0013–0.0019. The pre-registered success rule
+    (lower maximum and ES99+, retention within two points, on every dataset and order) is met. Framing per DEC-078:
+    an intervention beside the κ pilot. AW-B4's report covers the evaluation stage next (Capex); the GPU moved on to
+    the random-direction control at 11:16.

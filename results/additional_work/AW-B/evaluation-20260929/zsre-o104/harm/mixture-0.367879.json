@@ -1,0 +1,195 @@
+{
+  "summary": {
+    "capoff": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.0006109240620920638,
+        "mean_positive": 0.0007239941326214188,
+        "es99_positive": 0.0723994132621383,
+        "maximum_signed": 0.9999921247357433,
+        "maximum_positive": 0.9999921247357433,
+        "maximum_location": "w153:p3",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 99,
+        "half_mass_fraction": 0.00040369112328074474,
+        "positive_mass": 177.55014910166713,
+        "exceedance": {
+          "0.01": {
+            "count": 349,
+            "fraction": 0.001423113151767474
+          },
+          "0.1": {
+            "count": 318,
+            "fraction": 0.0012967048202351195
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.0006531938110025767,
+        "mean_positive": 0.0006531938110025767,
+        "es99_positive": 0.06531938110025404,
+        "maximum_signed": 0.9997023071735267,
+        "maximum_positive": 0.9997023071735267,
+        "maximum_location": "w153:p3",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 94,
+        "half_mass_fraction": 0.00038330268271101014,
+        "positive_mass": 160.1872906288284,
+        "exceedance": {
+          "0.01": {
+            "count": 423,
+            "fraction": 0.0017248620721995458
+          },
+          "0.1": {
+            "count": 353,
+            "fraction": 0.0014394239042232616
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      }
+    },
+    "original": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.0006109240620920638,
+        "mean_positive": 0.0007239941326214188,
+        "es99_positive": 0.0723994132621383,
+        "maximum_signed": 0.9999921247357433,
+        "maximum_positive": 0.9999921247357433,
+        "maximum_location": "w153:p3",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 99,
+        "half_mass_fraction": 0.00040369112328074474,
+        "positive_mass": 177.55014910166713,
+        "exceedance": {
+          "0.01": {
+            "count": 349,
+            "fraction": 0.001423113151767474
+          },
+          "0.1": {
+            "count": 318,
+            "fraction": 0.0012967048202351195
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.0006531938110025767,
+        "mean_positive": 0.0006531938110025767,
+        "es99_positive": 0.06531938110025404,
+        "maximum_signed": 0.9997023071735267,
+        "maximum_positive": 0.9997023071735267,
+        "maximum_location": "w153:p3",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 94,
+        "half_mass_fraction": 0.00038330268271101014,
+        "positive_mass": 160.1872906288284,
+        "exceedance": {
+          "0.01": {
+            "count": 423,
+            "fraction": 0.0017248620721995458
+          },
+          "0.1": {
+            "count": 353,
+            "fraction": 0.0014394239042232616
+          },
+          "1.0": {
+            "count": 0,
+            "fraction": 0.0
+          }
+        }
+      }
+    }
+  },
+  "changed_fraction": 0.0017493282008832272,
+  "telemetry": {
+    "logical_positions": 245237,
+    "hard_null": 244808,
+    "selected": 429,
+    "corrected_positions": 429
+  },
+  "vectors": {
+    "path": "/home/derp/cap/assets/runs/additional_work/AW-B/evaluation-20260929/zsre-o104/mixture-0.367879.npz",
+    "sha256": "2aa97985427efe918ead14d7349864811c2dc86abbd5c2fc4befe00db714a89b"
+  },
+  "selection": {
+    "mode": "v5",
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "windows": 1931,
+    "window_tokens": 128,
+    "positions": 245237,
+    "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+    "context": "reset every window",
+    "order": "window then target position, starting at target position 1"
+  },
+  "pass_key": "v5",
+  "pass_process_seconds": 1661.3865094790235,
+  "returned_events": {
+    "shared_capoff_selection": {
+      "phase": "query",
+      "model": "shared_capoff_selection",
+      "batches": 15328,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 245248,
+        "partial_forwards": 0,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 241.26633766340092,
+        "accel_seconds": 241.26633766340092,
+        "peak_mem_mib": 0,
+        "tokens": 15696565,
+        "phase": "query"
+      }
+    },
+    "cap_corrected_batch": {
+      "phase": "query",
+      "model": "cap_corrected_batch",
+      "batches": 267,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 0,
+        "partial_forwards": 4272,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 2.2981591529678553,
+        "accel_seconds": 2.2981591529678553,
+        "peak_mem_mib": 0,
+        "tokens": 217370,
+        "phase": "query"
+      }
+    }
+  },
+  "cost_note": "shared pass charged once, not once per numerical configuration"
+}
