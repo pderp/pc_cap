@@ -1,0 +1,195 @@
+{
+  "summary": {
+    "capoff": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.005945348971041095,
+        "mean_positive": 0.00610482889527021,
+        "es99_positive": 0.610482889527021,
+        "maximum_signed": 14.018919556428566,
+        "maximum_positive": 14.018919556428566,
+        "maximum_location": "w711:p49",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 132,
+        "half_mass_fraction": 0.000538254831040993,
+        "positive_mass": 1497.1299237893782,
+        "exceedance": {
+          "0.01": {
+            "count": 689,
+            "fraction": 0.0028095271105094254
+          },
+          "0.1": {
+            "count": 656,
+            "fraction": 0.002674963402749177
+          },
+          "1.0": {
+            "count": 428,
+            "fraction": 0.0017452505127692804
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.005929078527639552,
+        "mean_positive": 0.005929078527639552,
+        "es99_positive": 0.5929078527639552,
+        "maximum_signed": 13.384606716643612,
+        "maximum_positive": 13.384606716643612,
+        "maximum_location": "w711:p49",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 135,
+        "half_mass_fraction": 0.0005504878953828337,
+        "positive_mass": 1454.0294308827438,
+        "exceedance": {
+          "0.01": {
+            "count": 771,
+            "fraction": 0.003143897535853073
+          },
+          "0.1": {
+            "count": 729,
+            "fraction": 0.002972634635067302
+          },
+          "1.0": {
+            "count": 405,
+            "fraction": 0.0016514636861485012
+          }
+        }
+      }
+    },
+    "original": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.005945348971041095,
+        "mean_positive": 0.00610482889527021,
+        "es99_positive": 0.610482889527021,
+        "maximum_signed": 14.018919556428566,
+        "maximum_positive": 14.018919556428566,
+        "maximum_location": "w711:p49",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 132,
+        "half_mass_fraction": 0.000538254831040993,
+        "positive_mass": 1497.1299237893782,
+        "exceedance": {
+          "0.01": {
+            "count": 689,
+            "fraction": 0.0028095271105094254
+          },
+          "0.1": {
+            "count": 656,
+            "fraction": 0.002674963402749177
+          },
+          "1.0": {
+            "count": 428,
+            "fraction": 0.0017452505127692804
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.005929078527639552,
+        "mean_positive": 0.005929078527639552,
+        "es99_positive": 0.5929078527639552,
+        "maximum_signed": 13.384606716643612,
+        "maximum_positive": 13.384606716643612,
+        "maximum_location": "w711:p49",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 135,
+        "half_mass_fraction": 0.0005504878953828337,
+        "positive_mass": 1454.0294308827438,
+        "exceedance": {
+          "0.01": {
+            "count": 771,
+            "fraction": 0.003143897535853073
+          },
+          "0.1": {
+            "count": 729,
+            "fraction": 0.002972634635067302
+          },
+          "1.0": {
+            "count": 405,
+            "fraction": 0.0016514636861485012
+          }
+        }
+      }
+    }
+  },
+  "changed_fraction": 0.0031520529120809665,
+  "telemetry": {
+    "logical_positions": 245237,
+    "hard_null": 244464,
+    "selected": 773,
+    "corrected_positions": 773
+  },
+  "vectors": {
+    "path": "/home/derp/cap/assets/runs/additional_work/AW-B/calibration-20260929/counterfact/v5.npz",
+    "sha256": "b76c272235891a5227aeb85ea2bc905933f91f403aef1cb8a2815feeddac954b"
+  },
+  "selection": {
+    "mode": "v5",
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "windows": 1931,
+    "window_tokens": 128,
+    "positions": 245237,
+    "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+    "context": "reset every window",
+    "order": "window then target position, starting at target position 1"
+  },
+  "pass_key": "v5",
+  "pass_process_seconds": 3481.106878201943,
+  "returned_events": {
+    "shared_capoff_selection": {
+      "phase": "query",
+      "model": "shared_capoff_selection",
+      "batches": 15328,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 245248,
+        "partial_forwards": 0,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 243.19289538194425,
+        "accel_seconds": 243.19289538194425,
+        "peak_mem_mib": 0,
+        "tokens": 15696565,
+        "phase": "query"
+      }
+    },
+    "cap_corrected_batch": {
+      "phase": "query",
+      "model": "cap_corrected_batch",
+      "batches": 526,
+      "failed_batches": 0,
+      "returned_cost": {
+        "full_forwards": 0,
+        "partial_forwards": 8416,
+        "reverses": 0,
+        "settle_iters": 0,
+        "prefix_microsteps": 0,
+        "router_probes": 0,
+        "search_candidates": 0,
+        "memory_search_seconds": 0.0,
+        "wall_seconds": 4.593946798704565,
+        "accel_seconds": 4.593946798704565,
+        "peak_mem_mib": 0,
+        "tokens": 442116,
+        "phase": "query"
+      }
+    }
+  },
+  "cost_note": "shared pass charged once, not once per numerical configuration"
+}
