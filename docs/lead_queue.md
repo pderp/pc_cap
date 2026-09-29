@@ -1355,3 +1355,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     Reading: the credit direction is doing the work; acceptance-by-loss cannot acquire on its own. The compute-matched
     control (DEC-075 control 3) is running now; the v5 credit settings and Option R follow it automatically.
 
+
+140. (2026-09-29, 15:20 EDT) **Compute-matched adjoint control done (DEC-075 control 3): 12 cells, all complete.** The
+    matched arm (SE-AM) is offered, per item, the operation budget the eight-step error credit actually spent, as extra
+    acquisition rounds; adjoint does not use it — it reaches its acceptance threshold within the ordinary rounds, so
+    its ledger equals plain adjoint (75.5k forwards, 11.2k reverses, 270 s learning per zsRE cell). zsRE endpoints:
+    ES 0.983 (SE-A 0.998), RET-ES 0.508 (0.515), RET-GS 0.142 (0.131), LS 0.987 (0.970) — small shifts from the
+    variant's stop rule and prefix order, not from extra compute; CounterFact identical and saturated. Reading: the
+    eight-step retention gain is not something adjoint recovers when given the same budget, because adjoint cannot
+    spend it; the control is therefore weak by construction (budget offered, not consumed), and the report must say
+    so. The GPU chain moved on to the fixed-v5 credit settings at 15:15; Option R follows.

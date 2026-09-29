@@ -1,0 +1,114 @@
+{
+  "status": "complete",
+  "dataset": "zsre",
+  "arm": "SE-AM",
+  "credit_iters": 8,
+  "error_lr": 0.1,
+  "error_solver_active": false,
+  "requested_credit_iters": 8,
+  "requested_error_lr": 0.1,
+  "control_treatment": {
+    "credit": "adjoint-matched",
+    "arm": "SE-AM",
+    "reference_credit": "error",
+    "reference_credit_iters": 8,
+    "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+    "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+    "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+    "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+    "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+    "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+    "role": "additional_updates"
+  },
+  "reference_sources_sha256": {
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/config.json": "436e9e07a1b72d8c6a429eab527277fab7b043ad94b16bafcf21bcf2424bb503",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/finish.json": "c37683e4dfadb1b96516e8ffa628dd3234628003b0cb14b2da2414a5e27094d5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/items.jsonl": "81a1c1f3e0b12e23e42e0b92af2dbb1edb118412fac9b9fec8db43defda20bee",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+    "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+  },
+  "desktop_cuda_processes": [
+    {
+      "pid": "2042",
+      "used_memory": "94 MiB"
+    },
+    {
+      "pid": "22030",
+      "used_memory": "261 MiB"
+    },
+    {
+      "pid": "3578885",
+      "used_memory": "26 MiB"
+    }
+  ],
+  "items_completed": 1000,
+  "items_planned": 1000,
+  "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "elapsed_process_seconds": 1000.2865555321332,
+  "ledger": {
+    "query": {
+      "phase": "query",
+      "full_forwards": 61853,
+      "partial_forwards": 96110,
+      "reverses": 0,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 227.02585450583138,
+      "accel_seconds": 227.02585450583138,
+      "peak_mem_mib": 1230.97802734375,
+      "tokens": 3182461
+    },
+    "learning": {
+      "phase": "learning",
+      "full_forwards": 76147,
+      "partial_forwards": 138142,
+      "reverses": 11300,
+      "settle_iters": 0,
+      "prefix_microsteps": 3815,
+      "router_probes": 0,
+      "search_candidates": 45780,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 272.5674378562253,
+      "accel_seconds": 272.5674378562253,
+      "peak_mem_mib": 1230.97802734375,
+      "tokens": 2683992
+    },
+    "total": {
+      "phase": "total",
+      "full_forwards": 138000,
+      "partial_forwards": 234252,
+      "reverses": 11300,
+      "settle_iters": 0,
+      "prefix_microsteps": 3815,
+      "router_probes": 0,
+      "search_candidates": 45780,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 499.5932923620567,
+      "accel_seconds": 499.5932923620567,
+      "peak_mem_mib": 1230.97802734375,
+      "tokens": 5866453
+    },
+    "events": 242830,
+    "elapsed_wall_seconds": 1000.2865839004517,
+    "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  }
+}

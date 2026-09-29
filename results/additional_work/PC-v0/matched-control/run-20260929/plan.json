@@ -1,0 +1,204 @@
+{
+  "population": "exposed S5",
+  "cells": [
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 1000
+    },
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 1000
+    },
+    {
+      "dataset": "zsre",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 1000
+    },
+    {
+      "dataset": "zsre",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 1000
+    },
+    {
+      "dataset": "zsre",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 1000
+    },
+    {
+      "dataset": "zsre",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 1000
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 300
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 300
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 300
+    }
+  ],
+  "credit": {
+    "SE-A": {
+      "credit_iters": 8,
+      "error_lr": 0.1,
+      "error_solver_active": false,
+      "requested_credit_iters": 8,
+      "requested_error_lr": 0.1,
+      "control_treatment": {
+        "credit": "adjoint",
+        "arm": "SE-A",
+        "reference_credit": "error",
+        "reference_credit_iters": 8,
+        "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+        "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+        "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+        "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+        "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+        "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+        "role": "adjoint_control"
+      }
+    },
+    "SE-AM": {
+      "credit_iters": 8,
+      "error_lr": 0.1,
+      "error_solver_active": false,
+      "requested_credit_iters": 8,
+      "requested_error_lr": 0.1,
+      "control_treatment": {
+        "credit": "adjoint-matched",
+        "arm": "SE-AM",
+        "reference_credit": "error",
+        "reference_credit_iters": 8,
+        "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+        "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+        "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+        "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+        "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+        "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+        "role": "additional_updates"
+      }
+    }
+  },
+  "control_treatment": {
+    "credit": "adjoint-matched",
+    "arm": "SE-AM",
+    "reference_credit": "error",
+    "reference_credit_iters": 8,
+    "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+    "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+    "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+    "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+    "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+    "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend"
+  },
+  "reference_sources_sha256": {
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/config.json": "75784e728d0246ea1109cc0396c084f26a9a3356c4c537e200639f935d9d7864",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/finish.json": "e60da8da4fd09517fc54326590b8a3230a0c6baa6ea30b174b5f46acc1631d2d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/items.jsonl": "05f3ecbfc159fad3a37fd116b84f31fa6320f341fd2dc01ff73408d8046ab3c0",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+    "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/config.json": "4bd5be7d2590a12ce80d83028c5004fa71a5dc48bad45cc33ea8f57d67159dcb",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/finish.json": "5c5b196bcbc6a4346c7f167e4e99bf8d98d8003409613d4cdb04d1de8bfe6f6e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/items.jsonl": "0e07a13242e7766ce897e290bfe5492228a8d005c0c5203a566ede7f16f02f91",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/config.json": "436e9e07a1b72d8c6a429eab527277fab7b043ad94b16bafcf21bcf2424bb503",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/finish.json": "c37683e4dfadb1b96516e8ffa628dd3234628003b0cb14b2da2414a5e27094d5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/items.jsonl": "81a1c1f3e0b12e23e42e0b92af2dbb1edb118412fac9b9fec8db43defda20bee",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/config.json": "b8726395e9e4ff4144d4d878d636f0bcb8d2eb62997dec27dfb76e453d803748",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/finish.json": "b44b377c10bd5fcf9fef89414c3269f71aad5bcd03794136169a04af049dcea5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/items.jsonl": "16fbded509885159a5acd622dbb95c119ed4e2d4706089ccb7d48e67e1120fbb",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/config.json": "a160d54505ed5d4fd678f775bcb810cdc9debdb487d1412f549eb39e88fee8d3",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/finish.json": "785d374fca8f0c0c5133096d019ee09057c6a4ca964f7f7a633cb745990b74a6",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/items.jsonl": "9ce7d2c3544f8b19cd6991810bf0d5b49dbc741b50a7a1cb25325688cf9b9cb0",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/config.json": "54c93b91d1f0a426928e7477f91011b61c4992be6c3a4549805af95b73f7a003",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/finish.json": "35a2517e9f882b9bbdf47bba640dd1abcc6886dcc8e273c94679df49f6319345",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/items.jsonl": "e7b65cd6309974e54e17bfd1391b4f7043207e589e868730148d1c774716a2bc"
+  },
+  "sources": {
+    "aw/pc_v0.py": "311cc337635d625cd4ec743805d69311a8b247df7502903cf9cbc4c8812c4286",
+    "aw/pc_sweep.py": "f5245304d7aa2fd414c39e0c15ae2aecfa296951eadf895433a3fdfdbe04a42d",
+    "manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+    "aw/pc_matched_run.py": "fdad7363d011b5f6cc8e988daf3736f6872de8998e750c3a4163572bda099ab7",
+    "aw/pc_matched_credit.py": "cbdea574e48f5d3ae1ff3ba8be8b793b021ff8a20e38818b38f3f80aeafd7b9f",
+    "aw/pc_random_run.py": "301fa776695b80c8a9a18e26d55b2757c552329044d33085a197979591e7007d",
+    "aw/pc_random_credit.py": "4d8d625e3d3992d26829d21ddc3e9a0fe918fb5fcde2972d747285d6e8f7ee7b",
+    "aw/pc_historical.py": "ed8e217b9e64066ef79f439965fbfb74130d2326313025e5d593550bf6565c1e"
+  },
+  "model_execution": false,
+  "claim": "exploratory DEC-075 useful-update budget control; not new confirmation"
+}
