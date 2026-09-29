@@ -1319,3 +1319,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     share bounds every token's loss at −log ρ = 1 nat. The evaluation of v5 / cap-off / mixture on the ten sealed
     realization-0 memories started 05:24 (ceiling 16 h; expected a few hours). Until it reports, this is a
     development-population result.
+
+135. (2026-09-29, 06:40 EDT) Capex round 52 committed (pc_cap bbb7336, assets 09938c6): AW-B3 driver, PC-12 random and
+    compute-matched controls (private runners), X24-final PASS on all 64 cells and 32 pairs, PC-8 measured reports
+    (`docs/additional_work/PC-v0_report.md`, `PC-v1_report.md`; reviewer tables in `review-data/results.md`; resolved
+    deck export `deck_v3/completed-pc-final-20260928/`), PC-11 applied-state tests, and R-1 (the Option R execution
+    consumer with a two-worker schedule — ready for Tuesday's decision). GPU queue: AW-B evaluation (running) → random
+    control → matched control (queued automatically). Round 53 lanes: PC-13 settling-depth report and figure, AW-B4
+    bounded-correction report, PRES-6 deck update.
+

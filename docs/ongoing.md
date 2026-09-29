@@ -29,6 +29,8 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-09-29 06:35** — Capex round 52 committed (AW-B3, PC-12, X24-final PASS, PC-8 reports, PC-11 tests, R-1 consumer). GPU: settling-depth control done (items 132–133); AW-B calibration done, mixture ρ = e⁻¹ selected (item 134); AW-B evaluation running since 05:24; PC-12 random and matched controls queued behind it. Round 53 lanes below.
+
 - **2026-09-28 17:50** — DEC-076: AW-B pre-registration approved; calibration follows the settling-depth controls on the GPU. Lane AW-B3 (calibration driver) opened first; PC-12 second.
 
 - **2026-09-28 18:00** — DEC-075: three PC-v0 controls approved (settling depth 1/32, random-direction credit, compute-matched adjoint); no base control. Capstan applies the staged PC-9/PC-10 patch tonight (old versions kept) and runs the settling-depth control; lanes PC-12 (the two new credit arms) and PC-8 below.
@@ -178,6 +180,36 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 53 — fold the new results into the record (2026-09-29, 06:35)
+
+Delivered and committed by Capex in round 52: AW-B3, PC-12, X24-final, PC-8, PC-11, R-1. New results since PC-8's
+reports: the settling-depth control (`results/additional_work/PC-v0/control-k{1,32}-20260928/` with harm readouts
+under `harm/control-k{1,32}-20260928/`; lead queue 132–133) and the AW-B calibration
+(`results/additional_work/AW-B/calibration-20260929/`, selection = mixture ρ = e⁻¹, no comparator; item 134); the
+AW-B evaluation on the ten sealed realization-0 memories is running (`evaluation-20260929/`), and the random /
+matched controls follow it on the GPU automatically.
+
+### Lane PC-13 — settling-depth control report and the credit × depth figure (first)
+
+`docs/additional_work/PC-controls_report.md` (extend with the random / matched groups when they finish): per depth
+1 / 8 / 32 the paired efficacy, harm and cost against adjoint, with the exact one-step equality stated as the mechanism
+check; one figure for slide 9 with own-prompt retention, paraphrase retention, ES99+ and learning cost against depth
+(`assets/presentation-materials/figures/pc_v0/controls/`); claim-ledger rows; the reviewer table in `review-data/results.md`.
+Use the treatment-aware generator; do not pool depths.
+
+### Lane AW-B4 — bounded-correction report (second; starts when the evaluation finishes)
+
+`docs/additional_work/AW-B_report.md` from the calibration and evaluation outputs: the sixteen-setting development
+table (why every clip fails, why the mixture holds), the mechanical selection with its rule, the sealed-stream
+evaluation of v5 / cap-off / mixture per order with paired differences, the tail figure (survival curves before and
+after the bound, the 1-nat ceiling visible), cost; ledger rows; slide 8 material beside the κ pilot; the reviewer
+table. State the guarantee precisely: ≤ 1 nat per token at a fixed prefix, not a bound on total or generated-text loss.
+
+### Lane PRES-6 — deck update for slides 8 and 9 and the closing slide (third; after PC-13 and AW-B4)
+
+Fold the two new results into the speaker drafts and the resolved export; the measured / proposed labels and the
+Tuesday decision form updated with what now exists.
 
 ### Lane AW-B3 — bounded-correction calibration driver (first; DEC-076; GPU dispatch by Capstan after the controls)
 
