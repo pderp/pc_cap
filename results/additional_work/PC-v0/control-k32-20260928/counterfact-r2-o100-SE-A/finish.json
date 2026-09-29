@@ -1,0 +1,79 @@
+{
+  "status": "complete",
+  "dataset": "counterfact",
+  "arm": "SE-A",
+  "credit_iters": 8,
+  "error_lr": 0.1,
+  "error_solver_active": false,
+  "requested_credit_iters": 32,
+  "requested_error_lr": 0.1,
+  "desktop_cuda_processes": [
+    {
+      "pid": "2042",
+      "used_memory": "88 MiB"
+    },
+    {
+      "pid": "22030",
+      "used_memory": "265 MiB"
+    },
+    {
+      "pid": "3578885",
+      "used_memory": "26 MiB"
+    }
+  ],
+  "items_completed": 300,
+  "items_planned": 300,
+  "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+  "elapsed_process_seconds": 435.5712176579982,
+  "ledger": {
+    "query": {
+      "phase": "query",
+      "full_forwards": 75923,
+      "partial_forwards": 20232,
+      "reverses": 0,
+      "settle_iters": 0,
+      "prefix_microsteps": 0,
+      "router_probes": 0,
+      "search_candidates": 0,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 217.2629120578058,
+      "accel_seconds": 217.2629120578058,
+      "peak_mem_mib": 1191.508544921875,
+      "tokens": 2842952
+    },
+    "learning": {
+      "phase": "learning",
+      "full_forwards": 12270,
+      "partial_forwards": 18540,
+      "reverses": 1818,
+      "settle_iters": 0,
+      "prefix_microsteps": 618,
+      "router_probes": 0,
+      "search_candidates": 7416,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 45.43296505976468,
+      "accel_seconds": 45.43296505976468,
+      "peak_mem_mib": 1191.508544921875,
+      "tokens": 258430
+    },
+    "total": {
+      "phase": "total",
+      "full_forwards": 88193,
+      "partial_forwards": 38772,
+      "reverses": 1818,
+      "settle_iters": 0,
+      "prefix_microsteps": 618,
+      "router_probes": 0,
+      "search_candidates": 7416,
+      "memory_search_seconds": 0.0,
+      "wall_seconds": 262.6958771175705,
+      "accel_seconds": 262.6958771175705,
+      "peak_mem_mib": 1191.508544921875,
+      "tokens": 3101382
+    },
+    "events": 44157,
+    "elapsed_wall_seconds": 435.57123589515686,
+    "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+  }
+}
