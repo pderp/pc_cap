@@ -1304,3 +1304,18 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     settling depth (+8 % at 8 steps, +52 % at 32), alongside the retention gain of item 132: deeper settling buys
     own-prompt retention with more ordinary-text harm and more compute. The AW-B calibration started at 00:00
     (`results/additional_work/AW-B/calibration-20260929/`, ceiling 8 h).
+
+134. (2026-09-29, 05:30 EDT) **AW-B calibration done (5.4 h, DEC-076/076a rules applied mechanically):
+    `results/additional_work/AW-B/calibration-20260929/` (committed).** Development memories, full 245,237-position
+    inventory, thirteen wrappers + three gates. The pre-registered rule selected **the matched mixture ρ = e⁻¹
+    (the b = 0.5 equivalent; loss increase ≤ 1 nat at every token by construction)** as the bound and **no comparator**
+    (none eligible). On the development memories the mixture keeps every efficacy endpoint unchanged (zsRE RET-ES
+    0.997, RET-GS 0.973, LS 1.0, near-miss 0.87, revision 1.0; CounterFact RET-GS 0.753 → 0.745, the rest unchanged)
+    while cutting harm: zsRE mean KL 0.00227 → 0.00071 (under the old 0.001 line), ES99+ 0.237 → 0.076, maximum
+    9.94 → 1.00 nats; CounterFact mean KL 0.00593 → 0.00160, ES99+ 0.610 → 0.173, maximum 14.02 → 1.00. Every clip
+    (b = 0.5 … 4) destroys editing (RET-ES −0.63 … −1.0) because it bounds how far the answer token can rise; shrinkage
+    and stricter gates lose paraphrase retention (0.75-shrink −0.065 on CounterFact; gates −0.04 … −0.13). Mechanism:
+    the mixture keeps ≥ 0.63 of the cap's mass on its answer, so greedy decoding is unchanged, while the base's 0.37
+    share bounds every token's loss at −log ρ = 1 nat. The evaluation of v5 / cap-off / mixture on the ten sealed
+    realization-0 memories started 05:24 (ceiling 16 h; expected a few hours). Until it reports, this is a
+    development-population result.
