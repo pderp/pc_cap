@@ -1384,3 +1384,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     0.00179 (rate 0.05), 0.00158 (rate 0.2) against adjoint 0.00181 and the 8-step 0.00167; CounterFact 0.00418–0.00439
     against 0.00438; maxima 8.9–12.3 nats in every arm. With items 128 and 141 this closes the fixed-v5 question: on
     the selected reader the credit rule and its settings change neither efficacy nor harm, only cost.
+
+143. (2026-09-30, 01:00 EDT) Capex round 54 committed: PC-15 (PC-trained reader runner) and AW-L5 (upper-layer trained 2×2
+    runner) are CPU-complete with owner commands; HT-16 closed the 3,000-edit scaling study as infeasible (684 zsRE
+    subjects remain after every reservation — it is cut). Option R still waits for R-2 (reconciliation of the
+    ceiling-killed cell). To keep the GPU busy, the **PC-trained reader profile stage started at 01:00**: training
+    profiles for the BP and ePC rules (seed 0), then development evaluations on both datasets; the twelve-cell cost
+    projection follows on CPU and gates the six trainings. Option R resumes ahead of the reader trainings as soon as
+    R-2 lands.
