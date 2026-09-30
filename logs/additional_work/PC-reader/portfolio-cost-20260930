@@ -1,0 +1,83 @@
+{
+  "study": "pc",
+  "model_calls": 0,
+  "gpu_seconds": 0,
+  "projected_process_hours": 76.88953064122299,
+  "training_profiles": {
+    "('bp', (1, 2, 3))": {
+      "source": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/profile-bp-s0/report.json",
+        "sha256": "15eb0f07824209435d23bbf4ed4b4662b2118638ec49683474b9a5e4d2dcb31b"
+      },
+      "projected_seconds": 2220.9785470122006
+    },
+    "('epc', (1, 2, 3))": {
+      "source": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/profile-epc-s0/report.json",
+        "sha256": "a1bddfb7991d90efa3abe97ffe0b3b20b611f82f7f23d767ba9bd105eb564e58"
+      },
+      "projected_seconds": 81409.50665736338
+    }
+  },
+  "evaluation_profiles": {
+    "('bp', (1, 2, 3), (1, 2, 3), 'zsre')": {
+      "components": {
+        "acquisition_and_immediate_300": 162.0312956906855,
+        "retention_at_100_and_300": 11.003003232181072,
+        "fixed_endpoints_twice": 403.17425846587867,
+        "full_harm": 1589.2952719681198,
+        "construction_and_other": 4.441270982613787
+      },
+      "projected_seconds": 2169.945100339479,
+      "source": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-profile-bp-zsre/report.json",
+        "sha256": "e667fd110ec3b818593bb2a38d72653163d10e75307fc552ee8d39c749728efb"
+      }
+    },
+    "('bp', (1, 2, 3), (1, 2, 3), 'counterfact')": {
+      "components": {
+        "acquisition_and_immediate_300": 195.76072349678725,
+        "retention_at_100_and_300": 10.775218717753887,
+        "fixed_endpoints_twice": 408.0787590639666,
+        "full_harm": 1670.3108997229428,
+        "construction_and_other": 4.430441908305511
+      },
+      "projected_seconds": 2289.356042909756,
+      "source": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-profile-bp-counterfact/report.json",
+        "sha256": "a65635fab370eac6b0fe60ce622165b50f8332ac57d25cb0058f69deb0f75fc1"
+      }
+    },
+    "('epc', (1, 2, 3), (1, 2, 3), 'zsre')": {
+      "components": {
+        "acquisition_and_immediate_300": 159.70771313644946,
+        "retention_at_100_and_300": 10.223725605756044,
+        "fixed_endpoints_twice": 398.2135546277277,
+        "full_harm": 1466.5164864161052,
+        "construction_and_other": 4.374534238129854
+      },
+      "projected_seconds": 2039.0360140241683,
+      "source": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-profile-epc-zsre/report.json",
+        "sha256": "b2ad21ef86789a4818f4bad7d62e38a5fade2625bee6bf3a962810f41abe4731"
+      }
+    },
+    "('epc', (1, 2, 3), (1, 2, 3), 'counterfact')": {
+      "components": {
+        "acquisition_and_immediate_300": 194.40683465916663,
+        "retention_at_100_and_300": 37.11345352232456,
+        "fixed_endpoints_twice": 414.3223300902173,
+        "full_harm": 1488.3877334201825,
+        "construction_and_other": 4.384056126698852
+      },
+      "projected_seconds": 2138.61440781859,
+      "source": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-profile-epc-counterfact/report.json",
+        "sha256": "59dfc9d1aa3e7b889af13aca68bafbf4e4d096d1482a9b51e43af12af371f7cc"
+      }
+    }
+  },
+  "upper_ceiling_hours": null,
+  "fits_upper_ceiling_before_retry_reserve": null,
+  "limitations": "Extrapolation from seed0, 10 edits and eight validation windows; occupancy, variable prefix shapes, cache clearing and retries may increase cost. No automatic dispatch or arm reduction. Shared full-read BP training is charged once when combining the two portfolios."
+}
