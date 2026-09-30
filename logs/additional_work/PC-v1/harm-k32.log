@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 128, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 123, in main
+    r = run(a.run, a.output, wall_seconds=a.wall_seconds, batch_size=a.batch_size)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 55, in run
+    rows = load_cells(run_path)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/pc_v1_harm.py", line 43, in load_cells
+    raise ValueError(f"{name}: checkpoint credit/iters differ from the planned arm")
+ValueError: zsre-r0-o100-SE-E: checkpoint credit/iters differ from the planned arm
