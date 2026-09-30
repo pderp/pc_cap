@@ -1378,3 +1378,9 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     resume need a consumer step that does not exist yet (lane R-2 for Capex); Option R resumes when it lands. The GPU
     runs the variant harm readouts meanwhile.
 
+
+142. (2026-09-30, 00:55 EDT) Variant harm readouts done (repaired driver, full inventory, three runs × four arms): the
+    credit setting leaves ordinary-text harm unchanged within position noise — zsRE SE-E mean ΔNLL 0.00147 (32 it.),
+    0.00179 (rate 0.05), 0.00158 (rate 0.2) against adjoint 0.00181 and the 8-step 0.00167; CounterFact 0.00418–0.00439
+    against 0.00438; maxima 8.9–12.3 nats in every arm. With items 128 and 141 this closes the fixed-v5 question: on
+    the selected reader the credit rule and its settings change neither efficacy nor harm, only cost.
