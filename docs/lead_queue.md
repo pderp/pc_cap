@@ -1365,3 +1365,16 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     eight-step retention gain is not something adjoint recovers when given the same budget, because adjoint cannot
     spend it; the control is therefore weak by construction (budget offered, not consumed), and the report must say
     so. The GPU chain moved on to the fixed-v5 credit settings at 15:15; Option R follows.
+
+141. (2026-09-29, 21:10 EDT) **Fixed-v5 credit settings done: the v5 result is robust to the credit setting.** 32 iterations,
+    error rate 0.05 and 0.2 (four cells each, all complete): every endpoint identical to the eight-step run on zsRE
+    (ES 1.0, RET-ES 1.0, RET-GS 0.983, LS 1.0, near-miss 0.76, revision 1.0) and CounterFact (RET-GS 0.800–0.803 vs
+    0.807 adjoint); cost per zsRE cell 673 s at 32 iterations vs 422 at 8 and 312 adjoint. Their harm readouts were
+    refused by my driver (it did not carry the variant's treatment record into Capex's adapter); fixed, rerunning now
+    (≈ 4 h). **Option R stopped after 2.9 h with four cells complete** (learned reader and random reader on zsRE, orders
+    100–101; ceiling use 0.49–0.59): the v0_stable zsRE order-100 cell hit its 8,002 s allowance (1.7 × the block-1 donor
+    mean) with only checkpoint 300 durable — it ran several times slower than its R1 counterpart — and the consumer
+    stopped on the torn attempt as designed (no retry budget remains for that cell). Owner reconciliation and a
+    resume need a consumer step that does not exist yet (lane R-2 for Capex); Option R resumes when it lands. The GPU
+    runs the variant harm readouts meanwhile.
+

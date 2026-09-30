@@ -183,6 +183,22 @@ applied PC-9/PC-10 files in `aw/` are the running versions until the settling-de
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
 
+## Round 55 — Option R reconciliation and resume (2026-09-29, 21:10; urgent)
+
+### Lane R-2 — reconcile the torn Option R attempt and resume the session (first, before PC-15)
+
+Session `logs/additional_work/R/queue/20260929T174143/`: four cells complete; cell `61eb6d08…` (v0_stable, zsRE,
+order 100) was killed at its 8,002 s allowance with checkpoints 100 and 300 certified and phases open; the consumer
+refuses to resume on "unknown/torn attempt cost". Needed: (1) an owner reconciliation step in `aw/r_run.py`
+(`reconcile --cell-id … --execute`) that closes the torn attempt with its whole-envelope cost (8,002 s, already
+charged in `dispatch-00/finish.json`), records the cell as incomplete-by-ceiling with no retry budget, and writes a
+receipt; (2) `run --resume` continuing the same session with the remaining 25 cells, skipping incomplete cells;
+(3) a diagnosis of why the v0_stable zsRE cell ran several times slower than its R1 donor (checkpoint 100 at 40 min
+against a 78-minute full R1 cell) — phase timings, GPU contention with the paired learned-reader cell, watch or
+full-validation cost in the consumer — and, if the class will not fit its ceiling, an explicit owner-visible option
+to defer the class rather than burn 8,002 s per cell; no silent ceiling increase. Capstan resumes as soon as this
+lands.
+
 ## Round 54 — the runners the default portfolio still needs (2026-09-29, 06:50; DEC-077)
 
 Order for Capex: PC-13 and AW-B4 (round 53) remain first because the talk needs them; then the three runners below in
