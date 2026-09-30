@@ -1392,3 +1392,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     profiles for the BP and ePC rules (seed 0), then development evaluations on both datasets; the twelve-cell cost
     projection follows on CPU and gates the six trainings. Option R resumes ahead of the reader trainings as soon as
     R-2 lands.
+
+144. (2026-09-30, 02:05 EDT) **PC-trained reader: profiles done, cost projected, scope question.** Profiles (seed 0):
+    a BP training takes ≈ 37 min; an **ePC-surrogate training ≈ 22.6 h** (37× slower: the eight-step error inference
+    inside every training step); each evaluation cell ≈ 36 min, of which the full harm readout is 25. Twelve-cell
+    projection 76.9 process-hours (three ePC seeds alone 67.8 h), against ≈ 140 GPU-hours left before October 6 with
+    Option R (≈ 25–30 h once R-2 lands) still owed. Applied default: the BP control arm runs now (three seeds with
+    their six evaluations, ≈ 5.5 h, done ≈ 07:30), Option R goes next when its reconciliation lands, then ePC seed 0
+    with its two evaluations (≈ 24 h). Remaining after that ≈ 45 h, which fits either the two extra ePC seeds (45 h)
+    or the upper-layer 2×2 (≈ 30 h), not both. **Question for the lead: for the last slot, extra ePC seeds (a spread
+    on the PC-trained reader) or the upper-layer interface (your hypothesis)? Default if unanswered by Thursday
+    evening: the ePC seeds, per DEC-077's order.**
