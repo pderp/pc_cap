@@ -18,6 +18,7 @@ import json
 import time
 from pathlib import Path
 
+from aw import pc_treatments as treatment
 from aw.pc_harm_readout import CUTOFF, dump, pair, read_arm, selection, sha, table_block, wall_limit
 from aw.pc_v0 import blocking_cuda_processes
 from aw.pc_v1_readout import PCPositionBatchReader
@@ -39,9 +40,13 @@ def load_cells(run: Path) -> list[dict]:
             raise ValueError(f"readout requires a completed group; {name} is {finish.get('status')}")
         cp = json.loads((d / f"checkpoint-{CHECKPOINT}.json").read_bytes())
         binding = cp["snapshot"]
-        if binding["credit"] != {"SE-A": "adjoint", "SE-E": "error"}[c["arm"]] or binding["iters"] != 8:
-            raise ValueError(f"{name}: checkpoint credit/iters differ from the planned arm")
-        rows.append(dict(c, name=name, directory=str(d), binding=binding, checkpoint_sha256=sha(d / f"checkpoint-{CHECKPOINT}.json")))
+        if binding["credit"] != {"SE-A": "adjoint", "SE-E": "error"}[c["arm"]]:
+            raise ValueError(f"{name}: checkpoint credit differs from the planned arm")
+        config = json.loads((d / "config.json").read_bytes())
+        record = treatment.recorded(config, finish)  # validates requested vs effective treatment (PC-10)
+        solver = record["solver"]
+        rows.append(dict(c, name=name, directory=str(d), binding=binding, config=config, finish=finish, solver=solver,
+                         treatment=record["treatment"], checkpoint_sha256=sha(d / f"checkpoint-{CHECKPOINT}.json")))
     return rows
 
 
@@ -80,10 +85,12 @@ def run(run_dir: str, output: str, *, wall_seconds: int, batch_size: int) -> dic
             report["selection"] = meta
             paired = {}
             for ds in sorted({r["dataset"] for r in rows}):
-                adapter, _ = construct(spec["recipes"][ds], "SE-A")  # base / config / selected reader; the arm is irrelevant here
-                cap = adapter.learner
                 for row in [r for r in rows if r["dataset"] == ds]:
-                    reader = PCPositionBatchReader.from_checkpoint(cap.base, cap.cfg, cap.params, row["binding"], batch_size=batch_size)
+                    # construct per arm so the EPC interface carries the recorded error rate of this cell's treatment
+                    adapter, _ = construct(spec["recipes"][ds], row["arm"], credit_iters=row["solver"]["credit_iters"], error_lr=row["solver"]["error_lr"])
+                    cap = adapter.learner
+                    reader = PCPositionBatchReader.from_checkpoint(cap.base, cap.cfg, cap.params, row["binding"], batch_size=batch_size,
+                                                                   config=row["config"], finish=row["finish"])
                     result = read_arm(reader, windows, meta, out / row["name"])
                     report["cells"].append({k: row[k] for k in ("dataset", "realization", "order", "arm", "directory", "binding", "checkpoint_sha256")} | dict(readout=result))
                     paired.setdefault((ds, row["realization"], row["order"]), {})[row["arm"]] = result
