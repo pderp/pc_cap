@@ -1403,3 +1403,25 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     or the upper-layer 2×2 (≈ 30 h), not both. **Question for the lead: for the last slot, extra ePC seeds (a spread
     on the PC-trained reader) or the upper-layer interface (your hypothesis)? Default if unanswered by Thursday
     evening: the ePC seeds, per DEC-077's order.**
+
+145. (2026-09-30, 05:45 EDT) **PC-trained reader, BP control arm done** (three readers re-trained with the selected v5
+    recipe under Capex's runner, seeds 0–2; each evaluated on the exposed realization-0 streams at 300 edits with the
+    full harm readout; 5.5 h). Endpoints at 300 edits and harm (own cap-off, 245,237 positions):
+
+    | reader | dataset | ES | RET-ES | RET-GS | LS | near-miss | fired positions | mean ΔNLL | ES99+ | max |
+    |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+    | BP s0 | zsRE | 1.00 | 1.00 | 0.973 | 1.00 | 0.85 | 18 | 0.00011 | 0.012 | 6.5 |
+    | BP s1 | zsRE | 1.00 | 1.00 | 0.990 | 1.00 | 0.67 | 13 | 0.00013 | 0.013 | 7.9 |
+    | BP s2 | zsRE | 1.00 | 1.00 | 0.977 | 1.00 | 0.73 | 21 | 0.00018 | 0.018 | 10.6 |
+    | BP s0 | CounterFact | 1.00 | 1.00 | 0.810 | 1.00 | 1.00 | 256 | 0.00202 | 0.207 | 8.5 |
+    | BP s1 | CounterFact | 0.99 | 0.99 | 0.800 | 1.00 | 0.99 | 660 | 0.00535 | 0.551 | 12.5 |
+    | BP s2 | CounterFact | 1.00 | 1.00 | 0.835 | 1.00 | 1.00 | 149 | 0.00118 | 0.121 | 9.9 |
+
+    Two things worth noting before the ePC arm reports. (1) Retention matches the selected v5 reader (zsRE 0.983,
+    CounterFact 0.807 at 300 edits), so the recipe reproduces. (2) On zsRE these un-selected re-trainings fire on
+    13–21 ordinary-text positions against ≈ 350 for the selected v5 reader on the same streams, and their mean harm is
+    ten times smaller (0.0001–0.0002 vs 0.0018); on CounterFact the seed spread is wide (13 to 660 firings). The
+    selected v5 artifact came out of a 42-candidate selection on retention; that selection appears to have picked a
+    reader that fires more on ordinary text than a typical re-training. Descriptive, three seeds, exposed
+    populations, 300 edits — but it belongs beside the fidelity results in the talk. ePC seed 0 training started
+    05:36 (≈ 22.6 h); its two evaluations follow; Option R still waits for R-2.
