@@ -288,7 +288,9 @@ def data(base, spec, seed):
             path.parent.mkdir(parents=True, exist_ok=True)
             with path.open("xb") as f:
                 pickle.dump(bank, f)
-        if len(bank.items) != 1000 or [v.item_id for v in bank.items] != [
+        # The MQuAKE v3 pool holds 500 items (its original bank file keeps the `_1000` name); compare with the rows
+        # actually loaded, not a fixed 1,000 (Capstan, 2026-09-30 01:10, first dispatch; Capex to review).
+        if len(bank.items) != len(rows) or [v.item_id for v in bank.items] != [
             v["item_id"] for v in rows
         ]:
             raise ValueError("bank item coverage/order differs")
@@ -299,8 +301,10 @@ def data(base, spec, seed):
         ):
             raise ValueError("cached bank tokens differ from its bound pool")
         offset = sum(len(b.items) for b in banks)
-        train_ix.append(list(range(offset, offset + 900)))
-        dev_ix.append(list(range(offset + 900, offset + 1000)))
+        n = len(bank.items)
+        split = (n * 9) // 10  # last tenth of each pool held out, as 900 / 1,000 was for the 1,000-item pools
+        train_ix.append(list(range(offset, offset + split)))
+        dev_ix.append(list(range(offset + split, offset + n)))
         banks.append(bank)
         records.append(
             dict(
