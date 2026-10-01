@@ -54,7 +54,8 @@ per-token readout of what every correction does to 245,237 positions of ordinary
    plain clip does most of it.
 5. **Training the reader itself with the predictive-coding surrogate** (running now; one of three seeds done) gives a
    quieter reader: identical own-prompt retention, lower paraphrase generalisation (0.95 vs 0.97 on zsRE, 0.57 vs 0.81
-   on CounterFact), and zero firings on zsRE ordinary text. Training costs 37× the backpropagation run.
+   on CounterFact), and zero firings on zsRE ordinary text. Training costs about 100× the backpropagation run
+   (measured: 24.6 h against 14 min for seed 0; the earlier 37× was a profile projection).
 
 **What the testbed does not do.** It does not implement expected-free-energy policy selection, the coupled free energy
 of the abstract, precision as risk sensitivity, autonomous epistemic audits, or Markov blankets in the formal sense.
@@ -394,7 +395,7 @@ without losing LS or near-miss, pick the largest reduction of the maximum token 
 The v5 training recipe (same pools, episodes, optimiser, 300 updates, checkpoint average 150–300) re-run under two
 gradient estimators, backpropagation vs the ePC surrogate of §3.6, three paired seeds each; every reader evaluated on
 the exposed realization-0 streams at 300 edits (acquisition adjoint in every arm; fresh memory per reader) with the
-full harm readout. Training cost: BP ≈ 37 min per seed; **ePC ≈ 24.6 h per seed** (eight-step error inference inside
+full harm readout. Training cost (measured on seed 0): BP 14 min; **ePC 24.6 h per seed**, about 100× (eight-step error inference inside
 every training step). Done so far: all three BP seeds, ePC seed 0.
 
 | reader | dataset | ES | RET-ES | RET-GS | LS | near-miss | fired positions (of 245,237) | mean ΔNLL | ES99+ | max |

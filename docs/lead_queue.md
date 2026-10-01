@@ -1537,3 +1537,19 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     Round 57 lanes for Capex: PRES-7 (fold B–D and HT-17 into slides 6/7/8/11, ledger rows, scripts, final-experiments
     refresh), PC-16 (three-seed ePC reader report generator, with the HT-17 reader refresh as a step), R-3 (Option R
     extension report generator, learned vs random, v0 deferred), AW-L6 (interface 2×2 report generator, lowest priority).
+
+152. (2026-10-01, 15:05 EDT) **Capex round 57 committed (pc_cap 674c1ca, assets 7f50332); round 58 opened.** Delivered:
+    PRES-7 (the deck now carries the B–D wording and HT-17: slides 2/6/7/8/11, both scripts timed to 15/25 min, claim
+    ledger rows, `backup-ht17.md`; final export `assets/presentation-materials/deck_v3/round57-delivered/`); PC-16
+    (`aw/pc_reader_report.py`, partial report from 8 of 12 cells, refresh command for seeds 1–2 including the HT-17
+    reader refresh); R-3 (`aw/r_report.py`, partial Option R report: 4 complete, 1 incomplete by ceiling, 9 deferred,
+    16 pending; t(3) display withheld until all four realizations are fully paired); AW-L6 (`aw/aw_l_report.py`,
+    parser and factorial math tested on synthetic trees). 16 tests pass here, ruff clean. Two corrections from Capex
+    that I adopt: the AW-B mixture cuts conditional severity to about **one-third** (1.62 → 0.54, 1.93 → 0.58 nats),
+    not half; and the ePC reader training cost is **≈ 100× BP as measured** (24.6 h vs 14 min on seed 0), the 37× was a
+    profile projection — the Friday README is corrected accordingly. Round 58 lanes (all CPU): X25 receipt/hash audit of
+    every post-halt result plus a freeze checklist for Oct 9; S4-LIM adds the GPT-2-small / transfer caveat (your 29 Sep
+    review) and the halt/deferral limitations to the Stage-4 reports through their generator; PRES-8 Q&A refresh with the
+    entropy-feedback questions and a rehearsal pack; KP-1 checks whether the κ-pilot readers restore exactly for the
+    optional Oct 5 readout (go/no-go, nothing launched); CAL-1 optional calibration demonstration and a post-conference
+    coupled-objective note. GPU unchanged: ePC seed 1 at step 81/300, Option R armed, AW-L5 after.

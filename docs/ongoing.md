@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-01 15:05** — Capex round 57 committed (PRES-7 deck with B–D and HT-17; PC-16/R-3/AW-L6 report generators, partial reports). Round 58 lanes: X25 audit + freeze checklist, S4-LIM model-scale caveat, PRES-8 rehearsal/Q&A, KP-1 κ-pilot restoration check, CAL-1 optional. Corrections noted: AW-B severity falls to about one-third (not half); ePC reader training is ≈ 100× BP measured (37× was a projection).
 - **2026-10-01 14:40** — HT-17 complete and committed (finite-range tail differences, not classes; AW-B halves conditional severity; GPD adds nothing over exponential for the learned reader; stable v0 zsRE shape 0.43–1.03 beats exponential on held-out windows). Slice check passes. Round 57 lanes: PRES-7, PC-16, R-3, AW-L6.
 - **2026-10-01 14:05** — Lane HT-17 opened for Capex (round 56; `docs/tasks/HT-17.md`): saved-vector tail analysis per Capex's specification, CPU only, fits by Oct 5. GPU queue unchanged.
 - **2026-10-01 13:40** — DEC-081a: B–D wording revised to Capex's conservative language after its review of the entropy feedback (fitted shapes, not classes; mixture = proven ceiling; κ pilot = bounded loss deformation); HT-17 narrowed to Capex's saved-vector tail analysis spec, opens on the lead's word. Capex review files committed.
@@ -188,6 +189,66 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 58 — freeze readiness, rehearsal, limitations, optional checks (2026-10-01, 15:05)
+
+Priority order: X25 → S4-LIM → PRES-8 → KP-1 → CAL-1. All CPU; no GPU; the GPU queue is Capstan's. Round-57
+generators are rerun by the owner as results land (ePC seeds ≈ Oct 2 08:40 / Oct 3 10:10; Option R ≈ Oct 3 evening;
+AW-L5 ≈ Oct 5); Capex refreshes the deck through PRES after each.
+
+### Lane X25 — supplemental-results receipt and hash audit; freeze checklist
+
+In the style of X22–X24, an independent read-only audit of every post-halt result that a report or slide cites: PC-v0
+(60 cells + controls k1/k32, random, matched), PC-v1 (4 + the credit-setting variants) and their harm readouts, AW-B
+calibration and evaluation, PC-reader (profiles, trainings, evaluations as they complete), Option R session segments,
+HT-17 snapshots. For each: the cited file exists, its hash matches the report's `sources_sha256` / `sources.json`, the
+cost/finish receipts are complete, no number in a report or ledger row lacks a named source, and no result is cited from
+an intermediate directory where a canonical one exists. Output `logs/additional_work/X25/` (table, JSON, PASS/FAIL per
+report) and a one-page **freeze checklist** for Oct 9 17:00 (`docs/freeze_checklist_20261009.md`): what the lead signs,
+which directories are final, which generators were last run on which inputs, open items. Rerun once more after the last
+GPU result lands (owner tells you). Done-when: every cited result PASS or an explicit discrepancy list.
+
+### Lane S4-LIM — Stage-4 report limitations: the model-scale caveat
+
+`docs/R1_stage4_report.md` (assembled; `logs/R1/reports/stage4-assembled/`) has no statement that the base is GPT-2 small
+(124M) and that findings may not transfer to production-scale models (the lead's 29 Sep review asked for this in every
+external report). Add it to the report's limitations section through its generator (not by hand-editing an assembled
+file), with the same sentence in the triplet and comparator reports' limitations and in the deck's scope slide (12)
+if absent; also note there the DEC-074b halt (S1_literal CounterFact and the extension unavailable) and the DEC-080
+Option R v0-class deferral as reporting limitations. No numbers change. Done-when: regenerated reports carry the caveat;
+diff shows only the added text.
+
+### Lane PRES-8 — rehearsal pack and Q&A refresh
+
+`docs/presentation/qa.md`: add the questions the entropy feedback raises and the answers the deck now supports (what
+class the data support and why we say "fitted finite-range shapes"; the κ pilot versus the calibrated coupled entropy,
+with the (1 − e^{−κℓ})/κ form; the one-nat bound as a proven ceiling; W(N) and why no entropy-growth claim; the
+equation-126 question kept private); the PC-reader three-seed answer as a placeholder to fill on Oct 3; the Option R
+answer (learned vs random on realization 3, v0 deferred). Rehearsal pack under `assets/presentation-materials/deck_v3/
+rehearsal/`: the 15- and 25-minute scripts with per-slide timings from `aw/presentation_timing.py`, a backup-slide index
+(HT-17 survival, κ trade-off, controls figure), and a one-page "numbers to say" sheet with sources. Fold the lead's
+notes from the 2 Oct review when they arrive (owner relays). Done-when: Q&A and rehearsal pack exist and match the
+round-57 deck.
+
+### Lane KP-1 — κ-pilot reader restoration check (CPU; enables the optional Oct 5 readout)
+
+Determine, without model execution, whether the nine κ-pilot readers (ordinary / κ 0.2 / κ 0.5 × seeds 0–2) and the
+memories used by `results/R1/drift_assay_ht3_*` can be restored exactly for a 245,237-position readout under
+`aw/pc_harm_readout.py` (or the AW-B scoring path): artifact paths and hashes, memory snapshots, calibration, gate
+settings, the development streams and edit counts used; a dry-run plan with the exact owner command, projected cost
+(from the 25-min-per-cell readout profile) and what would be comparable to the Stage-4 assay (different population:
+label it). If restoration is not exact, say so and stop. Done-when: `docs/tasks/KP-1.md` with a go/no-go and the
+command; nothing launched.
+
+### Lane CAL-1 — calibration demonstration and the post-conference objective note (optional, half a day)
+
+Known-distribution checks of Nelson 2026's one-sided α = d = 1 formulas in `aw/entropy_feedback_checks.py` or a sibling:
+normalised density, slope condition x f′/f = −1 at x = σ, escort moment E_escort[X] = σ, κ → 0 limit, the entropy
+1 + ln_{κ/(1+κ)} σ, for κ ∈ {0, 0.25, 1, 2} (ordinary mean finite/divergent vs escort moment); plus a two-page note
+`docs/additional_work/coupled_objective_note.md`: what a JAX implementation of a coupled free-energy objective for the
+residual agent would need to specify (modelled variable, reference distribution, constraints, normalisation, escort
+gradients, tests), as the starting point for the post-conference discussion with the reviewer's group. No training, no
+GPU. Stop if it becomes a library port.
 
 ## Round 57 — fold the new results in; report generators for the last three runs (2026-10-01, 14:40)
 
