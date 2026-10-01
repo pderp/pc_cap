@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-01 14:40** — HT-17 complete and committed (finite-range tail differences, not classes; AW-B halves conditional severity; GPD adds nothing over exponential for the learned reader; stable v0 zsRE shape 0.43–1.03 beats exponential on held-out windows). Slice check passes. Round 57 lanes: PRES-7, PC-16, R-3, AW-L6.
 - **2026-10-01 14:05** — Lane HT-17 opened for Capex (round 56; `docs/tasks/HT-17.md`): saved-vector tail analysis per Capex's specification, CPU only, fits by Oct 5. GPU queue unchanged.
 - **2026-10-01 13:40** — DEC-081a: B–D wording revised to Capex's conservative language after its review of the entropy feedback (fitted shapes, not classes; mixture = proven ceiling; κ pilot = bounded loss deformation); HT-17 narrowed to Capex's saved-vector tail analysis spec, opens on the lead's word. Capex review files committed.
 - **2026-10-01 12:10** — DEC-081: reviewer feedback (Nelson 2026) items B–D drafted (`docs/friday-10.02-review/talk-text-B-C-D.md`, abstract-to-testbed map, tails_v1 §class prototype); A = lane HT-17 (class fits, CPU) pending the lead's go and Capex's availability; E deferred post-conference. Capex processing the same inputs (not to be interrupted).
@@ -187,6 +188,54 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 57 — fold the new results in; report generators for the last three runs (2026-10-01, 14:40)
+
+Priority order: PRES-7 → PC-16 → R-3 → AW-L6. All CPU. Generators are scaffolded on the cells that exist and rerun by
+the owner when the remaining cells land (ePC seeds ≈ Oct 2 08:45 and ≈ Oct 3 10:30; Option R 16 cells ≈ Oct 3 evening;
+AW-L5 ≈ Oct 5). No GPU use; the GPU queue is Capstan's.
+
+### Lane PRES-7 — deck integration of B–D and HT-17
+
+Fold `docs/friday-10.02-review/talk-text-B-C-D.md` (slides 2/6/7/8/11; ledger rows `kappa-design`, `AW-B`, new
+`HT17-tails` and `AI-coupled-FE`) into `docs/presentation/deck_v3/` and `docs/talk_claim_ledger_v7.md`, replacing the
+"[prototype, pending HT-17]" placeholders and the appendix with HT-17's reported numbers (frequency, conditional
+severity, shapes with intervals where eligible, the held-out comparison, the AW-B severity cut, the invalid-fit
+labelling). Slide 6/7 on-screen: HT-17's frequency-vs-severity figure beside (or instead of) the HT-13
+rarity-vs-severity; survival figure as backup. Update both speaking scripts, `docs/presentation/final-experiments.md`
+(DEC-080/081/081a, HT-17, Option R deferral), `review-results.md` and the resolved deck export. Language: fitted
+finite-range shapes; no class, no W(N), no infinite variance, no temperature; the κ pilot as a bounded deformation of
+one surprisal; the mixture as a proven ceiling. Done-when: deck, ledger, scripts and export agree with the HT-17 report.
+
+### Lane PC-16 — PC-trained reader report generator (three seeds per rule)
+
+`aw/pc_reader_report.py` (CPU): reads `results/additional_work/PC-reader/train-*/report.json` and
+`eval-*-s*-{zsre,counterfact}/{report.json, stream/checkpoint-300.json, harm/}`; tables per reader × dataset (ES,
+RET-ES, RET-GS, LS, near-miss, revision, unseen false fires, gate telemetry: fired positions, hard nulls; harm: mean KL,
+mean ΔNLL, ES99+, max, exceedances; training cost, parameter count, evaluation cost); paired BP−ePC differences by seed
+and the seed spread; the selected v5 artifact's values on the same streams as a labelled historical reference (items
+145–146); failed/missing cells visible with denominators. Then a step that runs HT-17's refresh (new output directory,
+per its report) and cites the reader rows. Report `docs/additional_work/PC-reader_report.md` from the completed BP ×3 +
+ePC s0 now, marked partial; the owner reruns when seeds 1–2 land. Framing: a quieter reader (fewer paraphrase
+retrievals, fewer ordinary-text firings) if it holds across seeds; training seeds are not subject realizations; no
+superiority claim; cost 37× stated. Tests on a tiny synthetic result tree.
+
+### Lane R-3 — Option R extension report generator
+
+`aw/r_report.py` (CPU): from the session receipts (`logs/additional_work/R/queue/20260929T174143/`, resume segments) and
+cell outputs, an extension report `docs/additional_work/R_report.md`: realization 3, learned reader vs random reader
+on zsRE and CounterFact, five orders each (the `v0_stable` class explicitly deferred per DEC-080, the ceiling-killed cell
+incomplete by ceiling, both visible); behaviour at 100/300/1,000 beside realizations 0–2; the registered learned-vs-random
+contrast recomputed on realizations 0–3 as a labelled sensitivity with the t(3) display (no re-issued classifier labels,
+no re-run of the registered family); fidelity-watch entries; costs (segments, ceilings, deferrals). Scaffold on the four
+complete cells now; the owner reruns when the 16 land. Tests on a synthetic session.
+
+### Lane AW-L6 — upper-layer interface 2×2 report generator (lowest priority)
+
+`aw/aw_l_report.py` (CPU) for the AW-L5 outputs (six readers, read {1,2,3}/{2,3} × write {1,2,3}/{3}, 24 evaluations):
+per seed/dataset/arm tables, paired read, write and interaction differences, the 0.02 descriptive tolerance shown and
+not inferential, fidelity beside efficacy, cost with the dense-zero charging rule; report `docs/additional_work/AW-L_report.md`.
+Scaffold against the AW-L5 development outputs; final when the run completes (≈ Oct 5).
 
 ## Round 56 — saved-vector tail analysis (2026-10-01, 14:05; DEC-081/081a)
 

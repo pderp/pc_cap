@@ -1507,3 +1507,33 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     figures Oct 6–8; cut order if short: free-α fit, calibration demonstration, pilot-assay fits, secondary comparators.
     I check an independent slice and carry the agreed wording into the deck through PRES. GPU unchanged (ePC seed 1
     training; Option R armed behind the chain; AW-L5 after).
+
+151. (2026-10-01, 14:40 EDT) **HT-17 done and committed (pc_cap d6675b6, assets 4d31bff); my slice check passes; round 57
+    lanes opened.** Capex's saved-vector tail analysis covers 299 cells (225 Stage-4 zsRE/CounterFact, 30 AW-B
+    memory × arm, 8 reader evaluations, 36 legacy κ-pilot cells), CPU only, 89 s. Report
+    `docs/additional_work/HT-17_report.md`; record `logs/additional_work/HT-17/snapshot-20261001-v2/`; figures
+    `assets/presentation-materials/figures/tails_ht17/snapshot-20261001-v2/` (frequency vs conditional severity with
+    joint-window intervals; survival with threshold sensitivity). What it says, in Capex's words: **a difference in
+    finite-range tail behaviour, not three complexity classes.**
+    - Learned reader: harmful-change frequency 0.159 % (zsRE) / 0.298 % (CounterFact), conditional severity 1.63 /
+      1.91 nats; per-cell shapes 0.04–0.06 / 0.03–0.10 but the window intervals include zero and the generalized Pareto
+      adds nothing over the exponential on held-out windows (−0.0004 … +0.0028 nats per excess): an economical
+      exponential approximation on the measured range.
+    - Stable v0 on zsRE: frequency 0.104 %, severity 1.72 nats, shapes 0.43–1.03 with the GPD beating the exponential by
+      0.15–0.59 nats per excess in all fifteen cells (illustrative cell interval 0.39–0.78): a real finite-range
+      tail-shape distinction, not a measured infinite variance; above 1 nat thirteen cells fall below the screen.
+    - Random reader on CounterFact: frequency 2.05 %, severity 3.49 nats; negative shapes in all cells, but ten of
+      fifteen held-out comparisons fail because the fitted endpoint excludes a held-out extreme: a negative fitted
+      shape is not a guarantee about unseen extremes.
+    - AW-B: the mixture leaves frequency unchanged and cuts conditional severity 1.62 → 0.54 (zsRE) and 1.93 → 0.58
+      (CounterFact) nats, paired intervals −1.20 … −0.98 and −1.46 … −1.25; its GPD fit is invalid (endpoint) in every
+      memory and gets no shape; the one-nat ceiling stands as the analytic statement.
+    - PC reader, one ePC seed: lower frequency than BP on CounterFact, severity difference −0.23 nats with interval
+      −0.53 … +0.09 (uncertain); zsRE undefined (no events). Seeds 1–2 to be folded in (refresh command in the report).
+    My independent slice (learned r0/o100 both datasets, random CounterFact r0, AW-B zsRE o100 v5) reproduces Capex's
+    shapes and scales to three decimals (0.0486/1.519, 0.0977/1.840, −0.184/3.872, 0.0140/1.626). Tests: 17 pass here
+    (Capex's record says 21; the four may sit in another file — not blocking), ruff clean. The talk wording in
+    `talk-text-B-C-D.md` already matches this reading; the prototype appendix there is now superseded by HT-17.
+    Round 57 lanes for Capex: PRES-7 (fold B–D and HT-17 into slides 6/7/8/11, ledger rows, scripts, final-experiments
+    refresh), PC-16 (three-seed ePC reader report generator, with the HT-17 reader refresh as a step), R-3 (Option R
+    extension report generator, learned vs random, v0 deferred), AW-L6 (interface 2×2 report generator, lowest priority).
