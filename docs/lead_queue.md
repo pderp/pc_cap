@@ -1553,3 +1553,25 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     entropy-feedback questions and a rehearsal pack; KP-1 checks whether the κ-pilot readers restore exactly for the
     optional Oct 5 readout (go/no-go, nothing launched); CAL-1 optional calibration demonstration and a post-conference
     coupled-objective note. GPU unchanged: ePC seed 1 at step 81/300, Option R armed, AW-L5 after.
+
+153. (2026-10-01, 15:20 EDT) **Capex round 58 committed (pc_cap 37cf14f, assets bdeb8d4); round 59 opened; one decision
+    with a default.** Delivered: X25, an independent audit of every post-halt result a report or slide cites — 25 groups
+    PASS, 13,112 bindings over 4,583 files — plus `docs/freeze_checklist_20261009.md` (what you sign on Oct 9: scope and
+    wording, every remaining cell accounted for, receipts closed, the CPU refresh order, X25 rerun, deck archived);
+    S4-LIM, the three Stage-4 reports regenerated through their producers with the GPT-2-small / transfer caveat and the
+    DEC-074b and DEC-080 limitations, numeric tables unchanged (I checked the diff: 9 lines added, nothing removed);
+    PRES-8, `qa.md` with the entropy-feedback questions, `numbers_to_say.md`, and a hashed rehearsal pack under
+    `assets/presentation-materials/deck_v3/rehearsal/`; CAL-1, twelve known-distribution checks of the one-sided
+    formulas pass (max error 2e-11) and `docs/additional_work/coupled_objective_note.md` states what a coupled objective
+    would need before any training. Tests pass here, ruff clean.
+    **Decision (default: no).** KP-1 found that the nine κ-pilot readers and 27 end-of-stream checkpoints restore exactly,
+    but the old drift assay built its memory on the fly and saved no state identity, so an *exact* continuation of the
+    pilot is not possible. A readout of the saved stream checkpoints would be a separately labelled development
+    experiment on a different population (100-edit development memories), 7.5 GPU-hours for two datasets, and would not
+    replace or extend any Stage-4 or supplemental result. My default is **not to run it**: the margin before Oct 6 is
+    about a day and the freeze checklist already says not to substitute it. Say "run the κ readout" if you want it
+    anyway and I will fit it after AW-L5 on Oct 5.
+    Round 59 lanes: X26 (every spoken number in the scripts and Q&A traced to a canonical source; discrepancies listed)
+    and DOC-1 (reviewer folder brought to the round-58 state for tomorrow). POST-1 (the coupled-objective study design
+    for the reviewer's group) opens after tomorrow's review so it carries their answers. GPU unchanged: ePC seed 1
+    training (step ≈ 95/300), Option R armed, AW-L5 after.

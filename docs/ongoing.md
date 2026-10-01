@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-01 15:20** — Capex round 58 committed (X25 PASS 25 groups + freeze checklist `docs/freeze_checklist_20261009.md`; S4-LIM caveats in the three Stage-4 reports; PRES-8 Q&A, numbers-to-say, rehearsal pack; KP-1 no-go for an exact κ-pilot continuation; CAL-1 checks pass + `coupled_objective_note.md`). Round 59: X26, DOC-1; POST-1 after the Oct 2 review. Optional κ readout: default no (see item 153).
 - **2026-10-01 15:05** — Capex round 57 committed (PRES-7 deck with B–D and HT-17; PC-16/R-3/AW-L6 report generators, partial reports). Round 58 lanes: X25 audit + freeze checklist, S4-LIM model-scale caveat, PRES-8 rehearsal/Q&A, KP-1 κ-pilot restoration check, CAL-1 optional. Corrections noted: AW-B severity falls to about one-third (not half); ePC reader training is ≈ 100× BP measured (37× was a projection).
 - **2026-10-01 14:40** — HT-17 complete and committed (finite-range tail differences, not classes; AW-B halves conditional severity; GPD adds nothing over exponential for the learned reader; stable v0 zsRE shape 0.43–1.03 beats exponential on held-out windows). Slice check passes. Round 57 lanes: PRES-7, PC-16, R-3, AW-L6.
 - **2026-10-01 14:05** — Lane HT-17 opened for Capex (round 56; `docs/tasks/HT-17.md`): saved-vector tail analysis per Capex's specification, CPU only, fits by Oct 5. GPU queue unchanged.
@@ -189,6 +190,29 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 59 — consistency audit of the spoken numbers; reviewer-folder refresh (2026-10-01, 15:20)
+
+Two small CPU lanes now; refresh duties follow as results land (owner triggers: PC-16 + HT-17 refresh after ePC seed 1
+≈ Oct 2 09:00 and seed 2 ≈ Oct 3 10:30; R-3 after Option R ≈ Oct 3 evening; AW-L6 after AW-L5 ≈ Oct 5; then PRES deck
+refresh and the X25 rerun). A post-conference proposal lane (POST-1: the coupled-objective study design, building on
+`coupled_objective_note.md`) opens after the Oct 2 review so it can carry the reviewers' answers.
+
+### Lane X26 — spoken-number consistency audit
+
+`aw/script_numbers_check.py` (CPU): extract every numeral and percentage from the resolved 15- and 25-minute scripts,
+`qa.md` and the slide drafts; match each to `docs/presentation/numbers_to_say.md` and from there to a canonical report
+or ledger row (tolerance for rounding stated); list unmatched numbers, literal placeholders and any number whose source is
+an intermediate directory. Output `logs/additional_work/X26/` (table, JSON) and a short `docs/tasks/X26.md` with the
+discrepancies. Rerun after each deck refresh. Done-when: every spoken number traces or is listed as a discrepancy.
+
+### Lane DOC-1 — reviewer-folder refresh
+
+Bring `assets/presentation-materials/review-data/results.md` and `final-experiments.md` (Capex's) up to the round-58
+state: HT-17's finite-range reading and the AW-B one-third severity cut, the PC-reader partial (BP ×3, ePC s0, ≈ 100×
+measured cost), Option R's resume with the v0 class deferred (DEC-080), DEC-081/081a, the S4-LIM caveats, the freeze
+checklist pointer; keep the Oct 1 Capstan primer and feedback documents referenced as the reviewers' entry points.
+Done-when: a reviewer reading the folder on Oct 2 sees the same state as the repository.
 
 ## Round 58 — freeze readiness, rehearsal, limitations, optional checks (2026-10-01, 15:05)
 
