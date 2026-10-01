@@ -1,3 +1,10 @@
+October 1 update: slides 8, 9 and 12 and both timed scripts now incorporate AW-B
+and the depth/direction/offered-budget controls. The resolved round55 export is
+under `assets/presentation-materials/deck_v3/round55-20261001/`. Default PC results
+are complete; reader-training replication and upper-layer results remain pending.
+The older outline entries below describe the earlier preparation state; use the
+current slide drafts and `final-experiments.md` for readiness.
+
 # Deck v3 outline — Active Inference in the Extremes
 
 Round-46 speaker drafts and diagram sources: [slide 2](deck_v3/slide02-active-inference-testbed.md), [slide 3](deck_v3/slide03-predictive-coding-credit.md), [slide 6](deck_v3/slide06-beyond-the-mean.md), and [slide 11](deck_v3/slide11-return-to-active-inference.md). These are for charlie’s review. Round-47 adds drafts for slides 1, 4, 5, 7, 8 and 12 in the same directory, using corrected HT-13 v1.1. HT-14 is available. Round 48 adds [slide 9](deck_v3/slide09-pc-v0-results.md) and [slide 10](deck_v3/slide10-fixed-v5-credit.md), with automatic PC-result slots also in slide 12. All twelve drafts await charlie’s review; PC results remain pending.

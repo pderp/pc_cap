@@ -1,6 +1,6 @@
 # Slide 10 — Does PC credit transfer to the fixed v5 reader?
 
-**Draft speaker text for charlie's review. Research results pending.**
+**Draft speaker text for charlie's review. Completed exposed-stream comparison; reader-training replication is a separate study.**
 
 **On screen:** behavior, harm and cost for the fixed-v5 paired comparison;
 `diagram-specs.json`, slide `10`. Placeholders use the schema register

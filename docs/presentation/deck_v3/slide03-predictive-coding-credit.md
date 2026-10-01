@@ -1,12 +1,12 @@
 # Slide 3 — What predictive coding changes in this experiment
 
-**Draft speaker text for charlie's review; experimental outcome still pending.**
+**Draft speaker text for charlie's review; completed comparative outcomes are on slides 9–10.**
 
 **On screen:** “Same frozen base and cap; change acquisition credit.”
 Two branches: SE-A, negative normalized adjoint; SE-E, normalized site error after
 eight inference steps. Center: corrected energy and the SD-24 repair in one figure.
 Visible labels: **mechanism implemented/tested**; **efficacy, harm, cost: experiment
-pending**. Claim footer: `PC-mechanism`, `PC-SD24`, `PC-v0`, `PC-fixed-v5`.
+measured on exposed streams**. Claim footer: `PC-mechanism`, `PC-SD24`, `PC-v0`, `PC-fixed-v5`.
 Diagram specification: `diagram-specs.json`, slide `03`.
 
 ## Speaker text

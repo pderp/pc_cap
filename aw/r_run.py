@@ -311,7 +311,15 @@ def approve(path):
     return ref(p)
 
 
-def status(cell, matrix_hash):
+def attempt_files(directory):
+    return {
+        str(p.resolve()): native.sha(p)
+        for p in sorted(Path(directory).glob("attempt-*/**/*"))
+        if p.is_file()
+    }
+
+
+def status(cell, matrix_hash, *, reconciled=True):
     c = dict(cell, result_dir=str(OUTPUT / cell["cell_id"]))
     cost = queue.charged_cost(c, queue.cell_cost(c["result_dir"]), RECEIPTS, matrix_hash)
     starts = [p for p in RECEIPTS.glob("*/" + cell["cell_id"] + "/*/start.json")]
@@ -320,10 +328,129 @@ def status(cell, matrix_hash):
         json.loads(p.read_bytes()).get("status") == "complete"
         for p in Path(c["result_dir"]).glob("attempt-*/result.json")
     )
-    return dict(cost=cost, dispatches=attempts, complete=complete)
+    terminal = None
+    path = OUTPUT / cell["cell_id"] / "reconciliation.json"
+    if reconciled and path.exists():
+        rec = json.loads(path.read_bytes())
+        if (
+            rec["matrix_sha256"] != matrix_hash
+            or rec["cell_id"] != cell["cell_id"]
+            or rec["recipe"] != cell["recipe"]
+            or rec["status"] != "incomplete_by_ceiling"
+            or rec["retry_budget_seconds"] != 0
+            or rec["charged_process_wall_seconds"] != cost["known_attempt_wall_seconds"]
+            or rec["process_receipts"] != cost["process_receipts"]
+            or rec["unknown_attempts_closed"] != cost["unknown_attempts"]
+            or rec["attempt_files"] != attempt_files(c["result_dir"])
+            or cost["known_attempt_wall_seconds"] < cell["ceilings"]["wall_seconds"]
+            or complete
+        ):
+            raise ValueError("reconciliation no longer matches cell evidence")
+        cost["reconciled_unknown_attempts"] = cost["unknown_attempts"]
+        cost["unknown_attempts"] = []
+        terminal = rec["status"]
+    return dict(cost=cost, dispatches=attempts, complete=complete, terminal=terminal)
+
+
+def reconcile(cell_id, *, execute=False):
+    """Close accounting only. Preserve the torn journal and all scientific artifacts."""
+    session_cost()  # Refuse reconciliation while an Option R segment is open.
+    m = matrix()
+    cell = next((c for c in m["cells"] if c["cell_id"] == cell_id), None)
+    if cell is None:
+        raise ValueError("cell is not in the Option R matrix")
+    current = status(cell, native.sha(MATRIX))
+    target = OUTPUT / cell_id / "reconciliation.json"
+    if current["terminal"]:
+        return json.loads(target.read_bytes())
+    st = status(cell, native.sha(MATRIX), reconciled=False)
+    cost = st["cost"]
+    if st["complete"] or cost["known_attempt_wall_seconds"] < cell["ceilings"]["wall_seconds"]:
+        raise ValueError("reconciliation requires an incomplete cell with exhausted ceiling")
+    covered = set()
+    for binding in cost["process_receipts"]:
+        finish = checked(binding)
+        covered.update(finish["new_attempts"])
+        # A completed subprocess envelope is required even if the driver was killed.
+        session = Path(binding["path"]).parents[2]
+        if not (session / "session-finish.json").exists():
+            raise ValueError("owning session must be stopped before reconciliation")
+    if not cost["process_receipts"] or not set(cost["unknown_attempts"]).issubset(covered):
+        raise ValueError("unknown attempt not covered by a closed process envelope")
+    rec = dict(
+        schema="aw-r-accounting-reconciliation-v1",
+        status="incomplete_by_ceiling",
+        cell_id=cell_id,
+        matrix_sha256=native.sha(MATRIX),
+        recipe=cell["recipe"],
+        charged_process_wall_seconds=cost["known_attempt_wall_seconds"],
+        process_receipts=cost["process_receipts"],
+        unknown_attempts_closed=cost["unknown_attempts"],
+        attempt_files=attempt_files(OUTPUT / cell_id),
+        retry_budget_seconds=0,
+        additional_charge_seconds=0,
+        primary_inference_inclusion=False,
+        scientific_completion=False,
+        note="Accounting closure only. Torn phases and checkpoint evidence remain untouched; no successful phase or final endpoint is synthesized.",
+    )
+    if execute:
+        durable_json(target, rec)
+        status(cell, native.sha(MATRIX))
+    return rec
+
+
+def session_cost():
+    """Count closed execution segments once; never charge idle time between resumes."""
+    total = 0.0
+    for start in sorted(RECEIPTS.glob("*/session-start.json")):
+        for p in [start, *sorted(start.parent.glob("resumes/*/session-start.json"))]:
+            end = p.with_name("session-finish.json")
+            if not end.exists():
+                raise ValueError("unfinished queue session needs owner reconciliation")
+            value = json.loads(p.read_bytes())
+            if value["matrix"] != ref(MATRIX):
+                raise ValueError("session matrix differs")
+            seconds = json.loads(end.read_bytes())["elapsed_wall_seconds"]
+            if isinstance(seconds, bool) or not math.isfinite(seconds) or seconds < 0:
+                raise ValueError("invalid session wall cost")
+            total += seconds
+    return total
+
+
+def resume_inventory(*, defer_classes=()):
+    m = matrix()
+    available = {c["condition"] + ":" + c["dataset"] for c in m["cells"]}
+    if not set(defer_classes).issubset(available):
+        raise ValueError("unknown condition:dataset deferral")
+    groups = dict(completed=[], incomplete=[], deferred=[], pending=[])
+    process_seconds = 0.0
+    for c in m["cells"]:
+        st = status(c, native.sha(MATRIX))
+        process_seconds += st["cost"]["known_attempt_wall_seconds"]
+        if st["cost"]["unknown_attempts"]:
+            raise ValueError("unknown/torn attempt cost; reconcile before resuming")
+        group = (
+            "completed"
+            if st["complete"]
+            else "incomplete"
+            if st["terminal"]
+            else "deferred"
+            if c["condition"] + ":" + c["dataset"] in defer_classes
+            else "pending"
+        )
+        groups[group].append(c["cell_id"])
+    return dict(
+        groups,
+        process_seconds=process_seconds,
+        prior_wall_seconds=session_cost(),
+        defer_classes=sorted(set(defer_classes)),
+        model_calls=0,
+    )
 
 
 def retry_allowed(state, directory):
+    if state.get("terminal"):
+        raise RuntimeError("terminal incomplete cell has no retry budget")
     if state["cost"]["unknown_attempts"]:
         raise ValueError("unknown/torn attempt cost; reconcile before resuming")
     if state["dispatches"] >= 2:
@@ -450,7 +577,7 @@ def child(cell_id, parent_pid, receipt):
     )
 
 
-def run(decision_path, *, wall_hours=30):
+def run(decision_path, *, wall_hours=30, resume=None, defer_classes=()):
     from pccap.harness.lease import gpu_lease
 
     if not math.isfinite(wall_hours) or not 0 < wall_hours <= 30:
@@ -458,20 +585,28 @@ def run(decision_path, *, wall_hours=30):
     decision = approve(decision_path)
     m = matrix()
     expected_sources = sources()
-    # Prior session envelopes count against the same portfolio allowance.
-    prior = 0.0
-    for p in RECEIPTS.glob("*/session-start.json"):
-        end = p.with_name("session-finish.json")
-        if not end.exists():
-            raise ValueError("unfinished queue session needs owner reconciliation")
-        prior += json.loads(end.read_bytes())["elapsed_wall_seconds"]
+    inventory = resume_inventory(defer_classes=defer_classes)
+    prior = inventory["prior_wall_seconds"]
     allowance = min(wall_hours * 3600 - prior, CUTOFF - time.time())
     if allowance <= 0:
         raise TimeoutError("portfolio wall budget exhausted")
-    session = RECEIPTS / time.strftime("%Y%m%dT%H%M%S")
-    session.mkdir(parents=True, exist_ok=False)
+    if resume is None:
+        if list(RECEIPTS.glob("*/session-start.json")):
+            raise ValueError("existing portfolio requires --resume SESSION")
+        session = RECEIPTS / time.strftime("%Y%m%dT%H%M%S")
+        segment = session
+    else:
+        session = Path(resume).resolve()
+        if session.parent != RECEIPTS.resolve():
+            raise ValueError("resume requires an existing Option R session")
+        original = json.loads((session / "session-start.json").read_bytes())
+        if original["matrix"] != ref(MATRIX) or original["decision"] != decision:
+            raise ValueError("resume matrix or approved decision differs")
+        number = len(list(session.glob("resumes/*/session-start.json"))) + 1
+        segment = session / "resumes" / f"{number:04d}"
+    segment.mkdir(parents=True, exist_ok=False)
     durable_json(
-        session / "session-start.json",
+        segment / "session-start.json",
         dict(
             matrix=ref(MATRIX),
             decision=decision,
@@ -479,11 +614,23 @@ def run(decision_path, *, wall_hours=30):
             workers=2,
             memory_floor_mib=6144,
             sources=expected_sources,
+            inventory=inventory,
+            parent_session=str(session),
+            prior_wall_seconds=prior,
+            idle_gaps_charged=False,
         ),
     )
     begun = time.monotonic()
-    result = dict(status="failed", completed=[], observations=[])
-    pending = list(m["cells"])
+    result = dict(
+        status="failed",
+        completed=[],
+        observations=[],
+        incomplete=inventory["incomplete"],
+        deferred=inventory["deferred"],
+    )
+    pending = [
+        c for c in m["cells"] if c["cell_id"] not in result["incomplete"] + result["deferred"]
+    ]
     active = {}
     stop = None
     try:
@@ -555,7 +702,13 @@ def run(decision_path, *, wall_hours=30):
             if sources() != expected_sources:
                 stop = "runner sources changed during execution"
             result.update(
-                status="complete" if len(result["completed"]) == 30 and stop is None else "stopped",
+                status=(
+                    "complete"
+                    if len(result["completed"]) == 30
+                    else "finished_with_incomplete_cells"
+                )
+                if stop is None and not pending
+                else "stopped",
                 reason=stop,
             )
     finally:
@@ -563,13 +716,13 @@ def run(decision_path, *, wall_hours=30):
         result["process_seconds"] = sum(
             status(c, native.sha(MATRIX))["cost"]["known_attempt_wall_seconds"] for c in m["cells"]
         )
-        durable_json(session / "session-finish.json", result)
+        durable_json(segment / "session-finish.json", result)
     return result
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("command", choices=("plan", "run", "cell"))
+    p.add_argument("command", choices=("plan", "run", "cell", "reconcile", "status"))
     p.add_argument("--validate-payloads", action="store_true")
     p.add_argument("--execute", action="store_true")
     p.add_argument("--approved-decision")
@@ -577,13 +730,27 @@ def main():
     p.add_argument("--cell-id")
     p.add_argument("--parent-pid", type=int)
     p.add_argument("--receipt")
+    p.add_argument("--resume", metavar="SESSION")
+    p.add_argument("--defer-class", action="append", default=[], metavar="CONDITION:DATASET")
     a = p.parse_args()
     if a.command == "plan":
         result = plan(validate_payloads=a.validate_payloads)
+    elif a.command == "reconcile":
+        if not a.cell_id:
+            p.error("--cell-id required")
+        result = reconcile(a.cell_id, execute=a.execute)
+        result = {k: v for k, v in result.items() if k != "attempt_files"}
+    elif a.command == "status":
+        result = resume_inventory(defer_classes=a.defer_class)
     elif a.command == "run":
         if not a.execute or not a.approved_decision:
             p.error("--execute and --approved-decision required after Tuesday choice")
-        result = run(a.approved_decision, wall_hours=a.wall_hours)
+        result = run(
+            a.approved_decision,
+            wall_hours=a.wall_hours,
+            resume=a.resume,
+            defer_classes=a.defer_class,
+        )
     else:
         if not a.execute or not all((a.cell_id, a.parent_pid, a.receipt)):
             p.error("cell is dispatched by the owning queue only")

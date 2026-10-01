@@ -41,7 +41,7 @@ informative actions or audits for itself.” [`AI-programme`, `PC-mechanism`, `A
 
 Three equal visual panels, one per central theme; no positive-result badges.
 Label the active-inference loop **programme**, the PC comparison **experiment
-pending**, and the loss distributions **measured testbed evidence**. This opening
+measured, with limitations**, and the loss distributions **measured testbed evidence**. This opening
 does not announce a complete coupled agent or an established heavy-tail family.
 [`AI-programme`, `PC-v0`, `HT13-corrected`]
 
@@ -51,5 +51,5 @@ Sources: [shared brief](../presentation_brief_2026-09-26.md),
 title is *Thriving in the Extremes: Active Inference in Non-equilibrium Systems*;
 keep it alongside charlie's heading. Individual talk length remains unspecified.
 
-Before presentation, replace “experiment pending” with the actual PC disposition;
+Completed credit comparisons now populate the PC evidence; reader-training replication continues.
 do not change it into a positive claim merely because the run completed.

@@ -299,7 +299,7 @@ def render(result):
     )
     text += "\n\nThe zsRE harm vectors are not bitwise equal: small floating-point differences survive despite equal endpoint scores. CounterFact harm is exactly zero for both arms. Rounded summaries do not justify saying all probabilities or final memories are identical. Learning costs differ even at one step because the error path includes its terminal diagnostic.\n\n"
     text += "## Interpretation and limits\n\nOn these zsRE streams, more settling increases own-prompt retention, while 32 steps reduces paraphrase retention. Mean loss increase and ES99+ rise with depth, alongside a much larger learning cost. The maximum does **not** rise monotonically: the eight-step mean of maxima is smaller than at one step, then rises at 32. More retained taught answers therefore do not establish better generalization, lower harm or a net scientific benefit. CounterFact has saturated own-prompt scores and zero paraphrase retention at all depths, limiting its discrimination.\n\n"
-    text += "The direction and compute controls are still needed to separate structured credit from useful extra acquisition work. The depth effect alone cannot establish that the content of PC credit, rather than extra computation, causes the gain. Random-direction and additional-update adjoint groups remain pending until their full runs finish; no provisional effects are substituted.\n\n"
+    text += "The depth effect alone cannot establish that the content of PC credit, rather than extra computation, causes the gain. The closed direction control and completed offered-budget control below narrow the interpretation without resolving that attribution.\n\n"
     text += "Harm uses the same 32 ordinary-text windows / 4,064 fixed-prefix target positions per cell and the same cap-off/original reference. These dependent positions are not independent experimental replicates and this does not fit a heavy-tail distribution. Learning wall is a ledger subset of whole-process time; do not add them. Full original eight-step acquisition and harm jobs are charged once, not again for this subset analysis.\n\n"
     text += native.table(
         [
@@ -314,6 +314,10 @@ def render(result):
         ],
     )
     text += "\n\nThe active-inference programme motivates selective correction and the consequences of rare errors. These experiments measure acquisition credit in a frozen model with a cap; they do not implement autonomous expected-free-energy policy selection or establish general PC superiority. Sources and exact numeric tables are in `logs/additional_work/PC-v0/controls-report-20260929/report.json`.\n"
+    if "credit_controls" in result:
+        from aw.pc_credit_control_review import render as render_controls
+
+        text += render_controls(result["credit_controls"])
     return text
 
 
@@ -369,6 +373,9 @@ def build(output=OUTPUT, document=DOCUMENT):
                 raise ValueError("repeated adjoint endpoints differ across depths")
     if not all(r["primary_secondary_exact"] for r in equality):
         raise ValueError("one-step endpoint equality does not hold; revise narrative")
+    from aw.pc_credit_control_review import build as credit_controls
+
+    controls = credit_controls(evidence)
     result = dict(
         schema="pc-depth-report-v1",
         status="complete",
@@ -387,7 +394,8 @@ def build(output=OUTPUT, document=DOCUMENT):
             )
             for k in (1, 8, 32)
         ],
-        pending_controls=["random direction", "adjoint additional acquisition updates"],
+        credit_controls=controls,
+        pending_controls=[],
         model_calls=0,
         sources_sha256=evidence.bindings,
         historical_source_substitutions=evidence.substitutions,

@@ -1,12 +1,12 @@
 # 25-minute speaking script — draft for charlie
 
-Prepared 2026-09-27 by Capex from the twelve slide drafts. **Author review and
+Updated 2026-10-01 by Capex from the twelve slide drafts. **Author review and
 rehearsal required; this is a duration option, not a confirmed conference slot.**
 Clock includes slide changes and pointing pauses, excludes audience Q&A. Read
 only the paragraphs under “Say”; source/cut notes and tables are not spoken.
 
-PC values remain literal result slots. After complete reports exist, the existing
-presentation export resolves them from `pc-result-sources.json`; an absent source
+Completed result values remain literal source slots here. The presentation
+export resolves them from `pc-result-sources.json`; an absent source
 renders PENDING, never zero. If still pending at rehearsal, say “this comparison
 is pending; I cannot yet report a direction or effect” instead of the numerical
 paragraph. Do not read placeholder braces aloud or imply completion prematurely.
@@ -24,11 +24,11 @@ lists; timing is a target, not a measured delivery duration.
 | 5 | 07:40–09:35 | 115 s | 212 |
 | 6 | 09:35–12:05 | 150 s | 289 |
 | 7 | 12:05–13:25 | 80 s | 130 |
-| 8 | 13:25–15:05 | 100 s | 178 |
-| 9 | 15:05–17:55 | 170 s | 342 |
+| 8 | 13:25–15:05 | 100 s | 187 |
+| 9 | 15:05–17:55 | 170 s | 318 |
 | 10 | 17:55–20:45 | 170 s | 346 |
 | 11 | 20:45–22:45 | 120 s | 243 |
-| 12 | 22:45–25:00 | 135 s | 281 |
+| 12 | 22:45–25:00 | 135 s | 324 |
 
 Total allocation: **25:00**.
 
@@ -252,76 +252,37 @@ exact generated-answer agreement measure different properties.
 
 Evidence: `HT-readout`, `HT13-corrected`, `R1-design`, `R1-fidelity`; [source draft](slide07-local-consequences.md).
 
-## Slide 8 — The κ pilot measures a trade-off
+## Slide 8 — Two interventions against extreme prediction loss
 
 **13:25–15:05; 100 seconds.**
 
 Say:
 
-The distributional findings motivate asking whether changing the training loss
-could reduce the tail. This pilot changed the reader's answer-surprisal loss
-to a coupled-log form at kappa 0.2 and 0.5. We compared it with ordinary loss
-and with plain surprisal clipped at two. The clipped control matters because
-it tests whether a simpler loss ceiling produces a similar trade-off.
+The kappa pilot changed the reader's training loss. Both kappa settings reduced a development tail statistic but lost too much retention and failed the declared success rule. Clipping also reduced that tail descriptively. These remain preliminary trade-offs, without evidence of a special coupling advantage.
 
-The tail statistic improves descriptively, but the kappa arms lose too much
-retention. The predeclared rule allowed a mean retention drop of at most 0.02,
-with no increase in unseen false fires and a tail change exceeding the seed
-spread. Both kappa arms miss the retention floor of about 0.776, and their tail
-reductions do not clear the declared separation rule. We therefore do not
-declare a successful secondary condition.
+Evaluation then used ten already-exposed memories: five orders on each dataset, at three hundred edits. All ten met the declared rule: smaller maximum loss and worst-one-percent average, with retention inside tolerance. zsRE endpoints were unchanged. CounterFact paraphrase retention changed by {{awb.counterfact.gs_change}}, a loss of roughly 0.7 to 1.2 percentage points. The largest observed token losses fell from as much as fifteen nats to one.
 
-These are preliminary hints, as agreed with Matthew Iklé. The pilot does not
-implement the coupled free energy, a coupled Markov blanket, or a test of the
-one-kappa conjecture. It changes a loss; it does not supply the coupled expectation
-or altered inference distribution required by that larger proposal.
+The guarantee has a precise scope. At the same prefix, mixing in a base share of exp minus one ensures the target probability never falls below that share of the base probability. Its extra negative log likelihood is therefore at most one nat per token. That does not bound a whole generated answer by one nat, preserve every greedy answer, or establish a heavy-tail family. It also does not implement coupled free energy or autonomous action selection.
 
-Evidence: `kappa-clip2`, `kappa-design`, `kappa-kappa02`, `kappa-kappa05`, `kappa-ordinary`; [source draft](slide08-kappa-tradeoff.md).
+Evidence: `AI-testbed`, `AW-B`, `kappa-design`; [source draft](slide08-kappa-tradeoff.md).
 
-## Slide 9 — Corrected PC-v0: efficacy, harm and cost
+## Slide 9 — Predictive coding: retention, harm and the controls
 
 **15:05–17:55; 170 seconds.**
 
 Say:
 
-This comparison brings predictive coding directly into the experiment. We keep
-the cap, frozen base, teaching stream and update constraints fixed and change
-the acquisition credit. SE-A uses the adjoint; SE-E infers errors for eight steps
-with the corrected energy. In particular, the prior penalty now applies to the
-inferred error before adding the cap's write. The old defective-energy results
-are a historical reference, not a control pooled into this comparison.
+This brings predictive coding directly into the experiment. We keep the frozen base, cap and teaching stream fixed and change acquisition credit: ordinary adjoint or iteratively inferred errors. The energy defect was corrected before these runs. The original comparison has three realizations and five dependent orders; the depth controls use only the common order100. These exposed historical streams are supplemental evidence, not new confirmation.
 
-The population is the exposed historical S5 stream: zsRE ends at one thousand
-edits and CounterFact at three hundred. There are three realizations and five
-dependent orders per realization. This is a supplemental defect-correction
-replication. The primary scores retain the old S5 conventions; bounded-text
-secondary scores are kept separate, rather than silently changing the measure.
+One step is a mechanism check: starting from zero inferred error, the first step gives a scaled negative adjoint. Normalizing the update direction removes that scale in exact arithmetic. The measured behavioral endpoints agree exactly across all six one-step pairs, although tiny floating-point differences remain in some harm vectors.
 
-On zsRE, SE-E minus SE-A is {{v0.zsre.es}} for immediate editing success and
-{{v0.zsre.ret_gs}} for final paraphrase retention. The three realization retention
-differences are {{v0.zsre.ret_gs.realizations}}. On CounterFact, the corresponding
-means are {{v0.counterfact.es}} and {{v0.counterfact.ret_gs}}, with retention
-differences {{v0.counterfact.ret_gs.realizations}}. Locality differences are
-{{v0.zsre.ls}} and {{v0.counterfact.ls}}, respectively. Higher behavior scores
-favor SE-E. A null or adverse difference is part of the answer.
+On zsRE, own-prompt retention for error credit rises from {{depth.1.RET-ES}} to {{depth.8.RET-ES}} to {{depth.32.RET-ES}} at one, eight and thirty-two steps. Paraphrase retention does not improve at thirty-two steps; it falls to {{depth.32.RET-GS}}. Learning costs and the worst-one-percent positive-loss average rise with depth. The maximum loss itself is not monotonic. More retained taught answers are therefore not an overall superiority result.
 
-We must put harm beside efficacy. On the same preselected ordinary-text
-positions, the mean difference of the two arms' ES99 positive-harm values is
-{{v0.zsre.harm_es99_difference}} nats on zsRE and
-{{v0.counterfact.harm_es99_difference}} on CounterFact. Lower favors SE-E here.
-These are differences of arm tail summaries, not the ES99 of positionwise
-differences. The readout retains all unchanged positions and compares against
-the same frozen base. It describes concentrated loss; it does not establish
-an asymptotic heavy-tail family.
+The direction control paid for real credit, then replaced its orientation with random directions of the same norm. Its first zsRE run stopped by the resource rule after {{control.random.n}} of a thousand items, with immediate success {{control.random.es}}. Ten planned cells were never started. This is a poor result for that random-credit implementation on one stream, not a completed replication or a proof that all random search must fail.
 
-SE-A's summed process time is {{v0.SE-A.seconds}} seconds; SE-E's is
-{{v0.SE-E.seconds}}. The separately charged harm readout takes
-{{v0.harm.seconds}} seconds. Process time includes startup, acquisition and
-evaluation; it is not a pure credit-kernel timing. We report this cost alongside
-the measured effect. This tests one predictive-coding mechanism, not a complete
-active-inference agent or a general claim that PC is superior.
+The additional-update adjoint arm was offered the eight-step PC operation budget but spent only part of it: it usually reached its own stopping thresholds earlier. All twelve cells completed, without recovering the own-prompt gain. Because actual compute was not equal and stopping behavior differed, this remains a weak test of direction versus extra effective computation. The cause of the PC gain is not fully separated.
 
-Evidence: `AI-testbed`, `HT-readout`, `PC-SD24`, `PC-mechanism`, `PC-v0`; [source draft](slide09-pc-v0-results.md).
+Evidence: `HT-readout`, `PC-SD24`, `PC-budget`, `PC-depth`, `PC-one-step`, `PC-random`, `PC-v0`; [source draft](slide09-pc-v0-results.md).
 
 ## Slide 10 — Does PC credit transfer to the fixed v5 reader?
 
@@ -419,7 +380,7 @@ S5 zsRE and CounterFact streams. The fixed-v5 differences are
 realization. The corresponding differences in positive-harm ES99 are
 {{v0.zsre.harm_es99_difference}} / {{v0.counterfact.harm_es99_difference}}
 and {{v1.zsre.harm_es99_difference}} / {{v1.counterfact.harm_es99_difference}}
-nats. These values stay PENDING until their completed sources exist. Read them
+nats. The depth controls show an own-prompt retention gain with increased harm and cost; the underspent adjoint control leaves attribution unresolved. Read them
 alongside the process and operation costs on the preceding slides. The historical defective-energy run
 and CPU readiness checks do not fill this slot. A null or adverse result should
 be stated just as directly as an improvement.
@@ -429,7 +390,7 @@ unintended prediction loss: a small fraction of evaluated positions can account
 for substantial harm even when averages look small. We need the frequency,
 severity and concentration beside retention. This is empirical evidence about
 our finite test population, not a proof of a heavy-tail family or future
-robustness.
+robustness. The mixture intervention now supplies a measured way to cap per-token loss increase at a fixed prefix, with a small CounterFact paraphrase cost and all ten evaluation memories meeting the declared rule.
 
 The approved stop leaves S1_literal CounterFact and the optional extension
 unrun. MQuAKE's omitted comparators and unavailable thousand-edit endpoint have
@@ -438,7 +399,7 @@ at 17:00 Eastern; the remaining days are for analysis of fixed results, slides
 and rehearsal before October 15. These limits help make the claims readable:
 what we tested, what it showed, and what remains a question.
 
-Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `HT-readout`, `HT13-corrected`, `PC-SD24`, `PC-fixed-v5`, `PC-v0`, `resources`, `talk-scope`, `unavailable`; [source draft](slide12-takeaways-and-scope.md).
+Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `AW-B`, `HT-readout`, `HT13-corrected`, `PC-SD24`, `PC-fixed-v5`, `PC-v0`, `resources`, `talk-scope`, `unavailable`; [source draft](slide12-takeaways-and-scope.md).
 
 ## Cut and backup instructions — not spoken
 
@@ -448,7 +409,7 @@ Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `HT-readout`, `HT13-corrected
   caveat and distinction between empirical concentration and an established heavy-tail family.
 - Slide 3: the detailed one-step/nonzero-write diagnostic and full operation ledger are backup;
   retain SD-24's meaning and the JAX differentiation qualification.
-- Slide 8: retain the failed decision rule and coupled-free-energy limitation even when short.
+- Slide 8: retain the failed κ rule, measured mixture result, and per-token fixed-prefix limitation even when short.
 - Slides 9–10: full per-order metrics, 100-edit tables and cost breakdowns are backup; retain
   effect, harm, cost, exposed population and any unfavorable result.
 - Slide 12: detailed process accounting is backup (392.42 process-hours for the main 270-cell

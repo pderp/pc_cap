@@ -48,7 +48,7 @@ def publish():
             "Exposed S5; two datasets × three realizations × order100 only; 4064 harm positions/cell | "
             "Paired adjoint at each depth; eight-step order100 subset only | "
             "More settling increases taught-answer retention and learning cost; tail mean rises, maximum is nonmonotonic | "
-            "No paraphrase benefit, selected best depth, general PC superiority or separation of direction from compute; random/matched controls pending | "
+            "No paraphrase benefit, selected best depth, general PC superiority or separation of direction from compute; random stopped early and offered-budget control underspent | "
             "docs/additional_work/PC-controls_report.md; logs/additional_work/PC-v0/controls-report-20260929/report.json"
         ),
         "PC-one-step": (
@@ -110,7 +110,7 @@ def publish():
                     str(Path(__file__).resolve()): sha(__file__),
                 },
                 outputs=outputs,
-                deck_status="PRES-6 pending completed AW-B evaluation; existing resolved deck remains its earlier snapshot",
+                deck_status="Depth and credit controls published; PRES-6 export is recorded separately",
             ),
             indent=2,
         )

@@ -96,7 +96,7 @@ The zsRE harm vectors are not bitwise equal: small floating-point differences su
 
 On these zsRE streams, more settling increases own-prompt retention, while 32 steps reduces paraphrase retention. Mean loss increase and ES99+ rise with depth, alongside a much larger learning cost. The maximum does **not** rise monotonically: the eight-step mean of maxima is smaller than at one step, then rises at 32. More retained taught answers therefore do not establish better generalization, lower harm or a net scientific benefit. CounterFact has saturated own-prompt scores and zero paraphrase retention at all depths, limiting its discrimination.
 
-The direction and compute controls are still needed to separate structured credit from useful extra acquisition work. The depth effect alone cannot establish that the content of PC credit, rather than extra computation, causes the gain. Random-direction and additional-update adjoint groups remain pending until their full runs finish; no provisional effects are substituted.
+The depth effect alone cannot establish that the content of PC credit, rather than extra computation, causes the gain. The closed direction control and completed offered-budget control below narrow the interpretation without resolving that attribution.
 
 Harm uses the same 32 ordinary-text windows / 4,064 fixed-prefix target positions per cell and the same cap-off/original reference. These dependent positions are not independent experimental replicates and this does not fit a heavy-tail distribution. Learning wall is a ledger subset of whole-process time; do not add them. Full original eight-step acquisition and harm jobs are charged once, not again for this subset analysis.
 
@@ -109,3 +109,37 @@ Harm uses the same 32 ordinary-text windows / 4,064 fixed-prefix target position
 
 
 The active-inference programme motivates selective correction and the consequences of rare errors. These experiments measure acquisition credit in a frozen model with a cap; they do not implement autonomous expected-free-energy policy selection or establish general PC superiority. Sources and exact numeric tables are in `logs/additional_work/PC-v0/controls-report-20260929/report.json`.
+
+## Direction and offered-budget controls (DEC-075/079)
+
+The random-direction run is **closed by resource rule**, not a complete 12-cell experiment. Only its first zsRE realization-0/order-100 pair was attempted: adjoint completed 1,000 items; random credit stopped after 993. The planned group contains ten unstarted cells (five remaining pairs), not eleven. These partial observations are not pooled with the complete depth comparisons.
+
+| Arm | Status | Items | Immediate ES | Process seconds | Total forwards | Total reverses |
+| --- | --- | --- | --- | --- | --- | --- |
+| SE-A | complete | 1000 | 0.998 | 989.738 | 139630 | 11334 |
+| SE-R | resource_stop | 993 | 0.00302115 | 3727.43 | 641262 | 340155 |
+
+
+On the common first 993 items, immediate ES is 0.997986 for adjoint and 0.003021 for random credit. Three random-arm immediate answers succeed; even all seven remaining answers succeeding would give only 0.010 over 1,000 items. That bound concerns immediate ES, not the unobserved final memory or retention. Random credit retains the true eight-step credit's norm and pays for its calculation before replacing the direction. This one stream supports the practical importance of informative credit in this implementation; it does not establish a general impossibility result for random search or a PC advantage over adjoint.
+
+The additional-update adjoint control completed all twelve cells (six pairs). The PC arm's budget was **offered, not consumed**. Per-item operation counts include forwards, partial forwards and reverses; they are not FLOPs. Most records hit the stopping thresholds without spending the allowance, and some incomplete rounds roll back while their compute remains charged.
+
+| Dataset | Arm | ES | RET-ES | RET-GS | LS | Learning forwards | Learning reverses | Learning seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| zsre | SE-A | 0.998333 | 0.515333 | 0.130667 | 0.97 | 75591.3 | 11214 | 270.277 |
+| zsre | SE-AM | 0.983333 | 0.508 | 0.142 | 0.986667 | 75537.3 | 11223 | 270.041 |
+| counterfact | SE-A | 1 | 1 | 0 | 1 | 12400 | 1826.67 | 45.0171 |
+| counterfact | SE-AM | 1 | 1 | 0 | 1 | 12400 | 1826.67 | 45.2319 |
+
+
+| Dataset | r | Offered ops | Used ops | Fraction used | Threshold stops | Incomplete rollbacks |
+| --- | --- | --- | --- | --- | --- | --- |
+| zsre | 0 | 391311 | 225484 | 0.576227 | 945 | 55 |
+| zsre | 1 | 380888 | 219015 | 0.575012 | 953 | 43 |
+| zsre | 2 | 388261 | 225589 | 0.581024 | 962 | 35 |
+| counterfact | 0 | 61344 | 32996 | 0.537885 | 300 | 0 |
+| counterfact | 1 | 62026 | 33456 | 0.539387 | 300 | 0 |
+| counterfact | 2 | 61096 | 32628 | 0.534045 | 300 | 0 |
+
+
+The control does not recover the eight-step own-prompt retention gain, but also does not spend an equal measured compute budget. Its stopping logic/prefix traversal differ; the small behavior changes cannot be attributed to extra updates alone. These results leave **direction versus extra effective compute unresolved**. CounterFact's saturated own-prompt and zero paraphrase scores limit discrimination. Exact per-realization differences and process/operation costs are in `PC-matched-control_report.md`. Separate full-vector PC-12 harm curves were not supplied; native drift summaries are available but cannot fill an ES99 slot.

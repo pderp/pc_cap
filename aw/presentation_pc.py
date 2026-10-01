@@ -250,7 +250,11 @@ def resolve(register=REGISTER):
             status[name] = v1_values(path, slots, bindings)
         else:
             report = read(path, bindings)
-            if name == "v0_report":
+            if name in ("depth_controls", "aw_b"):
+                from aw.presentation_followup import values
+
+                status[name] = values(name, report, slots, bindings)
+            elif name == "v0_report":
                 status[name] = v0_values(report, slots, bindings)
             else:
                 if name == "v1_harm":

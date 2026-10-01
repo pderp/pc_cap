@@ -1,53 +1,25 @@
-# Slide 8 — The κ pilot measures a trade-off
+# Slide 8 — Two interventions against extreme prediction loss
 
-**Draft speaker text for charlie's review; development evidence, DEC-054.**
+**Draft speaker text for charlie's review, updated October 1. Measured results; distinct populations.**
 
-**On screen:** κ pilot retention-versus-tail figure; ordinary, κ=.2, κ=.5 and
-clip-2 arms. Visible label: **preliminary development result; declared gain not
-established**. Claim footer: `kappa-ordinary`, `kappa-kappa02`, `kappa-kappa05`,
-`kappa-clip2`, `kappa-design`. Renderable source: `diagram-specs.json`, slide `08`.
+**On screen:** AW-B survival curves, with the one-nat boundary. Keep the κ trade-off
+figure as backup. Claims: `kappa-design`, `AW-B`. DEC-078 treats the mixture as an
+intervention beside the κ pilot, not a recommended cap configuration.
 
 ## Speaker text
 
-“The distributional findings motivate asking whether changing the training loss
-could reduce the tail. This pilot changed the reader's answer-surprisal loss
-to a coupled-log form at kappa 0.2 and 0.5. We compared it with ordinary loss
-and with plain surprisal clipped at two. The clipped control matters because
-it tests whether a simpler loss ceiling produces a similar trade-off.” [`kappa-design`]
+“The kappa pilot changed the reader's training loss. Both kappa settings reduced a development tail statistic but lost too much retention and failed the declared success rule. Clipping also reduced that tail descriptively. These remain preliminary trade-offs, without evidence of a special coupling advantage.” [`kappa-design`]
 
-“Across the three development datasets and three training seeds, mean paraphrase
-retention is approximately 0.796 for ordinary loss, 0.754 for kappa 0.2, 0.748
-for kappa 0.5 and 0.779 for clipping. Positive-harm ES95 is approximately 0.223,
-0.084, 0.063 and 0.103 nats, respectively. ES95 averages the worst five percent
-of this pilot's evaluated positions; it is not the ES99 full-validation quantity
-on the preceding slides.” [`kappa-ordinary`, `kappa-kappa02`, `kappa-kappa05`, `kappa-clip2`]
+“AW-B asks a different question: can we limit the correction at query time? We calibrated sixteen settings on development memories, requiring retention within two percentage points on both datasets and no worsening of locality or near-miss preservation. Every symmetric clip failed retention eligibility. The selected mixture keeps about thirty-seven percent of the original base distribution and sixty-three percent of the cap distribution. No shrink or gate comparator qualified.” [`AW-B`]
 
-“The tail statistic improves descriptively, but the kappa arms lose too much
-retention. The predeclared rule allowed a mean retention drop of at most 0.02,
-with no increase in unseen false fires and a tail change exceeding the seed
-spread. Both kappa arms miss the retention floor of about 0.776, and their tail
-reductions do not clear the declared separation rule. We therefore do not
-declare a successful secondary condition.” [`kappa-design`]
+“Evaluation then used ten already-exposed memories: five orders on each dataset, at three hundred edits. All ten met the declared rule: smaller maximum loss and worst-one-percent average, with retention inside tolerance. zsRE endpoints were unchanged. CounterFact paraphrase retention changed by {{awb.counterfact.gs_change}}, a loss of roughly 0.7 to 1.2 percentage points. The largest observed token losses fell from as much as fifteen nats to one.” [`AW-B`]
 
-“This experiment does give us useful information: on this substrate, reducing
-the influence of large training losses changes the balance between correction
-retention and unintended effects. The clipped control obtains much of the
-descriptive tail reduction too. The comparison does not establish a special
-coupling advantage, and a lower tail statistic alone would not make a better
-overall learner.” [`kappa-design`, `kappa-clip2`]
+“The survival curves include all 245,237 fixed-prefix positions per memory, including unchanged and improved predictions. Thin curves are orders, not independent datasets. The mixture moves zsRE mean KL below the original 0.001 line in every order; CounterFact remains above it. Calibration and evaluation together cost {{awb.hours}} process-hours. The pilot's ES95 on 4,064 positions is a different quantity and population from AW-B's ES99.” [`AW-B`, `kappa-design`]
 
-“These are preliminary hints, as agreed with Matthew Iklé. The pilot does not
-implement the coupled free energy, a coupled Markov blanket, or a test of the
-one-kappa conjecture. It changes a loss; it does not supply the coupled expectation
-or altered inference distribution required by that larger proposal.” [`kappa-design`]
+“The guarantee has a precise scope. At the same prefix, mixing in a base share of exp minus one ensures the target probability never falls below that share of the base probability. Its extra negative log likelihood is therefore at most one nat per token. That does not bound a whole generated answer by one nat, preserve every greedy answer, or establish a heavy-tail family. It also does not implement coupled free energy or autonomous action selection.” [`AW-B`, `AI-testbed`]
 
-## Figure and source notes
+## Sources and backup
 
-Figure: `pc_cap/logs/r1_round37/presentation-figures-v2/kappa-tradeoff.png`.
-Source page: `assets/presentation-materials/kappa_pilot_v5.md`;
-audited numbers: `logs/r1_round22/ht3e-independent-review-v2.json`;
-actual objective: `logs/heavy_tail/HT-3b-objective-review.json`. All three training
-seeds and all datasets enter the stated macro means. This is a 32-window /
-4,064-position population per dataset; do not splice its tail values into the
-245,237-position full-validation series. Ordinary reader weights are reused,
-not a new ordinary training run. [Claim ledger](../../talk_claim_ledger_v7.md).
+- [AW-B report](../../additional_work/AW-B_report.md): all settings, selection, per-order differences, costs and proof.
+- Survival plot: `assets/presentation-materials/figures/aw_b/evaluation-survival.png` (PDF/SVG and source manifest beside it).
+- κ backup: `pc_cap/logs/r1_round37/presentation-figures-v2/kappa-tradeoff.png`; ordinary/κ.2/κ.5/clip2 retention 0.796/0.754/0.748/0.779, ES95 0.223/0.084/0.063/0.103 nats. Three development datasets × three training seeds; no κ claim is upgraded by AW-B.

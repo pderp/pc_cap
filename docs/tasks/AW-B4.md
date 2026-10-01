@@ -1,13 +1,31 @@
-# AW-B4 — reporting preparation while evaluation runs
+# AW-B4 — bounded-correction final report
 
-**Status:** calibration independently reconstructed; final report pending complete evaluation. **Agent:** Capex. **Date:** 2026-09-29. **Cost:** CPU only; zero GPU/model calls.
+Status: done. Agent: Capex. Updated October 1, 2026. CPU analysis only; no new GPU/model calls.
 
-**Inputs:** completed calibration and its approved selection; no partial evaluation outcomes used. **Outputs:** `aw/aw_b_report.py`, `aw/aw_b_tail_figure.py`, tests; `logs/additional_work/AW-B/report-20260929/calibration-review.{json,md}`; development-only survival PNG/PDF/SVG and source manifest at `assets/presentation-materials/figures/aw_b/calibration-survival.*`. The final `docs/additional_work/AW-B_report.md` is a future output and has deliberately not been published yet.
+Inputs: completed calibration-20260929 and evaluation-20260929. The existing
+report generator independently reconstructed **62 dataset/setting records**:
+32 development records plus 30 final evaluation records. Full vectors, endpoint
+scores, identities, selection and success conjunction verify.
 
-All 32 dataset/setting combinations reproduce from vectors and endpoint rows, with memory/base/reader identity and full 245,237-position coverage. Mechanical selection reproduces the approved minimum-across-datasets ranking: mixture rho=exp(−1), no eligible shrink/gate comparator. The full sixteen-setting development table is in the review.
+Outputs: `docs/additional_work/AW-B_report.md`; report JSON/publication receipt
+under `logs/additional_work/AW-B/report-20260929/`; final survival PNG/PDF/SVG and
+manifest in `assets/presentation-materials/figures/aw_b/`; AW-B ledger row,
+reviewer table and slide 8. All sixteen development settings, selection reasons,
+per-order differences and separate calibration/evaluation costs are included.
 
-**Interpretation corrections:** CounterFact RET-GS changes 0.753333 → 0.745000, within ±0.02; it is not unchanged. A base mixture guarantees a probability floor, not unchanged greedy answers. The one-nat bound is per token at the same prefix relative to the specified base; it is not a one-nat total sequence or generated-text bound. CounterFact mean KL remains above 0.001. An efficacy-matched weakening comparison is unavailable because no comparator qualified.
+The selected exp(-1) base mixture passes in all ten evaluation memories. zsRE
+endpoints are unchanged; CounterFact RET-GS loses 0.006667–0.011667. Mean KL clears
+0.001 for zsRE but not CounterFact. The bound is **one nat per token at the same
+prefix versus the same base**. It does not ensure unchanged greedy answers or
+one-nat sequence/generated-text loss. No shrink/gate comparator qualified.
+DEC-078 framing remains an intervention beside the κ pilot, not a recommended
+configuration or proof of a heavy-tail family.
 
-**Verify:** in the CPU environment, `../venv/bin/python -m aw.aw_b_report` reconstructs calibration. After both evaluation `report.json` and `cost.json` say complete, run `../venv/bin/python -m aw.aw_b_report --final`; it refuses running/failed evaluation before writing final outputs. Then system Python with matplotlib: `MPLCONFIGDIR=/home/derp/cap/assets/presentation-materials/.matplotlib python3 -m aw.aw_b_tail_figure --report logs/additional_work/AW-B/report-20260929/report.json`. The default figure command reads calibration only. Numerical/guard regressions are included in the seven passing round-53 CPU tests; survival uses strict P(X>x), including nonpositive positions, with post steps. Final evaluation code remains untested against a completed real evaluation until that input exists.
+Verification: `python -m aw.aw_b_report --final`, then system Python
+`-m aw.aw_b_tail_figure --report logs/additional_work/AW-B/report-20260929/report.json`.
+Part of 30 passing targeted CPU tests; strict survival steps, complete population,
+partial-result refusal and dataset-specific slide qualification tested. Final
+figure visually inspected. Logs: `logs/additional_work/round55/tests.txt`.
 
-**Done-when:** final ten-memory/three-arm report, per-order differences, success conjunction, cost, evaluation figure, claim rows and reviewer tables published. **Unresolved:** the GPU evaluation; then PRES-6. **Questions:** none. Active driver and sources untouched. No commit by Capex.
+Done-when: all final report/figure/claim/reviewer outputs published — met.
+Dependencies: PRES-6 delivered. Questions/deviations: none. No commit by Capex.

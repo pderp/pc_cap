@@ -1,8 +1,8 @@
 # Final experiments — joint decision form for Tuesday, September 29
 
-Prepared 2026-09-27 by Capex from the reviewer primer §5. **No candidate is
-selected, ranked or authorized by this form.** charlie, the human reviewers,
-Capex and Capstan fill it together after the completed paired PC reports exist.
+Prepared September 27; updated October 1 by Capex. **DEC-077/078 decisions now
+supersede the blank decision fields in the historical candidate descriptions.**
+This update records existing decisions and results; it authorizes no extra run.
 Canonical repository copy: `pc_cap/docs/presentation/final-experiments.md`;
 identical initial export: `assets/presentation-materials/review-data/final-experiments.md`.
 Paths beginning `pc_cap/` or `assets/` are relative to `/home/derp/cap/`.
@@ -12,23 +12,30 @@ distributions**. The current testbed does not implement autonomous expected-free
 policy selection, coupled free energy or demonstrated Markov blankets; another
 retention/tail result alone would not establish those claims.
 
-## Evidence available at the meeting
+## Decision and execution update — October 1
 
-| Required input | Result / interpretation to fill | Source |
+DEC-077 approved the default portfolio without waiting for external review;
+DEC-078 fixes AW-B's framing as an intervention beside the κ pilot. The original
+candidate descriptions below are historical design notes, not pending approvals.
+The October 9, 17:00 EDT cutoff and no-new-fits October 6 line remain in force.
+
+| Branch | Current decision / measured status | Source |
 | --- | --- | --- |
-| Corrected PC-v0, all 60 cells and three realization summaries | PENDING | `pc_cap/logs/additional_work/PC-v0/report-60-20260927/report.json` (configured future path) |
-| Matched PC-v0 ordinary-text harm and separate cost | PENDING | `pc_cap/results/additional_work/PC-v0/harm/replication-60-20260927/report.json` and sibling `cost.json` (configured future paths) |
-| Fixed-v5 credit, all four cells at 100/300 edits | PENDING | `pc_cap/results/additional_work/PC-v1/replication-4-20260927/` (configured future directory) |
-| Fixed-v5 final harm and separate cost | PENDING | `pc_cap/results/additional_work/PC-v1/harm/replication-4-20260927/` (configured future directory) |
-| Reviewer comments and proposed scientific question | ____________________ | Attach written feedback / meeting notes |
-| Actual GPU release and remaining usable wall-hours | ____________________ | Capstan's latest completion/cost records; do not add overlapping process-hours |
+| A: PC-trained reader | Authorized; all three BP seeds complete; ePC seed0 complete, seeds1–2 still in progress/queued. No completed three-seed ePC comparison yet. | `docs/additional_work/PC-reader.md`; lead queue 145–146 |
+| B: fixed-v5 credit settings | Authorized and complete; depth32 and rates .05/.2 produced no clear efficacy gain in the exposed cells; avoid an equivalence claim. | lead queue 141–142 |
+| C: failed-cell tuning | No outcome-selected new tuning launched by this review; keep exploratory if later pursued. | Original branch below |
+| D: bounded correction | Calibration and ten-memory evaluation complete; all ten mixture cells meet the declared rule. Per-token guarantee, small CF paraphrase cost, CF KL still above .001. | `docs/additional_work/AW-B_report.md`; DEC-078 |
+| E: Option R | Go decision exists; 4 cells complete, 1 ceiling-exhausted, 25 pending. R-2 reconciliation complete; explicit v0 class deferral recommended pending a versioned batching repair. GPU resume belongs to Capstan. | `docs/tasks/R-2.md`; `docs/additional_work/R_decision.md` |
+| F: upper-layer trained factorial | Authorized; runner and CPU validation complete; queued after reader replication. No measured factorial outcome yet. | `docs/additional_work/AW-L.md`; `docs/tasks/AW-L5.md` |
+| G: 3,000-edit scaling | Closed infeasible: certified population insufficient without violating reservations. No GPU recipe supplied. | `docs/tasks/HT-16.md` |
+| DEC-075 PC controls | Depths complete; random closed partial by DEC-079; offered-budget adjoint complete but underspent. | `docs/additional_work/PC-controls_report.md` |
 
-The paired effects, preservation, failures and cost jointly inform the entries
-below. “Works” is a discussion label to define here, not a new automatic success
-threshold or a label inferred from whether a job completed.
+The baseline eight-step PC-v0 report and paired harm are complete at
+`logs/additional_work/PC-v0/report-60-20260927/`; fixed-v5 credit and full-validation
+harm are complete at `logs/additional_work/PC-v1/report-4-20260927/`.
+Remaining wall-time estimates belong to the current queue/profile receipts;
+process-hours from overlapping jobs must not be added as elapsed GPU hours.
 
-**Definition used for “works / transfers,” with the observed trade-offs:**
-________________________________________________________________________
 
 ## Conditional branches from the primer
 

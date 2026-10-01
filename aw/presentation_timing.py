@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
@@ -69,52 +70,100 @@ A useful next study would compare policy-driven and fixed or random audits with 
 The main run stopped at the approved 270-cell scope, with omitted comparisons reported as unavailable. Experiments finish October 9 at 17:00 Eastern; analysis, slides and rehearsal follow before October 15. I welcome discussion about the next controlled test of informative audits.""",
 ]
 
-CHOICES = {1:[0,1], 2:[0,1,2], 3:[0,1,2,4], 4:[0,1,4], 5:[0,2,4,5],
-           6:[1,2,4,5], 7:[1,3], 8:[0,2,4], 9:list(range(5)), 10:list(range(5)),
-           11:[0,1,5], 12:[0,1,2,4]}
-BUDGETS = {15:[50,85,125,35,75,70,65,40,115,100,85,55],
-           25:[65,120,165,110,115,150,80,100,170,170,120,135]}
+CHOICES = {
+    1: [0, 1],
+    2: [0, 1, 2],
+    3: [0, 1, 2, 4],
+    4: [0, 1, 4],
+    5: [0, 2, 4, 5],
+    6: [1, 2, 4, 5],
+    7: [1, 3],
+    8: [0, 2, 4],
+    9: list(range(5)),
+    10: list(range(5)),
+    11: [0, 1, 5],
+    12: [0, 1, 2, 4],
+}
+BUDGETS = {
+    15: [50, 85, 125, 35, 75, 70, 65, 40, 115, 100, 85, 55],
+    25: [65, 120, 165, 110, 115, 150, 80, 100, 170, 170, 120, 135],
+}
+
+# PRES-6: completed follow-ups replace the earlier short-version slots.
+SHORT[
+    7
+] = """The kappa pilot reduced a development tail statistic but failed its retention and separation rule. A different intervention now has a positive result: mix the original base probabilities with the cap's probabilities at query time.
+
+All ten exposed evaluation memories met the declared rule: smaller maximum loss and worst-one-percent average, retention within two points. CounterFact lost roughly one point of paraphrase retention; its mean KL remains above 0.001.
+
+The mixture guarantees at most one nat of extra loss per token at the same prefix. It does not bound whole-answer loss, preserve every greedy answer or implement coupled free energy."""
+SHORT[
+    8
+] = """Predictive coding changes acquisition credit on the same frozen base and cap. The corrected eight-step experiment uses three realizations and five dependent orders; depth controls use their common order100 only.
+
+One step matches the adjoint's behavioral endpoints, as its normalized direction should. More settling raises zsRE own-prompt retention from {{depth.1.RET-ES}} to {{depth.8.RET-ES}} to {{depth.32.RET-ES}}, but the thirty-two-step paraphrase score falls to {{depth.32.RET-GS}}. Tail loss and learning cost rise too.
+
+Random-direction credit stopped after {{control.random.n}} items with immediate success {{control.random.es}}. It is a partial one-stream control, not a full replication. The additional-update adjoint control completed twelve cells but underspent the offered PC budget. That leaves direction versus effective computation unresolved.
+
+The original five-order paraphrase differences are {{v0.zsre.ret_gs}} and {{v0.counterfact.ret_gs}}. Its ES99 differences are {{v0.zsre.harm_es99_difference}} and {{v0.counterfact.harm_es99_difference}} nats. Better taught-answer retention alone does not establish better generalization or lower harm."""
+SHORT[
+    11
+] = """Active inference gives us the proposed belief-and-action loop; autonomous audit selection remains future work. Predictive coding has measured retention, harm and cost trade-offs, with compute attribution still unresolved. Extreme-loss measurements now motivate a tested per-token mixture bound, alongside the unsuccessful kappa pilot.
+
+These are finite test populations, not proof of a heavy-tail family. The main run stopped at 270 cells; omitted comparisons stay unavailable. Reader-training replication continues, and we make no three-seed claim from its first seed. Experiments end October 9 at 17:00 Eastern, leaving time for analysis and rehearsal before October 15."""
+BUDGETS[15][2] -= 10
+BUDGETS[15][7] += 10
 
 
 def stamp(seconds):
-    return f"{seconds//60:02d}:{seconds%60:02d}"
+    return f"{seconds // 60:02d}:{seconds % 60:02d}"
 
 
-def main():
+def main(*, refresh=False):
     originals = sorted(SOURCE.glob("slide*.md"))
     evidence, long = {}, []
     for n, p in enumerate(originals, 1):
         full = p.read_text()
         body = full.split("## Speaker text\n", 1)[1].split("\n## ", 1)[0]
-        paragraphs = re.findall(r'“(.*?)”', body, re.S)
+        paragraphs = re.findall(r"“(.*?)”", body, re.S)
         long.append("\n\n".join(paragraphs[i].replace("“", "") for i in CHOICES[n]))
-        evidence[p.name] = dict(sha256=hashlib.sha256(full.encode()).hexdigest(),
-                               claims=sorted(set(re.findall(r'`([A-Za-z0-9-]+)`', body))))
+        evidence[p.name] = dict(
+            sha256=hashlib.sha256(full.encode()).hexdigest(),
+            claims=sorted(set(re.findall(r"`([A-Za-z0-9-]+)`", body))),
+        )
     records = {}
-    for minutes, texts in ((15,SHORT),(25,long)):
+    for minutes, texts in ((15, SHORT), (25, long)):
         budgets = BUDGETS[minutes]
-        assert sum(budgets) == minutes*60
+        assert sum(budgets) == minutes * 60
         records[str(minutes)] = []
         rows, t = [], 0
-        for n, (words, seconds) in enumerate(zip(texts,budgets),1):
+        for n, (words, seconds) in enumerate(zip(texts, budgets), 1):
             # Replace slot tokens by a representative three-word spoken number;
             # realization lists expand further when the actual report is available.
-            counted = re.sub(r'\{\{[^}]+\}\}', 'pending measured value', words)
-            counted = re.sub(r'\\\[.*?\\\]', '', counted, flags=re.S)
+            counted = re.sub(r"\{\{[^}]+\}\}", "pending measured value", words)
+            counted = re.sub(r"\\\[.*?\\\]", "", counted, flags=re.S)
             count = len(counted.split())
-            records[str(minutes)].append(dict(slide=n, start_seconds=t, seconds=seconds,
-                                              approximate_words=count, implied_words_per_minute=60*count/seconds))
-            rows.append(f"| {n} | {stamp(t)}–{stamp(t+seconds)} | {seconds} s | {count} |")
+            records[str(minutes)].append(
+                dict(
+                    slide=n,
+                    start_seconds=t,
+                    seconds=seconds,
+                    approximate_words=count,
+                    implied_words_per_minute=60 * count / seconds,
+                )
+            )
+            rows.append(f"| {n} | {stamp(t)}–{stamp(t + seconds)} | {seconds} s | {count} |")
             t += seconds
-        text = f"""# {minutes}-minute speaking script — draft for charlie
+        text = (
+            f"""# {minutes}-minute speaking script — draft for charlie
 
-Prepared 2026-09-27 by Capex from the twelve slide drafts. **Author review and
+Updated 2026-10-01 by Capex from the twelve slide drafts. **Author review and
 rehearsal required; this is a duration option, not a confirmed conference slot.**
 Clock includes slide changes and pointing pauses, excludes audience Q&A. Read
 only the paragraphs under “Say”; source/cut notes and tables are not spoken.
 
-PC values remain literal result slots. After complete reports exist, the existing
-presentation export resolves them from `pc-result-sources.json`; an absent source
+Completed result values remain literal source slots here. The presentation
+export resolves them from `pc-result-sources.json`; an absent source
 renders PENDING, never zero. If still pending at rehearsal, say “this comparison
 is pending; I cannot yet report a direction or effect” instead of the numerical
 paragraph. Do not read placeholder braces aloud or imply completion prematurely.
@@ -125,12 +174,15 @@ lists; timing is a target, not a measured delivery duration.
 
 | Slide | Running clock | Allocation | Approximate spoken words |
 | --- | --- | --- | --- |
-""" + "\n".join(rows) + f"\n\nTotal allocation: **{minutes}:00**.\n\n"
+"""
+            + "\n".join(rows)
+            + f"\n\nTotal allocation: **{minutes}:00**.\n\n"
+        )
         if minutes == 15:
             text += """Short-version cuts follow the outline: slides 4–5 form one 1:50 unit
 (35 seconds of design, then 75 of results); slides 6–7 form one 2:15 unit.
 Keep both slide numbers for the existing figure files and advance at the stated
-clock. The kappa section is 40 seconds; detailed settling diagnostics, operation
+clock. The kappa and mixture section is 50 seconds; detailed settling diagnostics, operation
 tables, comparator breakdowns and process accounting move to backup. Retain the
 active-inference opening and return, corrected-PC comparison and empirical tails.
 
@@ -142,12 +194,16 @@ and 6–7 as speaking units, shorten kappa and move diagnostics/accounting to ba
 Do not obtain the shorter version by removing one of the three central themes.
 
 """
-        for p, words, record in zip(originals,texts,records[str(minutes)]):
+        for p, words, record in zip(originals, texts, records[str(minutes)]):
             title = p.read_text().splitlines()[0].removeprefix("# ")
             start = record["start_seconds"]
-            text += f"## {title}\n\n**{stamp(start)}–{stamp(start+record['seconds'])}; {record['seconds']} seconds.**\n\n"
+            text += f"## {title}\n\n**{stamp(start)}–{stamp(start + record['seconds'])}; {record['seconds']} seconds.**\n\n"
             text += "Say:\n\n" + words + "\n\n"
-            text += "Evidence: " + ", ".join(f"`{x}`" for x in evidence[p.name]["claims"]) + f"; [source draft]({p.name}).\n\n"
+            text += (
+                "Evidence: "
+                + ", ".join(f"`{x}`" for x in evidence[p.name]["claims"])
+                + f"; [source draft]({p.name}).\n\n"
+            )
         text += """## Cut and backup instructions — not spoken
 
 - Slides 4–5: omit the control-by-control tour and detailed order/t-sensitivity tables;
@@ -156,7 +212,7 @@ Do not obtain the shorter version by removing one of the three central themes.
   caveat and distinction between empirical concentration and an established heavy-tail family.
 - Slide 3: the detailed one-step/nonzero-write diagnostic and full operation ledger are backup;
   retain SD-24's meaning and the JAX differentiation qualification.
-- Slide 8: retain the failed decision rule and coupled-free-energy limitation even when short.
+- Slide 8: retain the failed κ rule, measured mixture result, and per-token fixed-prefix limitation even when short.
 - Slides 9–10: full per-order metrics, 100-edit tables and cost breakdowns are backup; retain
   effect, harm, cost, exposed population and any unfavorable result.
 - Slide 12: detailed process accounting is backup (392.42 process-hours for the main 270-cell
@@ -167,12 +223,16 @@ All claims use [claim ledger v7](../../talk_claim_ledger_v7.md). The ledger and
 the completed result sources, rather than an inference from the story, determine
 the final PC interpretation. No new experimental commitment is made by this script.
 """
-        with (SOURCE / f"speaking-script-{minutes}min.md").open("x") as f:
+        with (SOURCE / f"speaking-script-{minutes}min.md").open("w" if refresh else "x") as f:
             f.write(text)
-    with (ROOT / "logs/additional_work/round50/presentation-timing.json").open("x") as f:
-        json.dump(dict(source_drafts=evidence, timings=records),f,indent=2)
+    folder = ROOT / "logs/additional_work" / ("round55" if refresh else "round50")
+    folder.mkdir(parents=True, exist_ok=True)
+    with (folder / "presentation-timing.json").open("w" if refresh else "x") as f:
+        json.dump(dict(source_drafts=evidence, timings=records), f, indent=2)
         f.write("\n")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--refresh", action="store_true")
+    main(refresh=parser.parse_args().refresh)

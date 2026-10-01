@@ -1,12 +1,9 @@
 # Slide 12 — What we learned, what remains, what it took
 
-**Draft speaker text for charlie's review; PC takeaway intentionally pending.**
+**Draft speaker text for charlie's review; completed credit and bounded-intervention evidence; reader replication continues.**
 
-**On screen:** three theme panels, plus a compact scope/cost footer. The PC panel
-contains **RESULT SLOT — fill from completed paired experiment**, not a zero
-or a positive-result placeholder. Claim footer: `AI-testbed`, `AI-next`, `PC-v0`,
-`PC-fixed-v5`, `HT13-corrected`, `resources`, `unavailable`.
-Renderable source: `diagram-specs.json`, slide `12`.
+**On screen:** three themes with measured/proposed labels. Claims: `AI-next`,
+`PC-depth`, `PC-budget`, `AW-B`, `HT13-corrected`, `talk-scope`.
 
 ## Speaker text
 
@@ -23,7 +20,7 @@ S5 zsRE and CounterFact streams. The fixed-v5 differences are
 realization. The corresponding differences in positive-harm ES99 are
 {{v0.zsre.harm_es99_difference}} / {{v0.counterfact.harm_es99_difference}}
 and {{v1.zsre.harm_es99_difference}} / {{v1.counterfact.harm_es99_difference}}
-nats. These values stay PENDING until their completed sources exist. Read them
+nats. The depth controls show an own-prompt retention gain with increased harm and cost; the underspent adjoint control leaves attribution unresolved. Read them
 alongside the process and operation costs on the preceding slides. The historical defective-energy run
 and CPU readiness checks do not fill this slot. A null or adverse result should
 be stated just as directly as an improvement.” [`PC-v0`, `PC-fixed-v5`, `PC-SD24`]
@@ -33,7 +30,7 @@ unintended prediction loss: a small fraction of evaluated positions can account
 for substantial harm even when averages look small. We need the frequency,
 severity and concentration beside retention. This is empirical evidence about
 our finite test population, not a proof of a heavy-tail family or future
-robustness.” [`HT13-corrected`, `HT-readout`]
+robustness. The mixture intervention now supplies a measured way to cap per-token loss increase at a fixed prefix, with a small CounterFact paraphrase cost and all ten evaluation memories meeting the declared rule.” [`HT13-corrected`, `HT-readout`, `AW-B`]
 
 “The cost and scope also belong with these conclusions. The reconciled 270-cell
 snapshot accounts for about 392.42 process-hours. Two workers overlap, so this

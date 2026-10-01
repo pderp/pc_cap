@@ -161,8 +161,8 @@ def test_every_authored_slot_has_a_resolvable_family():
     files.append(p.ROOT / "docs/presentation/deck_v3/diagram-specs.json")
     for f in files:
         for slot in re.findall(r"\{\{([^}]+)\}\}", Path(f).read_text()):
-            assert slot.startswith(("v0.", "v1."))
+            assert slot.startswith(("v0.", "v1.", "awb.", "depth.", "control."))
             assert re.fullmatch(
-                r"(v0|v1)\.(zsre|counterfact)\.(?:(100|300)\.)?(es|ret_es|ret_gs|ls|near_miss|revision|harm_es99_difference|harm_mean_difference)(\.(realizations|range))?|(v0|v1)\.(SE-A|SE-E|harm)\.seconds",
+                r"(v0|v1)\.(zsre|counterfact)\.(?:(100|300)\.)?(es|ret_es|ret_gs|ls|near_miss|revision|harm_es99_difference|harm_mean_difference)(\.(realizations|range))?|(v0|v1)\.(SE-A|SE-E|harm)\.seconds|awb\.(hours|(zsre|counterfact)\.gs_change)|depth\.(1|8|32)\.RET-(ES|GS)|control\.random\.(es|n)",
                 slot,
             )

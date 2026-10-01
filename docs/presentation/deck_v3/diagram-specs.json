@@ -81,7 +81,7 @@
     {
       "number": "03",
       "title": "Predictive coding supplies acquisition credit",
-      "status": "Mechanism tested; comparative efficacy, harm and cost pending",
+      "status": "Mechanism and acquisition comparisons measured; reader-training replication continues",
       "claims": [
         "PC-mechanism",
         "PC-SD24",
@@ -204,59 +204,35 @@
     },
     {
       "number": "08",
-      "title": "The κ pilot measures a retention–tail trade-off",
-      "status": "Development evidence: preliminary hints; declared gain not established",
+      "title": "Two interventions against extreme prediction loss",
+      "status": "κ: development success rule missed. Mixture: ten exposed memories pass.",
       "claims": [
         "kappa-design",
-        "kappa-ordinary",
-        "kappa-kappa02",
-        "kappa-kappa05",
-        "kappa-clip2"
+        "AW-B"
       ],
       "panels": [],
-      "figure": "pc_cap/logs/r1_round37/presentation-figures-v2/kappa-tradeoff.png",
+      "figure": "assets/presentation-materials/figures/aw_b/evaluation-survival.png",
       "requires_tail_gate": false,
-      "footer": "κ arms reduce ES95 descriptively but miss the retention floor and declared tail-separation rule.",
-      "notes": "DEC-054: not coupled free energy, a coupled blanket, or a one-κ test. This is a loss-level pilot."
+      "footer": "Mixture keeps retention within two points; CounterFact KL remains above 0.001.",
+      "notes": "One nat per token at the same prefix; no whole-answer guarantee. DEC-078: intervention only.",
+      "figure_manifest": "assets/presentation-materials/figures/aw_b/evaluation-survival-manifest.json"
     },
     {
       "number": "09",
-      "title": "Corrected PC-v0: efficacy, harm and cost",
-      "status": "Exposed historical S5; 3 realizations × 5 orders; result slots await completed sources",
+      "title": "Predictive coding: retention, harm and learning cost",
+      "status": "Depth controls: order100, three realizations per dataset; exposed historical streams.",
       "claims": [
-        "PC-v0",
-        "PC-SD24",
-        "HT-readout"
+        "PC-depth",
+        "PC-one-step",
+        "PC-random",
+        "PC-budget"
       ],
       "connections": false,
-      "panels": [
-        {
-          "title": "Paraphrase retention: Δ",
-          "lines": [
-            "zsRE: {{v0.zsre.ret_gs}}",
-            "CounterFact: {{v0.counterfact.ret_gs}}",
-            "Higher favors SE-E"
-          ]
-        },
-        {
-          "title": "Positive-harm ES99: Δ",
-          "lines": [
-            "zsRE: {{v0.zsre.harm_es99_difference}}",
-            "CounterFact: {{v0.counterfact.harm_es99_difference}}",
-            "Lower favors SE-E"
-          ]
-        },
-        {
-          "title": "Acquisition + assay cost",
-          "lines": [
-            "SE-A process s: {{v0.SE-A.seconds}}",
-            "SE-E process s: {{v0.SE-E.seconds}}",
-            "Harm readout s: {{v0.harm.seconds}}"
-          ]
-        }
-      ],
-      "footer": "All differences: corrected eight-step SE-E minus SE-A. Readout uses 4,064 fixed positions per arm.",
-      "notes": "Supplemental defect-correction replication; old S5 primary scoring. No fresh confirmation or general PC claim."
+      "panels": [],
+      "footer": "Random: 3/993 immediate successes. Adjoint budget offered, underspent.",
+      "notes": "More own-prompt retention does not establish better generalization or equal-compute superiority.",
+      "figure": "assets/presentation-materials/figures/pc_v0/controls/depth-retention-harm-cost.png",
+      "figure_manifest": "assets/presentation-materials/figures/pc_v0/controls/depth-retention-harm-cost-manifest.json"
     },
     {
       "number": "10",
@@ -340,13 +316,13 @@
     {
       "number": "12",
       "title": "What we learned, what remains, what it took",
-      "status": "Three themes; measured, proposed and pending claims kept visible",
+      "status": "Measured credit and tail interventions; autonomous audit policies remain proposed.",
       "claims": [
         "AI-next",
-        "PC-v0",
-        "PC-fixed-v5",
+        "PC-depth",
+        "PC-budget",
+        "AW-B",
         "HT13-corrected",
-        "resources",
         "talk-scope"
       ],
       "connections": false,
@@ -362,16 +338,16 @@
         {
           "title": "Predictive coding",
           "lines": [
-            "v0 ΔGS (zsRE): {{v0.zsre.ret_gs}}",
-            "v5 ΔGS (zsRE): {{v1.zsre.ret_gs}}",
-            "Harm + cost, both datasets"
+            "PC retention / cost trade-off",
+            "Compute attribution unresolved",
+            "MEASURED CONTROLS"
           ]
         },
         {
           "title": "Extremes",
           "lines": [
-            "Concentrated prediction loss",
-            "Frequency beside severity",
+            "Mixture bounds token harm",
+            "All ten memories pass rule",
             "MEASURED; FAMILY UNPROVEN"
           ]
         }
