@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-01 14:05** — Lane HT-17 opened for Capex (round 56; `docs/tasks/HT-17.md`): saved-vector tail analysis per Capex's specification, CPU only, fits by Oct 5. GPU queue unchanged.
 - **2026-10-01 13:40** — DEC-081a: B–D wording revised to Capex's conservative language after its review of the entropy feedback (fitted shapes, not classes; mixture = proven ceiling; κ pilot = bounded loss deformation); HT-17 narrowed to Capex's saved-vector tail analysis spec, opens on the lead's word. Capex review files committed.
 - **2026-10-01 12:10** — DEC-081: reviewer feedback (Nelson 2026) items B–D drafted (`docs/friday-10.02-review/talk-text-B-C-D.md`, abstract-to-testbed map, tails_v1 §class prototype); A = lane HT-17 (class fits, CPU) pending the lead's go and Capex's availability; E deferred post-conference. Capex processing the same inputs (not to be interrupted).
 - **2026-10-01 10:35** — DEC-080: Option R resumes with the v0 class deferred (16 runnable cells, 9 deferred) as soon as the ePC seeds 1–2 chain releases the GPU (≈ Oct 3 10:30; watcher armed); AW-L5 after it. Capex round 55 committed (R-2, AW-B report, matched-control report, PRES-6). Friday review primer at `docs/friday-10.02-review/README.md`.
@@ -186,6 +187,20 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 56 — saved-vector tail analysis (2026-10-01, 14:05; DEC-081/081a)
+
+### Lane HT-17 — harmful-change frequency and conditional severity from the saved harm vectors (CPU only)
+
+Specification: `docs/tasks/HT-17.md`, which adopts Capex's own seven-point design from
+`docs/friday-10.02-review/feedback-MMK-nelson-entropy-capex.md` as written. Populations: Stage-4 learned / stable v0 /
+random caps (both datasets, every realization and order), the paired AW-B arms, the BP and ePC reader seeds as they
+land, the pilot assay kept separate. Excess fits over u ∈ {0.01, 0.1, 0.5, 1} nats (generalized Pareto vs exponential
+restriction; conditional lognormal if both fail), exceedance probability and contributing windows, joint window-identity
+resampling, a "not identified" screen, invalid-fit marking (endpoint boundary; κ ≤ −1/2), no entropy column, small
+figures. Language: fitted finite-range shapes, not complexity classes. Fits by Oct 5; report 6–8 Oct. No GPU. Capstan
+checks a slice and carries the agreed wording to the deck via PRES. Prototype evidence only:
+`feedback-MMK-nelson-entropy.md` §3 (revised).
 
 ## Round 55 — Option R reconciliation and resume (2026-09-29, 21:10; urgent)
 

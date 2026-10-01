@@ -1497,3 +1497,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     abstract-to-testbed rows and the `tails_v1.md` section are re-labelled "fitted shapes, exploratory". Lane A is now
     Capex's "saved-vector tail analysis" specification (CPU, aim to finish fits by Oct 5); it opens on your word. Capex's
     review files committed (response, check script, literature hashes and page renders). GPU unchanged.
+
+150. (2026-10-01, 14:05 EDT) **Lane HT-17 opened for Capex (round 56).** `docs/tasks/HT-17.md` adopts Capex's own
+    seven-point "small, defensible tail analysis" as the specification: declared observable and populations, the gate's
+    firing indicator separate from Δ > u, excess fits over four thresholds (generalized Pareto vs its exponential
+    restriction on held-out windows; conditional lognormal if both fail), joint window-identity resampling, a "not
+    identified" screen, invalid-fit marking for endpoint-boundary shapes and κ ≤ −1/2, no calibrated-entropy column,
+    two small figures, language of fitted finite-range shapes rather than classes. CPU only; fits by Oct 5, report and
+    figures Oct 6–8; cut order if short: free-α fit, calibration demonstration, pilot-assay fits, secondary comparators.
+    I check an independent slice and carry the agreed wording into the deck through PRES. GPU unchanged (ePC seed 1
+    training; Option R armed behind the chain; AW-L5 after).
