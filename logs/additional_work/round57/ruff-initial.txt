@@ -1,0 +1,58 @@
+F401 [*] `math` imported but unused
+ --> aw/r_report.py:6:8
+  |
+4 | import argparse
+5 | import json
+6 | import math
+  |        ^^^^
+7 | import statistics
+8 | from collections import Counter
+  |
+help: Remove unused import: `math`
+  |
+5 | import json
+  - import math
+6 | import statistics
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+   --> aw/r_report.py:97:5
+    |
+ 95 |       # Imports only for existing read-only inventory/receipt/summary functions.
+ 96 |       # No engine, dispatch, run, observe/update, classifier or model constructor is called.
+ 97 | /     from aw import r_run as runner
+ 98 | |     from scripts import r1_75_analysis_stage4_v1 as native
+    | |__________________________________________________________^
+ 99 |
+100 |       sources = {}
+    |
+help: Organize imports
+    |
+96  |     # No engine, dispatch, run, observe/update, classifier or model constructor is called.
+    -     from aw import r_run as runner
+97  |     from scripts import r1_75_analysis_stage4_v1 as native
+98  |
+99  +     from aw import r_run as runner
+100 +
+101 |     sources = {}
+    |
+
+F401 [*] `pathlib.Path` imported but unused
+ --> aw/tests/test_reader_reports.py:6:21
+  |
+4 | import copy
+5 | import json
+6 | from pathlib import Path
+  |                     ^^^^
+7 |
+8 | import pytest
+  |
+help: Remove unused import: `pathlib.Path`
+  |
+5 | import json
+  - from pathlib import Path
+6 |
+  |
+
+Found 3 errors.
+[*] 3 fixable with the `--fix` option.

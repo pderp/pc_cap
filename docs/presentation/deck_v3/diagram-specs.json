@@ -4,7 +4,7 @@
     {
       "number": "01",
       "title": "Three questions for Active Inference in the Extremes",
-      "status": "charlie derr · October 15, 2026 · Binghamton · draft opening",
+      "status": "charlie derr \u00b7 October 15, 2026 \u00b7 Binghamton \u00b7 draft opening",
       "claims": [
         "AI-programme",
         "PC-v0",
@@ -25,7 +25,7 @@
           "lines": [
             "How should a correction learn?",
             "Iterative error-inference credit",
-            "EXPERIMENT PENDING"
+            "MEASURED TRADE-OFFS"
           ]
         },
         {
@@ -47,7 +47,8 @@
       "claims": [
         "AI-loop",
         "AI-testbed",
-        "AI-programme"
+        "AI-programme",
+        "AI-coupled-FE"
       ],
       "panels": [
         {
@@ -76,7 +77,7 @@
         }
       ],
       "footer": "PROPOSED: preferences + policy inference + information-seeking audits",
-      "notes": "Two implemented interfaces do not establish a Markov blanket. HT-14 map available; policy loop proposed."
+      "notes": "Interfaces are implemented. Coupled objective, blanket properties and policy loop remain proposed."
     },
     {
       "number": "03",
@@ -120,7 +121,7 @@
     {
       "number": "04",
       "title": "A correction testbed with distinct controls",
-      "status": "Three realizations × five dependent orders; endpoint depends on dataset",
+      "status": "Three realizations \u00d7 five dependent orders; endpoint depends on dataset",
       "claims": [
         "R1-design",
         "R1-controls",
@@ -175,46 +176,70 @@
     },
     {
       "number": "06",
-      "title": "Why look past the mean?",
-      "status": "Measured empirical survival; tail family unestablished",
+      "title": "How often, and how severe?",
+      "status": "HT-17: Stage-4 primary conditions; 1,000 edits; fixed ordinary-text inventory",
       "claims": [
-        "HT-readout",
-        "HT13-empirical",
-        "R1-fidelity"
+        "HT17-tails",
+        "HT-readout"
       ],
-      "figure": "assets/presentation-materials/figures/tails/survival_by_dataset.png",
+      "figure": "assets/presentation-materials/figures/tails_ht17/round57-final-v2/frequency-severity-stage4.png",
       "panels": [],
-      "footer": "P(delta NLL > x), including unchanged positions in the denominator; own-cap-off reference.",
-      "notes": "HT-13 is descriptive pooling over repeated positions/cells. ES99 = mean of worst 1%, not percentile."
+      "footer": "Frequency above 0.01 nat is not gate firing. Severity is conditional on exceeding that threshold.",
+      "notes": "Same positions reused; window intervals do not cover subject or seed uncertainty.",
+      "figure_manifest": "assets/presentation-materials/figures/tails_ht17/round57-final-v2/manifest.json",
+      "requires_tail_gate": false
     },
     {
       "number": "07",
-      "title": "Similar small means can hide different consequences",
-      "status": "HT-13 corrected v1.1: 270 receipted cells; own-cap-off reference",
+      "title": "What does observed tail shape add?",
+      "status": "Exploratory finite-range fits; primary threshold 0.01 nat",
       "claims": [
-        "HT13-corrected",
-        "HT-readout",
-        "R1-specificity"
+        "HT17-tails"
       ],
-      "panels": [],
-      "figure": "assets/presentation-materials/figures/tails/rarity_vs_severity.png",
-      "requires_tail_gate": true,
-      "footer": "zsRE learned / live C2: maximum 11.05 / 50.60 nats; ES99+ .260 / .321 nats.",
-      "notes": "Means .002486 / .003198 nats are not an equivalence result. S1 base-continuation effects excluded."
+      "panels": [
+        {
+          "title": "Learned v5",
+          "lines": [
+            "Illustrative 95% shape intervals",
+            "zsRE: -0.097 to 0.177",
+            "CF: -0.009 to 0.187"
+          ]
+        },
+        {
+          "title": "Stable v0 \u00b7 zsRE",
+          "lines": [
+            "Illustrative interval: .390\u2013.779",
+            "Held-out gain: .149\u2013.594",
+            "nats/excess across 15 cells"
+          ]
+        },
+        {
+          "title": "Limits remain visible",
+          "lines": [
+            "Random CF: 10/15 failures",
+            "Mixture: all fits invalid",
+            "Sparse cells: no shape"
+          ]
+        }
+      ],
+      "footer": "Learned v5: little predictive gain over exponential. Stable v0: a more pronounced observed tail.",
+      "notes": "Conditional window intervals; illustrative r0/order100. No asymptotic class or infinite-variance finding.",
+      "connections": false
     },
     {
       "number": "08",
       "title": "Two interventions against extreme prediction loss",
-      "status": "κ: development success rule missed. Mixture: ten exposed memories pass.",
+      "status": "\u03ba: development success rule missed. Mixture: ten exposed memories pass.",
       "claims": [
         "kappa-design",
-        "AW-B"
+        "AW-B",
+        "HT17-tails"
       ],
       "panels": [],
       "figure": "assets/presentation-materials/figures/aw_b/evaluation-survival.png",
       "requires_tail_gate": false,
       "footer": "Mixture keeps retention within two points; CounterFact KL remains above 0.001.",
-      "notes": "One nat per token at the same prefix; no whole-answer guarantee. DEC-078: intervention only.",
+      "notes": "\u03ba pilot: bounded surprisal, not calibrated entropy. Mixture: analytic one-nat ceiling at shared prefix.",
       "figure_manifest": "assets/presentation-materials/figures/aw_b/evaluation-survival-manifest.json"
     },
     {
@@ -246,7 +271,7 @@
       "connections": false,
       "panels": [
         {
-          "title": "Paraphrase retention: Δ",
+          "title": "Paraphrase retention: \u0394",
           "lines": [
             "zsRE: {{v1.zsre.ret_gs}}",
             "CounterFact: {{v1.counterfact.ret_gs}}",
@@ -254,7 +279,7 @@
           ]
         },
         {
-          "title": "Positive-harm ES99: Δ",
+          "title": "Positive-harm ES99: \u0394",
           "lines": [
             "zsRE: {{v1.zsre.harm_es99_difference}}",
             "CounterFact: {{v1.counterfact.harm_es99_difference}}",
@@ -280,7 +305,8 @@
       "claims": [
         "AI-programme",
         "AI-next",
-        "HT13-empirical",
+        "AI-coupled-FE",
+        "HT17-tails",
         "PC-v0",
         "PC-fixed-v5"
       ],
@@ -296,9 +322,9 @@
         {
           "title": "PROPOSED policy model",
           "lines": [
-            "Beliefs + observations + actions",
-            "Preferences: pragmatic value",
-            "Information: epistemic value"
+            "Probability model + constraints",
+            "Preferences + escort weighting",
+            "Gradients + action model"
           ]
         },
         {
@@ -311,7 +337,7 @@
         }
       ],
       "footer": "Learning from observed failures motivates an experiment on autonomous information seeking.",
-      "notes": "Coupled free energy, kappa-porous blankets and the one-kappa conjecture remain proposed."
+      "notes": "Coupled free energy is a candidate objective. No implemented policy loop or blanket theorem."
     },
     {
       "number": "12",

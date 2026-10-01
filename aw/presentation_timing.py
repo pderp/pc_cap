@@ -115,11 +115,41 @@ BUDGETS[15][2] -= 10
 BUDGETS[15][7] += 10
 
 
+# PRES-7: HT-17 supersedes prototype shape language and pending B–D passages.
+SHORT[1] += "\n\nNelson’s coupled-entropy framework offers a candidate objective. Its probability model, constraints and policy loop still need to be specified; the present interfaces do not establish a coupled blanket."
+SHORT[5] = """The plot separates two questions. How often does a token's loss increase exceed 0.01 nat, and how large is that increase when it does? The denominator includes unchanged and improved predictions. This is not the gate firing rate.
+
+On zsRE, learned v5 has a harmful-change frequency of 0.1594 percent and conditional severity 1.630 nats. Stable v0 has 0.1041 percent and 1.716 nats. On CounterFact, the random reader is both more frequent and more severe than learned v5. Stable v0 has zero observed harm there but also zero paraphrase retention.
+
+Each condition reuses 245,237 positions across fifteen cells. Window intervals condition on those cells and do not cover subject or seed uncertainty. A mean, conditional severity, expected shortfall and maximum answer different questions."""
+SHORT[6] = """Fitting the observed excesses adds a qualified distinction. Learned-v5 shape intervals include zero, and held-out predictions gain very little over an exponential. Stable v0 on zsRE has a more pronounced tail and better generalized-Pareto predictions at the primary threshold.
+
+The failures matter: ten of fifteen random-CounterFact fits exclude held-out observations, and all mixture fits hit an invalid endpoint. Sparse cells have no reported shape. At larger thresholds even stable v0 usually has too few events to fit.
+
+These are finite-range findings, not measured complexity classes, state growth, temperature or infinite variance. The shape intervals assume adequate window blocks, whose independence remains unverified."""
+SHORT[7] = """The kappa pilot bounded one surprisal and failed its retention and tail-separation rule. It did not test Nelson’s calibrated entropy or coupled free energy; neither is confirmed or refuted.
+
+The query-time mixture passed in ten exposed memories, with a small CounterFact retention cost. HT-17 shows nearly unchanged harmful-change frequency but severity dropping roughly to one-third. The one-nat ceiling at a shared prefix is mathematical, independent of the invalid fitted shapes. It does not bound a whole generated answer by one nat."""
+SHORT[10] = """What should the agent do next? Our results now connect predictive-coding learning credit, measured frequency and severity, and an analytic bound on unintended prediction loss. Investigators still choose every audit.
+
+For a coupled active-inference objective, we first need to agree the probability model, constraints, escort weighting, gradients, preferences and policy loop with its authors. A bounded training loss and two software interfaces do not supply those ingredients or a Markov-blanket theorem.
+
+A future controlled study could compare informative audit policies with fixed or random audits at equal budgets, measuring corrections, information, loss and cost. That is a next scientific question, not another experimental commitment before October 9."""
+CHOICES.update({6: [0, 1, 2, 3, 4], 7: [1, 2, 3, 4], 8: [0, 2, 4, 5], 11: [0, 1, 2, 3]})
+
+
+BUDGETS[25][6] += 25
+BUDGETS[25][7] += 25
+BUDGETS[25][2] -= 15
+BUDGETS[25][8] -= 15
+BUDGETS[25][9] -= 20
+
+
 def stamp(seconds):
     return f"{seconds // 60:02d}:{seconds % 60:02d}"
 
 
-def main(*, refresh=False):
+def main(*, refresh=False, log_dir=None):
     originals = sorted(SOURCE.glob("slide*.md"))
     evidence, long = {}, []
     for n, p in enumerate(originals, 1):
@@ -225,7 +255,7 @@ the final PC interpretation. No new experimental commitment is made by this scri
 """
         with (SOURCE / f"speaking-script-{minutes}min.md").open("w" if refresh else "x") as f:
             f.write(text)
-    folder = ROOT / "logs/additional_work" / ("round55" if refresh else "round50")
+    folder = Path(log_dir) if log_dir else ROOT / "logs/additional_work" / ("round55" if refresh else "round50")
     folder.mkdir(parents=True, exist_ok=True)
     with (folder / "presentation-timing.json").open("w" if refresh else "x") as f:
         json.dump(dict(source_drafts=evidence, timings=records), f, indent=2)
@@ -235,4 +265,6 @@ the final PC interpretation. No new experimental commitment is made by this scri
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--refresh", action="store_true")
-    main(refresh=parser.parse_args().refresh)
+    parser.add_argument("--log-dir", type=Path)
+    args = parser.parse_args()
+    main(refresh=args.refresh, log_dir=args.log_dir)

@@ -1,75 +1,23 @@
-# Slide 6 — Why look past the mean?
+# Slide 6 — How often, and how severe?
 
-**Draft speaker text for charlie's review. Measured empirical distribution;
-heavy-tail family remains unestablished.**
+**Draft speaker text for charlie's review; updated October 1, 2026.**
 
-**On screen:** “How often is a token harmed by more than x?” Use HT-13
-`assets/presentation-materials/figures/tails/survival_by_dataset.png` (path relative
-to `/home/derp/cap`), with a visible own-cap-off reference label. Companion inset:
-mean, exceedance, maximum and concentration. Claim footer: `HT-readout`,
-`HT13-empirical`, `R1-fidelity`. Diagram specification: `diagram-specs.json`, slide `06`.
+**On screen:** HT-17 frequency versus conditional severity; both datasets, own-cap-off reference. The survival curves are backup.
 
 ## Speaker text
 
-“An average answers one question, but it does not tell us how the changes are
-distributed. A correction might leave almost all ordinary-text predictions
-unchanged and make a small fraction much worse. Improvements elsewhere can also
-offset worsening in a signed average. That is why we look at individual target
-positions as well as the overall mean.” [`HT-readout`]
+“An average can conceal a small number of large unintended changes. We measure delta NLL: the increase in negative log probability of the actual next token when the cap is enabled at the same prefix. One nat means that token becomes a factor of e less probable. This is a prediction-loss measure, not human harm or the preference term of expected free energy.” [`HT-readout`]
 
-“At each position we ask how much the negative log probability of the actual
-next token increases. Positive delta NLL means the system gives that token less
-probability after enabling the cap. The unit is nats: an increase of one nat
-corresponds to a factor of e reduction in probability for that token. This is
-a prediction-loss measure, not a direct measure of human harm or the preference-
-risk term of expected free energy.” [`HT-readout`]
+“The horizontal axis asks how often the increase exceeds 0.01 nat. Its denominator includes every scored position, including improvements and unchanged predictions. The vertical axis asks how large the increase is, on average, among positions exceeding that threshold. Neither axis is the gate firing rate: an activated correction need not cause harmful change.” [`HT17-tails`]
 
-“The horizontal axis sets a loss-increase threshold x. The vertical axis gives
-the fraction of evaluated cell-position observations whose increase exceeds x.
-Moving right asks about increasingly severe consequences; moving down asks
-about increasingly rare ones. The log axes let us see several scales together.
-The zero-change mass is part of the denominator even though zero cannot be
-placed on the logarithmic x-axis.” [`HT-readout`, `HT13-empirical`]
+“On zsRE, learned v5 has harmful changes at 0.1594 percent of positions with conditional severity 1.630 nats. Stable v0 has 0.1041 percent and 1.716 nats. On CounterFact, learned v5 has 0.2984 percent and 1.913 nats; the random reader has 2.0450 percent and 3.486 nats. Stable v0 has no observed harmful changes there, but also zero paraphrase retention. Its conditional severity is undefined, not zero.” [`HT17-tails`]
 
-“For example, in the learned-reader MQuAKE condition, approximately 0.1941 percent
-of these evaluated cell-position observations exceed one nat, while the largest
-increase is about 17.06 nats. About 2,336 of 3,678,555 observations carry half of
-the total positive loss increase. The denominator is the same 245,237 ordinary-
-text positions evaluated across fifteen cells, not millions of independent
-replicates. MQuAKE's edit stream ends at 300 edits. These are descriptive
-distributional measurements on that endpoint.” [`HT13-empirical`]
+“These are fifteen cells per condition and dataset: three subject realizations and five dependent orders, at a thousand edits. Every cell reuses the same 245,237 ordinary-text positions. The intervals resample matching window identities jointly, conditional on the observed cells. They do not account for subject or seed uncertainty, and independence between windows is unverified.” [`HT17-tails`]
 
-“We also report expected shortfall: for ES99, the average positive loss increase
-within the worst one percent of all positions, with zeros retained and a fractional
-boundary when needed. A percentile is the threshold at the edge of that tail;
-expected shortfall averages what lies inside it. These are different quantities.
-The maximum identifies the worst observed event, and concentration tells us how
-few positions account for much of the positive harm.” [`HT-readout`]
+“Expected shortfall asks another question: ES99 averages positive loss within the worst one percent of all positions, with zeros and a fractional boundary retained. The maximum is the single largest observed event. Learned v5 on zsRE has a lower maximum than stable v0, 11.05 versus 27.68 nats, but a higher average cell ES99, 0.260 versus 0.179. No single summary orders every kind of risk.” [`HT17-tails`, `HT-readout`]
 
-“Heavy-tailed distributions are central to why this question matters at this
-satellite. But a finite set of rare severe changes is not itself proof of a
-power law or an asymptotic heavy-tail class. Nor does it tell us whether rare
-inputs caused them, whether they cluster in time, or how the system will behave
-under an unseen extreme regime. Our measured claim is concentrated unintended
-prediction loss. That gives the active-inference programme a concrete quantity
-to explain and potentially regulate.” [`HT13-empirical`, `AI-next`]
+## Sources and backup
 
-## Figure preparation and exact qualifications
+[HT-17 report](../../additional_work/HT-17_report.md); source snapshot `logs/additional_work/HT-17/snapshot-20261001-v2/report.json`.
 
-**HT-13 corrected in v1.1:** the generator now computes fractional ES99 and labels
-the figure as empirical survival. The [earlier review](../../tasks/HT-13-round46-review.md)
-is historical. The round-48 export uses the corrected 270-cell snapshot; current source identities are recorded in the round-48 export manifest.
-The round-47 source identities remain historical. No tail-family inference
-is implied by the repair. [`HT13-corrected`]
-
-The figure compares cap-on with **each condition's own cap-off base**. For S1,
-this omits the effect of base continuation; use the companion original-base
-table when discussing total departure. Do not infer zero probability from
-curves outside the displayed range or a nonzero tail from the rendering floor.
-Cells sharing text and dependent stream orders are not independent tail draws.
-[`HT13-empirical`, `HT-readout`]
-
-Sources: HT-13 `tails.json` / `table.md` (identities in `claim-additions.json`),
-[comparator report](../../R1_stage4_report_comparators.md),
-[claim ledger](../../talk_claim_ledger_v7.md). This replaces the older development
-HT-6 figure in the outline's slide-6 slot; the development figure can remain backup.
+Figure: `assets/presentation-materials/figures/tails_ht17/round57-final-v2/frequency-severity-stage4.png`. The original six-panel frequency/severity figure, including AW-B and partial reader seeds, remains backup. These replace the HT-13 main-screen slots; the earlier 270-cell empirical report remains valid at its stated scope.

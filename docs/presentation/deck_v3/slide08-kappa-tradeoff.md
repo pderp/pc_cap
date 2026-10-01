@@ -8,7 +8,7 @@ intervention beside the κ pilot, not a recommended cap configuration.
 
 ## Speaker text
 
-“The kappa pilot changed the reader's training loss. Both kappa settings reduced a development tail statistic but lost too much retention and failed the declared success rule. Clipping also reduced that tail descriptively. These remain preliminary trade-offs, without evidence of a special coupling advantage.” [`kappa-design`]
+“The kappa pilot replaced one answer surprisal ℓ with the bounded loss (1 − exp(−κℓ))/κ, saturating at 1/κ. The tested settings, 0.2 and 0.5, failed the declared retention and tail-separation rule; ordinary clipping also reduced the tail. This uses the coupled-logarithm family, but differs from Nelson’s calibrated entropy in its probability transformation, independent-equals or escort averaging, outer root and informational-scale calibration. We did not test that entropy or a coupled free-energy objective. This result neither confirms nor refutes those untested proposals.” [`kappa-design`]
 
 “AW-B asks a different question: can we limit the correction at query time? We calibrated sixteen settings on development memories, requiring retention within two percentage points on both datasets and no worsening of locality or near-miss preservation. Every symmetric clip failed retention eligibility. The selected mixture keeps about thirty-seven percent of the original base distribution and sixty-three percent of the cap distribution. No shrink or gate comparator qualified.” [`AW-B`]
 
@@ -17,6 +17,8 @@ intervention beside the κ pilot, not a recommended cap configuration.
 “The survival curves include all 245,237 fixed-prefix positions per memory, including unchanged and improved predictions. Thin curves are orders, not independent datasets. The mixture moves zsRE mean KL below the original 0.001 line in every order; CounterFact remains above it. Calibration and evaluation together cost {{awb.hours}} process-hours. The pilot's ES95 on 4,064 positions is a different quantity and population from AW-B's ES99.” [`AW-B`, `kappa-design`]
 
 “The guarantee has a precise scope. At the same prefix, mixing in a base share of exp minus one ensures the target probability never falls below that share of the base probability. Its extra negative log likelihood is therefore at most one nat per token. That does not bound a whole generated answer by one nat, preserve every greedy answer, or establish a heavy-tail family. It also does not implement coupled free energy or autonomous action selection.” [`AW-B`, `AI-testbed`]
+
+“HT-17 separates the mixture’s effect into frequency and severity. Frequency above 0.01 nat is almost unchanged, while conditional severity falls from 1.619 to 0.542 nats on zsRE and 1.925 to 0.581 on CounterFact. All ten generalized-Pareto mixture fits hit an endpoint pathology and are invalid; none yields a tail-class estimate. The one-nat ceiling follows from the mixture algebra, independently of those fits.” [`AW-B`, `HT17-tails`]
 
 ## Sources and backup
 

@@ -520,3 +520,14 @@ Survival curves use P(ΔNLL > x), including zero and beneficial positions in the
 
 
 Survival figure: `assets/presentation-materials/figures/aw_b/evaluation-survival.png` (PDF/SVG beside it). DEC-078: an intervention beside the κ pilot, not a recommended cap configuration.
+
+
+## HT-17 — frequency, severity and finite-range shape (October 1)
+
+The [HT-17 report](../additional_work/HT-17_report.md) supersedes the prototype tail appendix. Across 299 cells it separates frequency above .01 nat from mean severity conditional on exceeding it. Primary learned-v5 frequencies/severities are .1594%/1.630 nats on zsRE and .2984%/1.913 nats on CounterFact. Stable v0 has a more pronounced fitted zsRE tail, yet its maximum and ES99 order differently against v5; zero CF harm accompanies zero paraphrase retention.
+
+Learned-v5 illustrative shape intervals include zero, with little held-out predictive gain over exponential. Stable-zsRE GPD gains .149–.594 nats per excess, with illustrative shape interval [.390,.779]. Random CF has 10/15 held-out support failures; all mixture fits are invalid. These are finite-range observations, not complexity classes or infinite-variance measurements. Conditional window intervals omit realization/seed uncertainty, and window independence remains unverified.
+
+AW-B reduces conditional severity 1.619→.542 and 1.925→.581 nats, with almost unchanged harmful-change frequency. Its one-nat shared-prefix ceiling is analytic, independent of failed tail fits. The κ pilot deformed one surprisal; it did not implement Nelson’s calibrated entropy or coupled free energy. The active-inference policy loop remains proposed.
+
+DEC-080 defers nine unrun Option R stable-v0 cells; the earlier ceiling-killed cell remains incomplete. Sixteen learned/random cells await resumption. DEC-081/081a adds CPU analysis and conservative presentation wording, not another GPU experiment. PC-reader replication remains partial (three BP seeds, one ePC seed); no three-seed rule comparison is yet available.

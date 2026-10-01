@@ -32,7 +32,7 @@ audit by comparing the expected information and preferred outcomes of alternativ
 actions. The dashed return loop is that proposed extension. The two software
 interfaces make the abstract's architecture concrete enough to study; they do
 not by themselves establish the conditional independence properties of a Markov
-blanket or a coupled free-energy formulation.” [`AI-loop`, `AI-programme`]
+blanket or a coupled free-energy formulation. Nelson’s manuscript offers a candidate objective; a matching probability model and constraints remain to be specified.” [`AI-loop`, `AI-programme`, `AI-coupled-FE`]
 
 “This gives us two tractable experimental questions. First, when teaching a
 correction, can iterative predictive-coding inference provide useful learning

@@ -144,9 +144,24 @@ def export(output):
         q = out / p.name
         q.write_text(substitute(p.read_text(), pc["slots"]))
         exports.append(dict(path=str(q), sha256=sha(q)))
+    backup_sources = []
+    for suffix in ("pdf", "png"):
+        original = (
+            ROOT.parent
+            / f"assets/presentation-materials/figures/tails_ht17/snapshot-20261001-v2/survival_thresholds.{suffix}"
+        )
+        target = out / f"ht17-survival-backup.{suffix}"
+        target.write_bytes(original.read_bytes())
+        backup_sources.append(original)
+        exports.append(dict(path=str(target), sha256=sha(target)))
     sources = [
+        *backup_sources,
         *SOURCE.glob("*.json"),
         *SOURCE.glob("*.md"),
+        ROOT / "logs/additional_work/HT-17/snapshot-20261001-v2/report.json",
+        ROOT / "docs/additional_work/HT-17_report.md",
+        ROOT.parent
+        / "assets/presentation-materials/figures/tails_ht17/snapshot-20261001-v2/survival_thresholds.png",
         Path(__file__),
         ROOT / "aw/presentation_prepare.py",
         ROOT / "aw/presentation_pc.py",

@@ -18,16 +18,16 @@ lists; timing is a target, not a measured delivery duration.
 | Slide | Running clock | Allocation | Approximate spoken words |
 | --- | --- | --- | --- |
 | 1 | 00:00–01:05 | 65 s | 114 |
-| 2 | 01:05–03:05 | 120 s | 238 |
-| 3 | 03:05–05:50 | 165 s | 318 |
-| 4 | 05:50–07:40 | 110 s | 199 |
-| 5 | 07:40–09:35 | 115 s | 212 |
-| 6 | 09:35–12:05 | 150 s | 289 |
-| 7 | 12:05–13:25 | 80 s | 130 |
-| 8 | 13:25–15:05 | 100 s | 187 |
-| 9 | 15:05–17:55 | 170 s | 318 |
-| 10 | 17:55–20:45 | 170 s | 346 |
-| 11 | 20:45–22:45 | 120 s | 243 |
+| 2 | 01:05–03:05 | 120 s | 254 |
+| 3 | 03:05–05:35 | 150 s | 318 |
+| 4 | 05:35–07:25 | 110 s | 199 |
+| 5 | 07:25–09:20 | 115 s | 212 |
+| 6 | 09:20–11:50 | 150 s | 298 |
+| 7 | 11:50–13:35 | 105 s | 242 |
+| 8 | 13:35–15:40 | 125 s | 286 |
+| 9 | 15:40–18:15 | 155 s | 318 |
+| 10 | 18:15–20:45 | 150 s | 346 |
+| 11 | 20:45–22:45 | 120 s | 214 |
 | 12 | 22:45–25:00 | 135 s | 324 |
 
 Total allocation: **25:00**.
@@ -84,13 +84,13 @@ audit by comparing the expected information and preferred outcomes of alternativ
 actions. The dashed return loop is that proposed extension. The two software
 interfaces make the abstract's architecture concrete enough to study; they do
 not by themselves establish the conditional independence properties of a Markov
-blanket or a coupled free-energy formulation.
+blanket or a coupled free-energy formulation. Nelson’s manuscript offers a candidate objective; a matching probability model and constraints remain to be specified.
 
-Evidence: `AI-loop`, `AI-next`, `AI-programme`, `AI-testbed`, `HT-readout`, `PC-fixed-v5`, `PC-v0`; [source draft](slide02-active-inference-testbed.md).
+Evidence: `AI-coupled-FE`, `AI-loop`, `AI-next`, `AI-programme`, `AI-testbed`, `HT-readout`, `PC-fixed-v5`, `PC-v0`; [source draft](slide02-active-inference-testbed.md).
 
 ## Slide 3 — What predictive coding changes in this experiment
 
-**03:05–05:50; 165 seconds.**
+**03:05–05:35; 150 seconds.**
 
 Say:
 
@@ -135,7 +135,7 @@ Evidence: `PC-SD24`, `PC-fixed-v5`, `PC-mechanism`, `PC-v0`; [source draft](slid
 
 ## Slide 4 — Correct a fact, then test its boundaries
 
-**05:50–07:40; 110 seconds.**
+**05:35–07:25; 110 seconds.**
 
 Say:
 
@@ -164,7 +164,7 @@ Evidence: `AI-testbed`, `HT-readout`, `PC-SD24`, `PC-v0`, `R1-controls`, `R1-des
 
 ## Slide 5 — Useful retention, with limits on specificity
 
-**07:40–09:35; 115 seconds.**
+**07:25–09:20; 115 seconds.**
 
 Say:
 
@@ -193,82 +193,59 @@ populations, accompanied by specific observed failure modes.
 
 Evidence: `HT-readout`, `R1-design`, `R1-retention-counterfact`, `R1-retention-mquake`, `R1-retention-zsre`, `R1-specificity`, `R1-triplet-summary`, `unavailable`; [source draft](slide05-retention-and-controls.md).
 
-## Slide 6 — Why look past the mean?
+## Slide 6 — How often, and how severe?
 
-**09:35–12:05; 150 seconds.**
-
-Say:
-
-At each position we ask how much the negative log probability of the actual
-next token increases. Positive delta NLL means the system gives that token less
-probability after enabling the cap. The unit is nats: an increase of one nat
-corresponds to a factor of e reduction in probability for that token. This is
-a prediction-loss measure, not a direct measure of human harm or the preference-
-risk term of expected free energy.
-
-The horizontal axis sets a loss-increase threshold x. The vertical axis gives
-the fraction of evaluated cell-position observations whose increase exceeds x.
-Moving right asks about increasingly severe consequences; moving down asks
-about increasingly rare ones. The log axes let us see several scales together.
-The zero-change mass is part of the denominator even though zero cannot be
-placed on the logarithmic x-axis.
-
-We also report expected shortfall: for ES99, the average positive loss increase
-within the worst one percent of all positions, with zeros retained and a fractional
-boundary when needed. A percentile is the threshold at the edge of that tail;
-expected shortfall averages what lies inside it. These are different quantities.
-The maximum identifies the worst observed event, and concentration tells us how
-few positions account for much of the positive harm.
-
-Heavy-tailed distributions are central to why this question matters at this
-satellite. But a finite set of rare severe changes is not itself proof of a
-power law or an asymptotic heavy-tail class. Nor does it tell us whether rare
-inputs caused them, whether they cluster in time, or how the system will behave
-under an unseen extreme regime. Our measured claim is concentrated unintended
-prediction loss. That gives the active-inference programme a concrete quantity
-to explain and potentially regulate.
-
-Evidence: `AI-next`, `HT-readout`, `HT13-empirical`; [source draft](slide06-beyond-the-mean.md).
-
-## Slide 7 — Similar averages can conceal different consequences
-
-**12:05–13:25; 80 seconds.**
+**09:20–11:50; 150 seconds.**
 
 Say:
 
-On zsRE, the learned reader's mean signed loss increase is about 0.00249 nats.
-The live-C2 comparator's is about 0.00320. Those small means accompany different
-patterns: roughly 0.159 percent versus 0.0187 percent of observations exceed
-0.01 nat, while their observed maxima are about 11.05 versus 50.60 nats. The
-learned cap changes more positions at that threshold; live C2 has a rarer but
-more severe observed extreme. Their means are not equal, and this plot is not
-a test that the means are equivalent.
+An average can conceal a small number of large unintended changes. We measure delta NLL: the increase in negative log probability of the actual next token when the cap is enabled at the same prefix. One nat means that token becomes a factor of e less probable. This is a prediction-loss measure, not human harm or the preference term of expected free energy.
 
-None of this makes probability drift an integrity failure. All forty-five
-learned-reader cells exceed the secondary mean-KL benchmark of 0.001, while the
-registered data-integrity checks and experimental admission are separate. KL
-measures a change in the whole next-token distribution; target-token loss and
-exact generated-answer agreement measure different properties.
+The horizontal axis asks how often the increase exceeds 0.01 nat. Its denominator includes every scored position, including improvements and unchanged predictions. The vertical axis asks how large the increase is, on average, among positions exceeding that threshold. Neither axis is the gate firing rate: an activated correction need not cause harmful change.
 
-Evidence: `HT-readout`, `HT13-corrected`, `R1-design`, `R1-fidelity`; [source draft](slide07-local-consequences.md).
+On zsRE, learned v5 has harmful changes at 0.1594 percent of positions with conditional severity 1.630 nats. Stable v0 has 0.1041 percent and 1.716 nats. On CounterFact, learned v5 has 0.2984 percent and 1.913 nats; the random reader has 2.0450 percent and 3.486 nats. Stable v0 has no observed harmful changes there, but also zero paraphrase retention. Its conditional severity is undefined, not zero.
+
+These are fifteen cells per condition and dataset: three subject realizations and five dependent orders, at a thousand edits. Every cell reuses the same 245,237 ordinary-text positions. The intervals resample matching window identities jointly, conditional on the observed cells. They do not account for subject or seed uncertainty, and independence between windows is unverified.
+
+Expected shortfall asks another question: ES99 averages positive loss within the worst one percent of all positions, with zeros and a fractional boundary retained. The maximum is the single largest observed event. Learned v5 on zsRE has a lower maximum than stable v0, 11.05 versus 27.68 nats, but a higher average cell ES99, 0.260 versus 0.179. No single summary orders every kind of risk.
+
+Evidence: `HT-readout`, `HT17-tails`; [source draft](slide06-beyond-the-mean.md).
+
+## Slide 7 — What does the observed tail shape add?
+
+**11:50–13:35; 105 seconds.**
+
+Say:
+
+For learned v5, shape estimates at 0.01 nat are close to zero: 0.0435 to 0.0588 on zsRE and 0.0294 to 0.0978 on CounterFact. The fixed illustrative realization-zero, order-one-hundred intervals are minus 0.097 to 0.177 and minus 0.009 to 0.187. Both include zero. Held-out-window log-likelihood gains over the exponential are tiny, at most about 0.0028 nats per excess. An exponential is an economical approximation on this measured range; this is not an equivalence test.
+
+Stable v0 on zsRE shows a more pronounced tail: fitted shapes range from 0.433 to 1.029, with an illustrative interval of 0.390 to 0.779. Held-out predictive gains are 0.149 to 0.594 nats per excess in every cell. But at a one-nat threshold, thirteen of fifteen cells have too few events for a fit. The evidence does not establish the farthest tail or infinite variance.
+
+The random CounterFact reader illustrates a failure mode: all fitted shapes are negative, yet ten of fifteen held-out comparisons fail because an estimated endpoint excludes an observed held-out event. Every mixture fit has an endpoint pathology and is labelled invalid. Sparse random-zsRE, stable-CounterFact and individual kappa-pilot cells have no eligible headline shape. These cases remain in the report.
+
+We have not measured system state growth, identified a complexity class or assigned a temperature. The scientific advance is a tested distinction in the observed shape of prediction-loss changes, with failed predictions visible. Those consequences can inform a future active-inference audit policy; they do not establish one.
+
+Evidence: `AI-next`, `HT17-tails`; [source draft](slide07-local-consequences.md).
 
 ## Slide 8 — Two interventions against extreme prediction loss
 
-**13:25–15:05; 100 seconds.**
+**13:35–15:40; 125 seconds.**
 
 Say:
 
-The kappa pilot changed the reader's training loss. Both kappa settings reduced a development tail statistic but lost too much retention and failed the declared success rule. Clipping also reduced that tail descriptively. These remain preliminary trade-offs, without evidence of a special coupling advantage.
+The kappa pilot replaced one answer surprisal ℓ with the bounded loss (1 − exp(−κℓ))/κ, saturating at 1/κ. The tested settings, 0.2 and 0.5, failed the declared retention and tail-separation rule; ordinary clipping also reduced the tail. This uses the coupled-logarithm family, but differs from Nelson’s calibrated entropy in its probability transformation, independent-equals or escort averaging, outer root and informational-scale calibration. We did not test that entropy or a coupled free-energy objective. This result neither confirms nor refutes those untested proposals.
 
 Evaluation then used ten already-exposed memories: five orders on each dataset, at three hundred edits. All ten met the declared rule: smaller maximum loss and worst-one-percent average, with retention inside tolerance. zsRE endpoints were unchanged. CounterFact paraphrase retention changed by {{awb.counterfact.gs_change}}, a loss of roughly 0.7 to 1.2 percentage points. The largest observed token losses fell from as much as fifteen nats to one.
 
 The guarantee has a precise scope. At the same prefix, mixing in a base share of exp minus one ensures the target probability never falls below that share of the base probability. Its extra negative log likelihood is therefore at most one nat per token. That does not bound a whole generated answer by one nat, preserve every greedy answer, or establish a heavy-tail family. It also does not implement coupled free energy or autonomous action selection.
 
-Evidence: `AI-testbed`, `AW-B`, `kappa-design`; [source draft](slide08-kappa-tradeoff.md).
+HT-17 separates the mixture’s effect into frequency and severity. Frequency above 0.01 nat is almost unchanged, while conditional severity falls from 1.619 to 0.542 nats on zsRE and 1.925 to 0.581 on CounterFact. All ten generalized-Pareto mixture fits hit an endpoint pathology and are invalid; none yields a tail-class estimate. The one-nat ceiling follows from the mixture algebra, independently of those fits.
+
+Evidence: `AI-testbed`, `AW-B`, `HT17-tails`, `kappa-design`; [source draft](slide08-kappa-tradeoff.md).
 
 ## Slide 9 — Predictive coding: retention, harm and the controls
 
-**15:05–17:55; 170 seconds.**
+**15:40–18:15; 155 seconds.**
 
 Say:
 
@@ -286,7 +263,7 @@ Evidence: `HT-readout`, `PC-SD24`, `PC-budget`, `PC-depth`, `PC-one-step`, `PC-r
 
 ## Slide 10 — Does PC credit transfer to the fixed v5 reader?
 
-**17:55–20:45; 170 seconds.**
+**18:15–20:45; 150 seconds.**
 
 Say:
 
@@ -336,31 +313,15 @@ Evidence: `AI-next`, `AI-programme`, `HT-readout`, `PC-fixed-v5`, `PC-mechanism`
 
 Say:
 
-Let me return to the question we started with. A cap that can store and apply a
-correction is a useful component, but active inference asks a further question:
-what should the agent do next? The experiments supply evidence about the
-correction mechanism and its consequences. The next step would connect those
-consequences to a model of preferred outcomes, uncertainty and possible actions.
+Active inference asks what the agent should do next. Our cap acquires corrections, and our assays measure their benefits and unintended consequences. A future controller might probe a paraphrase, audit unrelated text, request an observation or leave memory unchanged. We would need hidden-state beliefs, observation and action models, preferences and expected information to compare those policies.
 
-Consider an audit as an action. After learning a correction, a future controller
-might decide whether to test a nearby paraphrase, probe an unrelated context,
-ask for another observation, or leave its memory unchanged. To make that an
-expected-free-energy comparison, we would have to specify beliefs over hidden
-states, an observation model, candidate policies and preferences. We would also
-need to evaluate what information an audit is expected to provide. A trigger
-based only on a large observed loss is useful engineering, but it does not
-by itself supply all of those ingredients.
+Nelson’s coupled-entropy framework and the proposed coupled free energy are candidates for that objective. With their authors, we first need to specify the probability model, constraints, escort weighting, gradients and policy loop. A bounded transformation of one training loss supplies none of those specifications by itself. The architectural interfaces also do not prove Markov-blanket conditional independence.
 
-A useful next scientific comparison would give a policy-driven audit mechanism
-and a fixed or random audit rule the same budget, then measure useful corrections,
-information gained, unintended loss and computational cost under changing
-conditions. We would predefine those quantities rather than declare an audit
-informative because it found a striking example. That is a proposed next study,
-not an additional promise before October 9. The contribution today is the
-testbed, the measured behavior, and a sharper experimental route from
-predictive-coding credit and extremes to active inference.
+The predictive-coding experiments now measure learning-credit trade-offs in retention, unintended loss and cost. The tail analysis separates frequency from severity and checks which finite-range models predict held-out events. The mixture supplies a proven per-token ceiling with a measured efficacy cost. These are useful components and measurements for designing an audit policy.
 
-Evidence: `AI-next`, `AI-programme`, `HT13-empirical`, `PC-fixed-v5`, `PC-v0`, `kappa-kappa02`, `kappa-kappa05`; [source draft](slide11-return-to-active-inference.md).
+We have not demonstrated autonomous epistemic action: investigators still choose the observations and tests. A next experiment could compare policy-guided audits against fixed or random audits under the same budget, measuring useful corrections, information, loss and cost. That is a proposed study after this programme, not another commitment before October 9.
+
+Evidence: `AI-coupled-FE`, `AI-next`, `AI-programme`, `AW-B`, `HT17-tails`, `PC-fixed-v5`, `PC-v0`, `kappa-design`; [source draft](slide11-return-to-active-inference.md).
 
 ## Slide 12 — What we learned, what remains, what it took
 

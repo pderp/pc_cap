@@ -1,6 +1,6 @@
 # Final experiments — joint decision form for Tuesday, September 29
 
-Prepared September 27; updated October 1 by Capex. **DEC-077/078 decisions now
+Prepared September 27; updated October 1 by Capex. **DEC-077/078/080/081/081a decisions now
 supersede the blank decision fields in the historical candidate descriptions.**
 This update records existing decisions and results; it authorizes no extra run.
 Canonical repository copy: `pc_cap/docs/presentation/final-experiments.md`;
@@ -25,7 +25,7 @@ The October 9, 17:00 EDT cutoff and no-new-fits October 6 line remain in force.
 | B: fixed-v5 credit settings | Authorized and complete; depth32 and rates .05/.2 produced no clear efficacy gain in the exposed cells; avoid an equivalence claim. | lead queue 141–142 |
 | C: failed-cell tuning | No outcome-selected new tuning launched by this review; keep exploratory if later pursued. | Original branch below |
 | D: bounded correction | Calibration and ten-memory evaluation complete; all ten mixture cells meet the declared rule. Per-token guarantee, small CF paraphrase cost, CF KL still above .001. | `docs/additional_work/AW-B_report.md`; DEC-078 |
-| E: Option R | Go decision exists; 4 cells complete, 1 ceiling-exhausted, 25 pending. R-2 reconciliation complete; explicit v0 class deferral recommended pending a versioned batching repair. GPU resume belongs to Capstan. | `docs/tasks/R-2.md`; `docs/additional_work/R_decision.md` |
+| E: Option R | Go decision exists; 4 cells complete, 1 ceiling-exhausted and incomplete, 16 learned/random cells pending; 9 remaining v0 cells explicitly deferred under DEC-080. R-2 reconciliation complete; no higher ceilings. GPU resume belongs to Capstan. | `docs/tasks/R-2.md`; `docs/additional_work/R_decision.md` |
 | F: upper-layer trained factorial | Authorized; runner and CPU validation complete; queued after reader replication. No measured factorial outcome yet. | `docs/additional_work/AW-L.md`; `docs/tasks/AW-L5.md` |
 | G: 3,000-edit scaling | Closed infeasible: certified population insufficient without violating reservations. No GPU recipe supplied. | `docs/tasks/HT-16.md` |
 | DEC-075 PC controls | Depths complete; random closed partial by DEC-079; offered-budget adjoint complete but underspent. | `docs/additional_work/PC-controls_report.md` |
@@ -36,6 +36,12 @@ harm are complete at `logs/additional_work/PC-v1/report-4-20260927/`.
 Remaining wall-time estimates belong to the current queue/profile receipts;
 process-hours from overlapping jobs must not be added as elapsed GPU hours.
 
+
+## Feedback and tail-analysis update — DEC-081/081a
+
+Approved B–D wording distinguishes the bounded κ-surprisal pilot from the untested calibrated coupled entropy. HT-17 now reports 299 cells, including all available reader seeds; four ePC evaluations await completion. It separates harmful-change frequency and conditional severity, reports finite-range fits and held-out failures, and preserves the analytic mixture bound independently of invalid fits. No complexity classes, W(N), temperature or infinite variance were measured. See `docs/additional_work/HT-17_report.md` and deck slides 2/6/7/8/11.
+
+The remaining GPU portfolio is unchanged; no coupled-objective model fit or free-α sweep is added. Option R resumes learned/random only under DEC-080. October 9 at 17:00 EDT remains the experimental cutoff; no new model fits start on or after October 6.
 
 ## Conditional branches from the primer
 

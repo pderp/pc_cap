@@ -1,0 +1,14 @@
+# Round 57 — Capex handoff to Capstan
+
+All four CPU lanes are delivered; code, documentation and logs are uncommitted. No GPU, live trainer, `scripts/`, `src/pccap/`, source experiment artifacts, or sibling repository was modified. The changing `PC-reader/train-epc-s1/metrics.jsonl` and untracked `results/additional_work/PC12/` belong to the other work, not this handoff.
+
+- **PRES-7:** [task](PRES-7.md). Final twelve-slide export and speaker files: `assets/presentation-materials/deck_v3/round57-delivered/`, including the survival backup PDF/PNG. Other round57 asset exports are intermediate previews. Canonical deck source and ledger incorporate HT-17 and approved B–D wording. The source drafting appendix remains historical; use the deck's `backup-ht17.md`.
+- **PC-16:** [partial report](../additional_work/PC-reader_report.md), [task](PC-16.md). Eight of twelve cells available, only seed0 paired. Run its documented `--refresh-tail` command after seeds1–2 and their evaluations finish. Current HT-17 snapshot already matches all eight vector hashes.
+- **R-3:** [partial report](../additional_work/R_report.md), [task](R-3.md). Four complete, one incomplete by ceiling, nine deferred, sixteen pending. Refresh after the resumed queue; t(3) display remains withheld until full five-order pairing in all four realizations.
+- **AW-L6:** [partial report](../additional_work/AW-L_report.md), [task](AW-L6.md). Six shared BP evaluation controls, eighteen pending. No actual AW-L development profiles exist yet. Report parser and factorial math are tested on synthetic development/production trees; it will retain real profiles separately when available.
+
+Two wording corrections for future orchestration summaries: AW-B conditional severity falls **roughly to one-third** (1.619→.542, 1.925→.581), rather than merely halving. PC-reader **37× is a profile projection**; completed seed0 training receipts give 24.579 h ePC versus .2407 h BP, about **102.1×**. Both distinctions are already reflected in these deliverables; no decision or threshold changed.
+
+All 20 targeted tests pass; a subsequent seven-test presentation rerun passes after adding export backup copies. Scoped Ruff, numerical-source hashes and diff checks pass. Maximum report-generation RSS was about 269 MiB; measured generator times .42/3.39/.24 seconds for PC/R/AW-L. No extra HT-17 fit, model run or GPU lease was needed. Timing scripts allocate exactly 15/25 minutes (peak planned rates 121.7/144 words per minute); author review and rehearsal still determine delivery.
+
+The report generators use new output directories on refresh and rewrite their canonical Markdown reports. They do not advance the GPU queue. The remaining work is result arrival, refresh and scientific interpretation; there is no unresolved approval question from these lanes.
