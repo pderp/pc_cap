@@ -1449,3 +1449,25 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     10:30). The upper-layer 2×2 (AW-L5, ≈ 30 h) then fits before the Oct 6 last-fits line (≈ Oct 4 evening).
     Option R still waits for Capex's R-2 reconciliation; Capex has been idle since Sep 29 evening. Nothing needs
     your input at this point.
+
+147. (2026-10-01, 10:35 EDT) **Option R resumes with the v0 class deferred (DEC-080); everything committed.** Capex's R-2
+    reconciliation landed this morning: the ceiling-killed `v0_stable` zsRE cell is closed as incomplete by ceiling (8,002 s
+    charged once), and the cause of the stall is an execution-path mismatch, not GPU contention: the realization-3 recipes
+    omit the batched drift-assay settings of their frozen parent, so v0 cells run the scalar drift path (2,000 s per drift
+    phase against 290 s in the donor cell). Per your decision the session resumes through Capex's consumer with
+    `--defer-class v0_stable:zsre --defer-class v0_stable:counterfact`: inventory 4 complete, 1 incomplete, **16 runnable**
+    (learned reader and random reader, both datasets, the remaining orders), **9 deferred** (recorded in the resume receipt,
+    not failed). The consumer's 13 CPU tests pass. Estimated wall for the 16 cells at two workers ≈ 8–10 h (the four
+    completed cells averaged 0.86 process-hours each); the portfolio has 27.1 of its 30 wall-hours left.
+
+    Dispatch: the GPU is held by the ePC seed-1 training until ≈ Oct 2 08:45, then seed 2 to ≈ Oct 3 10:30. A watcher
+    waits for that chain to exit and launches the resume immediately (log `logs/additional_work/R/resume-20261001.log`,
+    chain log `logs/additional_work/PC-v0/chain.log`), so Option R should finish ≈ Oct 3 evening. The upper-layer 2×2
+    (AW-L5, ≈ 30 h) follows and still ends before the Oct 6 last-fits line (≈ Oct 5 early morning). Consequence for the
+    report: realization 3 supports the learned-vs-random contrast only; the v0 comparison keeps three realizations.
+
+    Commits: pc_cap 2c8e29d (Capex round 55: R-2 consumer and diagnosis, AW-B report, matched-control report, PRES-6 deck
+    update with both speaking scripts, follow-up tooling), 63e162a (Friday review primer, `docs/friday-10.02-review/`),
+    this item; assets 07166a7 (figure refresh, reviewer results and final-experiments updates). Nothing else needs your
+    input; Capex's next lanes (round 56) are the Option R extension report when the cells land and the ePC reader report
+    after seed 2.
