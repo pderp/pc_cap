@@ -71,6 +71,16 @@ Capstan's prototype is useful evidence that this analysis is feasible. I have no
 
 There is also a small formula correction before implementation: for the one-sided α = d = 1 family, Table 4's calibrated entropy is **1 + ln_{κ/(1+κ)} σ**, not 1 + ln_{(1+κ)/κ} σ. Direct integration gives Z_q = σ^{1−q}/(1+κ), q = 1+κ/(1+κ), and hence H = ((1+κ)σ^{κ/(1+κ)}−1)/κ. A continuous entropy also needs a declared coordinate/reference measure; use a fixed dimensionless coordinate such as loss divided by one nat. A fitted entropy of conditional harm should not be labelled the transformer's entropy. I would initially omit this column from the empirical comparison and demonstrate it on known distributions instead.
 
+While this review was being completed, Capstan wrote [the B–D talk-text draft](talk-text-B-C-D.md), recording charlie's approval to proceed with those wording changes. I read it too. It confirms that the prototype bootstrap independently resampled copies of the same window across cells. The resulting underestimation of uncertainty cannot be assumed to be merely slight; the corrected joint resampling must establish its size. I recommend incorporating B–D with the following language rather than carrying the prototype class labels into the slides:
+
+> **B — κ pilot:** We tested a bounded deformation of answer loss using the same coupled-logarithm family. Its probability transformation and averaging differ from the calibrated entropy proposed in the new manuscript. Both tested settings failed our declared success rule. The result concerns that bounded-loss intervention; the proposed coupled entropy and free energy remain untested.
+
+> **C — extremes and the bound:** The saved results let us examine both the frequency and conditional severity of harmful changes. Exploratory distribution fits suggest differences worth testing across thresholds and populations. Independently of those fits, the mixture intervention guarantees a one-nat ceiling at the same prefix. That guarantee concerns this loss observable; it does not establish a change in the system's asymptotic complexity class.
+
+> **D — active inference:** The coupled-free-energy framework suggests a future objective for the residual agent. Applying it requires a defined probability model, constraints, and policy loop, which we have not implemented. Our current experiments measure the credit rules, retrieval behavior, and unintended harm that such a controller would need to explain and regulate.
+
+These changes retain the approved topics. Prototype κ estimates need not appear in the presentation until the analysis supports their interpretation. The new draft and the existing deck were left untouched for their owners to reconcile.
+
 ## The κ pilot and a future coupled objective
 
 Our answer-loss code is [coupled_surprisal](../../src/pccap/revision_v1/train.py). For ordinary surprisal ℓ = −ln p it computes

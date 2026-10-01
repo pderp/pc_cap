@@ -1481,3 +1481,19 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (κ row corrected; three rows added) and `assets/presentation-materials/tails_v1.md` (new section with the
     prototype class fits, labelled pending HT-17). Every κ̂ / σ̂ in those texts is marked prototype until HT-17 reports.
     Open: lane A (HT-17) — say go when Capex is free and I open it; nothing else needed from you.
+
+149. (2026-10-01, 13:40 EDT) **Capex's review of the entropy feedback ingested; my documents revised (DEC-081a).** Capex
+    read both inputs in full and agrees on the priority (analysis now, a properly specified coupled objective later) but
+    corrects six things in my response, all of which I accept: a fitted generalized-Pareto shape is not a complexity
+    class (the paper's classes concern the growth of states W(N), which we do not define); the mixture's "κ̂ ≈ −1.4" is
+    optimizer output at the likelihood endpoint and outside the entropy domain, so the 1-nat bound is a proven ceiling,
+    not a fitted class; "infinite fitted variance" is an extrapolation; Δ > 0.01 is a harmful-change indicator, not the
+    firing rate; the excess scale depends on the threshold; the prototype bootstrap understates uncertainty by an
+    unknown amount. Capex also corrected the calibrated-entropy formula for the one-sided family and found an apparent
+    algebraic discrepancy in the manuscript's equation 126 (positive-κ branch; exact counterexample α = d = κ = a = 1
+    gives a limit of 1, not 2), verified by `aw/entropy_feedback_checks.py` — a question to put to the author privately.
+    Revised accordingly: `talk-text-B-C-D.md` now carries Capex's conservative slide wording with prototype numbers in a
+    backup appendix only; `feedback-MMK-nelson-entropy.md` has a revision note and inline corrections; the
+    abstract-to-testbed rows and the `tails_v1.md` section are re-labelled "fitted shapes, exploratory". Lane A is now
+    Capex's "saved-vector tail analysis" specification (CPU, aim to finish fits by Oct 5); it opens on your word. Capex's
+    review files committed (response, check script, literature hashes and page renders). GPU unchanged.

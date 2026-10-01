@@ -5,11 +5,29 @@ primer) and `/home/derp/cap/NelsonUniqueUnivEntropy2026Sep27.pdf` (K. P. Nelson,
 complex systems*, 42 pages, built 1 Oct 2026). Numbers in §3 are from a prototype I ran today on the saved per-position
 harm vectors; they are not yet a report of record.
 
+> **Revision, 1 October 13:30 EDT, after Capex's review (`feedback-MMK-nelson-entropy-capex.md`).** Capex's review
+> corrects this document in six places and I accept all six. (1) A fitted generalized-Pareto shape on an observed range
+> is not a "complexity class" in the paper's sense, which concerns the growth of accessible states W(N); this experiment
+> defines no such N, so the talk reports fitted finite-range shapes, not classes. (2) A shape estimate below −1 (the
+> mixture, the κ 0.5 pilot arm) sits at the likelihood's endpoint boundary and outside the entropy domain κ > −1/2; it
+> is optimizer output, not an estimate. The 1-nat mixture is a proven ceiling, not a fitted family. (3) "Infinite fitted
+> variance" is an extrapolation of an unbounded family, not a measurement; the stable-v0 shape's fall from 0.8 to 0.16
+> across thresholds could be curvature, mixture, sampling or a ceiling, and does not establish a power-law body.
+> (4) Δ > 0.01 is a harmful-change indicator, not the firing rate; the gate's firing count is saved separately and
+> differs (e.g. 18 firings vs 15 positions > 0.01 for BP seed 0 on zsRE). (5) The excess scale σ_u depends on the
+> threshold (σ_u = σ_0 + κu for an exact GPD); it is not the distribution's σ or a temperature. (6) The prototype
+> bootstrap understates uncertainty by an unknown amount. Also corrected: the one-sided α = d = 1 calibrated entropy is
+> 1 + ln_{κ/(1+κ)} σ, not 1 + ln_{(1+κ)/κ} σ. The original wording below is kept for the record with these corrections
+> applied inline where a reader could otherwise be misled; the deck text in `talk-text-B-C-D.md` now uses Capex's
+> conservative language, and the proposed lane A is narrowed to Capex's "saved-vector tail analysis" specification.
+> Capex also found an apparent algebraic discrepancy in the manuscript's equation 126 (positive-κ branch), added to §6.
+
 **Short answer.** The feedback can be brought into play before the talk, but on the analysis side, not as a new
 training objective. The reviewer's central object, the complexity class (κ, α) with an informational scale σ, can be
 fitted to the harm distributions we have already measured, on CPU, from saved data, in about two working days. A
-first pass shows the three cap families sit in three different classes, which is a sharper statement than the talk's
-current "rare, severe, concentrated; no class claimed". Implementing the calibrated coupled entropy or the coupled
+first pass shows the three cap families have visibly different fitted shapes and frequencies on the observed range,
+which is a sharper statement than the talk's current "rare, severe, concentrated; no class claimed" [revised: "fitted
+shapes", not "classes"; see the revision note]. Implementing the calibrated coupled entropy or the coupled
 free energy as a learning objective does **not** fit: the GPU is booked to 5 October, the design has the subtleties the
 reviewer himself flags, and a rushed implementation in front of its author is the wrong risk. He says delaying it is
 fine; I recommend taking him at his word and planning it with his team after the conference.
@@ -76,41 +94,42 @@ Method: for each cell, take Δ = loss_cap − loss_capoff at every scored positi
 u (u = 0.01 nats, i.e. the positions the cap measurably touched); fit the generalized Pareto with location 0 by
 maximum likelihood (scipy), which is Nelson's coupled exponential with κ = shape and σ = informational scale; also fit
 the stretched version with α free by numerical maximum likelihood. Uncertainty by resampling windows (200 draws).
-The zero mass (the fraction of positions untouched, 99.7–99.98 %) is reported separately; it is the firing rate and
-is not part of the shape.
+The zero mass (the fraction of positions with Δ ≤ 0.01, 99.7–99.98 %) is reported separately; it is a harmful-change
+indicator, not the gate's firing rate [revised], and is not part of the shape.
 
-| condition (15 cells each unless noted) | dataset | positions > 0.01 per cell | κ̂ (per-cell range) | pooled κ̂, window bootstrap 95 % | σ̂ nats | reading in his classes |
+| condition (15 cells each unless noted) | dataset | positions > 0.01 per cell | κ̂ (per-cell range) | pooled κ̂, window bootstrap 95 % | σ̂ nats | fitted shape on the observed range (exploratory) [column heading revised] |
 |---|---|---:|---|---|---:|---|
-| learned reader v5 | zsRE | 391 | 0.050 (0.043–0.059) | 0.052 (0.024–0.079) | 1.54 | **exponential class**, κ ≈ 0, scale 1.5 nats |
-| learned reader v5 | CounterFact | 732 | 0.056 (0.029–0.098) | 0.058 (0.036–0.077) | 1.79 | exponential class, scale 1.8 nats |
-| stable v0 cap | zsRE | 255 | 0.746 (0.434–1.029) | 0.811 (0.776–0.855) | 0.55–0.62 | **power-law class**: exponent −(1+1/κ) ≈ −2.2; variance infinite (κ > 0.5) within the fitted family |
-| matched update, S1_LM, S1_literal + stable cap | zsRE | 255–258 | 0.71–0.75 | — | 0.63 | same class as the stable cap (same mechanism) |
-| live v0 C1 | zsRE | 235 | 0.44 (−0.28–0.96) | — | 1.5 | power-law class, unstable per cell |
+| learned reader v5 | zsRE | 391 | 0.050 (0.043–0.059) | 0.052 (0.024–0.079) | 1.54 | small positive fitted shape, near the exponential restriction; excess scale 1.5 nats at u = 0.01 |
+| learned reader v5 | CounterFact | 732 | 0.056 (0.029–0.098) | 0.058 (0.036–0.077) | 1.79 | small positive fitted shape; excess scale 1.8 nats |
+| stable v0 cap | zsRE | 255 | 0.746 (0.434–1.029) | 0.811 (0.776–0.855) | 0.55–0.62 | large positive fitted shape at low thresholds (an unbounded GPD with this shape would have infinite variance: an extrapolation, not a measurement); strongly threshold-dependent, see below |
+| matched update, S1_LM, S1_literal + stable cap | zsRE | 255–258 | 0.71–0.75 | — | 0.63 | same fitted shape as the stable cap (same mechanism) |
+| live v0 C1 | zsRE | 235 | 0.44 (−0.28–0.96) | — | 1.5 | large positive shape, unstable per cell |
 | live v0 C2 | zsRE | 46 | unstable (n too small) | — | — | 36 of 46 touched positions lose > 1 nat; the fit is not meaningful |
-| random reader | CounterFact | 5,015 | −0.22 (−0.26 … −0.18) | −0.200 (−0.202 … −0.198) | 4.1 | **compact-support class**: many firings, bounded severity |
-| random reader | zsRE | 65 | −0.30 | — | 2.3 | compact support |
-| AW-B: v5 → 1-nat mixture (order 100) | zsRE | 289 → 289 | 0.01 → **−1.4** | — | 1.6 → 1.4 | exponential → compact support, N_max = 1 nat, by construction |
-| AW-B: v5 → mixture | CounterFact | 691 → 689 | 0.14 → −1.3 | — | 1.4 → 1.3 | same |
-| BP re-trained readers s0/s1/s2 | CounterFact | 227 / 567 / 138 | −0.24 / −0.07 / −0.02 | — | 2.2–2.8 | exponential-to-compact; wider seed spread |
-| ePC-trained reader s0 | CounterFact | 162 | −0.26 | — | 2.5 | compact-leaning; zsRE: zero touched positions |
-| κ pilot (3 seeds, 4,064 positions each): ordinary / κ 0.2 / κ 0.5 / clip 2 | CounterFact | 101 / 52 / 33 / 66 (pooled) | −0.44 / −0.55 / −1.03 / −0.57 | — | 3.2 / 4.0 / 6.7 / 4.1 | all compact-leaning at this sample size; the κ arms move further toward compact support |
+| random reader | CounterFact | 5,015 | −0.22 (−0.26 … −0.18) | −0.200 (−0.202 … −0.198) | 4.1 | negative fitted shape (finite fitted endpoint); many harmful changes, bounded severity |
+| random reader | zsRE | 65 | −0.30 | — | 2.3 | negative fitted shape |
+| AW-B: v5 → 1-nat mixture (order 100) | zsRE | 289 → 289 | 0.01 → **−1.4** | — | 1.6 → 1.4 | ceiling of 1 nat imposed by construction; the fitted shape < −1 is at the likelihood endpoint and outside the entropy domain: **not an estimate** [revised] |
+| AW-B: v5 → mixture | CounterFact | 691 → 689 | 0.14 → −1.3 | — | 1.4 → 1.3 | same: proven bound, invalid fit |
+| BP re-trained readers s0/s1/s2 | CounterFact | 227 / 567 / 138 | −0.24 / −0.07 / −0.02 | — | 2.2–2.8 | small negative to near-zero shapes; wider seed spread |
+| ePC-trained reader s0 | CounterFact | 162 | −0.26 | — | 2.5 | negative shape; zsRE: zero positions > 0.01 |
+| κ pilot (3 seeds, 4,064 positions each): ordinary / κ 0.2 / κ 0.5 / clip 2 | CounterFact | 101 / 52 / 33 / 66 (pooled) | −0.44 / −0.55 / −1.03 / −0.57 | — | 3.2 / 4.0 / 6.7 / 4.1 | 33–101 excesses pooled over seeds: below any identification screen; the κ 0.5 value is at the endpoint boundary and invalid; directions only |
 
 Stability checks on the two main cases: the learned reader's κ̂ is 0.043 / 0.049 / 0.059 (zsRE) and 0.098 / 0.041 /
 0.029 (CounterFact) in realizations 0 / 1 / 2, and 0.05–0.07 for thresholds 0.01–0.5 nats; above 1 nat it drops to
-about −0.06 to −0.14, i.e. the far tail is slightly lighter than exponential (a token's loss is bounded in practice
+about −0.06 to −0.14, i.e. the fitted far tail is lighter than exponential (a token's loss is bounded in practice
 by the logit range). The stable v0 cap's κ̂ is 0.73 / 0.96 / 0.65 by realization and 0.81–0.88 for thresholds
-0.01–0.1, falling to 0.59 at 1 nat and 0.16 at 2 nats: the power-law body is real, the far tail again truncates. The
+0.01–0.1, falling to 0.59 at 1 nat and 0.16 at 2 nats: this could be finite-range curvature, a population mixture, sampling
+variation or a ceiling; the prototype does not decide which [revised: the earlier "the power-law body is real" is withdrawn]. The
 stretched fit (α free) prefers α ≈ 0.85–0.9 with κ ≈ 0 for the learned reader and does not beat the α = 1 fit by more
 than one nat of log-likelihood, so α = 1 is the honest default.
 
-**What this says, in the reviewer's language.** The three cap families are in three different complexity classes.
-The v0 cap fires rarely and its harm, when it fires, is power-law distributed with a small informational scale
-(0.6 nats) and an infinite fitted variance. The learned reader fires on more positions and its harm is exponential
-with a larger scale (1.5–1.8 nats): it trades long-range (power-law) harm for a higher "temperature" of bounded
-severity. The random reader and the 1-nat mixture are compact-support. This upgrades the talk's "rarer but heavier
-versus more frequent but milder" from a description to two fitted numbers per condition, with intervals, and it
-answers the reviewer's question about what class the data support **without** claiming an asymptotic law: the claim
-is "within the coupled-exponential family, the fitted class is X", with the threshold sensitivity shown.
+**What this says [revised].** On the observed range the three cap families differ in both harmful-change frequency
+and conditional severity, and their excess distributions have different fitted shapes: small and positive for the
+learned reader (near the exponential restriction, excess scale 1.5–1.8 nats), large and positive but strongly
+threshold-dependent for the v0 caps (excess scale 0.6 nats at u = 0.01), negative for the random reader. These are
+fitted shapes within one family on a finite range, not complexity classes, not asymptotic laws and not a measured
+variance. The 1-nat mixture is a proven ceiling on this observable, not a fitted family. This still upgrades the talk's
+"rarer but heavier versus more frequent but milder" from a description to numbers that can be checked across
+thresholds and populations, which is what the saved-vector tail analysis must do before any number enters a slide.
 
 What it still cannot say: an asymptotic tail (the truncation above 1–2 nats is visible), independence of positions
 (the bootstrap resamples windows, and should resample window identities jointly across cells in the real analysis),
@@ -120,14 +139,19 @@ or anything about the system's entropy growth with degrees of freedom (§4, item
 
 ## 4. Proposed alterations, in order of value per hour
 
-**A. Add the complexity-class fit to the fidelity analysis (HT-17). Recommended. CPU only, no GPU time, no change to
-any experiment.** Scope: every receipted Stage-4 cell (270), the ten AW-B evaluation memories × three arms, the
+**A. Add the saved-vector tail analysis to the fidelity analysis (HT-17, narrowed to Capex's specification). Recommended.
+CPU only, no GPU time, no change to any experiment.** [revised: adopt Capex's seven points: a declared observable and
+population; the gate's firing indicator reported separately from Δ > 0.01; excess fits Y = Δ − u with the exceedance
+probability; GPD vs its exponential restriction compared by predicted survival and held-out-window likelihood, with a
+correctly normalised alternative such as a conditional lognormal if both fail; window identities resampled jointly
+across paired cells, realization / order / seed variation reported separately; a "not identified" screen (fewer than 100
+excesses or 30 contributing windows: counts and curves only); small outputs. Start on representative cells and measure
+throughput before expanding.] Original scope text follows. Scope: every receipted Stage-4 cell (270), the ten AW-B evaluation memories × three arms, the
 PC-reader cells (BP ×3, ePC ×3 when done), the PC-v0/v1 harm readouts, the κ-pilot drift vectors. For each: firing
 rate (zero mass), generalized-Pareto (κ, σ) over u = 0.01 with window-identity block bootstrap, threshold sensitivity
-(0.01 / 0.1 / 0.5 / 1 nat), the stretched fit (α) as a check, the calibrated entropy of the fitted coupled exponential
-(1 + ln_{(1+κ)/κ} σ, his Table 4) beside BGS (1 + ln σ + κ) as one column. One figure: a **class map**, κ̂ against σ̂ per
-condition × dataset with intervals, the κ = 0 line and the compact/power-law regions marked, replacing or accompanying
-`rarity_vs_severity.png`. Owner: Capex (one lane, 1–2 days, `aw/tail_class.py` beside `aw/tail_figures.py`, tests on a
+(0.01 / 0.1 / 0.5 / 1 nat), the stretched fit (α) as a check, [the calibrated-entropy column is dropped from the empirical comparison per Capex; for the one-sided α = d = 1
+family it is 1 + ln_{κ/(1+κ)} σ = ((1+κ)σ^{κ/(1+κ)} − 1)/κ, to be demonstrated on known distributions first]. One figure: frequency against conditional severity per condition × dataset; a κ̂-against-σ̂ **parameter plot**, if
+kept, labelled by population and threshold, not a map of universality classes [revised]. Owner: Capex (one lane, 1–2 days, `aw/tail_class.py` beside `aw/tail_figures.py`, tests on a
 synthetic coupled-exponential sample with known κ), my review, then the talk's slides 6–7 and `tails_v1.md` v2. Fits
 before the 9 October freeze with room to spare; the data it uses are already frozen.
 
@@ -139,15 +163,17 @@ the null result and the clip control as they are; add the measured class of the 
 harm toward compact support, consistent with the direction his coupled log predicts for κ > 0, but at the retention
 cost already reported).
 
-**C. Reframe the bound as a class change. Recommended. Zero cost once A exists.** The 1-nat mixture turns an
-exponential-class harm distribution into a compact-support one with N_max = 1 nat, deterministically. That is a
-cleaner statement for his audience than "lowers ES99+ 3.2–3.5×", and both can be shown. DEC-078's framing
+**C. State the bound as a proven ceiling on the observable. Recommended. Zero cost.** [revised] The 1-nat mixture
+imposes a ceiling of one nat on the per-position loss at the same prefix, by construction: a proven bound on the upper
+tail, independent of any fitted family, and not a change of complexity class. That can be shown beside the measured
+ES99+ reduction. DEC-078's framing
 (intervention beside the κ pilot, not a recommended configuration) is unchanged.
 
 **D. One paragraph in the active-inference section. Recommended. Zero cost.** Name the coupled free energy's
 informational form as the proposed training objective for the residual agent (his equation 56), the informational
 scale as its temperature, and the "pseudo-Markov blanket" as the version of the blanket his framework offers for a
-boundary that non-equilibrium fluctuations cross. Keep it labelled proposed; cite the paper by its title and date.
+boundary that non-equilibrium fluctuations cross. Keep it labelled proposed; cite the paper by its title and date; do not select a particular equation as our training
+objective before the authors clarify the modelled variable, constraints and escort weighting [revised per Capex].
 This also answers his last sentence about integrating with the coupled-AI team: the talk states where the hook is.
 
 **E. Not feasible before the talk: a coupled-entropy or coupled-free-energy training objective.** Design (which
@@ -195,4 +221,13 @@ if you prefer to hear the reviewer's reaction tomorrow first, the fits above are
 4. Does the informational scale of the harm (1.5–1.8 nats for the learned reader, 0.6 for the v0 cap) carry the
    temperature interpretation he would endorse for a non-physical system, or is that a stretch?
 5. Which of the two coupled free energies would his team want a residual agent on a frozen transformer to minimise,
-   and over which distribution (next-token, episode-level, or the harm itself)?
+   and over which distribution (next-token, episode-level, or the harm itself)? Do gradients pass through the escort
+   weights, and are reference values available from the team's implementation?
+6. (From Capex, to be asked privately and precisely.) In equation 126, positive-κ branch, the compensated ratio
+   H(W^{1+a})/H(W) · W^{−aκ/(α+dκ)} appears to tend to 1 rather than the printed (1+a)^{1/α}: with α = d = κ = a = 1,
+   H(W) = √W − 1 and the ratio is exactly 1 + 1/√W. Is the positive-κ secondary scaling exponent intended to be zero
+   for this entropy, or is a different limiting prescription meant? (Checked numerically in
+   `aw/entropy_feedback_checks.py`; the κ = 0 branch does give (1+a)^{1/α}.) Our finite comparisons and the α = 1
+   GPD identity do not depend on this.
+7. What connects the conditional harm distribution to a state space W(N)? Can we agree the talk reports fitted
+   finite-range behaviour without claiming that connection has been measured?
