@@ -234,7 +234,8 @@ def summarize(output, document, previous=None):
         for ref,f in r['fidelity'].items():
             fr.append([r['dataset'],r['condition'],r['realization'],ref,statistics.mean(f['mean_kl']),statistics.mean(f['mean_signed_nll']),max(f['max_positive_nll']),f['half_kl_positions'],f"{r['benchmark_passes']}/{r['complete_orders']}"])
     text+=table(['Dataset','condition','r','reference','mean KL','signed ΔNLL','max positive ΔNLL','positions for half KL','joint benchmark passes'],fr)
-    text+='## Missing contrasts and execution accounting\n\n'
+    from aw.report_limitations import PARAGRAPH
+    text+='## Missing contrasts and execution accounting\n\n' + PARAGRAPH + '\n\n'
     text+=table(['Dataset','contrast','reason'],[[r['dataset'],r['contrast'],r['reason']] for r in unavailable])
     text+=f"Selected inventory: **{account['charged_hours']:.6f} charged process-hours**, {account['failures']} failed processes, {account['retries']} retries, {account['unknown_attempts']} unknown attempts. Covered driver cost is not counted twice. Process-hours can overlap across workers and are not elapsed GPU hours. {account['missing_parent_decisions']} missing parent decisions remain disclosed (the known Q21 interruption for the current snapshot). The selected inventory agrees with historical block-4 charges.\n\n"
     text+='The native global accounting adapter is explicitly unavailable because its current whole-queue replay would differ from this historical boundary. The separate selected-process inventory above is verified from enclosing start/finish/driver receipts. No operational record is manufactured or modified.\n\n'
@@ -296,14 +297,19 @@ def plot(output, figures):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command',choices=('analyze','publish','plot'))
+    p.add_argument('command',choices=('analyze','publish','plot','limitations'))
     p.add_argument('--through',type=int,choices=(225,270),default=225)
     p.add_argument('--output',required=True)
     p.add_argument('--document',default=str(ROOT/'docs/R1_stage4_report_comparators.md'))
     p.add_argument('--previous')
     p.add_argument('--figures')
     a=p.parse_args()
-    if a.command=='analyze':
+    if a.command=='limitations':
+        from aw.report_limitations import refresh
+        refresh(a.document, '## Missing contrasts and execution accounting')
+        refresh(Path(a.output) / 'report.md', '## Missing contrasts and execution accounting')
+        (Path(a.output) / 'publication.json').write_text(json.dumps(dict(document=str(Path(a.document).resolve()), sha256=sha(a.document)), indent=2) + '\n')
+    elif a.command=='analyze':
         analyze(a.output,a.through)
     elif a.command=='publish':
         summarize(a.output,a.document,a.previous)

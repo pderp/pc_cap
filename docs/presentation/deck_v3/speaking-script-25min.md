@@ -20,15 +20,15 @@ lists; timing is a target, not a measured delivery duration.
 | 1 | 00:00–01:05 | 65 s | 114 |
 | 2 | 01:05–03:05 | 120 s | 254 |
 | 3 | 03:05–05:35 | 150 s | 318 |
-| 4 | 05:35–07:25 | 110 s | 199 |
-| 5 | 07:25–09:20 | 115 s | 212 |
-| 6 | 09:20–11:50 | 150 s | 298 |
-| 7 | 11:50–13:35 | 105 s | 242 |
-| 8 | 13:35–15:40 | 125 s | 286 |
-| 9 | 15:40–18:15 | 155 s | 318 |
-| 10 | 18:15–20:45 | 150 s | 346 |
-| 11 | 20:45–22:45 | 120 s | 214 |
-| 12 | 22:45–25:00 | 135 s | 324 |
+| 4 | 05:35–07:20 | 105 s | 199 |
+| 5 | 07:20–09:10 | 110 s | 212 |
+| 6 | 09:10–11:40 | 150 s | 298 |
+| 7 | 11:40–13:25 | 105 s | 242 |
+| 8 | 13:25–15:30 | 125 s | 286 |
+| 9 | 15:30–18:05 | 155 s | 318 |
+| 10 | 18:05–20:35 | 150 s | 346 |
+| 11 | 20:35–22:30 | 115 s | 214 |
+| 12 | 22:30–25:00 | 150 s | 356 |
 
 Total allocation: **25:00**.
 
@@ -135,7 +135,7 @@ Evidence: `PC-SD24`, `PC-fixed-v5`, `PC-mechanism`, `PC-v0`; [source draft](slid
 
 ## Slide 4 — Correct a fact, then test its boundaries
 
-**05:35–07:25; 110 seconds.**
+**05:35–07:20; 105 seconds.**
 
 Say:
 
@@ -164,7 +164,7 @@ Evidence: `AI-testbed`, `HT-readout`, `PC-SD24`, `PC-v0`, `R1-controls`, `R1-des
 
 ## Slide 5 — Useful retention, with limits on specificity
 
-**07:25–09:20; 115 seconds.**
+**07:20–09:10; 110 seconds.**
 
 Say:
 
@@ -195,7 +195,7 @@ Evidence: `HT-readout`, `R1-design`, `R1-retention-counterfact`, `R1-retention-m
 
 ## Slide 6 — How often, and how severe?
 
-**09:20–11:50; 150 seconds.**
+**09:10–11:40; 150 seconds.**
 
 Say:
 
@@ -213,7 +213,7 @@ Evidence: `HT-readout`, `HT17-tails`; [source draft](slide06-beyond-the-mean.md)
 
 ## Slide 7 — What does the observed tail shape add?
 
-**11:50–13:35; 105 seconds.**
+**11:40–13:25; 105 seconds.**
 
 Say:
 
@@ -229,7 +229,7 @@ Evidence: `AI-next`, `HT17-tails`; [source draft](slide07-local-consequences.md)
 
 ## Slide 8 — Two interventions against extreme prediction loss
 
-**13:35–15:40; 125 seconds.**
+**13:25–15:30; 125 seconds.**
 
 Say:
 
@@ -245,7 +245,7 @@ Evidence: `AI-testbed`, `AW-B`, `HT17-tails`, `kappa-design`; [source draft](sli
 
 ## Slide 9 — Predictive coding: retention, harm and the controls
 
-**15:40–18:15; 155 seconds.**
+**15:30–18:05; 155 seconds.**
 
 Say:
 
@@ -263,7 +263,7 @@ Evidence: `HT-readout`, `PC-SD24`, `PC-budget`, `PC-depth`, `PC-one-step`, `PC-r
 
 ## Slide 10 — Does PC credit transfer to the fixed v5 reader?
 
-**18:15–20:45; 150 seconds.**
+**18:05–20:35; 150 seconds.**
 
 Say:
 
@@ -309,7 +309,7 @@ Evidence: `AI-next`, `AI-programme`, `HT-readout`, `PC-fixed-v5`, `PC-mechanism`
 
 ## Slide 11 — Return to active inference: what should the agent do next?
 
-**20:45–22:45; 120 seconds.**
+**20:35–22:30; 115 seconds.**
 
 Say:
 
@@ -325,7 +325,7 @@ Evidence: `AI-coupled-FE`, `AI-next`, `AI-programme`, `AW-B`, `HT17-tails`, `PC-
 
 ## Slide 12 — What we learned, what remains, what it took
 
-**22:45–25:00; 135 seconds.**
+**22:30–25:00; 150 seconds.**
 
 Say:
 
@@ -353,14 +353,13 @@ severity and concentration beside retention. This is empirical evidence about
 our finite test population, not a proof of a heavy-tail family or future
 robustness. The mixture intervention now supplies a measured way to cap per-token loss increase at a fixed prefix, with a small CounterFact paraphrase cost and all ten evaluation memories meeting the declared rule.
 
-The approved stop leaves S1_literal CounterFact and the optional extension
-unrun. MQuAKE's omitted comparators and unavailable thousand-edit endpoint have
+The base is GPT-2 small (124M parameters); transfer of these findings to production-scale models has not been established. DEC-074b left S1_literal CounterFact and the original optional extension unavailable. The later supplemental Option R study is separate; its stable-v0 class is deferred under DEC-080. MQuAKE's omitted comparators and unavailable thousand-edit endpoint have
 their earlier, separate design reasons. Experimental work finishes October 9
 at 17:00 Eastern; the remaining days are for analysis of fixed results, slides
 and rehearsal before October 15. These limits help make the claims readable:
 what we tested, what it showed, and what remains a question.
 
-Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `AW-B`, `HT-readout`, `HT13-corrected`, `PC-SD24`, `PC-fixed-v5`, `PC-v0`, `resources`, `talk-scope`, `unavailable`; [source draft](slide12-takeaways-and-scope.md).
+Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `AW-B`, `HT-readout`, `HT13-corrected`, `PC-SD24`, `PC-fixed-v5`, `PC-v0`, `model-scale`, `resources`, `talk-scope`, `unavailable`; [source draft](slide12-takeaways-and-scope.md).
 
 ## Cut and backup instructions — not spoken
 

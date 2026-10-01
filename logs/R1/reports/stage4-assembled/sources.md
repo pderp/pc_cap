@@ -5,8 +5,8 @@ Each lettered report citation names the file and full SHA256 below.
 | ID | File | SHA256 |
 | --- | --- | --- |
 | S | docs/R1_stage4_report_skeleton.md | 944c5d935c048f4d556d90807db32d69ffa1a6f9ce0d070be627d7999d9cbd05 |
-| T | docs/R1_stage4_report_triplet.md | 1dd7aaa83b733855ad2f5e76ba2daae00c4bac9c8123fc876c1ffbe8c7151a42 |
-| C | docs/R1_stage4_report_comparators.md | 60fe3e85c2e17303eb55b374f29d667f2b79960a27a8f312e5408801e81989fb |
+| T | docs/R1_stage4_report_triplet.md | a1b2ed533422d7d563354b7f827e0c168e1808abf43e133f8f325a28c264b964 |
+| C | docs/R1_stage4_report_comparators.md | 5ec5887173889aaefc97e8be5328613bd31863a1ddd5981119a86e1aba740afc |
 | P | logs/R1/reports/comparators-270/appendix/primary.csv | c3ca7f3a1dcdbd4fc16263654a76f4447290185632abc6c662f76175be8f1a58 |
 | A | logs/R1/reports/comparators-270/appendix/report.md | ea7e85a8c7b94f3848af691f1bd34f311efe41766469310491ae0a19e27ba714 |
 | U | logs/R1/reports/comparators-270/unavailable.csv | 91e16240c675c92230fbf3da1eca416f6e5006fff9c8ee0c0ad10e6e50def208 |
@@ -17,7 +17,7 @@ Each lettered report citation names the file and full SHA256 below.
 | W | logs/R1/reports/comparators-270/appendix/watch_summary.csv | 194cb8a9f8a6d4c892d73a783234ec73f586210d69187f1091710c6e1d0207a2 |
 | R | logs/R1/operations/Q21_cutover/halt-reconciliation.md | 5d15ca4616264073fa2d746eb33d638c0b3da32b80414411cb335e454e7087c4 |
 | V | docs/tasks/R1-final-queue-bindings-v2.json | c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c |
-| D | docs/decisions.md | f91d7fd8744d5ec84c482e37fc59416e03049639bfddbd1d676bd861c6169e5e |
+| D | docs/decisions.md | b1eed6c05a5add09b73320fb897acce093d38e0995a940d24f5c515d91cda3dc |
 | M | manifests/revision_v1/run_matrix_final.json | 06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb |
 | F | logs/additional_work/round48/HT-15b-270/cell_tails.json | 0bfe5cb9486a489d39419a6dfb55068d1b75f5c2e8678bd404a1f57429b9802c |
 | G | logs/R1/reports/comparators-270/report.json | 739034d75b489bf553bb852cf464021e7a78fd63c51c05a4eefcfc01bc721814 |

@@ -19,16 +19,16 @@ lists; timing is a target, not a measured delivery duration.
 | --- | --- | --- | --- |
 | 1 | 00:00–00:50 | 50 s | 92 |
 | 2 | 00:50–02:15 | 85 s | 163 |
-| 3 | 02:15–04:10 | 115 s | 195 |
-| 4 | 04:10–04:45 | 35 s | 71 |
-| 5 | 04:45–06:00 | 75 s | 110 |
-| 6 | 06:00–07:10 | 70 s | 122 |
-| 7 | 07:10–08:15 | 65 s | 102 |
-| 8 | 08:15–09:05 | 50 s | 81 |
-| 9 | 09:05–11:00 | 115 s | 158 |
-| 10 | 11:00–12:40 | 100 s | 148 |
-| 11 | 12:40–14:05 | 85 s | 107 |
-| 12 | 14:05–15:00 | 55 s | 93 |
+| 3 | 02:15–04:05 | 110 s | 195 |
+| 4 | 04:05–04:40 | 35 s | 71 |
+| 5 | 04:40–05:55 | 75 s | 110 |
+| 6 | 05:55–07:05 | 70 s | 122 |
+| 7 | 07:05–08:10 | 65 s | 102 |
+| 8 | 08:10–09:00 | 50 s | 81 |
+| 9 | 09:00–10:50 | 110 s | 158 |
+| 10 | 10:50–12:25 | 95 s | 148 |
+| 11 | 12:25–13:50 | 85 s | 107 |
+| 12 | 13:50–15:00 | 70 s | 122 |
 
 Total allocation: **15:00**.
 
@@ -69,7 +69,7 @@ Evidence: `AI-coupled-FE`, `AI-loop`, `AI-next`, `AI-programme`, `AI-testbed`, `
 
 ## Slide 3 — What predictive coding changes in this experiment
 
-**02:15–04:10; 115 seconds.**
+**02:15–04:05; 110 seconds.**
 
 Say:
 
@@ -85,7 +85,7 @@ Evidence: `PC-SD24`, `PC-fixed-v5`, `PC-mechanism`, `PC-v0`; [source draft](slid
 
 ## Slide 4 — Correct a fact, then test its boundaries
 
-**04:10–04:45; 35 seconds.**
+**04:05–04:40; 35 seconds.**
 
 Say:
 
@@ -97,7 +97,7 @@ Evidence: `AI-testbed`, `HT-readout`, `PC-SD24`, `PC-v0`, `R1-controls`, `R1-des
 
 ## Slide 5 — Useful retention, with limits on specificity
 
-**04:45–06:00; 75 seconds.**
+**04:40–05:55; 75 seconds.**
 
 Say:
 
@@ -111,7 +111,7 @@ Evidence: `HT-readout`, `R1-design`, `R1-retention-counterfact`, `R1-retention-m
 
 ## Slide 6 — How often, and how severe?
 
-**06:00–07:10; 70 seconds.**
+**05:55–07:05; 70 seconds.**
 
 Say:
 
@@ -125,7 +125,7 @@ Evidence: `HT-readout`, `HT17-tails`; [source draft](slide06-beyond-the-mean.md)
 
 ## Slide 7 — What does the observed tail shape add?
 
-**07:10–08:15; 65 seconds.**
+**07:05–08:10; 65 seconds.**
 
 Say:
 
@@ -139,7 +139,7 @@ Evidence: `AI-next`, `HT17-tails`; [source draft](slide07-local-consequences.md)
 
 ## Slide 8 — Two interventions against extreme prediction loss
 
-**08:15–09:05; 50 seconds.**
+**08:10–09:00; 50 seconds.**
 
 Say:
 
@@ -151,7 +151,7 @@ Evidence: `AI-testbed`, `AW-B`, `HT17-tails`, `kappa-design`; [source draft](sli
 
 ## Slide 9 — Predictive coding: retention, harm and the controls
 
-**09:05–11:00; 115 seconds.**
+**09:00–10:50; 110 seconds.**
 
 Say:
 
@@ -167,7 +167,7 @@ Evidence: `HT-readout`, `PC-SD24`, `PC-budget`, `PC-depth`, `PC-one-step`, `PC-r
 
 ## Slide 10 — Does PC credit transfer to the fixed v5 reader?
 
-**11:00–12:40; 100 seconds.**
+**10:50–12:25; 95 seconds.**
 
 Say:
 
@@ -181,7 +181,7 @@ Evidence: `AI-next`, `AI-programme`, `HT-readout`, `PC-fixed-v5`, `PC-mechanism`
 
 ## Slide 11 — Return to active inference: what should the agent do next?
 
-**12:40–14:05; 85 seconds.**
+**12:25–13:50; 85 seconds.**
 
 Say:
 
@@ -195,7 +195,7 @@ Evidence: `AI-coupled-FE`, `AI-next`, `AI-programme`, `AW-B`, `HT17-tails`, `PC-
 
 ## Slide 12 — What we learned, what remains, what it took
 
-**14:05–15:00; 55 seconds.**
+**13:50–15:00; 70 seconds.**
 
 Say:
 
@@ -203,7 +203,9 @@ Active inference gives us the proposed belief-and-action loop; autonomous audit 
 
 These are finite test populations, not proof of a heavy-tail family. The main run stopped at 270 cells; omitted comparisons stay unavailable. Reader-training replication continues, and we make no three-seed claim from its first seed. Experiments end October 9 at 17:00 Eastern, leaving time for analysis and rehearsal before October 15.
 
-Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `AW-B`, `HT-readout`, `HT13-corrected`, `PC-SD24`, `PC-fixed-v5`, `PC-v0`, `resources`, `talk-scope`, `unavailable`; [source draft](slide12-takeaways-and-scope.md).
+The base is GPT-2 small, 124 million parameters; transfer to production-scale models is unestablished. S1 literal CounterFact and the original extension remain unavailable; Option R's stable-v0 arm is deferred.
+
+Evidence: `AI-next`, `AI-programme`, `AI-testbed`, `AW-B`, `HT-readout`, `HT13-corrected`, `PC-SD24`, `PC-fixed-v5`, `PC-v0`, `model-scale`, `resources`, `talk-scope`, `unavailable`; [source draft](slide12-takeaways-and-scope.md).
 
 ## Cut and backup instructions — not spoken
 

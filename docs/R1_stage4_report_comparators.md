@@ -228,6 +228,8 @@ Both original and own-cap-off references are retained. They need not agree for c
 
 ## Missing contrasts and execution accounting
 
+The base is GPT-2 small (124M parameters); transfer of these findings to production-scale models has not been established. DEC-074b left S1_literal CounterFact and the original optional extension unavailable. The later supplemental Option R study is separate; its stable-v0 class is deferred under DEC-080.
+
 | Dataset | contrast | reason |
 | --- | --- | --- |
 | counterfact | primary-vs-S1_literal | Not run under DEC-074b: stop at 270 excludes S1_literal CounterFact. |

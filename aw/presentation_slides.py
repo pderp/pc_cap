@@ -173,6 +173,22 @@ def export(output):
             if "figure_manifest" in spec
         ],
     ]
+    # Bind the canonical follow-up reports behind literal speaker/Q&A numbers.
+    # They are partial snapshots, not new slots implying completed replications.
+    for name in ("PC-reader", "R", "AW-L"):
+        document = ROOT / f"docs/additional_work/{name}_report.md"
+        sources.append(document)
+        import re
+        references = re.findall(r"logs/additional_work/[^`\s]+/report\.json", document.read_text())
+        if not references:
+            raise ValueError(f"canonical numerical report not named: {document}")
+        for reference in set(references):
+            report_path = ROOT / reference
+            sources.append(report_path)
+            verify = json.loads(report_path.read_bytes())
+            from aw.presentation_pc import verify_sources
+            verify_sources(verify, pc["sources_sha256"])
+    sources.extend([ROOT / "docs/R1_stage4_report.md", ROOT / "docs/presentation/qa.md"])
     mapping = ROOT / "docs/presentation/abstract_to_testbed.md"
     if mapping.exists():
         sources.append(mapping)

@@ -145,6 +145,18 @@ BUDGETS[25][8] -= 15
 BUDGETS[25][9] -= 20
 
 
+# PRES-8: retain scale and missing-arm limitations in both durations.
+SHORT[11] += "\n\nThe base is GPT-2 small, 124 million parameters; transfer to production-scale models is unestablished. S1 literal CounterFact and the original extension remain unavailable; Option R's stable-v0 arm is deferred."
+BUDGETS[15][11] += 15
+BUDGETS[15][2] -= 5
+BUDGETS[15][8] -= 5
+BUDGETS[15][9] -= 5
+BUDGETS[25][11] += 15
+BUDGETS[25][3] -= 5
+BUDGETS[25][4] -= 5
+BUDGETS[25][10] -= 5
+
+
 def stamp(seconds):
     return f"{seconds // 60:02d}:{seconds % 60:02d}"
 

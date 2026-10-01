@@ -39,12 +39,11 @@ be included alongside it before the talk.
 The report retains unavailable comparisons rather than assigning them zero
 effect.” [`resources`, `unavailable`]
 
-“The approved stop leaves S1_literal CounterFact and the optional extension
-unrun. MQuAKE's omitted comparators and unavailable thousand-edit endpoint have
+“The base is GPT-2 small (124M parameters); transfer of these findings to production-scale models has not been established. DEC-074b left S1_literal CounterFact and the original optional extension unavailable. The later supplemental Option R study is separate; its stable-v0 class is deferred under DEC-080. MQuAKE's omitted comparators and unavailable thousand-edit endpoint have
 their earlier, separate design reasons. Experimental work finishes October 9
 at 17:00 Eastern; the remaining days are for analysis of fixed results, slides
 and rehearsal before October 15. These limits help make the claims readable:
-what we tested, what it showed, and what remains a question.” [`unavailable`, `talk-scope`]
+what we tested, what it showed, and what remains a question.” [`unavailable`, `talk-scope`, `model-scale`]
 
 “I would welcome discussion about which uncertainty signal should drive the next
 audit, and which controlled environment would best test the proposed coupled

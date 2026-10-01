@@ -7,8 +7,8 @@ import numpy as np
 import pytest
 
 from aw.comparator_report import groups, unavailable_reason
-from aw.pc_historical import Sources
 from aw.pc_v0_report import sha
+from aw.reporting_sources import Sources
 
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'logs/R1/reports/comparators-225'

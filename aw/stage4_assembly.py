@@ -48,12 +48,14 @@ def table(headers, rows):
     )
 
 
-def build(output, document):
+def build(output, document, *, refresh=False):
     output, document = Path(output).resolve(), Path(document).resolve()
     source_link = os.path.relpath(output / "sources.md", document.parent)
     assembly_link = os.path.relpath(output / "assembly.json", document.parent)
-    if output.exists() or document.exists():
+    if not refresh and (output.exists() or document.exists()):
         raise FileExistsError("new assembly output and document required")
+    from aw.report_limitations import PARAGRAPH
+
     bindings = {
         key: dict(path=str(ROOT / name), sha256=sha(ROOT / name)) for key, name in SOURCE.items()
     }
@@ -200,11 +202,13 @@ The native filled skeleton [A] supplies all registered table categories and figu
 
 ## Completion, limitations and reproducibility
 
+{PARAGRAPH}
+
 The main run is complete to the lead's reduced halt scope, while omitted comparisons remain unavailable. Experiments stop **October 9 at 17:00 ET**, with the **October 15** presentation later; preparation time is not experimental time. Development selection, three realization clusters, dependent orders, source-population exceptions and incomplete architectural/control coverage constrain generalization. PC-v0 and fixed-v5 supplemental findings are outside this main-study report until independently completed. [D] [T] [R]
 
 Reproduce this assembly with `python -m aw.stage4_assembly --output NEW_ASSEMBLY_DIRECTORY --document NEW_REPORT.md` (explicit new-path placeholders). The [source registry]({source_link}) and [assembly record]({assembly_link}) bind all cited files, unchanged copied primary rows and accounting arithmetic. The original registered analyzer and classifier were not rerun or altered.
 """
-    output.mkdir(parents=True)
+    output.mkdir(parents=True, exist_ok=refresh)
     source_table = []
     for key, binding in bindings.items():
         name = SOURCE[key]
@@ -224,6 +228,7 @@ Reproduce this assembly with `python -m aw.stage4_assembly --output NEW_ASSEMBLY
         task="R1-D14g",
         source_bindings=bindings,
         producer=dict(path=str(Path(__file__).resolve()), sha256=sha(__file__)),
+        prose_source=dict(path=str(ROOT / "aw/report_limitations.py"), sha256=sha(ROOT / "aw/report_limitations.py")),
         document=dict(path=str(document), sha256=sha(document)),
         primary_rows=p,
         unavailable_inventory=u,
@@ -249,8 +254,9 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--output", required=True)
     p.add_argument("--document", required=True)
+    p.add_argument("--refresh", action="store_true", help="refresh publication only; no analyzer rerun")
     a = p.parse_args()
-    build(a.output, a.document)
+    build(a.output, a.document, refresh=a.refresh)
 
 
 if __name__ == "__main__":

@@ -110,15 +110,17 @@ The native filled skeleton [A] supplies all registered table categories and figu
 
 ## Completion, limitations and reproducibility
 
+The base is GPT-2 small (124M parameters); transfer of these findings to production-scale models has not been established. DEC-074b left S1_literal CounterFact and the original optional extension unavailable. The later supplemental Option R study is separate; its stable-v0 class is deferred under DEC-080.
+
 The main run is complete to the lead's reduced halt scope, while omitted comparisons remain unavailable. Experiments stop **October 9 at 17:00 ET**, with the **October 15** presentation later; preparation time is not experimental time. Development selection, three realization clusters, dependent orders, source-population exceptions and incomplete architectural/control coverage constrain generalization. PC-v0 and fixed-v5 supplemental findings are outside this main-study report until independently completed. [D] [T] [R]
 
 Reproduce this assembly with `python -m aw.stage4_assembly --output NEW_ASSEMBLY_DIRECTORY --document NEW_REPORT.md` (explicit new-path placeholders). The [source registry](../logs/R1/reports/stage4-assembled/sources.md) and [assembly record](../logs/R1/reports/stage4-assembled/assembly.json) bind all cited files, unchanged copied primary rows and accounting arithmetic. The original registered analyzer and classifier were not rerun or altered.
 
 [S]: R1_stage4_report_skeleton.md "SHA256 944c5d935c048f4d556d90807db32d69ffa1a6f9ce0d070be627d7999d9cbd05"
 
-[T]: R1_stage4_report_triplet.md "SHA256 1dd7aaa83b733855ad2f5e76ba2daae00c4bac9c8123fc876c1ffbe8c7151a42"
+[T]: R1_stage4_report_triplet.md "SHA256 a1b2ed533422d7d563354b7f827e0c168e1808abf43e133f8f325a28c264b964"
 
-[C]: R1_stage4_report_comparators.md "SHA256 60fe3e85c2e17303eb55b374f29d667f2b79960a27a8f312e5408801e81989fb"
+[C]: R1_stage4_report_comparators.md "SHA256 5ec5887173889aaefc97e8be5328613bd31863a1ddd5981119a86e1aba740afc"
 
 [P]: ../logs/R1/reports/comparators-270/appendix/primary.csv "SHA256 c3ca7f3a1dcdbd4fc16263654a76f4447290185632abc6c662f76175be8f1a58"
 
@@ -140,7 +142,7 @@ Reproduce this assembly with `python -m aw.stage4_assembly --output NEW_ASSEMBLY
 
 [V]: tasks/R1-final-queue-bindings-v2.json "SHA256 c6f88c56814f3ff265401cefce2c51773de49e0fbb7ddb4e0cbbbdda75eb721c"
 
-[D]: decisions.md "SHA256 f91d7fd8744d5ec84c482e37fc59416e03049639bfddbd1d676bd861c6169e5e"
+[D]: decisions.md "SHA256 b1eed6c05a5add09b73320fb897acce093d38e0995a940d24f5c515d91cda3dc"
 
 [M]: ../manifests/revision_v1/run_matrix_final.json "SHA256 06fa8b3b3f3d734c12d47ac2b1b09d8dcd0c35c203013456c9409590329d56bb"
 

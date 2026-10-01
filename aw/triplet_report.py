@@ -242,6 +242,9 @@ def publish():
              "## Tables, figures and reproduction", "",
              "[Native filled skeleton and all tables](../logs/R1/reports/triplet/appendix/report.md); [analysis with source hashes](../logs/R1/reports/triplet/analysis.json); [every realization's five orders](../logs/R1/reports/triplet/realization-summary.csv); [process accounting](../logs/R1/reports/triplet/accounting.csv). Reproducer: `python -m aw.triplet_report analyze`, then `python -m aw.triplet_report publish`, using new output paths rather than overwriting this historical snapshot. Standard plots: `python -m scripts.r1_d14_figures --data logs/R1/reports/triplet/appendix/report-data.json` in the existing plotting environment. Selected exports are copied to `assets/presentation-materials/figures/triplet/`.", "",
              "No models, GPU execution, experimental re-scoring, source-lock edits, queue operations or commits were performed for this report.", ""]
+    from aw.report_limitations import PARAGRAPH
+    i = text.index("## Execution accounting and limits")
+    text[i + 1:i + 1] = ["", PARAGRAPH]
     with (ROOT / "docs/R1_stage4_report_triplet.md").open("x") as f:
         f.write("\n".join(text))
     print(json.dumps({"groups": len(groups), "complete_primary_metric_rows": len(contrast_rows), "process_hours": costs["process_hours"]}))
@@ -249,6 +252,10 @@ def publish():
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("command", choices=("analyze", "publish"))
+    p.add_argument("command", choices=("analyze", "publish", "limitations"))
     a = p.parse_args()
-    analyze() if a.command == "analyze" else publish()
+    if a.command == "limitations":
+        from aw.report_limitations import refresh
+        refresh(ROOT / "docs/R1_stage4_report_triplet.md", "## Execution accounting and limits")
+    else:
+        analyze() if a.command == "analyze" else publish()

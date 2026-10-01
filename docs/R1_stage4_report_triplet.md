@@ -111,6 +111,8 @@ Historical watch prefix: 135 queue observations, 91 breach entries and 17 creep 
 
 ## Execution accounting and limits
 
+The base is GPT-2 small (124M parameters); transfer of these findings to production-scale models has not been established. DEC-074b left S1_literal CounterFact and the original optional extension unavailable. The later supplemental Option R study is separate; its stable-v0 class is deferred under DEC-080.
+
 The 135 enclosing process receipts charge **140.970610 process-hours**, matching the saved block-3 boundary cell by cell. There are zero unknown costs, failures or retries within this snapshot. Covered driver time is not charged again. Process-hours include concurrent workers and are not elapsed GPU wall-hours.
 
 2 parent decision records are absent at the documented Q21 cutover; their successful start/finish and driver results remain present and charged. This known interruption is disclosed in [accounting.json](../logs/R1/reports/triplet/accounting.json). No missing decision was manufactured. The native global accounting field stays explicitly unavailable: replaying the advancing whole queue would not describe a blocks-1–3 snapshot.
