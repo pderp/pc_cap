@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-01 07:20** — PC-trained reader: BP arm complete (item 145); ePC seed 0 complete (item 146: own-prompt retention equal to BP, RET-GS 0.03/0.24 lower on zsRE/CounterFact, zero ordinary-text firings on zsRE); ePC seeds 1–2 chained (≈ Oct 3 10:30), then AW-L5 2×2. Option R waits for R-2. Capex idle since Sep 29.
 - **2026-09-29 06:50** — DEC-077: no external review; all remaining work proceeds on defaults. GPU queue after the controls: fixed-v5 credit settings → Option R (go decision `docs/additional_work/R_decision.md`) → PC-trained reader → upper-layer 2×2 → scaling. Round 54 lanes below for the runners still missing.
 
 - **2026-09-29 06:35** — Capex round 52 committed (AW-B3, PC-12, X24-final PASS, PC-8 reports, PC-11 tests, R-1 consumer). GPU: settling-depth control done (items 132–133); AW-B calibration done, mixture ρ = e⁻¹ selected (item 134); AW-B evaluation running since 05:24; PC-12 random and matched controls queued behind it. Round 53 lanes below.

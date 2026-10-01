@@ -1425,3 +1425,27 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     reader that fires more on ordinary text than a typical re-training. Descriptive, three seeds, exposed
     populations, 300 edits — but it belongs beside the fidelity results in the talk. ePC seed 0 training started
     05:36 (≈ 22.6 h); its two evaluations follow; Option R still waits for R-2.
+
+146. (2026-10-01, 07:20 EDT) **PC-trained reader, ePC seed 0 done** (training 24.6 h against the 22.6 h projection; both
+    evaluations with the full harm readout, 1 h). Same endpoints as item 145, with the paired BP seed 0 for reference:
+
+    | reader | dataset | ES | RET-ES | RET-GS | LS | near-miss | fired positions | mean ΔNLL | ES99+ | max |
+    |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+    | ePC s0 | zsRE | 1.00 | 1.00 | 0.947 | 1.00 | 0.91 | 0 | 0 | 0 | 0 |
+    | BP s0 | zsRE | 1.00 | 1.00 | 0.973 | 1.00 | 0.85 | 18 | 0.00011 | 0.012 | 6.5 |
+    | ePC s0 | CounterFact | 1.00 | 1.00 | 0.568 | 1.00 | 0.98 | 185 | 0.00128 | 0.132 | 7.7 |
+    | BP s0 | CounterFact | 1.00 | 1.00 | 0.810 | 1.00 | 1.00 | 256 | 0.00202 | 0.207 | 8.5 |
+
+    Reading, one seed only. The ePC-trained reader edits and retains its own prompts exactly like the BP one (ES,
+    RET-ES, LS all 1.00) but generalises less to paraphrases: RET-GS is 0.03 below BP on zsRE and 0.24 below on
+    CounterFact (0.57 vs 0.81; the BP seeds span 0.80–0.835, so this is outside the BP seed spread). On ordinary
+    text the ePC reader never fires on zsRE (0 of 245,237 positions, so harm is identically zero) and fires less
+    on CounterFact than its BP pair (185 vs 256), with proportionally lower harm. A quieter, more conservative
+    reader: fewer false retrievals, fewer true paraphrase retrievals. Whether that is the surrogate's finite
+    settling (the gradient magnitudes differ by construction; Capex's note in `docs/additional_work/PC-reader.md`)
+    or a seed effect waits on seeds 1–2. Descriptive, exposed populations, 300 edits, one order.
+
+    GPU: ePC seed 1 training started 07:08 (ends ≈ Oct 2 07:45, evaluations to ≈ 08:45); seed 2 follows (≈ Oct 3
+    10:30). The upper-layer 2×2 (AW-L5, ≈ 30 h) then fits before the Oct 6 last-fits line (≈ Oct 4 evening).
+    Option R still waits for Capex's R-2 reconciliation; Capex has been idle since Sep 29 evening. Nothing needs
+    your input at this point.
