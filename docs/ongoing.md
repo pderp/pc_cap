@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-01 12:10** — DEC-081: reviewer feedback (Nelson 2026) items B–D drafted (`docs/friday-10.02-review/talk-text-B-C-D.md`, abstract-to-testbed map, tails_v1 §class prototype); A = lane HT-17 (class fits, CPU) pending the lead's go and Capex's availability; E deferred post-conference. Capex processing the same inputs (not to be interrupted).
 - **2026-10-01 10:35** — DEC-080: Option R resumes with the v0 class deferred (16 runnable cells, 9 deferred) as soon as the ePC seeds 1–2 chain releases the GPU (≈ Oct 3 10:30; watcher armed); AW-L5 after it. Capex round 55 committed (R-2, AW-B report, matched-control report, PRES-6). Friday review primer at `docs/friday-10.02-review/README.md`.
 - **2026-10-01 07:20** — PC-trained reader: BP arm complete (item 145); ePC seed 0 complete (item 146: own-prompt retention equal to BP, RET-GS 0.03/0.24 lower on zsRE/CounterFact, zero ordinary-text firings on zsRE); ePC seeds 1–2 chained (≈ Oct 3 10:30), then AW-L5 2×2. Option R waits for R-2. Capex idle since Sep 29.
 - **2026-09-29 06:50** — DEC-077: no external review; all remaining work proceeds on defaults. GPU queue after the controls: fixed-v5 credit settings → Option R (go decision `docs/additional_work/R_decision.md`) → PC-trained reader → upper-layer 2×2 → scaling. Round 54 lanes below for the runners still missing.

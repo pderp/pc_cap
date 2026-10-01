@@ -1471,3 +1471,13 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     this item; assets 07166a7 (figure refresh, reviewer results and final-experiments updates). Nothing else needs your
     input; Capex's next lanes (round 56) are the Option R extension report when the cells land and the ePC reader report
     after seed 2.
+
+148. (2026-10-01, 12:10 EDT) **Reviewer feedback: B–D done as far as my files go (DEC-081).** The exact deck text for the
+    κ-pilot reframing (B), the class-change framing of the 1-nat bound (C) and the coupled-free-energy / pseudo-Markov-
+    blanket paragraph (D) is in `docs/friday-10.02-review/talk-text-B-C-D.md`, keyed to slides 2, 6, 7, 8, 11 and the
+    claim-ledger rows (`kappa-design`, `AW-B`, new `HT17-class` and `AI-coupled-FE`), for Capex to fold into the deck;
+    I did not touch the deck files because Capex is working in them now (`aw/entropy_feedback_checks.py` and
+    `logs/literature/` appeared at 11:30). My own files are updated: `docs/presentation/abstract_to_testbed.md`
+    (κ row corrected; three rows added) and `assets/presentation-materials/tails_v1.md` (new section with the
+    prototype class fits, labelled pending HT-17). Every κ̂ / σ̂ in those texts is marked prototype until HT-17 reports.
+    Open: lane A (HT-17) — say go when Capex is free and I open it; nothing else needed from you.
