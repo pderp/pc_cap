@@ -9,6 +9,11 @@ presentation materials). The figures referenced as `figures/NN-*.png` are copies
 
 Reading order if you have twenty minutes: §1, §4, §5 and §8. The rest is reference.
 
+> **Update, 2 October:** everything since Kenric Nelson's feedback (the tail analysis of record, the revised talk
+> wording, two of three ePC reader seeds, Option R's resume, the calibration checks and the questions for the meeting)
+> is in `UPDATE-2026-10-02.md` in this folder. Numbers in this primer that it supersedes: the ePC training cost (≈ 100×
+> measured, not 37×) and §6.5's one-seed reading of the ePC reader.
+
 ---
 
 ## 1. The project in one page
