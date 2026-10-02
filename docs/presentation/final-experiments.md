@@ -1,10 +1,10 @@
-# Final experiments — joint decision form for Tuesday, September 29
+# Final experiments — October 2 review and historical decision forms
 
 Prepared September 27; updated October 1 by Capex. **DEC-077/078/080/081/081a decisions now
 supersede the blank decision fields in the historical candidate descriptions.**
 This update records existing decisions and results; it authorizes no extra run.
 Canonical repository copy: `pc_cap/docs/presentation/final-experiments.md`;
-identical initial export: `assets/presentation-materials/review-data/final-experiments.md`.
+review export (same content, local links rebased): `assets/presentation-materials/review-data/final-experiments.md`.
 Paths beginning `pc_cap/` or `assets/` are relative to `/home/derp/cap/`.
 
 The presentation connects **active inference, predictive coding and heavy-tailed
@@ -26,7 +26,7 @@ The October 9, 17:00 EDT cutoff and no-new-fits October 6 line remain in force.
 | C: failed-cell tuning | No outcome-selected new tuning launched by this review; keep exploratory if later pursued. | Original branch below |
 | D: bounded correction | Calibration and ten-memory evaluation complete; all ten mixture cells meet the declared rule. Per-token guarantee, small CF paraphrase cost, CF KL still above .001. | `docs/additional_work/AW-B_report.md`; DEC-078 |
 | E: Option R | Go decision exists; 4 cells complete, 1 ceiling-exhausted and incomplete, 16 learned/random cells pending; 9 remaining v0 cells explicitly deferred under DEC-080. R-2 reconciliation complete; no higher ceilings. GPU resume belongs to Capstan. | `docs/tasks/R-2.md`; `docs/additional_work/R_decision.md` |
-| F: upper-layer trained factorial | Authorized; runner and CPU validation complete; queued after reader replication. No measured factorial outcome yet. | `docs/additional_work/AW-L.md`; `docs/tasks/AW-L5.md` |
+| F: upper-layer trained factorial | Authorized; runner and CPU validation complete; queued after reader replication and the DEC-080 Option R resume. No measured factorial outcome yet. | `docs/additional_work/AW-L.md`; `docs/tasks/AW-L5.md` |
 | G: 3,000-edit scaling | Closed infeasible: certified population insufficient without violating reservations. No GPU recipe supplied. | `docs/tasks/HT-16.md` |
 | DEC-075 PC controls | Depths complete; random closed partial by DEC-079; offered-budget adjoint complete but underspent. | `docs/additional_work/PC-controls_report.md` |
 
@@ -43,7 +43,36 @@ Approved B–D wording distinguishes the bounded κ-surprisal pilot from the unt
 
 The remaining GPU portfolio is unchanged; no coupled-objective model fit or free-α sweep is added. Option R resumes learned/random only under DEC-080. October 9 at 17:00 EDT remains the experimental cutoff; no new model fits start on or after October 6.
 
-## Conditional branches from the primer
+## October 2 reviewer entry points and current constraints
+
+Read [Capstan's October 1 primer](../friday-10.02-review/README.md), the
+[feedback response](../friday-10.02-review/feedback-MMK-nelson-entropy.md) and
+[Capex's feedback review](../friday-10.02-review/feedback-MMK-nelson-entropy-capex.md)
+alongside the [current results guide](review-results.md). This update reflects
+Round 58 evidence; the blank forms below are historical, not new approval requests.
+
+The PC-reader comparison currently has three BP seeds and only ePC seed 0
+(8/12 evaluations). That completed training pair costs **102.1×** as much process
+time for ePC as for BP; the older 37× figure and the estimates below are forecasts.
+Do not claim a three-seed result or assume the remaining work can fit those older
+budgets. Current queue receipts determine the remaining elapsed-time estimate.
+
+HT-17's 299-cell analysis reports finite-range shapes, frequency and conditional
+severity, not asymptotic classes. AW-B takes severity above .01 nat to about
+**one-third** (zsRE 1.619→.542; CounterFact 1.925→.581), with little change in
+frequency. DEC-081/081a do not authorize a coupled-objective training experiment.
+The optional κ readout remains default no; exact pilot restoration failed KP-1.
+
+The main Stage-4 base is GPT-2 small (124M); transfer to production scale is
+unestablished. DEC-074b left S1_literal CounterFact and the registered extension
+unavailable. DEC-080 separately defers nine remaining Option R v0 cells, with
+one v0 ceiling stop incomplete; learned/random resume without raised ceilings.
+Report these omissions, exposed supplemental populations and dependent orders
+beside any result. The [freeze checklist](../freeze_checklist_20261009.md) identifies
+the final evidence and outstanding refreshes. No new fits start on or after
+October 6; experimental completion is October 9, 17:00 EDT, ahead of October 15.
+
+## Historical conditional branches from the primer
 
 | Evidence branch | Candidates named in §5 | Branch selected at meeting |
 | --- | --- | --- |

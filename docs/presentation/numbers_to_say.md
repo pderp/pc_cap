@@ -16,4 +16,4 @@ Use rounded values below. These are measured results or explicitly labeled scope
 [P] `logs/additional_work/PC-reader/report-round57-final/report.json`: coverage and `training_cost_ratios[seed=0]`.
 [A] `docs/R1_stage4_report.md`: accounting and limitations.
 
-For detailed PC effects use the resolved scripts' source slots. Do not improvise a favorable PC conclusion, an asymptotic tail class, W(N), or a completed Option R/upper-layer result. Refresh after new evaluations and the October 2 review.
+Detailed spoken numbers use `docs/talk_claim_ledger_v7.md` and `docs/presentation/deck_v3/pc-result-sources.json`. Rerun `aw.script_numbers_check` after every export; its occurrence inventory states rounding tolerances and untraced/review items. Numerical ledger matches alone do not establish contextual correctness. Do not improvise a favorable PC conclusion, an asymptotic tail class, W(N), or a completed Option R/upper-layer result. Refresh after new evaluations and the October 2 review.

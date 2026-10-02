@@ -1,4 +1,48 @@
-# Corrected predictive-coding results — completed default treatment
+# Research results for the October 2 review
+
+**Current reading guide: October 1, Round 59; evidence through Round 58.** Start
+with [Capstan's October 1 primer](../friday-10.02-review/README.md), then the
+[reviewer feedback and response](../friday-10.02-review/feedback-MMK-nelson-entropy.md)
+and [Capex's scientific review](../friday-10.02-review/feedback-MMK-nelson-entropy-capex.md).
+The dated reports below govern quantitative claims; older planning estimates and
+the prototype tail-class appendix are superseded by these measured results.
+
+- **Heavy tails:** [HT-17](../additional_work/HT-17_report.md) describes finite-range
+  differences across 299 available cells. Learned-reader generalized-Pareto fits
+  add little held-out predictive value over an exponential; stable-v0 zsRE differs.
+  Neither result identifies an asymptotic class, infinite variance or entropy
+  growth. Frequency, conditional severity and fit failures must travel together.
+- **Bounded correction:** [AW-B](../additional_work/AW-B_report.md) reduces conditional
+  severity above .01 nat from 1.619 to .542 nats on zsRE and 1.925 to .581 on
+  CounterFact: about **one-third of the original severity**, with nearly unchanged
+  harmful-change frequency. The one-nat ceiling is an analytic per-token guarantee
+  at a shared prefix; it is not a whole-answer or KL guarantee. CounterFact KL
+  remains above .001 and paraphrase retention has a small cost.
+- **Training the reader with PC:** [the partial reader report](../additional_work/PC-reader_report.md)
+  contains three BP seeds and ePC seed 0: 8 of 12 evaluations, only one paired seed.
+  Completed seed-0 training process time is **102.1× BP**, approximately 100×;
+  37× was a forecast. The paired result has lower paraphrase retention and fewer
+  ordinary-text firings under ePC. It is not yet a three-seed finding.
+- **Remaining GPU work:** ePC seeds 1–2 precede the DEC-080 Option R resume
+  (learned/random only), then the upper-layer factorial. [Option R](../additional_work/R_report.md)
+  has four complete cells, one incomplete ceiling stop, nine v0 cells deferred
+  and sixteen pending. No full extension or upper-layer result is available.
+- **Interpretation:** DEC-081/081a retain the active-inference programme, corrected
+  predictive-coding tests and empirical extremes as the three themes. The κ pilot
+  is a bounded deformation of surprisal; a calibrated coupled-free-energy agent
+  remains proposed. [Approved talk wording](../friday-10.02-review/talk-text-B-C-D.md)
+  and the [coupled-objective note](../additional_work/coupled_objective_note.md)
+  distinguish those claims.
+- **Scope and cutoff:** the main Stage-4 base is GPT-2 small (124M parameters);
+  transfer to production-scale models is unestablished. The DEC-074b halt leaves
+  S1_literal CounterFact and the registered extension unavailable; the separate
+  Option R study also lacks its deferred v0 class. Supplemental streams are exposed,
+  orders are dependent, and training seeds are not subject realizations. See the
+  [Stage-4 limitations](../R1_stage4_report.md) and [October 9 freeze checklist](../freeze_checklist_20261009.md).
+  No new fits start on or after October 6. Experiments end October 9 at 17:00 EDT;
+  the presentation is October 15.
+
+## Completed default predictive-coding treatment
 
 2026-09-28, Capex. All 64 cells passed the final integrity audit. All harm vectors and paired statistics were independently reconstructed on CPU. Eight error iterations, learning rate 0.1. The opening sections retain the completed default treatment; the PC-13 section below adds the later settling-depth controls.
 
