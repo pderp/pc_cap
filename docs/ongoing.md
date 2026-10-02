@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-02 09:55** — Round 61: DOC-2 (add `UPDATE-2026-10-02.md` to the reviewer entry point before this afternoon's meeting), then PC-16a seed-1 refresh. POST-1/PRES-9 after the review.
 - **2026-10-02 09:50** — Capex round 60 committed (REP-1 guide + refresh-all runner). ePC seed 1 evaluated (item 155: the seed-0 'quiet reader' was largely a seed effect; consistent small RET-GS deficit). **PC-16a trigger: go** (both seed-1 evaluations complete). Seed 2 training since 08:13 (≈ Oct 3 09:30 with evaluations) → Option R → AW-L5. POST-1/PRES-9 after the review.
 - **2026-10-02 07:30** — Capex round 59 committed (X26 clean; DOC-1 + `review-data/CURRENT.md`). ePC seed 1 trained (24.1 h); evaluations running (≈ 08:15), then seed 2 (≈ Oct 3 09:30), Option R, AW-L5. Round 60: PC-16a (conditional refresh), REP-1 (reproduction document + refresh-all); POST-1/PRES-9 after today's review.
 - **2026-10-01 15:20** — Capex round 58 committed (X25 PASS 25 groups + freeze checklist `docs/freeze_checklist_20261009.md`; S4-LIM caveats in the three Stage-4 reports; PRES-8 Q&A, numbers-to-say, rehearsal pack; KP-1 no-go for an exact κ-pilot continuation; CAL-1 checks pass + `coupled_objective_note.md`). Round 59: X26, DOC-1; POST-1 after the Oct 2 review. Optional κ readout: default no (see item 153).
@@ -192,6 +193,30 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 61 — reviewer entry point for this afternoon; the seed-1 refresh (2026-10-02, 09:50)
+
+Two lanes, in this order; both CPU; the meeting is this afternoon, so DOC-2 first.
+
+### Lane DOC-2 — add the 2 October update to the reviewer entry point
+
+`docs/friday-10.02-review/UPDATE-2026-10-02.md` (Capstan, committed 8b9d3c6) is the summary of everything since
+Nelson's feedback, written for Kenric Nelson and Matt Iklé. Add it as the first link in
+`assets/presentation-materials/review-data/CURRENT.md` (label it "2 October update: read first"), reference it from
+`review-data/results.md` and `final-experiments.md` where they summarise the PC-reader, HT-17 and Option R state, and
+regenerate the folder through `aw.reviewer_folder` so the hashes and manifest match. Do not edit the update itself (it is
+Capstan's file); if a number in it conflicts with a canonical report, note the conflict in the handoff. Done-when:
+CURRENT.md lists the update first and the folder manifest is consistent.
+
+### Lane PC-16a (continued) — refresh for ePC seed 1 (go since 08:13)
+
+Both seed-1 evaluations are complete (`eval-epc-s1-{zsre,counterfact}/report.json`, status complete). Run
+`aw.pc_reader_report` with `--refresh-tail` into fresh dated directories, rewrite
+`docs/additional_work/PC-reader_report.md` (10 of 12 cells; two paired seeds; the two-seed reading in lead-queue item
+155: seed 0's quiet reader was largely a seed effect; the consistent finding is identical own-prompt retention with a
+small paraphrase deficit, zsRE −0.026/−0.020, CounterFact −0.242/−0.022; firing seed-dependent under both rules;
+measured cost ≈ 100×), then refresh the deck's reader statements, `numbers_to_say.md` and the rehearsal pack through
+PRES, keeping the three-seed answer marked partial. Seed 2 lands ≈ 3 Oct 09:30; the owner posts the trigger.
 
 ## Round 60 — seed-1 refresh; reproduction document for the supplemental work (2026-10-02, 07:30)
 

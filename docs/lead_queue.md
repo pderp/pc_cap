@@ -1612,3 +1612,11 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     PC-16a's condition is met (both seed-1 evaluations complete), so Capex can run the reader report, HT-17 and deck
     refresh now. Then Option R (≈ Oct 3 evening) and AW-L5 (≈ Oct 5 early). POST-1 and PRES-9 wait for your notes from
     today's meeting.
+
+156. (2026-10-02, 09:55 EDT) **Round 61 opened for Capex.** DOC-2: add `docs/friday-10.02-review/UPDATE-2026-10-02.md`
+    (the summary of everything since Nelson's feedback, for this afternoon's meeting) as the first link in
+    `assets/presentation-materials/review-data/CURRENT.md`, reference it from the reviewer results and final-experiments
+    summaries, and regenerate the folder manifest; then PC-16a's seed-1 refresh (reader report, HT-17 snapshot, deck
+    statements, numbers sheet, rehearsal pack), keeping the three-seed answer partial. POST-1 (coupled-objective study
+    design) and PRES-9 (fold the reviewers' notes) open when you relay the meeting. GPU: ePC seed 2 training since
+    08:13 (≈ Oct 3 09:30 with evaluations), Option R armed behind it, AW-L5 after.
