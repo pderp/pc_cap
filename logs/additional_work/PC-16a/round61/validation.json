@@ -1,0 +1,76 @@
+{
+  "agent": "Capex",
+  "created_utc": "2026-10-02T14:09:29.877672+00:00",
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 ../venv/bin/python -m pytest -q -p no:cacheprovider aw/tests/test_reader_interpretation.py aw/tests/test_reader_reports.py aw/tests/test_refresh_reports.py aw/tests/test_supplemental_audit.py aw/tests/test_script_numbers_check.py",
+    "passed": 33,
+    "elapsed_seconds": 0.17
+  },
+  "lint": "PASS",
+  "model_calls": 0,
+  "gpu_seconds": 0,
+  "tail_analysis_seconds": 91.02396694198251,
+  "coverage": {
+    "stage4": 225,
+    "AW-B": 30,
+    "PC-reader": 10,
+    "kappa-pilot": 36
+  },
+  "unchanged_previous_cell_statistics": 299,
+  "reader_evaluations": 10,
+  "reader_matched_tail_rows": 10,
+  "fully_paired_seeds": [
+    0,
+    1
+  ],
+  "pending_evaluations": [
+    {
+      "rule": "epc",
+      "seed": 2,
+      "dataset": "zsre",
+      "status": "pending"
+    },
+    {
+      "rule": "epc",
+      "seed": 2,
+      "dataset": "counterfact",
+      "status": "pending"
+    }
+  ],
+  "canonical_pack_exports_verified": 39,
+  "review_folder_files_verified": 4,
+  "reviewer_update_unchanged": true,
+  "reviewer_update_sha256": "cbf3826f166f1b7c37173052ca1bf7ac149b8c6b4ea73e218198f63d21772b28",
+  "code_sha256": {
+    "aw/reader_interpretation.py": "bb19686028c0398706a12494631156e2c7acd380b11b075159719fd0ffbb4097",
+    "aw/pc_reader_report.py": "8cab1c0966557fae07f4027eabd69f827e381524b7397431caa2d4d34c9d8cf0",
+    "aw/rehearsal_pack.py": "3e4ed5353a4e99dbfc2429b8eb773af1c8ab18b5a18d04fad4a60ea9b1f5e761",
+    "aw/reporting_sources.py": "f801bc94a837848089d9a6154aac6f35b315c70282034228e4ad36b018c5c07d",
+    "aw/presentation_slides.py": "373b9252137d67c2d616591ee59983b0a52526c885b0e920e6514c1a8bec077f",
+    "aw/presentation_timing.py": "04fe72494c8d46a077fc421ab2bcc23865846a4f201966f5a7d4f9342c54ea2b",
+    "aw/refresh_report_steps.py": "7e986d36ed3e59453a6534da94068270c50f21d885480e769bbbb5a5fedfb6e1",
+    "aw/supplemental_audit.py": "36f04a65ccb6d853639d549d361f23e1f78975e838b03f0e10b5e79ebdec1cf2",
+    "aw/reviewer_folder.py": "8cead12955a7f5145862455a233f00abd78d648fcb6c9502ec7e3fe4bc3ba264",
+    "aw/tests/test_reader_interpretation.py": "b7d59578b434c3237719cf9b4c966a2370b2d2d01322ab2cea38a3121388c52e"
+  },
+  "full_reproduction": {
+    "receipt": "logs/additional_work/reproductions/round61-verified/refresh.json",
+    "status": "complete",
+    "wall_seconds": 262.876412947895,
+    "steps": 16,
+    "outputs_verified": 193,
+    "checked_groups": 29,
+    "input_changes": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "canonical_x25": "logs/additional_work/X25/round61-final/audit.json",
+  "canonical_x26": "logs/additional_work/X26/round61-final/audit.json",
+  "x26_rounding_review": "logs/additional_work/X26/round61-final/rounding-review.json",
+  "timing_seconds": {
+    "15": 900,
+    "25": 1500
+  }
+}

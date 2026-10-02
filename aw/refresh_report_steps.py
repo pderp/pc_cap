@@ -313,8 +313,8 @@ def deck(out, assets):
     save(source / "diagram-specs.json", specs)
     mapping = {
         "logs/additional_work/PRES-8": out / "timing",
-        "logs/additional_work/HT-17/snapshot-20261001-v2/report.json": paths["HT-17"],
-        "logs/additional_work/PC-reader/report-round57-final/report.json": paths["PC-reader"],
+        "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json": paths["HT-17"],
+        "logs/additional_work/PC-reader/report-round61-final/report.json": paths["PC-reader"],
         "docs/presentation/numbers_to_say.md": out / "documents/numbers_to_say.md",
         "docs/presentation/rehearsal.md": out / "documents/rehearsal.md",
         "docs/R1_stage4_report.md": out / "documents/R1_stage4_report.md",
@@ -324,9 +324,9 @@ def deck(out, assets):
         mapping[f"docs/additional_work/{name}_report.md"] = out / f"documents/{name}_report.md"
     # Only these two parent-relative figure paths are hardcoded by the legacy pack.
     parent_map = {
-        "assets/presentation-materials/figures/tails_ht17/snapshot-20261001-v2/survival_thresholds.png": assets
+        "assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.png": assets
         / "ht17/survival_thresholds.png",
-        "assets/presentation-materials/figures/tails_ht17/snapshot-20261001-v2/survival_thresholds.pdf": assets
+        "assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.pdf": assets
         / "ht17/survival_thresholds.pdf",
         "assets/presentation-materials/figures/pc_v0/controls/depth-retention-harm-cost.png": assets
         / "pc-controls/depth-retention-harm-cost.png",

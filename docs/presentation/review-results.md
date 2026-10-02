@@ -1,14 +1,20 @@
 # Research results for the October 2 review
 
-**Current reading guide: October 1, Round 59; evidence through Round 58.** Start
-with [Capstan's October 1 primer](../friday-10.02-review/README.md), then the
+**Current reading guide: October 2, Round 61.** Start with
+[2 October update: read first](../friday-10.02-review/UPDATE-2026-10-02.md), which
+summarizes HT-17, the two completed ePC seeds and the unchanged Option R queue.
+The canonical reader/tail reports below now include both completed ePC seeds.
+Numerical qualifications to the update: own-prompt retention is nearly equal,
+not identical (CounterFact seed 1: ePC 1.00, BP .99), and the seed-0 CounterFact
+paraphrase deficit is substantial, at 24.17 percentage points.
+Then read [Capstan's October 1 primer](../friday-10.02-review/README.md), the
 [reviewer feedback and response](../friday-10.02-review/feedback-MMK-nelson-entropy.md)
 and [Capex's scientific review](../friday-10.02-review/feedback-MMK-nelson-entropy-capex.md).
 The dated reports below govern quantitative claims; older planning estimates and
 the prototype tail-class appendix are superseded by these measured results.
 
 - **Heavy tails:** [HT-17](../additional_work/HT-17_report.md) describes finite-range
-  differences across 299 available cells. Learned-reader generalized-Pareto fits
+  differences across 301 available cells; ten reader evaluations are included. Learned-reader generalized-Pareto fits
   add little held-out predictive value over an exponential; stable-v0 zsRE differs.
   Neither result identifies an asymptotic class, infinite variance or entropy
   growth. Frequency, conditional severity and fit failures must travel together.
@@ -19,11 +25,13 @@ the prototype tail-class appendix are superseded by these measured results.
   at a shared prefix; it is not a whole-answer or KL guarantee. CounterFact KL
   remains above .001 and paraphrase retention has a small cost.
 - **Training the reader with PC:** [the partial reader report](../additional_work/PC-reader_report.md)
-  contains three BP seeds and ePC seed 0: 8 of 12 evaluations, only one paired seed.
-  Completed seed-0 training process time is **102.1× BP**, approximately 100×;
-  37× was a forecast. The paired result has lower paraphrase retention and fewer
-  ordinary-text firings under ePC. It is not yet a three-seed finding.
-- **Remaining GPU work:** ePC seeds 1–2 precede the DEC-080 Option R resume
+  contains three BP seeds and ePC seeds 0–1: **10 of 12 evaluations, two paired seeds**.
+  ePC paraphrase retention is lower in each completed pair; differences vary
+  markedly by seed. CounterFact firing reverses from ePC/BP 185/256 positions
+  to 720/660. Completed training costs **102.1× and 95.8× BP**; 37× was a forecast.
+  Neither uniform quietness nor a systematic training-rule effect is established.
+  Seed 2 remains pending.
+- **Remaining GPU work:** ePC seed 2 precedes the DEC-080 Option R resume
   (learned/random only), then the upper-layer factorial. [Option R](../additional_work/R_report.md)
   has four complete cells, one incomplete ceiling stop, nine v0 cells deferred
   and sixteen pending. No full extension or upper-layer result is available.
@@ -566,12 +574,12 @@ Survival curves use P(ΔNLL > x), including zero and beneficial positions in the
 Survival figure: `assets/presentation-materials/figures/aw_b/evaluation-survival.png` (PDF/SVG beside it). DEC-078: an intervention beside the κ pilot, not a recommended cap configuration.
 
 
-## HT-17 — frequency, severity and finite-range shape (October 1)
+## HT-17 — frequency, severity and finite-range shape (October 2)
 
-The [HT-17 report](../additional_work/HT-17_report.md) supersedes the prototype tail appendix. Across 299 cells it separates frequency above .01 nat from mean severity conditional on exceeding it. Primary learned-v5 frequencies/severities are .1594%/1.630 nats on zsRE and .2984%/1.913 nats on CounterFact. Stable v0 has a more pronounced fitted zsRE tail, yet its maximum and ES99 order differently against v5; zero CF harm accompanies zero paraphrase retention.
+The [HT-17 report](../additional_work/HT-17_report.md) supersedes the prototype tail appendix. Across 301 cells it separates frequency above .01 nat from mean severity conditional on exceeding it. Primary learned-v5 frequencies/severities are .1594%/1.630 nats on zsRE and .2984%/1.913 nats on CounterFact. Stable v0 has a more pronounced fitted zsRE tail, yet its maximum and ES99 order differently against v5; zero CF harm accompanies zero paraphrase retention.
 
 Learned-v5 illustrative shape intervals include zero, with little held-out predictive gain over exponential. Stable-zsRE GPD gains .149–.594 nats per excess, with illustrative shape interval [.390,.779]. Random CF has 10/15 held-out support failures; all mixture fits are invalid. These are finite-range observations, not complexity classes or infinite-variance measurements. Conditional window intervals omit realization/seed uncertainty, and window independence remains unverified.
 
 AW-B reduces conditional severity 1.619→.542 and 1.925→.581 nats, with almost unchanged harmful-change frequency. Its one-nat shared-prefix ceiling is analytic, independent of failed tail fits. The κ pilot deformed one surprisal; it did not implement Nelson’s calibrated entropy or coupled free energy. The active-inference policy loop remains proposed.
 
-DEC-080 defers nine unrun Option R stable-v0 cells; the earlier ceiling-killed cell remains incomplete. Sixteen learned/random cells await resumption. DEC-081/081a adds CPU analysis and conservative presentation wording, not another GPU experiment. PC-reader replication remains partial (three BP seeds, one ePC seed); no three-seed rule comparison is yet available.
+DEC-080 defers nine unrun Option R stable-v0 cells; the earlier ceiling-killed cell remains incomplete. Sixteen learned/random cells await resumption. DEC-081/081a adds CPU analysis and conservative presentation wording, not another GPU experiment. PC-reader replication remains partial (three BP seeds, two ePC seeds; 10/12 evaluations); no three-seed rule comparison is yet available.

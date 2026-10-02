@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-02 11:00** — Round 61 committed (DOC-2; PC-16a seed-1 refresh). Reviewer entry point: `assets/presentation-materials/review-data/CURRENT.md` → `UPDATE-2026-10-02.md` first. Next lanes (POST-1, PRES-9) after the review.
 - **2026-10-02 09:55** — Round 61: DOC-2 (add `UPDATE-2026-10-02.md` to the reviewer entry point before this afternoon's meeting), then PC-16a seed-1 refresh. POST-1/PRES-9 after the review.
 - **2026-10-02 09:50** — Capex round 60 committed (REP-1 guide + refresh-all runner). ePC seed 1 evaluated (item 155: the seed-0 'quiet reader' was largely a seed effect; consistent small RET-GS deficit). **PC-16a trigger: go** (both seed-1 evaluations complete). Seed 2 training since 08:13 (≈ Oct 3 09:30 with evaluations) → Option R → AW-L5. POST-1/PRES-9 after the review.
 - **2026-10-02 07:30** — Capex round 59 committed (X26 clean; DOC-1 + `review-data/CURRENT.md`). ePC seed 1 trained (24.1 h); evaluations running (≈ 08:15), then seed 2 (≈ Oct 3 09:30), Option R, AW-L5. Round 60: PC-16a (conditional refresh), REP-1 (reproduction document + refresh-all); POST-1/PRES-9 after today's review.

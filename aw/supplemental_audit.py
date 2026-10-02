@@ -26,10 +26,10 @@ REPORTS = {
     'depth/random controls': 'PC-v0/controls-report-20260929/report.json',
     'matched control': 'PC-v0/matched-report-20261001/report.json',
     'AW-B': 'AW-B/report-20260929/report.json',
-    'PC-reader': 'PC-reader/report-round57-final/report.json',
+    'PC-reader': 'PC-reader/report-round61-final/report.json',
     'Option R': 'R/report-round57-final/report.json',
     'AW-L': 'AW-L/report-round57-final/report.json',
-    'HT-17': 'HT-17/snapshot-20261001-v2/report.json',
+    'HT-17': 'HT-17/snapshot-20261002-seed1/report.json',
 }
 HASH = re.compile(r'^[0-9a-f]{64}$')
 

@@ -1620,3 +1620,16 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     statements, numbers sheet, rehearsal pack), keeping the three-seed answer partial. POST-1 (coupled-objective study
     design) and PRES-9 (fold the reviewers' notes) open when you relay the meeting. GPU: ePC seed 2 training since
     08:13 (≈ Oct 3 09:30 with evaluations), Option R armed behind it, AW-L5 after.
+
+157. (2026-10-02, 11:00 EDT) **Capex round 61 committed; single entry point for this afternoon:**
+    `/home/derp/cap/assets/presentation-materials/review-data/CURRENT.md`. Its first link is the 2 October update
+    (`pc_cap/docs/friday-10.02-review/UPDATE-2026-10-02.md`); the rest of the folder (primer, both feedback responses,
+    results, final-experiments, freeze checklist) hangs off it. Round 61 delivered DOC-2 (entry point and summaries
+    refreshed, 26 links and hashes checked) and the PC-16a seed-1 refresh (reader report `report-round61-final`, HT-17
+    `snapshot-20261002-seed1`, 10/12 evaluations, two paired seeds; deck, Q&A, ledger, number sheet, scripts and
+    rehearsal pack agree; X25 rerun PASS on 25 groups; the one-command reproduction passes in 263 s). I applied Capex's
+    four wording qualifications to the update: own-prompt retention is nearly equal, not identical (CounterFact seed 1:
+    1.00 vs 0.99); the paraphrase deficits are 2.7 / 2.0 points (zsRE) and 2.2 points (CounterFact seed 1) but 24.2
+    points for CounterFact seed 0, so they are not uniformly small; firing and harm reverse direction between the two
+    CounterFact seeds; the third seed assesses within-recipe consistency rather than establishing a training-rule
+    effect. GPU: ePC seed 2 training (≈ Oct 3 09:30 with evaluations), Option R armed, AW-L5 after.

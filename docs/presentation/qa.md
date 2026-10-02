@@ -51,7 +51,7 @@ Evidence: `PC-mechanism`, `PC-SD24`.
 ## 7. Why leave the reader trained by backpropagation?
 
 Holding the selected v5 reader fixed makes the second PC experiment a comparison of acquisition credit on the same reader and base.
-A separate PC-trained-reader experiment now has BP evaluations for three seeds and ePC evaluations for seed 0; this is not yet a three-seed paired result.
+A separate PC-trained-reader experiment now has BP evaluations for three seeds and ePC evaluations for seeds 0–1: 10/12 evaluations and two paired seeds; this is not yet a three-seed paired result.
 
 Evidence: `PC-fixed-v5`, `R1-controls`; [PC-reader report](../additional_work/PC-reader_report.md).
 
@@ -176,8 +176,9 @@ Evidence: `HT17-tails`, `AI-coupled-FE`, `model-scale`.
 
 ## 25. What does the three-seed PC-reader experiment say?
 
-**Pending paired seeds 1–2:** seed 0 has lower ePC paraphrase retention (zsRE .9467 versus BP .9733; CounterFact .5683 versus .8100) and fewer ordinary-text firings, while measured training takes about 102.1 times BP's process time.
-After all evaluations finish, replace this answer with the per-seed paired retention, firing, harm and cost results; a quieter reader alone does not establish safer learning, and training seeds are not new subject realizations.
+**Two paired seeds, 10/12 evaluations; seed 2 pending.** ePC minus BP paraphrase-retention differences are −2.67/−2.00 percentage points on zsRE and −24.17/−2.17 on CounterFact for seeds 0/1. The first CounterFact deficit is substantial. Own-prompt retention agrees except CounterFact seed 1 (ePC 1.00, BP .99).
+
+Ordinary-text fired positions on CounterFact are ePC/BP 185/256 for seed 0 and 720/660 for seed 1, out of 245,237 positions each. The second ePC seed has slightly greater mean loss and ES99 there, reversing seed 0's direction; a uniformly quieter or safer reader is not supported. zsRE firing remains lower in both available ePC seeds. Completed training-time ratios are 102.1× and 95.8× BP. A third seed can assess consistency within this recipe but cannot alone establish a systematic training-rule effect or generalization to new subject populations.
 
 Evidence: [PC-reader report](../additional_work/PC-reader_report.md), including source receipts; 37× was an earlier profile forecast, not the completed seed-0 ratio.
 

@@ -9,6 +9,7 @@ from pathlib import Path
 from aw.pc_historical import ROOT, sha
 from aw.presentation_slides import export
 from aw.presentation_timing import main as timing
+from aw.refresh_report_steps import reader_number_line
 
 
 def build(output):
@@ -20,7 +21,7 @@ def build(output):
     shutil.copyfile(timing_path, output / 'timings.json')
     shutil.copyfile(ROOT / 'docs/presentation/qa.md', output / 'qa.md')
     backup = {
-        'HT-17 survival: empirical curves, invalid-fit caveats': ROOT.parent / 'assets/presentation-materials/figures/tails_ht17/snapshot-20261001-v2/survival_thresholds.png',
+        'HT-17 survival: empirical curves, invalid-fit caveats': ROOT.parent / 'assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.png',
         'κ pilot: retention versus tail trade-off, declared gate failed': ROOT / 'logs/r1_round37/presentation-figures-v2/kappa-tradeoff.png',
         'PC controls: depth, retention, harm and cost': ROOT.parent / 'assets/presentation-materials/figures/pc_v0/controls/depth-retention-harm-cost.png',
     }
@@ -33,8 +34,8 @@ def build(output):
         lines.append(f'- [{label}]({target.name}).')
     lines += ['', 'HT-17: finite-range shapes, not classes; shape intervals condition on fixed cells and assume adequate window blocks. κ pilot: development population, 4,064 positions and ES95; do not compare it directly with Stage-4 ES99. PC controls: order100 subset; offered-budget adjoint did not spend all available compute.']
     (output/'backup-index.md').write_text('\n'.join(lines)+'\n')
-    reader_path=ROOT/'logs/additional_work/PC-reader/report-round57-final/report.json'
-    ht_path=ROOT/'logs/additional_work/HT-17/snapshot-20261001-v2/report.json'
+    reader_path=ROOT/'logs/additional_work/PC-reader/report-round61-final/report.json'
+    ht_path=ROOT/'logs/additional_work/HT-17/snapshot-20261002-seed1/report.json'
     stage_path=ROOT/'logs/R1/reports/triplet/summary.json'
     reader=json.loads(reader_path.read_bytes())
     ht=json.loads(ht_path.read_bytes())
@@ -45,8 +46,7 @@ def build(output):
         rows=[r for r in stage['groups'] if r['condition']=='R1_learned_ff' and r['dataset']==ds]
         values=[v for r in rows for v in r['primary']['RET-GS']]
         return sum(values)/len(values)
-    ratio=next(r['epc_over_bp'] for r in reader['training_cost_ratios'] if r['seed']==0)
-    text=f'''# Numbers to say — October 1 evidence snapshot
+    text=f'''# Numbers to say — October 2 evidence snapshot
 
 Use rounded values below. These are measured results or explicitly labeled scope; no pending value is zero. Source keys refer to the precise records below and to `manifest.json`/`rehearsal-manifest.json` for hashes.
 
@@ -54,25 +54,25 @@ Use rounded values below. These are measured results or explicitly labeled scope
 - **Fidelity:** all **45/45** main learned-reader cells exceed mean KL **0.001**. Integrity and preservation are different checks. [S]
 - **AW-B mixture severity:** zsRE **{severity('zsre','v5'):.3f}→{severity('zsre','mixture:0.367879'):.3f} nats**; CounterFact **{severity('counterfact','v5'):.3f}→{severity('counterfact','mixture:0.367879'):.3f}** conditional on loss increase >.01 nat. Roughly one-third, not half; harmful-change frequency is nearly unchanged. Ten exposed 300-edit memories, five orders/dataset. [H]
 - **Analytic mixture ceiling:** **one nat per token at the same prefix** for base weight exp(−1). Not a one-nat whole-answer guarantee. [B]
-- **PC-reader:** **8/12** evaluations available; only seed0 paired. Completed ePC/BP training process-time ratio **{ratio:.1f}×**; 37× was a forecast. No three-seed finding yet. [P]
+{reader_number_line(reader)}
 - **Main execution:** **270 cells, 392.42 process-hours**. Concurrent process time, not elapsed GPU time; supplemental work is additional. **GPT-2 small, 124M**; transfer to production scale unestablished. [A]
 - **Schedule:** experiment cutoff **October 9, 17:00 EDT**; presentation **October 15**. [A]
 
 [S] `logs/R1/reports/triplet/summary.json`: learned condition, dataset, `primary.RET-GS`; benchmark counts per group.
-[H] `logs/additional_work/HT-17/snapshot-20261001-v2/report.json`: AW-B groups, threshold .01, `conditional_mean_loss`.
+[H] `{ht_path}`: AW-B groups, threshold .01, `conditional_mean_loss`.
 [B] `docs/additional_work/AW-B_report.md`: declared mixture and scope.
-[P] `logs/additional_work/PC-reader/report-round57-final/report.json`: coverage and `training_cost_ratios[seed=0]`.
+[P] `{reader_path}`: coverage, per-seed endpoint numerators/denominators and `training_cost_ratios` for completed trainings.
 [A] `docs/R1_stage4_report.md`: accounting and limitations.
 
 Detailed spoken numbers use `docs/talk_claim_ledger_v7.md` and `docs/presentation/deck_v3/pc-result-sources.json`. Rerun `aw.script_numbers_check` after every export; its occurrence inventory states rounding tolerances and untraced/review items. Numerical ledger matches alone do not establish contextual correctness. Do not improvise a favorable PC conclusion, an asymptotic tail class, W(N), or a completed Option R/upper-layer result. Refresh after new evaluations and the October 2 review.
 '''
     (output/'numbers-to-say.md').write_text(text)
     (ROOT/'docs/presentation/numbers_to_say.md').write_text(text)
-    for p in (reader_path, ht_path, stage_path, ROOT/'docs/additional_work/AW-B_report.md', ROOT/'docs/R1_stage4_report.md', ROOT/'docs/presentation/qa.md', Path(__file__).resolve()):
+    for p in (reader_path, ht_path, stage_path, ROOT/'docs/additional_work/AW-B_report.md', ROOT/'docs/R1_stage4_report.md', ROOT/'docs/presentation/qa.md', ROOT/'aw/refresh_report_steps.py', Path(__file__).resolve()):
         sources[str(p)]=sha(p)
     index='''# Rehearsal pack — charlie's October 15 presentation
 
-Canonical October 1 export: `assets/presentation-materials/deck_v3/rehearsal/`.
+Canonical October 2 export: `assets/presentation-materials/deck_v3/rehearsal/`.
 
 - `speaking-script-15min.md` and `speaking-script-25min.md`: resolved numbers, per-slide clocks, cuts and evidence.
 - `timings.json`: allocations total exactly 15/25 minutes, including slide changes but excluding Q&A. Rates are estimates, not a measured rehearsal or confirmed session duration.
@@ -80,7 +80,7 @@ Canonical October 1 export: `assets/presentation-materials/deck_v3/rehearsal/`.
 - `qa.md`, `numbers-to-say.md`, `backup-index.md`: audience answers, one-page numerical prompts and three figures for follow-up questions.
 - `manifest.json` binds deck inputs; `rehearsal-manifest.json` binds this entire pack. No private author-equation question is exported.
 
-The October 2 review notes have not arrived. Refresh PC-reader after seeds1–2, Option R after resume, and AW-L after its queue; update their literal text as well as generated tables. No three-seed or completed-extension conclusion should be inferred from this snapshot.
+The October 2 review notes have not arrived. PC-reader currently has 10/12 evaluations and two paired seeds. Refresh after seed 2, Option R after resume, and AW-L after its queue; update their literal text as well as generated tables. No three-seed or completed-extension conclusion should be inferred from this snapshot.
 '''
     (output/'README.md').write_text(index)
     (ROOT/'docs/presentation/rehearsal.md').write_text(index)

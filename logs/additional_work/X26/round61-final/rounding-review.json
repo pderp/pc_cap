@@ -1,0 +1,64 @@
+{
+  "task": "PC-16a/X26",
+  "automated_inventory": "logs/additional_work/X26/round61-final/audit.json",
+  "reviewed_occurrences": [
+    {
+      "path": "/home/derp/cap/assets/presentation-materials/deck_v3/rehearsal/speaking-script-15min.md",
+      "line": 148,
+      "raw": "one-third",
+      "status": "reviewed_approximation",
+      "source": "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json",
+      "ratios": {
+        "zsre": 0.33490598431041146,
+        "counterfact": 0.30182825406284614
+      },
+      "explanation": "The script explicitly says roughly; these are remaining severity fractions, not fractions removed."
+    },
+    {
+      "path": "/home/derp/cap/assets/presentation-materials/deck_v3/rehearsal/speaking-script-25min.md",
+      "line": 303,
+      "raw": "2.7",
+      "status": "verified_rounded_deficit_magnitude",
+      "source": "logs/additional_work/PC-reader/report-round61-final/report.json",
+      "selector": "paired_differences[dataset=zsre,seed=0].difference_bp_minus_epc.RET-GS * 100",
+      "unrounded_percentage_points": 2.6666666666666727,
+      "explanation": "The spoken positive deficit is BP minus ePC; ledger rows also give negative ePC minus BP. This is a unit/sign conversion, not a different experimental result."
+    },
+    {
+      "path": "/home/derp/cap/assets/presentation-materials/deck_v3/rehearsal/speaking-script-25min.md",
+      "line": 303,
+      "raw": "24.2",
+      "status": "verified_rounded_deficit_magnitude",
+      "source": "logs/additional_work/PC-reader/report-round61-final/report.json",
+      "selector": "paired_differences[dataset=counterfact,seed=0].difference_bp_minus_epc.RET-GS * 100",
+      "unrounded_percentage_points": 24.16666666666667,
+      "explanation": "The spoken positive deficit is BP minus ePC; ledger rows also give negative ePC minus BP. This is a unit/sign conversion, not a different experimental result."
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/docs/presentation/deck_v3/slide10-fixed-v5-credit.md",
+      "line": 55,
+      "raw": "2.7",
+      "status": "verified_rounded_deficit_magnitude",
+      "source": "logs/additional_work/PC-reader/report-round61-final/report.json",
+      "selector": "paired_differences[dataset=zsre,seed=0].difference_bp_minus_epc.RET-GS * 100",
+      "unrounded_percentage_points": 2.6666666666666727,
+      "explanation": "The spoken positive deficit is BP minus ePC; ledger rows also give negative ePC minus BP. This is a unit/sign conversion, not a different experimental result."
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/docs/presentation/deck_v3/slide10-fixed-v5-credit.md",
+      "line": 55,
+      "raw": "24.2",
+      "status": "verified_rounded_deficit_magnitude",
+      "source": "logs/additional_work/PC-reader/report-round61-final/report.json",
+      "selector": "paired_differences[dataset=counterfact,seed=0].difference_bp_minus_epc.RET-GS * 100",
+      "unrounded_percentage_points": 24.16666666666667,
+      "explanation": "The spoken positive deficit is BP minus ePC; ledger rows also give negative ePC minus BP. This is a unit/sign conversion, not a different experimental result."
+    }
+  ],
+  "unresolved": [],
+  "sources_sha256": {
+    "logs/additional_work/PC-reader/report-round61-final/report.json": "e70eea17244f69a3c202002b33eba0de677fc823d7c6a6bdf67861da384f7642",
+    "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json": "d4a40e2b66a21fc154543439fe8d4d007e7a62308407f89e5a63f8dbf92cfeee",
+    "logs/additional_work/X26/round61-final/audit.json": "70c2c2fdf042f25dd41484a992553db012adfdd9d7c28b2f5826a0140cbc3a7c"
+  }
+}

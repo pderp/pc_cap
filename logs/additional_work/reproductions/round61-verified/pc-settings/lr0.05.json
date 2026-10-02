@@ -1,0 +1,2199 @@
+{
+  "schema": "pc-fixed-v5-report-v1",
+  "cells": [
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300,
+      "finish": {
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_solver": {
+          "credit_iters": 8,
+          "error_lr": 0.1,
+          "error_solver_active": false,
+          "requested_credit_iters": 8,
+          "requested_error_lr": 0.05
+        },
+        "status": "complete",
+        "items_completed": 300,
+        "items_planned": 300,
+        "checkpoints_completed": [
+          100,
+          300
+        ],
+        "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_before": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "cost_policy": "shared ledger totals and returned costs separate; never summed together",
+        "elapsed_process_seconds": 312.48963283794,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 8227,
+            "partial_forwards": 7210,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 21.648893477628008,
+            "accel_seconds": 21.648893477628008,
+            "peak_mem_mib": 1540.19140625,
+            "tokens": 202635
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 15336,
+            "partial_forwards": 0,
+            "reverses": 5669,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 38.32146551809274,
+            "accel_seconds": 38.32146551809274,
+            "peak_mem_mib": 1540.19140625,
+            "tokens": 195119
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 23563,
+            "partial_forwards": 7210,
+            "reverses": 5669,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 59.970358995720744,
+            "accel_seconds": 59.970358995720744,
+            "peak_mem_mib": 1540.19140625,
+            "tokens": 397754
+          },
+          "events": 30773,
+          "elapsed_wall_seconds": 314.92820286750793,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        },
+        "state_sha256": "29a2ba3b9e83e63380618e737884b43a646f3567c5d5233ef1d3b7f832ed7ef5",
+        "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_after": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "config_sha256": "12095fa57c1fb13c55ad088575883b5bef0173c0a00f047392ecaad3f9cbc1f1"
+      },
+      "process": {
+        "elapsed_process_seconds": 316.890364266932,
+        "scope": "includes lease wait, model construction and stream; not additive to finish time",
+        "wall_allowance_seconds": 7200.0
+      },
+      "checkpoints": {
+        "100": {
+          "ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-GS": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 97.0,
+            "value": 0.97,
+            "evaluated_value": 0.97,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 72.0,
+            "value": 0.72,
+            "evaluated_value": 0.72,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        },
+        "300": {
+          "ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-GS": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 295.0,
+            "value": 0.9833333333333333,
+            "evaluated_value": 0.9833333333333333,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 76.0,
+            "value": 0.76,
+            "evaluated_value": 0.76,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        }
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-E",
+      "items": 300,
+      "finish": {
+        "credit_iters": 8,
+        "error_lr": 0.05,
+        "error_solver_active": true,
+        "requested_solver": {
+          "credit_iters": 8,
+          "error_lr": 0.05,
+          "error_solver_active": true,
+          "requested_credit_iters": 8,
+          "requested_error_lr": 0.05
+        },
+        "status": "complete",
+        "items_completed": 300,
+        "items_planned": 300,
+        "checkpoints_completed": [
+          100,
+          300
+        ],
+        "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_before": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "cost_policy": "shared ledger totals and returned costs separate; never summed together",
+        "elapsed_process_seconds": 424.5009593081195,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 8227,
+            "partial_forwards": 7210,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 21.938093557721004,
+            "accel_seconds": 21.938093557721004,
+            "peak_mem_mib": 1513.90625,
+            "tokens": 202635
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 39264,
+            "partial_forwards": 0,
+            "reverses": 29661,
+            "settle_iters": 24056,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 141.03691943734884,
+            "accel_seconds": 141.03691943734884,
+            "peak_mem_mib": 1513.90625,
+            "tokens": 193503
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 47491,
+            "partial_forwards": 7210,
+            "reverses": 29661,
+            "settle_iters": 24056,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 162.97501299506985,
+            "accel_seconds": 162.97501299506985,
+            "peak_mem_mib": 1513.90625,
+            "tokens": 396138
+          },
+          "events": 30645,
+          "elapsed_wall_seconds": 426.9351122379303,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        },
+        "state_sha256": "53e8bc98241e4ea306921afa42c8875b9cd60cc5ff7cfaf6f620f66da845b3d7",
+        "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_after": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "config_sha256": "8cbab1fc6e77e1763fc6e5d6158809d65a15741929798f85d97a10e75aae96ce"
+      },
+      "process": {
+        "elapsed_process_seconds": 428.8964223570656,
+        "scope": "includes lease wait, model construction and stream; not additive to finish time",
+        "wall_allowance_seconds": 7200.0
+      },
+      "checkpoints": {
+        "100": {
+          "ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-GS": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 97.0,
+            "value": 0.97,
+            "evaluated_value": 0.97,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 72.0,
+            "value": 0.72,
+            "evaluated_value": 0.72,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        },
+        "300": {
+          "ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-GS": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 295.0,
+            "value": 0.9833333333333333,
+            "evaluated_value": 0.9833333333333333,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 76.0,
+            "value": 0.76,
+            "evaluated_value": 0.76,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        }
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300,
+      "finish": {
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_solver": {
+          "credit_iters": 8,
+          "error_lr": 0.1,
+          "error_solver_active": false,
+          "requested_credit_iters": 8,
+          "requested_error_lr": 0.05
+        },
+        "status": "complete",
+        "items_completed": 300,
+        "items_planned": 300,
+        "checkpoints_completed": [
+          100,
+          300
+        ],
+        "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_before": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "cost_policy": "shared ledger totals and returned costs separate; never summed together",
+        "elapsed_process_seconds": 293.8730356141459,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 21961,
+            "partial_forwards": 4880,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 40.800851192325354,
+            "accel_seconds": 40.800851192325354,
+            "peak_mem_mib": 1504.9462890625,
+            "tokens": 533045
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 8856,
+            "partial_forwards": 0,
+            "reverses": 3028,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 22.710471316007897,
+            "accel_seconds": 22.710471316007897,
+            "peak_mem_mib": 1504.9462890625,
+            "tokens": 74620
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 30817,
+            "partial_forwards": 4880,
+            "reverses": 3028,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 63.51132250833325,
+            "accel_seconds": 63.51132250833325,
+            "peak_mem_mib": 1504.9462890625,
+            "tokens": 607665
+          },
+          "events": 35697,
+          "elapsed_wall_seconds": 296.3157205581665,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        },
+        "state_sha256": "1f79bf1ce5b36285ce893e60cdbc192e71876b777b2453f7d0c722287eba4625",
+        "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_after": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "config_sha256": "226c79d06596bdda0765be27821295124821b2800e39ec3465182cc1aa2ea79b"
+      },
+      "process": {
+        "elapsed_process_seconds": 298.2761580811348,
+        "scope": "includes lease wait, model construction and stream; not additive to finish time",
+        "wall_allowance_seconds": 7200.0
+      },
+      "checkpoints": {
+        "100": {
+          "ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-GS": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 82.5,
+            "value": 0.825,
+            "evaluated_value": 0.825,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        },
+        "300": {
+          "ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-GS": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 242.0,
+            "value": 0.8066666666666666,
+            "evaluated_value": 0.8066666666666666,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        }
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-E",
+      "items": 300,
+      "finish": {
+        "credit_iters": 8,
+        "error_lr": 0.05,
+        "error_solver_active": true,
+        "requested_solver": {
+          "credit_iters": 8,
+          "error_lr": 0.05,
+          "error_solver_active": true,
+          "requested_credit_iters": 8,
+          "requested_error_lr": 0.05
+        },
+        "status": "complete",
+        "items_completed": 300,
+        "items_planned": 300,
+        "checkpoints_completed": [
+          100,
+          300
+        ],
+        "base_hash_before": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_before": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "cost_policy": "shared ledger totals and returned costs separate; never summed together",
+        "elapsed_process_seconds": 356.62053248798475,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 21961,
+            "partial_forwards": 4880,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 41.1473418395035,
+            "accel_seconds": 41.1473418395035,
+            "peak_mem_mib": 1540.9443359375,
+            "tokens": 533045
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 21450,
+            "partial_forwards": 0,
+            "reverses": 15665,
+            "settle_iters": 12680,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 79.28705481952056,
+            "accel_seconds": 79.28705481952056,
+            "peak_mem_mib": 1540.9443359375,
+            "tokens": 73850
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 43411,
+            "partial_forwards": 4880,
+            "reverses": 15665,
+            "settle_iters": 12680,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 120.43439665902406,
+            "accel_seconds": 120.43439665902406,
+            "peak_mem_mib": 1540.9443359375,
+            "tokens": 606895
+          },
+          "events": 35611,
+          "elapsed_wall_seconds": 359.0534710884094,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        },
+        "state_sha256": "f9a9bf1fb86030e43de80709cbbd1ce0a64feb378a179fd1e302935334dd9986",
+        "base_hash_after": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "reader_hash_after": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+        "config_sha256": "4c8f5e01e22ce732cf417e3a0653ec754a4804ac8e7d46b4808c841f2cf2e87a"
+      },
+      "process": {
+        "elapsed_process_seconds": 361.01781756593846,
+        "scope": "includes lease wait, model construction and stream; not additive to finish time",
+        "wall_allowance_seconds": 7200.0
+      },
+      "checkpoints": {
+        "100": {
+          "ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-ES": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "RET-GS": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 82.0,
+            "value": 0.82,
+            "evaluated_value": 0.82,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        },
+        "300": {
+          "ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-ES": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 300.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "RET-GS": {
+            "planned": 300,
+            "scored": 300,
+            "numerator": 241.0,
+            "value": 0.8033333333333333,
+            "evaluated_value": 0.8033333333333333,
+            "status": "complete",
+            "status_counts": {
+              "ok": 300
+            },
+            "evaluable": 300
+          },
+          "LS": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "near_miss": {
+            "planned": 100,
+            "scored": 100,
+            "numerator": 100.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 100
+            },
+            "evaluable": 100
+          },
+          "revision": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          },
+          "revision_latest_answer": {
+            "planned": 50,
+            "scored": 50,
+            "numerator": 50.0,
+            "value": 1.0,
+            "evaluated_value": 1.0,
+            "status": "complete",
+            "status_counts": {
+              "ok": 50
+            },
+            "evaluable": 50
+          }
+        }
+      }
+    }
+  ],
+  "population": "exposed R1 realization 0, order 100, first 300 edits",
+  "treatment": {
+    "arms": {
+      "SE-A": "adjoint",
+      "SE-E": "error"
+    },
+    "iters": 8,
+    "error_lr": 0.05,
+    "energy": "SD-24 corrected",
+    "arm_settings": {
+      "SE-A": {
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.05
+      },
+      "SE-E": {
+        "credit_iters": 8,
+        "error_lr": 0.05,
+        "error_solver_active": true,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.05
+      }
+    }
+  },
+  "sources_sha256": {
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+    "/home/derp/cap/pc_cap/docs/tasks/round58-source-archive/manifest.json": "d557203a67b0126cd27fc1fd1f84432503aa25f4711fbd13ae23eeedd58e32f1",
+    "/home/derp/cap/pc_cap/docs/tasks/round61-source-archive/manifest.json": "9ee41613f248ee2c5a77cc3de58e50a47d675285deec8688b92b241b4ff06687",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v1_run.py": "bad90a9aef1753b6df9d13fe6ba279aa400394b0633b4e01d719fc85363252d2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/plan.json": "c7054b52d4e6f87ae15d75d0f47ef3da7bcdfd7528946f6a2d160207acde8566",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/config.json": "12095fa57c1fb13c55ad088575883b5bef0173c0a00f047392ecaad3f9cbc1f1",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-8e4df877ccad361ba231bd0a49c4e2d3bff9990db7c1a9070157a6a54bc470dc.json": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/checkpoint-100.json": "bd37bbe8fbebe99185e23d008519c7e2e03f8d7bb49d329ebdd4539be5a53570",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/checkpoint-300.json": "13faafa012098018850fea6ff6dc4ec33c30261ed1b5989808f453d371397438",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/finish.json": "caa5046409104faa9a0fabb30d32c74f432860ae1464e67ab4dd994e8816626c",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/process.json": "48076364b373eb1892ff653e0a004b47a6697b2f90d7c74204440fb3330e3ac3",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/config.json": "8cbab1fc6e77e1763fc6e5d6158809d65a15741929798f85d97a10e75aae96ce",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/checkpoint-100.json": "7e3bfff5869de3bbde7a88c36c8474328f8023d103f4c78cfd09845f58389f70",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/checkpoint-300.json": "53b5dd0738bee995e70438d3a69a21856e40b64007b1a2339e780c777d81f933",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/finish.json": "dc036b848aa37ee6d766912df630e3f76b5fee17e8b18d2313b5bbf89093ed1d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/process.json": "901424c4dc1c0b37fc391f5b114e6e184f2ff20cbdd40a359175227049627d53",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/config.json": "226c79d06596bdda0765be27821295124821b2800e39ec3465182cc1aa2ea79b",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-b0acc16f0f979c8203fdf4a384b2d0a830a7db2537dfabcfdc4cd9f679df1d91.json": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/checkpoint-100.json": "665ff242ef1fcbd4f4b8e63d9e24ba92e52bb56e229f30201b436fcafc16246b",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/checkpoint-300.json": "b2bcfd97b8d893fa1617499c290909bfe49afeffcc1ed8b38cd568c3fb531e5f",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/finish.json": "194933dcf26e1f22a499b12b889d34adfdf78f073a5eb401fa7656670c061002",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/process.json": "0440cf1ffc086781fb7a321eb55fa462d3f421c1795310bbc30b0d2305bde72d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/config.json": "4c8f5e01e22ce732cf417e3a0653ec754a4804ac8e7d46b4808c841f2cf2e87a",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/checkpoint-100.json": "7bc2b593c1803334851326f8fb4df298c21c418ae451d0482ba038c8ba774168",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/checkpoint-300.json": "5a16ccb1713d6343442df0d2e3cf8d92728965ff06cb82237c23a5eb46ce5998",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/finish.json": "e7db6548313d726da7068cb896d236654f1e978fbdd399afab8ff9063f69d025",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/process.json": "a9e1c25d426378f62074e755b1aab661b41d48936e7b745814450c927e917e03",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/report.json": "4b15991a4c799ebbb79868a6880781202b78e150caccc669b2a6d6e064c0bb97",
+    "/home/derp/cap/pc_cap/aw/pc_v1_harm.py": "e36f52df4fedce6570e003765a77b5f53ce3141b6aae7deb6b0438c9159f798c",
+    "/home/derp/cap/pc_cap/aw/pc_harm_readout.py": "c5e797370adca001c90dd4de6d8fee326fc0be47a2e4239016bd72123cfe1354",
+    "/home/derp/cap/pc_cap/aw/pc_v1_readout.py": "f97239846cc4ad87a5f1566c07984d67114b45c39b6bb3c66348cd823c50a61c",
+    "/home/derp/cap/pc_cap/aw/pc_v1_run.py": "2f44c0edf9b0a601a45465d8af43594d15ecde8f97310ce6d9002183dda6f0f2",
+    "/home/derp/cap/pc_cap/aw/scoring.py": "c2550248a7ddce91431f97f27ddc46f235ff5ecfeabcecba64fc8bd58dfdccfd",
+    "/home/derp/cap/pc_cap/scripts/r1_68f_full_validation.py": "7e7301b9089326365e76d10d29d112d27029848627b66d1308120dfbd7368473",
+    "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-A/cost.json": "aadb6aa137f9c62fa0193a5d57f6bb821f9067edec6a0c4596ebbb657c6d7743",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-A/vectors.npz": "93965721c2ac8b8e3b10b238f61458bbeaa6d92b7095a049afddd3421d56ba66",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-E/cost.json": "b97b9b13339e5935a20dbebd50d1c24346dd773201d61cb7270bc63ef90b5be7",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-E/vectors.npz": "9aa6cbed28a52c9e93ccaf9dd271fdf8c6302117e07ed776027b251fe82cd44a",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-A/cost.json": "2203f0deba12f2ec2afd55c2370194024c7919bae7ea0cf68b4cb2befc00669c",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-A/vectors.npz": "c30c0cf05349b0f438b7f10a20f2263d9c871b4b893153abd3f078e893ab3c88",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-E/cost.json": "4eaa665f033b53a513b4b65b6e2d8db702d3bccf02a5be5689e9ec1150f47ba7",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-E/vectors.npz": "871a19f65792cf4ea3e6e3fe0a7d42691a18ab61397faa02fdddea7cccf210e6",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-paired.npz": "558379cf8499749b5cefd8a63a7b2ce9e4f7b275ac13514bb8a0590e660a3c8e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-paired.npz": "e6ae1602881b77eb41b23681facfa1e18f787e8338073bd1ec76919ffe107add",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/cost.json": "a622fdea0e62ba79ad19d72a16f6f4196fc3c2fd1c11ba6254eab02b59c4b4b6"
+  },
+  "harm": {
+    "smoke": false,
+    "run": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929",
+    "checkpoint": 300,
+    "population": "post hoc / exposed R1 realization-0 streams, first 300 edits in order 100",
+    "selection": {
+      "mode": "v5",
+      "source": {
+        "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+        "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+      },
+      "inventory": {
+        "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+        "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+      },
+      "windows": 1931,
+      "window_tokens": 128,
+      "positions": 245237,
+      "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+      "context": "reset every window",
+      "order": "window then target position, starting at target position 1"
+    },
+    "cells": [
+      {
+        "dataset": "counterfact",
+        "realization": 0,
+        "order": 100,
+        "arm": "SE-A",
+        "directory": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A",
+        "binding": {
+          "path": "/home/derp/cap/assets/runs/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/checkpoint-300.snapshot",
+          "sha256": "40e05cb0691ffc66bae74a81ee28b3c913f0b58b719db15b55bc62abb2d82b2a",
+          "state_sha256": "1f79bf1ce5b36285ce893e60cdbc192e71876b777b2453f7d0c722287eba4625",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+          "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+          "credit": "adjoint",
+          "iters": 8,
+          "error_lr": 0.1
+        },
+        "checkpoint_sha256": "b2bcfd97b8d893fa1617499c290909bfe49afeffcc1ed8b38cd568c3fb531e5f",
+        "readout": {
+          "treatment": {
+            "credit_iters": 8,
+            "error_lr": 0.05
+          },
+          "summary": {
+            "capoff": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.004381400123235321,
+                "mean_positive": 0.004586864719197248,
+                "es99_positive": 0.4586864719197249,
+                "maximum_signed": 11.744237842903047,
+                "maximum_positive": 11.744237842903047,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 110,
+                "half_mass_fraction": 0.00044854569253416083,
+                "positive_mass": 1124.8689431417738,
+                "exceedance": {
+                  "0.01": {
+                    "count": 691,
+                    "fraction": 0.0028176824867373195
+                  },
+                  "0.1": {
+                    "count": 657,
+                    "fraction": 0.0026790410908631244
+                  },
+                  "1.0": {
+                    "count": 344,
+                    "fraction": 0.0014027247111977393
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.004175656473143588,
+                "mean_positive": 0.004175656473143588,
+                "es99_positive": 0.41756564731435886,
+                "maximum_signed": 11.60299525990636,
+                "maximum_positive": 11.60299525990636,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 106,
+                "half_mass_fraction": 0.00043223494007837315,
+                "positive_mass": 1024.0254665043146,
+                "exceedance": {
+                  "0.01": {
+                    "count": 815,
+                    "fraction": 0.003323315812866737
+                  },
+                  "0.1": {
+                    "count": 755,
+                    "fraction": 0.003078654526029922
+                  },
+                  "1.0": {
+                    "count": 291,
+                    "fraction": 0.0011866072411585527
+                  }
+                }
+              }
+            },
+            "original": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.004381400123235321,
+                "mean_positive": 0.004586864719197248,
+                "es99_positive": 0.4586864719197249,
+                "maximum_signed": 11.744237842903047,
+                "maximum_positive": 11.744237842903047,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 110,
+                "half_mass_fraction": 0.00044854569253416083,
+                "positive_mass": 1124.8689431417738,
+                "exceedance": {
+                  "0.01": {
+                    "count": 691,
+                    "fraction": 0.0028176824867373195
+                  },
+                  "0.1": {
+                    "count": 657,
+                    "fraction": 0.0026790410908631244
+                  },
+                  "1.0": {
+                    "count": 344,
+                    "fraction": 0.0014027247111977393
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.004175656473143588,
+                "mean_positive": 0.004175656473143588,
+                "es99_positive": 0.41756564731435886,
+                "maximum_signed": 11.60299525990636,
+                "maximum_positive": 11.60299525990636,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 106,
+                "half_mass_fraction": 0.00043223494007837315,
+                "positive_mass": 1024.0254665043146,
+                "exceedance": {
+                  "0.01": {
+                    "count": 815,
+                    "fraction": 0.003323315812866737
+                  },
+                  "0.1": {
+                    "count": 755,
+                    "fraction": 0.003078654526029922
+                  },
+                  "1.0": {
+                    "count": 291,
+                    "fraction": 0.0011866072411585527
+                  }
+                }
+              }
+            }
+          },
+          "selection": {
+            "mode": "v5",
+            "source": {
+              "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+              "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+            },
+            "inventory": {
+              "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+              "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+            },
+            "windows": 1931,
+            "window_tokens": 128,
+            "positions": 245237,
+            "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+            "context": "reset every window",
+            "order": "window then target position, starting at target position 1"
+          },
+          "fields": [
+            "loss_cap",
+            "loss_capoff",
+            "loss_original",
+            "kl_capoff_to_cap",
+            "kl_original_to_cap"
+          ],
+          "vectors": {
+            "path": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-A/vectors.npz",
+            "sha256": "93965721c2ac8b8e3b10b238f61458bbeaa6d92b7095a049afddd3421d56ba66"
+          },
+          "state_sha256": "1f79bf1ce5b36285ce893e60cdbc192e71876b777b2453f7d0c722287eba4625",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        }
+      },
+      {
+        "dataset": "counterfact",
+        "realization": 0,
+        "order": 100,
+        "arm": "SE-E",
+        "directory": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E",
+        "binding": {
+          "path": "/home/derp/cap/assets/runs/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/checkpoint-300.snapshot",
+          "sha256": "96dce6cd4dbea4ece9fb5cf49710b6b566a6a57e11b01d7fa18acc32e4ee39c3",
+          "state_sha256": "f9a9bf1fb86030e43de80709cbbd1ce0a64feb378a179fd1e302935334dd9986",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+          "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+          "credit": "error",
+          "iters": 8,
+          "error_lr": 0.05
+        },
+        "checkpoint_sha256": "5a16ccb1713d6343442df0d2e3cf8d92728965ff06cb82237c23a5eb46ce5998",
+        "readout": {
+          "treatment": {
+            "credit_iters": 8,
+            "error_lr": 0.05
+          },
+          "summary": {
+            "capoff": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.004387121478519205,
+                "mean_positive": 0.00459392302992994,
+                "es99_positive": 0.45939230299299405,
+                "maximum_signed": 12.143345829421355,
+                "maximum_positive": 12.143345829421355,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 111,
+                "half_mass_fraction": 0.00045262338064810774,
+                "positive_mass": 1126.5999020909294,
+                "exceedance": {
+                  "0.01": {
+                    "count": 695,
+                    "fraction": 0.002833993239193107
+                  },
+                  "0.1": {
+                    "count": 654,
+                    "fraction": 0.0026668080265212835
+                  },
+                  "1.0": {
+                    "count": 350,
+                    "fraction": 0.0014271908398814208
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.004175152292478382,
+                "mean_positive": 0.004175152292478382,
+                "es99_positive": 0.41751522924783824,
+                "maximum_signed": 11.984810858067068,
+                "maximum_positive": 11.984810858067068,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 108,
+                "half_mass_fraction": 0.000440390316306267,
+                "positive_mass": 1023.9018227505205,
+                "exceedance": {
+                  "0.01": {
+                    "count": 815,
+                    "fraction": 0.003323315812866737
+                  },
+                  "0.1": {
+                    "count": 752,
+                    "fraction": 0.003066421461688081
+                  },
+                  "1.0": {
+                    "count": 295,
+                    "fraction": 0.0012029179936143405
+                  }
+                }
+              }
+            },
+            "original": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.004387121478519205,
+                "mean_positive": 0.00459392302992994,
+                "es99_positive": 0.45939230299299405,
+                "maximum_signed": 12.143345829421355,
+                "maximum_positive": 12.143345829421355,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 111,
+                "half_mass_fraction": 0.00045262338064810774,
+                "positive_mass": 1126.5999020909294,
+                "exceedance": {
+                  "0.01": {
+                    "count": 695,
+                    "fraction": 0.002833993239193107
+                  },
+                  "0.1": {
+                    "count": 654,
+                    "fraction": 0.0026668080265212835
+                  },
+                  "1.0": {
+                    "count": 350,
+                    "fraction": 0.0014271908398814208
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.004175152292478382,
+                "mean_positive": 0.004175152292478382,
+                "es99_positive": 0.41751522924783824,
+                "maximum_signed": 11.984810858067068,
+                "maximum_positive": 11.984810858067068,
+                "maximum_location": "w994:p63",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 108,
+                "half_mass_fraction": 0.000440390316306267,
+                "positive_mass": 1023.9018227505205,
+                "exceedance": {
+                  "0.01": {
+                    "count": 815,
+                    "fraction": 0.003323315812866737
+                  },
+                  "0.1": {
+                    "count": 752,
+                    "fraction": 0.003066421461688081
+                  },
+                  "1.0": {
+                    "count": 295,
+                    "fraction": 0.0012029179936143405
+                  }
+                }
+              }
+            }
+          },
+          "selection": {
+            "mode": "v5",
+            "source": {
+              "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+              "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+            },
+            "inventory": {
+              "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+              "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+            },
+            "windows": 1931,
+            "window_tokens": 128,
+            "positions": 245237,
+            "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+            "context": "reset every window",
+            "order": "window then target position, starting at target position 1"
+          },
+          "fields": [
+            "loss_cap",
+            "loss_capoff",
+            "loss_original",
+            "kl_capoff_to_cap",
+            "kl_original_to_cap"
+          ],
+          "vectors": {
+            "path": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-E/vectors.npz",
+            "sha256": "9aa6cbed28a52c9e93ccaf9dd271fdf8c6302117e07ed776027b251fe82cd44a"
+          },
+          "state_sha256": "f9a9bf1fb86030e43de80709cbbd1ce0a64feb378a179fd1e302935334dd9986",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        }
+      },
+      {
+        "dataset": "zsre",
+        "realization": 0,
+        "order": 100,
+        "arm": "SE-A",
+        "directory": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A",
+        "binding": {
+          "path": "/home/derp/cap/assets/runs/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/checkpoint-300.snapshot",
+          "sha256": "7016d06c6fc4455fa05c7a5121671f3720e315dc5d0bda074714a9df3422d37c",
+          "state_sha256": "29a2ba3b9e83e63380618e737884b43a646f3567c5d5233ef1d3b7f832ed7ef5",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+          "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+          "credit": "adjoint",
+          "iters": 8,
+          "error_lr": 0.1
+        },
+        "checkpoint_sha256": "13faafa012098018850fea6ff6dc4ec33c30261ed1b5989808f453d371397438",
+        "readout": {
+          "treatment": {
+            "credit_iters": 8,
+            "error_lr": 0.05
+          },
+          "summary": {
+            "capoff": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.0018129308873972353,
+                "mean_positive": 0.0019558495087591984,
+                "es99_positive": 0.19558495087591984,
+                "maximum_signed": 9.262267463622692,
+                "maximum_positive": 9.262267463622692,
+                "maximum_location": "w860:p44",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 53,
+                "half_mass_fraction": 0.00021611747003918657,
+                "positive_mass": 479.64666597957927,
+                "exceedance": {
+                  "0.01": {
+                    "count": 289,
+                    "fraction": 0.0011784518649306588
+                  },
+                  "0.1": {
+                    "count": 277,
+                    "fraction": 0.001129519607563296
+                  },
+                  "1.0": {
+                    "count": 152,
+                    "fraction": 0.0006198085933199313
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.001860621413289744,
+                "mean_positive": 0.001860621413289744,
+                "es99_positive": 0.18606214132897445,
+                "maximum_signed": 8.504404086539708,
+                "maximum_positive": 8.504404086539708,
+                "maximum_location": "w939:p39",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 53,
+                "half_mass_fraction": 0.00021611747003918657,
+                "positive_mass": 456.29321353093724,
+                "exceedance": {
+                  "0.01": {
+                    "count": 361,
+                    "fraction": 0.0014720454091348369
+                  },
+                  "0.1": {
+                    "count": 341,
+                    "fraction": 0.0013904916468558985
+                  },
+                  "1.0": {
+                    "count": 137,
+                    "fraction": 0.0005586432716107276
+                  }
+                }
+              }
+            },
+            "original": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.0018129308873972353,
+                "mean_positive": 0.0019558495087591984,
+                "es99_positive": 0.19558495087591984,
+                "maximum_signed": 9.262267463622692,
+                "maximum_positive": 9.262267463622692,
+                "maximum_location": "w860:p44",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 53,
+                "half_mass_fraction": 0.00021611747003918657,
+                "positive_mass": 479.64666597957927,
+                "exceedance": {
+                  "0.01": {
+                    "count": 289,
+                    "fraction": 0.0011784518649306588
+                  },
+                  "0.1": {
+                    "count": 277,
+                    "fraction": 0.001129519607563296
+                  },
+                  "1.0": {
+                    "count": 152,
+                    "fraction": 0.0006198085933199313
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.001860621413289744,
+                "mean_positive": 0.001860621413289744,
+                "es99_positive": 0.18606214132897445,
+                "maximum_signed": 8.504404086539708,
+                "maximum_positive": 8.504404086539708,
+                "maximum_location": "w939:p39",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 53,
+                "half_mass_fraction": 0.00021611747003918657,
+                "positive_mass": 456.29321353093724,
+                "exceedance": {
+                  "0.01": {
+                    "count": 361,
+                    "fraction": 0.0014720454091348369
+                  },
+                  "0.1": {
+                    "count": 341,
+                    "fraction": 0.0013904916468558985
+                  },
+                  "1.0": {
+                    "count": 137,
+                    "fraction": 0.0005586432716107276
+                  }
+                }
+              }
+            }
+          },
+          "selection": {
+            "mode": "v5",
+            "source": {
+              "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+              "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+            },
+            "inventory": {
+              "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+              "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+            },
+            "windows": 1931,
+            "window_tokens": 128,
+            "positions": 245237,
+            "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+            "context": "reset every window",
+            "order": "window then target position, starting at target position 1"
+          },
+          "fields": [
+            "loss_cap",
+            "loss_capoff",
+            "loss_original",
+            "kl_capoff_to_cap",
+            "kl_original_to_cap"
+          ],
+          "vectors": {
+            "path": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-A/vectors.npz",
+            "sha256": "c30c0cf05349b0f438b7f10a20f2263d9c871b4b893153abd3f078e893ab3c88"
+          },
+          "state_sha256": "29a2ba3b9e83e63380618e737884b43a646f3567c5d5233ef1d3b7f832ed7ef5",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        }
+      },
+      {
+        "dataset": "zsre",
+        "realization": 0,
+        "order": 100,
+        "arm": "SE-E",
+        "directory": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E",
+        "binding": {
+          "path": "/home/derp/cap/assets/runs/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/checkpoint-300.snapshot",
+          "sha256": "26493ffbf186aa677c15bed39999d2d755268b2f63995a4409aa8e1ff116b249",
+          "state_sha256": "53e8bc98241e4ea306921afa42c8875b9cd60cc5ff7cfaf6f620f66da845b3d7",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+          "reader_sha256": "a5f4c4ea9aaf67f3bb5581a4f2c3bec997baed99100ba46f7d292cb6200f1862",
+          "credit": "error",
+          "iters": 8,
+          "error_lr": 0.05
+        },
+        "checkpoint_sha256": "53b5dd0738bee995e70438d3a69a21856e40b64007b1a2339e780c777d81f933",
+        "readout": {
+          "treatment": {
+            "credit_iters": 8,
+            "error_lr": 0.05
+          },
+          "summary": {
+            "capoff": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.001792788750813259,
+                "mean_positive": 0.0019335699373629678,
+                "es99_positive": 0.1933569937362968,
+                "maximum_signed": 11.684951940485636,
+                "maximum_positive": 11.684951940485636,
+                "maximum_location": "w1314:p20",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 52,
+                "half_mass_fraction": 0.00021203978192523967,
+                "positive_mass": 474.1828907290824,
+                "exceedance": {
+                  "0.01": {
+                    "count": 288,
+                    "fraction": 0.001174374176816712
+                  },
+                  "0.1": {
+                    "count": 276,
+                    "fraction": 0.001125441919449349
+                  },
+                  "1.0": {
+                    "count": 151,
+                    "fraction": 0.0006157309052059844
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.0018290727701816786,
+                "mean_positive": 0.0018290727701816786,
+                "es99_positive": 0.18290727701816786,
+                "maximum_signed": 11.287152512879487,
+                "maximum_positive": 11.287152512879487,
+                "maximum_location": "w1314:p20",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 52,
+                "half_mass_fraction": 0.00021203978192523967,
+                "positive_mass": 448.5563189410443,
+                "exceedance": {
+                  "0.01": {
+                    "count": 360,
+                    "fraction": 0.00146796772102089
+                  },
+                  "0.1": {
+                    "count": 340,
+                    "fraction": 0.0013864139587419517
+                  },
+                  "1.0": {
+                    "count": 133,
+                    "fraction": 0.0005423325191549399
+                  }
+                }
+              }
+            },
+            "original": {
+              "loss": {
+                "positions": 245237,
+                "mean_signed": 0.001792788750813259,
+                "mean_positive": 0.0019335699373629678,
+                "es99_positive": 0.1933569937362968,
+                "maximum_signed": 11.684951940485636,
+                "maximum_positive": 11.684951940485636,
+                "maximum_location": "w1314:p20",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 52,
+                "half_mass_fraction": 0.00021203978192523967,
+                "positive_mass": 474.1828907290824,
+                "exceedance": {
+                  "0.01": {
+                    "count": 288,
+                    "fraction": 0.001174374176816712
+                  },
+                  "0.1": {
+                    "count": 276,
+                    "fraction": 0.001125441919449349
+                  },
+                  "1.0": {
+                    "count": 151,
+                    "fraction": 0.0006157309052059844
+                  }
+                }
+              },
+              "kl": {
+                "positions": 245237,
+                "mean_signed": 0.0018290727701816786,
+                "mean_positive": 0.0018290727701816786,
+                "es99_positive": 0.18290727701816786,
+                "maximum_signed": 11.287152512879487,
+                "maximum_positive": 11.287152512879487,
+                "maximum_location": "w1314:p20",
+                "maximum_ties": 1,
+                "tie_policy": "first in window/target order",
+                "half_mass_positions": 52,
+                "half_mass_fraction": 0.00021203978192523967,
+                "positive_mass": 448.5563189410443,
+                "exceedance": {
+                  "0.01": {
+                    "count": 360,
+                    "fraction": 0.00146796772102089
+                  },
+                  "0.1": {
+                    "count": 340,
+                    "fraction": 0.0013864139587419517
+                  },
+                  "1.0": {
+                    "count": 133,
+                    "fraction": 0.0005423325191549399
+                  }
+                }
+              }
+            }
+          },
+          "selection": {
+            "mode": "v5",
+            "source": {
+              "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+              "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+            },
+            "inventory": {
+              "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+              "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+            },
+            "windows": 1931,
+            "window_tokens": 128,
+            "positions": 245237,
+            "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+            "context": "reset every window",
+            "order": "window then target position, starting at target position 1"
+          },
+          "fields": [
+            "loss_cap",
+            "loss_capoff",
+            "loss_original",
+            "kl_capoff_to_cap",
+            "kl_original_to_cap"
+          ],
+          "vectors": {
+            "path": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-E/vectors.npz",
+            "sha256": "871a19f65792cf4ea3e6e3fe0a7d42691a18ab61397faa02fdddea7cccf210e6"
+          },
+          "state_sha256": "53e8bc98241e4ea306921afa42c8875b9cd60cc5ff7cfaf6f620f66da845b3d7",
+          "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+        }
+      }
+    ],
+    "pairs": [
+      {
+        "dataset": "counterfact",
+        "realization": 0,
+        "order": 100,
+        "direction": "SE-E minus SE-A",
+        "vectors": {
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-paired.npz",
+          "sha256": "558379cf8499749b5cefd8a63a7b2ce9e4f7b275ac13514bb8a0590e660a3c8e"
+        },
+        "positionwise": {
+          "capoff": {
+            "loss": {
+              "positions": 245237,
+              "mean_signed": 5.721355283884208e-06,
+              "mean_positive": 0.00017264580749759293,
+              "es99_positive": 0.017264580749759298,
+              "maximum_signed": 0.875159304479384,
+              "maximum_positive": 0.875159304479384,
+              "maximum_location": "w841:p24",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 60,
+              "half_mass_fraction": 0.000244661286836815,
+              "positive_mass": 42.33913989328714,
+              "exceedance": {
+                "0.01": {
+                  "count": 396,
+                  "fraction": 0.001614764493122979
+                },
+                "0.1": {
+                  "count": 128,
+                  "fraction": 0.0005219440785852053
+                },
+                "1.0": {
+                  "count": 0,
+                  "fraction": 0.0
+                }
+              }
+            },
+            "kl": {
+              "positions": 245237,
+              "mean_signed": -5.041806652065108e-07,
+              "mean_positive": 0.00014325820396768717,
+              "es99_positive": 0.014325820396768718,
+              "maximum_signed": 0.9052843756182707,
+              "maximum_positive": 0.9052843756182707,
+              "maximum_location": "w841:p24",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 58,
+              "half_mass_fraction": 0.00023650591060892117,
+              "positive_mass": 35.13221216642367,
+              "exceedance": {
+                "0.01": {
+                  "count": 371,
+                  "fraction": 0.0015128222902743061
+                },
+                "0.1": {
+                  "count": 99,
+                  "fraction": 0.00040369112328074474
+                },
+                "1.0": {
+                  "count": 0,
+                  "fraction": 0.0
+                }
+              }
+            }
+          },
+          "original": {
+            "loss": {
+              "positions": 245237,
+              "mean_signed": 5.721355283884208e-06,
+              "mean_positive": 0.00017264580749759293,
+              "es99_positive": 0.017264580749759298,
+              "maximum_signed": 0.875159304479384,
+              "maximum_positive": 0.875159304479384,
+              "maximum_location": "w841:p24",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 60,
+              "half_mass_fraction": 0.000244661286836815,
+              "positive_mass": 42.33913989328714,
+              "exceedance": {
+                "0.01": {
+                  "count": 396,
+                  "fraction": 0.001614764493122979
+                },
+                "0.1": {
+                  "count": 128,
+                  "fraction": 0.0005219440785852053
+                },
+                "1.0": {
+                  "count": 0,
+                  "fraction": 0.0
+                }
+              }
+            },
+            "kl": {
+              "positions": 245237,
+              "mean_signed": -5.041806652065108e-07,
+              "mean_positive": 0.00014325820396768717,
+              "es99_positive": 0.014325820396768718,
+              "maximum_signed": 0.9052843756182707,
+              "maximum_positive": 0.9052843756182707,
+              "maximum_location": "w841:p24",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 58,
+              "half_mass_fraction": 0.00023650591060892117,
+              "positive_mass": 35.13221216642367,
+              "exceedance": {
+                "0.01": {
+                  "count": 371,
+                  "fraction": 0.0015128222902743061
+                },
+                "0.1": {
+                  "count": 99,
+                  "fraction": 0.00040369112328074474
+                },
+                "1.0": {
+                  "count": 0,
+                  "fraction": 0.0
+                }
+              }
+            }
+          }
+        },
+        "difference_of_arm_es99": {
+          "capoff": 0.0007058310732691586,
+          "original": 0.0007058310732691586
+        },
+        "interpretation": "Descriptive paired positions, not independent experimental replicates. ES99 of paired differences is not difference of ES99s."
+      },
+      {
+        "dataset": "zsre",
+        "realization": 0,
+        "order": 100,
+        "direction": "SE-E minus SE-A",
+        "vectors": {
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-paired.npz",
+          "sha256": "e6ae1602881b77eb41b23681facfa1e18f787e8338073bd1ec76919ffe107add"
+        },
+        "positionwise": {
+          "capoff": {
+            "loss": {
+              "positions": 245237,
+              "mean_signed": -2.014213658397623e-05,
+              "mean_positive": 9.818984351400835e-05,
+              "es99_positive": 0.009818984351400833,
+              "maximum_signed": 4.279736798360473,
+              "maximum_positive": 4.279736798360473,
+              "maximum_location": "w1314:p20",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 17,
+              "half_mass_fraction": 6.932069793709758e-05,
+              "positive_mass": 24.079782653844866,
+              "exceedance": {
+                "0.01": {
+                  "count": 166,
+                  "fraction": 0.0006768962269151882
+                },
+                "0.1": {
+                  "count": 61,
+                  "fraction": 0.0002487389749507619
+                },
+                "1.0": {
+                  "count": 2,
+                  "fraction": 8.155376227893833e-06
+                }
+              }
+            },
+            "kl": {
+              "positions": 245237,
+              "mean_signed": -3.154864310806557e-05,
+              "mean_positive": 8.155800863631704e-05,
+              "es99_positive": 0.008155800863631702,
+              "maximum_signed": 4.014737604112513,
+              "maximum_positive": 4.014737604112513,
+              "maximum_location": "w1314:p20",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 14,
+              "half_mass_fraction": 5.708763359525683e-05,
+              "positive_mass": 20.001041363944474,
+              "exceedance": {
+                "0.01": {
+                  "count": 156,
+                  "fraction": 0.000636119345775719
+                },
+                "0.1": {
+                  "count": 49,
+                  "fraction": 0.00019980671758339892
+                },
+                "1.0": {
+                  "count": 2,
+                  "fraction": 8.155376227893833e-06
+                }
+              }
+            }
+          },
+          "original": {
+            "loss": {
+              "positions": 245237,
+              "mean_signed": -2.014213658397623e-05,
+              "mean_positive": 9.818984351400835e-05,
+              "es99_positive": 0.009818984351400833,
+              "maximum_signed": 4.279736798360473,
+              "maximum_positive": 4.279736798360473,
+              "maximum_location": "w1314:p20",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 17,
+              "half_mass_fraction": 6.932069793709758e-05,
+              "positive_mass": 24.079782653844866,
+              "exceedance": {
+                "0.01": {
+                  "count": 166,
+                  "fraction": 0.0006768962269151882
+                },
+                "0.1": {
+                  "count": 61,
+                  "fraction": 0.0002487389749507619
+                },
+                "1.0": {
+                  "count": 2,
+                  "fraction": 8.155376227893833e-06
+                }
+              }
+            },
+            "kl": {
+              "positions": 245237,
+              "mean_signed": -3.154864310806557e-05,
+              "mean_positive": 8.155800863631704e-05,
+              "es99_positive": 0.008155800863631702,
+              "maximum_signed": 4.014737604112513,
+              "maximum_positive": 4.014737604112513,
+              "maximum_location": "w1314:p20",
+              "maximum_ties": 1,
+              "tie_policy": "first in window/target order",
+              "half_mass_positions": 14,
+              "half_mass_fraction": 5.708763359525683e-05,
+              "positive_mass": 20.001041363944474,
+              "exceedance": {
+                "0.01": {
+                  "count": 156,
+                  "fraction": 0.000636119345775719
+                },
+                "0.1": {
+                  "count": 49,
+                  "fraction": 0.00019980671758339892
+                },
+                "1.0": {
+                  "count": 2,
+                  "fraction": 8.155376227893833e-06
+                }
+              }
+            }
+          }
+        },
+        "difference_of_arm_es99": {
+          "capoff": -0.002227957139623038,
+          "original": -0.002227957139623038
+        },
+        "interpretation": "Descriptive paired positions, not independent experimental replicates. ES99 of paired differences is not difference of ES99s."
+      }
+    ],
+    "sources_sha256": {
+      "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+      "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+      "/home/derp/cap/pc_cap/docs/tasks/round58-source-archive/manifest.json": "d557203a67b0126cd27fc1fd1f84432503aa25f4711fbd13ae23eeedd58e32f1",
+      "/home/derp/cap/pc_cap/docs/tasks/round61-source-archive/manifest.json": "9ee41613f248ee2c5a77cc3de58e50a47d675285deec8688b92b241b4ff06687",
+      "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v1_run.py": "bad90a9aef1753b6df9d13fe6ba279aa400394b0633b4e01d719fc85363252d2",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/plan.json": "c7054b52d4e6f87ae15d75d0f47ef3da7bcdfd7528946f6a2d160207acde8566",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/config.json": "12095fa57c1fb13c55ad088575883b5bef0173c0a00f047392ecaad3f9cbc1f1",
+      "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-8e4df877ccad361ba231bd0a49c4e2d3bff9990db7c1a9070157a6a54bc470dc.json": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/checkpoint-100.json": "bd37bbe8fbebe99185e23d008519c7e2e03f8d7bb49d329ebdd4539be5a53570",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/checkpoint-300.json": "13faafa012098018850fea6ff6dc4ec33c30261ed1b5989808f453d371397438",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/finish.json": "caa5046409104faa9a0fabb30d32c74f432860ae1464e67ab4dd994e8816626c",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-A/process.json": "48076364b373eb1892ff653e0a004b47a6697b2f90d7c74204440fb3330e3ac3",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/config.json": "8cbab1fc6e77e1763fc6e5d6158809d65a15741929798f85d97a10e75aae96ce",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/checkpoint-100.json": "7e3bfff5869de3bbde7a88c36c8474328f8023d103f4c78cfd09845f58389f70",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/checkpoint-300.json": "53b5dd0738bee995e70438d3a69a21856e40b64007b1a2339e780c777d81f933",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/finish.json": "dc036b848aa37ee6d766912df630e3f76b5fee17e8b18d2313b5bbf89093ed1d",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/zsre-r0-o100-SE-E/process.json": "901424c4dc1c0b37fc391f5b114e6e184f2ff20cbdd40a359175227049627d53",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/config.json": "226c79d06596bdda0765be27821295124821b2800e39ec3465182cc1aa2ea79b",
+      "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-b0acc16f0f979c8203fdf4a384b2d0a830a7db2537dfabcfdc4cd9f679df1d91.json": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/checkpoint-100.json": "665ff242ef1fcbd4f4b8e63d9e24ba92e52bb56e229f30201b436fcafc16246b",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/checkpoint-300.json": "b2bcfd97b8d893fa1617499c290909bfe49afeffcc1ed8b38cd568c3fb531e5f",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/finish.json": "194933dcf26e1f22a499b12b889d34adfdf78f073a5eb401fa7656670c061002",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-A/process.json": "0440cf1ffc086781fb7a321eb55fa462d3f421c1795310bbc30b0d2305bde72d",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/config.json": "4c8f5e01e22ce732cf417e3a0653ec754a4804ac8e7d46b4808c841f2cf2e87a",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/checkpoint-100.json": "7bc2b593c1803334851326f8fb4df298c21c418ae451d0482ba038c8ba774168",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/checkpoint-300.json": "5a16ccb1713d6343442df0d2e3cf8d92728965ff06cb82237c23a5eb46ce5998",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/finish.json": "e7db6548313d726da7068cb896d236654f1e978fbdd399afab8ff9063f69d025",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929/counterfact-r0-o100-SE-E/process.json": "a9e1c25d426378f62074e755b1aab661b41d48936e7b745814450c927e917e03",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/report.json": "4b15991a4c799ebbb79868a6880781202b78e150caccc669b2a6d6e064c0bb97",
+      "/home/derp/cap/pc_cap/aw/pc_v1_harm.py": "e36f52df4fedce6570e003765a77b5f53ce3141b6aae7deb6b0438c9159f798c",
+      "/home/derp/cap/pc_cap/aw/pc_harm_readout.py": "c5e797370adca001c90dd4de6d8fee326fc0be47a2e4239016bd72123cfe1354",
+      "/home/derp/cap/pc_cap/aw/pc_v1_readout.py": "f97239846cc4ad87a5f1566c07984d67114b45c39b6bb3c66348cd823c50a61c",
+      "/home/derp/cap/pc_cap/aw/pc_v1_run.py": "2f44c0edf9b0a601a45465d8af43594d15ecde8f97310ce6d9002183dda6f0f2",
+      "/home/derp/cap/pc_cap/aw/scoring.py": "c2550248a7ddce91431f97f27ddc46f235ff5ecfeabcecba64fc8bd58dfdccfd",
+      "/home/derp/cap/pc_cap/scripts/r1_68f_full_validation.py": "7e7301b9089326365e76d10d29d112d27029848627b66d1308120dfbd7368473",
+      "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+      "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-A/cost.json": "aadb6aa137f9c62fa0193a5d57f6bb821f9067edec6a0c4596ebbb657c6d7743",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-A/vectors.npz": "93965721c2ac8b8e3b10b238f61458bbeaa6d92b7095a049afddd3421d56ba66",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-E/cost.json": "b97b9b13339e5935a20dbebd50d1c24346dd773201d61cb7270bc63ef90b5be7",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-SE-E/vectors.npz": "9aa6cbed28a52c9e93ccaf9dd271fdf8c6302117e07ed776027b251fe82cd44a",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-A/cost.json": "2203f0deba12f2ec2afd55c2370194024c7919bae7ea0cf68b4cb2befc00669c",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-A/vectors.npz": "c30c0cf05349b0f438b7f10a20f2263d9c871b4b893153abd3f078e893ab3c88",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-E/cost.json": "4eaa665f033b53a513b4b65b6e2d8db702d3bccf02a5be5689e9ec1150f47ba7",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-SE-E/vectors.npz": "871a19f65792cf4ea3e6e3fe0a7d42691a18ab61397faa02fdddea7cccf210e6",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/counterfact-r0-o100-paired.npz": "558379cf8499749b5cefd8a63a7b2ce9e4f7b275ac13514bb8a0590e660a3c8e",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/zsre-r0-o100-paired.npz": "e6ae1602881b77eb41b23681facfa1e18f787e8338073bd1ec76919ffe107add",
+      "/home/derp/cap/pc_cap/results/additional_work/PC-v1/harm/pc-v1-4-lr0.05-20260929/cost.json": "a622fdea0e62ba79ad19d72a16f6f4196fc3c2fd1c11ba6254eab02b59c4b4b6"
+    },
+    "note": "Fixed-v5 credit arms restored from their checkpoint-300 snapshots; own cap-off reference (original base = cap-off base for this intervention); descriptive paired positions.",
+    "completion_review": {
+      "original_status": "complete"
+    },
+    "historical_source_substitutions": {
+      "/home/derp/cap/pc_cap/aw/pc_v1_run.py": {
+        "path": "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v1_run.py",
+        "sha256": "bad90a9aef1753b6df9d13fe6ba279aa400394b0633b4e01d719fc85363252d2"
+      }
+    }
+  },
+  "harm_cost": {
+    "status": "complete",
+    "cost_scope": "fixed-v5 harm readout only",
+    "shared_ceiling_seconds": 28800,
+    "run": "/home/derp/cap/pc_cap/results/additional_work/PC-v1/replication-4-lr0.05-20260929",
+    "other_cuda_processes": [
+      {
+        "pid": "2042",
+        "name": "/usr/bin/kwin_wayland",
+        "used_memory": "94 MiB"
+      },
+      {
+        "pid": "22030",
+        "name": "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=wayland --render-n",
+        "used_memory": "262 MiB"
+      },
+      {
+        "pid": "3578885",
+        "name": "/usr/bin/nautilus",
+        "used_memory": "26 MiB"
+      }
+    ],
+    "elapsed_process_seconds": 4967.562058982905,
+    "completed_arms": 4
+  }
+}

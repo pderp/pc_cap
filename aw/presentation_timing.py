@@ -80,7 +80,7 @@ CHOICES = {
     7: [1, 3],
     8: [0, 2, 4],
     9: list(range(5)),
-    10: list(range(5)),
+    10: [0, 1, 2, 3, 5],
     11: [0, 1, 5],
     12: [0, 1, 2, 4],
 }
@@ -110,7 +110,7 @@ SHORT[
     11
 ] = """Active inference gives us the proposed belief-and-action loop; autonomous audit selection remains future work. Predictive coding has measured retention, harm and cost trade-offs, with compute attribution still unresolved. Extreme-loss measurements now motivate a tested per-token mixture bound, alongside the unsuccessful kappa pilot.
 
-These are finite test populations, not proof of a heavy-tail family. The main run stopped at 270 cells; omitted comparisons stay unavailable. Reader-training replication continues, and we make no three-seed claim from its first seed. Experiments end October 9 at 17:00 Eastern, leaving time for analysis and rehearsal before October 15."""
+These are finite test populations, not proof of a heavy-tail family. The main run stopped at 270 cells; omitted comparisons stay unavailable. Reader-training replication now has two paired seeds; the three-seed comparison remains partial. Experiments end October 9 at 17:00 Eastern, leaving time for analysis and rehearsal before October 15."""
 BUDGETS[15][2] -= 10
 BUDGETS[15][7] += 10
 
@@ -156,6 +156,11 @@ BUDGETS[25][3] -= 5
 BUDGETS[25][4] -= 5
 BUDGETS[25][10] -= 5
 
+# PC-16a: distinguish reader training from fixed-reader acquisition credit.
+SHORT[9] = """The fixed-v5 transfer check changes acquisition credit on the same BP-trained reader. SE-E minus SE-A paraphrase retention is {{v1.zsre.ret_gs}} on zsRE and {{v1.counterfact.ret_gs}} on CounterFact. Harm and cost must accompany those small descriptive differences; this is one exposed subject realization.
+
+A separate study trains the reader itself with predictive coding. Ten of twelve evaluations are available, pairing two seeds. ePC paraphrase retention is lower in each completed pair, with a notably larger deficit in one CounterFact seed. Own-prompt retention is nearly equal. Ordinary-text firing and harm vary by seed: ePC is quieter in the first CounterFact pair but fires more in the second. Training costs about one hundred times BP. The third seed is pending; we have no three-seed or systematic-superiority conclusion."""
+
 
 def stamp(seconds):
     return f"{seconds // 60:02d}:{seconds % 60:02d}"
@@ -199,7 +204,7 @@ def main(*, refresh=False, log_dir=None):
         text = (
             f"""# {minutes}-minute speaking script — draft for charlie
 
-Updated 2026-10-01 by Capex from the twelve slide drafts. **Author review and
+Updated 2026-10-02 by Capex from the twelve slide drafts. **Author review and
 rehearsal required; this is a duration option, not a confirmed conference slot.**
 Clock includes slide changes and pointing pauses, excludes audience Q&A. Read
 only the paragraphs under “Say”; source/cut notes and tables are not spoken.

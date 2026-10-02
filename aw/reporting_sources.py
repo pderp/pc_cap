@@ -15,10 +15,12 @@ from aw.pc_historical import sha
 class Sources(PCSources):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        manifest = self.root / 'docs/tasks/round58-source-archive/manifest.json'
-        self.archives = json.loads(manifest.read_bytes()) if manifest.exists() else {}
-        if manifest.exists():
-            self.bindings[str(manifest)] = sha(manifest)
+        self.archives = {}
+        for name in ('round58-source-archive', 'round61-source-archive'):
+            manifest = self.root / 'docs/tasks' / name / 'manifest.json'
+            if manifest.exists():
+                self.archives.update(json.loads(manifest.read_bytes()))
+                self.bindings[str(manifest)] = sha(manifest)
 
     def resolve(self, name, expected):
         path = Path(name)

@@ -1,6 +1,6 @@
 # Final experiments — October 2 review and historical decision forms
 
-Prepared September 27; updated October 1 by Capex. **DEC-077/078/080/081/081a decisions now
+Prepared September 27; updated October 2 by Capex. **DEC-077/078/080/081/081a decisions now
 supersede the blank decision fields in the historical candidate descriptions.**
 This update records existing decisions and results; it authorizes no extra run.
 Canonical repository copy: `pc_cap/docs/presentation/final-experiments.md`;
@@ -12,7 +12,7 @@ distributions**. The current testbed does not implement autonomous expected-free
 policy selection, coupled free energy or demonstrated Markov blankets; another
 retention/tail result alone would not establish those claims.
 
-## Decision and execution update — October 1
+## Decision and execution update — October 2
 
 DEC-077 approved the default portfolio without waiting for external review;
 DEC-078 fixes AW-B's framing as an intervention beside the κ pilot. The original
@@ -21,7 +21,7 @@ The October 9, 17:00 EDT cutoff and no-new-fits October 6 line remain in force.
 
 | Branch | Current decision / measured status | Source |
 | --- | --- | --- |
-| A: PC-trained reader | Authorized; all three BP seeds complete; ePC seed0 complete, seeds1–2 still in progress/queued. No completed three-seed ePC comparison yet. | `docs/additional_work/PC-reader.md`; lead queue 145–146 |
+| A: PC-trained reader | Authorized; all three BP seeds complete; ePC seeds0–1 complete: 10/12 evaluations, two paired seeds; seed2 training. No completed three-seed ePC comparison yet. | `docs/additional_work/PC-reader.md`; lead queue 155–156 |
 | B: fixed-v5 credit settings | Authorized and complete; depth32 and rates .05/.2 produced no clear efficacy gain in the exposed cells; avoid an equivalence claim. | lead queue 141–142 |
 | C: failed-cell tuning | No outcome-selected new tuning launched by this review; keep exploratory if later pursued. | Original branch below |
 | D: bounded correction | Calibration and ten-memory evaluation complete; all ten mixture cells meet the declared rule. Per-token guarantee, small CF paraphrase cost, CF KL still above .001. | `docs/additional_work/AW-B_report.md`; DEC-078 |
@@ -39,25 +39,32 @@ process-hours from overlapping jobs must not be added as elapsed GPU hours.
 
 ## Feedback and tail-analysis update — DEC-081/081a
 
-Approved B–D wording distinguishes the bounded κ-surprisal pilot from the untested calibrated coupled entropy. HT-17 now reports 299 cells, including all available reader seeds; four ePC evaluations await completion. It separates harmful-change frequency and conditional severity, reports finite-range fits and held-out failures, and preserves the analytic mixture bound independently of invalid fits. No complexity classes, W(N), temperature or infinite variance were measured. See `docs/additional_work/HT-17_report.md` and deck slides 2/6/7/8/11.
+Approved B–D wording distinguishes the bounded κ-surprisal pilot from the untested calibrated coupled entropy. HT-17 now reports 301 cells, including ten reader evaluations; seed2 on both datasets awaits completion. It separates harmful-change frequency and conditional severity, reports finite-range fits and held-out failures, and preserves the analytic mixture bound independently of invalid fits. No complexity classes, W(N), temperature or infinite variance were measured. See `docs/additional_work/HT-17_report.md` and deck slides 2/6/7/8/11.
 
 The remaining GPU portfolio is unchanged; no coupled-objective model fit or free-α sweep is added. Option R resumes learned/random only under DEC-080. October 9 at 17:00 EDT remains the experimental cutoff; no new model fits start on or after October 6.
 
 ## October 2 reviewer entry points and current constraints
 
-Read [Capstan's October 1 primer](../friday-10.02-review/README.md), the
+Read [2 October update: read first](../friday-10.02-review/UPDATE-2026-10-02.md)
+for the latest two-seed reader result, HT-17 interpretation and Option R queue.
+PC-16a has refreshed both canonical reports for seeds0–1.
+Then read [Capstan's October 1 primer](../friday-10.02-review/README.md), the
 [feedback response](../friday-10.02-review/feedback-MMK-nelson-entropy.md) and
 [Capex's feedback review](../friday-10.02-review/feedback-MMK-nelson-entropy-capex.md)
 alongside the [current results guide](review-results.md). This update reflects
-Round 58 evidence; the blank forms below are historical, not new approval requests.
+October 2 evidence; the blank forms below are historical, not new approval requests.
 
-The PC-reader comparison currently has three BP seeds and only ePC seed 0
-(8/12 evaluations). That completed training pair costs **102.1×** as much process
-time for ePC as for BP; the older 37× figure and the estimates below are forecasts.
+The PC-reader comparison currently has three BP seeds and ePC seeds 0–1
+(**10/12 evaluations; two paired seeds**). The completed pairs cost **102.1× and
+95.8×** as much process time for ePC as for BP; the older 37× figure and the
+estimates below are forecasts. Paraphrase deficits have the same direction but
+variable magnitudes (including a 24.17-point CounterFact seed-0 deficit); firing
+and harm do not improve uniformly. Own-prompt retention is nearly equal, with
+CounterFact seed1 ePC 1.00 versus BP .99.
 Do not claim a three-seed result or assume the remaining work can fit those older
 budgets. Current queue receipts determine the remaining elapsed-time estimate.
 
-HT-17's 299-cell analysis reports finite-range shapes, frequency and conditional
+HT-17's 301-cell analysis reports finite-range shapes, frequency and conditional
 severity, not asymptotic classes. AW-B takes severity above .01 nat to about
 **one-third** (zsRE 1.619→.542; CounterFact 1.925→.581), with little change in
 frequency. DEC-081/081a do not authorize a coupled-objective training experiment.

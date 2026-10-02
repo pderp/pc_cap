@@ -67,9 +67,10 @@ def export(output):
     current = DESTINATION / "CURRENT.md"
     current.write_text("""# October 2 review — current entry points
 
-Evidence snapshot: October 1, Round 58; folder refreshed in Round 59.
-The September 27 README is historical; use the October 1 primer and these updated summaries.
+Evidence through October 2; folder refreshed in Round 61.
+The September 27 README is historical; begin with the October 2 update.
 
+- [2 October update: read first](../../../pc_cap/docs/friday-10.02-review/UPDATE-2026-10-02.md)
 - [Capstan's October 1 primer](../../../pc_cap/docs/friday-10.02-review/README.md)
 - [Reviewer feedback and response](../../../pc_cap/docs/friday-10.02-review/feedback-MMK-nelson-entropy.md)
 - [Capex's scientific review](../../../pc_cap/docs/friday-10.02-review/feedback-MMK-nelson-entropy-capex.md)
@@ -81,11 +82,13 @@ These are a dated snapshot. PC-reader, Option R and upper-layer results must be 
 """)
     _, checked = rebase(current.read_text(), current, current)
     record = dict(
-        task="DOC-1",
+        task="DOC-2",
         records=records,
         navigation=str(current),
         navigation_sha256=sha(current),
         navigation_links=checked,
+        linked_documents_sha256={str(p): sha(p) for p in checked},
+        folder_files_sha256={str(p): sha(p) for p in sorted(DESTINATION.iterdir()) if p.is_file()},
         code_sha256=sha(__file__),
         gpu_seconds=0,
     )

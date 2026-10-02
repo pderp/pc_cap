@@ -10,8 +10,9 @@ import sys
 from pathlib import Path
 
 from aw import reader_results as rr
+from aw.reader_interpretation import narrative
 
-DEFAULT_TAIL = rr.ROOT / "logs/additional_work/HT-17/snapshot-20261001-v2/report.json"
+DEFAULT_TAIL = rr.ROOT / "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json"
 DEFAULT_HISTORY = rr.ROOT / "logs/additional_work/PC-v1/report-4-20260927/report.json"
 
 
@@ -153,6 +154,9 @@ def build(root, *, tail=None, history=None, positions=245237):
                 )
     receipts = [rr.cost(p.parent, sources) for p in sorted(root.glob("*/cost.json"))]
     known = [r["seconds"] for r in receipts if r["seconds"] is not None]
+    sources[str(rr.ROOT / "aw/reader_interpretation.py")] = rr.sha(
+        rr.ROOT / "aw/reader_interpretation.py"
+    )
     sources[str(Path(__file__).resolve())] = rr.sha(Path(__file__))
     sources[str(Path(rr.__file__).resolve())] = rr.sha(Path(rr.__file__))
     return dict(
@@ -190,7 +194,7 @@ Machine-readable source and input hashes: `{output}/report.json`.
 
 This changes **reader/controller training** (BP versus ePC); acquisition uses adjoint in every arm. Same exposed realization 0, order 100, first 300 edits on each dataset. Three paired training seeds are not three subject realizations. Missing/failed cells remain visible. No superiority claim or new decision threshold is assigned.
 
-The current seed-0 result is consistent with a quieter ePC reader: fewer ordinary-text firings and less retained paraphrase generalization. Whether that repeats across seeds remains open; quietness is not improved editing by itself. Descriptive spread is shown separately by rule; paired comparisons use only intersecting seeds, never a mean of three BP seeds minus one ePC seed. No training losses are compared as though settled ePC CE and feedforward BP CE were the same objective.
+{narrative(r)}
 
 ## Training and measured costs
 
@@ -283,7 +287,7 @@ The earlier **37×** ratio in lead-queue item 144 was a ten-update profile proje
             for c in r["tail_rows"]
         ],
     )
-    text += """The full [HT-17 report](HT-17_report.md) retains threshold checks, joint-window intervals and invalid fits. Its current snapshot already covers the eight completed evaluations; no duplicate fit was needed for this report. Rerun into a **new** directory when remaining seeds finish:
+    text += f"""The full [HT-17 report](HT-17_report.md) retains threshold checks, joint-window intervals and invalid fits. This snapshot matches {len(r["tail_rows"])} of {r["completed_evaluations"]} completed reader evaluations; any exceptions are listed above. Rerun into a **new** directory when remaining seeds finish:
 
 ```bash
 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \\
