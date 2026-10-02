@@ -1633,3 +1633,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     points for CounterFact seed 0, so they are not uniformly small; firing and harm reverse direction between the two
     CounterFact seeds; the third seed assesses within-recipe consistency rather than establishing a training-rule
     effect. GPU: ePC seed 2 training (≈ Oct 3 09:30 with evaluations), Option R armed, AW-L5 after.
+
+158. (2026-10-02, 14:00 EDT) **DEC-082 recorded; round 62 opened.** Your answer is enough: the remaining experiments
+    proceed exactly as planned, the talk's framing stands, the κ readout is closed without execution, and the
+    post-conference work becomes a collaboration foundation. Capex's lanes: POST-1, a proposal document for Kenric's
+    group (what the testbed offers a coupled objective and what it lacks, the open questions carried verbatim with the
+    decision each unblocks, a pre-registration skeleton for a first joint experiment, cost and data reservations;
+    nothing implemented or scheduled); PRES-9, an outcome note in the review folder linked from the public entry point,
+    Q&A placeholders marked resolved. Then the result-driven refreshes. Nothing further needed from you until the
+    Oct 9 freeze sign-off, apart from pushing both repos when convenient.

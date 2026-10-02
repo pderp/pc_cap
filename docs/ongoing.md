@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-02 14:00** — DEC-082: review held; proceed as planned; post-conference collaboration foundation; κ readout closed. Round 62: POST-1 (collaboration proposal), PRES-9 (outcome recorded, folder closed). GPU unchanged.
 - **2026-10-02 11:00** — Round 61 committed (DOC-2; PC-16a seed-1 refresh). Reviewer entry point: `assets/presentation-materials/review-data/CURRENT.md` → `UPDATE-2026-10-02.md` first. Next lanes (POST-1, PRES-9) after the review.
 - **2026-10-02 09:55** — Round 61: DOC-2 (add `UPDATE-2026-10-02.md` to the reviewer entry point before this afternoon's meeting), then PC-16a seed-1 refresh. POST-1/PRES-9 after the review.
 - **2026-10-02 09:50** — Capex round 60 committed (REP-1 guide + refresh-all runner). ePC seed 1 evaluated (item 155: the seed-0 'quiet reader' was largely a seed effect; consistent small RET-GS deficit). **PC-16a trigger: go** (both seed-1 evaluations complete). Seed 2 training since 08:13 (≈ Oct 3 09:30 with evaluations) → Option R → AW-L5. POST-1/PRES-9 after the review.
@@ -194,6 +195,34 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 62 — after the review: collaboration foundation; closing the review folder (2026-10-02, 14:00; DEC-082)
+
+### Lane POST-1 — foundation for the post-conference collaboration on coupled entropy / coupled free energy
+
+Write `docs/post_conference/coupled_collaboration_proposal.md` (new folder) for the authors' group, building on
+`docs/additional_work/coupled_objective_note.md` and the Oct 2 review (DEC-082): (1) what this testbed offers a coupled
+objective (frozen GPT-2 small base, the residual cap with read/write interfaces, the null gate, the delta acquisition
+with adjoint or ePC credit, the 245,237-position harm readout, the receipted/hashed pipeline, local JAX) and what it
+lacks (no probability model over latent correction states, no policy loop); (2) the open questions for the
+collaborators, verbatim from `docs/friday-10.02-review/UPDATE-2026-10-02.md` §6, each with the decision it unblocks;
+(3) a first joint experiment as a pre-registration skeleton: a specified coupled objective (to be chosen with the
+authors) vs the ordinary objective, matched initialisation, data, schedule and cost, three seeds, the existing 300-edit
+exposed evaluation and the full harm readout, with the "minimum evidence before training" tests from the note as entry
+conditions; (4) cost and calendar (CPU validation, GPU hours from the measured reader-training and readout profiles),
+and the data-reservation situation (what fresh subjects remain after Option R). Nothing is implemented or scheduled;
+no PyTorch, no remote. Done-when: a document the lead can send to Kenric's group after 15 Oct.
+
+### Lane PRES-9 — close the review folder; record the outcome
+
+Add a dated "Outcome" section to `docs/friday-10.02-review/UPDATE-2026-10-02.md`? No: that file is Capstan's; instead
+write `docs/friday-10.02-review/OUTCOME-2026-10-02.md` recording DEC-082 (proceed as planned; collaboration foundation;
+κ readout closed), link it from `assets/presentation-materials/review-data/CURRENT.md` (public GitHub URL, second entry),
+mark `qa.md`'s reviewer-meeting placeholders as resolved with "no changes requested", and refresh the reviewer folder
+manifest. Done-when: CURRENT.md shows the outcome and the folder manifest is consistent.
+
+Then the owner-triggered refreshes as before: PC-16a for seed 2 (≈ Oct 3 09:30), R-3 after Option R (≈ Oct 3 evening),
+AW-L6 after AW-L5 (≈ Oct 5), PRES deck refresh after each, X25 and the one-command reproduction at the end.
 
 ## Round 61 — reviewer entry point for this afternoon; the seed-1 refresh (2026-10-02, 09:50)
 
