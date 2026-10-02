@@ -1,0 +1,386 @@
+{
+  "draft": true,
+  "slides": [
+    {
+      "number": "01",
+      "title": "Three questions for Active Inference in the Extremes",
+      "status": "charlie derr \u00b7 October 15, 2026 \u00b7 Binghamton \u00b7 draft opening",
+      "claims": [
+        "AI-programme",
+        "PC-v0",
+        "HT-readout"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Active inference",
+          "lines": [
+            "What should the agent do next?",
+            "Beliefs, preferences, information",
+            "PROGRAMME"
+          ]
+        },
+        {
+          "title": "Predictive coding",
+          "lines": [
+            "How should a correction learn?",
+            "Iterative error-inference credit",
+            "MEASURED TRADE-OFFS"
+          ]
+        },
+        {
+          "title": "Heavy-tailed distributions",
+          "lines": [
+            "Where do consequences fall?",
+            "Frequency, severity, concentration",
+            "MEASURED TESTBED EVIDENCE"
+          ]
+        }
+      ],
+      "footer": "Frozen transformer prior + adaptive residual cap: implemented testbed for a broader proposal.",
+      "notes": "Submitted title retained in speaker source. A coupled agent and a heavy-tail family remain unestablished."
+    },
+    {
+      "number": "02",
+      "title": "From active inference to our testbed",
+      "status": "Implemented components; proposed policy loop",
+      "claims": [
+        "AI-loop",
+        "AI-testbed",
+        "AI-programme",
+        "AI-coupled-FE"
+      ],
+      "panels": [
+        {
+          "title": "Environment / observations",
+          "lines": [
+            "Supplied factual corrections",
+            "Questions and ordinary text",
+            "Tested predictions"
+          ]
+        },
+        {
+          "title": "Adaptive cap",
+          "lines": [
+            "Memory + reader / null gate",
+            "Bounded residual writes",
+            "Acquisition credit"
+          ]
+        },
+        {
+          "title": "Frozen transformer",
+          "lines": [
+            "Features and predictions",
+            "Main-condition weights fixed",
+            "Generative substrate"
+          ]
+        }
+      ],
+      "footer": "PROPOSED: preferences + policy inference + information-seeking audits",
+      "notes": "Interfaces are implemented. Coupled objective, blanket properties and policy loop remain proposed."
+    },
+    {
+      "number": "03",
+      "title": "Predictive coding supplies acquisition credit",
+      "status": "Mechanism and acquisition comparisons measured; reader-training replication continues",
+      "claims": [
+        "PC-mechanism",
+        "PC-SD24",
+        "PC-v0",
+        "PC-fixed-v5"
+      ],
+      "panels": [
+        {
+          "title": "Same teaching problem",
+          "lines": [
+            "Prefix x, taught target y",
+            "Same fixed base and cap",
+            "Writes w held fixed in settling"
+          ]
+        },
+        {
+          "title": "SE-A: adjoint",
+          "lines": [
+            "Compute task-loss derivative",
+            "Negative normalized gradient",
+            "Then common bounded update"
+          ]
+        },
+        {
+          "title": "SE-E: inferred errors",
+          "lines": [
+            "E = 1/2 sum ||e||^2 + loss_y",
+            "Zero e; 8 steps; step size 0.1",
+            "Use normalized site error"
+          ]
+        }
+      ],
+      "footer": "SD-24: penalize e before adding w; old write-site prior penalized e + w.",
+      "notes": "9 forward + 9 reverse evaluations per 8-step inference; JAX autodiff. Compare efficacy, harm, cost."
+    },
+    {
+      "number": "04",
+      "title": "A correction testbed with distinct controls",
+      "status": "Three realizations \u00d7 five dependent orders; endpoint depends on dataset",
+      "claims": [
+        "R1-design",
+        "R1-controls",
+        "R1-fidelity"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Learned-reader condition",
+          "lines": [
+            "Frozen GPT-2 base",
+            "Fixed BP-trained reader",
+            "Adaptive bounded memory"
+          ]
+        },
+        {
+          "title": "Controlled comparisons",
+          "lines": [
+            "Random reader / stable cap",
+            "Live cap / matched update",
+            "S1 continued-base controls"
+          ]
+        },
+        {
+          "title": "Separate questions",
+          "lines": [
+            "Acquisition and retention",
+            "Locality and near misses",
+            "Ordinary-text probability harm"
+          ]
+        }
+      ],
+      "footer": "zsRE / CounterFact: 1,000 edits. MQuAKE: descriptive at 300. This reader study uses BP, not PC credit.",
+      "notes": "50 locality prompts do not exhaust specificity. Five orders within a realization are dependent."
+    },
+    {
+      "number": "05",
+      "title": "Retention improves, with limits to specificity",
+      "status": "Completed triplet + 270-cell comparator snapshot; preliminary three-realization analysis",
+      "claims": [
+        "R1-triplet-summary",
+        "R1-specificity",
+        "R1-retention-zsre",
+        "R1-retention-counterfact"
+      ],
+      "panels": [],
+      "figure": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/retention/paraphrase-retention.png",
+      "requires_tail_gate": false,
+      "footer": "Mean paraphrase retention: zsRE .9603; CounterFact .6780; MQuAKE .7156 (300 edits).",
+      "notes": "CounterFact vs stable: inconclusive. zsRE near-miss passes: 86 / 92 / 87 out of 100.",
+      "figure_manifest": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/retention/manifest.json"
+    },
+    {
+      "number": "06",
+      "title": "How often, and how severe?",
+      "status": "HT-17: Stage-4 primary conditions; 1,000 edits; fixed ordinary-text inventory",
+      "claims": [
+        "HT17-tails",
+        "HT-readout"
+      ],
+      "figure": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/ht17-slide/frequency-severity-stage4.png",
+      "panels": [],
+      "footer": "Frequency above 0.01 nat is not gate firing. Severity is conditional on exceeding that threshold.",
+      "notes": "Same positions reused; window intervals do not cover subject or seed uncertainty.",
+      "figure_manifest": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/ht17-slide/manifest.json",
+      "requires_tail_gate": false
+    },
+    {
+      "number": "07",
+      "title": "What does observed tail shape add?",
+      "status": "Exploratory finite-range fits; primary threshold 0.01 nat",
+      "claims": [
+        "HT17-tails"
+      ],
+      "panels": [
+        {
+          "title": "Learned v5",
+          "lines": [
+            "Illustrative 95% shape intervals",
+            "zsRE: -0.097 to 0.177",
+            "CF: -0.009 to 0.187"
+          ]
+        },
+        {
+          "title": "Stable v0 \u00b7 zsRE",
+          "lines": [
+            "Illustrative interval: .390\u2013.779",
+            "Held-out gain: .149\u2013.594",
+            "nats/excess across 15 cells"
+          ]
+        },
+        {
+          "title": "Limits remain visible",
+          "lines": [
+            "Random CF: 10/15 failures",
+            "Mixture: all fits invalid",
+            "Sparse cells: no shape"
+          ]
+        }
+      ],
+      "footer": "Learned v5: little predictive gain over exponential. Stable v0: a more pronounced observed tail.",
+      "notes": "Conditional window intervals; illustrative r0/order100. No asymptotic class or infinite-variance finding.",
+      "connections": false
+    },
+    {
+      "number": "08",
+      "title": "Two interventions against extreme prediction loss",
+      "status": "\u03ba: development success rule missed. Mixture: ten exposed memories pass.",
+      "claims": [
+        "kappa-design",
+        "AW-B",
+        "HT17-tails"
+      ],
+      "panels": [],
+      "figure": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/aw-b/evaluation-survival.png",
+      "requires_tail_gate": false,
+      "footer": "Mixture keeps retention within two points; CounterFact KL remains above 0.001.",
+      "notes": "\u03ba pilot: bounded surprisal, not calibrated entropy. Mixture: analytic one-nat ceiling at shared prefix.",
+      "figure_manifest": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/aw-b/evaluation-survival-manifest.json"
+    },
+    {
+      "number": "09",
+      "title": "Predictive coding: retention, harm and learning cost",
+      "status": "Depth controls: order100, three realizations per dataset; exposed historical streams.",
+      "claims": [
+        "PC-depth",
+        "PC-one-step",
+        "PC-random",
+        "PC-budget"
+      ],
+      "connections": false,
+      "panels": [],
+      "footer": "Random: 3/993 immediate successes. Adjoint budget offered, underspent.",
+      "notes": "More own-prompt retention does not establish better generalization or equal-compute superiority.",
+      "figure": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/pc-controls/depth-retention-harm-cost.png",
+      "figure_manifest": "/home/derp/cap/assets/presentation-materials/reproductions/round60-verified/pc-controls/depth-retention-harm-cost-manifest.json"
+    },
+    {
+      "number": "10",
+      "title": "Does PC credit transfer to the fixed v5 reader?",
+      "status": "One exposed R1 realization per dataset; 300 edits; paired credit-rule intervention",
+      "claims": [
+        "PC-fixed-v5",
+        "PC-mechanism",
+        "HT-readout"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Paraphrase retention: \u0394",
+          "lines": [
+            "zsRE: {{v1.zsre.ret_gs}}",
+            "CounterFact: {{v1.counterfact.ret_gs}}",
+            "100-edit values in notes"
+          ]
+        },
+        {
+          "title": "Positive-harm ES99: \u0394",
+          "lines": [
+            "zsRE: {{v1.zsre.harm_es99_difference}}",
+            "CounterFact: {{v1.counterfact.harm_es99_difference}}",
+            "Full 245,237-position readout"
+          ]
+        },
+        {
+          "title": "Acquisition + assay cost",
+          "lines": [
+            "SE-A stream s: {{v1.SE-A.seconds}}",
+            "SE-E stream s: {{v1.SE-E.seconds}}",
+            "Harm readout s: {{v1.harm.seconds}}"
+          ]
+        }
+      ],
+      "footer": "Same BP base, trained reader, gates, memory capacity and stream; fresh memory for each arm.",
+      "notes": "Only delta acquisition credit changes. Reader training remains BP; active-inference policy choice is proposed."
+    },
+    {
+      "number": "11",
+      "title": "What should the agent do next?",
+      "status": "Proposed active-inference extension; no new pre-October-9 commitment",
+      "claims": [
+        "AI-programme",
+        "AI-next",
+        "AI-coupled-FE",
+        "HT17-tails",
+        "PC-v0",
+        "PC-fixed-v5"
+      ],
+      "panels": [
+        {
+          "title": "Implemented / measured",
+          "lines": [
+            "Acquire bounded corrections",
+            "Test retention and locality",
+            "Measure harm distribution"
+          ]
+        },
+        {
+          "title": "PROPOSED policy model",
+          "lines": [
+            "Probability model + constraints",
+            "Preferences + escort weighting",
+            "Gradients + action model"
+          ]
+        },
+        {
+          "title": "PROPOSED comparison",
+          "lines": [
+            "Policy-guided vs fixed audits",
+            "Equal audit / compute budget",
+            "Utility, information, harm, cost"
+          ]
+        }
+      ],
+      "footer": "Learning from observed failures motivates an experiment on autonomous information seeking.",
+      "notes": "Coupled free energy is a candidate objective. No implemented policy loop or blanket theorem."
+    },
+    {
+      "number": "12",
+      "title": "What we learned, what remains, what it took",
+      "status": "Measured credit and tail interventions; autonomous audit policies remain proposed.",
+      "claims": [
+        "AI-next",
+        "PC-depth",
+        "PC-budget",
+        "AW-B",
+        "HT13-corrected",
+        "talk-scope",
+        "model-scale"
+      ],
+      "connections": false,
+      "panels": [
+        {
+          "title": "Active inference",
+          "lines": [
+            "Concrete correction testbed",
+            "Autonomous audit policy",
+            "REMAINS PROPOSED"
+          ]
+        },
+        {
+          "title": "Predictive coding",
+          "lines": [
+            "PC retention / cost trade-off",
+            "Compute attribution unresolved",
+            "MEASURED CONTROLS"
+          ]
+        },
+        {
+          "title": "Extremes",
+          "lines": [
+            "Mixture bounds token harm",
+            "All ten memories pass rule",
+            "MEASURED; FAMILY UNPROVEN"
+          ]
+        }
+      ],
+      "footer": "270-cell snapshot: 392.42 process-hours, not elapsed GPU hours. PC costs reported separately.",
+      "notes": "GPT-2 small (124M): transfer to production scale unestablished. Experiment cutoff Oct 9; talk Oct 15."
+    }
+  ]
+}

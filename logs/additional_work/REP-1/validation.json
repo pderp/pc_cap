@@ -1,0 +1,34 @@
+{
+  "task": "REP-1",
+  "agent": "Capex",
+  "recorded_utc": "2026-10-02T12:04:14.550300+00:00",
+  "model_calls": 0,
+  "gpu_seconds": 0,
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= ../venv/bin/python -m pytest -q -p no:cacheprovider aw/tests/test_refresh_reports.py",
+      "exit_code": 0,
+      "result": "9 passed in 0.12s"
+    },
+    {
+      "command": "../venv/bin/ruff check aw/refresh_reports.py aw/refresh_report_steps.py aw/reproduction_catalog.py aw/tests/test_refresh_reports.py",
+      "exit_code": 0,
+      "result": "All checks passed!"
+    },
+    {
+      "check": "guide local document links",
+      "result": "none missing"
+    }
+  ],
+  "code_sha256": {
+    "aw/refresh_reports.py": "efafe67099865fad549c640a8b84d16824a0c2124e593fa0a60890a56550d98b",
+    "aw/refresh_report_steps.py": "f34d9289777d9b11c58d6d59f2d0171781c9b6d399c944337b69f5f889788917",
+    "aw/reproduction_catalog.py": "f57d509f4bb8b3af425b7d3fb30a5ffca813838c300da8612e76a15e0d359d2d",
+    "aw/tests/test_refresh_reports.py": "48824c0de6601ea1c56156f7b6a1b6a71c3e63580742d771721638e0f2a22e54"
+  },
+  "integration": "logs/additional_work/reproductions/round60-verified/refresh.json",
+  "earlier_runs": {
+    "check1": "initial end-to-end development check",
+    "final": "complete_with_input_changes: the output-label adapter changed during development; use round60-verified for delivery"
+  }
+}

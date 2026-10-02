@@ -1,0 +1,39 @@
+{
+  "note": "Completed default-treatment outputs verified by X24-final and PC-8 on 2026-09-28. The harm report copies resolve preserved historical source bytes and carry independent full-vector reconstruction; original readouts and the fixed-v5 final-table failure remain unchanged in results/additional_work/PC-v*/harm/pc-v*-20260927 namespaces. Later DEC-075 controls are separate treatments.",
+  "sources": {
+    "v0_report": {
+      "path": "/home/derp/cap/pc_cap/logs/additional_work/reproductions/round60-final/pc-default/v0/report.json",
+      "schema": "aw.pc_v0_report: aggregates (dataset,metric) mean/realizations/minimum/maximum; cells finish cost"
+    },
+    "v0_harm": {
+      "path": "/home/derp/cap/pc_cap/logs/additional_work/reproductions/round60-final/pc-default/v0/harm/report.json",
+      "schema": "aw.pc_harm_readout: pairs difference_of_arm_es99.original, positionwise.original.loss.mean_signed; cells readout.summary.original; sibling cost.json"
+    },
+    "v1_run": {
+      "path": "results/additional_work/PC-v1/replication-4-20260927",
+      "schema": "aw.pc_v1_run: each cell checkpoint-100/300.json metrics.<metric>.value; finish.json elapsed_process_seconds"
+    },
+    "v1_harm": {
+      "path": "/home/derp/cap/pc_cap/logs/additional_work/reproductions/round60-final/pc-default/v1/harm/report.json",
+      "schema": "PC-5 shared read_arm/pair schema, selection.positions=245237; four arms and two pairs, final 300 checkpoint only"
+    },
+    "depth_controls": {
+      "path": "/home/derp/cap/pc_cap/logs/additional_work/reproductions/round60-final/pc-controls/report.json",
+      "schema": "completed depths, partial random and completed offered-budget control; distinct populations"
+    },
+    "aw_b": {
+      "path": "/home/derp/cap/pc_cap/logs/additional_work/reproductions/round60-final/aw-b/report.json",
+      "schema": "completed sixteen-setting calibration and ten-memory exposed evaluation, per-order full vectors"
+    }
+  },
+  "slots": {
+    "v0.<dataset>.<es|ret_es|ret_gs|ls>": "PC-3 aggregates selector dataset + ES/RET-ES/RET-GS/LS, mean; suffix .realizations / .range reads realization values / min,max",
+    "v0.<SE-A|SE-E>.seconds": "sum PC-3 cells[*].finish.elapsed_process_seconds for arm (30 cells)",
+    "v1.<dataset>.<100|300>.<metric>": "SE-E minus SE-A checkpoint metrics.<ES|RET-ES|RET-GS|LS|near_miss|revision>.value; short key omits 300",
+    "v1.<SE-A|SE-E>.seconds": "sum PC-7 finish.elapsed_process_seconds for arm (2 cells; stream-engine seconds)",
+    "<v0|v1>.<dataset>.harm_es99_difference": "mean pairs[*].difference_of_arm_es99.original; difference of arm ES99s, not ES99 of paired losses",
+    "<v0|v1>.<dataset>.harm_mean_difference": "mean pairs[*].positionwise.original.loss.mean_signed",
+    "<v0|v1>.<dataset>.<SE-A|SE-E>.<es99|mean_kl>": "mean cells[*].readout.summary.original.loss.es99_positive or .kl.mean_signed",
+    "<v0|v1>.harm.seconds": "sibling cost.json elapsed_process_seconds, readout only"
+  }
+}

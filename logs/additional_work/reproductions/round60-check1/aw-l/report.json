@@ -1,0 +1,5835 @@
+{
+  "task": "AW-L6",
+  "status": "partial",
+  "planned_trainings": 6,
+  "planned_evaluations": 24,
+  "completed_evaluations": 6,
+  "reused_evaluations": 6,
+  "trainings": [
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 866.5778056730051,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0/cost.json",
+        "scope": "reader training including construction/cache; no acquisition or harm",
+        "peak_host_rss_bytes": 7010529280
+      },
+      "rule": "bp",
+      "seed": 0,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "parameter_count": 3348228,
+      "profile_only": false,
+      "steps": 300,
+      "initial_reader_sha256": "aacfa58c32ab7e403440741dfc96b364297e194e463833b8c8e10f233d6bdc87",
+      "reader_sha256": "0a978dc1d8c8d853b3ff623b0eea65f7f8d9e183b8f9b3484d03184ff4a4f150",
+      "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "recipe": {
+        "schema": "supplemental-reader-training-v1",
+        "original_summary": {
+          "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+          "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+        },
+        "source_recipe": {
+          "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+          "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+        },
+        "pools": [
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+            "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+            "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+            "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+          }
+        ],
+        "stop_tokens": {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+          "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+        },
+        "training": {
+          "pool_items": 1000,
+          "held_out": 100,
+          "steps": 300,
+          "batch": 2,
+          "n_memory": 64,
+          "n_query_records": 8,
+          "n_out": 8,
+          "save_every": 50,
+          "kappa": 0.0,
+          "clip_surprisal": null,
+          "out_para_nulls": true,
+          "out_para_prob": 1.0,
+          "lr": 0.001,
+          "weight_decay": 0.01,
+          "dev_every": 50,
+          "no_query_null": false,
+          "lex_idf": false,
+          "text_nulls": 8,
+          "text_windows": 512
+        },
+        "calibration": {
+          "bank_scales": {
+            "1": 70.70187377929688,
+            "2": 106.5766658782959,
+            "3": 425.5740661621094
+          },
+          "radii": {
+            "1": 0.2808128833770752,
+            "2": 0.4143741011619568,
+            "3": 0.18857809603214265
+          }
+        },
+        "base": {
+          "files": {
+            "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+            "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+            "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+          },
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+        },
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "checkpoint_steps": [
+          150,
+          200,
+          250,
+          300
+        ],
+        "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+        "error_credit": {
+          "iterations": 8,
+          "error_lr": 0.1,
+          "source": "pccap.revision_v1.epc_train.EPCTrainer"
+        },
+        "loss": {
+          "w_answer": 1.0,
+          "w_retrieval": 1.0,
+          "w_preserve": 1.0,
+          "w_code_norm": 0.0,
+          "fast_steps": 0,
+          "balance_null": true,
+          "kappa": 0.0,
+          "clip_surprisal": null
+        },
+        "text_range": [
+          0,
+          50001920
+        ],
+        "text_seed": "training_seed + 7",
+        "acquisition": "adjoint in every evaluation arm; newly empty memory"
+      },
+      "selected_steps": [
+        150,
+        200,
+        250,
+        300
+      ],
+      "planned_read": "all",
+      "planned_seed": 0,
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/train-upper-s0",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/train-upper-s0/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_seed": 0,
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 906.5266465980094,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1/cost.json",
+        "scope": "reader training including construction/cache; no acquisition or harm",
+        "peak_host_rss_bytes": 7126441984
+      },
+      "rule": "bp",
+      "seed": 1,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "parameter_count": 3348228,
+      "profile_only": false,
+      "steps": 300,
+      "initial_reader_sha256": "e761d9cb37bd152303cc2c187892308b032c5f9b59113f8777be1ed7a235afd4",
+      "reader_sha256": "db54bff7c258ff17504f35af2e16e6e953afedf1a2ef7cfbfd0bd53d43c194e8",
+      "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "recipe": {
+        "schema": "supplemental-reader-training-v1",
+        "original_summary": {
+          "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+          "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+        },
+        "source_recipe": {
+          "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+          "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+        },
+        "pools": [
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+            "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+            "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+            "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+          }
+        ],
+        "stop_tokens": {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+          "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+        },
+        "training": {
+          "pool_items": 1000,
+          "held_out": 100,
+          "steps": 300,
+          "batch": 2,
+          "n_memory": 64,
+          "n_query_records": 8,
+          "n_out": 8,
+          "save_every": 50,
+          "kappa": 0.0,
+          "clip_surprisal": null,
+          "out_para_nulls": true,
+          "out_para_prob": 1.0,
+          "lr": 0.001,
+          "weight_decay": 0.01,
+          "dev_every": 50,
+          "no_query_null": false,
+          "lex_idf": false,
+          "text_nulls": 8,
+          "text_windows": 512
+        },
+        "calibration": {
+          "bank_scales": {
+            "1": 70.70187377929688,
+            "2": 106.5766658782959,
+            "3": 425.5740661621094
+          },
+          "radii": {
+            "1": 0.2808128833770752,
+            "2": 0.4143741011619568,
+            "3": 0.18857809603214265
+          }
+        },
+        "base": {
+          "files": {
+            "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+            "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+            "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+          },
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+        },
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "checkpoint_steps": [
+          150,
+          200,
+          250,
+          300
+        ],
+        "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+        "error_credit": {
+          "iterations": 8,
+          "error_lr": 0.1,
+          "source": "pccap.revision_v1.epc_train.EPCTrainer"
+        },
+        "loss": {
+          "w_answer": 1.0,
+          "w_retrieval": 1.0,
+          "w_preserve": 1.0,
+          "w_code_norm": 0.0,
+          "fast_steps": 0,
+          "balance_null": true,
+          "kappa": 0.0,
+          "clip_surprisal": null
+        },
+        "text_range": [
+          0,
+          50001920
+        ],
+        "text_seed": "training_seed + 7",
+        "acquisition": "adjoint in every evaluation arm; newly empty memory"
+      },
+      "selected_steps": [
+        150,
+        200,
+        250,
+        300
+      ],
+      "planned_read": "all",
+      "planned_seed": 1,
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/train-upper-s1",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/train-upper-s1/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_seed": 1,
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 872.0438489108346,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2/cost.json",
+        "scope": "reader training including construction/cache; no acquisition or harm",
+        "peak_host_rss_bytes": 7000293376
+      },
+      "rule": "bp",
+      "seed": 2,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "parameter_count": 3348228,
+      "profile_only": false,
+      "steps": 300,
+      "initial_reader_sha256": "9dfecba4ba30af9433a67faed5410575967dbafe38ca6bab1ed586f48d873765",
+      "reader_sha256": "c30cd21e2b6c088941bdefc067b093cb3b353eca1a184460aacf8d917334d94d",
+      "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "recipe": {
+        "schema": "supplemental-reader-training-v1",
+        "original_summary": {
+          "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+          "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+        },
+        "source_recipe": {
+          "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+          "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+        },
+        "pools": [
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+            "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+            "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+          },
+          {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+            "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+          }
+        ],
+        "stop_tokens": {
+          "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+          "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+        },
+        "training": {
+          "pool_items": 1000,
+          "held_out": 100,
+          "steps": 300,
+          "batch": 2,
+          "n_memory": 64,
+          "n_query_records": 8,
+          "n_out": 8,
+          "save_every": 50,
+          "kappa": 0.0,
+          "clip_surprisal": null,
+          "out_para_nulls": true,
+          "out_para_prob": 1.0,
+          "lr": 0.001,
+          "weight_decay": 0.01,
+          "dev_every": 50,
+          "no_query_null": false,
+          "lex_idf": false,
+          "text_nulls": 8,
+          "text_windows": 512
+        },
+        "calibration": {
+          "bank_scales": {
+            "1": 70.70187377929688,
+            "2": 106.5766658782959,
+            "3": 425.5740661621094
+          },
+          "radii": {
+            "1": 0.2808128833770752,
+            "2": 0.4143741011619568,
+            "3": 0.18857809603214265
+          }
+        },
+        "base": {
+          "files": {
+            "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+            "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+            "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+          },
+          "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+        },
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "checkpoint_steps": [
+          150,
+          200,
+          250,
+          300
+        ],
+        "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+        "error_credit": {
+          "iterations": 8,
+          "error_lr": 0.1,
+          "source": "pccap.revision_v1.epc_train.EPCTrainer"
+        },
+        "loss": {
+          "w_answer": 1.0,
+          "w_retrieval": 1.0,
+          "w_preserve": 1.0,
+          "w_code_norm": 0.0,
+          "fast_steps": 0,
+          "balance_null": true,
+          "kappa": 0.0,
+          "clip_surprisal": null
+        },
+        "text_range": [
+          0,
+          50001920
+        ],
+        "text_seed": "training_seed + 7",
+        "acquisition": "adjoint in every evaluation arm; newly empty memory"
+      },
+      "selected_steps": [
+        150,
+        200,
+        250,
+        300
+      ],
+      "planned_read": "all",
+      "planned_seed": 2,
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/train-upper-s2",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/train-upper-s2/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_seed": 2,
+      "reused_from_pc_reader": false
+    }
+  ],
+  "cells": [
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 1716.0450022760779,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/cost.json",
+        "scope": "construction + acquisition/endpoints + harm; components are subsets",
+        "peak_host_rss_bytes": 2732728320
+      },
+      "dataset": "zsre",
+      "rule": "bp",
+      "seed": 0,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "write_sites": [
+        1,
+        2,
+        3
+      ],
+      "development": false,
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 292.0,
+          "value": 0.9733333333333334,
+          "evaluated_value": 0.9733333333333334,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 85.0,
+          "value": 0.85,
+          "evaluated_value": 0.85,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "unseen": {
+        "expected_n": 100,
+        "requested_n": 100,
+        "source_shortfall": 0,
+        "scored_n": 100,
+        "status_counts": {
+          "ok": 100
+        },
+        "coverage": 1.0,
+        "false_fires": 4,
+        "firing_observed_n": 100,
+        "false_fire_rate_evaluated": 0.04,
+        "false_fire_rate_full_inventory": 0.04,
+        "answer_changes": 4,
+        "answer_change_rate_evaluated": 0.04,
+        "answer_change_rate_full_inventory": 0.04,
+        "both_answers_terminated_n": 100,
+        "incomplete_answer_pairs_n": 0,
+        "answer_change_rate_complete_pairs": 0.04,
+        "complete_answer_preservation_rate_evaluated": 0.96,
+        "complete_answer_preservation_rate_full_inventory": 0.96,
+        "denominator_policy": "one planned prompt per item, unconditional on acquisition/firing; unavailable cases and shortfalls retained; no imputation"
+      },
+      "gate": {
+        "logical_positions": 245237,
+        "hard_null": 245219,
+        "selected": 18,
+        "corrected": 18
+      },
+      "harm": {
+        "capoff": {
+          "mean_kl": 0.00011072148883967136,
+          "mean_delta_nll": 0.00010996898634091604,
+          "es99_positive": 0.011701862036157267,
+          "maximum_positive": 6.506295622832672,
+          "exceedance": {
+            "0.01": {
+              "count": 15,
+              "fraction": 6.116532170920375e-05
+            },
+            "0.1": {
+              "count": 14,
+              "fraction": 5.708763359525683e-05
+            },
+            "1.0": {
+              "count": 9,
+              "fraction": 3.669919302552225e-05
+            }
+          },
+          "half_mass_positions": 3
+        },
+        "original": {
+          "mean_kl": 0.00011072148883967136,
+          "mean_delta_nll": 0.00010996898634091604,
+          "es99_positive": 0.011701862036157267,
+          "maximum_positive": 6.506295622832672,
+          "exceedance": {
+            "0.01": {
+              "count": 15,
+              "fraction": 6.116532170920375e-05
+            },
+            "0.1": {
+              "count": 14,
+              "fraction": 5.708763359525683e-05
+            },
+            "1.0": {
+              "count": 9,
+              "fraction": 3.669919302552225e-05
+            }
+          },
+          "half_mass_positions": 3
+        }
+      },
+      "positions": 245237,
+      "population": "post hoc/exposed realization0 order100, 300 edits",
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "vector": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/harm/vectors.npz",
+        "sha256": "e874c4b3a98b1dc402b9c3d8e1a273aad77f98876b482a91b3ed188644738001"
+      },
+      "pairing": {
+        "items": [
+          "zsre-train-14871",
+          "zsre-train-8237",
+          "zsre-train-11729",
+          "zsre-train-4432",
+          "zsre-train-2421",
+          "zsre-train-2768",
+          "zsre-train-17771",
+          "zsre-train-3402",
+          "zsre-train-10258",
+          "zsre-train-1768",
+          "zsre-train-9968",
+          "zsre-train-605",
+          "zsre-train-10401",
+          "zsre-train-8232",
+          "zsre-train-16863",
+          "zsre-train-4913",
+          "zsre-train-14780",
+          "zsre-train-5996",
+          "zsre-train-5863",
+          "zsre-train-11831",
+          "zsre-train-10324",
+          "zsre-train-9940",
+          "zsre-train-13591",
+          "zsre-train-894",
+          "zsre-train-4424",
+          "zsre-train-3084",
+          "zsre-train-10728",
+          "zsre-train-15186",
+          "zsre-train-11638",
+          "zsre-train-12208",
+          "zsre-train-3661",
+          "zsre-train-15828",
+          "zsre-train-12913",
+          "zsre-train-3188",
+          "zsre-train-8417",
+          "zsre-train-9575",
+          "zsre-train-3617",
+          "zsre-train-3987",
+          "zsre-train-12360",
+          "zsre-train-8816",
+          "zsre-train-15954",
+          "zsre-train-16731",
+          "zsre-train-1366",
+          "zsre-train-16149",
+          "zsre-train-17412",
+          "zsre-train-901",
+          "zsre-train-14547",
+          "zsre-train-17684",
+          "zsre-train-11657",
+          "zsre-train-11818",
+          "zsre-train-15213",
+          "zsre-train-9943",
+          "zsre-train-14123",
+          "zsre-train-9102",
+          "zsre-train-14112",
+          "zsre-train-18042",
+          "zsre-train-2258",
+          "zsre-train-9065",
+          "zsre-train-16647",
+          "zsre-train-7060",
+          "zsre-train-11088",
+          "zsre-train-11886",
+          "zsre-train-12018",
+          "zsre-train-14693",
+          "zsre-train-16361",
+          "zsre-train-13441",
+          "zsre-train-16280",
+          "zsre-train-4278",
+          "zsre-train-14767",
+          "zsre-train-15656",
+          "zsre-train-4466",
+          "zsre-train-12179",
+          "zsre-train-10450",
+          "zsre-train-115",
+          "zsre-train-15872",
+          "zsre-train-4828",
+          "zsre-train-10444",
+          "zsre-train-12481",
+          "zsre-train-8355",
+          "zsre-train-8881",
+          "zsre-train-6606",
+          "zsre-train-1998",
+          "zsre-train-6665",
+          "zsre-train-16467",
+          "zsre-train-14158",
+          "zsre-train-17522",
+          "zsre-train-8000",
+          "zsre-train-9079",
+          "zsre-train-4121",
+          "zsre-train-9769",
+          "zsre-train-925",
+          "zsre-train-5626",
+          "zsre-train-17644",
+          "zsre-train-11109",
+          "zsre-train-14390",
+          "zsre-train-15884",
+          "zsre-train-9904",
+          "zsre-train-11850",
+          "zsre-train-16623",
+          "zsre-train-18011",
+          "zsre-train-14567",
+          "zsre-train-1783",
+          "zsre-train-6128",
+          "zsre-train-98",
+          "zsre-train-7919",
+          "zsre-train-4059",
+          "zsre-train-7169",
+          "zsre-train-15509",
+          "zsre-train-16275",
+          "zsre-train-11343",
+          "zsre-train-647",
+          "zsre-train-9393",
+          "zsre-train-11710",
+          "zsre-train-5550",
+          "zsre-train-5169",
+          "zsre-train-5944",
+          "zsre-train-1470",
+          "zsre-train-9765",
+          "zsre-train-3903",
+          "zsre-train-1135",
+          "zsre-train-2095",
+          "zsre-train-14695",
+          "zsre-train-1285",
+          "zsre-train-1712",
+          "zsre-train-503",
+          "zsre-train-852",
+          "zsre-train-1912",
+          "zsre-train-16130",
+          "zsre-train-8599",
+          "zsre-train-2337",
+          "zsre-train-6801",
+          "zsre-train-17997",
+          "zsre-train-11679",
+          "zsre-train-3896",
+          "zsre-train-13074",
+          "zsre-train-10752",
+          "zsre-train-1334",
+          "zsre-train-13292",
+          "zsre-train-11732",
+          "zsre-train-11945",
+          "zsre-train-14299",
+          "zsre-train-1517",
+          "zsre-train-12631",
+          "zsre-train-15919",
+          "zsre-train-11635",
+          "zsre-train-5593",
+          "zsre-train-2917",
+          "zsre-train-11596",
+          "zsre-train-8598",
+          "zsre-train-10594",
+          "zsre-train-16736",
+          "zsre-train-13255",
+          "zsre-train-7818",
+          "zsre-train-15484",
+          "zsre-train-13357",
+          "zsre-train-16696",
+          "zsre-train-2351",
+          "zsre-train-15397",
+          "zsre-train-6924",
+          "zsre-train-16552",
+          "zsre-train-11287",
+          "zsre-train-11856",
+          "zsre-train-12647",
+          "zsre-train-14904",
+          "zsre-train-9637",
+          "zsre-train-14050",
+          "zsre-train-11915",
+          "zsre-train-4931",
+          "zsre-train-2898",
+          "zsre-train-12611",
+          "zsre-train-1647",
+          "zsre-train-10390",
+          "zsre-train-12444",
+          "zsre-train-1964",
+          "zsre-train-278",
+          "zsre-train-2382",
+          "zsre-train-14200",
+          "zsre-train-13761",
+          "zsre-train-6323",
+          "zsre-train-16662",
+          "zsre-train-14312",
+          "zsre-train-15129",
+          "zsre-train-2218",
+          "zsre-train-7015",
+          "zsre-train-16010",
+          "zsre-train-4221",
+          "zsre-train-8163",
+          "zsre-train-13423",
+          "zsre-train-26",
+          "zsre-train-8568",
+          "zsre-train-4597",
+          "zsre-train-5281",
+          "zsre-train-4920",
+          "zsre-train-8929",
+          "zsre-train-17090",
+          "zsre-train-16581",
+          "zsre-train-47",
+          "zsre-train-12423",
+          "zsre-train-15792",
+          "zsre-train-2993",
+          "zsre-train-6139",
+          "zsre-train-16836",
+          "zsre-train-9659",
+          "zsre-train-14433",
+          "zsre-train-10922",
+          "zsre-train-9724",
+          "zsre-train-16962",
+          "zsre-train-5879",
+          "zsre-train-9902",
+          "zsre-train-8212",
+          "zsre-train-14000",
+          "zsre-train-6355",
+          "zsre-train-15795",
+          "zsre-train-16973",
+          "zsre-train-3658",
+          "zsre-train-11621",
+          "zsre-train-52",
+          "zsre-train-7223",
+          "zsre-train-14296",
+          "zsre-train-6818",
+          "zsre-train-6421",
+          "zsre-train-9078",
+          "zsre-train-12218",
+          "zsre-train-8812",
+          "zsre-train-5317",
+          "zsre-train-6167",
+          "zsre-train-15815",
+          "zsre-train-13830",
+          "zsre-train-10574",
+          "zsre-train-8833",
+          "zsre-train-8247",
+          "zsre-train-2280",
+          "zsre-train-397",
+          "zsre-train-2812",
+          "zsre-train-14648",
+          "zsre-train-230",
+          "zsre-train-17434",
+          "zsre-train-8426",
+          "zsre-train-5096",
+          "zsre-train-16657",
+          "zsre-train-7151",
+          "zsre-train-14851",
+          "zsre-train-12061",
+          "zsre-train-11954",
+          "zsre-train-2057",
+          "zsre-train-16966",
+          "zsre-train-10636",
+          "zsre-train-3149",
+          "zsre-train-12027",
+          "zsre-train-11371",
+          "zsre-train-10542",
+          "zsre-train-3621",
+          "zsre-train-1004",
+          "zsre-train-4550",
+          "zsre-train-6779",
+          "zsre-train-15984",
+          "zsre-train-16764",
+          "zsre-train-8180",
+          "zsre-train-11912",
+          "zsre-train-1287",
+          "zsre-train-16448",
+          "zsre-train-9234",
+          "zsre-train-4955",
+          "zsre-train-1840",
+          "zsre-train-4747",
+          "zsre-train-13733",
+          "zsre-train-15811",
+          "zsre-train-3232",
+          "zsre-train-17289",
+          "zsre-train-12192",
+          "zsre-train-6825",
+          "zsre-train-2696",
+          "zsre-train-14935",
+          "zsre-train-10747",
+          "zsre-train-9969",
+          "zsre-train-7460",
+          "zsre-train-7550",
+          "zsre-train-13634",
+          "zsre-train-3575",
+          "zsre-train-16389",
+          "zsre-train-2021",
+          "zsre-train-5811",
+          "zsre-train-9275",
+          "zsre-train-13469",
+          "zsre-train-16353",
+          "zsre-train-2148",
+          "zsre-train-3119",
+          "zsre-train-3248",
+          "zsre-train-8228",
+          "zsre-train-12779",
+          "zsre-train-7483",
+          "zsre-train-10992",
+          "zsre-train-975",
+          "zsre-train-10200",
+          "zsre-train-13614",
+          "zsre-train-12859",
+          "zsre-train-3639",
+          "zsre-train-5762",
+          "zsre-train-8437",
+          "zsre-train-3701"
+        ],
+        "endpoints": "22ead50f4c996c1e7ed6b0d768cf66752ad2d6b781514678112d12a4eb25836d",
+        "payload_sha256": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+        "window_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+      },
+      "training": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0",
+        "status": "complete",
+        "cost": {
+          "status": "complete",
+          "seconds": 866.5778056730051,
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0/cost.json",
+          "scope": "reader training including construction/cache; no acquisition or harm",
+          "peak_host_rss_bytes": 7010529280
+        },
+        "rule": "bp",
+        "seed": 0,
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "parameter_count": 3348228,
+        "profile_only": false,
+        "steps": 300,
+        "initial_reader_sha256": "aacfa58c32ab7e403440741dfc96b364297e194e463833b8c8e10f233d6bdc87",
+        "reader_sha256": "0a978dc1d8c8d853b3ff623b0eea65f7f8d9e183b8f9b3484d03184ff4a4f150",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "recipe": {
+          "schema": "supplemental-reader-training-v1",
+          "original_summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+            "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+          },
+          "source_recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+            "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+          },
+          "pools": [
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+              "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+              "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+              "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+            }
+          ],
+          "stop_tokens": {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+            "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+          },
+          "training": {
+            "pool_items": 1000,
+            "held_out": 100,
+            "steps": 300,
+            "batch": 2,
+            "n_memory": 64,
+            "n_query_records": 8,
+            "n_out": 8,
+            "save_every": 50,
+            "kappa": 0.0,
+            "clip_surprisal": null,
+            "out_para_nulls": true,
+            "out_para_prob": 1.0,
+            "lr": 0.001,
+            "weight_decay": 0.01,
+            "dev_every": 50,
+            "no_query_null": false,
+            "lex_idf": false,
+            "text_nulls": 8,
+            "text_windows": 512
+          },
+          "calibration": {
+            "bank_scales": {
+              "1": 70.70187377929688,
+              "2": 106.5766658782959,
+              "3": 425.5740661621094
+            },
+            "radii": {
+              "1": 0.2808128833770752,
+              "2": 0.4143741011619568,
+              "3": 0.18857809603214265
+            }
+          },
+          "base": {
+            "files": {
+              "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+              "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+              "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+            },
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+          },
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "checkpoint_steps": [
+            150,
+            200,
+            250,
+            300
+          ],
+          "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+          "error_credit": {
+            "iterations": 8,
+            "error_lr": 0.1,
+            "source": "pccap.revision_v1.epc_train.EPCTrainer"
+          },
+          "loss": {
+            "w_answer": 1.0,
+            "w_retrieval": 1.0,
+            "w_preserve": 1.0,
+            "w_code_norm": 0.0,
+            "fast_steps": 0,
+            "balance_null": true,
+            "kappa": 0.0,
+            "clip_surprisal": null
+          },
+          "text_range": [
+            0,
+            50001920
+          ],
+          "text_seed": "training_seed + 7",
+          "acquisition": "adjoint in every evaluation arm; newly empty memory"
+        },
+        "selected_steps": [
+          150,
+          200,
+          250,
+          300
+        ]
+      },
+      "interface": {
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "write_sites": [
+          1,
+          2,
+          3
+        ],
+        "parameters": 3348228,
+        "weights_bytes": 13392912,
+        "delta_allocated_bytes": 10229760,
+        "delta_active_coordinate_bytes": 10229760,
+        "total_allocated_bytes": 24288920,
+        "aggregate_allowance": 0.3,
+        "delta_steps_per_prefix": 5,
+        "inactive_storage": "dense exact zeros; all bytes charged"
+      },
+      "stream_seconds": 511.6395737770945,
+      "harm_seconds": 1200.5182242910378,
+      "changed_distribution_fraction": 7.33983860510445e-05,
+      "planned_read": "all",
+      "planned_write": "all",
+      "planned_seed": 0,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 1696.772964647971,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/cost.json",
+        "scope": "construction + acquisition/endpoints + harm; components are subsets",
+        "peak_host_rss_bytes": 2737074176
+      },
+      "dataset": "counterfact",
+      "rule": "bp",
+      "seed": 0,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "write_sites": [
+        1,
+        2,
+        3
+      ],
+      "development": false,
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 243.0,
+          "value": 0.81,
+          "evaluated_value": 0.81,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 100.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "unseen": {
+        "expected_n": 100,
+        "requested_n": 100,
+        "source_shortfall": 0,
+        "scored_n": 100,
+        "status_counts": {
+          "ok": 100
+        },
+        "coverage": 1.0,
+        "false_fires": 0,
+        "firing_observed_n": 100,
+        "false_fire_rate_evaluated": 0.0,
+        "false_fire_rate_full_inventory": 0.0,
+        "answer_changes": 0,
+        "answer_change_rate_evaluated": 0.0,
+        "answer_change_rate_full_inventory": 0.0,
+        "both_answers_terminated_n": 69,
+        "incomplete_answer_pairs_n": 31,
+        "answer_change_rate_complete_pairs": 0.0,
+        "complete_answer_preservation_rate_evaluated": 0.69,
+        "complete_answer_preservation_rate_full_inventory": 0.69,
+        "denominator_policy": "one planned prompt per item, unconditional on acquisition/firing; unavailable cases and shortfalls retained; no imputation"
+      },
+      "gate": {
+        "logical_positions": 245237,
+        "hard_null": 244981,
+        "selected": 256,
+        "corrected": 256
+      },
+      "harm": {
+        "capoff": {
+          "mean_kl": 0.002012263349584983,
+          "mean_delta_nll": 0.0020202565905123237,
+          "es99_positive": 0.20700253520628986,
+          "maximum_positive": 8.519330450689646,
+          "exceedance": {
+            "0.01": {
+              "count": 227,
+              "fraction": 0.0009256352018659501
+            },
+            "0.1": {
+              "count": 217,
+              "fraction": 0.0008848583207264809
+            },
+            "1.0": {
+              "count": 149,
+              "fraction": 0.0006075755289780906
+            }
+          },
+          "half_mass_positions": 49
+        },
+        "original": {
+          "mean_kl": 0.002012263349584983,
+          "mean_delta_nll": 0.0020202565905123237,
+          "es99_positive": 0.20700253520628986,
+          "maximum_positive": 8.519330450689646,
+          "exceedance": {
+            "0.01": {
+              "count": 227,
+              "fraction": 0.0009256352018659501
+            },
+            "0.1": {
+              "count": 217,
+              "fraction": 0.0008848583207264809
+            },
+            "1.0": {
+              "count": 149,
+              "fraction": 0.0006075755289780906
+            }
+          },
+          "half_mass_positions": 49
+        }
+      },
+      "positions": 245237,
+      "population": "post hoc/exposed realization0 order100, 300 edits",
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "vector": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/harm/vectors.npz",
+        "sha256": "539e3f5863d41121a67596164abdad0e921218fe3739d6a7efc0cb78f6c132c3"
+      },
+      "pairing": {
+        "items": [
+          "cf-9366",
+          "cf-9706",
+          "cf-6570",
+          "cf-10698",
+          "cf-6587",
+          "cf-1158",
+          "cf-3250",
+          "cf-4795",
+          "cf-6335",
+          "cf-2684",
+          "cf-9025",
+          "cf-4086",
+          "cf-9688",
+          "cf-9845",
+          "cf-3348",
+          "cf-2041",
+          "cf-3586",
+          "cf-138",
+          "cf-142",
+          "cf-9721",
+          "cf-10456",
+          "cf-8044",
+          "cf-8884",
+          "cf-2861",
+          "cf-6392",
+          "cf-1322",
+          "cf-105",
+          "cf-5253",
+          "cf-10689",
+          "cf-1476",
+          "cf-2619",
+          "cf-9567",
+          "cf-3708",
+          "cf-232",
+          "cf-2155",
+          "cf-2531",
+          "cf-6249",
+          "cf-6609",
+          "cf-7341",
+          "cf-4576",
+          "cf-5967",
+          "cf-191",
+          "cf-1305",
+          "cf-203",
+          "cf-7097",
+          "cf-5390",
+          "cf-2964",
+          "cf-7975",
+          "cf-233",
+          "cf-5080",
+          "cf-1649",
+          "cf-3785",
+          "cf-9083",
+          "cf-2491",
+          "cf-8469",
+          "cf-9816",
+          "cf-5504",
+          "cf-7902",
+          "cf-4554",
+          "cf-6977",
+          "cf-5351",
+          "cf-8288",
+          "cf-10638",
+          "cf-2464",
+          "cf-9510",
+          "cf-8795",
+          "cf-8611",
+          "cf-4642",
+          "cf-5239",
+          "cf-5271",
+          "cf-2800",
+          "cf-486",
+          "cf-1833",
+          "cf-2086",
+          "cf-10359",
+          "cf-4952",
+          "cf-6434",
+          "cf-2461",
+          "cf-8354",
+          "cf-1008",
+          "cf-6533",
+          "cf-2749",
+          "cf-4397",
+          "cf-2221",
+          "cf-6075",
+          "cf-3950",
+          "cf-3408",
+          "cf-3774",
+          "cf-8894",
+          "cf-5773",
+          "cf-4245",
+          "cf-3233",
+          "cf-4827",
+          "cf-721",
+          "cf-3158",
+          "cf-6510",
+          "cf-5286",
+          "cf-3720",
+          "cf-1760",
+          "cf-6755",
+          "cf-10257",
+          "cf-6386",
+          "cf-5311",
+          "cf-3451",
+          "cf-1319",
+          "cf-7745",
+          "cf-4193",
+          "cf-5933",
+          "cf-10350",
+          "cf-6107",
+          "cf-7777",
+          "cf-4507",
+          "cf-2256",
+          "cf-5765",
+          "cf-457",
+          "cf-9626",
+          "cf-7286",
+          "cf-10814",
+          "cf-8382",
+          "cf-5783",
+          "cf-4895",
+          "cf-3897",
+          "cf-5140",
+          "cf-9408",
+          "cf-5559",
+          "cf-9405",
+          "cf-5671",
+          "cf-8349",
+          "cf-1463",
+          "cf-8560",
+          "cf-9353",
+          "cf-8774",
+          "cf-6079",
+          "cf-8693",
+          "cf-5381",
+          "cf-2007",
+          "cf-8991",
+          "cf-10451",
+          "cf-7903",
+          "cf-9842",
+          "cf-1765",
+          "cf-4155",
+          "cf-4773",
+          "cf-9550",
+          "cf-5674",
+          "cf-4063",
+          "cf-5011",
+          "cf-1719",
+          "cf-10149",
+          "cf-1514",
+          "cf-5526",
+          "cf-7574",
+          "cf-8747",
+          "cf-5787",
+          "cf-9882",
+          "cf-7837",
+          "cf-6550",
+          "cf-195",
+          "cf-8236",
+          "cf-2149",
+          "cf-5316",
+          "cf-8889",
+          "cf-23",
+          "cf-4741",
+          "cf-2396",
+          "cf-7537",
+          "cf-6501",
+          "cf-1444",
+          "cf-4138",
+          "cf-10028",
+          "cf-7013",
+          "cf-3507",
+          "cf-880",
+          "cf-4446",
+          "cf-6750",
+          "cf-934",
+          "cf-852",
+          "cf-5586",
+          "cf-7936",
+          "cf-9112",
+          "cf-4173",
+          "cf-9256",
+          "cf-2512",
+          "cf-2428",
+          "cf-10162",
+          "cf-10123",
+          "cf-7127",
+          "cf-3271",
+          "cf-8980",
+          "cf-1402",
+          "cf-3627",
+          "cf-3775",
+          "cf-2733",
+          "cf-8346",
+          "cf-9008",
+          "cf-4654",
+          "cf-9648",
+          "cf-4349",
+          "cf-2407",
+          "cf-6482",
+          "cf-2295",
+          "cf-1350",
+          "cf-7096",
+          "cf-3144",
+          "cf-4893",
+          "cf-65",
+          "cf-8890",
+          "cf-6950",
+          "cf-363",
+          "cf-5344",
+          "cf-826",
+          "cf-10081",
+          "cf-3601",
+          "cf-2485",
+          "cf-6433",
+          "cf-6960",
+          "cf-1849",
+          "cf-5282",
+          "cf-8270",
+          "cf-10263",
+          "cf-10701",
+          "cf-4099",
+          "cf-10262",
+          "cf-9731",
+          "cf-7306",
+          "cf-4464",
+          "cf-10403",
+          "cf-1181",
+          "cf-6376",
+          "cf-4225",
+          "cf-6507",
+          "cf-8200",
+          "cf-7722",
+          "cf-4048",
+          "cf-9850",
+          "cf-6042",
+          "cf-2200",
+          "cf-3538",
+          "cf-10119",
+          "cf-2685",
+          "cf-9664",
+          "cf-1755",
+          "cf-210",
+          "cf-10255",
+          "cf-5229",
+          "cf-2828",
+          "cf-10398",
+          "cf-2507",
+          "cf-7867",
+          "cf-9799",
+          "cf-10098",
+          "cf-8263",
+          "cf-6738",
+          "cf-3110",
+          "cf-7128",
+          "cf-9261",
+          "cf-929",
+          "cf-8987",
+          "cf-2832",
+          "cf-2896",
+          "cf-6489",
+          "cf-5932",
+          "cf-829",
+          "cf-10008",
+          "cf-29",
+          "cf-1739",
+          "cf-7434",
+          "cf-9498",
+          "cf-1587",
+          "cf-630",
+          "cf-4722",
+          "cf-9715",
+          "cf-4279",
+          "cf-6838",
+          "cf-3759",
+          "cf-5613",
+          "cf-21",
+          "cf-4176",
+          "cf-9364",
+          "cf-7129",
+          "cf-6065",
+          "cf-3737",
+          "cf-10105",
+          "cf-267",
+          "cf-1368",
+          "cf-3180",
+          "cf-6492",
+          "cf-4862",
+          "cf-8324",
+          "cf-285",
+          "cf-7532",
+          "cf-719",
+          "cf-8490",
+          "cf-5645",
+          "cf-8518",
+          "cf-958",
+          "cf-4240",
+          "cf-9825",
+          "cf-9765",
+          "cf-3339"
+        ],
+        "endpoints": "557f0ff39c8d6d82b441ac6454c5ce67a37db031a241321c77a8e2fb7ae2d14c",
+        "payload_sha256": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+        "window_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+      },
+      "training": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0",
+        "status": "complete",
+        "cost": {
+          "status": "complete",
+          "seconds": 866.5778056730051,
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0/cost.json",
+          "scope": "reader training including construction/cache; no acquisition or harm",
+          "peak_host_rss_bytes": 7010529280
+        },
+        "rule": "bp",
+        "seed": 0,
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "parameter_count": 3348228,
+        "profile_only": false,
+        "steps": 300,
+        "initial_reader_sha256": "aacfa58c32ab7e403440741dfc96b364297e194e463833b8c8e10f233d6bdc87",
+        "reader_sha256": "0a978dc1d8c8d853b3ff623b0eea65f7f8d9e183b8f9b3484d03184ff4a4f150",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "recipe": {
+          "schema": "supplemental-reader-training-v1",
+          "original_summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+            "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+          },
+          "source_recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+            "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+          },
+          "pools": [
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+              "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+              "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+              "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+            }
+          ],
+          "stop_tokens": {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+            "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+          },
+          "training": {
+            "pool_items": 1000,
+            "held_out": 100,
+            "steps": 300,
+            "batch": 2,
+            "n_memory": 64,
+            "n_query_records": 8,
+            "n_out": 8,
+            "save_every": 50,
+            "kappa": 0.0,
+            "clip_surprisal": null,
+            "out_para_nulls": true,
+            "out_para_prob": 1.0,
+            "lr": 0.001,
+            "weight_decay": 0.01,
+            "dev_every": 50,
+            "no_query_null": false,
+            "lex_idf": false,
+            "text_nulls": 8,
+            "text_windows": 512
+          },
+          "calibration": {
+            "bank_scales": {
+              "1": 70.70187377929688,
+              "2": 106.5766658782959,
+              "3": 425.5740661621094
+            },
+            "radii": {
+              "1": 0.2808128833770752,
+              "2": 0.4143741011619568,
+              "3": 0.18857809603214265
+            }
+          },
+          "base": {
+            "files": {
+              "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+              "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+              "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+            },
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+          },
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "checkpoint_steps": [
+            150,
+            200,
+            250,
+            300
+          ],
+          "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+          "error_credit": {
+            "iterations": 8,
+            "error_lr": 0.1,
+            "source": "pccap.revision_v1.epc_train.EPCTrainer"
+          },
+          "loss": {
+            "w_answer": 1.0,
+            "w_retrieval": 1.0,
+            "w_preserve": 1.0,
+            "w_code_norm": 0.0,
+            "fast_steps": 0,
+            "balance_null": true,
+            "kappa": 0.0,
+            "clip_surprisal": null
+          },
+          "text_range": [
+            0,
+            50001920
+          ],
+          "text_seed": "training_seed + 7",
+          "acquisition": "adjoint in every evaluation arm; newly empty memory"
+        },
+        "selected_steps": [
+          150,
+          200,
+          250,
+          300
+        ]
+      },
+      "interface": {
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "write_sites": [
+          1,
+          2,
+          3
+        ],
+        "parameters": 3348228,
+        "weights_bytes": 13392912,
+        "delta_allocated_bytes": 5529600,
+        "delta_active_coordinate_bytes": 5529600,
+        "total_allocated_bytes": 19584784,
+        "aggregate_allowance": 0.3,
+        "delta_steps_per_prefix": 5,
+        "inactive_storage": "dense exact zeros; all bytes charged"
+      },
+      "stream_seconds": 508.0423525008373,
+      "harm_seconds": 1184.848634902155,
+      "changed_distribution_fraction": 0.0010438881571704106,
+      "planned_read": "all",
+      "planned_write": "all",
+      "planned_seed": 0,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s0-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s0-zsre/cost.json"
+      },
+      "planned_read": "all",
+      "planned_write": "last",
+      "planned_seed": 0,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s0-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s0-counterfact/cost.json"
+      },
+      "planned_read": "all",
+      "planned_write": "last",
+      "planned_seed": 0,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s0-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s0-zsre/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "all",
+      "planned_seed": 0,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s0-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s0-counterfact/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "all",
+      "planned_seed": 0,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s0-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s0-zsre/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "last",
+      "planned_seed": 0,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s0-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s0-counterfact/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "last",
+      "planned_seed": 0,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 1717.8606793228537,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/cost.json",
+        "scope": "construction + acquisition/endpoints + harm; components are subsets",
+        "peak_host_rss_bytes": 2729627648
+      },
+      "dataset": "zsre",
+      "rule": "bp",
+      "seed": 1,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "write_sites": [
+        1,
+        2,
+        3
+      ],
+      "development": false,
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 297.0,
+          "value": 0.99,
+          "evaluated_value": 0.99,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 67.0,
+          "value": 0.67,
+          "evaluated_value": 0.67,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "unseen": {
+        "expected_n": 100,
+        "requested_n": 100,
+        "source_shortfall": 0,
+        "scored_n": 100,
+        "status_counts": {
+          "ok": 100
+        },
+        "coverage": 1.0,
+        "false_fires": 14,
+        "firing_observed_n": 100,
+        "false_fire_rate_evaluated": 0.14,
+        "false_fire_rate_full_inventory": 0.14,
+        "answer_changes": 14,
+        "answer_change_rate_evaluated": 0.14,
+        "answer_change_rate_full_inventory": 0.14,
+        "both_answers_terminated_n": 100,
+        "incomplete_answer_pairs_n": 0,
+        "answer_change_rate_complete_pairs": 0.14,
+        "complete_answer_preservation_rate_evaluated": 0.86,
+        "complete_answer_preservation_rate_full_inventory": 0.86,
+        "denominator_policy": "one planned prompt per item, unconditional on acquisition/firing; unavailable cases and shortfalls retained; no imputation"
+      },
+      "gate": {
+        "logical_positions": 245237,
+        "hard_null": 245224,
+        "selected": 13,
+        "corrected": 13
+      },
+      "harm": {
+        "capoff": {
+          "mean_kl": 0.0001344412039450287,
+          "mean_delta_nll": 0.00012545985127825426,
+          "es99_positive": 0.012736847088171712,
+          "maximum_positive": 7.922522122649974,
+          "exceedance": {
+            "0.01": {
+              "count": 12,
+              "fraction": 4.8932257367363e-05
+            },
+            "0.1": {
+              "count": 12,
+              "fraction": 4.8932257367363e-05
+            },
+            "1.0": {
+              "count": 9,
+              "fraction": 3.669919302552225e-05
+            }
+          },
+          "half_mass_positions": 3
+        },
+        "original": {
+          "mean_kl": 0.0001344412039450287,
+          "mean_delta_nll": 0.00012545985127825426,
+          "es99_positive": 0.012736847088171712,
+          "maximum_positive": 7.922522122649974,
+          "exceedance": {
+            "0.01": {
+              "count": 12,
+              "fraction": 4.8932257367363e-05
+            },
+            "0.1": {
+              "count": 12,
+              "fraction": 4.8932257367363e-05
+            },
+            "1.0": {
+              "count": 9,
+              "fraction": 3.669919302552225e-05
+            }
+          },
+          "half_mass_positions": 3
+        }
+      },
+      "positions": 245237,
+      "population": "post hoc/exposed realization0 order100, 300 edits",
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "vector": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/harm/vectors.npz",
+        "sha256": "316d7702d6ed8aed940ca0985bd91dc94ac9bbb93989509d960047e22e550157"
+      },
+      "pairing": {
+        "items": [
+          "zsre-train-14871",
+          "zsre-train-8237",
+          "zsre-train-11729",
+          "zsre-train-4432",
+          "zsre-train-2421",
+          "zsre-train-2768",
+          "zsre-train-17771",
+          "zsre-train-3402",
+          "zsre-train-10258",
+          "zsre-train-1768",
+          "zsre-train-9968",
+          "zsre-train-605",
+          "zsre-train-10401",
+          "zsre-train-8232",
+          "zsre-train-16863",
+          "zsre-train-4913",
+          "zsre-train-14780",
+          "zsre-train-5996",
+          "zsre-train-5863",
+          "zsre-train-11831",
+          "zsre-train-10324",
+          "zsre-train-9940",
+          "zsre-train-13591",
+          "zsre-train-894",
+          "zsre-train-4424",
+          "zsre-train-3084",
+          "zsre-train-10728",
+          "zsre-train-15186",
+          "zsre-train-11638",
+          "zsre-train-12208",
+          "zsre-train-3661",
+          "zsre-train-15828",
+          "zsre-train-12913",
+          "zsre-train-3188",
+          "zsre-train-8417",
+          "zsre-train-9575",
+          "zsre-train-3617",
+          "zsre-train-3987",
+          "zsre-train-12360",
+          "zsre-train-8816",
+          "zsre-train-15954",
+          "zsre-train-16731",
+          "zsre-train-1366",
+          "zsre-train-16149",
+          "zsre-train-17412",
+          "zsre-train-901",
+          "zsre-train-14547",
+          "zsre-train-17684",
+          "zsre-train-11657",
+          "zsre-train-11818",
+          "zsre-train-15213",
+          "zsre-train-9943",
+          "zsre-train-14123",
+          "zsre-train-9102",
+          "zsre-train-14112",
+          "zsre-train-18042",
+          "zsre-train-2258",
+          "zsre-train-9065",
+          "zsre-train-16647",
+          "zsre-train-7060",
+          "zsre-train-11088",
+          "zsre-train-11886",
+          "zsre-train-12018",
+          "zsre-train-14693",
+          "zsre-train-16361",
+          "zsre-train-13441",
+          "zsre-train-16280",
+          "zsre-train-4278",
+          "zsre-train-14767",
+          "zsre-train-15656",
+          "zsre-train-4466",
+          "zsre-train-12179",
+          "zsre-train-10450",
+          "zsre-train-115",
+          "zsre-train-15872",
+          "zsre-train-4828",
+          "zsre-train-10444",
+          "zsre-train-12481",
+          "zsre-train-8355",
+          "zsre-train-8881",
+          "zsre-train-6606",
+          "zsre-train-1998",
+          "zsre-train-6665",
+          "zsre-train-16467",
+          "zsre-train-14158",
+          "zsre-train-17522",
+          "zsre-train-8000",
+          "zsre-train-9079",
+          "zsre-train-4121",
+          "zsre-train-9769",
+          "zsre-train-925",
+          "zsre-train-5626",
+          "zsre-train-17644",
+          "zsre-train-11109",
+          "zsre-train-14390",
+          "zsre-train-15884",
+          "zsre-train-9904",
+          "zsre-train-11850",
+          "zsre-train-16623",
+          "zsre-train-18011",
+          "zsre-train-14567",
+          "zsre-train-1783",
+          "zsre-train-6128",
+          "zsre-train-98",
+          "zsre-train-7919",
+          "zsre-train-4059",
+          "zsre-train-7169",
+          "zsre-train-15509",
+          "zsre-train-16275",
+          "zsre-train-11343",
+          "zsre-train-647",
+          "zsre-train-9393",
+          "zsre-train-11710",
+          "zsre-train-5550",
+          "zsre-train-5169",
+          "zsre-train-5944",
+          "zsre-train-1470",
+          "zsre-train-9765",
+          "zsre-train-3903",
+          "zsre-train-1135",
+          "zsre-train-2095",
+          "zsre-train-14695",
+          "zsre-train-1285",
+          "zsre-train-1712",
+          "zsre-train-503",
+          "zsre-train-852",
+          "zsre-train-1912",
+          "zsre-train-16130",
+          "zsre-train-8599",
+          "zsre-train-2337",
+          "zsre-train-6801",
+          "zsre-train-17997",
+          "zsre-train-11679",
+          "zsre-train-3896",
+          "zsre-train-13074",
+          "zsre-train-10752",
+          "zsre-train-1334",
+          "zsre-train-13292",
+          "zsre-train-11732",
+          "zsre-train-11945",
+          "zsre-train-14299",
+          "zsre-train-1517",
+          "zsre-train-12631",
+          "zsre-train-15919",
+          "zsre-train-11635",
+          "zsre-train-5593",
+          "zsre-train-2917",
+          "zsre-train-11596",
+          "zsre-train-8598",
+          "zsre-train-10594",
+          "zsre-train-16736",
+          "zsre-train-13255",
+          "zsre-train-7818",
+          "zsre-train-15484",
+          "zsre-train-13357",
+          "zsre-train-16696",
+          "zsre-train-2351",
+          "zsre-train-15397",
+          "zsre-train-6924",
+          "zsre-train-16552",
+          "zsre-train-11287",
+          "zsre-train-11856",
+          "zsre-train-12647",
+          "zsre-train-14904",
+          "zsre-train-9637",
+          "zsre-train-14050",
+          "zsre-train-11915",
+          "zsre-train-4931",
+          "zsre-train-2898",
+          "zsre-train-12611",
+          "zsre-train-1647",
+          "zsre-train-10390",
+          "zsre-train-12444",
+          "zsre-train-1964",
+          "zsre-train-278",
+          "zsre-train-2382",
+          "zsre-train-14200",
+          "zsre-train-13761",
+          "zsre-train-6323",
+          "zsre-train-16662",
+          "zsre-train-14312",
+          "zsre-train-15129",
+          "zsre-train-2218",
+          "zsre-train-7015",
+          "zsre-train-16010",
+          "zsre-train-4221",
+          "zsre-train-8163",
+          "zsre-train-13423",
+          "zsre-train-26",
+          "zsre-train-8568",
+          "zsre-train-4597",
+          "zsre-train-5281",
+          "zsre-train-4920",
+          "zsre-train-8929",
+          "zsre-train-17090",
+          "zsre-train-16581",
+          "zsre-train-47",
+          "zsre-train-12423",
+          "zsre-train-15792",
+          "zsre-train-2993",
+          "zsre-train-6139",
+          "zsre-train-16836",
+          "zsre-train-9659",
+          "zsre-train-14433",
+          "zsre-train-10922",
+          "zsre-train-9724",
+          "zsre-train-16962",
+          "zsre-train-5879",
+          "zsre-train-9902",
+          "zsre-train-8212",
+          "zsre-train-14000",
+          "zsre-train-6355",
+          "zsre-train-15795",
+          "zsre-train-16973",
+          "zsre-train-3658",
+          "zsre-train-11621",
+          "zsre-train-52",
+          "zsre-train-7223",
+          "zsre-train-14296",
+          "zsre-train-6818",
+          "zsre-train-6421",
+          "zsre-train-9078",
+          "zsre-train-12218",
+          "zsre-train-8812",
+          "zsre-train-5317",
+          "zsre-train-6167",
+          "zsre-train-15815",
+          "zsre-train-13830",
+          "zsre-train-10574",
+          "zsre-train-8833",
+          "zsre-train-8247",
+          "zsre-train-2280",
+          "zsre-train-397",
+          "zsre-train-2812",
+          "zsre-train-14648",
+          "zsre-train-230",
+          "zsre-train-17434",
+          "zsre-train-8426",
+          "zsre-train-5096",
+          "zsre-train-16657",
+          "zsre-train-7151",
+          "zsre-train-14851",
+          "zsre-train-12061",
+          "zsre-train-11954",
+          "zsre-train-2057",
+          "zsre-train-16966",
+          "zsre-train-10636",
+          "zsre-train-3149",
+          "zsre-train-12027",
+          "zsre-train-11371",
+          "zsre-train-10542",
+          "zsre-train-3621",
+          "zsre-train-1004",
+          "zsre-train-4550",
+          "zsre-train-6779",
+          "zsre-train-15984",
+          "zsre-train-16764",
+          "zsre-train-8180",
+          "zsre-train-11912",
+          "zsre-train-1287",
+          "zsre-train-16448",
+          "zsre-train-9234",
+          "zsre-train-4955",
+          "zsre-train-1840",
+          "zsre-train-4747",
+          "zsre-train-13733",
+          "zsre-train-15811",
+          "zsre-train-3232",
+          "zsre-train-17289",
+          "zsre-train-12192",
+          "zsre-train-6825",
+          "zsre-train-2696",
+          "zsre-train-14935",
+          "zsre-train-10747",
+          "zsre-train-9969",
+          "zsre-train-7460",
+          "zsre-train-7550",
+          "zsre-train-13634",
+          "zsre-train-3575",
+          "zsre-train-16389",
+          "zsre-train-2021",
+          "zsre-train-5811",
+          "zsre-train-9275",
+          "zsre-train-13469",
+          "zsre-train-16353",
+          "zsre-train-2148",
+          "zsre-train-3119",
+          "zsre-train-3248",
+          "zsre-train-8228",
+          "zsre-train-12779",
+          "zsre-train-7483",
+          "zsre-train-10992",
+          "zsre-train-975",
+          "zsre-train-10200",
+          "zsre-train-13614",
+          "zsre-train-12859",
+          "zsre-train-3639",
+          "zsre-train-5762",
+          "zsre-train-8437",
+          "zsre-train-3701"
+        ],
+        "endpoints": "22ead50f4c996c1e7ed6b0d768cf66752ad2d6b781514678112d12a4eb25836d",
+        "payload_sha256": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+        "window_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+      },
+      "training": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1",
+        "status": "complete",
+        "cost": {
+          "status": "complete",
+          "seconds": 906.5266465980094,
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1/cost.json",
+          "scope": "reader training including construction/cache; no acquisition or harm",
+          "peak_host_rss_bytes": 7126441984
+        },
+        "rule": "bp",
+        "seed": 1,
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "parameter_count": 3348228,
+        "profile_only": false,
+        "steps": 300,
+        "initial_reader_sha256": "e761d9cb37bd152303cc2c187892308b032c5f9b59113f8777be1ed7a235afd4",
+        "reader_sha256": "db54bff7c258ff17504f35af2e16e6e953afedf1a2ef7cfbfd0bd53d43c194e8",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "recipe": {
+          "schema": "supplemental-reader-training-v1",
+          "original_summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+            "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+          },
+          "source_recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+            "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+          },
+          "pools": [
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+              "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+              "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+              "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+            }
+          ],
+          "stop_tokens": {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+            "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+          },
+          "training": {
+            "pool_items": 1000,
+            "held_out": 100,
+            "steps": 300,
+            "batch": 2,
+            "n_memory": 64,
+            "n_query_records": 8,
+            "n_out": 8,
+            "save_every": 50,
+            "kappa": 0.0,
+            "clip_surprisal": null,
+            "out_para_nulls": true,
+            "out_para_prob": 1.0,
+            "lr": 0.001,
+            "weight_decay": 0.01,
+            "dev_every": 50,
+            "no_query_null": false,
+            "lex_idf": false,
+            "text_nulls": 8,
+            "text_windows": 512
+          },
+          "calibration": {
+            "bank_scales": {
+              "1": 70.70187377929688,
+              "2": 106.5766658782959,
+              "3": 425.5740661621094
+            },
+            "radii": {
+              "1": 0.2808128833770752,
+              "2": 0.4143741011619568,
+              "3": 0.18857809603214265
+            }
+          },
+          "base": {
+            "files": {
+              "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+              "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+              "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+            },
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+          },
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "checkpoint_steps": [
+            150,
+            200,
+            250,
+            300
+          ],
+          "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+          "error_credit": {
+            "iterations": 8,
+            "error_lr": 0.1,
+            "source": "pccap.revision_v1.epc_train.EPCTrainer"
+          },
+          "loss": {
+            "w_answer": 1.0,
+            "w_retrieval": 1.0,
+            "w_preserve": 1.0,
+            "w_code_norm": 0.0,
+            "fast_steps": 0,
+            "balance_null": true,
+            "kappa": 0.0,
+            "clip_surprisal": null
+          },
+          "text_range": [
+            0,
+            50001920
+          ],
+          "text_seed": "training_seed + 7",
+          "acquisition": "adjoint in every evaluation arm; newly empty memory"
+        },
+        "selected_steps": [
+          150,
+          200,
+          250,
+          300
+        ]
+      },
+      "interface": {
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "write_sites": [
+          1,
+          2,
+          3
+        ],
+        "parameters": 3348228,
+        "weights_bytes": 13392912,
+        "delta_allocated_bytes": 10229760,
+        "delta_active_coordinate_bytes": 10229760,
+        "total_allocated_bytes": 24288920,
+        "aggregate_allowance": 0.3,
+        "delta_steps_per_prefix": 5,
+        "inactive_storage": "dense exact zeros; all bytes charged"
+      },
+      "stream_seconds": 513.0456034671515,
+      "harm_seconds": 1200.9289831109345,
+      "changed_distribution_fraction": 5.3009945481309916e-05,
+      "planned_read": "all",
+      "planned_write": "all",
+      "planned_seed": 1,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 1696.9756632659119,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/cost.json",
+        "scope": "construction + acquisition/endpoints + harm; components are subsets",
+        "peak_host_rss_bytes": 2754830336
+      },
+      "dataset": "counterfact",
+      "rule": "bp",
+      "seed": 1,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "write_sites": [
+        1,
+        2,
+        3
+      ],
+      "development": false,
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 297.0,
+          "value": 0.99,
+          "evaluated_value": 0.99,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 297.0,
+          "value": 0.99,
+          "evaluated_value": 0.99,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 240.0,
+          "value": 0.8,
+          "evaluated_value": 0.8,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 99.0,
+          "value": 0.99,
+          "evaluated_value": 0.99,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 49.0,
+          "value": 0.98,
+          "evaluated_value": 0.98,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 49.0,
+          "value": 0.98,
+          "evaluated_value": 0.98,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "unseen": {
+        "expected_n": 100,
+        "requested_n": 100,
+        "source_shortfall": 0,
+        "scored_n": 100,
+        "status_counts": {
+          "ok": 100
+        },
+        "coverage": 1.0,
+        "false_fires": 1,
+        "firing_observed_n": 100,
+        "false_fire_rate_evaluated": 0.01,
+        "false_fire_rate_full_inventory": 0.01,
+        "answer_changes": 1,
+        "answer_change_rate_evaluated": 0.01,
+        "answer_change_rate_full_inventory": 0.01,
+        "both_answers_terminated_n": 69,
+        "incomplete_answer_pairs_n": 31,
+        "answer_change_rate_complete_pairs": 0.014492753623188406,
+        "complete_answer_preservation_rate_evaluated": 0.68,
+        "complete_answer_preservation_rate_full_inventory": 0.68,
+        "denominator_policy": "one planned prompt per item, unconditional on acquisition/firing; unavailable cases and shortfalls retained; no imputation"
+      },
+      "gate": {
+        "logical_positions": 245237,
+        "hard_null": 244577,
+        "selected": 660,
+        "corrected": 660
+      },
+      "harm": {
+        "capoff": {
+          "mean_kl": 0.005166184345546091,
+          "mean_delta_nll": 0.005352227042554863,
+          "es99_positive": 0.5512697134562556,
+          "maximum_positive": 12.501782615145244,
+          "exceedance": {
+            "0.01": {
+              "count": 567,
+              "fraction": 0.0023120491606079016
+            },
+            "0.1": {
+              "count": 548,
+              "fraction": 0.0022345730864429102
+            },
+            "1.0": {
+              "count": 363,
+              "fraction": 0.0014802007853627307
+            }
+          },
+          "half_mass_positions": 109
+        },
+        "original": {
+          "mean_kl": 0.005166184345546091,
+          "mean_delta_nll": 0.005352227042554863,
+          "es99_positive": 0.5512697134562556,
+          "maximum_positive": 12.501782615145244,
+          "exceedance": {
+            "0.01": {
+              "count": 567,
+              "fraction": 0.0023120491606079016
+            },
+            "0.1": {
+              "count": 548,
+              "fraction": 0.0022345730864429102
+            },
+            "1.0": {
+              "count": 363,
+              "fraction": 0.0014802007853627307
+            }
+          },
+          "half_mass_positions": 109
+        }
+      },
+      "positions": 245237,
+      "population": "post hoc/exposed realization0 order100, 300 edits",
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "vector": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/harm/vectors.npz",
+        "sha256": "2b2c153ff5331bde89b4dc75ab7ef5ad224d338937a6718cd802c076eedf1822"
+      },
+      "pairing": {
+        "items": [
+          "cf-9366",
+          "cf-9706",
+          "cf-6570",
+          "cf-10698",
+          "cf-6587",
+          "cf-1158",
+          "cf-3250",
+          "cf-4795",
+          "cf-6335",
+          "cf-2684",
+          "cf-9025",
+          "cf-4086",
+          "cf-9688",
+          "cf-9845",
+          "cf-3348",
+          "cf-2041",
+          "cf-3586",
+          "cf-138",
+          "cf-142",
+          "cf-9721",
+          "cf-10456",
+          "cf-8044",
+          "cf-8884",
+          "cf-2861",
+          "cf-6392",
+          "cf-1322",
+          "cf-105",
+          "cf-5253",
+          "cf-10689",
+          "cf-1476",
+          "cf-2619",
+          "cf-9567",
+          "cf-3708",
+          "cf-232",
+          "cf-2155",
+          "cf-2531",
+          "cf-6249",
+          "cf-6609",
+          "cf-7341",
+          "cf-4576",
+          "cf-5967",
+          "cf-191",
+          "cf-1305",
+          "cf-203",
+          "cf-7097",
+          "cf-5390",
+          "cf-2964",
+          "cf-7975",
+          "cf-233",
+          "cf-5080",
+          "cf-1649",
+          "cf-3785",
+          "cf-9083",
+          "cf-2491",
+          "cf-8469",
+          "cf-9816",
+          "cf-5504",
+          "cf-7902",
+          "cf-4554",
+          "cf-6977",
+          "cf-5351",
+          "cf-8288",
+          "cf-10638",
+          "cf-2464",
+          "cf-9510",
+          "cf-8795",
+          "cf-8611",
+          "cf-4642",
+          "cf-5239",
+          "cf-5271",
+          "cf-2800",
+          "cf-486",
+          "cf-1833",
+          "cf-2086",
+          "cf-10359",
+          "cf-4952",
+          "cf-6434",
+          "cf-2461",
+          "cf-8354",
+          "cf-1008",
+          "cf-6533",
+          "cf-2749",
+          "cf-4397",
+          "cf-2221",
+          "cf-6075",
+          "cf-3950",
+          "cf-3408",
+          "cf-3774",
+          "cf-8894",
+          "cf-5773",
+          "cf-4245",
+          "cf-3233",
+          "cf-4827",
+          "cf-721",
+          "cf-3158",
+          "cf-6510",
+          "cf-5286",
+          "cf-3720",
+          "cf-1760",
+          "cf-6755",
+          "cf-10257",
+          "cf-6386",
+          "cf-5311",
+          "cf-3451",
+          "cf-1319",
+          "cf-7745",
+          "cf-4193",
+          "cf-5933",
+          "cf-10350",
+          "cf-6107",
+          "cf-7777",
+          "cf-4507",
+          "cf-2256",
+          "cf-5765",
+          "cf-457",
+          "cf-9626",
+          "cf-7286",
+          "cf-10814",
+          "cf-8382",
+          "cf-5783",
+          "cf-4895",
+          "cf-3897",
+          "cf-5140",
+          "cf-9408",
+          "cf-5559",
+          "cf-9405",
+          "cf-5671",
+          "cf-8349",
+          "cf-1463",
+          "cf-8560",
+          "cf-9353",
+          "cf-8774",
+          "cf-6079",
+          "cf-8693",
+          "cf-5381",
+          "cf-2007",
+          "cf-8991",
+          "cf-10451",
+          "cf-7903",
+          "cf-9842",
+          "cf-1765",
+          "cf-4155",
+          "cf-4773",
+          "cf-9550",
+          "cf-5674",
+          "cf-4063",
+          "cf-5011",
+          "cf-1719",
+          "cf-10149",
+          "cf-1514",
+          "cf-5526",
+          "cf-7574",
+          "cf-8747",
+          "cf-5787",
+          "cf-9882",
+          "cf-7837",
+          "cf-6550",
+          "cf-195",
+          "cf-8236",
+          "cf-2149",
+          "cf-5316",
+          "cf-8889",
+          "cf-23",
+          "cf-4741",
+          "cf-2396",
+          "cf-7537",
+          "cf-6501",
+          "cf-1444",
+          "cf-4138",
+          "cf-10028",
+          "cf-7013",
+          "cf-3507",
+          "cf-880",
+          "cf-4446",
+          "cf-6750",
+          "cf-934",
+          "cf-852",
+          "cf-5586",
+          "cf-7936",
+          "cf-9112",
+          "cf-4173",
+          "cf-9256",
+          "cf-2512",
+          "cf-2428",
+          "cf-10162",
+          "cf-10123",
+          "cf-7127",
+          "cf-3271",
+          "cf-8980",
+          "cf-1402",
+          "cf-3627",
+          "cf-3775",
+          "cf-2733",
+          "cf-8346",
+          "cf-9008",
+          "cf-4654",
+          "cf-9648",
+          "cf-4349",
+          "cf-2407",
+          "cf-6482",
+          "cf-2295",
+          "cf-1350",
+          "cf-7096",
+          "cf-3144",
+          "cf-4893",
+          "cf-65",
+          "cf-8890",
+          "cf-6950",
+          "cf-363",
+          "cf-5344",
+          "cf-826",
+          "cf-10081",
+          "cf-3601",
+          "cf-2485",
+          "cf-6433",
+          "cf-6960",
+          "cf-1849",
+          "cf-5282",
+          "cf-8270",
+          "cf-10263",
+          "cf-10701",
+          "cf-4099",
+          "cf-10262",
+          "cf-9731",
+          "cf-7306",
+          "cf-4464",
+          "cf-10403",
+          "cf-1181",
+          "cf-6376",
+          "cf-4225",
+          "cf-6507",
+          "cf-8200",
+          "cf-7722",
+          "cf-4048",
+          "cf-9850",
+          "cf-6042",
+          "cf-2200",
+          "cf-3538",
+          "cf-10119",
+          "cf-2685",
+          "cf-9664",
+          "cf-1755",
+          "cf-210",
+          "cf-10255",
+          "cf-5229",
+          "cf-2828",
+          "cf-10398",
+          "cf-2507",
+          "cf-7867",
+          "cf-9799",
+          "cf-10098",
+          "cf-8263",
+          "cf-6738",
+          "cf-3110",
+          "cf-7128",
+          "cf-9261",
+          "cf-929",
+          "cf-8987",
+          "cf-2832",
+          "cf-2896",
+          "cf-6489",
+          "cf-5932",
+          "cf-829",
+          "cf-10008",
+          "cf-29",
+          "cf-1739",
+          "cf-7434",
+          "cf-9498",
+          "cf-1587",
+          "cf-630",
+          "cf-4722",
+          "cf-9715",
+          "cf-4279",
+          "cf-6838",
+          "cf-3759",
+          "cf-5613",
+          "cf-21",
+          "cf-4176",
+          "cf-9364",
+          "cf-7129",
+          "cf-6065",
+          "cf-3737",
+          "cf-10105",
+          "cf-267",
+          "cf-1368",
+          "cf-3180",
+          "cf-6492",
+          "cf-4862",
+          "cf-8324",
+          "cf-285",
+          "cf-7532",
+          "cf-719",
+          "cf-8490",
+          "cf-5645",
+          "cf-8518",
+          "cf-958",
+          "cf-4240",
+          "cf-9825",
+          "cf-9765",
+          "cf-3339"
+        ],
+        "endpoints": "557f0ff39c8d6d82b441ac6454c5ce67a37db031a241321c77a8e2fb7ae2d14c",
+        "payload_sha256": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+        "window_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+      },
+      "training": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1",
+        "status": "complete",
+        "cost": {
+          "status": "complete",
+          "seconds": 906.5266465980094,
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1/cost.json",
+          "scope": "reader training including construction/cache; no acquisition or harm",
+          "peak_host_rss_bytes": 7126441984
+        },
+        "rule": "bp",
+        "seed": 1,
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "parameter_count": 3348228,
+        "profile_only": false,
+        "steps": 300,
+        "initial_reader_sha256": "e761d9cb37bd152303cc2c187892308b032c5f9b59113f8777be1ed7a235afd4",
+        "reader_sha256": "db54bff7c258ff17504f35af2e16e6e953afedf1a2ef7cfbfd0bd53d43c194e8",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "recipe": {
+          "schema": "supplemental-reader-training-v1",
+          "original_summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+            "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+          },
+          "source_recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+            "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+          },
+          "pools": [
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+              "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+              "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+              "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+            }
+          ],
+          "stop_tokens": {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+            "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+          },
+          "training": {
+            "pool_items": 1000,
+            "held_out": 100,
+            "steps": 300,
+            "batch": 2,
+            "n_memory": 64,
+            "n_query_records": 8,
+            "n_out": 8,
+            "save_every": 50,
+            "kappa": 0.0,
+            "clip_surprisal": null,
+            "out_para_nulls": true,
+            "out_para_prob": 1.0,
+            "lr": 0.001,
+            "weight_decay": 0.01,
+            "dev_every": 50,
+            "no_query_null": false,
+            "lex_idf": false,
+            "text_nulls": 8,
+            "text_windows": 512
+          },
+          "calibration": {
+            "bank_scales": {
+              "1": 70.70187377929688,
+              "2": 106.5766658782959,
+              "3": 425.5740661621094
+            },
+            "radii": {
+              "1": 0.2808128833770752,
+              "2": 0.4143741011619568,
+              "3": 0.18857809603214265
+            }
+          },
+          "base": {
+            "files": {
+              "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+              "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+              "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+            },
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+          },
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "checkpoint_steps": [
+            150,
+            200,
+            250,
+            300
+          ],
+          "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+          "error_credit": {
+            "iterations": 8,
+            "error_lr": 0.1,
+            "source": "pccap.revision_v1.epc_train.EPCTrainer"
+          },
+          "loss": {
+            "w_answer": 1.0,
+            "w_retrieval": 1.0,
+            "w_preserve": 1.0,
+            "w_code_norm": 0.0,
+            "fast_steps": 0,
+            "balance_null": true,
+            "kappa": 0.0,
+            "clip_surprisal": null
+          },
+          "text_range": [
+            0,
+            50001920
+          ],
+          "text_seed": "training_seed + 7",
+          "acquisition": "adjoint in every evaluation arm; newly empty memory"
+        },
+        "selected_steps": [
+          150,
+          200,
+          250,
+          300
+        ]
+      },
+      "interface": {
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "write_sites": [
+          1,
+          2,
+          3
+        ],
+        "parameters": 3348228,
+        "weights_bytes": 13392912,
+        "delta_allocated_bytes": 5529600,
+        "delta_active_coordinate_bytes": 5529600,
+        "total_allocated_bytes": 19584784,
+        "aggregate_allowance": 0.3,
+        "delta_steps_per_prefix": 5,
+        "inactive_storage": "dense exact zeros; all bytes charged"
+      },
+      "stream_seconds": 509.1746025541797,
+      "harm_seconds": 1183.9079164338764,
+      "changed_distribution_fraction": 0.002691274155204965,
+      "planned_read": "all",
+      "planned_write": "all",
+      "planned_seed": 1,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s1-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s1-zsre/cost.json"
+      },
+      "planned_read": "all",
+      "planned_write": "last",
+      "planned_seed": 1,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s1-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s1-counterfact/cost.json"
+      },
+      "planned_read": "all",
+      "planned_write": "last",
+      "planned_seed": 1,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s1-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s1-zsre/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "all",
+      "planned_seed": 1,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s1-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s1-counterfact/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "all",
+      "planned_seed": 1,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s1-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s1-zsre/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "last",
+      "planned_seed": 1,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s1-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s1-counterfact/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "last",
+      "planned_seed": 1,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 1725.5358913531527,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/cost.json",
+        "scope": "construction + acquisition/endpoints + harm; components are subsets",
+        "peak_host_rss_bytes": 2731876352
+      },
+      "dataset": "zsre",
+      "rule": "bp",
+      "seed": 2,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "write_sites": [
+        1,
+        2,
+        3
+      ],
+      "development": false,
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 293.0,
+          "value": 0.9766666666666667,
+          "evaluated_value": 0.9766666666666667,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 73.0,
+          "value": 0.73,
+          "evaluated_value": 0.73,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "unseen": {
+        "expected_n": 100,
+        "requested_n": 100,
+        "source_shortfall": 0,
+        "scored_n": 100,
+        "status_counts": {
+          "ok": 100
+        },
+        "coverage": 1.0,
+        "false_fires": 11,
+        "firing_observed_n": 100,
+        "false_fire_rate_evaluated": 0.11,
+        "false_fire_rate_full_inventory": 0.11,
+        "answer_changes": 11,
+        "answer_change_rate_evaluated": 0.11,
+        "answer_change_rate_full_inventory": 0.11,
+        "both_answers_terminated_n": 100,
+        "incomplete_answer_pairs_n": 0,
+        "answer_change_rate_complete_pairs": 0.11,
+        "complete_answer_preservation_rate_evaluated": 0.89,
+        "complete_answer_preservation_rate_full_inventory": 0.89,
+        "denominator_policy": "one planned prompt per item, unconditional on acquisition/firing; unavailable cases and shortfalls retained; no imputation"
+      },
+      "gate": {
+        "logical_positions": 245237,
+        "hard_null": 245216,
+        "selected": 21,
+        "corrected": 21
+      },
+      "harm": {
+        "capoff": {
+          "mean_kl": 0.0001697639732686698,
+          "mean_delta_nll": 0.0001800639043125121,
+          "es99_positive": 0.01832747558306769,
+          "maximum_positive": 10.575678481311616,
+          "exceedance": {
+            "0.01": {
+              "count": 19,
+              "fraction": 7.747607416499141e-05
+            },
+            "0.1": {
+              "count": 19,
+              "fraction": 7.747607416499141e-05
+            },
+            "1.0": {
+              "count": 15,
+              "fraction": 6.116532170920375e-05
+            }
+          },
+          "half_mass_positions": 4
+        },
+        "original": {
+          "mean_kl": 0.0001697639732686698,
+          "mean_delta_nll": 0.0001800639043125121,
+          "es99_positive": 0.01832747558306769,
+          "maximum_positive": 10.575678481311616,
+          "exceedance": {
+            "0.01": {
+              "count": 19,
+              "fraction": 7.747607416499141e-05
+            },
+            "0.1": {
+              "count": 19,
+              "fraction": 7.747607416499141e-05
+            },
+            "1.0": {
+              "count": 15,
+              "fraction": 6.116532170920375e-05
+            }
+          },
+          "half_mass_positions": 4
+        }
+      },
+      "positions": 245237,
+      "population": "post hoc/exposed realization0 order100, 300 edits",
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "vector": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/harm/vectors.npz",
+        "sha256": "654630e5c2d6ec2deeca084897c47d6cdcf06f99bdeb8bb8478dff5015f62710"
+      },
+      "pairing": {
+        "items": [
+          "zsre-train-14871",
+          "zsre-train-8237",
+          "zsre-train-11729",
+          "zsre-train-4432",
+          "zsre-train-2421",
+          "zsre-train-2768",
+          "zsre-train-17771",
+          "zsre-train-3402",
+          "zsre-train-10258",
+          "zsre-train-1768",
+          "zsre-train-9968",
+          "zsre-train-605",
+          "zsre-train-10401",
+          "zsre-train-8232",
+          "zsre-train-16863",
+          "zsre-train-4913",
+          "zsre-train-14780",
+          "zsre-train-5996",
+          "zsre-train-5863",
+          "zsre-train-11831",
+          "zsre-train-10324",
+          "zsre-train-9940",
+          "zsre-train-13591",
+          "zsre-train-894",
+          "zsre-train-4424",
+          "zsre-train-3084",
+          "zsre-train-10728",
+          "zsre-train-15186",
+          "zsre-train-11638",
+          "zsre-train-12208",
+          "zsre-train-3661",
+          "zsre-train-15828",
+          "zsre-train-12913",
+          "zsre-train-3188",
+          "zsre-train-8417",
+          "zsre-train-9575",
+          "zsre-train-3617",
+          "zsre-train-3987",
+          "zsre-train-12360",
+          "zsre-train-8816",
+          "zsre-train-15954",
+          "zsre-train-16731",
+          "zsre-train-1366",
+          "zsre-train-16149",
+          "zsre-train-17412",
+          "zsre-train-901",
+          "zsre-train-14547",
+          "zsre-train-17684",
+          "zsre-train-11657",
+          "zsre-train-11818",
+          "zsre-train-15213",
+          "zsre-train-9943",
+          "zsre-train-14123",
+          "zsre-train-9102",
+          "zsre-train-14112",
+          "zsre-train-18042",
+          "zsre-train-2258",
+          "zsre-train-9065",
+          "zsre-train-16647",
+          "zsre-train-7060",
+          "zsre-train-11088",
+          "zsre-train-11886",
+          "zsre-train-12018",
+          "zsre-train-14693",
+          "zsre-train-16361",
+          "zsre-train-13441",
+          "zsre-train-16280",
+          "zsre-train-4278",
+          "zsre-train-14767",
+          "zsre-train-15656",
+          "zsre-train-4466",
+          "zsre-train-12179",
+          "zsre-train-10450",
+          "zsre-train-115",
+          "zsre-train-15872",
+          "zsre-train-4828",
+          "zsre-train-10444",
+          "zsre-train-12481",
+          "zsre-train-8355",
+          "zsre-train-8881",
+          "zsre-train-6606",
+          "zsre-train-1998",
+          "zsre-train-6665",
+          "zsre-train-16467",
+          "zsre-train-14158",
+          "zsre-train-17522",
+          "zsre-train-8000",
+          "zsre-train-9079",
+          "zsre-train-4121",
+          "zsre-train-9769",
+          "zsre-train-925",
+          "zsre-train-5626",
+          "zsre-train-17644",
+          "zsre-train-11109",
+          "zsre-train-14390",
+          "zsre-train-15884",
+          "zsre-train-9904",
+          "zsre-train-11850",
+          "zsre-train-16623",
+          "zsre-train-18011",
+          "zsre-train-14567",
+          "zsre-train-1783",
+          "zsre-train-6128",
+          "zsre-train-98",
+          "zsre-train-7919",
+          "zsre-train-4059",
+          "zsre-train-7169",
+          "zsre-train-15509",
+          "zsre-train-16275",
+          "zsre-train-11343",
+          "zsre-train-647",
+          "zsre-train-9393",
+          "zsre-train-11710",
+          "zsre-train-5550",
+          "zsre-train-5169",
+          "zsre-train-5944",
+          "zsre-train-1470",
+          "zsre-train-9765",
+          "zsre-train-3903",
+          "zsre-train-1135",
+          "zsre-train-2095",
+          "zsre-train-14695",
+          "zsre-train-1285",
+          "zsre-train-1712",
+          "zsre-train-503",
+          "zsre-train-852",
+          "zsre-train-1912",
+          "zsre-train-16130",
+          "zsre-train-8599",
+          "zsre-train-2337",
+          "zsre-train-6801",
+          "zsre-train-17997",
+          "zsre-train-11679",
+          "zsre-train-3896",
+          "zsre-train-13074",
+          "zsre-train-10752",
+          "zsre-train-1334",
+          "zsre-train-13292",
+          "zsre-train-11732",
+          "zsre-train-11945",
+          "zsre-train-14299",
+          "zsre-train-1517",
+          "zsre-train-12631",
+          "zsre-train-15919",
+          "zsre-train-11635",
+          "zsre-train-5593",
+          "zsre-train-2917",
+          "zsre-train-11596",
+          "zsre-train-8598",
+          "zsre-train-10594",
+          "zsre-train-16736",
+          "zsre-train-13255",
+          "zsre-train-7818",
+          "zsre-train-15484",
+          "zsre-train-13357",
+          "zsre-train-16696",
+          "zsre-train-2351",
+          "zsre-train-15397",
+          "zsre-train-6924",
+          "zsre-train-16552",
+          "zsre-train-11287",
+          "zsre-train-11856",
+          "zsre-train-12647",
+          "zsre-train-14904",
+          "zsre-train-9637",
+          "zsre-train-14050",
+          "zsre-train-11915",
+          "zsre-train-4931",
+          "zsre-train-2898",
+          "zsre-train-12611",
+          "zsre-train-1647",
+          "zsre-train-10390",
+          "zsre-train-12444",
+          "zsre-train-1964",
+          "zsre-train-278",
+          "zsre-train-2382",
+          "zsre-train-14200",
+          "zsre-train-13761",
+          "zsre-train-6323",
+          "zsre-train-16662",
+          "zsre-train-14312",
+          "zsre-train-15129",
+          "zsre-train-2218",
+          "zsre-train-7015",
+          "zsre-train-16010",
+          "zsre-train-4221",
+          "zsre-train-8163",
+          "zsre-train-13423",
+          "zsre-train-26",
+          "zsre-train-8568",
+          "zsre-train-4597",
+          "zsre-train-5281",
+          "zsre-train-4920",
+          "zsre-train-8929",
+          "zsre-train-17090",
+          "zsre-train-16581",
+          "zsre-train-47",
+          "zsre-train-12423",
+          "zsre-train-15792",
+          "zsre-train-2993",
+          "zsre-train-6139",
+          "zsre-train-16836",
+          "zsre-train-9659",
+          "zsre-train-14433",
+          "zsre-train-10922",
+          "zsre-train-9724",
+          "zsre-train-16962",
+          "zsre-train-5879",
+          "zsre-train-9902",
+          "zsre-train-8212",
+          "zsre-train-14000",
+          "zsre-train-6355",
+          "zsre-train-15795",
+          "zsre-train-16973",
+          "zsre-train-3658",
+          "zsre-train-11621",
+          "zsre-train-52",
+          "zsre-train-7223",
+          "zsre-train-14296",
+          "zsre-train-6818",
+          "zsre-train-6421",
+          "zsre-train-9078",
+          "zsre-train-12218",
+          "zsre-train-8812",
+          "zsre-train-5317",
+          "zsre-train-6167",
+          "zsre-train-15815",
+          "zsre-train-13830",
+          "zsre-train-10574",
+          "zsre-train-8833",
+          "zsre-train-8247",
+          "zsre-train-2280",
+          "zsre-train-397",
+          "zsre-train-2812",
+          "zsre-train-14648",
+          "zsre-train-230",
+          "zsre-train-17434",
+          "zsre-train-8426",
+          "zsre-train-5096",
+          "zsre-train-16657",
+          "zsre-train-7151",
+          "zsre-train-14851",
+          "zsre-train-12061",
+          "zsre-train-11954",
+          "zsre-train-2057",
+          "zsre-train-16966",
+          "zsre-train-10636",
+          "zsre-train-3149",
+          "zsre-train-12027",
+          "zsre-train-11371",
+          "zsre-train-10542",
+          "zsre-train-3621",
+          "zsre-train-1004",
+          "zsre-train-4550",
+          "zsre-train-6779",
+          "zsre-train-15984",
+          "zsre-train-16764",
+          "zsre-train-8180",
+          "zsre-train-11912",
+          "zsre-train-1287",
+          "zsre-train-16448",
+          "zsre-train-9234",
+          "zsre-train-4955",
+          "zsre-train-1840",
+          "zsre-train-4747",
+          "zsre-train-13733",
+          "zsre-train-15811",
+          "zsre-train-3232",
+          "zsre-train-17289",
+          "zsre-train-12192",
+          "zsre-train-6825",
+          "zsre-train-2696",
+          "zsre-train-14935",
+          "zsre-train-10747",
+          "zsre-train-9969",
+          "zsre-train-7460",
+          "zsre-train-7550",
+          "zsre-train-13634",
+          "zsre-train-3575",
+          "zsre-train-16389",
+          "zsre-train-2021",
+          "zsre-train-5811",
+          "zsre-train-9275",
+          "zsre-train-13469",
+          "zsre-train-16353",
+          "zsre-train-2148",
+          "zsre-train-3119",
+          "zsre-train-3248",
+          "zsre-train-8228",
+          "zsre-train-12779",
+          "zsre-train-7483",
+          "zsre-train-10992",
+          "zsre-train-975",
+          "zsre-train-10200",
+          "zsre-train-13614",
+          "zsre-train-12859",
+          "zsre-train-3639",
+          "zsre-train-5762",
+          "zsre-train-8437",
+          "zsre-train-3701"
+        ],
+        "endpoints": "22ead50f4c996c1e7ed6b0d768cf66752ad2d6b781514678112d12a4eb25836d",
+        "payload_sha256": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+        "window_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+      },
+      "training": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2",
+        "status": "complete",
+        "cost": {
+          "status": "complete",
+          "seconds": 872.0438489108346,
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2/cost.json",
+          "scope": "reader training including construction/cache; no acquisition or harm",
+          "peak_host_rss_bytes": 7000293376
+        },
+        "rule": "bp",
+        "seed": 2,
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "parameter_count": 3348228,
+        "profile_only": false,
+        "steps": 300,
+        "initial_reader_sha256": "9dfecba4ba30af9433a67faed5410575967dbafe38ca6bab1ed586f48d873765",
+        "reader_sha256": "c30cd21e2b6c088941bdefc067b093cb3b353eca1a184460aacf8d917334d94d",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "recipe": {
+          "schema": "supplemental-reader-training-v1",
+          "original_summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+            "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+          },
+          "source_recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+            "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+          },
+          "pools": [
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+              "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+              "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+              "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+            }
+          ],
+          "stop_tokens": {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+            "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+          },
+          "training": {
+            "pool_items": 1000,
+            "held_out": 100,
+            "steps": 300,
+            "batch": 2,
+            "n_memory": 64,
+            "n_query_records": 8,
+            "n_out": 8,
+            "save_every": 50,
+            "kappa": 0.0,
+            "clip_surprisal": null,
+            "out_para_nulls": true,
+            "out_para_prob": 1.0,
+            "lr": 0.001,
+            "weight_decay": 0.01,
+            "dev_every": 50,
+            "no_query_null": false,
+            "lex_idf": false,
+            "text_nulls": 8,
+            "text_windows": 512
+          },
+          "calibration": {
+            "bank_scales": {
+              "1": 70.70187377929688,
+              "2": 106.5766658782959,
+              "3": 425.5740661621094
+            },
+            "radii": {
+              "1": 0.2808128833770752,
+              "2": 0.4143741011619568,
+              "3": 0.18857809603214265
+            }
+          },
+          "base": {
+            "files": {
+              "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+              "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+              "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+            },
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+          },
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "checkpoint_steps": [
+            150,
+            200,
+            250,
+            300
+          ],
+          "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+          "error_credit": {
+            "iterations": 8,
+            "error_lr": 0.1,
+            "source": "pccap.revision_v1.epc_train.EPCTrainer"
+          },
+          "loss": {
+            "w_answer": 1.0,
+            "w_retrieval": 1.0,
+            "w_preserve": 1.0,
+            "w_code_norm": 0.0,
+            "fast_steps": 0,
+            "balance_null": true,
+            "kappa": 0.0,
+            "clip_surprisal": null
+          },
+          "text_range": [
+            0,
+            50001920
+          ],
+          "text_seed": "training_seed + 7",
+          "acquisition": "adjoint in every evaluation arm; newly empty memory"
+        },
+        "selected_steps": [
+          150,
+          200,
+          250,
+          300
+        ]
+      },
+      "interface": {
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "write_sites": [
+          1,
+          2,
+          3
+        ],
+        "parameters": 3348228,
+        "weights_bytes": 13392912,
+        "delta_allocated_bytes": 10229760,
+        "delta_active_coordinate_bytes": 10229760,
+        "total_allocated_bytes": 24288920,
+        "aggregate_allowance": 0.3,
+        "delta_steps_per_prefix": 5,
+        "inactive_storage": "dense exact zeros; all bytes charged"
+      },
+      "stream_seconds": 513.0480982640292,
+      "harm_seconds": 1208.5892513699364,
+      "changed_distribution_fraction": 8.563145039288525e-05,
+      "planned_read": "all",
+      "planned_write": "all",
+      "planned_seed": 2,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact",
+      "status": "complete",
+      "cost": {
+        "status": "complete",
+        "seconds": 1686.3375916769728,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/cost.json",
+        "scope": "construction + acquisition/endpoints + harm; components are subsets",
+        "peak_host_rss_bytes": 2759135232
+      },
+      "dataset": "counterfact",
+      "rule": "bp",
+      "seed": 2,
+      "read_taps": [
+        1,
+        2,
+        3
+      ],
+      "write_sites": [
+        1,
+        2,
+        3
+      ],
+      "development": false,
+      "metrics": {
+        "ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-ES": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 300.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "RET-GS": {
+          "planned": 300,
+          "scored": 300,
+          "numerator": 250.5,
+          "value": 0.835,
+          "evaluated_value": 0.835,
+          "status": "complete",
+          "status_counts": {
+            "ok": 300
+          },
+          "evaluable": 300
+        },
+        "LS": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "near_miss": {
+          "planned": 100,
+          "scored": 100,
+          "numerator": 100.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 100
+          },
+          "evaluable": 100
+        },
+        "revision": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        },
+        "revision_latest_answer": {
+          "planned": 50,
+          "scored": 50,
+          "numerator": 50.0,
+          "value": 1.0,
+          "evaluated_value": 1.0,
+          "status": "complete",
+          "status_counts": {
+            "ok": 50
+          },
+          "evaluable": 50
+        }
+      },
+      "unseen": {
+        "expected_n": 100,
+        "requested_n": 100,
+        "source_shortfall": 0,
+        "scored_n": 100,
+        "status_counts": {
+          "ok": 100
+        },
+        "coverage": 1.0,
+        "false_fires": 0,
+        "firing_observed_n": 100,
+        "false_fire_rate_evaluated": 0.0,
+        "false_fire_rate_full_inventory": 0.0,
+        "answer_changes": 0,
+        "answer_change_rate_evaluated": 0.0,
+        "answer_change_rate_full_inventory": 0.0,
+        "both_answers_terminated_n": 69,
+        "incomplete_answer_pairs_n": 31,
+        "answer_change_rate_complete_pairs": 0.0,
+        "complete_answer_preservation_rate_evaluated": 0.69,
+        "complete_answer_preservation_rate_full_inventory": 0.69,
+        "denominator_policy": "one planned prompt per item, unconditional on acquisition/firing; unavailable cases and shortfalls retained; no imputation"
+      },
+      "gate": {
+        "logical_positions": 245237,
+        "hard_null": 245088,
+        "selected": 149,
+        "corrected": 149
+      },
+      "harm": {
+        "capoff": {
+          "mean_kl": 0.0011195605193277866,
+          "mean_delta_nll": 0.001183001923154548,
+          "es99_positive": 0.12077266938863637,
+          "maximum_positive": 9.864664242756364,
+          "exceedance": {
+            "0.01": {
+              "count": 138,
+              "fraction": 0.0005627209597246745
+            },
+            "0.1": {
+              "count": 136,
+              "fraction": 0.0005545655834967807
+            },
+            "1.0": {
+              "count": 83,
+              "fraction": 0.0003384481134575941
+            }
+          },
+          "half_mass_positions": 25
+        },
+        "original": {
+          "mean_kl": 0.0011195605193277866,
+          "mean_delta_nll": 0.001183001923154548,
+          "es99_positive": 0.12077266938863637,
+          "maximum_positive": 9.864664242756364,
+          "exceedance": {
+            "0.01": {
+              "count": 138,
+              "fraction": 0.0005627209597246745
+            },
+            "0.1": {
+              "count": 136,
+              "fraction": 0.0005545655834967807
+            },
+            "1.0": {
+              "count": 83,
+              "fraction": 0.0003384481134575941
+            }
+          },
+          "half_mass_positions": 25
+        }
+      },
+      "positions": 245237,
+      "population": "post hoc/exposed realization0 order100, 300 edits",
+      "selection": {
+        "mode": "v5",
+        "source": {
+          "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+          "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+        },
+        "inventory": {
+          "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+          "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+        },
+        "windows": 1931,
+        "window_tokens": 128,
+        "positions": 245237,
+        "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "context": "reset every window",
+        "order": "window then target position, starting at target position 1"
+      },
+      "vector": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/harm/vectors.npz",
+        "sha256": "3c1c801e2d1f74915982ebbb3399fae9458bd18d17dd5a38e5e9eb1e72583767"
+      },
+      "pairing": {
+        "items": [
+          "cf-9366",
+          "cf-9706",
+          "cf-6570",
+          "cf-10698",
+          "cf-6587",
+          "cf-1158",
+          "cf-3250",
+          "cf-4795",
+          "cf-6335",
+          "cf-2684",
+          "cf-9025",
+          "cf-4086",
+          "cf-9688",
+          "cf-9845",
+          "cf-3348",
+          "cf-2041",
+          "cf-3586",
+          "cf-138",
+          "cf-142",
+          "cf-9721",
+          "cf-10456",
+          "cf-8044",
+          "cf-8884",
+          "cf-2861",
+          "cf-6392",
+          "cf-1322",
+          "cf-105",
+          "cf-5253",
+          "cf-10689",
+          "cf-1476",
+          "cf-2619",
+          "cf-9567",
+          "cf-3708",
+          "cf-232",
+          "cf-2155",
+          "cf-2531",
+          "cf-6249",
+          "cf-6609",
+          "cf-7341",
+          "cf-4576",
+          "cf-5967",
+          "cf-191",
+          "cf-1305",
+          "cf-203",
+          "cf-7097",
+          "cf-5390",
+          "cf-2964",
+          "cf-7975",
+          "cf-233",
+          "cf-5080",
+          "cf-1649",
+          "cf-3785",
+          "cf-9083",
+          "cf-2491",
+          "cf-8469",
+          "cf-9816",
+          "cf-5504",
+          "cf-7902",
+          "cf-4554",
+          "cf-6977",
+          "cf-5351",
+          "cf-8288",
+          "cf-10638",
+          "cf-2464",
+          "cf-9510",
+          "cf-8795",
+          "cf-8611",
+          "cf-4642",
+          "cf-5239",
+          "cf-5271",
+          "cf-2800",
+          "cf-486",
+          "cf-1833",
+          "cf-2086",
+          "cf-10359",
+          "cf-4952",
+          "cf-6434",
+          "cf-2461",
+          "cf-8354",
+          "cf-1008",
+          "cf-6533",
+          "cf-2749",
+          "cf-4397",
+          "cf-2221",
+          "cf-6075",
+          "cf-3950",
+          "cf-3408",
+          "cf-3774",
+          "cf-8894",
+          "cf-5773",
+          "cf-4245",
+          "cf-3233",
+          "cf-4827",
+          "cf-721",
+          "cf-3158",
+          "cf-6510",
+          "cf-5286",
+          "cf-3720",
+          "cf-1760",
+          "cf-6755",
+          "cf-10257",
+          "cf-6386",
+          "cf-5311",
+          "cf-3451",
+          "cf-1319",
+          "cf-7745",
+          "cf-4193",
+          "cf-5933",
+          "cf-10350",
+          "cf-6107",
+          "cf-7777",
+          "cf-4507",
+          "cf-2256",
+          "cf-5765",
+          "cf-457",
+          "cf-9626",
+          "cf-7286",
+          "cf-10814",
+          "cf-8382",
+          "cf-5783",
+          "cf-4895",
+          "cf-3897",
+          "cf-5140",
+          "cf-9408",
+          "cf-5559",
+          "cf-9405",
+          "cf-5671",
+          "cf-8349",
+          "cf-1463",
+          "cf-8560",
+          "cf-9353",
+          "cf-8774",
+          "cf-6079",
+          "cf-8693",
+          "cf-5381",
+          "cf-2007",
+          "cf-8991",
+          "cf-10451",
+          "cf-7903",
+          "cf-9842",
+          "cf-1765",
+          "cf-4155",
+          "cf-4773",
+          "cf-9550",
+          "cf-5674",
+          "cf-4063",
+          "cf-5011",
+          "cf-1719",
+          "cf-10149",
+          "cf-1514",
+          "cf-5526",
+          "cf-7574",
+          "cf-8747",
+          "cf-5787",
+          "cf-9882",
+          "cf-7837",
+          "cf-6550",
+          "cf-195",
+          "cf-8236",
+          "cf-2149",
+          "cf-5316",
+          "cf-8889",
+          "cf-23",
+          "cf-4741",
+          "cf-2396",
+          "cf-7537",
+          "cf-6501",
+          "cf-1444",
+          "cf-4138",
+          "cf-10028",
+          "cf-7013",
+          "cf-3507",
+          "cf-880",
+          "cf-4446",
+          "cf-6750",
+          "cf-934",
+          "cf-852",
+          "cf-5586",
+          "cf-7936",
+          "cf-9112",
+          "cf-4173",
+          "cf-9256",
+          "cf-2512",
+          "cf-2428",
+          "cf-10162",
+          "cf-10123",
+          "cf-7127",
+          "cf-3271",
+          "cf-8980",
+          "cf-1402",
+          "cf-3627",
+          "cf-3775",
+          "cf-2733",
+          "cf-8346",
+          "cf-9008",
+          "cf-4654",
+          "cf-9648",
+          "cf-4349",
+          "cf-2407",
+          "cf-6482",
+          "cf-2295",
+          "cf-1350",
+          "cf-7096",
+          "cf-3144",
+          "cf-4893",
+          "cf-65",
+          "cf-8890",
+          "cf-6950",
+          "cf-363",
+          "cf-5344",
+          "cf-826",
+          "cf-10081",
+          "cf-3601",
+          "cf-2485",
+          "cf-6433",
+          "cf-6960",
+          "cf-1849",
+          "cf-5282",
+          "cf-8270",
+          "cf-10263",
+          "cf-10701",
+          "cf-4099",
+          "cf-10262",
+          "cf-9731",
+          "cf-7306",
+          "cf-4464",
+          "cf-10403",
+          "cf-1181",
+          "cf-6376",
+          "cf-4225",
+          "cf-6507",
+          "cf-8200",
+          "cf-7722",
+          "cf-4048",
+          "cf-9850",
+          "cf-6042",
+          "cf-2200",
+          "cf-3538",
+          "cf-10119",
+          "cf-2685",
+          "cf-9664",
+          "cf-1755",
+          "cf-210",
+          "cf-10255",
+          "cf-5229",
+          "cf-2828",
+          "cf-10398",
+          "cf-2507",
+          "cf-7867",
+          "cf-9799",
+          "cf-10098",
+          "cf-8263",
+          "cf-6738",
+          "cf-3110",
+          "cf-7128",
+          "cf-9261",
+          "cf-929",
+          "cf-8987",
+          "cf-2832",
+          "cf-2896",
+          "cf-6489",
+          "cf-5932",
+          "cf-829",
+          "cf-10008",
+          "cf-29",
+          "cf-1739",
+          "cf-7434",
+          "cf-9498",
+          "cf-1587",
+          "cf-630",
+          "cf-4722",
+          "cf-9715",
+          "cf-4279",
+          "cf-6838",
+          "cf-3759",
+          "cf-5613",
+          "cf-21",
+          "cf-4176",
+          "cf-9364",
+          "cf-7129",
+          "cf-6065",
+          "cf-3737",
+          "cf-10105",
+          "cf-267",
+          "cf-1368",
+          "cf-3180",
+          "cf-6492",
+          "cf-4862",
+          "cf-8324",
+          "cf-285",
+          "cf-7532",
+          "cf-719",
+          "cf-8490",
+          "cf-5645",
+          "cf-8518",
+          "cf-958",
+          "cf-4240",
+          "cf-9825",
+          "cf-9765",
+          "cf-3339"
+        ],
+        "endpoints": "557f0ff39c8d6d82b441ac6454c5ce67a37db031a241321c77a8e2fb7ae2d14c",
+        "payload_sha256": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+        "window_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+      },
+      "training": {
+        "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2",
+        "status": "complete",
+        "cost": {
+          "status": "complete",
+          "seconds": 872.0438489108346,
+          "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2/cost.json",
+          "scope": "reader training including construction/cache; no acquisition or harm",
+          "peak_host_rss_bytes": 7000293376
+        },
+        "rule": "bp",
+        "seed": 2,
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "parameter_count": 3348228,
+        "profile_only": false,
+        "steps": 300,
+        "initial_reader_sha256": "9dfecba4ba30af9433a67faed5410575967dbafe38ca6bab1ed586f48d873765",
+        "reader_sha256": "c30cd21e2b6c088941bdefc067b093cb3b353eca1a184460aacf8d917334d94d",
+        "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+        "recipe": {
+          "schema": "supplemental-reader-training-v1",
+          "original_summary": {
+            "path": "/home/derp/cap/pc_cap/results/R1/pilot/r1_50_stream_sel6_text_s2/summary.json",
+            "sha256": "706a4fbb70e3b1a519d9964b8be09e04ac84ac9f95560aaacc6a72f0db94e835"
+          },
+          "source_recipe": {
+            "path": "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json",
+            "sha256": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35"
+          },
+          "pools": [
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_counterfact_v1.json",
+              "sha256": "06a17c80724193031a3627757e1fa94f333582b0abe755f3388e398ee7c73cd7"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_zsre_v1.json",
+              "sha256": "e07aba6524efdc11d45290939ea75d22fd190e212794cf1ee8125c02bc63162e"
+            },
+            {
+              "path": "/home/derp/cap/pc_cap/manifests/revision_v1/train_pool_mquake_v3.json",
+              "sha256": "b98d49d297766c484c423537d8c2c6bcfc89905e2a2297d5db49c30031dcea5b"
+            }
+          ],
+          "stop_tokens": {
+            "path": "/home/derp/cap/pc_cap/manifests/revision_v1/stop_tokens_v1.json",
+            "sha256": "90b6cd9f118aae8d13742e54601e25fe12fb28ef7a4c7abed171bc446687d711"
+          },
+          "training": {
+            "pool_items": 1000,
+            "held_out": 100,
+            "steps": 300,
+            "batch": 2,
+            "n_memory": 64,
+            "n_query_records": 8,
+            "n_out": 8,
+            "save_every": 50,
+            "kappa": 0.0,
+            "clip_surprisal": null,
+            "out_para_nulls": true,
+            "out_para_prob": 1.0,
+            "lr": 0.001,
+            "weight_decay": 0.01,
+            "dev_every": 50,
+            "no_query_null": false,
+            "lex_idf": false,
+            "text_nulls": 8,
+            "text_windows": 512
+          },
+          "calibration": {
+            "bank_scales": {
+              "1": 70.70187377929688,
+              "2": 106.5766658782959,
+              "3": 425.5740661621094
+            },
+            "radii": {
+              "1": 0.2808128833770752,
+              "2": 0.4143741011619568,
+              "3": 0.18857809603214265
+            }
+          },
+          "base": {
+            "files": {
+              "config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+              "model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+              "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+            },
+            "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189"
+          },
+          "seeds": [
+            0,
+            1,
+            2
+          ],
+          "checkpoint_steps": [
+            150,
+            200,
+            250,
+            300
+          ],
+          "checkpoint_policy": "unweighted tensor mean at 150/200/250/300; no outcome selection",
+          "error_credit": {
+            "iterations": 8,
+            "error_lr": 0.1,
+            "source": "pccap.revision_v1.epc_train.EPCTrainer"
+          },
+          "loss": {
+            "w_answer": 1.0,
+            "w_retrieval": 1.0,
+            "w_preserve": 1.0,
+            "w_code_norm": 0.0,
+            "fast_steps": 0,
+            "balance_null": true,
+            "kappa": 0.0,
+            "clip_surprisal": null
+          },
+          "text_range": [
+            0,
+            50001920
+          ],
+          "text_seed": "training_seed + 7",
+          "acquisition": "adjoint in every evaluation arm; newly empty memory"
+        },
+        "selected_steps": [
+          150,
+          200,
+          250,
+          300
+        ]
+      },
+      "interface": {
+        "read_taps": [
+          1,
+          2,
+          3
+        ],
+        "write_sites": [
+          1,
+          2,
+          3
+        ],
+        "parameters": 3348228,
+        "weights_bytes": 13392912,
+        "delta_allocated_bytes": 5529600,
+        "delta_active_coordinate_bytes": 5529600,
+        "total_allocated_bytes": 19584784,
+        "aggregate_allowance": 0.3,
+        "delta_steps_per_prefix": 5,
+        "inactive_storage": "dense exact zeros; all bytes charged"
+      },
+      "stream_seconds": 507.0370635499712,
+      "harm_seconds": 1175.3949298509397,
+      "changed_distribution_fraction": 0.0006075755289780906,
+      "planned_read": "all",
+      "planned_write": "all",
+      "planned_seed": 2,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": true
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s2-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s2-zsre/cost.json"
+      },
+      "planned_read": "all",
+      "planned_write": "last",
+      "planned_seed": 2,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s2-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-all-last-s2-counterfact/cost.json"
+      },
+      "planned_read": "all",
+      "planned_write": "last",
+      "planned_seed": 2,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s2-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s2-zsre/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "all",
+      "planned_seed": 2,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s2-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-all-s2-counterfact/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "all",
+      "planned_seed": 2,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s2-zsre",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s2-zsre/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "last",
+      "planned_seed": 2,
+      "planned_dataset": "zsre",
+      "reused_from_pc_reader": false
+    },
+    {
+      "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s2-counterfact",
+      "status": "missing",
+      "cost": {
+        "status": "missing",
+        "seconds": null,
+        "path": "/home/derp/cap/pc_cap/results/additional_work/AW-L/eval-upper-last-s2-counterfact/cost.json"
+      },
+      "planned_read": "upper",
+      "planned_write": "last",
+      "planned_seed": 2,
+      "planned_dataset": "counterfact",
+      "reused_from_pc_reader": false
+    }
+  ],
+  "effects": [
+    {
+      "seed": 0,
+      "dataset": "zsre",
+      "effects": null
+    },
+    {
+      "seed": 0,
+      "dataset": "counterfact",
+      "effects": null
+    },
+    {
+      "seed": 1,
+      "dataset": "zsre",
+      "effects": null
+    },
+    {
+      "seed": 1,
+      "dataset": "counterfact",
+      "effects": null
+    },
+    {
+      "seed": 2,
+      "dataset": "zsre",
+      "effects": null
+    },
+    {
+      "seed": 2,
+      "dataset": "counterfact",
+      "effects": null
+    }
+  ],
+  "effect_spread": [
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "RET-ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "RET-GS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "LS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "near_miss",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "revision",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "mean_kl",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "mean_delta_nll",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "es99_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "maximum_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "read",
+      "metric": "fired",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "RET-ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "RET-GS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "LS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "near_miss",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "revision",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "mean_kl",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "mean_delta_nll",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "es99_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "maximum_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "write",
+      "metric": "fired",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "RET-ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "RET-GS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "LS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "near_miss",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "revision",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "mean_kl",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "mean_delta_nll",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "es99_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "maximum_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "zsre",
+      "effect": "interaction",
+      "metric": "fired",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "RET-ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "RET-GS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "LS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "near_miss",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "revision",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "mean_kl",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "mean_delta_nll",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "es99_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "maximum_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "read",
+      "metric": "fired",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "RET-ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "RET-GS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "LS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "near_miss",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "revision",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "mean_kl",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "mean_delta_nll",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "es99_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "maximum_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "write",
+      "metric": "fired",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "RET-ES",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "RET-GS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "LS",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "near_miss",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "revision",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "mean_kl",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "mean_delta_nll",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "es99_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "maximum_positive",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    },
+    {
+      "dataset": "counterfact",
+      "effect": "interaction",
+      "metric": "fired",
+      "n": 0,
+      "mean": null,
+      "minimum": null,
+      "maximum": null,
+      "sample_sd": null
+    }
+  ],
+  "tolerance": [
+    {
+      "seed": 0,
+      "dataset": "zsre",
+      "read": "all",
+      "write": "all",
+      "ret_es_difference": 0.0,
+      "ret_gs_difference": 0.0,
+      "within_descriptive_002": true,
+      "baseline": true
+    },
+    {
+      "seed": 0,
+      "dataset": "zsre",
+      "read": "all",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 0,
+      "dataset": "zsre",
+      "read": "upper",
+      "write": "all",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 0,
+      "dataset": "zsre",
+      "read": "upper",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 0,
+      "dataset": "counterfact",
+      "read": "all",
+      "write": "all",
+      "ret_es_difference": 0.0,
+      "ret_gs_difference": 0.0,
+      "within_descriptive_002": true,
+      "baseline": true
+    },
+    {
+      "seed": 0,
+      "dataset": "counterfact",
+      "read": "all",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 0,
+      "dataset": "counterfact",
+      "read": "upper",
+      "write": "all",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 0,
+      "dataset": "counterfact",
+      "read": "upper",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 1,
+      "dataset": "zsre",
+      "read": "all",
+      "write": "all",
+      "ret_es_difference": 0.0,
+      "ret_gs_difference": 0.0,
+      "within_descriptive_002": true,
+      "baseline": true
+    },
+    {
+      "seed": 1,
+      "dataset": "zsre",
+      "read": "all",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 1,
+      "dataset": "zsre",
+      "read": "upper",
+      "write": "all",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 1,
+      "dataset": "zsre",
+      "read": "upper",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 1,
+      "dataset": "counterfact",
+      "read": "all",
+      "write": "all",
+      "ret_es_difference": 0.0,
+      "ret_gs_difference": 0.0,
+      "within_descriptive_002": true,
+      "baseline": true
+    },
+    {
+      "seed": 1,
+      "dataset": "counterfact",
+      "read": "all",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 1,
+      "dataset": "counterfact",
+      "read": "upper",
+      "write": "all",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 1,
+      "dataset": "counterfact",
+      "read": "upper",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 2,
+      "dataset": "zsre",
+      "read": "all",
+      "write": "all",
+      "ret_es_difference": 0.0,
+      "ret_gs_difference": 0.0,
+      "within_descriptive_002": true,
+      "baseline": true
+    },
+    {
+      "seed": 2,
+      "dataset": "zsre",
+      "read": "all",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 2,
+      "dataset": "zsre",
+      "read": "upper",
+      "write": "all",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 2,
+      "dataset": "zsre",
+      "read": "upper",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 2,
+      "dataset": "counterfact",
+      "read": "all",
+      "write": "all",
+      "ret_es_difference": 0.0,
+      "ret_gs_difference": 0.0,
+      "within_descriptive_002": true,
+      "baseline": true
+    },
+    {
+      "seed": 2,
+      "dataset": "counterfact",
+      "read": "all",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 2,
+      "dataset": "counterfact",
+      "read": "upper",
+      "write": "all",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    },
+    {
+      "seed": 2,
+      "dataset": "counterfact",
+      "read": "upper",
+      "write": "last",
+      "ret_es_difference": null,
+      "ret_gs_difference": null,
+      "within_descriptive_002": null,
+      "baseline": false
+    }
+  ],
+  "development_profiles": [],
+  "cost_inventory": [
+    {
+      "status": "complete",
+      "seconds": 866.5778056730051,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0/cost.json",
+      "scope": "reader training including construction/cache; no acquisition or harm",
+      "peak_host_rss_bytes": 7010529280
+    },
+    {
+      "status": "complete",
+      "seconds": 906.5266465980094,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1/cost.json",
+      "scope": "reader training including construction/cache; no acquisition or harm",
+      "peak_host_rss_bytes": 7126441984
+    },
+    {
+      "status": "complete",
+      "seconds": 872.0438489108346,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2/cost.json",
+      "scope": "reader training including construction/cache; no acquisition or harm",
+      "peak_host_rss_bytes": 7000293376
+    },
+    {
+      "status": "complete",
+      "seconds": 1716.0450022760779,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/cost.json",
+      "scope": "construction + acquisition/endpoints + harm; components are subsets",
+      "peak_host_rss_bytes": 2732728320
+    },
+    {
+      "status": "complete",
+      "seconds": 1696.772964647971,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/cost.json",
+      "scope": "construction + acquisition/endpoints + harm; components are subsets",
+      "peak_host_rss_bytes": 2737074176
+    },
+    {
+      "status": "complete",
+      "seconds": 1717.8606793228537,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/cost.json",
+      "scope": "construction + acquisition/endpoints + harm; components are subsets",
+      "peak_host_rss_bytes": 2729627648
+    },
+    {
+      "status": "complete",
+      "seconds": 1696.9756632659119,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/cost.json",
+      "scope": "construction + acquisition/endpoints + harm; components are subsets",
+      "peak_host_rss_bytes": 2754830336
+    },
+    {
+      "status": "complete",
+      "seconds": 1725.5358913531527,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/cost.json",
+      "scope": "construction + acquisition/endpoints + harm; components are subsets",
+      "peak_host_rss_bytes": 2731876352
+    },
+    {
+      "status": "complete",
+      "seconds": 1686.3375916769728,
+      "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/cost.json",
+      "scope": "construction + acquisition/endpoints + harm; components are subsets",
+      "peak_host_rss_bytes": 2759135232
+    }
+  ],
+  "attributed_process_seconds": 12884.67609372479,
+  "incremental_aw_l_process_seconds": 0,
+  "sources_sha256": {
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0/cost.json": "157829ed73481e7c7b432b0d6397b1fc2b2eee8e37c1eea882b59a40ce0dda85",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s0/report.json": "179ad95311549c28c690f2155e6eb89878ae473de9f7bf28caef4d4fe2b1fa0f",
+    "/home/derp/cap/assets/runs/additional_work/PC-reader/train-bp-s0/theta_avg150-300.npz": "693f1013e0b592c5b1ead013eaebf5ad2e462105be4168c48ff8a229942a1645",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/cost.json": "9d54219cbe26b2c1d34c15cac765ff076323d18b5ee42c907c29cbfeaf246e10",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/report.json": "2631739b3728783ccc11d612ea0fb35d20cf06e174e137a8976463b0b1515495",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-8e4df877ccad361ba231bd0a49c4e2d3bff9990db7c1a9070157a6a54bc470dc.json": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/stream/checkpoint-300.json": "3401f681abc718fcbc2682cb56a96e12fdd12150d39028f48849024b81ecdcb1",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/stream/finish.json": "4915f0efc2d61d5c368fc982bf72f542ab0ed4fd44c507b7d93ca6f784b08246",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/stream/config.json": "462ab357ab051fe1a841decc5ab062aa34e0ee21e9ccb709981d9a2ca8ea84a8",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/harm/summary.json": "c1e4c574b67b74c345a9172dee559054049da6c06b35ed09bea68cfbf3e3ae6e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/harm/cost.json": "b54160a8b75ef26e21fdefefc3a4352a1eab6073dbbeda1b2f9f0811171a9876",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/harm/vectors.npz": "e874c4b3a98b1dc402b9c3d8e1a273aad77f98876b482a91b3ed188644738001",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/cost.json": "9de3d4a2b45e6d8adcdbd51d8b44b0f4b88e8525b793b3b39af9fdf80a881e35",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/report.json": "131f4d69472a669726a9d80a98b69f1a8290913cfddfce4ac9f13e01d7a6dc42",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-b0acc16f0f979c8203fdf4a384b2d0a830a7db2537dfabcfdc4cd9f679df1d91.json": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/ce0d0ffc2a58a60e27c460d9.json": "e3b541c4e5b2a5087ab6f1c8191d2caab5cadae0955d83b33d47e111cd3cba31",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/stream/checkpoint-300.json": "9d9ab95acab22c8f9d6b2581587a06487c5fe96b7c676dd4194a8321ac1e6fff",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/stream/finish.json": "c083570d5a6f10d6377683a64c4880c8abbdf945a38f3e4ee982ec4300d7c1a9",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/stream/config.json": "94d7084068d60dda9349bc6dcaf2786bdc3663551419aa144b947691d68bca87",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/harm/summary.json": "59458d516582fcb43849d656cfe879e785769039efecd9b67cb61bc29347e2d8",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/harm/cost.json": "571effa6a7f50d7cd5d1ddd82ca08b3f9f81f6494add8ac4041b47c07c9786a4",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-counterfact/harm/vectors.npz": "539e3f5863d41121a67596164abdad0e921218fe3739d6a7efc0cb78f6c132c3",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1/cost.json": "0955a13d9b7689685a9eda87c52ce49f5d0c955865488b8b95f41d308a6aa7e6",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s1/report.json": "da8e862bdb35f3eab2a9fab3092b155b54f02e199566d79b8aecf0e82db24c44",
+    "/home/derp/cap/assets/runs/additional_work/PC-reader/train-bp-s1/theta_avg150-300.npz": "94a4042fcdc460e4eb635cfff705cbdf490fb37d7f11d0825abbc2441a252f02",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/cost.json": "9930fb2b8603b1e3ea04fe4b06644ee4c49ddd1eb862b904fa699d5bb48d66e3",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/report.json": "c2847ade7f9404f2dd2e69052eca96cb05faddd189865852e13a1dd719e6ebfa",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/stream/checkpoint-300.json": "7ba853de98a230af825db74fc427dbab29cef5a2912a852361b1a81c3c2b3abb",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/stream/finish.json": "909d86eabe7d273f5b7542a48421c3653448069ca6dcb8f6d7e7c2db7c3edbc9",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/stream/config.json": "ac14fb59bbaca158b97d3ed1ffb5e9437b6d6b2c778ec5a10b1b354536dcfaab",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/harm/summary.json": "25d70c633a77a10ccbf25eca6ebc7a7372f45ecc470d8ab0c84ac2d60d6f3e2d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/harm/cost.json": "1734913b6e1d6b6e1f0bb1f36c5a1639ec60d784fa855467970104080a98616c",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-zsre/harm/vectors.npz": "316d7702d6ed8aed940ca0985bd91dc94ac9bbb93989509d960047e22e550157",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/cost.json": "dbc979b03c9365e72579711015b1549f6dd2f239a7c462999a5bfbe7cac41545",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/report.json": "255f771686f23373759d72c5626aeaecb044fd469df2a9094198de54a09e6dbd",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/stream/checkpoint-300.json": "9d96702590f02ded92b15a32b32c648eaf5c1997f41b758f5fd93ed1719c57a9",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/stream/finish.json": "1b441ad69fe2de6679899c6128a4cd51820cbe7c995e5e8d6ed950b6970e0c41",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/stream/config.json": "151c11756eb6145813968bf69c5f978e6be88ea8766163d4e0386b7a3cbd7510",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/harm/summary.json": "43bd3fd3abdcde39da206f49b85ea53db1582eadf900b6f46b6b4fea0956bfb7",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/harm/cost.json": "84c11f264dfb3f60eb7bd3ecb3f54e60bb6fb0978999758d5e5b2c4ad413c1e4",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s1-counterfact/harm/vectors.npz": "2b2c153ff5331bde89b4dc75ab7ef5ad224d338937a6718cd802c076eedf1822",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2/cost.json": "e8b08e35a5a7392e65fb94a2f5d829bb6ec5f4d9bbc4edef91870ec25d589952",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/train-bp-s2/report.json": "991fe8e306f72ab84839621e25c47d7eea380844a4b2203564542cbc8af79a03",
+    "/home/derp/cap/assets/runs/additional_work/PC-reader/train-bp-s2/theta_avg150-300.npz": "d0868c86fa8f3bea02eafc2ef5eed25a216e5f233f5cf4beea593740dd01030c",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/cost.json": "80e741fb3173af0c240026ce45e9dc814897a2f30b223dcc4b5895a73d668dbf",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/report.json": "3fe729f5e0b77529d70e3b6b7e50871809b2431e7a343a8f2e8b29b36ca5d51a",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/stream/checkpoint-300.json": "f52122f54127eab88944a7df9991df3f43ce36e0a353f73b2b5568942ae70ebb",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/stream/finish.json": "b1d29bc87e9e391e54eedbc88a0597b5c380ba7412ffbc45b2ac18f7b1a05f93",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/stream/config.json": "c2abbad4cf7925084d9bdccf02092d7f6872049a3aa75421c99e9f6982572f53",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/harm/summary.json": "a03537ee861f383015cb4ecda8560340d0446ec285dc0156ba607d7059c80db2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/harm/cost.json": "acfac0944eeaff1b3ba1ae7ea807e6dda44aebf0a9f15130b135a56eb0ec3bfa",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-zsre/harm/vectors.npz": "654630e5c2d6ec2deeca084897c47d6cdcf06f99bdeb8bb8478dff5015f62710",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/cost.json": "297fe071d37daa6cee9861c047ddd68eeeba252ac6f3e667ea5cc65d9bfc6736",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/report.json": "6d67d4b47af48a79b9a5d50ef63e619e747425a36dbaf1afba5d5589570216b4",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/stream/checkpoint-300.json": "8a7c6a51acd302d1b916dab97172ae61dc9d5898467dcfd61461e8d5c7417a1d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/stream/finish.json": "9571df24d6291121634d389b3d8c44ff4cf2c6c426a57cfe398efbd5d77a32fa",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/stream/config.json": "56c4480d311cafa002e46645533953dcfe1645632ea213fcb67b8fea6bb8d083",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/harm/summary.json": "00b3f2ea656fedc47c58d7f089602c4477a50fe9f72830c527c80e7d7a26ec93",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/harm/cost.json": "87fe9c0cc95cefa3066aca01388cb6e59978bcd51ebcafb52b8af7025b434313",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s2-counterfact/harm/vectors.npz": "3c1c801e2d1f74915982ebbb3399fae9458bd18d17dd5a38e5e9eb1e72583767",
+    "/home/derp/cap/pc_cap/aw/aw_l_report.py": "b6f590146e61a307d28ff5df3408e50e1061592960e516c0b966c88cf69c9cdf",
+    "/home/derp/cap/pc_cap/aw/reader_results.py": "cf97542fa1ceddbc443d079c9565757898e980490faa84ec0bb8f8b4cc6d170a"
+  },
+  "gpu_seconds": 0,
+  "model_calls": 0
+}

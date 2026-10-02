@@ -1,0 +1,1902 @@
+{
+  "schema": "pc12-control-report-v1",
+  "treatment": {
+    "credit": "adjoint-matched",
+    "arm": "SE-AM",
+    "reference_credit": "error",
+    "reference_credit_iters": 8,
+    "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+    "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+    "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+    "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+    "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+    "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend"
+  },
+  "cells": [
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 1000,
+      "metrics": {
+        "ES": 0.998,
+        "RET-ES": 0.506,
+        "RET-GS": 0.116,
+        "LS": 0.965
+      },
+      "secondary": {
+        "bounded_es_immediate": 0.998,
+        "bounded_ret_es_end": 0.506,
+        "bounded_ret_gs_end": 0.116,
+        "bounded_ls_end": 0.965,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 1000,
+        "items_planned": 1000
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "adjoint_control"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/config.json": "75784e728d0246ea1109cc0396c084f26a9a3356c4c537e200639f935d9d7864",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/finish.json": "e60da8da4fd09517fc54326590b8a3230a0c6baa6ea30b174b5f46acc1631d2d",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/items.jsonl": "05f3ecbfc159fad3a37fd116b84f31fa6320f341fd2dc01ff73408d8046ab3c0",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 985.8972741388716,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 63141,
+            "partial_forwards": 98909,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 237.29541075741872,
+            "accel_seconds": 237.29541075741872,
+            "peak_mem_mib": 1235.50439453125,
+            "tokens": 3256947
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 76489,
+            "partial_forwards": 138802,
+            "reverses": 11334,
+            "settle_iters": 0,
+            "prefix_microsteps": 3853,
+            "router_probes": 0,
+            "search_candidates": 46236,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 274.8758995567914,
+            "accel_seconds": 274.8758995567914,
+            "peak_mem_mib": 1235.50439453125,
+            "tokens": 2682892
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 139630,
+            "partial_forwards": 237711,
+            "reverses": 11334,
+            "settle_iters": 0,
+            "prefix_microsteps": 3853,
+            "router_probes": 0,
+            "search_candidates": 46236,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 512.1713103142101,
+            "accel_seconds": 512.1713103142101,
+            "peak_mem_mib": 1235.50439453125,
+            "tokens": 5939839
+          },
+          "events": 244420,
+          "elapsed_wall_seconds": 985.8972904682159,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 1000,
+      "metrics": {
+        "ES": 0.979,
+        "RET-ES": 0.494,
+        "RET-GS": 0.126,
+        "LS": 0.965
+      },
+      "secondary": {
+        "bounded_es_immediate": 0.979,
+        "bounded_ret_es_end": 0.494,
+        "bounded_ret_gs_end": 0.126,
+        "bounded_ls_end": 0.965,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 1000,
+        "items_planned": 1000
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-AM",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint-matched",
+          "arm": "SE-AM",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "additional_updates"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/config.json": "75784e728d0246ea1109cc0396c084f26a9a3356c4c537e200639f935d9d7864",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/finish.json": "e60da8da4fd09517fc54326590b8a3230a0c6baa6ea30b174b5f46acc1631d2d",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/items.jsonl": "05f3ecbfc159fad3a37fd116b84f31fa6320f341fd2dc01ff73408d8046ab3c0",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 994.3882159041241,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 63148,
+            "partial_forwards": 99235,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 220.41637390526012,
+            "accel_seconds": 220.41637390526012,
+            "peak_mem_mib": 1233.25439453125,
+            "tokens": 3251016
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 76206,
+            "partial_forwards": 137956,
+            "reverses": 11322,
+            "settle_iters": 0,
+            "prefix_microsteps": 3803,
+            "router_probes": 0,
+            "search_candidates": 45636,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 272.8314516071696,
+            "accel_seconds": 272.8314516071696,
+            "peak_mem_mib": 1233.25439453125,
+            "tokens": 2670728
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 139354,
+            "partial_forwards": 237191,
+            "reverses": 11322,
+            "settle_iters": 0,
+            "prefix_microsteps": 3803,
+            "router_probes": 0,
+            "search_candidates": 45636,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 493.2478255124297,
+            "accel_seconds": 493.2478255124297,
+            "peak_mem_mib": 1233.25439453125,
+            "tokens": 5921744
+          },
+          "events": 243663,
+          "elapsed_wall_seconds": 994.3882329463959,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      },
+      "budget": {
+        "offered": 391311,
+        "used": 225484,
+        "threshold_stops": 945,
+        "incomplete_round_rollbacks": 55
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 1000,
+      "metrics": {
+        "ES": 0.998,
+        "RET-ES": 0.536,
+        "RET-GS": 0.141,
+        "LS": 0.985
+      },
+      "secondary": {
+        "bounded_es_immediate": 0.998,
+        "bounded_ret_es_end": 0.536,
+        "bounded_ret_gs_end": 0.141,
+        "bounded_ls_end": 0.985,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 1000,
+        "items_planned": 1000
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "adjoint_control"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/config.json": "4bd5be7d2590a12ce80d83028c5004fa71a5dc48bad45cc33ea8f57d67159dcb",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/finish.json": "5c5b196bcbc6a4346c7f167e4e99bf8d98d8003409613d4cdb04d1de8bfe6f6e",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/items.jsonl": "0e07a13242e7766ce897e290bfe5492228a8d005c0c5203a566ede7f16f02f91",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "261 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 968.7859881739132,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 64123,
+            "partial_forwards": 98924,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 232.85863080527633,
+            "accel_seconds": 232.85863080527633,
+            "peak_mem_mib": 1189.04638671875,
+            "tokens": 3287471
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 74405,
+            "partial_forwards": 134486,
+            "reverses": 11047,
+            "settle_iters": 0,
+            "prefix_microsteps": 3740,
+            "router_probes": 0,
+            "search_candidates": 44880,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 264.39794066292234,
+            "accel_seconds": 264.39794066292234,
+            "peak_mem_mib": 1189.04638671875,
+            "tokens": 2620418
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 138528,
+            "partial_forwards": 233410,
+            "reverses": 11047,
+            "settle_iters": 0,
+            "prefix_microsteps": 3740,
+            "router_probes": 0,
+            "search_candidates": 44880,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 497.2565714681987,
+            "accel_seconds": 497.2565714681987,
+            "peak_mem_mib": 1189.04638671875,
+            "tokens": 5907889
+          },
+          "events": 237888,
+          "elapsed_wall_seconds": 968.7860019207001,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 1000,
+      "metrics": {
+        "ES": 0.985,
+        "RET-ES": 0.534,
+        "RET-GS": 0.159,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 0.985,
+        "bounded_ret_es_end": 0.534,
+        "bounded_ret_gs_end": 0.159,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 1000,
+        "items_planned": 1000
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-AM",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint-matched",
+          "arm": "SE-AM",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "additional_updates"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/config.json": "4bd5be7d2590a12ce80d83028c5004fa71a5dc48bad45cc33ea8f57d67159dcb",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/finish.json": "5c5b196bcbc6a4346c7f167e4e99bf8d98d8003409613d4cdb04d1de8bfe6f6e",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/items.jsonl": "0e07a13242e7766ce897e290bfe5492228a8d005c0c5203a566ede7f16f02f91",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 1007.0420051719993,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 64416,
+            "partial_forwards": 98427,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 234.8773161363788,
+            "accel_seconds": 234.8773161363788,
+            "peak_mem_mib": 1220.366455078125,
+            "tokens": 3286314
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 74259,
+            "partial_forwards": 133709,
+            "reverses": 11047,
+            "settle_iters": 0,
+            "prefix_microsteps": 3701,
+            "router_probes": 0,
+            "search_candidates": 44412,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 264.7233178166207,
+            "accel_seconds": 264.7233178166207,
+            "peak_mem_mib": 1220.366455078125,
+            "tokens": 2613548
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 138675,
+            "partial_forwards": 232136,
+            "reverses": 11047,
+            "settle_iters": 0,
+            "prefix_microsteps": 3701,
+            "router_probes": 0,
+            "search_candidates": 44412,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 499.6006339529995,
+            "accel_seconds": 499.6006339529995,
+            "peak_mem_mib": 1220.366455078125,
+            "tokens": 5899862
+          },
+          "events": 236739,
+          "elapsed_wall_seconds": 1007.0420210361481,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      },
+      "budget": {
+        "offered": 380888,
+        "used": 219015,
+        "threshold_stops": 953,
+        "incomplete_round_rollbacks": 43
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 1000,
+      "metrics": {
+        "ES": 0.999,
+        "RET-ES": 0.504,
+        "RET-GS": 0.135,
+        "LS": 0.96
+      },
+      "secondary": {
+        "bounded_es_immediate": 0.999,
+        "bounded_ret_es_end": 0.504,
+        "bounded_ret_gs_end": 0.135,
+        "bounded_ls_end": 0.96,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 1000,
+        "items_planned": 1000
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "adjoint_control"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/config.json": "436e9e07a1b72d8c6a429eab527277fab7b043ad94b16bafcf21bcf2424bb503",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/finish.json": "c37683e4dfadb1b96516e8ffa628dd3234628003b0cb14b2da2414a5e27094d5",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/items.jsonl": "81a1c1f3e0b12e23e42e0b92af2dbb1edb118412fac9b9fec8db43defda20bee",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 984.44351452915,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 63347,
+            "partial_forwards": 97512,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 238.69689528178424,
+            "accel_seconds": 238.69689528178424,
+            "peak_mem_mib": 1233.24853515625,
+            "tokens": 3245915
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 75880,
+            "partial_forwards": 137710,
+            "reverses": 11261,
+            "settle_iters": 0,
+            "prefix_microsteps": 3820,
+            "router_probes": 0,
+            "search_candidates": 45840,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 271.5574394071009,
+            "accel_seconds": 271.5574394071009,
+            "peak_mem_mib": 1233.24853515625,
+            "tokens": 2679175
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 139227,
+            "partial_forwards": 235222,
+            "reverses": 11261,
+            "settle_iters": 0,
+            "prefix_microsteps": 3820,
+            "router_probes": 0,
+            "search_candidates": 45840,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 510.25433468888514,
+            "accel_seconds": 510.25433468888514,
+            "peak_mem_mib": 1233.24853515625,
+            "tokens": 5925090
+          },
+          "events": 242425,
+          "elapsed_wall_seconds": 984.4435341358185,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 1000,
+      "metrics": {
+        "ES": 0.986,
+        "RET-ES": 0.496,
+        "RET-GS": 0.141,
+        "LS": 0.995
+      },
+      "secondary": {
+        "bounded_es_immediate": 0.986,
+        "bounded_ret_es_end": 0.496,
+        "bounded_ret_gs_end": 0.141,
+        "bounded_ls_end": 0.995,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 1000,
+        "items_planned": 1000
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "zsre",
+        "arm": "SE-AM",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint-matched",
+          "arm": "SE-AM",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "additional_updates"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/config.json": "436e9e07a1b72d8c6a429eab527277fab7b043ad94b16bafcf21bcf2424bb503",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/finish.json": "c37683e4dfadb1b96516e8ffa628dd3234628003b0cb14b2da2414a5e27094d5",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/items.jsonl": "81a1c1f3e0b12e23e42e0b92af2dbb1edb118412fac9b9fec8db43defda20bee",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "261 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 1000,
+        "items_planned": 1000,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 1000.2865555321332,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 61853,
+            "partial_forwards": 96110,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 227.02585450583138,
+            "accel_seconds": 227.02585450583138,
+            "peak_mem_mib": 1230.97802734375,
+            "tokens": 3182461
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 76147,
+            "partial_forwards": 138142,
+            "reverses": 11300,
+            "settle_iters": 0,
+            "prefix_microsteps": 3815,
+            "router_probes": 0,
+            "search_candidates": 45780,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 272.5674378562253,
+            "accel_seconds": 272.5674378562253,
+            "peak_mem_mib": 1230.97802734375,
+            "tokens": 2683992
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 138000,
+            "partial_forwards": 234252,
+            "reverses": 11300,
+            "settle_iters": 0,
+            "prefix_microsteps": 3815,
+            "router_probes": 0,
+            "search_candidates": 45780,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 499.5932923620567,
+            "accel_seconds": 499.5932923620567,
+            "peak_mem_mib": 1230.97802734375,
+            "tokens": 5866453
+          },
+          "events": 242830,
+          "elapsed_wall_seconds": 1000.2865839004517,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      },
+      "budget": {
+        "offered": 388261,
+        "used": 225589,
+        "threshold_stops": 962,
+        "incomplete_round_rollbacks": 35
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300,
+      "metrics": {
+        "ES": 1.0,
+        "RET-ES": 1.0,
+        "RET-GS": 0.0,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 1.0,
+        "bounded_ret_es_end": 1.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 300,
+        "items_planned": 300
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "counterfact",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "adjoint_control"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/config.json": "b8726395e9e4ff4144d4d878d636f0bcb8d2eb62997dec27dfb76e453d803748",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/finish.json": "b44b377c10bd5fcf9fef89414c3269f71aad5bcd03794136169a04af049dcea5",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/items.jsonl": "16fbded509885159a5acd622dbb95c119ed4e2d4706089ccb7d48e67e1120fbb",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "264 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 300,
+        "items_planned": 300,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 440.76529087894596,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 77635,
+            "partial_forwards": 18696,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 223.47454310092144,
+            "accel_seconds": 223.47454310092144,
+            "peak_mem_mib": 1283.341552734375,
+            "tokens": 2909240
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 12390,
+            "partial_forwards": 18780,
+            "reverses": 1826,
+            "settle_iters": 0,
+            "prefix_microsteps": 626,
+            "router_probes": 0,
+            "search_candidates": 7512,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 44.739077559439465,
+            "accel_seconds": 44.739077559439465,
+            "peak_mem_mib": 1220.185791015625,
+            "tokens": 264795
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 90025,
+            "partial_forwards": 37476,
+            "reverses": 1826,
+            "settle_iters": 0,
+            "prefix_microsteps": 626,
+            "router_probes": 0,
+            "search_candidates": 7512,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 268.2136206603609,
+            "accel_seconds": 268.2136206603609,
+            "peak_mem_mib": 1283.341552734375,
+            "tokens": 3174035
+          },
+          "events": 44777,
+          "elapsed_wall_seconds": 440.7653021812439,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 300,
+      "metrics": {
+        "ES": 1.0,
+        "RET-ES": 1.0,
+        "RET-GS": 0.0,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 1.0,
+        "bounded_ret_es_end": 1.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 300,
+        "items_planned": 300
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "counterfact",
+        "arm": "SE-AM",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint-matched",
+          "arm": "SE-AM",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "additional_updates"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/config.json": "b8726395e9e4ff4144d4d878d636f0bcb8d2eb62997dec27dfb76e453d803748",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/finish.json": "b44b377c10bd5fcf9fef89414c3269f71aad5bcd03794136169a04af049dcea5",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/items.jsonl": "16fbded509885159a5acd622dbb95c119ed4e2d4706089ccb7d48e67e1120fbb",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 300,
+        "items_planned": 300,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 444.88380933809094,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 77635,
+            "partial_forwards": 18696,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 222.9689261233434,
+            "accel_seconds": 222.9689261233434,
+            "peak_mem_mib": 1275.0888671875,
+            "tokens": 2909240
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 12390,
+            "partial_forwards": 18780,
+            "reverses": 1826,
+            "settle_iters": 0,
+            "prefix_microsteps": 626,
+            "router_probes": 0,
+            "search_candidates": 7512,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 45.258214184548706,
+            "accel_seconds": 45.258214184548706,
+            "peak_mem_mib": 1205.000732421875,
+            "tokens": 264795
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 90025,
+            "partial_forwards": 37476,
+            "reverses": 1826,
+            "settle_iters": 0,
+            "prefix_microsteps": 626,
+            "router_probes": 0,
+            "search_candidates": 7512,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 268.2271403078921,
+            "accel_seconds": 268.2271403078921,
+            "peak_mem_mib": 1275.0888671875,
+            "tokens": 3174035
+          },
+          "events": 44777,
+          "elapsed_wall_seconds": 444.8838255405426,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      },
+      "budget": {
+        "offered": 61344,
+        "used": 32996,
+        "threshold_stops": 300,
+        "incomplete_round_rollbacks": 0
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300,
+      "metrics": {
+        "ES": 1.0,
+        "RET-ES": 1.0,
+        "RET-GS": 0.0,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 1.0,
+        "bounded_ret_es_end": 1.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 300,
+        "items_planned": 300
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "counterfact",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "adjoint_control"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/config.json": "a160d54505ed5d4fd678f775bcb810cdc9debdb487d1412f549eb39e88fee8d3",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/finish.json": "785d374fca8f0c0c5133096d019ee09057c6a4ca964f7f7a633cb745990b74a6",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/items.jsonl": "9ce7d2c3544f8b19cd6991810bf0d5b49dbc741b50a7a1cb25325688cf9b9cb0",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 300,
+        "items_planned": 300,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 426.2541873550508,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 75283,
+            "partial_forwards": 19464,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 210.39464291464537,
+            "accel_seconds": 210.39464291464537,
+            "peak_mem_mib": 1220.096435546875,
+            "tokens": 2806778
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 12540,
+            "partial_forwards": 19080,
+            "reverses": 1836,
+            "settle_iters": 0,
+            "prefix_microsteps": 636,
+            "router_probes": 0,
+            "search_candidates": 7632,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 45.52100672479719,
+            "accel_seconds": 45.52100672479719,
+            "peak_mem_mib": 1220.096435546875,
+            "tokens": 270415
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 87823,
+            "partial_forwards": 38544,
+            "reverses": 1836,
+            "settle_iters": 0,
+            "prefix_microsteps": 636,
+            "router_probes": 0,
+            "search_candidates": 7632,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 255.91564963944256,
+            "accel_seconds": 255.91564963944256,
+            "peak_mem_mib": 1220.096435546875,
+            "tokens": 3077193
+          },
+          "events": 44733,
+          "elapsed_wall_seconds": 426.25419878959656,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 1,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 300,
+      "metrics": {
+        "ES": 1.0,
+        "RET-ES": 1.0,
+        "RET-GS": 0.0,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 1.0,
+        "bounded_ret_es_end": 1.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 300,
+        "items_planned": 300
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "counterfact",
+        "arm": "SE-AM",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint-matched",
+          "arm": "SE-AM",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "additional_updates"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/config.json": "a160d54505ed5d4fd678f775bcb810cdc9debdb487d1412f549eb39e88fee8d3",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/finish.json": "785d374fca8f0c0c5133096d019ee09057c6a4ca964f7f7a633cb745990b74a6",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/items.jsonl": "9ce7d2c3544f8b19cd6991810bf0d5b49dbc741b50a7a1cb25325688cf9b9cb0",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 300,
+        "items_planned": 300,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 429.7746767990757,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 75283,
+            "partial_forwards": 19464,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 210.1815240390133,
+            "accel_seconds": 210.1815240390133,
+            "peak_mem_mib": 1200.15576171875,
+            "tokens": 2806778
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 12540,
+            "partial_forwards": 19080,
+            "reverses": 1836,
+            "settle_iters": 0,
+            "prefix_microsteps": 636,
+            "router_probes": 0,
+            "search_candidates": 7632,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 45.715714217862114,
+            "accel_seconds": 45.715714217862114,
+            "peak_mem_mib": 1199.8935546875,
+            "tokens": 270415
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 87823,
+            "partial_forwards": 38544,
+            "reverses": 1836,
+            "settle_iters": 0,
+            "prefix_microsteps": 636,
+            "router_probes": 0,
+            "search_candidates": 7632,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 255.89723825687543,
+            "accel_seconds": 255.89723825687543,
+            "peak_mem_mib": 1200.15576171875,
+            "tokens": 3077193
+          },
+          "events": 44733,
+          "elapsed_wall_seconds": 429.7746934890747,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      },
+      "budget": {
+        "offered": 62026,
+        "used": 33456,
+        "threshold_stops": 300,
+        "incomplete_round_rollbacks": 0
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-A",
+      "items": 300,
+      "metrics": {
+        "ES": 1.0,
+        "RET-ES": 1.0,
+        "RET-GS": 0.0,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 1.0,
+        "bounded_ret_es_end": 1.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 300,
+        "items_planned": 300
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "counterfact",
+        "arm": "SE-A",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint",
+          "arm": "SE-A",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "adjoint_control"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/config.json": "54c93b91d1f0a426928e7477f91011b61c4992be6c3a4549805af95b73f7a003",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/finish.json": "35a2517e9f882b9bbdf47bba640dd1abcc6886dcc8e273c94679df49f6319345",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/items.jsonl": "e7b65cd6309974e54e17bfd1391b4f7043207e589e868730148d1c774716a2bc",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "261 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 300,
+        "items_planned": 300,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 432.50113285006955,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 75923,
+            "partial_forwards": 20232,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 215.7948623308912,
+            "accel_seconds": 215.7948623308912,
+            "peak_mem_mib": 1200.508544921875,
+            "tokens": 2842952
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 12270,
+            "partial_forwards": 18540,
+            "reverses": 1818,
+            "settle_iters": 0,
+            "prefix_microsteps": 618,
+            "router_probes": 0,
+            "search_candidates": 7416,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 44.79130019037984,
+            "accel_seconds": 44.79130019037984,
+            "peak_mem_mib": 1200.508544921875,
+            "tokens": 258430
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 88193,
+            "partial_forwards": 38772,
+            "reverses": 1818,
+            "settle_iters": 0,
+            "prefix_microsteps": 618,
+            "router_probes": 0,
+            "search_candidates": 7416,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 260.58616252127104,
+            "accel_seconds": 260.58616252127104,
+            "peak_mem_mib": 1200.508544921875,
+            "tokens": 3101382
+          },
+          "events": 44157,
+          "elapsed_wall_seconds": 432.501149892807,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 2,
+      "order": 100,
+      "arm": "SE-AM",
+      "items": 300,
+      "metrics": {
+        "ES": 1.0,
+        "RET-ES": 1.0,
+        "RET-GS": 0.0,
+        "LS": 1.0
+      },
+      "secondary": {
+        "bounded_es_immediate": 1.0,
+        "bounded_ret_es_end": 1.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 1.0,
+        "locality_note": "legacy S5 LS already uses exact bounded decoded-text equality",
+        "items_completed": 300,
+        "items_planned": 300
+      },
+      "finish": {
+        "status": "complete",
+        "dataset": "counterfact",
+        "arm": "SE-AM",
+        "credit_iters": 8,
+        "error_lr": 0.1,
+        "error_solver_active": false,
+        "requested_credit_iters": 8,
+        "requested_error_lr": 0.1,
+        "control_treatment": {
+          "credit": "adjoint-matched",
+          "arm": "SE-AM",
+          "reference_credit": "error",
+          "reference_credit_iters": 8,
+          "matching": "per-item measured SE-E learning full_forwards + partial_forwards + reverses",
+          "extra_compute": "additional transactional acquisition rounds, not repeated unchanged-write gradients",
+          "prefix_policy": "gold-prefix order; same threshold and per-round A; R ceiling replaced by remaining operation allowance",
+          "stop": "threshold attained for all prefixes, or next base call exceeds allowance; unfinished round rolled back",
+          "accounting": "actual charged operations including rolled-back attempts; report unused allowance and completed rounds",
+          "interpretation": "equal offered per-item operation allowance; not equal FLOPs, wall time, number of writes, or always equal realized spend",
+          "role": "additional_updates"
+        },
+        "reference_sources_sha256": {
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/config.json": "54c93b91d1f0a426928e7477f91011b61c4992be6c3a4549805af95b73f7a003",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/finish.json": "35a2517e9f882b9bbdf47bba640dd1abcc6886dcc8e273c94679df49f6319345",
+          "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/items.jsonl": "e7b65cd6309974e54e17bfd1391b4f7043207e589e868730148d1c774716a2bc",
+          "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+          "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+          "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+          "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+          "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+          "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+          "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+          "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+          "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+          "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+          "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+          "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+          "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+          "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340"
+        },
+        "desktop_cuda_processes": [
+          {
+            "pid": "2042",
+            "used_memory": "94 MiB"
+          },
+          {
+            "pid": "22030",
+            "used_memory": "262 MiB"
+          },
+          {
+            "pid": "3578885",
+            "used_memory": "26 MiB"
+          }
+        ],
+        "items_completed": 300,
+        "items_planned": 300,
+        "base_hash_before": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "base_hash_after": "dcc5cf24311470d2938cde29e6b91bb6a8ba4961b17b02ab3ca287479a64893b",
+        "elapsed_process_seconds": 434.0342322229408,
+        "ledger": {
+          "query": {
+            "phase": "query",
+            "full_forwards": 75923,
+            "partial_forwards": 20232,
+            "reverses": 0,
+            "settle_iters": 0,
+            "prefix_microsteps": 0,
+            "router_probes": 0,
+            "search_candidates": 0,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 216.02946361503564,
+            "accel_seconds": 216.02946361503564,
+            "peak_mem_mib": 1185.508544921875,
+            "tokens": 2842952
+          },
+          "learning": {
+            "phase": "learning",
+            "full_forwards": 12270,
+            "partial_forwards": 18540,
+            "reverses": 1818,
+            "settle_iters": 0,
+            "prefix_microsteps": 618,
+            "router_probes": 0,
+            "search_candidates": 7416,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 44.72190598491579,
+            "accel_seconds": 44.72190598491579,
+            "peak_mem_mib": 1185.508544921875,
+            "tokens": 258430
+          },
+          "total": {
+            "phase": "total",
+            "full_forwards": 88193,
+            "partial_forwards": 38772,
+            "reverses": 1818,
+            "settle_iters": 0,
+            "prefix_microsteps": 618,
+            "router_probes": 0,
+            "search_candidates": 7416,
+            "memory_search_seconds": 0.0,
+            "wall_seconds": 260.75136959995143,
+            "accel_seconds": 260.75136959995143,
+            "peak_mem_mib": 1185.508544921875,
+            "tokens": 3101382
+          },
+          "events": 44157,
+          "elapsed_wall_seconds": 434.0342538356781,
+          "accel_time_convention": "wall time around jax.block_until_ready (no CUDA events in JAX)"
+        }
+      },
+      "budget": {
+        "offered": 61096,
+        "used": 32628,
+        "threshold_stops": 300,
+        "incomplete_round_rollbacks": 0
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "dataset": "zsre",
+      "realization": 0,
+      "difference": {
+        "ES": -0.019000000000000017,
+        "RET-ES": -0.01200000000000001,
+        "RET-GS": 0.009999999999999995,
+        "LS": 0.0
+      },
+      "secondary_difference": {
+        "bounded_es_immediate": -0.019000000000000017,
+        "bounded_ret_es_end": -0.01200000000000001,
+        "bounded_ret_gs_end": 0.009999999999999995,
+        "bounded_ls_end": 0.0
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 1,
+      "difference": {
+        "ES": -0.013000000000000012,
+        "RET-ES": -0.0020000000000000018,
+        "RET-GS": 0.018000000000000016,
+        "LS": 0.015000000000000013
+      },
+      "secondary_difference": {
+        "bounded_es_immediate": -0.013000000000000012,
+        "bounded_ret_es_end": -0.0020000000000000018,
+        "bounded_ret_gs_end": 0.018000000000000016,
+        "bounded_ls_end": 0.015000000000000013
+      }
+    },
+    {
+      "dataset": "zsre",
+      "realization": 2,
+      "difference": {
+        "ES": -0.013000000000000012,
+        "RET-ES": -0.008000000000000007,
+        "RET-GS": 0.005999999999999978,
+        "LS": 0.03500000000000003
+      },
+      "secondary_difference": {
+        "bounded_es_immediate": -0.013000000000000012,
+        "bounded_ret_es_end": -0.008000000000000007,
+        "bounded_ret_gs_end": 0.005999999999999978,
+        "bounded_ls_end": 0.03500000000000003
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 0,
+      "difference": {
+        "ES": 0.0,
+        "RET-ES": 0.0,
+        "RET-GS": 0.0,
+        "LS": 0.0
+      },
+      "secondary_difference": {
+        "bounded_es_immediate": 0.0,
+        "bounded_ret_es_end": 0.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 0.0
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 1,
+      "difference": {
+        "ES": 0.0,
+        "RET-ES": 0.0,
+        "RET-GS": 0.0,
+        "LS": 0.0
+      },
+      "secondary_difference": {
+        "bounded_es_immediate": 0.0,
+        "bounded_ret_es_end": 0.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 0.0
+      }
+    },
+    {
+      "dataset": "counterfact",
+      "realization": 2,
+      "difference": {
+        "ES": 0.0,
+        "RET-ES": 0.0,
+        "RET-GS": 0.0,
+        "LS": 0.0
+      },
+      "secondary_difference": {
+        "bounded_es_immediate": 0.0,
+        "bounded_ret_es_end": 0.0,
+        "bounded_ret_gs_end": 0.0,
+        "bounded_ls_end": 0.0
+      }
+    }
+  ],
+  "sources_sha256": {
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/plan.json": "1a09a8a03215860c9f8d3cbb93caa7978fc10195ad32995fcacd2dd332781d0e",
+    "/home/derp/cap/pc_cap/aw/pc_v0.py": "311cc337635d625cd4ec743805d69311a8b247df7502903cf9cbc4c8812c4286",
+    "/home/derp/cap/pc_cap/aw/pc_sweep.py": "f5245304d7aa2fd414c39e0c15ae2aecfa296951eadf895433a3fdfdbe04a42d",
+    "/home/derp/cap/pc_cap/manifests/archive/frozen-confirmatory-v2-84126123-superseded-for-grammar-20260913.json": "84126123f48c83e9270d6995335e86562e733efab7926ffa3178daadc5305a1f",
+    "/home/derp/cap/pc_cap/requirements.lock": "b8bc3a542813e294ece6c9fe6eb957287414d412738e31638dbc69bbcea524bb",
+    "/home/derp/cap/pc_cap/src/pccap/bases/epc.py": "6191a0ef6fcd6b85bd389b9eca937b9fd25bc98e2ce838cf473b4d7222ee1b23",
+    "/home/derp/cap/pc_cap/src/pccap/bases/bp.py": "fc5844300602fa3bb6693adf5ccd65eda1ba47e653df84ab2886ab9e86c9380a",
+    "/home/derp/cap/pc_cap/src/pccap/bases/gpt2_jax.py": "c41e0861557b5bd1224b3f73066727e7a3810a54db2535fbafdbde79e07b34ab",
+    "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81",
+    "/home/derp/cap/pc_cap/src/pccap/pc/nodes.py": "ee255458d74172a0e85a049829a4bf1637c0a4e4ef20c59ad5324c2984f982e1",
+    "/home/derp/cap/pc_cap/src/pccap/cap/learn.py": "a02e4a12baa7406b85f6d7215bbf7c81b6552ab11871445ce5dc2f63e5fffa01",
+    "/home/derp/cap/pc_cap/src/pccap/cap/cap.py": "3dcf8d71452304952fba2ab272fad857fe35a370ee595ab36b2471193a136278",
+    "/home/derp/cap/pc_cap/src/pccap/harness/runs.py": "4439757ea795ea8eb26668af8ccafc9ecf46ae6491e47280c9b879884f11f8fc",
+    "/home/derp/cap/pc_cap/src/pccap/data/decode.py": "5f3a591afd09adc6a898fdd2552ff2ffeb285ba19a6424202539ce48a0ea7e1f",
+    "/home/derp/cap/pc_cap/src/pccap/data/selection.py": "b31218ba52c29cf00062fa5172bb06d6e51ef23afa0694276cbb269b8325adbe",
+    "/home/derp/cap/pc_cap/src/pccap/metrics/editing.py": "bf004ff8a5b506c4a9527e1f83d99f39e68d42857837ebea232e304c21dd1340",
+    "/home/derp/cap/pc_cap/aw/pc_matched_run.py": "fdad7363d011b5f6cc8e988daf3736f6872de8998e750c3a4163572bda099ab7",
+    "/home/derp/cap/pc_cap/aw/pc_matched_credit.py": "cbdea574e48f5d3ae1ff3ba8be8b793b021ff8a20e38818b38f3f80aeafd7b9f",
+    "/home/derp/cap/pc_cap/aw/pc_random_run.py": "301fa776695b80c8a9a18e26d55b2757c552329044d33085a197979591e7007d",
+    "/home/derp/cap/pc_cap/aw/pc_random_credit.py": "4d8d625e3d3992d26829d21ddc3e9a0fe918fb5fcde2972d747285d6e8f7ee7b",
+    "/home/derp/cap/pc_cap/aw/pc_historical.py": "ed8e217b9e64066ef79f439965fbfb74130d2326313025e5d593550bf6565c1e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-A/config.json": "12d5f2dc07c74e6910cc3b94936c7d599b22c1a2ca0218b6bd7ed9b831741e5e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-A/finish.json": "24b4dc86d8740f234a1feb87ee4995750bb445def0653a190fd7839ffe234353",
+    "/home/derp/cap/pc_cap/manifests/confirm/zsre_r0.json": "d273acbd68d7052d182b29274e5f58e46f969bdbac6c2e40088d1a2ff6423e96",
+    "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json": "a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f89c2562adbbc3",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/reporting-sources.json": "5f52796ad28d97372aa500a26f9a5d84e20355d11c228ca935ac0debbce70a22",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/plan.json": "13b2308c3de5cb331defa607f7d800475c373fbfef3fdec8de3bb81aa9697c74",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/config.json": "75784e728d0246ea1109cc0396c084f26a9a3356c4c537e200639f935d9d7864",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/finish.json": "e60da8da4fd09517fc54326590b8a3230a0c6baa6ea30b174b5f46acc1631d2d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r0-o100-SE-E/items.jsonl": "05f3ecbfc159fad3a37fd116b84f31fa6320f341fd2dc01ff73408d8046ab3c0",
+    "/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/old/pc_v0.py": "871342dd83b86a537707654791962c051e152959953cf1ccf6736fc8d57e9913",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-A/items.jsonl": "4b717d3a43cf5a5c7a57d4f25337aec27ec2d61c2e533d181cdc0057786222f0",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-A/metrics.json": "da39b5fa92dbcf3d652e0b9a51b8c5d601f154bc906263bc486f6e5ca88b15c5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-A/secondary-summary.json": "b3650f3cf797235e604675802d562e963505f5f7e483c16f9b1086be4c987735",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-AM/config.json": "a9bbfb48c1db79bb57409655fc813cd6dbcdfbcc1b59c268874d2e28520d7fb2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-AM/finish.json": "1446e87c80ec2e41abb849b90ea4faa7aac685c9b1b07ec353035d9b0605c42f",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-AM/items.jsonl": "c34d29ddc48493973bc78bab5627782c521177d356c25191431b1e3f4a5e6257",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-AM/metrics.json": "fecfed20c536a60d658f5d0b24c5a818eb23d5b2d2fc70d76bbf1ad2cfeb7dd4",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-AM/secondary-summary.json": "5ad10d90e0106b77ce85b6d8a59724435e43d3bfc6279540a39bbbee1b40e2b2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r0-o100-SE-AM/operation-budgets.jsonl": "cd3cb113946a09839dad854778c89c8de906036cae0d6924dd7c6b057c5aadac",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-A/config.json": "3c34c38a334fc9421bf1ebedb01712a75713a5d9d679b205494296b67b33ceef",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-A/finish.json": "4885e4b1fd0c44cd711a723efdfb57db7edd0cb15ece670f1b19bb5a3b98ca71",
+    "/home/derp/cap/pc_cap/manifests/confirm/zsre_r1.json": "4e3e852f03ccb160538e2ad3d1b6803ea2028716c4cdc6559b49c2d5cdfb861a",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/config.json": "4bd5be7d2590a12ce80d83028c5004fa71a5dc48bad45cc33ea8f57d67159dcb",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/finish.json": "5c5b196bcbc6a4346c7f167e4e99bf8d98d8003409613d4cdb04d1de8bfe6f6e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r1-o100-SE-E/items.jsonl": "0e07a13242e7766ce897e290bfe5492228a8d005c0c5203a566ede7f16f02f91",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-A/items.jsonl": "68578a7427990e91deab3baeeef77df2b2ab674a83de9ff6c894bddde362f5f0",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-A/metrics.json": "7885624935041aa66feca7c281e69f37d1a44d8c1f21a80a8018dcf5dfe2edc2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-A/secondary-summary.json": "d7e088670261dde0dbf9c34dfd8c1cf31d442f44d16e27a5ad1f314bd7515ac0",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-AM/config.json": "252999cf64347318a682a1bf02278950c018423c12c95fcc0ca598cb81730c8f",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-AM/finish.json": "7378e7413b1082f8c8a6ab15ae92e9edc41c524086af41d1a43cad299eb4f633",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-AM/items.jsonl": "02a13793460cb66bec19e0869940f22e99283343e59096f550738a5c8dc98379",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-AM/metrics.json": "6fb2fb2dd448891fe61f92bf2d6ea3ac398e796ee33ae21b7341ec929a66da51",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-AM/secondary-summary.json": "b535ff255f68556fa4815281d226d3d7356207e5d44b4a123514c80243aa0bf7",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r1-o100-SE-AM/operation-budgets.jsonl": "df18b62564b4fa7d099bf00dbe275f1758d1df8675abb4e91868f4905f85fda6",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-A/config.json": "aaf5f857d6c664f661e7e63e22935275a17f5717d4602e09b400329965c8010d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-A/finish.json": "cea4ba2014e28634c32cdbcfea21f9196aa9b87b9c26ea632ec46693e3f1376f",
+    "/home/derp/cap/pc_cap/manifests/confirm/zsre_r2.json": "7e237bbe297db192972f0fed3b4a29963fef0b30ad9ba8fd8e5c031e14f0230d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/config.json": "436e9e07a1b72d8c6a429eab527277fab7b043ad94b16bafcf21bcf2424bb503",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/finish.json": "c37683e4dfadb1b96516e8ffa628dd3234628003b0cb14b2da2414a5e27094d5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/zsre-r2-o100-SE-E/items.jsonl": "81a1c1f3e0b12e23e42e0b92af2dbb1edb118412fac9b9fec8db43defda20bee",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-A/items.jsonl": "d7a7bb05f336c84fab2f5214902d668cb34652b82ccf5d0dea5bb914b5112f93",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-A/metrics.json": "126135fc56e26758dcbbf5c07ac58bf4b140ee98e9ad4696d38e963311cea7d5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-A/secondary-summary.json": "98cf2f438f1a12fada87412cda39ec99cd02d77a1508e03d36669d10a1925e8d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-AM/config.json": "89073e212b7d40938da5b0dec8a13cf097d20027f09ddca3461d7254a9137b44",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-AM/finish.json": "3c1eba62507da6e3b1f7845d27d2554ea5c2c1f5a4c5219b8a6ad3169de539c2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-AM/items.jsonl": "470846b7afafbd2abc63c8c436d589ccf2bdf87943778f1866c7078018fb98d6",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-AM/metrics.json": "cc3a0e2f69b3530fc2614ae95cd802acce3aace74c1107ba916d7374a90e26df",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-AM/secondary-summary.json": "dfb4a70a7218e1fe9e88573f70a0ee4e3fba11aecc098904543fdbea8b1d004e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/zsre-r2-o100-SE-AM/operation-budgets.jsonl": "969ab3275aa6f925b713f623290e4b35a658a15986a6b6fc2f441c7139aae084",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-A/config.json": "6d1976f9a89ed32513cd4e8de5df9b78e6eab583e1614ca1da400d8454d1ab19",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-A/finish.json": "6781a20c76459d3feabae8571dd723e9dc060f2e748dccccd97e508b8bad41a7",
+    "/home/derp/cap/pc_cap/manifests/confirm/counterfact_r0.json": "60637648bfe18eb14bcbf18849dc438499e423e7bcb28fc6ad0c9fb171de5a6b",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/config.json": "b8726395e9e4ff4144d4d878d636f0bcb8d2eb62997dec27dfb76e453d803748",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/finish.json": "b44b377c10bd5fcf9fef89414c3269f71aad5bcd03794136169a04af049dcea5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r0-o100-SE-E/items.jsonl": "16fbded509885159a5acd622dbb95c119ed4e2d4706089ccb7d48e67e1120fbb",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-A/items.jsonl": "75c3c9a354daf2894a79afd090559d54739bc56ebc5f09de6acb255aadbb888e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-A/metrics.json": "723c9875deeba51a61b3fec2e6087f259690102c07910e4c017bde7abcc03aab",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-A/secondary-summary.json": "1dc7e66a1b008feb804fb50fb298ac14c8b465020c3279483e48b2006f0a1878",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-AM/config.json": "5ada2b61134dd21e7f04218be678d3d21a42b63bb04e26bb169d1a85988d8ef5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-AM/finish.json": "954cb03d0c765afc31822d1b8411cc9003bc6b37a7f85206fe1c452966f3e3e7",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-AM/items.jsonl": "707b61ae86aa698a925571cb91dd8a3a0e703328674ace8910a4fbcff0fbf55c",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-AM/metrics.json": "eab0adb2729285750a1d46fe3debf92810c0682029b5cb10bafecd7786f7c13d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-AM/secondary-summary.json": "1dc7e66a1b008feb804fb50fb298ac14c8b465020c3279483e48b2006f0a1878",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r0-o100-SE-AM/operation-budgets.jsonl": "f6ea09e9a90804fca7f3a540c7eec2d271c4828d42227af93036c229463f6ca3",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-A/config.json": "e3fee5184e2cfeddf620f6abccb9a242ee79e8452b275a69e64fb5c68d18d8a5",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-A/finish.json": "df5111a2e90ffcba4ae80dc4b7d380feffca346fcbf38d6c2af6e30a6606b753",
+    "/home/derp/cap/pc_cap/manifests/confirm/counterfact_r1.json": "3a20a1704ed42dcaf12adb2a7619b79a2c3067871226118e086ba568013d652d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/config.json": "a160d54505ed5d4fd678f775bcb810cdc9debdb487d1412f549eb39e88fee8d3",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/finish.json": "785d374fca8f0c0c5133096d019ee09057c6a4ca964f7f7a633cb745990b74a6",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r1-o100-SE-E/items.jsonl": "9ce7d2c3544f8b19cd6991810bf0d5b49dbc741b50a7a1cb25325688cf9b9cb0",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-A/items.jsonl": "9e6c11f2ee733233a7ca0e87444302368810a1248a52703026f6c986794bfe0d",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-A/metrics.json": "a249eb2e678969630ccb0eaee33ca30d385d895e0c5fbc207b1ec4872a1b4b47",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-A/secondary-summary.json": "1dc7e66a1b008feb804fb50fb298ac14c8b465020c3279483e48b2006f0a1878",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-AM/config.json": "47ae39d12eba99edbc2fd0b4bba85915f23f921a62f29bd6650736c7472aa484",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-AM/finish.json": "d1078fa0ecf09a13e5a06de08608eff46ef2ac80b87829a745b73a4d7789f0a2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-AM/items.jsonl": "3dfd8f11373958adc7b9f423b64f2b98bc21acc0ba13d3596f903df81b9b923e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-AM/metrics.json": "bf479a10822f1b7fa07c6eed75d98a495007ec27ac27f6185472ead70195a813",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-AM/secondary-summary.json": "1dc7e66a1b008feb804fb50fb298ac14c8b465020c3279483e48b2006f0a1878",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r1-o100-SE-AM/operation-budgets.jsonl": "092e267898b92c2e1971136ecab7f4f4842dd69bcd50436af8d55a931d50789e",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-A/config.json": "816818f74eb219eeb4a05a60c95ccc4562e6d646c8fa0ba86a3a98ecde6a9d51",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-A/finish.json": "d887eeb1c9af2e13ae0c73c41173f1af42ada5af273e8bda46816333ce9509f4",
+    "/home/derp/cap/pc_cap/manifests/confirm/counterfact_r2.json": "ddf444b5e02dabd67634b2a1a73140f39fb7ece23a45275a79f5c6a8ee3d7fb4",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/config.json": "54c93b91d1f0a426928e7477f91011b61c4992be6c3a4549805af95b73f7a003",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/finish.json": "35a2517e9f882b9bbdf47bba640dd1abcc6886dcc8e273c94679df49f6319345",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/replication-60-20260927/counterfact-r2-o100-SE-E/items.jsonl": "e7b65cd6309974e54e17bfd1391b4f7043207e589e868730148d1c774716a2bc",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-A/items.jsonl": "b09c1e69c40e87c8fd53db76cebf0b18422703b6f5abecc76cd7460626864a0f",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-A/metrics.json": "738ba54a72010c2efa1cd40551c74d3d076900d469bdc2909f1dd248ef471041",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-A/secondary-summary.json": "1dc7e66a1b008feb804fb50fb298ac14c8b465020c3279483e48b2006f0a1878",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-AM/config.json": "d2fa43b2daea2a92589d6531f5939170849d50266234dc0005b60edef7ba6488",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-AM/finish.json": "a772907b856fb3fca5a804d41c25ea1964a50aaffc40355b0ade7d5a9d914379",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-AM/items.jsonl": "c7c4a62a876f8d36c8e27644f8c3db2a65427b8821ad0c673587a90eec3c49f8",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-AM/metrics.json": "07377cc7799e62b4615ac1fb30f7052e0bd7b1a7d4adecf8dbcbc1ea76d4a9c2",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-AM/secondary-summary.json": "1dc7e66a1b008feb804fb50fb298ac14c8b465020c3279483e48b2006f0a1878",
+    "/home/derp/cap/pc_cap/results/additional_work/PC-v0/matched-control/run-20260929/counterfact-r2-o100-SE-AM/operation-budgets.jsonl": "feddebee5aeb3193a438f9ce9d36475431a9c76255622d078558a51a65008726"
+  },
+  "population": "exposed S5; exploratory DEC-075 control; one order, three realizations"
+}

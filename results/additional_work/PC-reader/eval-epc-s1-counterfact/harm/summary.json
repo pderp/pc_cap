@@ -1,0 +1,165 @@
+{
+  "treatment": {
+    "reader_rule": "epc",
+    "seed": 1,
+    "read_taps": [
+      1,
+      2,
+      3
+    ],
+    "write_sites": [
+      1,
+      2,
+      3
+    ],
+    "acquisition": "adjoint"
+  },
+  "summary": {
+    "capoff": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.006282488698680307,
+        "mean_positive": 0.006412833853015754,
+        "es99_positive": 0.6412833853015752,
+        "maximum_signed": 12.362994933510638,
+        "maximum_positive": 12.362994933510638,
+        "maximum_location": "w161:p116",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 129,
+        "half_mass_fraction": 0.0005260217666991523,
+        "positive_mass": 1572.6641356120238,
+        "exceedance": {
+          "0.01": {
+            "count": 636,
+            "fraction": 0.002593409640470239
+          },
+          "0.1": {
+            "count": 612,
+            "fraction": 0.002495545125735513
+          },
+          "1.0": {
+            "count": 419,
+            "fraction": 0.0017085513197437582
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.006185039010467935,
+        "mean_positive": 0.006185039010467935,
+        "es99_positive": 0.6185039010467934,
+        "maximum_signed": 13.679417626276637,
+        "maximum_positive": 13.679417626276637,
+        "maximum_location": "w1039:p13",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 132,
+        "half_mass_fraction": 0.000538254831040993,
+        "positive_mass": 1516.8004118101242,
+        "exceedance": {
+          "0.01": {
+            "count": 719,
+            "fraction": 0.002931857753927833
+          },
+          "0.1": {
+            "count": 698,
+            "fraction": 0.002846226303534948
+          },
+          "1.0": {
+            "count": 402,
+            "fraction": 0.0016392306218066604
+          }
+        }
+      }
+    },
+    "original": {
+      "loss": {
+        "positions": 245237,
+        "mean_signed": 0.006282488698680307,
+        "mean_positive": 0.006412833853015754,
+        "es99_positive": 0.6412833853015752,
+        "maximum_signed": 12.362994933510638,
+        "maximum_positive": 12.362994933510638,
+        "maximum_location": "w161:p116",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 129,
+        "half_mass_fraction": 0.0005260217666991523,
+        "positive_mass": 1572.6641356120238,
+        "exceedance": {
+          "0.01": {
+            "count": 636,
+            "fraction": 0.002593409640470239
+          },
+          "0.1": {
+            "count": 612,
+            "fraction": 0.002495545125735513
+          },
+          "1.0": {
+            "count": 419,
+            "fraction": 0.0017085513197437582
+          }
+        }
+      },
+      "kl": {
+        "positions": 245237,
+        "mean_signed": 0.006185039010467935,
+        "mean_positive": 0.006185039010467935,
+        "es99_positive": 0.6185039010467934,
+        "maximum_signed": 13.679417626276637,
+        "maximum_positive": 13.679417626276637,
+        "maximum_location": "w1039:p13",
+        "maximum_ties": 1,
+        "tie_policy": "first in window/target order",
+        "half_mass_positions": 132,
+        "half_mass_fraction": 0.000538254831040993,
+        "positive_mass": 1516.8004118101242,
+        "exceedance": {
+          "0.01": {
+            "count": 719,
+            "fraction": 0.002931857753927833
+          },
+          "0.1": {
+            "count": 698,
+            "fraction": 0.002846226303534948
+          },
+          "1.0": {
+            "count": 402,
+            "fraction": 0.0016392306218066604
+          }
+        }
+      }
+    }
+  },
+  "selection": {
+    "mode": "v5",
+    "source": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    },
+    "inventory": {
+      "path": "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json",
+      "sha256": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e"
+    },
+    "windows": 1931,
+    "window_tokens": 128,
+    "positions": 245237,
+    "windows_sha256": "aa959510eb6e50ba3faeb6354cf1e38a89100a7b537bf79ebdc80a6e5df0886b",
+    "context": "reset every window",
+    "order": "window then target position, starting at target position 1"
+  },
+  "fields": [
+    "loss_cap",
+    "loss_capoff",
+    "loss_original",
+    "kl_capoff_to_cap",
+    "kl_original_to_cap"
+  ],
+  "vectors": {
+    "path": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-epc-s1-counterfact/harm/vectors.npz",
+    "sha256": "5a055b005f51278f5ec87572734ea88bdbb2f8d46d16eaff888ecad226a254c1"
+  },
+  "state_sha256": "475a22acda752b3b2ee268c89c96e2b873e7453eae5df599077525ac654e6692",
+  "base_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082"
+}

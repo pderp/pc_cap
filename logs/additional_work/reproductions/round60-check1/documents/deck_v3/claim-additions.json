@@ -1,0 +1,88 @@
+{
+  "rows": [
+    [
+      "AI-loop",
+      "Active inference",
+      "conceptual programme",
+      "Belief updating plus policy choice for preferred outcomes and information",
+      "Submitted July abstract; no experimental population",
+      "Conceptual distinction, not an effect comparison",
+      "Motivates preferences, generative model and epistemic/pragmatic policy evaluation",
+      "Current supplied edit/audit stream is not autonomous expected-free-energy policy inference",
+      "docs/presentation/presentation_brief_2026-09-26.md; July abstract"
+    ],
+    [
+      "AI-testbed",
+      "Active inference testbed",
+      "implemented",
+      "Fixed main-condition base; memory, learned reader/null gate and bounded residual writes",
+      "R1 learned-reader condition and supplied factual edit streams",
+      "Comparator packages separately identified; S1 bases were continued",
+      "Operational environment/cap/prior interfaces and conditional correction",
+      "Software interfaces do not prove blanket conditional independence; current R1 uses no PC credit",
+      "docs/R1_stage4_report_triplet.md; docs/plan_from_saturday.md"
+    ],
+    [
+      "PC-mechanism",
+      "Predictive coding",
+      "implementation validated",
+      "E(e;w)=0.5 sum ∥e∥^2 + taught-target loss; e starts at zero; eight steps at 0.1; 9 forwards and 9 reverses including terminal diagnostic",
+      "Actual solver CPU regressions; fixed-prefix taught targets; frozen weights",
+      "SE-A negative normalized adjoint; one-step site error equals -0.1 adjoint with nonzero writes",
+      "Correct mechanism and support-only target use; paired efficacy/harm/cost experiment is meaningful",
+      "Not measured efficacy, general convergence, biologically local implementation or wholly BP-free computation; fixed-v5 reader remains BP-trained",
+      "src/pccap/pc/epc_inference.py; aw/tests/test_pc_v0.py; aw/pc_v0.py; aw/pc_v1_acquire.py"
+    ],
+    [
+      "PC-SD24",
+      "Predictive coding",
+      "historical defect corrected",
+      "Old write-site prior penalized e+w; corrected prior penalizes e before adding w; September 13 repair",
+      "Historical defective SE-E versus corrected future experiment",
+      "DEC-036 / SD-24; current R1 feedforward matrix does not use PC credit",
+      "Motivates supplemental defect-correction replication on exposed S5 populations",
+      "Historical SE-E is not a corrected-energy result; CPU smoke cannot replace that result",
+      "docs/decisions.md DEC-036; docs/spec_defects.md SD-24; docs/additional_work/PC-v0.md"
+    ],
+    [
+      "HT-readout",
+      "Heavy-tailed distributions / extremes",
+      "measurement definitions",
+      "Delta NLL=log(p_reference(y)/p_cap(y)); KL direction reference to cap; strict survival P(delta>x); fractional ES99+ averages top 1% positive harm including zeros",
+      "Fixed-prefix ordinary-text validation; repeated positions are not independent replicates",
+      "Own cap-off and original-base references must be distinguished",
+      "Measures predictive loss severity/frequency/concentration beyond a signed mean; one nat means a factor-e drop in target probability",
+      "Prediction loss is not human harm or EFE preference-risk; percentiles are not expected shortfall; finite concentration does not identify a tail family",
+      "scripts/r1_68f_full_validation.py; aw/pc_harm_readout.py; docs/tasks/HT-13-round46-review.md"
+    ],
+    [
+      "HT13-empirical",
+      "Heavy-tailed distributions / extremes",
+      "measured descriptive snapshot",
+      "Learned MQuAKE: P(delta>1)=0.001940980; max=17.060533 nats; half positive mass in 2336 of 3678555 cell-position observations",
+      "MQuAKE learned reader: 15 cells, 3 realizations x 5 orders, 300 edits; same 245237 validation positions per cell",
+      "Cap-on versus own cap-off (same original base for this condition); HT-13 comparison panels include other conditions",
+      "Rare severe prediction-loss changes and concentration in this finite evaluated population",
+      "No independent-token uncertainty, power law, infinite variance, unobserved-black-swan robustness, temporal clustering or causal input-rarity claim; current ES99 column/title require repair",
+      "/home/derp/cap/assets/presentation-materials/figures/tails/tails.json; docs/tasks/HT-13-round46-review.md"
+    ],
+    [
+      "AI-next",
+      "Active inference / PC / extremes",
+      "proposed future study",
+      "Specify hidden-state beliefs, observation/action models, preferences and candidate audit policies; compare information-seeking versus budget-matched fixed/random audits",
+      "Future study; not an added pre-October-9 commitment",
+      "Predefined correction, information, preservation harm and cost endpoints at equal audit budget",
+      "Connects PC learning credit and observed failure distribution to a test of pragmatic/epistemic action",
+      "Investigator learning from failure is not yet autonomous epistemic action; no coupled-free-energy, coupled-blanket or one-kappa result",
+      "July abstract; docs/presentation/presentation_brief_2026-09-26.md; docs/decisions.md DEC-054"
+    ]
+  ],
+  "sources_sha256": {
+    "/home/derp/cap/assets/presentation-materials/figures/tails/tails.json": "00de5d7757e51ec4c34c3bdc526b57f4e73118f84ff9bb073e5b90a0e78bbb50",
+    "/home/derp/cap/pc_cap/docs/presentation/presentation_brief_2026-09-26.md": "2ceb2a375f46471dd7bacd00666371bce7e2e51934a2f13075b35e78bacfcea4",
+    "/home/derp/cap/pc_cap/docs/decisions.md": "f91d7fd8744d5ec84c482e37fc59416e03049639bfddbd1d676bd861c6169e5e",
+    "/home/derp/cap/pc_cap/src/pccap/pc/epc_inference.py": "ea316ce5cdba415d1564bb23c1b3de7e73bfa9a12c4a53f75d9fdccc7d2a5e81"
+  },
+  "tail_snapshot_note": "Drafted from existing HT-13 table; no defective ES99 values quoted; primary learned cells already complete"
+}
