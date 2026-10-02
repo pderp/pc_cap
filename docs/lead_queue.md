@@ -1575,3 +1575,15 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     and DOC-1 (reviewer folder brought to the round-58 state for tomorrow). POST-1 (the coupled-objective study design
     for the reviewer's group) opens after tomorrow's review so it carries their answers. GPU unchanged: ePC seed 1
     training (step ≈ 95/300), Option R armed, AW-L5 after.
+
+154. (2026-10-02, 07:30 EDT) **Capex round 59 committed (pc_cap ee23210, assets fb49501); round 60 opened; ePC seed 1
+    trained.** X26: every number spoken in the 15/25-minute scripts and the Q&A traces to `numbers_to_say.md` and a
+    canonical source; no unresolved placeholders, no intermediate-directory sources; the one inexact phrase ("roughly
+    one-third") is supported by the AW-B severity ratios. DOC-1: the reviewer folder is at the round-58 state and
+    `assets/presentation-materials/review-data/CURRENT.md` is the entry point for today's meeting (my Oct 1 primer, the
+    two feedback responses, results, final-experiments, the freeze checklist). Tests pass, ruff clean. GPU: ePC seed 1
+    finished training at 07:15 (24.1 h, 300 steps); its zsRE evaluation is running, CounterFact follows (≈ 08:15); seed 2
+    starts automatically (≈ Oct 3 09:30 with evaluations), then Option R (16 cells, ≈ Oct 3 evening), then AW-L5
+    (≈ Oct 5 early). Round 60 lanes: PC-16a (refresh the reader report, HT-17 and the deck once seed 1's evaluations
+    exist, again after seed 2) and REP-1 (a reproduction document for every supplemental result and figure the deck
+    cites, plus a one-command CPU refresh in dependency order). POST-1 and PRES-9 open when you relay today's review.

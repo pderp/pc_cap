@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-02 07:30** — Capex round 59 committed (X26 clean; DOC-1 + `review-data/CURRENT.md`). ePC seed 1 trained (24.1 h); evaluations running (≈ 08:15), then seed 2 (≈ Oct 3 09:30), Option R, AW-L5. Round 60: PC-16a (conditional refresh), REP-1 (reproduction document + refresh-all); POST-1/PRES-9 after today's review.
 - **2026-10-01 15:20** — Capex round 58 committed (X25 PASS 25 groups + freeze checklist `docs/freeze_checklist_20261009.md`; S4-LIM caveats in the three Stage-4 reports; PRES-8 Q&A, numbers-to-say, rehearsal pack; KP-1 no-go for an exact κ-pilot continuation; CAL-1 checks pass + `coupled_objective_note.md`). Round 59: X26, DOC-1; POST-1 after the Oct 2 review. Optional κ readout: default no (see item 153).
 - **2026-10-01 15:05** — Capex round 57 committed (PRES-7 deck with B–D and HT-17; PC-16/R-3/AW-L6 report generators, partial reports). Round 58 lanes: X25 audit + freeze checklist, S4-LIM model-scale caveat, PRES-8 rehearsal/Q&A, KP-1 κ-pilot restoration check, CAL-1 optional. Corrections noted: AW-B severity falls to about one-third (not half); ePC reader training is ≈ 100× BP measured (37× was a projection).
 - **2026-10-01 14:40** — HT-17 complete and committed (finite-range tail differences, not classes; AW-B halves conditional severity; GPD adds nothing over exponential for the learned reader; stable v0 zsRE shape 0.43–1.03 beats exponential on held-out windows). Slice check passes. Round 57 lanes: PRES-7, PC-16, R-3, AW-L6.
@@ -190,6 +191,32 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 60 — seed-1 refresh; reproduction document for the supplemental work (2026-10-02, 07:30)
+
+Held for the Oct 2 review outcome: POST-1 (coupled-objective study design) and PRES-9 (fold the reviewers' notes). Both
+open as soon as the owner relays the meeting.
+
+### Lane PC-16a — PC-reader and HT-17 refresh for ePC seed 1 (conditional; then seed 2)
+
+ePC seed-1 training finished 07:15 (86,798 s; 300 steps); its zsRE evaluation is running and the CounterFact one
+follows (≈ 08:15). When `results/additional_work/PC-reader/eval-epc-s1-counterfact/report.json` exists with a complete
+status: run `aw.pc_reader_report` with its `--refresh-tail` step into fresh dated directories (per the PC-16 task),
+rewrite `docs/additional_work/PC-reader_report.md` (now 10 of 12 cells; two paired seeds), and refresh the deck's
+reader statements and `numbers_to_say.md` through PRES, keeping the three-seed answer marked partial. Repeat when seed
+2 lands (≈ Oct 3 09:30; the owner posts the trigger). Done-when: report, HT-17 snapshot, deck and numbers agree on the
+available seeds, with denominators.
+
+### Lane REP-1 — reproduction document and one-command refresh for the supplemental work
+
+`docs/REPRODUCE.md` covers v0 only. Write `docs/REPRODUCE_additional_work.md`: for every supplemental result and every
+figure the deck cites (PC-v0 and its controls, PC-v1 and the credit-setting variants, the harm readouts, AW-B calibration
+and evaluation, PC-reader, Option R, AW-L, HT-13/15/17, κ pilot), the exact command, its inputs with hashes, the output
+directory, CPU or GPU, and the measured cost; the generator dependency order from `docs/freeze_checklist_20261009.md`.
+Add `aw/refresh_reports.py` (CPU): runs the report generators in that order into fresh dated directories, records which
+inputs changed since the previous run, and refuses to overwrite canonical directories; tests on a synthetic tree. GPU
+steps are documented, never executed by it. Done-when: a reader with the two repositories can regenerate every CPU
+artifact the deck cites from the document alone.
 
 ## Round 59 — consistency audit of the spoken numbers; reviewer-folder refresh (2026-10-01, 15:20)
 
