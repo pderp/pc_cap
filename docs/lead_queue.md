@@ -1587,3 +1587,28 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (≈ Oct 5 early). Round 60 lanes: PC-16a (refresh the reader report, HT-17 and the deck once seed 1's evaluations
     exist, again after seed 2) and REP-1 (a reproduction document for every supplemental result and figure the deck
     cites, plus a one-command CPU refresh in dependency order). POST-1 and PRES-9 open when you relay today's review.
+
+155. (2026-10-02, 09:50 EDT) **Capex round 60 committed (pc_cap 553750b, assets 37fc061); ePC seed 1 evaluated; PC-16a
+    trigger posted.** REP-1: `docs/REPRODUCE_additional_work.md` gives the command, inputs with hashes, outputs and
+    measured cost for every supplemental result and figure the deck cites, and `aw.refresh_reports` reruns the CPU
+    generators in dependency order into fresh directories (verified run: 16 steps, 262 s, 29 groups PASS, 193 hashed
+    files). Nine tests pass, ruff clean.
+
+    **ePC seed 1 (both datasets, 300 edits, exposed streams):**
+
+    | reader | dataset | ES | RET-ES | RET-GS | LS | near-miss | fired positions | mean ΔNLL | ES99+ | max |
+    |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+    | ePC s1 | zsRE | 1.00 | 1.00 | 0.970 | 1.00 | 0.85 | 6 | 0.00005 | 0.005 | 4.5 |
+    | BP s1 | zsRE | 1.00 | 1.00 | 0.990 | 1.00 | 0.67 | 13 | 0.00013 | 0.013 | 7.9 |
+    | ePC s1 | CounterFact | 1.00 | 1.00 | 0.778 | 1.00 | 0.95 | 720 | 0.00628 | 0.641 | 12.4 |
+    | BP s1 | CounterFact | 0.99 | 0.99 | 0.800 | 1.00 | 0.99 | 660 | 0.00535 | 0.551 | 12.5 |
+
+    Reading, two seeds now. Seed 0's "quieter reader" was mostly a seed effect: seed 1's ePC reader fires on 720
+    CounterFact positions (more than its BP pair) with slightly more harm, and generalises almost like BP (0.778 vs
+    0.800). What is consistent across both seeds is a small paraphrase-generalisation deficit for the ePC-trained reader
+    (zsRE −0.026 and −0.020; CounterFact −0.242 and −0.022) with own-prompt retention identical; firing behaviour on
+    ordinary text is seed-dependent in both rules (BP spans 149–660 on CounterFact). Training cost 24.1 h (≈ 100× BP).
+    Seed 2 decides whether the deficit is systematic; it started 08:13 and lands with evaluations ≈ Oct 3 09:30.
+    PC-16a's condition is met (both seed-1 evaluations complete), so Capex can run the reader report, HT-17 and deck
+    refresh now. Then Option R (≈ Oct 3 evening) and AW-L5 (≈ Oct 5 early). POST-1 and PRES-9 wait for your notes from
+    today's meeting.

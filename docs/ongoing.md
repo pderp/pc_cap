@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-02 09:50** — Capex round 60 committed (REP-1 guide + refresh-all runner). ePC seed 1 evaluated (item 155: the seed-0 'quiet reader' was largely a seed effect; consistent small RET-GS deficit). **PC-16a trigger: go** (both seed-1 evaluations complete). Seed 2 training since 08:13 (≈ Oct 3 09:30 with evaluations) → Option R → AW-L5. POST-1/PRES-9 after the review.
 - **2026-10-02 07:30** — Capex round 59 committed (X26 clean; DOC-1 + `review-data/CURRENT.md`). ePC seed 1 trained (24.1 h); evaluations running (≈ 08:15), then seed 2 (≈ Oct 3 09:30), Option R, AW-L5. Round 60: PC-16a (conditional refresh), REP-1 (reproduction document + refresh-all); POST-1/PRES-9 after today's review.
 - **2026-10-01 15:20** — Capex round 58 committed (X25 PASS 25 groups + freeze checklist `docs/freeze_checklist_20261009.md`; S4-LIM caveats in the three Stage-4 reports; PRES-8 Q&A, numbers-to-say, rehearsal pack; KP-1 no-go for an exact κ-pilot continuation; CAL-1 checks pass + `coupled_objective_note.md`). Round 59: X26, DOC-1; POST-1 after the Oct 2 review. Optional κ readout: default no (see item 153).
 - **2026-10-01 15:05** — Capex round 57 committed (PRES-7 deck with B–D and HT-17; PC-16/R-3/AW-L6 report generators, partial reports). Round 58 lanes: X25 audit + freeze checklist, S4-LIM model-scale caveat, PRES-8 rehearsal/Q&A, KP-1 κ-pilot restoration check, CAL-1 optional. Corrections noted: AW-B severity falls to about one-third (not half); ePC reader training is ≈ 100× BP measured (37× was a projection).
@@ -197,7 +198,7 @@ edits in new files or after the chain's finish is posted in the lead queue.
 Held for the Oct 2 review outcome: POST-1 (coupled-objective study design) and PRES-9 (fold the reviewers' notes). Both
 open as soon as the owner relays the meeting.
 
-### Lane PC-16a — PC-reader and HT-17 refresh for ePC seed 1 (conditional; then seed 2)
+### Lane PC-16a — PC-reader and HT-17 refresh for ePC seed 1 (**condition met 2026-10-02 08:13: go**; then seed 2)
 
 ePC seed-1 training finished 07:15 (86,798 s; 300 steps); its zsRE evaluation is running and the CounterFact one
 follows (≈ 08:15). When `results/additional_work/PC-reader/eval-epc-s1-counterfact/report.json` exists with a complete
