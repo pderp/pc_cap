@@ -1642,3 +1642,14 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     nothing implemented or scheduled); PRES-9, an outcome note in the review folder linked from the public entry point,
     Q&A placeholders marked resolved. Then the result-driven refreshes. Nothing further needed from you until the
     Oct 9 freeze sign-off, apart from pushing both repos when convenient.
+
+159. (2026-10-03, 06:30 EDT) **Capex round 62 committed (pc_cap beb002b, assets 8c2d397); round 63 opened.** POST-1:
+    `docs/post_conference/coupled_collaboration_proposal.md`, the document for Kenric's group after 15 Oct — what the
+    testbed provides a coupled objective and what it lacks, the four open questions verbatim, entry tests before any
+    training, a paired three-seed objective comparison, cost scenarios (7.2 vs 152 process-hours depending on whether
+    the common training method is BP or ePC, before new-objective overhead) and the dated data reserves (684 zsRE / 721
+    CounterFact subjects); nothing implemented, scheduled or sent. PRES-9: `docs/friday-10.02-review/OUTCOME-2026-10-02.md`
+    (DEC-082) is the second entry of the public reviewer page; Q&A placeholders resolved; 28 links and 1,909 bindings
+    verified. Tests and lint pass. Round 63: PC-16b, the complete three-seed reader refresh, conditional on seed 2's
+    two evaluations (training at step 282/300, evaluations done ≈ 08:45; I post the trigger). GPU after that: Option R
+    (≈ this evening) → AW-L5 (≈ Oct 5 early). Both repos have new commits to push when convenient.

@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-03 06:30** — Capex round 62 committed (POST-1 proposal `docs/post_conference/coupled_collaboration_proposal.md`; PRES-9 outcome note, reviewer folder closed). Round 63: PC-16b (three-seed refresh, go when seed-2 evaluations land ≈ 08:45). Seed 2 at step 282/300.
 - **2026-10-02 14:00** — DEC-082: review held; proceed as planned; post-conference collaboration foundation; κ readout closed. Round 62: POST-1 (collaboration proposal), PRES-9 (outcome recorded, folder closed). GPU unchanged.
 - **2026-10-02 11:00** — Round 61 committed (DOC-2; PC-16a seed-1 refresh). Reviewer entry point: `assets/presentation-materials/review-data/CURRENT.md` → `UPDATE-2026-10-02.md` first. Next lanes (POST-1, PRES-9) after the review.
 - **2026-10-02 09:55** — Round 61: DOC-2 (add `UPDATE-2026-10-02.md` to the reviewer entry point before this afternoon's meeting), then PC-16a seed-1 refresh. POST-1/PRES-9 after the review.
@@ -195,6 +196,23 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 63 — the three-seed reader refresh (2026-10-03, 06:30; conditional)
+
+### Lane PC-16b — PC-reader, HT-17 and deck refresh for ePC seed 2 (go when both seed-2 evaluations are complete)
+
+Seed-2 training is at step 282/300 (ends ≈ 07:45); its two evaluations follow (≈ 08:45). When
+`results/additional_work/PC-reader/eval-epc-s2-counterfact/report.json` exists with a complete status (the owner also
+posts the trigger in a lead-queue item): run `aw.pc_reader_report` with `--refresh-tail` into fresh dated directories,
+rewrite `docs/additional_work/PC-reader_report.md` as the **complete** 12/12 report (three paired seeds), apply
+`aw/reader_interpretation.py`'s rules for the three-seed reading (within-recipe consistency of the paraphrase deficit;
+firing and harm by seed with signs; nearly-equal own-prompt retention; measured ≈ 100× cost; no superiority or safer-
+learning claim; training seeds are not subject realizations), then refresh the deck's reader statements (slides 10–12
+as applicable), `numbers_to_say.md`, Q&A, ledger rows and the rehearsal pack through PRES; replace every "partial /
+10 of 12" statement. Rerun X26. Done-when: report, tail snapshot, deck, numbers and pack agree on twelve evaluations.
+
+Then: R-3 after Option R (≈ this evening), AW-L6 after AW-L5 (≈ Oct 5), PRES refresh after each, X25 and the
+one-command reproduction at the end (Oct 7–8).
 
 ## Round 62 — after the review: collaboration foundation; closing the review folder (2026-10-02, 14:00; DEC-082)
 
