@@ -1,10 +1,13 @@
 # Reviewer and audience questions
 
-2026-10-01, Capex; rehearsal answers for charlie. Completed supplemental results
+Updated 2026-10-02 after the review, Capex; rehearsal answers for charlie. Completed supplemental results
 are distinguished from pending PC-reader seeds, Option R and upper-layer results.
 Evidence references name claim-ledger rows or canonical reports. The three-seed
 answer must be refreshed after the expected October 3 evaluations. Friday review
-notes have not yet arrived; no feedback from that meeting is assumed here.
+placeholder resolved: **no changes requested** to the remaining experiments or
+approved talk framing (DEC-082). The optional κ readout is closed without execution;
+the coupled-objective collaboration is post-conference. Technical questions remain
+open. See the [recorded outcome](../friday-10.02-review/OUTCOME-2026-10-02.md).
 
 ## 1. What connects this experiment to active inference?
 
@@ -141,8 +144,8 @@ Evidence: `kappa-design`, `kappa-kappa02`, `kappa-kappa05`, `AI-programme`.
 
 ## 20. What remains before the talk and beyond it?
 
-PC-reader seeds 1–2, Option R learned/random cells and the upper-layer comparison remain to be reported with harm and measured cost; experiments end October 9 at 17:00 Eastern before the October 15 presentation.
-Beyond this testbed, a budget-matched test of policy-driven audits is proposed, while autonomous epistemic action and a coupled active-inference agent remain unestablished.
+PC-reader seed 2, Option R learned/random cells and the upper-layer comparison remain to be reported with harm and measured cost; experiments end October 9 at 17:00 Eastern before the October 15 presentation.
+The October 2 review requested no changes to that programme (DEC-082); the optional κ readout is closed without execution. A post-conference coupled-objective collaboration is proposed, while autonomous epistemic action and a coupled active-inference agent remain unestablished.
 
 Evidence: `talk-scope`, `PC-v0`, `PC-fixed-v5`, `AI-next`.
 

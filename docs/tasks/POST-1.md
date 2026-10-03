@@ -1,0 +1,15 @@
+# POST-1 — coupled-objective collaboration foundation
+
+**Status:** complete as a discussion proposal. **Agent:** Capex. **Date:** 2026-10-02. **Authority:** Round 62, DEC-082. Nothing implemented or scheduled.
+
+**Inputs:** `docs/additional_work/coupled_objective_note.md`; the four questions in `docs/friday-10.02-review/UPDATE-2026-10-02.md` §6; DEC-082; the PC-reader recipe and completed training/evaluation costs; `logs/additional_work/R/preparation-v1.json`; HT-16's population replay.
+
+**Outputs:** [collaboration proposal](../post_conference/coupled_collaboration_proposal.md), suitable for the lead to circulate after October 15; [planning evidence](../../logs/additional_work/POST-1/planning-evidence.json), recording 25 completed cost receipts and input hashes. Public URLs in the document refer to repository paths; new files need the lead's commit/push before those URLs become available remotely.
+
+**Scientific content:** testbed capabilities and missing probabilistic/policy models; all four author questions verbatim with decisions they enable; an ordinary-versus-coupled objective skeleton with three paired seeds, twelve exposed 300-edit evaluations and full harm; value/gradient/normalization entry tests; conditional costs/calendar; reserved-subject limits. Exact gradients in both arms are proposed for the first objective isolation; any ePC version must use the same credit rule in both arms. Equal updates and equal resource ceilings are explicitly distinguished from equal consumed compute. Objective, κ, retention margins, primary endpoint and compute policy remain joint design choices, not silently approved defaults.
+
+**Cost evidence:** six trainings plus twelve full evaluations would cost approximately 7.21 process-hours if both objectives cost the measured BP recipe, versus 151.81 at the measured ePC rate. The coupled objective is unprofiled; harm is already included in enclosing evaluation costs. Post-Option-R margins are 684 zsRE / 721 CounterFact at the recorded allocation, subject to later exclusions and a new feasibility check. No reserves are consumed by this proposal.
+
+**Verification:** exact string comparison against UPDATE §6 passed; all 25 cost-file hashes and arithmetic checked; document links resolve to existing local counterparts, including public-format GitHub links. Receipt: `logs/additional_work/PRES-9/validation.json`. Review the costing directly with `python3 -m json.tool logs/additional_work/POST-1/planning-evidence.json`; original costs remain unchanged. Remote publication was not asserted or tested.
+
+**Done-when:** sendable document exists, with unresolved author questions preserved and no added conference experiment. **Execution cost:** CPU file reads/arithmetic only; GPU 0 s, model calls 0. **Deviations:** none; costs use completed processes rather than the superseded short-profile forecast. **Unresolved:** scientific choices listed in the proposal are for the later collaboration, not blockers to this document. **Questions for lead:** none. Lead retains commits and external correspondence.

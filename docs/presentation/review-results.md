@@ -1,8 +1,11 @@
 # Research results for the October 2 review
 
-**Current reading guide: October 2, Round 61.** Start with
+**Current reading guide: October 2, Round 62.** Start with
 [2 October update: read first](../friday-10.02-review/UPDATE-2026-10-02.md), which
 summarizes HT-17, the two completed ePC seeds and the unchanged Option R queue.
+Then read the [review outcome](../friday-10.02-review/OUTCOME-2026-10-02.md):
+no changes requested to the remaining experiments or framing; the optional κ
+readout is closed, and the coupled-objective proposal is post-conference.
 The canonical reader/tail reports below now include both completed ePC seeds.
 Numerical qualifications to the update: own-prompt retention is nearly equal,
 not identical (CounterFact seed 1: ePC 1.00, BP .99), and the seed-0 CounterFact

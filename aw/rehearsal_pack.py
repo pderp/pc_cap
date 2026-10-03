@@ -64,11 +64,11 @@ Use rounded values below. These are measured results or explicitly labeled scope
 [P] `{reader_path}`: coverage, per-seed endpoint numerators/denominators and `training_cost_ratios` for completed trainings.
 [A] `docs/R1_stage4_report.md`: accounting and limitations.
 
-Detailed spoken numbers use `docs/talk_claim_ledger_v7.md` and `docs/presentation/deck_v3/pc-result-sources.json`. Rerun `aw.script_numbers_check` after every export; its occurrence inventory states rounding tolerances and untraced/review items. Numerical ledger matches alone do not establish contextual correctness. Do not improvise a favorable PC conclusion, an asymptotic tail class, W(N), or a completed Option R/upper-layer result. Refresh after new evaluations and the October 2 review.
+Detailed spoken numbers use `docs/talk_claim_ledger_v7.md` and `docs/presentation/deck_v3/pc-result-sources.json`. Rerun `aw.script_numbers_check` after every export; its occurrence inventory states rounding tolerances and untraced/review items. Numerical ledger matches alone do not establish contextual correctness. Do not improvise a favorable PC conclusion, an asymptotic tail class, W(N), or a completed Option R/upper-layer result. The October 2 review requested no changes to the programme or framing (DEC-082). Refresh after new evaluations.
 '''
     (output/'numbers-to-say.md').write_text(text)
     (ROOT/'docs/presentation/numbers_to_say.md').write_text(text)
-    for p in (reader_path, ht_path, stage_path, ROOT/'docs/additional_work/AW-B_report.md', ROOT/'docs/R1_stage4_report.md', ROOT/'docs/presentation/qa.md', ROOT/'aw/refresh_report_steps.py', Path(__file__).resolve()):
+    for p in (reader_path, ht_path, stage_path, ROOT/'docs/additional_work/AW-B_report.md', ROOT/'docs/R1_stage4_report.md', ROOT/'docs/presentation/qa.md', ROOT/'docs/friday-10.02-review/OUTCOME-2026-10-02.md', ROOT/'aw/refresh_report_steps.py', Path(__file__).resolve()):
         sources[str(p)]=sha(p)
     index='''# Rehearsal pack — charlie's October 15 presentation
 
@@ -80,13 +80,15 @@ Canonical October 2 export: `assets/presentation-materials/deck_v3/rehearsal/`.
 - `qa.md`, `numbers-to-say.md`, `backup-index.md`: audience answers, one-page numerical prompts and three figures for follow-up questions.
 - `manifest.json` binds deck inputs; `rehearsal-manifest.json` binds this entire pack. No private author-equation question is exported.
 
-The October 2 review notes have not arrived. PC-reader currently has 10/12 evaluations and two paired seeds. Refresh after seed 2, Option R after resume, and AW-L after its queue; update their literal text as well as generated tables. No three-seed or completed-extension conclusion should be inferred from this snapshot.
+The October 2 review is resolved: no changes requested to the remaining experiments or approved talk framing (DEC-082). The optional κ readout is closed without execution; coupled-objective work is a post-conference proposal. Outcome: https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md
+
+PC-reader currently has 10/12 evaluations and two paired seeds. Refresh after seed 2, Option R after resume, and AW-L after its queue; update their literal text as well as generated tables. No three-seed or completed-extension conclusion should be inferred from this snapshot.
 '''
     (output/'README.md').write_text(index)
     (ROOT/'docs/presentation/rehearsal.md').write_text(index)
     manifest=dict(task='PRES-8',sources_sha256=sources,deck_manifest_sha256=sha(output/'manifest.json'),
                   exports={str(p):sha(p) for p in sorted(output.iterdir()) if p.is_file()},
-                  draft=True,review_notes_pending=True,script_slots_unresolved=0)
+                  draft=True,review_notes_pending=False,review_outcome='DEC-082: no changes requested',script_slots_unresolved=0)
     for p in output.glob('speaking-script-*.md'):
         if '{{' in p.read_text() or 'PENDING' in p.read_text().split('## Cut and backup')[0].split('Say:',1)[1]:
             raise ValueError('unresolved result slot in speaking script')

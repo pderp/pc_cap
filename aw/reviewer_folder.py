@@ -67,10 +67,11 @@ def export(output):
     current = DESTINATION / "CURRENT.md"
     current.write_text("""# October 2 review — current entry points
 
-Evidence through October 2; folder refreshed in Round 61.
+Evidence through October 2; review outcome recorded in Round 62 (DEC-082).
 The September 27 README is historical; begin with the October 2 update.
 
 - [2 October update: read first](../../../pc_cap/docs/friday-10.02-review/UPDATE-2026-10-02.md)
+- [2 October review outcome: no changes requested](https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md)
 - [Capstan's October 1 primer](../../../pc_cap/docs/friday-10.02-review/README.md)
 - [Reviewer feedback and response](../../../pc_cap/docs/friday-10.02-review/feedback-MMK-nelson-entropy.md)
 - [Capex's scientific review](../../../pc_cap/docs/friday-10.02-review/feedback-MMK-nelson-entropy-capex.md)
@@ -78,16 +79,22 @@ The September 27 README is historical; begin with the October 2 update.
 - [Remaining experiments and historical planning forms](final-experiments.md)
 - [October 9 freeze checklist](../../../pc_cap/docs/freeze_checklist_20261009.md)
 
+The review is closed: proceed with the current experiments and framing; the optional κ readout is closed without execution. Coupled entropy/free-energy work is a post-conference collaboration proposal.
+
 These are a dated snapshot. PC-reader, Option R and upper-layer results must be refreshed after completed evaluations; pending results are not zero.
 """)
     _, checked = rebase(current.read_text(), current, current)
+    # The public navigation URL has a local source whose bytes we can verify.
+    outcome = ROOT / "docs/friday-10.02-review/OUTCOME-2026-10-02.md"
+    outcome_url = "https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md"
     record = dict(
-        task="DOC-2",
+        task="PRES-9",
         records=records,
         navigation=str(current),
         navigation_sha256=sha(current),
         navigation_links=checked,
-        linked_documents_sha256={str(p): sha(p) for p in checked},
+        linked_documents_sha256={str(p): sha(p) for p in [*checked, outcome]},
+        public_link_local_sources={outcome_url: str(outcome)},
         folder_files_sha256={str(p): sha(p) for p in sorted(DESTINATION.iterdir()) if p.is_file()},
         code_sha256=sha(__file__),
         gpu_seconds=0,

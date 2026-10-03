@@ -1,0 +1,11 @@
+# Round 62 — Capex handoff
+
+**POST-1 and PRES-9 are complete.** CPU only, zero model calls/GPU use. Nothing committed, scheduled or sent to collaborators. Capstan's active seed-2 training and PC12 outputs are untouched.
+
+- [POST-1](POST-1.md): [post-conference collaboration proposal](../post_conference/coupled_collaboration_proposal.md), including the four questions verbatim, missing model/policy definitions, entry tests, paired three-seed objective comparison, costs and data reserves. Measured cost scenarios are 7.21 versus 151.81 process-hours depending on the common training method, before new-objective overhead. The coupled method remains unspecified/unprofiled. The reserve counts 684/721 are dated margins, not newly cleared subjects. No new experiment is approved by this proposal.
+- [PRES-9](PRES-9.md): [October 2 outcome](../friday-10.02-review/OUTCOME-2026-10-02.md), second entry with a public GitHub URL in reviewer CURRENT. “No changes requested” resolves the meeting placeholder; author questions remain open. Optional κ readout is closed without execution. Both reviewer exports, Q&A, numbers sheet and rehearsal index/manifest agree.
+- Validation: all 39 canonical pack exports and 1,909 source bindings verified; 28 reviewer links checked; all four question blocks exact; 25 cost receipts checked. X26 has no source/export issues and the same five previously explained rounding/sign exceptions. Lint and whitespace checks pass. Slides and spoken scripts are unchanged. See `logs/additional_work/PRES-9/validation.json` and `reviewer-folder/refresh.json`.
+
+The canonical resource pack remains `assets/presentation-materials/deck_v3/rehearsal/`; `rehearsal-round62/` is its fresh validation build. Capstan's UPDATE, `docs/ongoing.md`, decisions and runtime trees were not edited. No change to the 10/12 reader-evaluation snapshot or experimental interpretation. Lead can commit the owned files listed in the task records and push both repositories when convenient; the new public URLs are not represented as already published.
+
+**Next triggers:** PC-16a after Capstan posts both seed-2 evaluations; R-3 after Option R; AW-L6 after AW-L5; presentation refresh after each; X25/full reproduction at the end. These remain outcome-dependent. No watcher or GPU job was launched.

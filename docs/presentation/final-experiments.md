@@ -1,6 +1,6 @@
 # Final experiments — October 2 review and historical decision forms
 
-Prepared September 27; updated October 2 by Capex. **DEC-077/078/080/081/081a decisions now
+Prepared September 27; updated October 2 by Capex. **DEC-077/078/080/081/081a/082 decisions now
 supersede the blank decision fields in the historical candidate descriptions.**
 This update records existing decisions and results; it authorizes no extra run.
 Canonical repository copy: `pc_cap/docs/presentation/final-experiments.md`;
@@ -68,7 +68,10 @@ HT-17's 301-cell analysis reports finite-range shapes, frequency and conditional
 severity, not asymptotic classes. AW-B takes severity above .01 nat to about
 **one-third** (zsRE 1.619→.542; CounterFact 1.925→.581), with little change in
 frequency. DEC-081/081a do not authorize a coupled-objective training experiment.
-The optional κ readout remains default no; exact pilot restoration failed KP-1.
+The optional κ readout is closed without execution under DEC-082; exact pilot restoration failed KP-1.
+The [October 2 review outcome](../friday-10.02-review/OUTCOME-2026-10-02.md) requests
+no changes to the remaining experiments or talk framing and opens a post-conference
+collaboration foundation. The authors' technical questions remain open.
 
 The main Stage-4 base is GPT-2 small (124M); transfer to production scale is
 unestablished. DEC-074b left S1_literal CounterFact and the registered extension

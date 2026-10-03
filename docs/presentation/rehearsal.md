@@ -8,4 +8,6 @@ Canonical October 2 export: `assets/presentation-materials/deck_v3/rehearsal/`.
 - `qa.md`, `numbers-to-say.md`, `backup-index.md`: audience answers, one-page numerical prompts and three figures for follow-up questions.
 - `manifest.json` binds deck inputs; `rehearsal-manifest.json` binds this entire pack. No private author-equation question is exported.
 
-The October 2 review notes have not arrived. PC-reader currently has 10/12 evaluations and two paired seeds. Refresh after seed 2, Option R after resume, and AW-L after its queue; update their literal text as well as generated tables. No three-seed or completed-extension conclusion should be inferred from this snapshot.
+The October 2 review is resolved: no changes requested to the remaining experiments or approved talk framing (DEC-082). The optional κ readout is closed without execution; coupled-objective work is a post-conference proposal. Outcome: https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md
+
+PC-reader currently has 10/12 evaluations and two paired seeds. Refresh after seed 2, Option R after resume, and AW-L after its queue; update their literal text as well as generated tables. No three-seed or completed-extension conclusion should be inferred from this snapshot.

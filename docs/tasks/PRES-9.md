@@ -1,0 +1,15 @@
+# PRES-9 — close the October 2 review folder
+
+**Status:** complete. **Agent:** Capex. **Date:** 2026-10-02. **Authority:** Round 62, DEC-082.
+
+**Inputs:** DEC-082 and lead-queue item 158; Capstan's unchanged October 2 UPDATE; Capex's reviewer guides, Q&A and canonical rehearsal pack.
+
+**Outputs:** [dated outcome](../friday-10.02-review/OUTCOME-2026-10-02.md); second navigation entry in `assets/presentation-materials/review-data/CURRENT.md` uses `https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md`. Q&A meeting placeholder is resolved with “no changes requested.” Guides and their exports now distinguish a closed optional κ readout from the former default-no contingency. The rehearsal generator and canonical pack carry the same outcome, including `review_notes_pending=false`. Technical author questions remain open.
+
+**Owned edits:** `aw/reviewer_folder.py`, `aw/rehearsal_pack.py`; `docs/presentation/{qa,review-results,final-experiments,numbers_to_say,rehearsal}.md`; `logs/additional_work/PRES-8/pack.json`; new outcome, task/handoff/validation files. Resource exports are under sibling `assets/presentation-materials/{review-data,deck_v3/rehearsal,deck_v3/rehearsal-round62}`. The last is the fresh validation export; `rehearsal/` remains canonical. No changes to Capstan's UPDATE, board, decisions, experimental code or raw results.
+
+**Verification commands:** CPU environment (`JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES=`, local venv); `python -m aw.reviewer_folder --output <new-repo-log-directory>`; `python -m aw.rehearsal_pack --output <new-assets-presentation-directory>`; `python -m aw.script_numbers_check --output <new-repo-log-directory> --pack /home/derp/cap/assets/presentation-materials/deck_v3/rehearsal`; scoped `ruff check aw/reviewer_folder.py aw/rehearsal_pack.py`; `git diff --check`. Export generators deliberately require new output directories.
+
+**Verification output:** `logs/additional_work/PRES-9/validation.json`: PASS, 28 reviewer-export local links, four reviewer-folder file hashes, 39 pack exports, 1,909 deck source hashes, outcome second entry and all four question blocks exact. Twelve slides and both spoken scripts are byte-identical to the prior pack. The X26 inventory reports no source/export issues; its same five contextual rounding/sign exceptions match the prior verified review, recorded in `numbers-check/context-review.json`. Scoped lint and whitespace checks pass. Folder receipt: `logs/additional_work/PRES-9/reviewer-folder/refresh.json`.
+
+**Done-when:** CURRENT shows the outcome, folder manifest is consistent, Q&A/rehearsal no longer await meeting notes. **Execution cost:** CPU only, GPU 0 s, model calls 0. **Deviations:** also refreshed the canonical rehearsal pack because Q&A is copied and hash-bound there; no scientific numbers or slide content changed. **Unresolved:** new public links become available after the lead commits/pushes the documents. **Questions for lead:** none; no commit or external message sent.
