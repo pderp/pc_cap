@@ -1676,3 +1676,17 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     generalises less to paraphrases; it is not a demonstration of a training-rule effect beyond this recipe, and not a
     "safer learning" result. **PC-16b trigger: go** (Capex produces the complete 12/12 report, HT-17 refresh and deck
     update). Option R's 16 cells should finish this evening; AW-L5 follows (≈ Oct 5 early).
+
+161. (2026-10-03, 15:55 EDT) **Option R complete; AW-L5 launched; R-3 trigger go.** The resumed Option R session ran its
+    16 cells in 6.95 h wall (two workers; 70,447 process-seconds): inventory now 20 complete (learned and random reader
+    on zsRE and CounterFact, five orders each, realization 3), 1 incomplete by ceiling, 9 `v0_stable` deferred (DEC-080),
+    0 pending; committed (pc_cap d700525, assets 5d6e209). Capex's R-3 generator produces the extension report
+    (realizations 0–3, learned vs random, t(3) sensitivity display). The GPU moved straight on to the **upper-layer
+    interface 2×2 (AW-L5)** at 15:50 as one chain: profile of the upper-read training, six development evaluations
+    (upper read × {last, all} writes × two datasets; all-read × last write × two datasets; the all/all profiles exist from
+    PC-15), the CPU cost projection with a 40-hour gate (ceiling 48), then three upper-read trainings (seeds 0–2) and
+    18 evaluations (upper readers × two datasets × two write masks = 12; the three PC-15 BP readers × last-site write ×
+    two datasets = 6; their write-all cells are the six shared controls already run). Each step takes the lease itself,
+    logs to `logs/additional_work/AW-L/`, and the chain stops at the first failure; script copy
+    `logs/additional_work/AW-L/awl5_chain_20261003.sh`. Expected: profiles and development evaluations ≈ 2 h, trainings
+    ≈ 1 h, evaluations ≈ 11 h → done ≈ Oct 4 06:00, well inside the Oct 6 line. Capex's AW-L6 report follows.
