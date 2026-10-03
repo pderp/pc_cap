@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-03 08:45** — ePC reader seed 2 done (item 160: paraphrase deficit on CounterFact in all three seeds, on zsRE in two of three; zsRE firings 0–6 vs 13–21; CounterFact mixed). **PC-16b: go.** Option R resumed 08:36 (16 cells, two workers) → AW-L5 after.
 - **2026-10-03 06:30** — Capex round 62 committed (POST-1 proposal `docs/post_conference/coupled_collaboration_proposal.md`; PRES-9 outcome note, reviewer folder closed). Round 63: PC-16b (three-seed refresh, go when seed-2 evaluations land ≈ 08:45). Seed 2 at step 282/300.
 - **2026-10-02 14:00** — DEC-082: review held; proceed as planned; post-conference collaboration foundation; κ readout closed. Round 62: POST-1 (collaboration proposal), PRES-9 (outcome recorded, folder closed). GPU unchanged.
 - **2026-10-02 11:00** — Round 61 committed (DOC-2; PC-16a seed-1 refresh). Reviewer entry point: `assets/presentation-materials/review-data/CURRENT.md` → `UPDATE-2026-10-02.md` first. Next lanes (POST-1, PRES-9) after the review.
@@ -199,7 +200,7 @@ edits in new files or after the chain's finish is posted in the lead queue.
 
 ## Round 63 — the three-seed reader refresh (2026-10-03, 06:30; conditional)
 
-### Lane PC-16b — PC-reader, HT-17 and deck refresh for ePC seed 2 (go when both seed-2 evaluations are complete)
+### Lane PC-16b — PC-reader, HT-17 and deck refresh for ePC seed 2 (**go since 2026-10-03 08:36: both evaluations complete**)
 
 Seed-2 training is at step 282/300 (ends ≈ 07:45); its two evaluations follow (≈ 08:45). When
 `results/additional_work/PC-reader/eval-epc-s2-counterfact/report.json` exists with a complete status (the owner also

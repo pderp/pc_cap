@@ -1653,3 +1653,26 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     verified. Tests and lint pass. Round 63: PC-16b, the complete three-seed reader refresh, conditional on seed 2's
     two evaluations (training at step 282/300, evaluations done ≈ 08:45; I post the trigger). GPU after that: Option R
     (≈ this evening) → AW-L5 (≈ Oct 5 early). Both repos have new commits to push when convenient.
+
+160. (2026-10-03, 08:45 EDT) **PC-trained reader complete: three ePC seeds; Option R running.** Seed 2 trained in 23.4 h
+    and both evaluations finished at 08:36; the Option R resume started at 08:36:48 (two workers, first cells
+    7cb708b7 and d7923935). All twelve reader evaluations (300 edits, exposed realization-0 streams):
+
+    | seed | dataset | RET-GS BP / ePC | difference | fired positions BP / ePC | mean ΔNLL BP / ePC |
+    |---|---|---:|---:|---:|---:|
+    | 0 | zsRE | 0.973 / 0.947 | −0.027 | 18 / 0 | 0.00011 / 0 |
+    | 1 | zsRE | 0.990 / 0.970 | −0.020 | 13 / 6 | 0.00013 / 0.00005 |
+    | 2 | zsRE | 0.977 / 0.980 | +0.003 | 21 / 0 | 0.00018 / 0 |
+    | 0 | CounterFact | 0.810 / 0.568 | −0.242 | 256 / 185 | 0.00202 / 0.00128 |
+    | 1 | CounterFact | 0.800 / 0.778 | −0.022 | 660 / 720 | 0.00535 / 0.00628 |
+    | 2 | CounterFact | 0.835 / 0.660 | −0.175 | 149 / 353 | 0.00118 / 0.00195 |
+
+    ES, RET-ES and LS are 1.00 (0.99 for BP seed 1) in every cell. Three-seed reading, descriptive: own-prompt retention
+    is nearly equal under both rules; paraphrase retention is lower for the ePC-trained reader on CounterFact in all
+    three seeds (−0.24, −0.02, −0.18) and on zsRE in two of three (−0.027, −0.020, +0.003); on zsRE the ePC readers fire
+    on 0–6 ordinary-text positions against 13–21 for BP, with correspondingly less harm, while on CounterFact firing and
+    harm go either way by seed. Training cost 23.4–24.6 h per ePC seed against 14 min for BP (≈ 100×). Within one
+    recipe and three seeds this is consistent with the ePC surrogate's finite-settling gradients producing a reader that
+    generalises less to paraphrases; it is not a demonstration of a training-rule effect beyond this recipe, and not a
+    "safer learning" result. **PC-16b trigger: go** (Capex produces the complete 12/12 report, HT-17 refresh and deck
+    update). Option R's 16 cells should finish this evening; AW-L5 follows (≈ Oct 5 early).
