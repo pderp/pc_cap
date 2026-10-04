@@ -1690,3 +1690,40 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     logs to `logs/additional_work/AW-L/`, and the chain stops at the first failure; script copy
     `logs/additional_work/AW-L/awl5_chain_20261003.sh`. Expected: profiles and development evaluations ≈ 2 h, trainings
     ≈ 1 h, evaluations ≈ 11 h → done ≈ Oct 4 06:00, well inside the Oct 6 line. Capex's AW-L6 report follows.
+
+162. (2026-10-04, 01:30 EDT) **The last planned experiment is done: upper-layer interface 2×2 (AW-L5) complete; the GPU
+    is idle two days before the Oct 6 line.** The chain ran from 15:36 to 01:17 (9.7 h, against my 30 h estimate):
+    profile, six development evaluations, cost projection, three upper-read trainings (seeds 0–2, 14 min each), 18
+    evaluations with full harm readouts; every receipt complete; committed (pc_cap 5489f7e). With the six shared PC-15
+    BP cells the factorial has all 24 cells. Endpoints at 300 edits (exposed realization-0 streams), harm vs own cap-off:
+
+    | read taps | write sites | dataset | RET-GS s0 / s1 / s2 | fired positions s0 / s1 / s2 | mean ΔNLL s0 / s1 / s2 | max nats |
+    |---|---|---|---|---|---|---|
+    | all {1,2,3} | all | zsRE | 0.973 / 0.990 / 0.977 | 18 / 13 / 21 | 0.00011 / 0.00013 / 0.00018 | 6.5–10.6 |
+    | all | **last only** | zsRE | 0.973 / 0.990 / 0.977 | 18 / 13 / 21 | 0.00042 / 0.00042 / 0.00057 | 13.4–14.7 |
+    | upper {2,3} | all | zsRE | 0.987 / 0.970 / 0.987 | 4 / 4 / 54 | 0.00006 / 0.00005 / 0.00034 | 7.2–7.5 |
+    | upper | last only | zsRE | 0.987 / 0.970 / 0.987 | 4 / 4 / 54 | 0.00015 / 0.00015 / 0.00149 | 12.2–17.6 |
+    | all | all | CounterFact | 0.810 / 0.800 / 0.835 | 256 / 660 / 149 | 0.00202 / 0.00535 / 0.00118 | 8.5–12.5 |
+    | all | last only | CounterFact | 0.803 / 0.797 / 0.830 | 256 / 660 / 149 | 0.00664 / 0.01537 / 0.00371 | 17.0–22.1 |
+    | upper | all | CounterFact | 0.778 / 0.692 / 0.812 | 149 / 84 / 798 | 0.00130 / 0.00042 / 0.00572 | 7.8–12.4 |
+    | upper | last only | CounterFact | 0.778 / 0.687 / 0.807 | 149 / 84 / 798 | 0.00386 / 0.00140 / 0.02076 | 12.1–16.0 |
+
+    Reading (descriptive, three training seeds, one population). **Write sites:** restricting the write to the last site
+    leaves acquisition, own-prompt and paraphrase retention and the firing decision unchanged (same reader, differences
+    ≤ 0.007), but makes each firing more damaging: mean ordinary-text harm rises about 3–4× for both reader types and
+    both datasets, and the worst token losses rise from 7–12 to 12–22 nats. Concentrating the correction at one site
+    costs fidelity, not efficacy; this is the opposite of the hypothesis that writing only at the last site would reduce
+    harm. **Read taps:** readers trained on the upper two taps retain zsRE paraphrases as well as full-read readers
+    (+0.014 / −0.020 / +0.010) but less on CounterFact in all three seeds (−0.032 / −0.108 / −0.023, outside the 0.02
+    tolerance), and seed 1's upper reader fails to acquire 7 % of CounterFact edits (ES 0.927); their ordinary-text
+    firing is seed-dependent (4–54 on zsRE, 84–798 on CounterFact) and their near-miss preservation on zsRE is lower
+    (0.64–0.77 vs 0.67–0.85). Interaction: the worst cell is upper read + last write (CounterFact seed 2, 0.021 mean,
+    2.08 ES99+). Capex's AW-L6 report (trigger: go) does the paired read / write / interaction tables with intervals.
+    One note for the record: my chain's cost gate parsed no hour-valued field from the projection output and read 0.0,
+    so it did not bind; the projection file is in `logs/additional_work/AW-L/portfolio-cost-20261003/` for AW-L6 to
+    report against the measured 9.7 h.
+
+    **Status of the portfolio:** every experiment in DEC-077's list is now run or closed (controls, credit settings,
+    Option R with the v0 class deferred, PC-trained reader ×3 seeds, interface 2×2; scaling cut; κ readout closed by
+    DEC-082). No further fits are planned. What remains is CPU: AW-L6, R-3 and the three-seed PC-16b reports, deck
+    refresh, X25 and the one-command reproduction, then your freeze sign-off on Oct 9.

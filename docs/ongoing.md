@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-04 01:30** — AW-L5 complete (24 cells; item 162: last-site-only writes keep efficacy but raise harm 3–4×; upper-tap readers lose CounterFact paraphrases). **AW-L6: go.** All planned GPU experiments done; GPU idle. Remaining: CPU reports (PC-16b, R-3, AW-L6), PRES refresh, X25 + reproduction, freeze Oct 9.
 - **2026-10-03 15:55** — Option R complete (20 complete / 1 incomplete / 9 deferred; item 161). **R-3: go.** AW-L5 chain launched 15:50 (profiles → dev evals → cost gate → 3 trainings → 18 evaluations; ≈ Oct 4 06:00). AW-L6 after.
 - **2026-10-03 08:45** — ePC reader seed 2 done (item 160: paraphrase deficit on CounterFact in all three seeds, on zsRE in two of three; zsRE firings 0–6 vs 13–21; CounterFact mixed). **PC-16b: go.** Option R resumed 08:36 (16 cells, two workers) → AW-L5 after.
 - **2026-10-03 06:30** — Capex round 62 committed (POST-1 proposal `docs/post_conference/coupled_collaboration_proposal.md`; PRES-9 outcome note, reviewer folder closed). Round 63: PC-16b (three-seed refresh, go when seed-2 evaluations land ≈ 08:45). Seed 2 at step 282/300.
