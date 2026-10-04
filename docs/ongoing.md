@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-04 06:30** — Capex round 63 committed (final PC-reader, Option R, AW-L reports; HT-17 complete; deck refresh; X25/X26/reproduction pass). DEC-083: portfolio closed. Round 64: FIN-1 consolidated report, FIN-2 freeze dry run (Oct 6), LINT-1, DOC-3. Capstan: deck file assembly (DECK-1), report slice review.
 - **2026-10-04 01:30** — AW-L5 complete (24 cells; item 162: last-site-only writes keep efficacy but raise harm 3–4×; upper-tap readers lose CounterFact paraphrases). **AW-L6: go.** All planned GPU experiments done; GPU idle. Remaining: CPU reports (PC-16b, R-3, AW-L6), PRES refresh, X25 + reproduction, freeze Oct 9.
 - **2026-10-03 15:55** — Option R complete (20 complete / 1 incomplete / 9 deferred; item 161). **R-3: go.** AW-L5 chain launched 15:50 (profiles → dev evals → cost gate → 3 trainings → 18 evaluations; ≈ Oct 4 06:00). AW-L6 after.
 - **2026-10-03 08:45** — ePC reader seed 2 done (item 160: paraphrase deficit on CounterFact in all three seeds, on zsRE in two of three; zsRE firings 0–6 vs 13–21; CounterFact mixed). **PC-16b: go.** Option R resumed 08:36 (16 cells, two workers) → AW-L5 after.
@@ -199,6 +200,43 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 64 — closing the record: consolidated report, freeze dry run, small fixes (2026-10-04, 06:30; DEC-083)
+
+Priority: FIN-1 → FIN-2 (on Oct 6) → LINT-1 → DOC-3. All CPU. No experiments.
+
+### Lane FIN-1 — consolidated report of the supplemental programme
+
+`docs/additional_work_report.md`, assembled by a generator (`aw/additional_work_assembly.py`, in the manner of
+`aw.stage4_assembly`: lettered sources with hashes, no new scoring): one entry point for everything after the halt —
+PC-v0 and its three controls, fixed-v5 credit and settings, the harm readouts, AW-B, PC-trained reader (three seeds),
+Option R (realizations 0–3, v0 deferred), the upper-layer 2×2, HT-13/15/17, the κ pilot — each with its question,
+design, population and exposure label, headline table copied from the canonical report, limitations, measured cost, and
+the decision that authorised it. A closing section states what the supplemental programme supports and does not
+(the DEC-081a language), the GPT-2-small caveat, and the total GPU process-hours spent after the halt from receipts
+(no double charging of shared controls or nested costs). Tests on a synthetic tree. Done-when: regenerable from the named
+sources; X25 covers it.
+
+### Lane FIN-2 — freeze dry run (run on Oct 6, after FIN-1)
+
+Execute every item of `docs/freeze_checklist_20261009.md` except the lead's signature: closed inventory check, receipt
+closure check (including the cost-gate note from AW-L5 and the Option R segment totals), the final CPU refresh in
+dependency order into dated directories, X25 and X26 reruns, the one-command reproduction, the deck archive
+(`assets/presentation-materials/deck_v3/freeze-20261009/`). Produce `docs/freeze_handoff_20261009_draft.md`: the dated
+artifact list (every canonical directory and its hash), generator versions, open items and disclosed exceptions, and
+the exact lines the lead signs. Done-when: the lead can complete the freeze on Oct 9 by reading one document.
+
+### Lane LINT-1 — small fixes
+
+`ruff check aw/` reports five findings; fix them (no behaviour change; tests pass). Add `aw/cost_gate.py`: reads the
+exact projected-process-hours field from a `reader_portfolio_cost` output (extensionless file), rejects missing or
+invalid input, compares with a stated gate; document it in `REPRODUCE_additional_work.md` beside the AW-L5 note. Tests.
+
+### Lane DOC-3 — reviewer entry point: final results
+
+`assets/presentation-materials/review-data/CURRENT.md`: add a dated "Results complete (Oct 4)" block linking the three
+final reports, the HT-17 complete snapshot and FIN-1's consolidated report (public GitHub URLs); keep the Oct 2
+documents as historical. Regenerate the folder manifest.
 
 ## Round 63 — the three-seed reader refresh (2026-10-03, 06:30; conditional)
 

@@ -1727,3 +1727,23 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     Option R with the v0 class deferred, PC-trained reader ×3 seeds, interface 2×2; scaling cut; κ readout closed by
     DEC-082). No further fits are planned. What remains is CPU: AW-L6, R-3 and the three-seed PC-16b reports, deck
     refresh, X25 and the one-command reproduction, then your freeze sign-off on Oct 9.
+
+163. (2026-10-04, 06:40 EDT) **Capex round 63 committed (pc_cap 42f9eeb, assets 6734967); DEC-083 records the closed
+    portfolio; round 64 opened.** Final reports of record: PC-reader (12/12; CounterFact paraphrase deficit in every seed,
+    zsRE reversed in seed 2, own-prompt retention nearly equal, cost ≈ 100×), Option R (realizations 0–3: learned minus
+    random paraphrase retention +44.1 points on zsRE, +56.2 on CounterFact, t(3) sensitivity intervals labelled and
+    unadjusted; v0 deferred), AW-L (24/24; last-only writes raise mean ordinary-text loss in every one of the twelve
+    paired comparisons, ratios **2.64–4.37×**, not the "3–4×" I wrote in item 162, with at most 0.67 points of paraphrase
+    change; upper reads lose CounterFact paraphrases in every seed), HT-17 complete snapshot (303 cells). Deck, scripts,
+    Q&A, ledger and number sheet agree; X25 PASS on 25 groups (6,158 files); X26 clean; reproduction 282 s, 198 hashes.
+    Two accounting corrections from Capex adopted: the AW-L5 cost gate read zero because the projection is an
+    extensionless file (it held 17.98 projected process-hours, under the gate; actual new AW-L cost 9.67 process-hours,
+    13.25 with the shared controls, not both chargeable); Option R's extension total is 70,447 s of which the resumed
+    segment is 50,029 s. Round 64 for Capex: FIN-1 (a consolidated supplemental-programme report assembled from the
+    canonical sources, with total post-halt GPU hours), FIN-2 (a freeze dry run on Oct 6 producing the handoff draft you
+    sign on Oct 9), LINT-1 (five ruff findings; a proper cost-gate reader), DOC-3 (reviewer entry point pointing at the
+    final results). Mine: assembling the twelve SVG slides and backups into one deck file for the talk (see the question
+    below), and a slice review of the three final reports.
+    **Question (not blocking):** the deck exists as twelve SVG slides, PNG figures and the two timed scripts, but not as
+    one file you can present from. I can assemble a PDF now; if you want PowerPoint (with the 15-minute script as speaker
+    notes) say so and I will build a .pptx as well.
