@@ -1,9 +1,8 @@
 # Reviewer and audience questions
 
-Updated 2026-10-02 after the review, Capex; rehearsal answers for charlie. Completed supplemental results
-are distinguished from pending PC-reader seeds, Option R and upper-layer results.
-Evidence references name claim-ledger rows or canonical reports. The three-seed
-answer must be refreshed after the expected October 3 evaluations. Friday review
+Updated 2026-10-04, Capex; rehearsal answers for charlie. PC-reader, Option R
+and the upper-layer factorial have their complete or explicitly closed inventories.
+Evidence references name claim-ledger rows or canonical reports. Friday review
 placeholder resolved: **no changes requested** to the remaining experiments or
 approved talk framing (DEC-082). The optional κ readout is closed without execution;
 the coupled-objective collaboration is post-conference. Technical questions remain
@@ -54,7 +53,7 @@ Evidence: `PC-mechanism`, `PC-SD24`.
 ## 7. Why leave the reader trained by backpropagation?
 
 Holding the selected v5 reader fixed makes the second PC experiment a comparison of acquisition credit on the same reader and base.
-A separate PC-trained-reader experiment now has BP evaluations for three seeds and ePC evaluations for seeds 0–1: 10/12 evaluations and two paired seeds; this is not yet a three-seed paired result.
+The separate PC-trained-reader experiment is complete: twelve evaluations pair BP and ePC for three training seeds. Acquisition remains adjoint in every arm.
 
 Evidence: `PC-fixed-v5`, `R1-controls`; [PC-reader report](../additional_work/PC-reader_report.md).
 
@@ -144,7 +143,7 @@ Evidence: `kappa-design`, `kappa-kappa02`, `kappa-kappa05`, `AI-programme`.
 
 ## 20. What remains before the talk and beyond it?
 
-PC-reader seed 2, Option R learned/random cells and the upper-layer comparison remain to be reported with harm and measured cost; experiments end October 9 at 17:00 Eastern before the October 15 presentation.
+The planned GPU experiments finished October 4. CPU checks, presentation review and rehearsal remain; charlie’s experimental freeze sign-off is due October 9 at 17:00 Eastern before the October 15 presentation.
 The October 2 review requested no changes to that programme (DEC-082); the optional κ readout is closed without execution. A post-conference coupled-objective collaboration is proposed, while autonomous epistemic action and a coupled active-inference agent remain unestablished.
 
 Evidence: `talk-scope`, `PC-v0`, `PC-fixed-v5`, `AI-next`.
@@ -179,18 +178,19 @@ Evidence: `HT17-tails`, `AI-coupled-FE`, `model-scale`.
 
 ## 25. What does the three-seed PC-reader experiment say?
 
-**Two paired seeds, 10/12 evaluations; seed 2 pending.** ePC minus BP paraphrase-retention differences are −2.67/−2.00 percentage points on zsRE and −24.17/−2.17 on CounterFact for seeds 0/1. The first CounterFact deficit is substantial. Own-prompt retention agrees except CounterFact seed 1 (ePC 1.00, BP .99).
+**Three paired seeds, 12/12 evaluations.** ePC minus BP paraphrase-retention differences are −2.67/−2.00/+0.33 percentage points on zsRE and −24.17/−2.17/−17.50 on CounterFact for seeds 0/1/2. CounterFact deficits recur across the three seeds, with substantial variation; zsRE's third seed reverses the deficit. Own-prompt retention agrees except CounterFact seed 1 (ePC 1.00, BP .99).
 
-Ordinary-text fired positions on CounterFact are ePC/BP 185/256 for seed 0 and 720/660 for seed 1, out of 245,237 positions each. The second ePC seed has slightly greater mean loss and ES99 there, reversing seed 0's direction; a uniformly quieter or safer reader is not supported. zsRE firing remains lower in both available ePC seeds. Completed training-time ratios are 102.1× and 95.8× BP. A third seed can assess consistency within this recipe but cannot alone establish a systematic training-rule effect or generalization to new subject populations.
+Ordinary-text fired positions on CounterFact are ePC/BP 185/256, 720/660 and 353/149; zsRE is 0/18, 6/13 and 0/21, each out of 245,237 positions. CounterFact mean loss and ES99 directions reverse across seeds, so there is no uniformly quieter or safer reader. Completed training ratios are 102.1×, 95.8× and 96.7× BP. These seeds assess this recipe on one exposed population, not a systematic training-rule effect on new subjects.
 
-Evidence: [PC-reader report](../additional_work/PC-reader_report.md), including source receipts; 37× was an earlier profile forecast, not the completed seed-0 ratio.
+Evidence: `PC-reader`; [PC-reader report](../additional_work/PC-reader_report.md), including source receipts; 37× was an earlier profile forecast.
 
-## 26. What is Option R adding?
+## 26. What did Option R add?
 
-It tests learned versus random readers on realization 3, with five orders each on zsRE and CounterFact; currently four cells are complete and sixteen are pending.
-The stable-v0 class has one ceiling-stopped incomplete cell and nine deferred cells, and the four-realization sensitivity remains withheld until complete paired coverage exists.
+Realization 3 has all twenty learned/random cells complete: two datasets, five orders each. The stable-v0 class retains one ceiling-stopped incomplete cell and nine deferred cells. At 1,000 edits, realization-3 learned/random paraphrase retention is .969/.515 on zsRE and .6815/.106 on CounterFact.
 
-Evidence: [Option R report](../additional_work/R_report.md), DEC-080. No primary classifier is reissued.
+Across all four subject realizations, the learned-minus-random paraphrase difference is 44.08 percentage points on zsRE and 56.20 on CounterFact. The assumption-labelled t(3) intervals are [41.56,46.59] and [54.18,58.22] points. These are supplemental unadjusted sensitivity intervals, not a reissued primary classifier or established familywise guarantee. Learned own-prompt retention is lower; fidelity failures remain reported.
+
+Evidence: `R-extension`; [Option R report](../additional_work/R_report.md), DEC-080.
 
 ## 27. Can we generalize these results to production models?
 
@@ -198,3 +198,17 @@ The base is GPT-2 small (124M parameters); transfer of these findings to product
 The populations, memory sizes and perturbation geometry also limit transfer, so a larger-model study would be a new experiment.
 
 Evidence: `model-scale`; [assembled Stage-4 report](../R1_stage4_report.md).
+
+## 28. Did upper-layer interfaces help?
+
+All 24 cells are available, including six shared BP controls. Last-only writes leave the firing decision unchanged and change paraphrase retention by at most 0.67 percentage points, but raise mean signed ordinary-text loss by 2.64–4.37 times across the twelve paired comparisons. Upper-only reading loses CounterFact paraphrase retention in all three seeds: 3.17, 10.83 and 2.33 percentage points with all-site writes. Its seed 1 acquires 92.67 percent of CounterFact edits.
+
+That contradicts the simple hope that restricting this interface would preserve performance while reducing harm. It does not establish that lower layers are noise or test readers retrained specifically for restricted writes: all readers used the full-write training objective. Three seeds share one exposed subject realization; the .02 tolerance is descriptive, not a noninferiority test.
+
+Evidence: `AW-L`; [upper-layer report](../additional_work/AW-L_report.md).
+
+## 29. Did the upper-layer budget check work?
+
+No. The dispatch shell searched the wrong path for the projection and defaulted to zero. The actual saved projection was 17.98 process-hours, below its 40-hour gate; new AW-L receipts total 9.67 process-hours, with roughly 9.7 elapsed wall-hours. This retrospective result does not establish that the gate worked. The original evidence is preserved and the defect must be repaired before future reuse.
+
+Evidence: [upper-layer cost disclosure](../additional_work/AW-L_report.md); no experimental result was changed or rerun.

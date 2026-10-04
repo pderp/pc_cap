@@ -182,11 +182,11 @@
         "HT17-tails",
         "HT-readout"
       ],
-      "figure": "assets/presentation-materials/figures/tails_ht17/round61-seed1/frequency-severity-stage4.png",
+      "figure": "assets/presentation-materials/figures/tails_ht17/round63-complete/frequency-severity-stage4.png",
       "panels": [],
       "footer": "Frequency above 0.01 nat is not gate firing. Severity is conditional on exceeding that threshold.",
       "notes": "Same positions reused; window intervals do not cover subject or seed uncertainty.",
-      "figure_manifest": "assets/presentation-materials/figures/tails_ht17/round61-seed1/manifest.json",
+      "figure_manifest": "assets/presentation-materials/figures/tails_ht17/round63-complete/manifest.json",
       "requires_tail_gate": false
     },
     {
@@ -267,7 +267,7 @@
         "PC-fixed-v5",
         "PC-mechanism",
         "HT-readout",
-        "PC-reader-partial"
+        "PC-reader"
       ],
       "connections": false,
       "panels": [
@@ -297,7 +297,7 @@
         }
       ],
       "footer": "Same BP base, trained reader, gates, memory capacity and stream; fresh memory for each arm.",
-      "notes": "Separate reader training: 10/12 evaluations; 2 paired seeds; ~100\u00d7 BP cost. Third seed pending."
+      "notes": "Separate reader training: 12/12 evaluations; 3 paired seeds; ~100\u00d7 BP cost. CF paraphrase loss in all seeds."
     },
     {
       "number": "11",
@@ -352,7 +352,9 @@
         "HT13-corrected",
         "talk-scope",
         "model-scale",
-        "PC-reader-partial"
+        "PC-reader",
+        "R-extension",
+        "AW-L"
       ],
       "connections": false,
       "panels": [
@@ -368,8 +370,8 @@
           "title": "Predictive coding",
           "lines": [
             "Credit: harm/cost trade-offs",
-            "Reader: 2 seeds; ~100\u00d7 cost",
-            "THREE-SEED ANSWER PENDING"
+            "Reader: 3 seeds; ~100\u00d7 cost",
+            "CF PARAPHRASE LOSS: ALL SEEDS"
           ]
         },
         {
@@ -382,7 +384,7 @@
         }
       ],
       "footer": "270-cell snapshot: 392.42 process-hours, not elapsed GPU hours. PC costs reported separately.",
-      "notes": "GPT-2 small (124M): transfer to production scale unestablished. Experiment cutoff Oct 9; talk Oct 15."
+      "notes": "GPT-2 small (124M). GPU work complete Oct 4; review freeze Oct 9; talk Oct 15. Upper-layer results in backup."
     }
   ]
 }

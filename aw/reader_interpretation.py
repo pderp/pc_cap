@@ -61,9 +61,28 @@ def narrative(report):
             f"{max(-row[4] for row in rows):.2f} percentage points; the magnitude matters. "
         )
     for dataset in ("zsre", "counterfact"):
+        retention = [row[4] for row in rows if row[0] == dataset]
+        if retention:
+            text += (
+                f"On {dataset}, ePC paraphrase retention is lower in "
+                f"{sum(x < 0 for x in retention)}/{len(retention)} paired seeds; "
+                f"ePC−BP differences range from {min(retention):+.2f} to "
+                f"{max(retention):+.2f} percentage points. "
+            )
         differences = [row[6] - row[5] for row in rows if row[0] == dataset]
         if differences and min(differences) < 0 < max(differences):
             text += f"On {dataset}, the ePC-minus-BP firing direction reverses across seeds. "
+        for metric in ("mean_delta_nll", "es99_positive"):
+            differences = [
+                cells["epc", seed, dataset]["harm"]["capoff"][metric]
+                - cells["bp", seed, dataset]["harm"]["capoff"][metric]
+                for seed in seeds
+            ]
+            if differences:
+                text += (
+                    f"{dataset} {metric}, ePC−BP by seed ({', '.join(map(str, seeds))}): "
+                    + ", ".join(f"{x:+.7g}" for x in differences) + " nats. "
+                )
     if len(seeds) < 3:
         text += "The three-seed comparison remains partial. "
     text += (

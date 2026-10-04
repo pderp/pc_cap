@@ -1,9 +1,23 @@
 # Reproducing the supplemental experiments and presentation
 
-Capex · October 2, 2026 · REP-1. This supplements [REPRODUCE.md](REPRODUCE.md).
+Capex · updated October 4, 2026 · REP-1 / Round 63. This supplements [REPRODUCE.md](REPRODUCE.md).
 It describes **recomputing reports from saved measurements** separately from
 **running new GPU experiments**. The one-command refresh below performs only the
 former. Local JAX is the execution stack; no PyTorch or Colab is involved.
+
+## Completed-portfolio reproduction — October 4
+
+The latest delivered receipt is [round63-verified/refresh.json](../logs/additional_work/reproductions/round63-verified/refresh.json):
+all **16 steps completed in 282.12 seconds**, inputs unchanged, **198 output hashes**
+verified. Its [catalog](../logs/additional_work/reproductions/round63-verified/catalog.json)
+has **29 groups with PASS verification**, 6,392 source bindings and 89 cost entries.
+It covers PC-reader **12/12**, Option R **20 complete / 1 incomplete / 9 deferred**,
+AW-L **24/24** with six shared controls, and HT-17 **303 cells**. The new upper-layer
+figure and the revised scripts are included. The earlier REP-1 snapshots and cost
+notes below remain historical; use this receipt for the completed portfolio.
+Current canonical reports are `PC-reader/report-round63-final`,
+`R/report-round63-final`, `AW-L/report-round63-final`, and
+`HT-17/snapshot-20261004-complete` under `logs/additional_work/`.
 
 ## Working trees and required resources
 
@@ -333,7 +347,7 @@ dataset and fresh tag; use the recorded evaluation arguments/population in the
 pilot's bound aliases, including MQuAKE's v3b retention manifest. These saved
 populations differ from the main 245,237-position assay. KP-1 found no saved
 identity for the old drift memory, so a new assay is not an exact continuation.
-The optional expanded κ readout remains default no.
+The optional expanded κ readout is closed without execution under DEC-082.
 
 An explicit zsRE example for the new reader above is:
 
@@ -358,7 +372,7 @@ learning components and empirical extremes. Neither source integrity nor a fitte
 finite-range shape establishes active-inference action selection, an asymptotic
 tail class or a coupled-free-energy mechanism. Main Stage-4 GPT-2-small results
 do not establish production-scale transfer. Keep exposed populations, dependent
-orders, the two harm inventories, partial reader seeds and DEC-074b/080 omissions
+orders, the two harm inventories, reader seed dependence and DEC-074b/080 omissions
 visible. After new reader/Option R/AW-L results land, regenerate into new outputs,
 revise literal presentation claims, then repeat X25/X26 and the reviewer export.
-POST-1 and PRES-9 await the October 2 reviewer feedback.
+POST-1 and PRES-9 are complete under DEC-082; the optional κ readout is closed. All planned GPU studies finished by October 4. The Round 63 reader, Option R and AW-L reports supersede the initial snapshot inventories above. The refreshed figure step also generates the all-seed upper-layer retention/harm figure; no new fits are involved.

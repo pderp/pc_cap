@@ -305,6 +305,16 @@ Realization 3 adds reserved subjects for the unchanged learned and random reader
 ## Inventory, ceilings and charged attempts
 
 """
+    final = [x for x in r['sensitivity'] if x['checkpoint'] == 1000 and x['metric'] == 'RET-GS']
+    if len(final) == 2 and all(x['estimate'] is not None for x in final):
+        text += ('The four-realization learned-minus-random paraphrase-retention differences at '
+                 '1,000 edits are ' + '; '.join(
+                     f"{x['dataset']}: {100*x['estimate']:.2f} percentage points "
+                     f"(t(3) sensitivity interval {100*x['interval'][0]:.2f} to {100*x['interval'][1]:.2f})"
+                     for x in final) + '. These are assumption-labelled, unadjusted sensitivity '
+                 'intervals over four realization means, not a reissued registered classifier or '
+                 'familywise guarantee. Own-prompt retention and fidelity remain separate outcomes; '
+                 'the later tables retain their losses and benchmark failures.\n\n')
     text += rr.table(
         [
             "Dataset",
@@ -406,7 +416,7 @@ Realization 3 adds reserved subjects for the unchanged learned and random reader
         ],
     )
     text += f"Historical comparison source: `{r['historical_analysis']}`. The extension does not test PC credit or interventions developed from earlier populations. It supplies one additional subject realization, not extra independent evidence from every order/token.\n\n"
-    text += """Refresh after the owner's resumed queue finishes (new report directory):
+    text += """Reproduce the saved extension (new report directory):
 
 ```bash
 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \\

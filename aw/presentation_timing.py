@@ -110,7 +110,7 @@ SHORT[
     11
 ] = """Active inference gives us the proposed belief-and-action loop; autonomous audit selection remains future work. Predictive coding has measured retention, harm and cost trade-offs, with compute attribution still unresolved. Extreme-loss measurements now motivate a tested per-token mixture bound, alongside the unsuccessful kappa pilot.
 
-These are finite test populations, not proof of a heavy-tail family. The main run stopped at 270 cells; omitted comparisons stay unavailable. Reader-training replication now has two paired seeds; the three-seed comparison remains partial. Experiments end October 9 at 17:00 Eastern, leaving time for analysis and rehearsal before October 15."""
+These are finite test populations, not proof of a heavy-tail family. The main run stopped at 270 cells; omitted comparisons stay unavailable. All three reader-training seeds are complete. Option R repeats the learned/random paraphrase contrast; last-only writes increase harm in the upper-layer study. Planned GPU work finished October 4; the October 9 freeze review and October 15 talk remain ahead."""
 BUDGETS[15][2] -= 10
 BUDGETS[15][7] += 10
 
@@ -159,7 +159,7 @@ BUDGETS[25][10] -= 5
 # PC-16a: distinguish reader training from fixed-reader acquisition credit.
 SHORT[9] = """The fixed-v5 transfer check changes acquisition credit on the same BP-trained reader. SE-E minus SE-A paraphrase retention is {{v1.zsre.ret_gs}} on zsRE and {{v1.counterfact.ret_gs}} on CounterFact. Harm and cost must accompany those small descriptive differences; this is one exposed subject realization.
 
-A separate study trains the reader itself with predictive coding. Ten of twelve evaluations are available, pairing two seeds. ePC paraphrase retention is lower in each completed pair, with a notably larger deficit in one CounterFact seed. Own-prompt retention is nearly equal. Ordinary-text firing and harm vary by seed: ePC is quieter in the first CounterFact pair but fires more in the second. Training costs about one hundred times BP. The third seed is pending; we have no three-seed or systematic-superiority conclusion."""
+A separate study trains the reader itself with predictive coding. All twelve evaluations pair three seeds. ePC has lower CounterFact paraphrase retention in every seed and lower zsRE retention in two of three. Own-prompt retention is nearly equal. Ordinary-text harm is lower on zsRE but mixed across CounterFact seeds. Training costs about one hundred times BP. This is within-recipe evidence on one exposed subject population, without a superiority or safer-learning claim."""
 
 
 def stamp(seconds):
@@ -204,7 +204,7 @@ def main(*, refresh=False, log_dir=None):
         text = (
             f"""# {minutes}-minute speaking script — draft for charlie
 
-Updated 2026-10-02 by Capex from the twelve slide drafts. **Author review and
+Updated 2026-10-04 by Capex from the twelve slide drafts. **Author review and
 rehearsal required; this is a duration option, not a confirmed conference slot.**
 Clock includes slide changes and pointing pauses, excludes audience Q&A. Read
 only the paragraphs under “Say”; source/cut notes and tables are not spoken.

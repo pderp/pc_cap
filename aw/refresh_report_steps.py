@@ -231,6 +231,7 @@ def figures(out, assets):
         pc_depth_figure,
         presentation_retention,
         tail_class_plot,
+        upper_layer_figure,
     )
     from aw import pc_result_figures as pc
 
@@ -259,6 +260,7 @@ def figures(out, assets):
     presentation_retention.render(assets / "retention")
     cli(tail_class_plot, "--report", out / "ht17/report.json", "--out", assets / "ht17")
     cli(ht17_slides, "--report", out / "ht17/report.json", "--out", assets / "ht17-slide")
+    upper_layer_figure.render(out / "aw-l/report.json", assets / "upper-layer")
     kappa.ROOT = RedirectRoot(
         {
             "logs": assets,
@@ -313,8 +315,10 @@ def deck(out, assets):
     save(source / "diagram-specs.json", specs)
     mapping = {
         "logs/additional_work/PRES-8": out / "timing",
-        "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json": paths["HT-17"],
-        "logs/additional_work/PC-reader/report-round61-final/report.json": paths["PC-reader"],
+        "logs/additional_work/HT-17/snapshot-20261004-complete/report.json": paths["HT-17"],
+        "logs/additional_work/PC-reader/report-round63-final/report.json": paths["PC-reader"],
+        "logs/additional_work/R/report-round63-final/report.json": paths["Option R"],
+        "logs/additional_work/AW-L/report-round63-final/report.json": paths["AW-L"],
         "docs/presentation/numbers_to_say.md": out / "documents/numbers_to_say.md",
         "docs/presentation/rehearsal.md": out / "documents/rehearsal.md",
         "docs/R1_stage4_report.md": out / "documents/R1_stage4_report.md",
@@ -324,9 +328,11 @@ def deck(out, assets):
         mapping[f"docs/additional_work/{name}_report.md"] = out / f"documents/{name}_report.md"
     # Only these two parent-relative figure paths are hardcoded by the legacy pack.
     parent_map = {
-        "assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.png": assets
+        "assets/presentation-materials/figures/upper_layer/round63-complete/upper-layer-tradeoffs.png": assets
+        / "upper-layer/upper-layer-tradeoffs.png",
+        "assets/presentation-materials/figures/tails_ht17/snapshot-20261004-complete/survival_thresholds.png": assets
         / "ht17/survival_thresholds.png",
-        "assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.pdf": assets
+        "assets/presentation-materials/figures/tails_ht17/snapshot-20261004-complete/survival_thresholds.pdf": assets
         / "ht17/survival_thresholds.pdf",
         "assets/presentation-materials/figures/pc_v0/controls/depth-retention-harm-cost.png": assets
         / "pc-controls/depth-retention-harm-cost.png",

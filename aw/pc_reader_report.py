@@ -12,7 +12,7 @@ from pathlib import Path
 from aw import reader_results as rr
 from aw.reader_interpretation import narrative
 
-DEFAULT_TAIL = rr.ROOT / "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json"
+DEFAULT_TAIL = rr.ROOT / "logs/additional_work/HT-17/snapshot-20261004-complete/report.json"
 DEFAULT_HISTORY = rr.ROOT / "logs/additional_work/PC-v1/report-4-20260927/report.json"
 
 
@@ -287,7 +287,7 @@ The earlier **37×** ratio in lead-queue item 144 was a ten-update profile proje
             for c in r["tail_rows"]
         ],
     )
-    text += f"""The full [HT-17 report](HT-17_report.md) retains threshold checks, joint-window intervals and invalid fits. This snapshot matches {len(r["tail_rows"])} of {r["completed_evaluations"]} completed reader evaluations; any exceptions are listed above. Rerun into a **new** directory when remaining seeds finish:
+    text += f"""The full [HT-17 report](HT-17_report.md) retains threshold checks, joint-window intervals and invalid fits. This snapshot matches {len(r["tail_rows"])} of {r["completed_evaluations"]} completed reader evaluations; any exceptions are listed above. Reproduce from the saved results into a **new** directory:
 
 ```bash
 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \\

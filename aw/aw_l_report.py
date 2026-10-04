@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from aw import aw_l_interpretation as interpretation
 from aw import reader_results as rr
 
 READ = {"all": [1, 2, 3], "upper": [2, 3]}
@@ -174,6 +175,8 @@ def build(root, shared, *, positions=245237):
             costs[c["path"]] = c
     sources[str(Path(__file__).resolve())] = rr.sha(Path(__file__))
     sources[str(Path(rr.__file__).resolve())] = rr.sha(Path(rr.__file__))
+    sources[str(Path(interpretation.__file__).resolve())] = rr.sha(Path(interpretation.__file__))
+    historical_gate = interpretation.cost_gate(rr.ROOT, sources) if root.resolve() == (rr.ROOT / 'results/additional_work/AW-L') else None
     return dict(
         task="AW-L6",
         status="complete" if all(c["status"] == "complete" for c in cells) else "partial",
@@ -187,6 +190,8 @@ def build(root, shared, *, positions=245237):
         cells=cells,
         effects=effects,
         effect_spread=spread,
+        write_comparisons=interpretation.comparisons(cells),
+        historical_cost_gate=historical_gate,
         tolerance=tolerance,
         development_profiles=profiles,
         cost_inventory=list(costs.values()),
@@ -208,7 +213,9 @@ Numerical source and hashes: `{output}/report.json`.
 
 Read all taps {{1,2,3}} or upper taps {{2,3}}; write all sites {{1,2,3}} or last site {{3}}. Three paired training seeds; each reader serves both write arms with separately acquired fresh memory. All training uses the full-write objective. Same exposed realization 0/order 100 at 300 edits. Lower layers are not assumed to be noise. Training seeds are not subject realizations.
 
-No complete four-arm seed block is available unless shown below. Available full-read/full-write controls are the identical PC-reader BP artifacts; they are reused observations, not additional replication. The three full-read trainings also share the PC-reader controls, as allowed in AW-L5. New factorial results cannot be inferred from those controls alone.
+Only complete four-arm seed blocks enter the contrasts below. Full-read/full-write controls are the identical PC-reader BP artifacts; they are reused observations, not additional replication. The three full-read trainings also share the PC-reader controls, as allowed in AW-L5.
+
+{interpretation.narrative(r)}
 
 ## Training and reuse
 
@@ -269,7 +276,8 @@ No complete four-arm seed block is available unless shown below. Available full-
         ],
     )
     text += f"## Cost and development availability\n\nUnique attributed process time: {r['attributed_process_seconds'] / 3600:.4f} hours; new work in the AW-L namespace: {r['incremental_aw_l_process_seconds'] / 3600:.4f} hours. Shared PC-reader cost is not charged a second time across portfolios. All dense allocated delta bytes, including zeroed inactive sites, remain charged. Cost components are subsets of parent receipts.\n\n{len(r['development_profiles'])} AW-L development evaluations are available in this snapshot. The AW-L directory currently has no delivered development outputs if this count is zero; the report does not invent them or substitute profile scores into the 300-edit table. The parser is tested on a synthetic development/production tree; development rows and their different denominators are retained separately in JSON when they arrive.\n\n"
-    text += """Refresh after the queued cells land (new directory each time):
+    text += interpretation.cost_note(r)
+    text += """Reproduce the saved results (new directory each time):
 
 ```bash
 JAX_PLATFORMS=cpu CUDA_VISIBLE_DEVICES= PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 \\

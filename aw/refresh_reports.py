@@ -33,7 +33,7 @@ DEPENDENCIES = {
     "pc-reader": ("ht17",),
     "option-r": (),
     "aw-l": (),
-    "figures": ("pc-default", "pc-controls", "aw-b", "kappa", "ht13", "ht17"),
+    "figures": ("pc-default", "pc-controls", "aw-b", "kappa", "ht13", "ht17", "aw-l"),
     "deck": ("stage4", "figures", "pc-reader", "option-r", "aw-l"),
     "audit": ("deck", "pc-settings"),
 }

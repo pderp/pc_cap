@@ -148,7 +148,7 @@ def export(output):
     for suffix in ("pdf", "png"):
         original = (
             ROOT.parent
-            / f"assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.{suffix}"
+            / f"assets/presentation-materials/figures/tails_ht17/snapshot-20261004-complete/survival_thresholds.{suffix}"
         )
         target = out / f"ht17-survival-backup.{suffix}"
         target.write_bytes(original.read_bytes())
@@ -158,10 +158,10 @@ def export(output):
         *backup_sources,
         *SOURCE.glob("*.json"),
         *SOURCE.glob("*.md"),
-        ROOT / "logs/additional_work/HT-17/snapshot-20261002-seed1/report.json",
+        ROOT / "logs/additional_work/HT-17/snapshot-20261004-complete/report.json",
         ROOT / "docs/additional_work/HT-17_report.md",
         ROOT.parent
-        / "assets/presentation-materials/figures/tails_ht17/snapshot-20261002-seed1/survival_thresholds.png",
+        / "assets/presentation-materials/figures/tails_ht17/snapshot-20261004-complete/survival_thresholds.png",
         Path(__file__),
         ROOT / "aw/presentation_prepare.py",
         ROOT / "aw/presentation_pc.py",

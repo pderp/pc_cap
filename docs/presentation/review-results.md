@@ -1,57 +1,40 @@
-# Research results for the October 2 review
+# Research results — completed supplemental portfolio, October 4
 
-**Current reading guide: October 2, Round 62.** Start with
-[2 October update: read first](../friday-10.02-review/UPDATE-2026-10-02.md), which
-summarizes HT-17, the two completed ePC seeds and the unchanged Option R queue.
-Then read the [review outcome](../friday-10.02-review/OUTCOME-2026-10-02.md):
-no changes requested to the remaining experiments or framing; the optional κ
-readout is closed, and the coupled-objective proposal is post-conference.
-The canonical reader/tail reports below now include both completed ePC seeds.
-Numerical qualifications to the update: own-prompt retention is nearly equal,
-not identical (CounterFact seed 1: ePC 1.00, BP .99), and the seed-0 CounterFact
-paraphrase deficit is substantial, at 24.17 percentage points.
-Then read [Capstan's October 1 primer](../friday-10.02-review/README.md), the
-[reviewer feedback and response](../friday-10.02-review/feedback-MMK-nelson-entropy.md)
-and [Capex's scientific review](../friday-10.02-review/feedback-MMK-nelson-entropy-capex.md).
-The dated reports below govern quantitative claims; older planning estimates and
-the prototype tail-class appendix are superseded by these measured results.
+**Current results as of October 4, Round 63.** The planned GPU work is complete;
+charlie's October 9 freeze review remains. The [October 2 update](../friday-10.02-review/UPDATE-2026-10-02.md)
+and [review outcome](../friday-10.02-review/OUTCOME-2026-10-02.md) are dated meeting records.
+The completed reports below supersede their pending-result descriptions, while
+DEC-082's unchanged programme and post-conference collaboration decision stand.
 
-- **Heavy tails:** [HT-17](../additional_work/HT-17_report.md) describes finite-range
-  differences across 301 available cells; ten reader evaluations are included. Learned-reader generalized-Pareto fits
-  add little held-out predictive value over an exponential; stable-v0 zsRE differs.
-  Neither result identifies an asymptotic class, infinite variance or entropy
-  growth. Frequency, conditional severity and fit failures must travel together.
-- **Bounded correction:** [AW-B](../additional_work/AW-B_report.md) reduces conditional
-  severity above .01 nat from 1.619 to .542 nats on zsRE and 1.925 to .581 on
-  CounterFact: about **one-third of the original severity**, with nearly unchanged
-  harmful-change frequency. The one-nat ceiling is an analytic per-token guarantee
-  at a shared prefix; it is not a whole-answer or KL guarantee. CounterFact KL
-  remains above .001 and paraphrase retention has a small cost.
-- **Training the reader with PC:** [the partial reader report](../additional_work/PC-reader_report.md)
-  contains three BP seeds and ePC seeds 0–1: **10 of 12 evaluations, two paired seeds**.
-  ePC paraphrase retention is lower in each completed pair; differences vary
-  markedly by seed. CounterFact firing reverses from ePC/BP 185/256 positions
-  to 720/660. Completed training costs **102.1× and 95.8× BP**; 37× was a forecast.
-  Neither uniform quietness nor a systematic training-rule effect is established.
-  Seed 2 remains pending.
-- **Remaining GPU work:** ePC seed 2 precedes the DEC-080 Option R resume
-  (learned/random only), then the upper-layer factorial. [Option R](../additional_work/R_report.md)
-  has four complete cells, one incomplete ceiling stop, nine v0 cells deferred
-  and sixteen pending. No full extension or upper-layer result is available.
-- **Interpretation:** DEC-081/081a retain the active-inference programme, corrected
-  predictive-coding tests and empirical extremes as the three themes. The κ pilot
-  is a bounded deformation of surprisal; a calibrated coupled-free-energy agent
-  remains proposed. [Approved talk wording](../friday-10.02-review/talk-text-B-C-D.md)
-  and the [coupled-objective note](../additional_work/coupled_objective_note.md)
-  distinguish those claims.
-- **Scope and cutoff:** the main Stage-4 base is GPT-2 small (124M parameters);
-  transfer to production-scale models is unestablished. The DEC-074b halt leaves
-  S1_literal CounterFact and the registered extension unavailable; the separate
-  Option R study also lacks its deferred v0 class. Supplemental streams are exposed,
-  orders are dependent, and training seeds are not subject realizations. See the
-  [Stage-4 limitations](../R1_stage4_report.md) and [October 9 freeze checklist](../freeze_checklist_20261009.md).
-  No new fits start on or after October 6. Experiments end October 9 at 17:00 EDT;
-  the presentation is October 15.
+- **Reader training:** [PC-reader](../additional_work/PC-reader_report.md) has all
+  twelve evaluations and three paired seeds. ePC−BP paraphrase differences in
+  percentage points are zsRE −2.67/−2.00/+0.33 and CounterFact −24.17/−2.17/−17.50.
+  Own-prompt retention is nearly equal. ePC lowers ordinary-text harm on zsRE;
+  CounterFact directions are mixed. Training costs 95.8–102.1× BP. This isolates
+  training with adjoint acquisition, distinct from the fixed-reader credit study.
+- **Additional subjects:** [Option R](../additional_work/R_report.md) closes with
+  twenty learned/random cells complete, one v0 cell incomplete by ceiling and
+  nine v0 cells deferred. Four-realization learned−random paraphrase differences
+  are +44.08/+56.20 points (zsRE/CounterFact). Assumption-labelled t(3) sensitivity
+  intervals do not reissue the primary classifier. Own-prompt and fidelity costs remain.
+- **Upper-layer interface:** [AW-L](../additional_work/AW-L_report.md) contains all
+  twenty-four cells, including six shared BP controls. Last-only writes raise
+  mean ordinary-text loss 2.64–4.37× with at most 0.67-point paraphrase change.
+  Upper-tap readers lose CounterFact paraphrases in all seeds. The cost-gate
+  parsing defect is disclosed; the actual projection and cost were below budget.
+- **Heavy tails:** [HT-17](../additional_work/HT-17_report.md) now covers 303 cells,
+  including all twelve reader evaluations; Option R/AW-L harm is reported in
+  their own reports, not newly inserted into this tail-fit population. These
+  are finite-range shapes, not asymptotic classes, temperature, W(N) or infinite variance.
+- **Bounded correction:** [AW-B](../additional_work/AW-B_report.md) still reduces
+  conditional severity above .01 nat to about one-third, with nearly unchanged
+  harmful-change frequency. Its one-nat guarantee applies per token at the same
+  prefix, not to whole answers or KL. CounterFact KL and a small retention cost remain.
+- **Scientific scope:** active inference remains a proposed autonomous policy loop;
+  corrected predictive coding is tested with adverse/null results retained;
+  extremes are measured prediction-loss changes. GPT-2 small (124M), exposed
+  supplemental populations, dependent orders and DEC-074b/080 omissions remain
+  explicit. See the [freeze checklist](../freeze_checklist_20261009.md).
 
 ## Completed default predictive-coding treatment
 
@@ -585,4 +568,4 @@ Learned-v5 illustrative shape intervals include zero, with little held-out predi
 
 AW-B reduces conditional severity 1.619→.542 and 1.925→.581 nats, with almost unchanged harmful-change frequency. Its one-nat shared-prefix ceiling is analytic, independent of failed tail fits. The κ pilot deformed one surprisal; it did not implement Nelson’s calibrated entropy or coupled free energy. The active-inference policy loop remains proposed.
 
-DEC-080 defers nine unrun Option R stable-v0 cells; the earlier ceiling-killed cell remains incomplete. Sixteen learned/random cells await resumption. DEC-081/081a adds CPU analysis and conservative presentation wording, not another GPU experiment. PC-reader replication remains partial (three BP seeds, two ePC seeds; 10/12 evaluations); no three-seed rule comparison is yet available.
+DEC-080 leaves nine Option R stable-v0 cells deferred and one earlier ceiling-killed cell incomplete. All twenty learned/random cells are complete. PC-reader replication has all twelve evaluations and three paired seeds; the upper-layer factorial has all twenty-four cells. These October 4 reports supersede the earlier pending counts. DEC-081/081a supplies conservative interpretation, while DEC-082 closes the optional κ readout.

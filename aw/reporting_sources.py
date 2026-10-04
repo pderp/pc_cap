@@ -16,10 +16,11 @@ class Sources(PCSources):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.archives = {}
-        for name in ('round58-source-archive', 'round61-source-archive'):
+        for name in ('round58-source-archive', 'round61-source-archive', 'round63-source-archive'):
             manifest = self.root / 'docs/tasks' / name / 'manifest.json'
             if manifest.exists():
-                self.archives.update(json.loads(manifest.read_bytes()))
+                for path, record in json.loads(manifest.read_bytes()).items():
+                    self.archives[path, record['sha256']] = record
                 self.bindings[str(manifest)] = sha(manifest)
 
     def resolve(self, name, expected):
@@ -30,8 +31,8 @@ class Sources(PCSources):
         except ValueError:
             if not path.is_relative_to(self.root):
                 raise
-            record = self.archives.get(str(path.relative_to(self.root)))
-            if record is None or record['sha256'] != expected:
+            record = self.archives.get((str(path.relative_to(self.root)), expected))
+            if record is None:
                 raise
             archived = self.root / record['archive']
             if sha(archived) != expected:
