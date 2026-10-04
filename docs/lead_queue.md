@@ -1759,3 +1759,12 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     answer. All generations are the saved checkpoint records; source hashes in the JSON. Counts over the 30: zsRE
     paraphrase ✓ learned 30, random 11, v0 family 1; CounterFact learned 21, random 5, v0 family 0; MQuAKE learned 15,
     random 0, stable 0. Spelling: you asked for "Captsan-README.md"; I used `Capstan-README.md`.
+
+165. (2026-10-04, 06:50 EDT) **Second example set added to `assets/support-information/`:** `README-random-sample.md`
+    and `examples-{zsre,counterfact,mquake}-random.md` (+ `examples-random.json`): 30 stream positions per dataset drawn
+    uniformly at random with a fixed seed (20261004) from positions 31 to the end, drawn once before looking at outcomes;
+    each item's heading shows its position. Compared with the first-30 set: zsRE v0-family own-prompt retention 9–13/30
+    instead of 1/30 (study-wide 0.66), their paraphrase retention 2–4/30 instead of 1/30; random reader paraphrases 17/30
+    (11/30); learned reader 30/30 on both in both sets. CounterFact unchanged in picture (learned 21/30, random 5/30,
+    v0 family 0/30). MQuAKE learned 24/30 paraphrases (15/30 among the first 30; study-wide 0.70). The Capstan-README
+    now points to the second set. Generator `aw/support_examples.py --mode random`.
