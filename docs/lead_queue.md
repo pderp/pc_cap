@@ -1747,3 +1747,15 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     **Question (not blocking):** the deck exists as twelve SVG slides, PNG figures and the two timed scripts, but not as
     one file you can present from. I can assemble a PDF now; if you want PowerPoint (with the 15-minute script as speaker
     notes) say so and I will build a .pptx as well.
+
+164. (2026-10-04, 06:30 EDT) **Support information written: `assets/support-information/Capstan-README.md` plus
+    `examples-zsre.md`, `examples-counterfact.md`, `examples-mquake.md` and `examples.json`** (assets commit; generator
+    `aw/support_examples.py`). For each dataset, realization 0, order 100: the first 30 edits of the stream with prompt,
+    new target (and the previously true answer for CounterFact/MQuAKE), paraphrase, the frozen base's own answer (CPU
+    decode with the sealed Stage-4 base; equals the stored CounterFact teacher continuation exactly), and for every
+    condition that ran there (8 on zsRE, 7 on CounterFact, 3 on MQuAKE) the answer right after the edit, at the end of
+    the stream on the own prompt, and on the paraphrase, each with its ✓/✗ from the registered scorer; then five locality
+    prompts, five near-miss cases, three unseen prompts and the revision cases with cap-off reference beside each cap's
+    answer. All generations are the saved checkpoint records; source hashes in the JSON. Counts over the 30: zsRE
+    paraphrase ✓ learned 30, random 11, v0 family 1; CounterFact learned 21, random 5, v0 family 0; MQuAKE learned 15,
+    random 0, stable 0. Spelling: you asked for "Captsan-README.md"; I used `Capstan-README.md`.
