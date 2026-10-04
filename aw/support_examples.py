@@ -101,19 +101,26 @@ def base_decoder():
     return answer
 
 
-def build(dataset: str, n: int, answer) -> dict:
+def build(dataset: str, n: int, answer, mode: str = "first", seed: int = 0, skip: int = 30) -> dict:
     payload = payload_for(dataset)
     pj = json.loads(payload.read_bytes())
     items = {it["item_id"]: it for it in pj["items"]}
     cells = cells_for(dataset)
     cps = {c: json.loads(p.read_bytes()) for c, p in cells.items()}
     primary = cps["R1_learned_ff"]
-    order = [h["item_id"] for h in sorted(primary["history"], key=lambda h: h["index"])][:n]
+    full_order = [h["item_id"] for h in sorted(primary["history"], key=lambda h: h["index"])]
+    if mode == "first":
+        positions = list(range(n))
+    else:
+        import random
+
+        positions = sorted(random.Random(seed).sample(range(skip, len(full_order)), n))
+    order = [full_order[i] for i in positions]
     rows = []
     for k, iid in enumerate(order, 1):
         it = items[iid]
         para = (it.get("paraphrases") or [None])[0]
-        row = dict(index=k, item_id=iid, prompt=it["prompt"], target=it["answer"], aliases=it.get("aliases", []),
+        row = dict(index=k, stream_position=positions[k - 1] + 1, item_id=iid, prompt=it["prompt"], target=it["answer"], aliases=it.get("aliases", []),
                    paraphrase=para, target_true=(it.get("target_true", {}).get("str") if isinstance(it.get("target_true"), dict) else it.get("target_true")),
                    base_prompt=answer(it["prompt"]), base_paraphrase=(answer(para) if para else None),
                    stored_teacher_generation=it.get("teacher_generation"), conditions={})
@@ -171,13 +178,21 @@ def build(dataset: str, n: int, answer) -> dict:
                              conditions=per_condition("revision", i, lambda r: dict(after=[(q["generated"], q["new_exact"], q["old_answer_reappeared"]) for q in r["after_revision_queries"]]))))
     sources = {str(payload): sha(payload), BASE + "/model.safetensors": sha(Path(BASE) / "model.safetensors")}
     sources.update({str(p): sha(p) for p in cells.values()})
-    return dict(dataset=dataset, realization=0, order=100, checkpoint=FINAL[dataset], conditions=list(cells), labels={c: LABEL[c] for c in cells},
+    return dict(dataset=dataset, realization=0, order=100, checkpoint=FINAL[dataset], mode=mode, seed=seed, skip=skip,
+                stream_positions=[p + 1 for p in positions], stream_length=len(full_order), conditions=list(cells), labels={c: LABEL[c] for c in cells},
                 items=rows, locality=locality, near_miss=near, unseen=unseen, revision=revision, sources_sha256=sources)
 
 
 def render_dataset(d: dict) -> str:
     ds, conds = d["dataset"], d["conditions"]
-    L = [f"# {ds}: {len(d['items'])} edits from realization 0, order 100 (checkpoint {d['checkpoint']})", ""]
+    which = (f"the first {len(d['items'])} edits" if d.get("mode", "first") == "first" else
+             f"{len(d['items'])} edits drawn at random (seed {d['seed']}) from stream positions {d['skip'] + 1}–{d['stream_length']}")
+    L = [f"# {ds}: {which} of realization 0, order 100 (checkpoint {d['checkpoint']})", ""]
+    if d.get("mode") == "random":
+        L.append("Stream positions shown: " + ", ".join(str(p) for p in d["stream_positions"]) + ". Each item's heading gives its position; "
+                 "the end-of-stream columns are the same checkpoint as in the first-30 files, so a late item has had fewer later edits "
+                 "stored on top of it than an early one.")
+        L.append("")
     L.append("Read `Capstan-README.md` first for what each column means. Answers are the exact greedy generations saved in the "
              "cell checkpoints (≤ 32 tokens, stopped at newline/EOS); `⏎` marks a newline, `…` a cut for display. ✓ = scored a "
              "success by the registered alias match (ES / RET-ES / RET-GS), ✗ = not. The **base** rows are the frozen GPT-2's own "
@@ -197,7 +212,8 @@ def render_dataset(d: dict) -> str:
     L.append("## The items")
     L.append("")
     for r in d["items"]:
-        L.append(f"### {r['index']}. `{r['item_id']}` — \"{r['prompt']}\"")
+        pos = f" (stream position {r['stream_position']})" if d.get("mode") == "random" else ""
+        L.append(f"### {r['index']}. `{r['item_id']}`{pos} — \"{r['prompt']}\"")
         L.append("")
         tt = f" · previously true answer: **{r['target_true']}**" if r.get("target_true") else ""
         L.append(f"- **new target:** {r['target']}{tt}")
@@ -283,7 +299,9 @@ The one thing computed for this document is the frozen base's own answer to each
   stream order), then five locality prompts, five near-miss cases, three unseen prompts and the revision cases, each with
   every condition that ran at that coordinate.
 - `examples.json`: the same content, machine-readable, with source hashes.
-- Generator: `pc_cap/aw/support_examples.py`.
+- **Second set, without the oldest-memories bias:** `README-random-sample.md` and `examples-<dataset>-random.md`, {n}
+  edits per dataset drawn at random (fixed seed) from the rest of the stream, with each item's stream position shown.
+- Generator: `pc_cap/aw/support_examples.py` (`--mode first` and `--mode random`).
 
 ## How to read an item
 
@@ -347,25 +365,56 @@ loss changes on 245,237 validation positions) is not shown here; see the HT-17 r
 """
 
 
+README_RANDOM = """# A second set of examples: {n} edits drawn at random from the rest of each stream (Capstan, {date})
+
+The first-30 files (`examples-<dataset>.md`) show the oldest memories of the stream, which biases the end-of-stream
+columns against the caps that forget: by checkpoint 1,000 those items have had 970 later edits stored on top of them.
+This set removes that bias. For each dataset, {n} stream positions were drawn uniformly at random, without replacement,
+from positions {skip}+1 to the end of the stream (1,000 for zsRE and CounterFact, 300 for MQuAKE), with a fixed seed
+({seed}) so the draw is reproducible and was made once, before looking at any outcome. Everything else is identical to
+the first set: same cells (realization 0, order 100), same checkpoint, same conditions, same scorer, same base-answer
+decode. Files: `examples-zsre-random.md`, `examples-counterfact-random.md`, `examples-mquake-random.md`,
+`examples-random.json`. Each item's heading gives its stream position, so you can see how many later edits each memory
+had to survive.
+
+What the position mix changes (compare each file's counts table with the first-30 file): on zsRE the v0-family caps'
+end-of-stream own-prompt retention rises from about 1/30 to 9–13/30 (study-wide mean 0.66 over all 1,000 edits; later
+positions have had fewer edits stored on top of them), and their paraphrase retention from 1/30 to 2–4/30; the random
+reader's paraphrase retention is 17/30 (first set 11/30; study-wide 0.52); the learned reader keeps all 30 own prompts
+and all 30 paraphrases in both sets. On CounterFact the two sets give the same picture (learned 21/30 paraphrases,
+random 5/30, v0 family 0/30, own-prompt retention complete for every cap). On MQuAKE the learned reader's paraphrase
+retention is 24/30 in this set against 15/30 among the first 30 (study-wide 0.70); the random reader and stable cap
+retain none in either. These remain hand-readable samples, not the study's estimates.
+"""
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--out", required=True)
     ap.add_argument("--n", type=int, default=30)
     ap.add_argument("--datasets", nargs="+", default=["zsre", "counterfact", "mquake"])
+    ap.add_argument("--mode", choices=("first", "random"), default="first")
+    ap.add_argument("--seed", type=int, default=20261004)
+    ap.add_argument("--skip", type=int, default=30, help="random mode: exclude the first SKIP stream positions")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     answer = base_decoder()
     all_ = {}
     for ds in a.datasets:
-        d = build(ds, a.n, answer)
+        d = build(ds, a.n, answer, mode=a.mode, seed=a.seed, skip=a.skip)
         all_[ds] = d
-        (out / f"examples-{ds}.md").write_text(render_dataset(d))
+        suffix = "" if a.mode == "first" else "-random"
+        (out / f"examples-{ds}{suffix}.md").write_text(render_dataset(d))
         print(ds, len(d["items"]), "items;", len(d["conditions"]), "conditions")
-    (out / "examples.json").write_text(json.dumps(all_, ensure_ascii=False, indent=1))
     import datetime as dt
 
-    (out / "Capstan-README.md").write_text(README.format(date=dt.date.today().isoformat(), n=a.n, cps="1,000 (300 for MQuAKE)"))
+    if a.mode == "first":
+        (out / "examples.json").write_text(json.dumps(all_, ensure_ascii=False, indent=1))
+        (out / "Capstan-README.md").write_text(README.format(date=dt.date.today().isoformat(), n=a.n, cps="1,000 (300 for MQuAKE)"))
+    else:
+        (out / "examples-random.json").write_text(json.dumps(all_, ensure_ascii=False, indent=1))
+        (out / "README-random-sample.md").write_text(README_RANDOM.format(date=dt.date.today().isoformat(), n=a.n, seed=a.seed, skip=a.skip))
     print("written to", out)
 
 
