@@ -12,7 +12,6 @@ import statistics
 from pathlib import Path
 
 from aw.pc_v0_report import ROOT, compare, expected_cells, sha
-from aw.reporting_sources import Sources
 
 REGISTER = ROOT / "docs/presentation/deck_v3/pc-result-sources.json"
 
@@ -32,16 +31,7 @@ def verify_sources(report, bindings):
         if not path.is_absolute():
             path = ROOT / path
         if bindings.get(str(path)) != identity and sha(path) != identity:
-            # Publication-only code cleanups preserve the exact original bytes.
-            # Record the archive actually checked; never bind changed live bytes
-            # to an old hash or relax runtime experiment source validation.
-            historical = Sources()
-            try:
-                historical.resolve(path, identity)
-            except (OSError, ValueError) as exc:
-                raise ValueError("PC presentation source differs: " + str(path)) from exc
-            bindings.update(historical.bindings)
-            continue
+            raise ValueError("PC presentation source differs: " + str(path))
         bindings[str(path)] = identity
 
 

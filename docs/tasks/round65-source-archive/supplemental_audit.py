@@ -30,7 +30,6 @@ REPORTS = {
     'Option R': 'R/report-round63-final/report.json',
     'AW-L': 'AW-L/report-round63-final/report.json',
     'HT-17': 'HT-17/snapshot-20261004-complete/report.json',
-    'Supplemental assembly': 'final-assembly-20261005/assembly.json',
 }
 HASH = re.compile(r'^[0-9a-f]{64}$')
 
@@ -135,33 +134,6 @@ class Audit:
                                matches_reported_completion=complete == expected)
             if not independent['matches_reported_cost'] or not independent['matches_reported_completion']:
                 failures.append(dict(reason='Option R enclosing costs/completion differ', checks=independent))
-        if isinstance(reported, dict) and reported.get('task') == 'FIN-1':
-            try:
-                from aw.additional_work_assembly import copied_table, receipt_total
-
-                original = reported['accounting']
-                recounted = receipt_total(ROOT, original['receipts'])
-                cost_matches = math.isclose(recounted['known_process_seconds'],
-                                           original['known_process_seconds'], abs_tol=1e-7)
-                groups_match = recounted['groups'] == original['groups']
-                rows_match = all(a['seconds'] == b['seconds'] and a['status'] == b['status']
-                                 for a, b in zip(recounted['receipts'], original['receipts'], strict=True))
-                document = Path(reported['document']['path']).read_text()
-                tables_match = True
-                for selection in reported['table_selections']:
-                    source = reported['source_bindings'][selection['source']]['path']
-                    block, _ = copied_table(Path(source).read_text(), selection['header'], selection['occurrence'])
-                    tables_match &= (hashlib.sha256(block.encode()).hexdigest() == selection['table_sha256']
-                                     and block in document)
-                gaps_valid = all(row['seconds'] is None for row in original['unknown_attempts'])
-                gaps_valid &= original['lower_bound'] == bool(original['unknown_attempts'])
-                independent = dict(receipt_total_matches=cost_matches, groups_match=groups_match,
-                                   receipt_values_and_statuses_match=rows_match,
-                                   copied_tables_match=tables_match, unknown_durations_preserved=gaps_valid)
-                if not all(independent.values()):
-                    failures.append(dict(reason='FIN-1 copied tables or accounting differ', checks=independent))
-            except (OSError, ValueError, KeyError, TypeError) as exc:
-                failures.append(dict(reason=f'FIN-1 validation: {exc}'))
         return dict(name=name, independent_checks=independent, source=str(path), source_sha256=self.digest(path),
                     status='FAIL' if failures else 'PASS', bindings=checks, receipts=receipts,
                     discrepancies=failures, metadata_files=[str(p) for p in documents])

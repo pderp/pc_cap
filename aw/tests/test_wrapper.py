@@ -12,6 +12,8 @@ os.environ.setdefault("JAX_PLATFORMS", "cpu")
 import numpy as np  # noqa: E402
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+from tests.revision_v1.tiny_base import CFG, TinyBase  # noqa: E402
+
 from aw import bounded as B  # noqa: E402
 from aw.wrapper import BoundedCap  # noqa: E402
 from pccap.harness.ledger import Ledger  # noqa: E402
@@ -20,7 +22,6 @@ from pccap.revision_v1.contracts import SupportExample  # noqa: E402
 from pccap.revision_v1.controller import ControllerConfig  # noqa: E402
 from pccap.revision_v1.learner import RevisionCap, RevisionConfig  # noqa: E402
 from pccap.revision_v1.reader import ReaderConfig  # noqa: E402
-from tests.revision_v1.tiny_base import CFG, TinyBase  # noqa: E402
 
 RC = ReaderConfig(d=CFG.d, width=8, hidden=8, d_code=6, top_k=2)
 CC = ControllerConfig(d=CFG.d, width=8, d_code=6, hidden=8, A=0.3, bank_scales=(1.0, 1.0, 1.0))

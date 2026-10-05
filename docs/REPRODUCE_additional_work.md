@@ -19,6 +19,19 @@ Current canonical reports are `PC-reader/report-round63-final`,
 `R/report-round63-final`, `AW-L/report-round63-final`, and
 `HT-17/snapshot-20261004-complete` under `logs/additional_work/`.
 
+The [consolidated supplemental report](additional_work_report.md) (FIN-1, October 5)
+copies the completed tables and provides a nonoverlapping cost ledger, including
+profiles and stopped runs. Its receipt-backed process total is a lower bound:
+three initial fixed-v5 harm-launch logs lack separate preserved durations. To
+reassemble it without rescoring, choose two fresh destinations:
+
+```bash
+../venv/bin/python -m aw.additional_work_assembly --output logs/additional_work/reproductions/NEW-assembly --document logs/additional_work/reproductions/NEW-report.md
+```
+
+X25's default inventory includes `final-assembly-20261005/assembly.json`. The full
+October-6 freeze refresh remains separate from this October-5 assembly.
+
 ## Working trees and required resources
 
 Use `/home/derp/cap/pc_cap` as the working directory, with its populated sibling
@@ -302,6 +315,24 @@ same-recipe PC-reader BP artifacts for `read all`; do not charge/retrain them
 again. The linked owner document gives the full commands, matching development
 profiles, two read × two write × two dataset × three seed design and 48-hour
 portfolio ceiling. No factorial result is inferred from those reused controls.
+
+**AW-L5 cost-gate record (LINT-1, October 5).** The original shell check searched
+for `*.json` inside a path that was actually an **extensionless JSON file**;
+that failed check remains part of the historical record. Read the exact file and
+the exact `projected_process_hours` field with the repaired CPU-only helper:
+
+```bash
+../venv/bin/python -m aw.cost_gate --input logs/additional_work/AW-L/portfolio-cost-20261003 --gate-hours 40
+```
+
+The preserved projection is 17.983384104727545 process-hours and passes the stated
+40-hour gate. This retrospective validation does not turn the failed historical
+shell check into a successful prelaunch check. The gate is distinct from the
+48-hour portfolio ceiling. Exit codes are 0 for pass (including equality), 1 for
+over gate, and 2 for invalid/missing input. Missing or duplicate keys, strings,
+booleans, nonfinite values and nonpositive durations are rejected; no fallback
+field, suffix search or GPU launch is used. For a new authorized projection,
+supply its exact file and an explicitly approved gate.
 
 For example, this new upper-read/last-write seed-0 cell needs its own matching
 development profile (repeat evaluation profiles for both write masks/datasets):

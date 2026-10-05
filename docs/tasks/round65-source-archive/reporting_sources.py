@@ -16,7 +16,7 @@ class Sources(PCSources):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.archives = {}
-        for name in ('round58-source-archive', 'round61-source-archive', 'round63-source-archive', 'round65-source-archive'):
+        for name in ('round58-source-archive', 'round61-source-archive', 'round63-source-archive'):
             manifest = self.root / 'docs/tasks' / name / 'manifest.json'
             if manifest.exists():
                 for path, record in json.loads(manifest.read_bytes()).items():

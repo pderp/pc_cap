@@ -20,9 +20,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 import numpy as np
-from scripts import r1_68f_full_validation as fv
 
 from aw import bounded
+from scripts import r1_68f_full_validation as fv
 
 Config = tuple[str, float | None]
 FIELDS = fv.FIELDS

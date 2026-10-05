@@ -149,7 +149,7 @@ def main() -> None:
     conditions = sorted({r["condition"] for r in table.values()})
     colours = {c: plt.cm.tab10(i % 10) for i, c in enumerate(conditions)}
     seen_cond, seen_ds = set(), set()
-    for _k, row in table.items():
+    for k, row in table.items():
         x = row["exceedance"]["0.01"]
         if x <= 0:
             continue
@@ -173,7 +173,7 @@ def main() -> None:
     # markdown table
     lines = ["| condition | dataset | cells | changed positions | P(>0.01) | P(>1) | P(>5) | max (nats) | ES99+ | half-mass positions |",
              "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
-    for _k, r in table.items():
+    for k, r in table.items():
         e = r["exceedance"]
         lines.append(f'| {LABEL.get(r["condition"], r["condition"])} | {r["dataset"]} | {r["cells"]} | {100*r["changed_fraction"]:.3f} % | '
                      f'{100*e["0.01"]:.4f} % | {100*e["1.0"]:.4f} % | {100*e["5.0"]:.4f} % | {r["max"]:.2f} | {r["es99_positive"]:.3f} | '

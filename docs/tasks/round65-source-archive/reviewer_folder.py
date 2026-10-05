@@ -14,29 +14,6 @@ DESTINATION = ROOT.parent / "assets/presentation-materials/review-data"
 LINK = re.compile(r"(!?\[[^\]]*\]\()([^\s)]+)(\))")
 
 
-def public_sources():
-    """Actual repository paths; local existence is checked, publication is not presumed."""
-    repository = "https://github.com/pderp/pc_cap/blob/master/"
-    assets = "https://github.com/pderp/cap-assets/blob/master/"
-    pairs = [(repository + path, ROOT / path) for path in (
-        "docs/additional_work_report.md",
-        "docs/additional_work/PC-reader_report.md",
-        "docs/additional_work/R_report.md",
-        "docs/additional_work/AW-L_report.md",
-        "logs/additional_work/HT-17/snapshot-20261004-complete/report.md",
-        "docs/friday-10.02-review/OUTCOME-2026-10-02.md",
-    )]
-    pairs.extend((assets + path, ROOT.parent / "assets" / path) for path in (
-        "support-information/Capstan-README.md",
-        "support-information/README-random-sample.md",
-        "presentation-materials/colleague_deck_20261004/active-inference-in-the-extremes-colleague-talk-20261004.pdf",
-    ))
-    for _, path in pairs:
-        if not path.is_file():
-            raise FileNotFoundError(path)
-    return dict(pairs)
-
-
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -62,7 +39,6 @@ def export(output):
     output = Path(output)
     if output.exists():
         raise FileExistsError("choose a new refresh record directory")
-    public = public_sources()
     rendered = []
     for name, exported in (
         ("review-results.md", "results.md"),
@@ -89,34 +65,10 @@ def export(output):
             )
         )
     current = DESTINATION / "CURRENT.md"
-    current.write_text("""# Research review — current entry points, updated October 5
+    current.write_text("""# Research review — current entry points, October 4
 
-## Results complete (Oct 4)
-
-The GPU portfolio is closed (DEC-083). Start with the consolidated report, then
-follow the detailed completed studies. These links use the public repository paths;
-new documents become available there after the lead commits and pushes them.
-
-- [Consolidated supplemental programme: results, limitations and measured costs](https://github.com/pderp/pc_cap/blob/master/docs/additional_work_report.md)
-- [PC-trained reader: all twelve evaluations, three paired training seeds](https://github.com/pderp/pc_cap/blob/master/docs/additional_work/PC-reader_report.md)
-- [Option R: twenty complete, one ceiling-stopped and nine deferred cells](https://github.com/pderp/pc_cap/blob/master/docs/additional_work/R_report.md)
-- [Upper-layer 2×2: twenty-four cells, including six shared controls](https://github.com/pderp/pc_cap/blob/master/docs/additional_work/AW-L_report.md)
-- [HT-17 complete snapshot: 303 cells, frequency, severity and finite-range fits](https://github.com/pderp/pc_cap/blob/master/logs/additional_work/HT-17/snapshot-20261004-complete/report.md)
-
-## Worked examples and colleague presentation
-
-- [Worked examples: inputs, requested edits, paraphrases and saved answers](https://github.com/pderp/cap-assets/blob/master/support-information/Capstan-README.md)
-- [Second example set: fixed-seed random sample from stream positions 31 onward](https://github.com/pderp/cap-assets/blob/master/support-information/README-random-sample.md)
-- [Long colleague-talk PDF: approximately 35–40 minutes](https://github.com/pderp/cap-assets/blob/master/presentation-materials/colleague_deck_20261004/active-inference-in-the-extremes-colleague-talk-20261004.pdf)
-
-The first example set shows the oldest thirty edits; the second samples later
-positions. Neither sample replaces the study-wide estimates. The longer talk
-is for rehearsal and colleague feedback before the shorter conference presentation.
-
-## Historical review and supporting documents
-
-The October 2 documents remain dated review records; their then-pending experiments
-are not the current inventory.
+Completed-result reports are current through October 4 (Round 63).
+The October 2 meeting update and outcome remain dated review records; use the current results link for the completed portfolio.
 
 - [2 October meeting update (historical snapshot)](../../../pc_cap/docs/friday-10.02-review/UPDATE-2026-10-02.md)
 - [2 October review outcome: no changes requested](https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md)
@@ -132,17 +84,17 @@ The review is closed: proceed with the current experiments and framing; the opti
 PC-reader has twelve evaluations and three paired seeds; Option R has twenty complete, one incomplete and nine deferred cells; the upper-layer factorial has twenty-four cells including six shared controls. No further GPU fits are planned. The October 9 freeze review remains.
 """)
     _, checked = rebase(current.read_text(), current, current)
-    urls = {href for _, href, _ in LINK.findall(current.read_text()) if href.startswith("https:")}
-    if urls != set(public):
-        raise ValueError("public navigation links differ from checked local sources")
+    # The public navigation URL has a local source whose bytes we can verify.
+    outcome = ROOT / "docs/friday-10.02-review/OUTCOME-2026-10-02.md"
+    outcome_url = "https://github.com/pderp/pc_cap/blob/master/docs/friday-10.02-review/OUTCOME-2026-10-02.md"
     record = dict(
-        task="Round65-DOC-3",
+        task="Round63-PRES",
         records=records,
         navigation=str(current),
         navigation_sha256=sha(current),
         navigation_links=checked,
-        linked_documents_sha256={str(p): sha(p) for p in [*checked, *public.values()]},
-        public_link_local_sources={url: str(path) for url, path in public.items()},
+        linked_documents_sha256={str(p): sha(p) for p in [*checked, outcome]},
+        public_link_local_sources={outcome_url: str(outcome)},
         folder_files_sha256={str(p): sha(p) for p in sorted(DESTINATION.iterdir()) if p.is_file()},
         code_sha256=sha(__file__),
         gpu_seconds=0,

@@ -7,8 +7,9 @@ import numpy as np
 
 os.environ.setdefault("JAX_PLATFORMS", "cpu")
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from aw import scoring as S  # noqa: E402
 from scripts import r1_68f_full_validation as fv  # noqa: E402
+
+from aw import scoring as S  # noqa: E402
 
 RNG = np.random.default_rng(7)
 

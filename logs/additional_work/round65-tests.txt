@@ -1,0 +1,37 @@
+............................................................F........... [ 26%]
+........................................................................ [ 52%]
+........................................................................ [ 79%]
+.........................................................                [100%]
+=================================== FAILURES ===================================
+____ test_followup_slots_keep_dataset_kl_and_partial_control_qualifications ____
+
+    def test_followup_slots_keep_dataset_kl_and_partial_control_qualifications():
+        slots = {}
+        report = json.loads(
+            (ROOT / "logs/additional_work/AW-B/report-20260929/report.json").read_bytes()
+        )
+>       assert values("aw_b", report, slots, {}).startswith("measured")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+aw/tests/test_followup_results.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+aw/presentation_followup.py:15: in values
+    verify_sources(report, bindings)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+report = {'schema': 'aw-b-report-v1', 'status': 'complete', 'calibration': {'command': 'calibrate', 'cells': {'zsre': {'harm': ...7944117144233], 'key': 'mixture:0.367879', 'category': 'bound', 'eligible': True, ...}, 'comparator': None}, ...}, ...}
+bindings = {'/home/derp/cap/pc_cap/docs/tasks/PC-9-candidate/sources.json': 'a37959b19646a5f70af9d2c7a2b9a235ce457119f58a1fd988f8...nal_work/AW-B/calibration-20260929/cost.json': 'fe836c9bf60aa9ef62b8449b98e4d1b66b236e43a8142ee1f2ec3db6a94a5338', ...}
+
+    def verify_sources(report, bindings):
+        for name, identity in report.get("sources_sha256", {}).items():
+            path = Path(name)
+            if not path.is_absolute():
+                path = ROOT / path
+            if bindings.get(str(path)) != identity and sha(path) != identity:
+>               raise ValueError("PC presentation source differs: " + str(path))
+E               ValueError: PC presentation source differs: /home/derp/cap/pc_cap/aw/scoring.py
+
+aw/presentation_pc.py:34: ValueError
+=========================== short test summary info ============================
+FAILED aw/tests/test_followup_results.py::test_followup_slots_keep_dataset_kl_and_partial_control_qualifications
+1 failed, 272 passed in 98.55s (0:01:38)
