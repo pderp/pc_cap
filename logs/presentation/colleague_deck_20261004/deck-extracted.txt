@@ -1,0 +1,639 @@
+OPENING
+
+
+Learning to correct without breaking everything else
+
+
+
+ A frozen language model, an adaptive cap, and the consequences
+ of rare errors
+
+
+ charlie derr · work with Matthew Iklé
+
+ 35–40 minute colleague version
+
+
+
+ Active inference / Predictive coding / Heavy-tailed distributions
+
+
+
+Active Inference in the Extremes · colleague rehearsal · results through 4 October 2026
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                           01 / 25
+OPENING
+
+
+Three questions, three different kinds of evidence
+
+
+
+    Active inference                              Predictive coding              Heavy-tailed
+                                                                                 distributions
+    What should the agent do                      How should a correction
+    next?                                         learn?                         How do consequences
+                                                                                 accumulate?
+    Beliefs, preferences and                      Iterative inference of error
+    information seeking                           signals                        Frequency, severity and tail
+                                                                                 shape
+    Policy loop: proposed                         Learning comparisons:
+                                                  measured                       Finite-range distributions:
+                                                                                 measured
+
+
+
+
+The same testbed connects the questions; it does not make them interchangeable.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                     02 / 25
+ACTIVE INFERENCE
+
+
+Active inference starts with a loop
+
+
+
+      Observe                                                Infer                             Choose
+
+      A correction, question                                 Update beliefs about              Act, abstain, or ask
+      or unexpected failure                                  what needs correcting             an informative question
+
+
+
+
+                                          Preferences + consequences + uncertainty
+
+                                          PROPOSED: expected-free-energy policy over outcomes and
+                                          information value
+
+
+
+Our investigators choose the audits today. An autonomous policy would have to choose them itself.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                               03 / 25
+THE TESTBED
+
+
+The cap changes an activation, not the frozen base weights
+
+
+
+     Environment                                  Adaptive cap                 Frozen transformer
+
+     Supplied edits                               Fact memory                  Predict next token
+     New questions                                Learned reader + null gate   Read internal features
+     Ordinary text                                Bounded residual writes      Base weights fixed
+
+
+
+
+   A null decision leaves the base prediction in place.
+   An interface is implemented; a formal Markov blanket is not established.
+
+
+
+The main system uses frozen GPT-2 small (124M parameters), with reads and writes at blocks 4, 8 and 12.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                   04 / 25
+THE TESTBED
+
+
+One edit has several tests to pass
+1,000 edits for zsRE / CounterFact; 300 for MQuAKE. The first record has 999 / 299 subsequent edits.
+
+
+
+
+    Teach                                         Return later                                 Look elsewhere
+
+    Prompt + target answer                        At the end of the edit stream                Unrelated and neighboring
+                                                                                               prompts
+    Immediate answer                              Original prompt / paraphrase
+                                                                                               Ordinary-text probabilities
+    ES: edit success                              RET-ES / RET-GS
+                                                                                               Preservation and harm
+
+
+
+
+Acquiring an answer, remembering it, generalizing it and preserving other behavior are separate outcomes.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                                   05 / 25
+WORKED EXAMPLE
+
+
+A recorded correction, after 1,000 edits
+zsRE · realization 0 / order 100 · first stored item · 1,000-edit endpoint
+
+
+
+ Teach: What league was Sporting Canamy? → Tercera División de México
+
+ Paraphrase: What league did Sporting Canamy join with?
+
+
+  At the 1,000-edit endpoint                      Original prompt                     Paraphrase
+
+
+  Learned reader                                  “Tercera División de México”        “Tercera División de México”
+
+  Random reader                                   “Tercera División de México”        “CD Atlético Baleares”
+
+  Stable v0                                       [empty answer]                      “forward”
+
+
+  All three acquired the target immediately. Cap-free original answer: empty (newline).
+
+The learned reader retrieves this fact from a paraphrase; the other two conditions give different answers.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                                06 / 25
+WORKED EXAMPLE
+
+
+A memory can survive while its paraphrase fails
+CounterFact · realization 0 / order 100 · 1,000 edits · deliberately counterfactual targets
+
+
+
+    PARAPHRASE SUCCESS                                                      PARAPHRASE FAILURE
+    Teach: James Howell speaks                                              Teach: Gol & Gincu The Series was created in the
+    Target: Spanish (stored old: English)                                   country of
+
+    Ask: Cataraqui is also the name of a municipal                          Target: Philippines (stored old: Malaysia)
+    electoral district. The language used by James                          Ask: He completed a Ph.D. there in 1954. Gol &
+    Howell is                                                               Gincu The Series originated in
+    Paraphrase output: “Spanish”                                            Paraphrase output: “the late 1960s as a
+    Cap fired: yes                                                          series of books by the late Dr. John Gol. The…
+                                                                            [excerpt]”
+                                                                            Cap fired: no
+
+
+
+
+Both taught targets survive on the original prompt. One paraphrase fires the learned cap; the other does not.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                                    07 / 25
+WORKED EXAMPLE
+
+
+Preserving behavior can mean preserving a bad answer
+zsRE · realization 0 / order 100 · saved endpoint probes at the 1,000-edit checkpoint
+
+
+
+ Teach: Where was Frits Poelman from? → New Zealand
+ Ask nearby: Where was George Pitt Morison from?
+
+  Condition                                       Neighboring answer                    Preservation score
+
+
+  Base (no cap)                                   [empty answer]                        Reference
+
+  Learned reader                                  [empty answer]                        Preserved
+
+  Random reader                                   “New Zealand”                         Changed
+
+  Stable v0                                       “Paris”                               Changed
+
+ Locality example: “what is the name of fred flintstones wife” → “?” both with and without cap.
+
+
+An unchanged answer establishes preservation on that prompt; it does not establish factual correctness.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                              08 / 25
+EVIDENCE
+
+
+What the main comparison holds fixed
+
+
+ Learned reader · random reader + gate · stable v0 cap
+
+  Dataset                                         What is supplied                           Endpoint
+
+
+  zsRE                                            Question → supplied factual answer         1,000 edits
+
+
+  CounterFact                                     Sentence stem → counterfactual target      1,000 edits
+
+
+  MQuAKE                                          Single-hop fact from MQuAKE data           300 edits;
+                                                                                             descriptive
+
+  The 270-cell snapshot includes further live-cap, matched-update and continued-base controls.
+
+Three subject realizations × five orders. Reordering the same facts does not create five new populations.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                      09 / 25
+EVIDENCE
+
+
+The learned reader retains more paraphrases
+
+
+
+
+Learned-reader means: 96.0% zsRE · 67.8% CounterFact · 71.6% MQuAKE (at 300 edits).
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                       10 / 25
+EXTREMES
+
+
+A changed probability can reveal harm before the answer
+changes
+
+   Same text prefix, same observed next token
+
+
+      ILLUSTRATIVE arithmetic                                ACTUAL main-study benchmark
+
+      Base probability p₀ = 0.10                             45 / 45 learned-reader cells
+      Cap probability pcap = 0.01                            exceed mean KL 0.001.
+      Loss increase = log(10) ≈ 2.30 nats                    Their data-integrity checks pass.
+
+
+
+   Observed-token loss and whole-distribution KL answer different questions.
+
+
+
+Δ = log(p₀ / pcap) for the observed next token, at the same prefix. Positive Δ means worse prediction.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                          11 / 25
+EXTREMES
+
+
+How often something goes wrong is not how badly it goes
+wrong
+
+
+
+
+Same 245,237 ordinary-text positions per cell. Harm threshold: Δ > 0.01 nat; gate firing is a different count.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                        12 / 25
+EXTREMES
+
+
+Rare large errors motivate tail analysis; they do not prove
+a tail law
+zsRE · realization 0 / order 100 · 1,000 edits · saved fits above 0.01 nat
+
+
+
+
+Learned v5: little held-out gain over an exponential. Stable v0 on zsRE: a more pronounced finite-range tail.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                       13 / 25
+EXTREMES
+
+
+A simple mixture gives a real per-token bound
+
+
+
+        Frozen base                                                                 Corrected model
+
+        37% base distribution                                                       63% cap distribution
+        ρ = e⁻¹ ≈ 0.368                                                             1 − ρ ≈ 0.632
+
+
+
+
+                                                  Probability mixture
+
+                                                  q = ρp₀ + (1 − ρ)pcap
+                                                  Every token retains a floor of ρp₀.
+
+
+At a shared prefix, q ≥ ρp₀. Therefore log(p₀/q) ≤ −log ρ = 1 nat when ρ = e⁻¹.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                            14 / 25
+EXTREMES
+
+
+The mixture reduced severity while largely retaining the
+edits
+
+
+
+
+Ten exposed memories pass the declared rule. Conditional severity falls to roughly one-third; frequency changes
+little.
+charlie derr · colleague rehearsal · 4 Oct 2026                                                     15 / 25
+PREDICTIVE CODING
+
+
+Predictive coding: infer errors before choosing an update
+
+
+
+     Adjoint credit · SE-A                                   Error inference · SE-E
+
+     Differentiate the task loss                             Set temporary errors e = 0
+     Take a negative normalized direction                    Minimize E(e) = ½Σ‖e‖² + task loss
+     Apply the bounded memory update                         Normalize inferred site errors
+
+
+
+
+      Same target, fixed existing writes, same bounded update
+
+      8 settling steps at η = 0.1; 9 forward + 9 reverse evaluations including the terminal diagnostic.
+
+
+Both paths feed the same bounded acquisition update. Our error inference uses JAX differentiation.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                      16 / 25
+PREDICTIVE CODING
+
+
+A repaired energy and a useful one-step sanity check
+
+
+
+    Corrected objective                                      First step from e = 0
+
+    E(e) = ½Σ‖e‖² + task loss                                e₁ = −η × adjoint
+
+    Existing writes stay fixed during inference.             Normalization removes η > 0.
+
+    Old penalty used e + w.                                  Deeper settling can change direction.
+
+
+
+
+The long Stage-4 feedforward run did not use the defective PC credit rule. The PC results here use the correction.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                       17 / 25
+PREDICTIVE CODING
+
+
+More settling bought memory retention, with costs
+
+
+
+
+Legacy 50M base, v0 live cap; zsRE at 1,000 edits. Three realizations, order 100; exposed populations.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                      18 / 25
+PREDICTIVE CODING
+
+
+Changing credit on the working reader gave small, mixed
+effects
+
+ Same reader; only the acquisition credit changes
+
+  SE-E minus adjoint                              zsRE                        CounterFact
+
+
+  Paraphrase retention                            0.00 percentage points      −0.33 percentage points
+
+
+  Positive-harm ES99                              −0.01397 nats               +0.01123 nats
+
+
+
+
+  Stream totals: adjoint 604.6 s → error inference 776.7 s. Separate harm readout: 5,004 s.
+
+Fixed BP-trained v5 reader; fresh memories; 300 edits. Four cells, one exposed subject realization per dataset.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                      19 / 25
+PREDICTIVE CODING
+
+
+Training the reader with PC was much more expensive
+
+
+
+
+Three paired training seeds, same exposed subjects; acquisition is adjoint in BOTH arms. Completed: 12/12
+evaluations.
+charlie derr · colleague rehearsal · 4 Oct 2026                                                    20 / 25
+ARCHITECTURE
+
+
+Restricting the cap to upper layers did not remove the
+harm
+
+
+
+
+Last-site-only writes increased mean loss 2.64–4.37× in all 12 write pairs, with little paraphrase change.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                        21 / 25
+ACTIVE INFERENCE
+
+
+The next agent could choose which failure to investigate
+
+
+
+     Available evidence                           PROPOSED policy                    Choose one audit
+
+     Retained corrections                         Beliefs + preferences              Original prompt?
+     Wrong-memory retrieval                       Action / observation               New paraphrase?
+     Rare ordinary-text losses                    model                              Nearby unedited fact?
+                                                  Information value and
+                                                  cost
+
+
+
+           Coupled-objective collaboration: first specify the probability model
+
+           Modeled variables · constraints · weighting / escort distribution · gradients · explicit baseline
+
+
+
+Proposed experiment: policy-selected audits versus fixed audits, with the same audit and compute budget.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                         22 / 25
+WHERE WE ARE
+
+
+The experimental portfolio is closed; the story is still being
+refined
+
+
+    Completed evidence                            Practical limits             Before Binghamton
+
+    270-cell main snapshot                        Small models; limited        Review fixed evidence
+                                                  populations
+    PC credit + reader studies                                                 Choose the essential story
+                                                  Some controls closed by
+    Mixture, tails and upper                      resource rule                Rehearse the 15-minute
+    layers                                                                     version
+                                                  Main snapshot: 392.42
+                                                  process-hours
+
+
+
+
+Experiments completed or explicitly closed by 4 October. Review freeze: 9 October, 17:00 EDT. Talk: 15 October.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                     23 / 25
+TAKEAWAYS
+
+
+Three takeaways to carry into the conference
+
+
+
+    Active inference                              Predictive coding              Extremes
+
+    A testbed for selective                       Measured learning-rule         Means miss consequential
+    correction                                    trade-offs                     structure
+
+    Autonomous audit policy                       No general advantage in this   Mixture bounds per-token
+    remains open                                  recipe                         loss
+
+
+
+
+The scientific contribution is a measured trade-off among useful correction, unintended harm and learning cost.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                     24 / 25
+COLLEAGUE FEEDBACK
+
+
+Help choose the fifteen-minute story
+
+
+
+    Keep                                          Clarify                       Cut or move
+
+    Which example or graph                        Where did the explanation     What belongs in Q&A?
+    stayed with you?                              lose you?
+                                                                                Which detail can the short
+    What would you tell                           Which claim needs more        talk omit?
+    someone tomorrow?                             evidence?
+
+
+
+
+Please give slide numbers: one to keep, one to clarify, and one to move to questions.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                   25 / 25
+BACKUP
+
+
+MQuAKE: a single-hop editing example
+Realization 0 / order 100 · 300 edits · deliberately counterfactual targets; no multi-hop test
+
+
+
+    PARAPHRASE SUCCESS                                                      PARAPHRASE FAILURE
+    Teach: The type of music that Marion Brown plays is                     Teach: Bettino Ricasoli is affiliated with the religion
+    Target: West Coast hip hop (stored old: jazz)                           of
+
+    Ask: What type of music does Marion Brown play?                         Target: Methodism (stored old: Catholic
+                                                                            Church)
+    Paraphrase output: “West Coast hip hop”
+                                                                            Ask: Which religion is Bettino Ricasoli affiliated
+    Cap fired: yes
+                                                                            with?
+                                                                            Paraphrase output: [empty answer]
+                                                                            Cap fired: yes
+
+
+
+
+Same realization 0 / order 100; 300-edit endpoint. A fired cap can still fail to produce the target.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                                        Backup 1 / 5
+BACKUP
+
+
+The risk summaries answer different questions
+
+
+  Quantity                                        Definition / question
+
+
+  Signed mean Δ                                   Average log(p₀/pcap); benefits remain negative
+
+  Frequency / severity                            P(Δ > u) / E[Δ | Δ > u], here u = 0.01 nat
+
+  ES99+                                           Fractional mean of worst 1% of max(Δ, 0), all positions
+
+  Mean KL                                         Average KL(p₀ ‖ pcap) over next-token distributions
+
+  Maximum                                         Largest observed Δ; not an unseen-event guarantee
+
+
+
+
+The token-position inventory is paired and dependent. None of these quantities turns tokens into subject
+replicates.
+charlie derr · colleague rehearsal · 4 Oct 2026                                                             Backup 2 / 5
+BACKUP
+
+
+What the extra PC controls do and do not settle
+
+
+
+    Random direction                                       Additional-update adjoint
+
+    3 immediate successes / 993 edits                      12 cells / 6 complete pairs
+
+    One attempted random stream                            About 53–58% of offered operations used
+
+    Resource stop; no final retention claim                Direction / effective compute unresolved
+
+
+
+
+No equal-realized-compute superiority claim follows from an allowance that the comparator did not spend.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                    Backup 3 / 5
+BACKUP
+
+
+A fourth subject draw supports the learned–random
+contrast
+
+  Fourth realization                              Learned RET-GS               Random RET-GS
+
+
+  zsRE                                            96.9%                        51.5%
+
+
+  CounterFact                                     68.15%                       10.6%
+
+
+
+
+  Four-draw contrast: zsRE +44.1 pp; CounterFact +56.2 pp. No new primary decision rule.
+
+Supplemental sensitivity analysis. Deferred v0 cells stay absent; the original confirmatory classifier is unchanged.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                        Backup 4 / 5
+BACKUP
+
+
+Source map and the submitted programme
+
+
+
+    Core evidence                                 Learning experiments       Research programme
+
+    R1_stage4_report.md                           PC-v0 / PC-v1 reports      July submitted abstract
+
+    HT-17_report.md                               PC-reader_report.md        Presentation brief, 26
+                                                                             September
+    Capstan's                                     AW-L_report.md +
+    support-information                           AW-B_report.md             Coupled collaboration
+    examples                                                                 proposal
+
+
+
+
+Full source paths, example identities and hashes accompany the deck. No new experiment was run to prepare it.
+
+charlie derr · colleague rehearsal · 4 Oct 2026                                                   Backup 5 / 5
+

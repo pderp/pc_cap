@@ -1,0 +1,627 @@
+[
+  {
+    "title": "Learning to correct without breaking everything else",
+    "section": "Opening",
+    "seconds": 60,
+    "kind": "cover",
+    "takeaway": "Active Inference in the Extremes · colleague rehearsal · results through 4 October 2026",
+    "sources": [
+      "brief",
+      "short_deck"
+    ],
+    "notes": "Our question is simple to state: can a system learn a correction without breaking things it already does?\nThe longer-term ambition is an agent that can also decide when to intervene, when to hold back, and what\nto investigate next. That brings together the three subjects of the conference session: active inference,\npredictive coding, and heavy-tailed distributions.\n\nToday I want to show you enough of the machinery and the actual outputs to judge the story for yourselves.\nThis is the longer colleague version of a talk I will give in Binghamton on October 15. As we go, please\nremember one example or result you would keep in a fifteen-minute version, and one place where the\nexplanation loses you. I will pause twice for quick reactions and leave the broader discussion until the end.",
+    "subtitle": "A frozen language model, an adaptive cap, and the consequences of rare errors",
+    "author": "charlie derr · work with Matthew Iklé",
+    "tag": "35–40 minute colleague version"
+  },
+  {
+    "title": "Three questions, three different kinds of evidence",
+    "section": "Opening",
+    "seconds": 75,
+    "kind": "cards",
+    "takeaway": "The same testbed connects the questions; it does not make them interchangeable.",
+    "sources": [
+      "brief",
+      "mapping"
+    ],
+    "notes": "Here is the route through the talk. Active inference asks what an agent should do next, given what it\nbelieves, what it wants, and what it might learn. Predictive coding asks how prediction errors can guide\nupdates within a system. Heavy-tail analysis asks about the distribution of consequences, especially\nuncommon large ones that a mean can hide.\n\nOur evidence is at different stages for those three questions. We have a working correction testbed.\nWe have experiments that change the learning rule and measure the resulting trade-offs. We also have\nsaved probability distributions that let us examine rare harmful changes. The autonomous action-selection\nloop remains a proposal. Making that distinction helps us say what we have learned without treating the\nmotivation as a completed result. I will first make the testbed concrete, then show the extremes, then\nthe predictive-coding results, and finally reconnect them to the proposed agent.",
+    "cards": [
+      [
+        "Active inference",
+        "What should the agent do next?",
+        "Beliefs, preferences and information seeking",
+        "Policy loop: proposed"
+      ],
+      [
+        "Predictive coding",
+        "How should a correction learn?",
+        "Iterative inference of error signals",
+        "Learning comparisons: measured"
+      ],
+      [
+        "Heavy-tailed distributions",
+        "How do consequences accumulate?",
+        "Frequency, severity and tail shape",
+        "Finite-range distributions: measured"
+      ]
+    ]
+  },
+  {
+    "title": "Active inference starts with a loop",
+    "section": "Active inference",
+    "seconds": 100,
+    "kind": "diagram",
+    "takeaway": "Our investigators choose the audits today. An autonomous policy would have to choose them itself.",
+    "sources": [
+      "brief",
+      "mapping",
+      "proposal"
+    ],
+    "notes": "Imagine an agent maintaining beliefs about a changing world. An observation can lead it to revise those\nbeliefs. An action can change the world or reveal information about it. Some outcomes matter more than\nothers, so preferences belong in the model as well. Active inference brings those pieces into a common\nframework for inference and policy selection. The proposal compares policies by expected free energy,\nwith preferred consequences and information value under an explicit probability model. Prediction-error\nlearning can be one component, but it does not by itself supply the whole loop.\n\nIn our setting, someone supplies a correction. The system can store it and decide whether to use it when\na new question arrives. A future agent might additionally decide which question to test next: another\nparaphrase, a nearby fact, or an ordinary-text context where a correction could do damage. That action\nwould buy information at some cost. The proposed policy would need an explicit probability model,\npreferences, and a way to compare information value with consequences. We have not implemented that\npolicy. The experiments I am about to show provide a place to ask whether it would be useful.",
+    "diagram": "active_loop"
+  },
+  {
+    "title": "The cap changes an activation, not the frozen base weights",
+    "section": "The testbed",
+    "seconds": 100,
+    "kind": "diagram",
+    "takeaway": "The main system uses frozen GPT-2 small (124M parameters), with reads and writes at blocks 4, 8 and 12.",
+    "sources": [
+      "mapping",
+      "stage4"
+    ],
+    "notes": "A language model maps the text so far into probabilities for the next token. Its internal activations\npass through a sequence of transformer blocks. We keep the main model's learned weights fixed, and\nplace an adaptive correction system, which we call a cap, around a few of those internal sites.\n\nThe cap stores records for the supplied facts. A trained reader compares the current query with memory,\nand a gate can choose no correction at all. When a record is selected, bounded residual vectors are added\nat the write sites. The model then continues computing its next-token distribution. A residual is simply\nan added correction to an existing activation; we are not replacing the entire transformer.\n\nThe attraction is a separation between a stable prior and adaptable memory. The difficulty is that a\nsmall local intervention can still have consequences downstream. Freezing the weights prevents one kind\nof change; it does not guarantee unchanged predictions. The diagrams in our abstract call these two\ninterfaces blankets. Here they are software interfaces; the required statistical blanket properties have\nnot been demonstrated.",
+    "diagram": "architecture"
+  },
+  {
+    "title": "One edit has several tests to pass",
+    "section": "The testbed",
+    "seconds": 85,
+    "kind": "cards",
+    "takeaway": "Acquiring an answer, remembering it, generalizing it and preserving other behavior are separate outcomes.",
+    "sources": [
+      "stage4",
+      "examples_readme"
+    ],
+    "notes": "An edit begins with a prompt and the answer we want the system to produce. First we ask whether it can\nproduce that answer immediately. After a long stream of other edits, we ask the original prompt again.\nThat tests whether the memory survived. Then we ask a paraphrase, a differently worded version of the\nsame request. That tests whether the system can find and use the memory outside the exact teaching\nprompt. Paraphrase retention is the main outcome in the central study.\n\nWe also ask about preservation. Unrelated prompts should keep their old behavior. Nearby prompts are\nmore challenging because they resemble an edited question while referring to another fact. Revisions\ntest whether the newer answer replaces an older one. Finally, ordinary text lets us compare token\nprobabilities even when a visible answer does not change. These tests will often disagree, and that\ndisagreement is part of the result rather than a nuisance to average away.",
+    "cards": [
+      [
+        "Teach",
+        "Prompt + target answer",
+        "Immediate answer",
+        "ES: edit success"
+      ],
+      [
+        "Return later",
+        "At the end of the edit stream",
+        "Original prompt / paraphrase",
+        "RET-ES / RET-GS"
+      ],
+      [
+        "Look elsewhere",
+        "Unrelated and neighboring prompts",
+        "Ordinary-text probabilities",
+        "Preservation and harm"
+      ]
+    ],
+    "subtitle": "1,000 edits for zsRE / CounterFact; 300 for MQuAKE. The first record has 999 / 299 subsequent edits."
+  },
+  {
+    "title": "A recorded correction, after 1,000 edits",
+    "section": "Worked example",
+    "seconds": 110,
+    "kind": "example",
+    "takeaway": "The learned reader retrieves this fact from a paraphrase; the other two conditions give different answers.",
+    "sources": [
+      "examples"
+    ],
+    "notes": "Here is an actual saved example, not an invented demonstration. The question asks which league Sporting\nCanamy was in. The supplied target is Tercera División de México. The cap-free model emits a newline\nimmediately, so its bounded answer is empty. All three displayed cap conditions acquire the taught answer.\n\nNow move to the end of the thousand-edit stream. The learned and random-reader conditions still answer\nthe original question correctly, but the stable cap's bounded answer is empty. Rephrase the question,\nand the learned reader still supplies the target. The random reader supplies the name of a different\nclub, while the stable cap says forward. That is a concrete difference between storing a correction and\nretrieving the right correction when the wording changes.\n\nThis is the first item of one realization and one order, selected to make the mechanisms understandable.\nIt is an old memory by the endpoint, and it is not a representative sample of the entire experiment.\nThe aggregate results come later. I have removed leading display spaces from these quotations; the\nsource file retains the complete generated strings and scoring flags.",
+    "example": "zsre",
+    "subtitle": "zsRE · realization 0 / order 100 · first stored item · 1,000-edit endpoint"
+  },
+  {
+    "title": "A memory can survive while its paraphrase fails",
+    "section": "Worked example",
+    "seconds": 110,
+    "kind": "example",
+    "takeaway": "Both taught targets survive on the original prompt. One paraphrase fires the learned cap; the other does not.",
+    "sources": [
+      "examples"
+    ],
+    "notes": "CounterFact asks a slightly different question. We deliberately teach a counterfactual target, so the\ntarget is an experimental instruction, not a claim about the world. In the first example we teach\nSpanish for James Howell, where the dataset lists English as the previously true answer. The paraphrase\nincludes an unrelated prefix sentence, yet the learned cap produces Spanish.\n\nThe second example teaches Philippines for the origin of Gol and Gincu The Series, where the stored\npreviously true answer is Malaysia. At the endpoint, the original prompt still gets Philippines. But the\nparaphrase receives the displayed free continuation instead. The saved selection flag says that the\nlearned cap did not fire on this paraphrase. We can therefore describe the observed routing failure\nwithout guessing from the final score alone.\n\nThe contrast is useful because both memories look successful if we only repeat the teaching prompt.\nThe paraphrase reveals the difference. It also reminds us that these are strict bounded-answer scores:\nproducing fluent text is not the same as giving the requested experimental target.",
+    "example": "counterfact",
+    "subtitle": "CounterFact · realization 0 / order 100 · 1,000 edits · deliberately counterfactual targets"
+  },
+  {
+    "title": "Preserving behavior can mean preserving a bad answer",
+    "section": "Worked example",
+    "seconds": 100,
+    "kind": "example",
+    "takeaway": "An unchanged answer establishes preservation on that prompt; it does not establish factual correctness.",
+    "sources": [
+      "examples",
+      "stage4"
+    ],
+    "notes": "Here is a nearby-fact test. We teach New Zealand for the displayed Frits Poelman prompt, then ask the\nsimilar question about George Pitt Morison. The base's bounded answer is empty. The learned reader\nkeeps it empty; the random reader instead supplies New Zealand, the supplied target for the other\nquestion. A third condition produces Paris. The dataset's stored neighboring answer is\nAustralia, but preservation is scored against the base's output, not against that stored factual answer.\n\nThe same issue is especially clear in an unrelated locality prompt about Fred Flintstone's wife. The\nbase outputs a question mark and the learned cap also outputs a question mark. That passes preservation;\nit is plainly not a demonstration of answering the question correctly. This is why I will not call a\nperfect locality score a guarantee of safe or knowledgeable behavior.\n\nPause for about twenty seconds: does the actual input-and-output example make the correction task clearer\nthan the architecture diagram? A quick show of hands is enough; save longer reactions for the discussion.",
+    "example": "preservation",
+    "pause_seconds": 20,
+    "subtitle": "zsRE · realization 0 / order 100 · saved endpoint probes at the 1,000-edit checkpoint"
+  },
+  {
+    "title": "What the main comparison holds fixed",
+    "section": "Evidence",
+    "seconds": 90,
+    "kind": "table",
+    "takeaway": "Three subject realizations × five orders. Reordering the same facts does not create five new populations.",
+    "sources": [
+      "stage4",
+      "triplet"
+    ],
+    "notes": "The central comparison puts a learned reader beside a random-geometry reader with a gate and an older\nstable cap. The main-condition transformer is frozen GPT-2 small. There are additional controls, but\nthese three make the main question easiest to see: how much useful retrieval comes from learning the\nreader rather than just having writable memory?\n\nWe use three datasets with different prompting styles. The zsRE task uses questions. CounterFact uses\ncounterfactual sentence completions and paraphrases. MQuAKE contributes single-hop edits from its data;\nour experiment is not a test of its full multi-hop reasoning task. The first two reach a thousand edits;\nMQuAKE is reported descriptively at three hundred.\n\nThree separately drawn subject realizations are each run in five orders. Those orders can reveal order\nsensitivity, but they reuse facts. Later reader-training seeds also reuse one exposed subject realization.\nThose are useful controlled interventions, with a narrower generalization claim. I will mark the different\npopulations rather than combine all the runs as though they were one larger independent experiment.",
+    "headers": [
+      "Dataset",
+      "What is supplied",
+      "Endpoint"
+    ],
+    "rows": [
+      [
+        "zsRE",
+        "Question → supplied factual answer",
+        "1,000 edits"
+      ],
+      [
+        "CounterFact",
+        "Sentence stem → counterfactual target",
+        "1,000 edits"
+      ],
+      [
+        "MQuAKE",
+        "Single-hop fact from MQuAKE data",
+        "300 edits; descriptive"
+      ]
+    ],
+    "intro": "Learned reader · random reader + gate · stable v0 cap",
+    "table_note": "The 270-cell snapshot includes further live-cap, matched-update and continued-base controls."
+  },
+  {
+    "title": "The learned reader retains more paraphrases",
+    "section": "Evidence",
+    "seconds": 95,
+    "kind": "figure",
+    "takeaway": "Learned-reader means: 96.0% zsRE · 67.8% CounterFact · 71.6% MQuAKE (at 300 edits).",
+    "sources": [
+      "triplet",
+      "stage4"
+    ],
+    "notes": "Each small point is a subject realization after averaging its five orders. The large marks show the\nmean of the three realizations. Keeping those points visible is more informative here than showing a\nlarge sample size built from repeated questions or tokens.\n\nThe learned-reader result is strongest on zsRE, with about ninety-six percent paraphrase retention.\nCounterFact is about sixty-eight percent. MQuAKE is about seventy-two percent, at its separate\nthree-hundred-edit endpoint. These numbers are scores on the supplied targets, not a general knowledge\nor reasoning benchmark. The graph also shows how much the comparisons depend on the dataset.\n\nThe useful result is that the learned reader can carry many corrections beyond the exact teaching\nwording. The next question is what changed elsewhere in the model's predictions. The main study's\nlimited-realization inference is preliminary; this graph deliberately shows descriptive realization\nspread, not a new confidence interval. A later fourth-realization check against the random reader is\navailable in the backup slides, without rewriting the original analysis.",
+    "figure": "retention"
+  },
+  {
+    "title": "A changed probability can reveal harm before the answer changes",
+    "section": "Extremes",
+    "seconds": 110,
+    "kind": "diagram",
+    "takeaway": "Δ = log(p₀ / pcap) for the observed next token, at the same prefix. Positive Δ means worse prediction.",
+    "sources": [
+      "ht17",
+      "stage4"
+    ],
+    "notes": "To see unintended changes, take a piece of ordinary text and stop at a particular prefix. We know the\nnext token in that text. Compare the probability assigned to it by the base with the probability assigned\nby the capped model. Negative log probability is the loss, so our loss difference is the logarithm of\nbase probability divided by capped probability. A positive value means the cap made that observed token\nless likely. Negative values are improvements.\n\nThe arithmetic example on screen is illustrative: a drop from ten percent to one percent gives log ten,\nabout two point three nats of increased loss. One nat corresponds to a probability reduction by a factor\nof about two point seven. Neither example is a newly measured case.\n\nKL asks a related but different question: how much did the whole next-token distribution change? All\nforty-five learned-reader cells in the main triplet exceeded the registered mean-KL benchmark of one\nthousandth. Their integrity checks passed, meaning the experimental records are usable. That does not\nmean the behavioral fidelity requirement passed. We need both efficacy and preservation to understand\nthe result.",
+    "diagram": "harm"
+  },
+  {
+    "title": "How often something goes wrong is not how badly it goes wrong",
+    "section": "Extremes",
+    "seconds": 100,
+    "kind": "figure",
+    "takeaway": "Same 245,237 ordinary-text positions per cell. Harm threshold: Δ > 0.01 nat; gate firing is a different count.",
+    "sources": [
+      "tails",
+      "ht17"
+    ],
+    "notes": "The left panel shows the fraction of positions where loss rises by more than one hundredth of a nat.\nThe right panel asks how large the increase is among those positions. For the learned reader, the\nfrequencies are about zero point sixteen percent on zsRE and zero point thirty percent on CounterFact.\nThe corresponding conditional severities are about one point six and one point nine nats.\n\nThe random reader on CounterFact is worse on both displayed measures. The stable cap on CounterFact has\nno observed harm in this inventory, but it also has zero paraphrase retention. Quietness alone is therefore\nnot our goal. On zsRE, different summaries give a less uniform ranking: the learned reader can improve\nediting while increasing some harm summaries relative to stable memory.\n\nEvery cell reuses the same ordinary-text inventory. The positions are dependent, and reusing them does\nnot multiply the number of independent subjects. These plotted values describe this fixed inventory.\nThe full report retains signed improvements, zeros, maxima and expected shortfalls as well as the two\nquantities shown here.",
+    "figure": "frequency_severity"
+  },
+  {
+    "title": "Rare large errors motivate tail analysis; they do not prove a tail law",
+    "section": "Extremes",
+    "seconds": 105,
+    "kind": "figure",
+    "takeaway": "Learned v5: little held-out gain over an exponential. Stable v0 on zsRE: a more pronounced finite-range tail.",
+    "sources": [
+      "tails",
+      "ht17"
+    ],
+    "notes": "A survival curve answers: what fraction of observations exceed this size? Reading farther to the right\nfocuses on larger consequences. In a heavy-tailed model, sufficiently large observations die away more\nslowly than an exponential tail. But seeing a few large observations is not enough to establish that\nmathematical property for the underlying system.\n\nWe fitted excess distributions above declared thresholds, checked how many windows supplied the events,\nand asked whether the more flexible generalized-Pareto model predicted held-out windows better than an\nexponential. For the learned reader, the extra shape parameter added little predictive value. The stable\ncap on zsRE showed a more pronounced tail over the measured range. Some negative-shape fits for the\nrandom reader failed because they assigned zero probability to held-out extremes beyond their fitted\nendpoint. That is a useful warning against treating a fitted upper bound as a guarantee.\n\nThe plotted empirical curves use the same preselected realization and order. They illustrate the\nmeasured range. We have not established an asymptotic power law, infinite variance, a thermodynamic\ntemperature or a complexity class. The important connection to the session is learning to inspect\nextremes rather than assuming that the mean tells the whole story.",
+    "figure": "survival",
+    "subtitle": "zsRE · realization 0 / order 100 · 1,000 edits · saved fits above 0.01 nat"
+  },
+  {
+    "title": "A simple mixture gives a real per-token bound",
+    "section": "Extremes",
+    "seconds": 95,
+    "kind": "diagram",
+    "takeaway": "At a shared prefix, q ≥ ρp₀. Therefore log(p₀/q) ≤ −log ρ = 1 nat when ρ = e⁻¹.",
+    "sources": [
+      "awb",
+      "awb_data"
+    ],
+    "notes": "One intervention has a guarantee we can derive rather than fit. Mix the base model's next-token\ndistribution with the cap's distribution. Keep about thirty-seven percent of the base and sixty-three\npercent of the cap. Because probabilities are nonnegative, every token keeps at least that base-weighted\nfloor. Taking the log ratio gives a maximum loss increase of one nat relative to the base, at that same\nprefix.\n\nThis does not require the empirical tail to follow a particular family. It is a property of the mixture.\nIt also permits large probability increases for desired tokens; it only prevents their probabilities\nfrom falling too far relative to the base floor. There is a trade-off because mixing can change the\ngreedy answer, so retention still has to be measured.\n\nThe guarantee is specifically about a token probability comparison at a common prefix. It is not a\none-nat guarantee for a whole answer, and it does not establish that KL falls below our much smaller\nbenchmark. Once generated prefixes diverge, one must be careful about what comparison is being made.",
+    "diagram": "mixture"
+  },
+  {
+    "title": "The mixture reduced severity while largely retaining the edits",
+    "section": "Extremes",
+    "seconds": 100,
+    "kind": "figure",
+    "takeaway": "Ten exposed memories pass the declared rule. Conditional severity falls to roughly one-third; frequency changes little.",
+    "sources": [
+      "tails",
+      "awb",
+      "pilot"
+    ],
+    "notes": "We selected the mixture using development data and then evaluated it on ten exposed memories: two\ndatasets and five orders, at three hundred edits. The graph shows mean severity among positions with\nloss increase above one hundredth of a nat. On zsRE it falls from about one point six two to zero point\nfive four nats. On CounterFact it falls from about one point nine three to zero point five eight.\nThat is roughly one-third of the original severity, not a reduction of only one-third.\n\nAll ten memories meet the specified retention and preservation rule. The frequency of harmful changes\nbarely moves. CounterFact paraphrase retention has a small cost, and its mean KL still exceeds the\nbenchmark. We also tried a kappa-based bounded-surprisal training loss. That pilot missed its declared\nsuccess rule. It was not the complete coupled-entropy or coupled-free-energy objective proposed in the\ntheoretical programme.\n\nThe distinction matters: one result is a useful analytic bound with a measured trade-off; the other is\na negative pilot on a particular loss. Neither is a general verdict on coupled active inference.",
+    "figure": "mixture_result"
+  },
+  {
+    "title": "Predictive coding: infer errors before choosing an update",
+    "section": "Predictive coding",
+    "seconds": 125,
+    "kind": "diagram",
+    "takeaway": "Both paths feed the same bounded acquisition update. Our error inference uses JAX differentiation.",
+    "sources": [
+      "pc_spec",
+      "pc0",
+      "pc1"
+    ],
+    "notes": "Now to the learning rule. A taught target creates a prediction loss. We need a signal saying which\ninternal correction would reduce that loss. The adjoint path computes a derivative through the model,\nthen uses the negative normalized direction. This is our comparison condition.\n\nIn the error-inference path, we introduce temporary error variables at the write sites. Start them at\nzero. Hold the existing memory writes fixed while those error variables settle. The energy balances a\nquadratic penalty on the inferred errors against the task loss produced with those errors present.\nAfter a finite number of optimization steps, the inferred site errors supply directions for the same\nbounded memory update used by the comparison arm. Our default is eight settling steps at step size\nzero point one.\n\nThat is the predictive-coding component we tested. There are different predictive-coding formulations;\nthis implementation uses automatic differentiation through the computation graph. It is not evidence\nfor biologically local learning or an implementation free of backpropagation. The scientific question\nis whether this particular iterative credit rule buys more useful correction, less harm, or a better\ntrade-off for its cost. Those are measured questions, not consequences of calling the method predictive\ncoding. Separately, we also trained the reader itself using error inference; I will distinguish that\nexperiment from changing acquisition credit.",
+    "diagram": "pc"
+  },
+  {
+    "title": "A repaired energy and a useful one-step sanity check",
+    "section": "Predictive coding",
+    "seconds": 80,
+    "kind": "cards",
+    "takeaway": "The long Stage-4 feedforward run did not use the defective PC credit rule. The PC results here use the correction.",
+    "sources": [
+      "pc_spec",
+      "controls",
+      "stage4"
+    ],
+    "notes": "An earlier error in the PC implementation penalized the inferred error plus the existing write, rather\nthan penalizing the inferred error alone. That changes the objective when a write is already present.\nWe corrected it before the supplemental comparisons shown here. The main feedforward reader experiment\ndid not use this defective credit path.\n\nThere is a simple mechanism check. At zero inferred error, the quadratic penalty has zero derivative.\nThe first gradient step is therefore minus the step size times the adjoint. Our common normalization\nremoves that positive scale, so the first-step directions agree in exact arithmetic. In the actual\none-step runs, all recorded behavioral endpoints agree, while small floating-point differences remain\nin some harm vectors. This makes one step an informative baseline. Any benefit from deeper settling\nmust earn its extra cost; it cannot be assumed from the presence of an iterative algorithm.",
+    "cards": [
+      [
+        "Corrected objective",
+        "E(e) = ½Σ‖e‖² + task loss",
+        "Existing writes stay fixed during inference.",
+        "Old penalty used e + w."
+      ],
+      [
+        "First step from e = 0",
+        "e₁ = −η × adjoint",
+        "Normalization removes η > 0.",
+        "Deeper settling can change direction."
+      ]
+    ]
+  },
+  {
+    "title": "More settling bought memory retention, with costs",
+    "section": "Predictive coding",
+    "seconds": 100,
+    "kind": "figure",
+    "takeaway": "Legacy 50M base, v0 live cap; zsRE at 1,000 edits. Three realizations, order 100; exposed populations.",
+    "sources": [
+      "depth",
+      "controls",
+      "pc_spec"
+    ],
+    "notes": "These are the same zsRE subjects and the same order at depths one, eight and thirty-two, averaged over\nthree realizations. On the left, own-prompt retention rises with deeper settling. Paraphrase retention\ndoes not show the same gain and falls at thirty-two steps. The other panels show the cost: expected\nshortfall of positive harm rises, and learning takes much longer.\n\nExpected shortfall here means the average of the worst one percent of positive-part loss values across\nthe whole inventory, including zeros. It is not the ninety-ninth percentile and not a mean over only the\npositive observations. This older base uses a smaller ordinary-text inventory, so do not compare its\nabsolute tail values with the main GPT-2 study as if only the learning rule changed.\n\nThe main eight-step comparison across all five orders found about a two-percentage-point own-prompt\ngain on zsRE, with no consistent paraphrase gain. Random-direction credit mostly failed in its one\nattempted stream. The extra-update adjoint control was offered the PC budget but stopped early, so it\ndoes not settle the question of credit direction versus equal realized compute. Those details are in backup.",
+    "figure": "depth"
+  },
+  {
+    "title": "Changing credit on the working reader gave small, mixed effects",
+    "section": "Predictive coding",
+    "seconds": 80,
+    "kind": "table",
+    "takeaway": "Fixed BP-trained v5 reader; fresh memories; 300 edits. Four cells, one exposed subject realization per dataset.",
+    "sources": [
+      "pc1"
+    ],
+    "notes": "We next moved the acquisition-credit comparison onto the working GPT-2 reader. The base, trained reader,\ngate, memory capacity and teaching streams stayed fixed; each arm acquired a fresh memory. At three\nhundred edits, zsRE paraphrase retention is unchanged. CounterFact falls by about a third of a percentage\npoint with error credit. The positive-harm expected shortfall improves a little on zsRE and worsens a\nlittle on CounterFact.\n\nThe acquisition-and-assay stream totals rise from about six hundred five seconds to seven hundred\nseventy-seven seconds across the two datasets. The separate full harm readout took about five thousand\nseconds for the comparison. I would not describe these results as a clear win or as proof that the\nalgorithms are equivalent. This is a one-realization exposed transfer check. It tells us that changing\nthis credit rule alone did not produce a compelling new paraphrase benefit in the tested working reader.",
+    "headers": [
+      "SE-E minus adjoint",
+      "zsRE",
+      "CounterFact"
+    ],
+    "rows": [
+      [
+        "Paraphrase retention",
+        "0.00 percentage points",
+        "−0.33 percentage points"
+      ],
+      [
+        "Positive-harm ES99",
+        "−0.01397 nats",
+        "+0.01123 nats"
+      ]
+    ],
+    "intro": "Same reader; only the acquisition credit changes",
+    "table_note": "Stream totals: adjoint 604.6 s → error inference 776.7 s. Separate harm readout: 5,004 s."
+  },
+  {
+    "title": "Training the reader with PC was much more expensive",
+    "section": "Predictive coding",
+    "seconds": 105,
+    "kind": "figure",
+    "takeaway": "Three paired training seeds, same exposed subjects; acquisition is adjoint in BOTH arms. Completed: 12/12 evaluations.",
+    "sources": [
+      "reader",
+      "reader_doc"
+    ],
+    "notes": "This experiment changes a different part of the system. We trained the reader and controller with\nbackpropagation or with error inference, using paired initializations and the same training episodes.\nAcquisition used adjoint credit in both conditions. The left panel shows the difference in paraphrase\nretention for each training seed, with error inference minus backpropagation as the sign convention.\n\nOn CounterFact, every seed is lower with the PC-trained reader: by about twenty-four, two and seventeen\nand a half percentage points. zsRE has two small deficits and one small gain. The right panel shows the\nmeasured training-time ratio: roughly one hundred times as much process time for error inference.\nEach PC training took about a day, compared with roughly fifteen minutes for BP.\n\nThe harm results do not provide a uniform compensation: CounterFact harm directions change across seeds.\nSome zsRE PC readers are very quiet, but quietness can accompany missed useful corrections. Three paired\ntraining seeds help reveal that variability; they are not three independent subject populations. This is\na substantive negative result for this implementation and recipe. It does not rule out other PC\narchitectures, tuning choices, or learning formulations.",
+    "figure": "reader"
+  },
+  {
+    "title": "Restricting the cap to upper layers did not remove the harm",
+    "section": "Architecture",
+    "seconds": 80,
+    "kind": "figure",
+    "takeaway": "Last-site-only writes increased mean loss 2.64–4.37× in all 12 write pairs, with little paraphrase change.",
+    "sources": [
+      "upper",
+      "upper_doc"
+    ],
+    "notes": "We also tested the idea that the cap might benefit from using only higher transformer layers. The design\ncrosses two choices: read all three taps or only the upper two, and write at all three sites or only the\nlast one. There are three paired seeds and two datasets, for twenty-four evaluations, including shared\nBP controls.\n\nThe graph isolates the write comparison. Every pair has more mean ordinary-text loss with last-site-only\nwrites, by about two point six to four point four times. Paraphrase scores barely change in those pairs.\nReading only upper taps also lowers CounterFact paraphrase retention in all three seeds when writes use\nall sites. This does not support the assumption that the lower interfaces are mostly noise.\n\nThere is a scope limit: these readers were trained with a full-write objective. Last-only writes were\nevaluated with newly acquired memories under that restriction, not with a separately optimized last-only\ntraining objective. A differently trained architecture remains a future question.",
+    "figure": "upper"
+  },
+  {
+    "title": "The next agent could choose which failure to investigate",
+    "section": "Active inference",
+    "seconds": 110,
+    "kind": "diagram",
+    "takeaway": "Proposed experiment: policy-selected audits versus fixed audits, with the same audit and compute budget.",
+    "sources": [
+      "proposal",
+      "mapping",
+      "feedback"
+    ],
+    "notes": "Now return to the agent loop. We have examples of successful correction, failures to retrieve, unintended\nchanges to nearby facts, and rare losses on ordinary text. Today the investigators choose which of those\ntests to run. An active-inference extension could choose an audit because it expects that observation to\nresolve uncertainty or avoid a costly intervention.\n\nFor example, it might have budget for one additional query. It could repeat the teaching question, ask\na new paraphrase, or test a neighboring fact. Which gives the most useful information about whether the\nstored correction should be used? The concrete proposed comparison is an explicit policy against fixed\naudit schedules, under the same resources, measuring correction utility and harm together.\n\nThe feedback from the coupled-entropy work points to a further modeling task: specify the modeled random\nvariable, the probability distribution, constraints, weighting and gradients before claiming a coupled\nfree-energy objective. Our bounded kappa loss did not do that. The measured mixture is a useful baseline,\nand tail severity gives us a consequence to model, but neither constructs the policy for us. This is a\npost-conference direction, not a promise of another experiment before October ninth.",
+    "diagram": "future"
+  },
+  {
+    "title": "The experimental portfolio is closed; the story is still being refined",
+    "section": "Where we are",
+    "seconds": 65,
+    "kind": "cards",
+    "takeaway": "Experiments completed or explicitly closed by 4 October. Review freeze: 9 October, 17:00 EDT. Talk: 15 October.",
+    "sources": [
+      "stage4",
+      "reader_doc",
+      "upper_doc",
+      "decisions"
+    ],
+    "notes": "The planned GPU work is now done, or explicitly closed where resource limits prevented completion. The\nmain snapshot contains two hundred seventy completed cells. Predictive-coding credit studies, the\nthree-seed reader comparison, the mixture intervention and the upper-layer experiment have their own\nreports. Tail analysis uses the saved outputs.\n\nThe original experimental deadline is October ninth at five p.m. Eastern. Finishing now leaves time\nto review the fixed evidence, make the slides intelligible, and rehearse before October fifteenth. The\nmain snapshot alone used three hundred ninety-two process-hours. That is summed worker time, not elapsed\nGPU time; concurrent workers overlap.\n\nThe most useful remaining work for this talk is not collecting another impressive number. It is checking\nthat the figures and examples support the interpretation, making the scope understandable, and deciding\nwhich parts deserve the limited conference time. Your reactions today help with that last part.",
+    "cards": [
+      [
+        "Completed evidence",
+        "270-cell main snapshot",
+        "PC credit + reader studies",
+        "Mixture, tails and upper layers"
+      ],
+      [
+        "Practical limits",
+        "Small models; limited populations",
+        "Some controls closed by resource rule",
+        "Main snapshot: 392.42 process-hours"
+      ],
+      [
+        "Before Binghamton",
+        "Review fixed evidence",
+        "Choose the essential story",
+        "Rehearse the 15-minute version"
+      ]
+    ]
+  },
+  {
+    "title": "Three takeaways to carry into the conference",
+    "section": "Takeaways",
+    "seconds": 65,
+    "kind": "cards",
+    "takeaway": "The scientific contribution is a measured trade-off among useful correction, unintended harm and learning cost.",
+    "sources": [
+      "stage4",
+      "pc1",
+      "reader_doc",
+      "ht17",
+      "proposal"
+    ],
+    "notes": "Here are the three points I currently want a conference audience to remember. First, the frozen-prior\narchitecture supplies concrete components for an active-inference programme, while autonomous policy\nchoice is still a missing piece. Second, predictive coding was tested as an actual intervention in the\nlearning machinery. We found trade-offs and substantial costs, rather than a general advantage for the\ntested recipe. Third, rare harmful changes make distributional analysis essential: frequency, severity\nand maxima can tell different stories. A simple probability mixture provides a useful bounded baseline.\n\nThe successful corrections are real, the negative results are useful, and the limits shape the next\nexperiment. That combination seems more informative than treating either the architecture or the\ntheoretical framework as already validated. I would like your help deciding which examples make that\nmessage most memorable and which technical details are necessary to trust it.",
+    "cards": [
+      [
+        "Active inference",
+        "A testbed for selective correction",
+        "Autonomous audit policy remains open"
+      ],
+      [
+        "Predictive coding",
+        "Measured learning-rule trade-offs",
+        "No general advantage in this recipe"
+      ],
+      [
+        "Extremes",
+        "Means miss consequential structure",
+        "Mixture bounds per-token loss"
+      ]
+    ]
+  },
+  {
+    "title": "Help choose the fifteen-minute story",
+    "section": "Colleague feedback",
+    "seconds": 120,
+    "kind": "cards",
+    "takeaway": "Please give slide numbers: one to keep, one to clarify, and one to move to questions.",
+    "sources": [],
+    "notes": "Before we open the discussion, take about forty-five seconds to write down three slide numbers. Which\none would you keep if I had time for only one detailed example? Which needs a clearer explanation?\nAnd which would you move to the question period? It is also useful to tell me what claim sounded\nstronger than the evidence actually shown.\n\nI am especially interested in whether the concrete answer examples, the predictive-coding mechanism,\nor the distributional harm story gives you the strongest way into this project. I am not asking you to\npick the most positive result. A negative result that teaches something important may be the right\ncenter of the talk. The short conference version must still connect all three themes, but the depth\ncan follow what you find worth discussing.\n\nAfter the writing pause, invite two brief reactions, then open the wider discussion. The remaining\nslides are optional backup on MQuAKE, scoring, PC controls, the fourth-realization check and sources.",
+    "cards": [
+      [
+        "Keep",
+        "Which example or graph stayed with you?",
+        "What would you tell someone tomorrow?"
+      ],
+      [
+        "Clarify",
+        "Where did the explanation lose you?",
+        "Which claim needs more evidence?"
+      ],
+      [
+        "Cut or move",
+        "What belongs in Q&A?",
+        "Which detail can the short talk omit?"
+      ]
+    ],
+    "pause_seconds": 45
+  },
+  {
+    "title": "MQuAKE: a single-hop editing example",
+    "section": "Backup",
+    "seconds": 0,
+    "kind": "example",
+    "takeaway": "Same realization 0 / order 100; 300-edit endpoint. A fired cap can still fail to produce the target.",
+    "sources": [
+      "examples",
+      "stage4"
+    ],
+    "notes": "This optional example shows Marion Brown taught the counterfactual target West Coast hip hop, with jazz\nas the stored old answer. The learned cap supplies the target on the original prompt and its paraphrase\nat three hundred edits. A second example about Bettino Ricasoli keeps Methodism on the original prompt\nbut produces an empty answer on the paraphrase, even though the stored selection flag says the cap fired.\nThat differs from the CounterFact no-fire example. We cannot conclude that every paraphrase failure\nhas the same cause. We also cannot claim multi-hop reasoning: this test uses the single-hop edit and\nparaphrase portion of the task. These selected examples do not estimate a success rate.",
+    "example": "mquake",
+    "subtitle": "Realization 0 / order 100 · 300 edits · deliberately counterfactual targets; no multi-hop test"
+  },
+  {
+    "title": "The risk summaries answer different questions",
+    "section": "Backup",
+    "seconds": 0,
+    "kind": "table",
+    "takeaway": "The token-position inventory is paired and dependent. None of these quantities turns tokens into subject replicates.",
+    "sources": [
+      "ht17",
+      "pc1"
+    ],
+    "notes": "Delta loss compares the observed next token at a common prefix. KL compares the whole predictive\ndistribution, in the reference-to-cap direction. Signed mean loss retains improvements as negative\nvalues. Conditional severity uses only values above the specified threshold. Expected shortfall uses\nthe positive part over the full inventory, including zero values. We sort that inventory and take the\nfractional mean of its worst one percent. Because one percent of 245,237 is not an integer, the boundary\nobservation gets fractional weight. A maximum is a different statistic again. Inferences over windows\ncondition on the tested models and subject populations; they do not cover training or subject variation.",
+    "headers": [
+      "Quantity",
+      "Definition / question"
+    ],
+    "rows": [
+      [
+        "Signed mean Δ",
+        "Average log(p₀/pcap); benefits remain negative"
+      ],
+      [
+        "Frequency / severity",
+        "P(Δ > u) / E[Δ | Δ > u], here u = 0.01 nat"
+      ],
+      [
+        "ES99+",
+        "Fractional mean of worst 1% of max(Δ, 0), all positions"
+      ],
+      [
+        "Mean KL",
+        "Average KL(p₀ ‖ pcap) over next-token distributions"
+      ],
+      [
+        "Maximum",
+        "Largest observed Δ; not an unseen-event guarantee"
+      ]
+    ]
+  },
+  {
+    "title": "What the extra PC controls do and do not settle",
+    "section": "Backup",
+    "seconds": 0,
+    "kind": "cards",
+    "takeaway": "No equal-realized-compute superiority claim follows from an allowance that the comparator did not spend.",
+    "sources": [
+      "controls",
+      "matched"
+    ],
+    "notes": "The random-direction control retains the norm and pays for the true error-credit calculation before\nreplacing the direction. Its only attempted random stream stopped at 993 edits under the resource rule,\nwith three immediate successes. Ten planned cells were unstarted. It supports the practical importance\nof informative direction on that stream, not a universal impossibility result about random search.\n\nFor the compute control, charlie approved funding additional acquisition updates rather than repeated\nderivative calculations at unchanged writes. The adjoint condition was offered the measured per-item\nPC operation allowance. It used only about fifty-three to fifty-eight percent, because its stopping\nrules usually ended acquisition sooner. This does not isolate extra computation as a cause of the PC\neffect, nor is it a FLOP-matched experiment. The six complete pairs and the partial random experiment\nare reported separately.",
+    "cards": [
+      [
+        "Random direction",
+        "3 immediate successes / 993 edits",
+        "One attempted random stream",
+        "Resource stop; no final retention claim"
+      ],
+      [
+        "Additional-update adjoint",
+        "12 cells / 6 complete pairs",
+        "About 53–58% of offered operations used",
+        "Direction / effective compute unresolved"
+      ]
+    ]
+  },
+  {
+    "title": "A fourth subject draw supports the learned–random contrast",
+    "section": "Backup",
+    "seconds": 0,
+    "kind": "table",
+    "takeaway": "Supplemental sensitivity analysis. Deferred v0 cells stay absent; the original confirmatory classifier is unchanged.",
+    "sources": [
+      "option_r"
+    ],
+    "notes": "The fourth-realization extension completed twenty learned-reader and random-reader cells, at a thousand\nedits, across five orders and two datasets. The new-realization paraphrase means are shown here. Combining\nfour realization-level contrasts gives a learned-minus-random mean of about forty-four percentage points\non zsRE and fifty-six on CounterFact. The supplemental t intervals assume normal realization errors and\nare unadjusted; they are not a replacement familywise analysis. The own-prompt contrasts are negative,\nso the generalization gain still needs to be distinguished from literal prompt retention. One stable-cap\nattempt was incomplete and nine such cells were deferred. Those missing comparisons are not zeroes.",
+    "headers": [
+      "Fourth realization",
+      "Learned RET-GS",
+      "Random RET-GS"
+    ],
+    "rows": [
+      [
+        "zsRE",
+        "96.9%",
+        "51.5%"
+      ],
+      [
+        "CounterFact",
+        "68.15%",
+        "10.6%"
+      ]
+    ],
+    "table_note": "Four-draw contrast: zsRE +44.1 pp; CounterFact +56.2 pp. No new primary decision rule."
+  },
+  {
+    "title": "Source map and the submitted programme",
+    "section": "Backup",
+    "seconds": 0,
+    "kind": "cards",
+    "takeaway": "Full source paths, example identities and hashes accompany the deck. No new experiment was run to prepare it.",
+    "sources": [
+      "brief",
+      "stage4",
+      "ht17",
+      "reader_doc",
+      "examples_readme",
+      "proposal"
+    ],
+    "notes": "The submitted title is Coupled Active Inference on a Frozen Transformer Prior: A Risk-Aware Residual\nAgent for Non-Equilibrium Regimes, by charlie derr and Matthew Iklé. The main report and its triplet\nanalysis support the main comparison. The supplemental reports distinguish the acquisition-credit,\nreader-training, mixture and upper-layer experiments. Capstan's support-information collection provides\nthe saved input and output examples. Our post-conference proposal identifies the unresolved modeling\nchoices for a coupled-objective and audit-policy collaboration. This talk is a snapshot of completed\nresults through October fourth; earlier documents that say a result is pending are historical.",
+    "cards": [
+      [
+        "Core evidence",
+        "R1_stage4_report.md",
+        "HT-17_report.md",
+        "Capstan's support-information examples"
+      ],
+      [
+        "Learning experiments",
+        "PC-v0 / PC-v1 reports",
+        "PC-reader_report.md",
+        "AW-L_report.md + AW-B_report.md"
+      ],
+      [
+        "Research programme",
+        "July submitted abstract",
+        "Presentation brief, 26 September",
+        "Coupled collaboration proposal"
+      ]
+    ]
+  }
+]
