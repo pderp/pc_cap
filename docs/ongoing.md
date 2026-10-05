@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-05 06:00** — Capex's colleague long-talk deck committed (30 pages, HTML, notes). Round 64 lanes not yet done → carried as round 65 (FIN-1, FIN-2 on Oct 6, LINT-1, DOC-3 + support-information link).
 - **2026-10-04 06:30** — Capex round 63 committed (final PC-reader, Option R, AW-L reports; HT-17 complete; deck refresh; X25/X26/reproduction pass). DEC-083: portfolio closed. Round 64: FIN-1 consolidated report, FIN-2 freeze dry run (Oct 6), LINT-1, DOC-3. Capstan: deck file assembly (DECK-1), report slice review.
 - **2026-10-04 01:30** — AW-L5 complete (24 cells; item 162: last-site-only writes keep efficacy but raise harm 3–4×; upper-tap readers lose CounterFact paraphrases). **AW-L6: go.** All planned GPU experiments done; GPU idle. Remaining: CPU reports (PC-16b, R-3, AW-L6), PRES refresh, X25 + reproduction, freeze Oct 9.
 - **2026-10-03 15:55** — Option R complete (20 complete / 1 incomplete / 9 deferred; item 161). **R-3: go.** AW-L5 chain launched 15:50 (profiles → dev evals → cost gate → 3 trainings → 18 evaluations; ≈ Oct 4 06:00). AW-L6 after.
@@ -200,6 +201,17 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 65 — the round-64 lanes, carried forward (2026-10-05, 06:00)
+
+Round 64's lanes were pre-empted by the lead's direct request for the colleague long-talk deck (PRES-colleague-long,
+delivered and committed 5 Oct). They stand unchanged and are now the round: **FIN-1** (consolidated supplemental-
+programme report via a generator), **FIN-2** (freeze dry run on 6 Oct producing `docs/freeze_handoff_20261009_draft.md`),
+**LINT-1** (five ruff findings; `aw/cost_gate.py`), **DOC-3** (reviewer entry point: results complete, plus a link to the
+colleague deck PDF and to `assets/support-information/`). Specifications are in the round-64 section below. Priority:
+FIN-1 → FIN-2 → LINT-1 → DOC-3. Add to DOC-3: link `assets/support-information/Capstan-README.md` and
+`README-random-sample.md` (public GitHub URLs) as the "worked examples" entry. Colleague-deck follow-ups (timing cut,
+example swaps) wait for the lead's rehearsal notes.
 
 ## Round 64 — closing the record: consolidated report, freeze dry run, small fixes (2026-10-04, 06:30; DEC-083)
 

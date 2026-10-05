@@ -1768,3 +1768,15 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     (11/30); learned reader 30/30 on both in both sets. CounterFact unchanged in picture (learned 21/30, random 5/30,
     v0 family 0/30). MQuAKE learned 24/30 paraphrases (15/30 among the first 30; study-wide 0.70). The Capstan-README
     now points to the second set. Generator `aw/support_examples.py --mode random`.
+
+166. (2026-10-05, 06:00 EDT) **Colleague long-talk deck committed; round 65 opened (the round-64 lanes carried forward).**
+    Capex's PRES-colleague-long (your direct request of Oct 4) is committed in both repos: a 30-page 16:9 PDF (25 main
+    slides, 5 backups) at `assets/presentation-materials/colleague_deck_20261004/active-inference-in-the-extremes-colleague-talk-20261004.pdf`,
+    an offline HTML presentation with notes and clock (`present.html`), a speaker-notes PDF, eight data-derived figures,
+    a timed script (39:25 planned incl. pauses; a 36:05 cut documented), a sources-and-examples guide, colleague-feedback
+    prompts and a 15-minute compression proposal (`docs/presentation/colleague_deck_20261004/`). Capex's validation
+    passed (titles, glyphs, bounds, notes/HTML consistency, 22 example-source identities, headline numbers vs sources);
+    ruff clean here. The two Chrome profile directories it left are ignored, not committed. Because that task pre-empted
+    round 64, its four lanes are still open and are now round 65: FIN-1 consolidated report, FIN-2 freeze dry run on
+    Oct 6, LINT-1, DOC-3 (now also linking the support-information examples and the colleague deck). Nothing needed
+    from you except the rehearsal notes on the long deck when you have them.
