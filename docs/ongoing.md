@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-05 08:50** — Capex round 65 committed (FIN-1 `docs/additional_work_report.md`; LINT-1; DOC-3). Round 66: FIN-2 freeze dry run on Oct 6 with a disclosed-exceptions register (missing durations; AW-L gate; 152.7 process-hour lower bound vs the DEC-073 150 GPU-hour ceiling). Then rehearsal-driven PRES-10.
 - **2026-10-05 06:00** — Capex's colleague long-talk deck committed (30 pages, HTML, notes). Round 64 lanes not yet done → carried as round 65 (FIN-1, FIN-2 on Oct 6, LINT-1, DOC-3 + support-information link).
 - **2026-10-04 06:30** — Capex round 63 committed (final PC-reader, Option R, AW-L reports; HT-17 complete; deck refresh; X25/X26/reproduction pass). DEC-083: portfolio closed. Round 64: FIN-1 consolidated report, FIN-2 freeze dry run (Oct 6), LINT-1, DOC-3. Capstan: deck file assembly (DECK-1), report slice review.
 - **2026-10-04 01:30** — AW-L5 complete (24 cells; item 162: last-site-only writes keep efficacy but raise harm 3–4×; upper-tap readers lose CounterFact paraphrases). **AW-L6: go.** All planned GPU experiments done; GPU idle. Remaining: CPU reports (PC-16b, R-3, AW-L6), PRES refresh, X25 + reproduction, freeze Oct 9.
@@ -201,6 +202,28 @@ first** (the calibration is the next GPU job after tonight's controls), then PC-
 applied PC-9/PC-10 files in `aw/` are the running versions until the settling-depth chain ends (≈ 03:00); build PC-12
 against those applied versions (committed at 1074ccc), not the originals under `PC-9-candidate/old/`, and land the
 edits in new files or after the chain's finish is posted in the lead queue.
+
+## Round 66 — the freeze dry run (2026-10-06; DEC-083)
+
+### Lane FIN-2 — freeze dry run (as specified in round 64), with three explicit exceptions to carry
+
+Run on 6 Oct: every item of `docs/freeze_checklist_20261009.md` except the lead's signature — closed inventory, receipt
+closure, the final CPU refresh in dependency order into dated directories, X25 and X26 reruns, the one-command
+reproduction, the deck archive (`assets/presentation-materials/deck_v3/freeze-20261009/`, the short deck; the colleague
+deck archived beside it), and `docs/freeze_handoff_20261009_draft.md` with the dated artifact list and hashes, generator
+versions, the exact signature lines left blank, and a **disclosed-exceptions register** that includes at least:
+(1) the three fixed-v5 harm launches with failure logs but no duration receipts (the post-halt cost total of 152.7
+process-hours is a lower bound); (2) the AW-L5 shell cost gate that read zero (projection 17.98 h, under the gate;
+retrospective check receipt `logs/additional_work/round65-cost-gate.json`); (3) the reconciliation of that 152.7
+process-hour lower bound against DEC-073's 150 GPU-hour stop ceiling — state the two definitions (process-envelope
+time of GPU-bound processes, including compilation and parallel sessions, versus exclusive GPU occupancy), give the
+best available occupancy figure from the lease records if one exists, and leave the judgement to the lead rather than
+asserting or denying an overrun; plus the standing items (Option R cell incomplete by ceiling and the nine deferred
+v0 cells, the random-direction control stopped by rule, S1_literal CounterFact and the extension unavailable under
+DEC-074b). Done-when: the lead can complete the freeze on Oct 9 by reading one document and signing.
+
+No other lane until the lead's rehearsal notes on the colleague deck arrive (then PRES-10: example swaps, timing cut,
+and the 15-minute compression if adopted).
 
 ## Round 65 — the round-64 lanes, carried forward (2026-10-05, 06:00)
 

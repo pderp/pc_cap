@@ -1780,3 +1780,17 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     round 64, its four lanes are still open and are now round 65: FIN-1 consolidated report, FIN-2 freeze dry run on
     Oct 6, LINT-1, DOC-3 (now also linking the support-information examples and the colleague deck). Nothing needed
     from you except the rehearsal notes on the long deck when you have them.
+
+167. (2026-10-05, 08:50 EDT) **Capex round 65 committed (pc_cap e61cc95, assets 0bc5235); round 66 = the freeze dry run
+    tomorrow.** FIN-1: `docs/additional_work_report.md`, the consolidated entry point for everything after the halt,
+    assembled by `aw/additional_work_assembly.py` from 25 named sources with 19 tables copied byte-for-byte (no rescoring);
+    its closing interpretation follows DEC-081a. LINT-1: ruff clean; `aw/cost_gate.py` reads the exact projection field
+    (the preserved AW-L projection is 17.98 h, under the 40-h gate; the historical shell failure stays on record).
+    DOC-3: the public reviewer page now has a "Results complete (Oct 4)" block linking the consolidated and final
+    reports, the worked examples and the colleague deck. 274 tests pass, X25 final PASS (25 groups, 6,129 files).
+    **One finding to carry to your Oct 9 sign-off:** the post-halt compute from 101 non-overlapping receipts is
+    **152.7 process-hours, a lower bound** (three early fixed-v5 harm launches failed without duration receipts). That
+    figure is process-envelope time of GPU-bound processes, including compilation and parallel sessions, which is not
+    the same quantity as DEC-073's 150 GPU-hour stop ceiling (exclusive occupancy). FIN-2 will state both definitions,
+    give the best occupancy figure the lease records allow, and leave the judgement to you in the exceptions register
+    rather than assert or deny an overrun. No other lane until your rehearsal notes on the colleague deck.
