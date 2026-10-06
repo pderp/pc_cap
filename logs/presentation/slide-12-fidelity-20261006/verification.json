@@ -1,0 +1,123 @@
+{
+  "status": "pass",
+  "document": "/home/derp/cap/assets/support-information/slide-12-probabilities-fidelity-and-rare-harm.md",
+  "document_sha256": "cdbe14c9824a7a0bbccb4f4687713933b32ce2eecf5b21045c963a4345afd95b",
+  "word_count": 3961,
+  "slide_12_pdf_text_verified": true,
+  "links_checked": 16,
+  "source_sha256": {
+    "/home/derp/cap/assets/presentation-materials/deck_v4/long_deck_v1.pdf": "c1146552b7aef1f9319709bee70af16950c49683bdd54ef325a416d29753505a",
+    "/home/derp/cap/assets/support-information/slide-10-stable-v0-training-and-baselines.md": "c6e43f93df157f7ee26d7792127b3a7b9f747d4a29151077439bfb7270a366dc",
+    "/home/derp/cap/assets/presentation-materials/deck_v4/long_deck_v1.md": "dfe8cd7afe9573444494efeb3fd96d10ac88c96bb4faaf7d4fcaf1d045fcffcb",
+    "/home/derp/cap/pc_cap/docs/tasks/R1-final-cell-recipes/61348508e40d54351613ab14.json": "a14686a8bd0651e8e06b6bbf64b90420f175b7f77991dc5c885cd106ac340b35",
+    "/home/derp/cap/pc_cap/scripts/r1_68f_full_validation.py": "7e7301b9089326365e76d10d29d112d27029848627b66d1308120dfbd7368473",
+    "/home/derp/cap/pc_cap/scripts/r1_68c_batched_drift.py": "bf2e879083bc3b67796824c5c66b695248c923a802b51d8c379d2dea5147bc24",
+    "/home/derp/cap/pc_cap/src/pccap/data/lm_sets.py": "badcbd8adf0158eaf783645cbd04350b06126d193eada431a7d76a33cbf0b039",
+    "/home/derp/cap/pc_cap/manifests/dev/lm_sets.json": "e5dba907d67114f2ca41262520c51c893dc97e027de31adc4c7ed5f06cfdce1e",
+    "/home/derp/cap/pc_cap/logs/R1/reports/triplet/analysis.json": "aa4f38a80ec644595be228a00d9bd8bc9e16706725807fbd22c2c9801545b71d",
+    "/home/derp/cap/pc_cap/logs/R1/reports/triplet/summary.json": "6ba5292171cb261c6b5e47f82f21e0bb93fda0f75b625913e876eec36cda6c13",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_report.md": "bb1fb0ad58c67570376192b6244e497a1636576f2547b75edff5fb0de9c7350a",
+    "/home/derp/cap/pc_cap/docs/R1_stage4_report_triplet.md": "a1b2ed533422d7d563354b7f827e0c168e1808abf43e133f8f325a28c264b964",
+    "/home/derp/cap/pc_cap/docs/additional_work/HT-17_report.md": "835f77ccd92c388d6bc44795a2eaf1baf9a019a22c4386a4744aba9338188d92",
+    "/home/derp/cap/pc_cap/logs/additional_work/HT-17/snapshot-20261004-complete/report.json": "67386fb2f89f253e7e11f792c33eb8e292ac9c77609881a2a6a0a4c4a7ccc210",
+    "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-zsre-0-100-8d55a573070d47b3be15/attempt-0000/full-validation-1000.npz": "6a899e0d3a88da7317e06b0d026047ad0ea4c64ce6248c02e7b715bb1b75d581"
+  },
+  "extra_bindings": {
+    "tokenizer": {
+      "path": "/home/derp/cap/assets/runs/pc_cap/R1/stage4_dev_bases/c5b784c4e67a8eda5b79a4036be236a27642fe8f33baf8fc64d9229971ffb189/tokenizer.json",
+      "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+    },
+    "text_tokens": {
+      "path": "/home/derp/cap/assets/data/prepared/lm/drift_tokens.npy",
+      "shape": [
+        247289
+      ],
+      "dtype": "int32",
+      "sha256": "aa9cc07ec22444b4da8a41f0babe1e27918f01cad42c29a91e61a95ba443bc23"
+    }
+  },
+  "example_cell": {
+    "condition": "R1_learned_ff",
+    "dataset": "zsre",
+    "realization": 0,
+    "order": 100
+  },
+  "example_vector": {
+    "path": "/home/derp/cap/pc_cap/results/R1/stage4_sealed_cells/R1_learned_ff-zsre-0-100-8d55a573070d47b3be15/attempt-0000/full-validation-1000.npz",
+    "sha256": "6a899e0d3a88da7317e06b0d026047ad0ea4c64ce6248c02e7b715bb1b75d581"
+  },
+  "example_shape": [
+    1931,
+    127,
+    5
+  ],
+  "example_location": {
+    "window": 860,
+    "target_position": 44,
+    "array_index": [
+      860,
+      43
+    ],
+    "token_id": 1081,
+    "token_text": " As"
+  },
+  "example_probabilities": {
+    "base_nll": 10.433792380844533,
+    "cap_nll": 19.696059844467225,
+    "base_probability": 2.9421278678251264e-05,
+    "cap_probability": 2.79325055874468e-09,
+    "delta": 9.262267463622692,
+    "kl": 6.7443360035793045,
+    "base_to_cap_probability_ratio": 10532.989454219796
+  },
+  "example_counts": {
+    "positions": 245237,
+    "zero_delta": 244760,
+    "positive_delta": 401,
+    "negative_delta": 76,
+    "delta_gt_001": 395
+  },
+  "example_statistics": {
+    "retained_paraphrase": 0.955,
+    "mean_kl": 0.002381492420811497,
+    "mean_delta": 0.0024502257170824966,
+    "conditional_mean_delta_gt_001": 1.60674502148664,
+    "p99_positive_part": 0.0
+  },
+  "learned_cell_mean_kl_ranges": {
+    "zsre": {
+      "min": 0.002329750503025938,
+      "max": 0.00244796962532886,
+      "n": 15
+    },
+    "counterfact": {
+      "min": 0.004727862359501758,
+      "max": 0.00578063758330125,
+      "n": 15
+    },
+    "mquake": {
+      "min": 0.0040920003913531965,
+      "max": 0.007123341825502143,
+      "n": 15
+    }
+  },
+  "learned_cells_failing_mean_kl": 45,
+  "learned_cells_passing_mean_delta": 45,
+  "maximum_learned_delta": 17.060533069655875,
+  "illustration_not_experiment": {
+    "base_probabilities": [
+      0.5,
+      0.3,
+      0.2
+    ],
+    "cap_probabilities": [
+      0.45,
+      0.35,
+      0.2
+    ],
+    "kl": 0.00643505388073571
+  },
+  "validation_scope": "saved scalar arrays, bound text tokens, metadata, slide text and illustrative arithmetic only; no refitting or model execution",
+  "gpu_seconds": 0,
+  "model_calls": 0
+}
