@@ -1,0 +1,1022 @@
+                                             CounterBench: Evaluating and Improving Counterfactual Reasoning in
+                                                                  Large Language Models
+
+
+                                                             Yuefei Chen1 Vivek K.Singh1 Jing Ma2 Ruixiang Tang1 *
+                                                               1
+                                                                 Rutgers University 2 Case Western Reserve University
+
+
+
+
+                                                                 Abstract                                                                  Back.
+
+                                                                                                                                             74.5
+
+
+
+
+arXiv:2502.11008v2 [cs.CL] 11 Apr 2026
+                                              Counterfactual reasoning is widely recognized
+                                                                                                               Basic                         58.5                     Nested
+                                              as one of the most challenging and intricate                             98.4
+                                                                                                                              75.2
+                                                                                                                                             53.0           78.4
+                                                                                                                                                                   94.0
+                                                                                                                                  72.4                  76.0
+                                              aspects of causality in artificial intelligence. In                                        54.8    50.8
+
+                                              this paper, we evaluate the performance of large                                            58.8
+                                                                                                                                         65.6     50.8
+                                                                                                                                                    67.2
+                                              language models (LLMs) in counterfactual rea-                                        70.8               72.4
+
+                                              soning. In contrast to previous studies that pri-                                89.6                     90.0
+
+                                              marily focus on commonsense causal reason-                               Cond.                                 Joint
+                                              ing, where LLMs often rely on prior knowledge                                   Our CoIn                       Standard
+                                              for inference, we specifically assess their abil-                               CausalCoT                      Solver
+                                              ity to perform counterfactual inference using a
+                                              set of formal rules. To support this evaluation,      Figure 1: Comparison of accuracy scores on the Coun-
+                                              we introduce a new benchmark dataset, Coun-           terBench dataset across different strategies: our pro-
+                                              terBench, comprising 1.2K counterfactual rea-         posed CoIn paradigm versus baseline approaches (Stan-
+                                              soning questions. The dataset is designed with        dard, CausalCoT (Jin et al., 2023), and Solver (Hua
+                                              varying levels of difficulty, diverse causal graph    et al., 2024)), evaluated using Gemini-1.5-flash. Our
+                                              structures, distinct types of counterfactual ques-    CounterBench dataset includes five kinds types. Basic
+                                              tions, and multiple nonsensical name variants.        focuses on exploring how a single change in a causal
+                                              Our experiments demonstrate that counterfac-          variable. Joint involves simultaneous changes in mul-
+                                              tual reasoning poses a significant challenge for      tiple causes, Nested involves stepwise hypothetical as-
+                                              LLMs, with most models performing at levels           sumptions about multiple variables. Conditional eval-
+                                              comparable to random guessing. To enhance             uates counterfactuals under observed conditions. And
+                                              LLM’s counterfactual reasoning ability, we pro-       Backdoor involves counterfactual reasoning in the pres-
+                                              pose a novel reasoning paradigm, CoIn, which          ence of backdoor paths that create confounding between
+                                              guides LLMs through iterative reasoning and           the treatment variable and the outcome.
+                                              backtracking to systematically explore counter-
+                                              factual solutions. Experimental results show
+                                              that our method significantly improves LLM            Koonce et al., 2011; Gow et al., 2016; Loi and
+                                              performance on counterfactual reasoning tasks
+                                                                                                    Rodrigues, 2012). For example, a consumer who
+                                              and consistently enhances performance across
+                                              different LLMs. Our dataset is available at           declined an extended warranty may later wonder,
+                                              https://huggingface.co/datasets/CounterBench          “What if I had purchased it, could I have avoided the
+                                              /CounterBench.                                        repair costs?” This illustrates how counterfactual
+                                                                                                    reasoning guides decision-making by evaluating
+                                         1    Introduction                                          missed opportunities and alternative outcomes (Kr-
+                                                                                                    ishnamurthy and Sivaraman, 2002). While tradi-
+                                         Counterfactual reasoning, residing at the pinnacle
+                                                                                                    tional causal inference methods (Sharma and Kici-
+                                         of Pearl’s Causal Hierarchy (Pearl and Mackenzie,
+                                                                                                    man, 2020; Chen et al., 2020; Feder et al., 2022)
+                                         2018), underpins the “what if” inquiries essential to
+                                                                                                    have enhanced the predictive accuracy, robustness,
+                                         human cognition and decision-making across crit-
+                                                                                                    and explainability of NLP models, recent progress
+                                         ical fields such as healthcare, business, public ad-
+                                                                                                    in LLMs has further enriched our ability to capture
+                                         ministration, and science (Gvozdenović et al., 2021;
+                                                                                                    nuanced causal dependencies (Liu et al., 2024a;
+                                         Kyrimi et al., 2025; Kasirzadeh and Smart, 2021;
+                                                                                                    Petroni et al., 2019; Liang et al., 2024; Tarassow,
+                                             * Corresponding Email: ruixiang.tang@rutgers.edu       2023; Ma, 2024; Liu et al., 2024b). These advance-
+ments not only demonstrate sophisticated reasoning         cess, guiding LLMs through abduction, action, it-
+in tasks ranging from writing to programming but           erative prediction, and backtracking validation to
+also pave the way toward emulating human-like              systematically formalize and explore counterfac-
+intelligence and achieving artificial general intelli-     tual paths. This structured mechanism dynami-
+gence (Li and Li, 2024; Alwin, 2023; Sahota, 2023;         cally assesses the promise of each inference step,
+Bubeck et al., 2023).                                      enabling reversion to more promising points and
+   Despite recent advancements, progress in coun-          ensuring logical consistency, particularly in long-
+terfactual reasoning using LLMs remains con-               chain causal dependencies. This systematic pro-
+strained by two primary challenges. First, there           cess substantially improves the accuracy of coun-
+is currently no dedicated benchmark dataset for            terfactual analysis. Experiments on CounterBench
+rigorously evaluating LLMs’ performance on coun-           demonstrate that CoIn achieves an accuracy of
+terfactual tasks, making it difficult to measure the       89.9%, delivering a nearly 20% improvement over
+models’ capacity to capture nuanced causal rela-           Gemini-1.5-flash compared to alternative strategies
+tionships. Second, even with advanced prompting            (see Figure 1). The framework of this work is illus-
+techniques, Causal CoT (Jin et al., 2023) and other        trated in Figure 2. The contributions of this work
+iterative methods, LLMs often struggle to produce          are summarized as follows:
+logically consistent, contextually appropriate coun-
+terfactuals (Ma, 2024; Jin et al., 2023; Kıcıman               • We build a comprehensive dataset, Counter-
+et al., 2023; Zečević et al., 2023). In response, this         Bench. The dataset contains over 1200 long-
+paper focuses on two key questions:                              chain complex counterfactual reasoning ques-
+   How well do LLMs handle counterfactual rea-                   tions. The dataset spans multiple difficulty
+soning? The absence of a standardized benchmark                  levels, diverse causal graph structures, various
+dataset has impeded rigorous empirical evaluation                types of counterfactual questions, and a wide
+of LLMs’ capabilities in capturing intricate causal              range of nonsensical variant name combina-
+relationships within complex counterfactual rea-                 tions.
+soning tasks. To address this, we present Counter-
+Bench, a comprehensive evaluation framework de-                • We benchmark LLMs with various inference
+signed to assess counterfactual reasoning through                strategies on CounterBench, and results re-
+1.2K questions encompassing various domains and                  veal that most existing models (e.g., GPT-4o
+reasoning types. By systematically evaluating five               and Deepseek-V3) exhibit limited capabilities
+key dimensions, it demands genuine reasoning be-                 in performing counterfactual inference tasks.
+yond pattern recognition or memorized responses.
+Our experiments expose notable performance lim-                • We propose a novel reasoning paradigm CoIn
+itations in LLMs, even those equipped with ad-                   guides LLMs through abduction, action, it-
+vanced inference techniques. Most models like                    erative prediction, and backtracking valida-
+GPT-4o and Deepseek-V3 achieve accuracy of ap-                   tion to systematically formalize and explore
+proximately 50%, equivalent to random guessing.                  counterfactual reasoning paths. It achieves
+Furthermore, our evaluation of state-of-the-art in-              nearly 90% accuracy on several state-of-the-
+ference strategies shows only marginal improve-                  art LLMs evaluated on CounterBench, repre-
+ments over baseline performance for most models.                 senting a 20% improvement over the previous
+The models consistently struggle with maintaining                best baseline.
+logical coherence during multi-step reasoning pro-
+cesses and accurately handling causal relationships
+in complex scenarios.                                      2    CounterBench
+   How to improve LLMs’ counterfactual rea-
+soning abilities? To advance large language mod-           To evaluate the counterfactual reasoning capabili-
+els’ counterfactual reasoning capabilities, this pa-       ties of LLMs, we introduce a comprehensive bench-
+per presents CoIn (Counterfactual Inference), a            marking dataset specifically designed to measure
+novel approach that explicitly tackles the critical        their ability to handle complex causal reasoning
+challenges of multi-step inference, which remain           tasks. This section details the structure of the
+unresolved by previous methods. CoIn embeds a              dataset, the methodology for query generation, and
+tailored search algorithm into the reasoning pro-          the benchmarking results analysis.
+                 CounterBench Dataset                  Benchmarking LLMs                   CoIn Reasoning Strategy
+
+             Basic                             Standard Strategy                                   Extraction
+                                               without Instruction
+             Joint
+                                                                                        Abduction and Intervention Action
+             Nested           Human                                      Error
+                            Verification         Solver Strategy        Analysis               Forward Inference
+           Conditonal
+            Backdoor                           CausalCoT Strategy                           Back-tracking Validation
+
+
+
+Figure 2: Illustration of the framework. We create CounterBench, a dataset featuring five types of counterfactual
+questions (basic, joint, conditional, nested, and backdoor). Based on this dataset, we benchmark state-of-the-art
+LLMs using various inference strategies, conduct comprehensive error analysis, and propose our CoIn reasoning
+framework featuring systematic inference with validation mechanisms.
+
+Type          Query Template Example                                                          Causal graph
+              We know that X causes V1, V1 causes V2, V2 causes V3, and V3 causes V4,
+Basic
+              V4 causes V5, V5 causes Y. Would Y occur if not X instead of X?
+              We know that X causes V1, V1 causes V2, V2 and V1 together cause V3,
+Joint         V3 causes V4, V4 and X together cause V5, and V5 causes Y.
+              Would Y occur if not X and not V3?
+              We know that X causes V1, V1 causes V2, V2 and V1 together cause V3,
+              V3 causes V4, V4 and V2 together cause V5, and V5 causes Y.
+Nested
+              Assume not X, and based on this assumption, further suppose not V4.
+              Would Y occur?
+            We know that X and V1 together cause V2, V2 causes V3, V3 causes V4,
+Conditional V4 causes V5, V5 causes Y. We observed V1. Would Y occur if not X
+            instead of X?
+                                                                                                   X
+              We know that V1 causes X, X and V1 together cause V2, V2 causes V3,                         V2    V3     V4   V5   Y
+Backdoor
+              V3 and X together cause V4, V4 causes V5, and V5 causes Y.                           V1
+
+
+
+
+                                     Table 1: Illustrative Counterfactual Query Types
+
+
+2.1     Dataset Structure                                            Basic Counterfactual. The basic counterfactual
+                                                                     type addresses simple “what-if” scenarios. In this
+                                                                     scenario, it is formalized as Yx (u), which serves as
+The dataset consists of two main components: a                       a potential outcome expression. In causal reason-
+set of counterfactual queries and corresponding                      ing, potential outcomes refer to the hypothetical
+binary answers. Formally, the dataset is defined                     results observed when a variable is set to a partic-
+as D := {(qi , ai )|i = 1, 2, ..., N }, where each                   ular value (Holland, 1986). In Yx (u) expression,
+qi is a counterfactual query, and ai ∈ {yes, no}                     Y is the outcome variable,x is the value consid-
+represents the correct answer. Each query is de-                     ered in the hypothetical scenario, and u denotes
+rived from a deterministic Structural Causal Model                   the context. To illustrate, consider a lawn irriga-
+(SCM) M = ⟨U, V, f ⟩, where U is the set of exoge-                   tion system that only activates when the weather is
+nous variables with assignments u, V is the set of                   sunny and the soil is dry. In this example, Yx (u)
+endogenous variables, and f is the set of structural                 describes the system’s potential behavior when the
+equations (Pearl, 2009). For each Vi ∈ V , we have                   weather condition x is imposed while the soil condi-
+Vi = fi (P a(Vi ), Ui ), where P a(Vi ) ⊆ V denotes                  tion (context u) remains unchanged. Consequently,
+the parents of Vi , and Ui refers to the subset of                   when asking whether the system would activate if
+exogenous variables from U that directly influence                   the weather changed to cloudy, the relevant coun-
+the value of Vi . Intervening on a set of variables                  terfactual outcome is Ycloudy (u).
+X ⊆ V and setting them to x modifies the model to
+Mx , which deterministically defines the values of                   Joint Counterfactual. This type involves a coun-
+intervened variables given u. The dataset includes                   terfactual scenario in which multiple variables are
+five types of counterfactual queries:                                set simultaneously. Formally, it is expressed as
+                                        Standard                           CausalCoT
+ Models                    Basic Cond. Joint Nested Back. Avg. Basic Cond. Joint Nested Back. Avg.
+ GPT-3 (Davinci-002)       56.8 50.2 48.8 51.6 52.5 51.9 51.2 41.9 51.2 51.6 50.5 49.3
+ GPT-3 (Babbage-002)       50.0† 50.0† 50.0† 50.0† 47.5 49.6 3.6* 7.6* 1.2* 19.6* 18.5* 9.8*
+ GPT-3.5                   49.6 51.2 50.4 50.0 52.0 50.6 43.6 50.4 53.6 50.0 47.5 49.1
+ GPT-4o mini               50.0† 50.0† 50.0† 50.0† 52.5 50.4 57.2 66.4 60.0 63.2 50.0 59.8
+ GPT-4o                    50.4 54.4 50.4 54.8 54.0 52.8 80.4 72.4 80.8 81.6 60.5 75.8
+ Claude-3 (Sonnet)         50.4 48.8 50.0 50.8 59.5 51.6 59.2 52.0 64.4 60.0 65.5 59.0
+ Claude-3.5 (Haiku)        28.4 24.0 43.6 54.0 51.0 39.8 60.4 65.6 67.2 66.0 61.0 64.2
+ Gemini-1.5-flash          75.2 65.6 67.2 76.0 53.0 68.0 72.4 70.8 72.4 78.4 58.5 71.0
+ Gemini-1.5-flash-8b       50.0† 50.0† 50.0† 50.0† 52.5 50.4 66.8 67.2 65.2 65.2 58.5 64.8
+ Deepseek-V3               50.4 50.4 50.0 50.0 60.5 51.9 80.8 70.4 76.4 77.6 63.5 74.2
+
+Table 2: Model accuracy of standard method and CausalCoT across different reasoning categories. Note: * The
+average accuracy is only 9.8% because most of responses are not “Yes” or “No” but “incomprehensible”, which
+means LLM cannot follow instruction of CausalCoT instruction well to infer. More details will be explained in the
+Appendix H. † indicates that the LLM predicts all questions as either “Yes” or “No”, leading to a 50% accuracy.
+
+
+Yx,z (u), representing the outcome Y after setting        observed as sunny, the query evaluates whether the
+X = x and Z = z. For instance, a lawn irrigation          lawn irrigation system still activate or not if the
+system will activate if the weather is sunny, but it      sensor detects moist soil instead of dryness. Here,
+also requires dry soil as a trigger. Suppose Z repre-     Z = z represents the weather is observed as sunny,
+sents the weather condition and X represents the          which is a given condition for reasoning.
+soil moisture condition. The query asks if the irriga-
+tion system will activate when the weather changes
+to cloudy and the sensor detects that the soil is
+moist meanwhile. The relevant counterfactual out-
+come is Ycloudy,moist (u). This scenario examines         Backdoor Counterfactual. This type involves
+the combined effect of both actions happening si-         counterfactual reasoning in the presence of back-
+multaneously.                                             door paths that create confounding between the
+                                                          treatment variable and the outcome (Pearl, 2009).
+Nested Counterfactual. Nested counterfactual              Formally, it addresses queries of the form Yx (u)
+involves sequential dependencies between vari-            when there exist backdoor paths from X to Y
+ables. This is represented as YZx (u), where an           through confounders. In such scenarios, the causal
+intervention on X affects Z, which in turn impacts        effect cannot be directly identified without con-
+Y . For example, if the weather had been cloudy,          trolling for the confounding variables along the
+which is a counterfactual weather state, and under        backdoor paths. For example, a manager consid-
+this scenario, the sensor detected moist soil instead     ers evaluating whether a new marketing campaign
+of dry soil, would the irrigation system activate?        would increase sales if it is implemented. How-
+In this framework, Z represents the weather condi-        ever, both the decision to launch the campaign and
+tion, X is the soil moisture reading. Z depends on        the sales outcome might be influenced by seasonal
+the counterfactual value of X through the system’s        demand patterns. Here, the backdoor path runs
+structural causal relationships.                          from the marketing campaign through seasonal
+                                                          demand to sales, creating a spurious association.
+Conditional Counterfactual. This type intro-              The counterfactual query “Would sales increase
+duces observed conditions into the counterfactual         if we launched the campaign?” requires account-
+world (Pearl, 2009). Formally, it is written as           ing for this confounding by either controlling for
+Yx (u) | Zx (u) = z, asking how Y would change            seasonal effects or using other identification strate-
+if X was set to x while Z = z being observed as           gies. In our dataset, backdoor counterfactuals test
+a condition. For example, a lawn irrigation sys-          whether LLMs can distinguish between genuine
+tem will activate if the weather is sunny, but it also    causal effects and spurious correlations when rea-
+requires dry soil as a trigger. Now the weather is        soning about alternative scenarios.
+2.2    Query Generation and Quality                       2022). By integrating a systematic derivation pro-
+       Assessment                                         cess, including causal graph extraction, query type
+Each query consists of background information             classification, data collection, and formalization,
+and a specific question. Table 1 illustrates how          CausalCoT ensures robust logical consistency and
+samples are generated using various deterministic         high reasoning accuracy.
+counterfactual query types. The background is con-        Evaluation Settings. Within our evaluation frame-
+structed with causal graphs and story templates,          work, responses are classified into three distinct
+and variable names are replaced by nonsensical, ar-       categories, “Yes”, “No”, and “Incomprehensible”.
+tificially generated words (e.g., “Kelp,” “Ziklo”) to     The latter encompassing responses that are either
+prevent models from relying on memorized knowl-           ambiguous or lack clear meaning, typically mani-
+edge. In this way, we force LLMs to engage in             festing when no answer is detected, such as NULL
+causal reasoning rather than using prior knowledge        returns or mere query echoes. During inference,
+in pretraining data. The dataset also features bal-       we set the temperature at 0. We employ inference
+anced distributions in multiple dimensions, with          accuracy as our primary performance metric.
+binary responses evenly split between 50% “Yes”           3.1   Experimental Results
+and 50% “No.” This balance extends across differ-
+ent question types and difficulty levels, ensuring a      As shown in Table 2, the results indicate that with-
+uniform response distribution within each category.       out specific instructions, most LLMs struggle with
+The dataset consists of 1,200 questions, categorized      counterfactual reasoning, performing no better than
+into five distinct types, with each type containing       random guessing in terms of accuracy. Specifically,
+200 or 250 questions. Within each type, there is an       for model GPT-4o mini, we observed consistent
+equal distribution of answers, comprising 100 “Yes”       predictions of either “Yes” or “No,” resulting in
+responses and 100 “No” responses or 125 “Yes”             a 50.0% accuracy in the first four kinds of ques-
+and 125 “No”. Additionally, the dataset is strati-        tions. Among all tested models, Gemini-1.5-flash
+fied based on five levels of difficulty, determined       achieved the highest baseline performance with an
+by the number of events present in each question,         accuracy of 68.0%. Although the CausalCoT ap-
+ranging from 5 to 9. Each difficulty level includes       proach is designed to enhance the causal reasoning
+240 questions, maintaining a balanced distribution        capabilities of LLMs, our empirical findings sug-
+of answers with 120 “Yes” and 120 “No”. We also           gest that it does not significantly improve their per-
+conduct a human evaluation on these queries, with         formance in counterfactual reasoning tasks. Most
+further details provided in Appendix B.                   models showed minimal or no improvement, as ex-
+                                                          emplified by GPT-3.5 Turbo. The best performance
+3     Benchmarking LLMs on CounterBench                   model in the CausalCoT is GPT-4o, achieved an
+                                                          accuracy of only 75.8%.
+We conducted comprehensive experiments to sys-            Error Analysis. To systematically analyze the lim-
+tematically evaluate the performance of current           itations of existing approaches, we conducted an
+LLMs on counterfactual reasoning tasks, demon-            error analysis on responses generated by Causal-
+strating their capabilities using state-of-the-art rea-   CoT. Our analysis focuses on three key compo-
+soning techniques.                                        nents: causal data collection, inference process,
+Models. The tested LLM models include GPT-                and conclusion derivation. Through careful ex-
+3.5 turbo, GPT-4o, GPT-4o mini, Davinci-002,              amination of each component, we identified three
+Babbage-002 (OpenAI, 2024), Claude 3.5 Haiku,             primary categories of errors: Wrong causal rela-
+Claude 3 Sonnet (Anthropic, 2024), Deepseek-              tionships: This error occurs when LLMs cannot
+V3 (DeepSeek, 2024) and Gemini-1.5-Flash and              construct accurate causal graphs or extract known
+Gemini-1.5-Flash-8B (Google, 2024).                       values from background information. Wrong infer-
+Reasoning Strategies. In our baseline evaluations,        ence process: This happens when LLMs, despite
+we employed two distinct reasoning strategies to          correctly identifying causal relationships, make in-
+assess these models. The first relied on standard         correct predictions of the target event Y . Wrong
+prompting methods without specialized instruc-            conclusion: This type of error arises when LLMs
+tions. The second used the advanced CausalCoT             reach contradictory final answers, even after cor-
+approach (Jin et al., 2023), an extension of the          rectly computing the value of Y . The distribution
+Chain-of-Thought prompting paradigm (Wei et al.,          of these error categories is illustrated in Figure
+3. Notably, 86% of errors occur in the inference         Each phase serves a specific purpose in ensuring
+process, revealing that even with well-constructed       accurate counterfactual reasoning, and they pro-
+causal graphs, LLMs struggle significantly with          vide a robust methodology for handling complex
+deriving accurate predictions through reasoning.         causal dependencies together. Below, we describe
+                                                         each phase in detail, explaining its role and how it
+                                                         contributes to the overall process.
+
+                                                         4.1   Extraction
+                      12%                                In the first phase, we focus on systematically gath-
+                 2%                                      ering all relevant information explicitly stated in
+                                                         the scenario. The process begins with construct-
+                                                         ing the causal graph by identifying relationships
+                                                         between events and representing them in a clear
+                                                         “event 1 → event 2” format, which eliminates
+                              86%                        potential ambiguities. Next, we collect the given
+                      Wrong Inference                    values for each variable from both background in-
+                      Wrong Relations                    formation and questions, where these values indi-
+                      Wrong Conclusion
+                                                         cate whether specific events occur or not. Crucially,
+                                                         this phase maintains strict adherence to explicitly
+       Figure 3: Error Analysis of CausalCoT.            stated information, avoiding any unsupported in-
+                                                         ferences or assumptions in favor of a rigorous and
+                                                         unbiased data collection process.
+4   Proposed Reasoning Strategy
+As discussed in previous section, the primary chal-      4.2   Abduction
+lenge for large language models is to minimize           This phase focuses on inferring the posterior con-
+incorrect inferences, which are a major source of        straints over the exogenous noise variables, equiv-
+errors. To address this challenge, we propose CoIn       alently, constraints over parent assignments that
+(Counterfactual Inference), a systematic reason-         make the observed factual world consistent with
+ing framework that guides large language models          the structural equations. For each observed variable
+through structured problem-solving instead of re-        V with value vobs , we invert its structural equa-
+lying on intuitive shortcuts or memorized patterns.      tion V := fV (Parents(V ), UV ) to obtain either a
+Our approach transforms counterfactual queries           unique solution for UV or a feasible set over UV
+into a five-phase algorithmic process, mirroring         given the parents. In deterministic logical models,
+how humans naturally approach “what if” ques-            this is often conveniently carried out by deducing
+tions (Sel et al., 2023): first understanding what       parent assignments that must hold for vobs to be
+actually happened, then imagining the alternative        true. The resulting values are stored as the factual
+scenario, systematically working through the con-        world knowledge base and will be held fixed in
+sequences, and finally double-checking the logic.        subsequent Intervention Action and Forward Infer-
+This structured approach significantly reduces rea-      ence, ensuring counterfactuals are evaluated in the
+soning errors by breaking down complex problems          same world.
+into manageable steps with built-in validation. An
+example of proposed paradigm is provided in Ap-          4.3   Intervention Action
+pendix A.                                                In this phase, the framework applies the counter-
+   The CoIn framework consists of five key phases:       factual interventions described in the query. This
+Extraction: Extract Counterfactual Information           involves modifying the original set of causal rules
+from the given natural language facts. Abduc-            by replacing the equations for the intervened vari-
+tion: Infer the underlying conditions from ob-           ables with constant values, resulting in an updated
+served facts; Intervention Action: Apply the hy-         set of rules. The interventions are incorporated into
+pothetical changes specified in the query; Forward       the knowledge base, effectively making a precise
+Inference: Systematically trace through the causal       alteration to the causal graph. This phase captures
+consequences; Back-tracking Validation: Verify           the core “what if” element of the query, allowing
+the logical consistency of the entire reasoning chain.   the framework to simulate hypothetical worlds in
+a controlled way. It focuses on specific changes,            Model                 Standard CausalCoT Solver Ours
+which streamlines the exploration by limiting the            GPT-3 (Davinci-002)     51.9       49.3      50.1   49.6
+search to paths directly affected by the interven-           GPT-3     (Babbage-     49.6        9.8      47.9   45.8
+                                                             002)
+tion, similar to how efficient searches eliminate            GPT-4o mini             50.4       59.8      47.2   79.9
+unnecessary branches.                                        GPT-4o                  52.8       75.8      51.4   89.4
+                                                             GPT-3.5 turbo           50.6       49.1      49.6   58.9
+4.4    Forward Inference                                     Claude-3 (Sonnet)       51.6       59.0      51.8   89.8
+                                                             Claude-3.5 (Haiku)      39.8       64.2      48.3   79.1
+During this iterative phase, the framework predicts          Gemini-1.5-flash        68.0       71.0      52.8   89.9
+                                                             Gemini-1.5-flash-8b     50.4       64.8      50.3   83.9
+values for unobserved variables by selecting nodes           Deepseek-V3             51.9       74.2      49.3   91.8
+in the causal graph whose parent variables are al-
+ready known in the knowledge base and evaluat-            Table 3: Model accuracy on CounterBench. We report
+ing their updated equations. Beginning with the           the average accuracy for four inference strategies: Stan-
+intervened variables and the inferred noise terms,        dard, CausalCoT, Solver, and CoIn.
+it gradually computes the effects on downstream
+variables until it reaches the target variable Y . If a
+                                                          approach combines LLMs with Structural Causal
+node’s value cannot be calculated due to missing in-
+                                                          Model (SCM) tools (Pearl, 2009) for causal infer-
+formation about its parents, the framework chooses
+                                                          ence. The study introduces CausalTool, a suite of
+another suitable node and continues the process
+                                                          10 inference tools designed for various causal tasks.
+until Y is determined. This forward progression
+                                                          It leverages LLMs to classify causal questions, ex-
+mimics a depth-first exploration of causal chains,
+                                                          tract causal graphs and formalized data, and route
+enabling the framework to dynamically construct
+                                                          them to the appropriate tools for inference, with
+and assess potential outcomes. By focusing on
+                                                          the final answer generated by the LLM. 1 During
+nodes that can be computed immediately, it nav-
+                                                          inference, the temperature is set to zero.
+igates the dependency graph efficiently, steering
+clear of unproductive paths and promoting a me-           5.2    Main Result
+thodical advancement toward the solution. The
+details of this phase is in the Appendix G.               The comprehensive performance comparison
+                                                          across all models is presented in Table 3. Our
+4.5    Back-tracking Validation                           approach demonstrates notable improvements over
+To confirm that the predicted values are logi-            existing methods across the model spectrum,
+cally consistent, this final phase retraces the steps     with particularly noteworthy performance gains
+through the knowledge base and re-evaluates the           achieved by smaller language models, including
+equation for each non-noise variable using the pre-       GPT-4o mini, Claude-3.5 Haiku, and Gemini-1.5-
+dicted values. For every such variable V , it recalcu-    flash-8b. For instance, our method enables GPT-4o
+lates the expected value based on the updated equa-       mini to achieve an accuracy of 79.9%, surpassing
+tion and checks if it matches the previously stored       the performance of several larger models without
+value. If any mismatch occurs, the framework sig-         CoIn enhancement. As detailed in Table 4, taking
+nals an error, highlighting a potential issue in the      GPT-4o mini as an example, CoIn achieves superior
+earlier reasoning that may need reevaluation. This        performance across all five types of counterfactual
+validation serves as a protective measure against         questions, with particularly better results on ba-
+errors that could accumulate during the process,          sic questions compared to more complex variants.
+akin to retracing a path to confirm its validity.         Additionally, state-of-the-art LLMs such as GPT-
+                                                          4o, Gemini-1.5-flash, and Deepseek-V3 achieve re-
+5     Experiments                                         markable accuracy approaching or exceeding 90%
+                                                          when augmented with our method. Taken GPT-4o
+5.1    Experiment Setup                                   as example, Our strategy improves the accuracy
+We adopted the same LLMs as mentioned in Sec-             of the model from 75.8% to 89.4%, demonstrating
+tion 3 for our experiments. To establish baselines,       CoIn’s effectiveness in guiding LLMs through al-
+we implemented both CausalCoT (Jin et al., 2023)          gorithm to explore paths step-by-step. The results
+and standard solver strategies. The latter integrates        1
+                                                               Since the source code for CausalTool is not publicly avail-
+external tools into the chain-of-thought process, as      able, we re-implemented its counterfactual inference proce-
+described in (Hua et al., 2024). Specifically, this       dure based on descriptions in the original paper.
+ Methods     Basic Cond. Joint Nested Back. Avg.        terfactual reasoning tasks.
+ Standard    50.0   50.0   50.0   50.0   52.5   50.4              90
+ CausalCoT   57.2   66.4   60.0   63.2   50.0   59.8                                                       Standard
+ Solver      35.2   54.4   50.4   50.0   45.5   47.2
+                                                                  80                                       CausalCoT
+                                                                  70                                       Ours
+ Ours        82.8   79.2   80.0   80.4   76.5   79.9
+                                                                  60
+
+                                                       Accuracy (%)
+Table 4: Accuracy of GPT-4o mini across five query                50
+types in the CounterBench.                                        40
+                                                                  30
+indicate that contemporary LLMs, when equipped                    20
+with our strategy, can effectively resolve most for-              10
+mal complex counterfactual problems. The details                   0 gemini-1.5 gemini-1.5 gemini-1.5-8b gemini-1.5-8b
+of all performance of our results are presented in                        anti-    common-  anti-    common-
+                                                                       commonsense sense commonsense sense
+Appendix C. Moreover, in Appendix D, we con-
+ducted error analysis. The analysis reveals a sub-      Figure 4: Accuracy comparison between Standard,
+stantial reduction in errors of inference process.      CoIn, and CausalCoT method in Anti-commonsense
+                                                        and Commonsense Dataset.
+Moreover, we also examine the impact of complex
+causal relationships on outcomes. We found that
+accuracy decreases as the number of variants in-        6             Related Work
+creases for CausalCoT and CoIn. The details are
+shown in the next section.                              Counterfactual Reasoning. Counterfactual rea-
+                                                        soning explores how outcomes change when cer-
+5.3   Validating Generalization Ability                 tain variables are altered from their historical states.
+                                                        In Structural Causal Models (SCMs), Pearl’s (Pearl,
+In this section, we evaluate the generalization ca-     2009) “surgery” and do-calculus provide system-
+pability of CoIn using the CLADDER dataset (Jin         atic ways to infer intervention outcomes, highlight-
+et al., 2023). CLADDER is a dataset focus on the        ing deep causal knowledge required for accurate
+causal reasoning questions. We utilize the CLAD-        inference. Counterfactuals can be deterministic
+DER dataset to determine if the proposed method         or probabilistic: deterministic settings yield pre-
+can be extended beyond the CounterBench dataset.        dictable outcomes from given conditions, while
+Unlike our dataset, which focuses on formal rules,      probabilistic models incorporate inherent uncer-
+CLADDER includes examples that utilize com-             tainties. These methods have gained traction in
+mon sense knowledge rather than causal inference        domains like social sciences, where they assess
+abilities to answer queries. Specifically, it encom-    alternative policy outcomes and study causal mech-
+passes both commonsense and anti-commonsense            anisms in observational data (Morgan, 2015), and
+scenarios, allowing us to explore whether CoIn          in medicine, where they enable personalized treat-
+remains effective under the influence of pretrain-      ment and decision support (Johansson et al., 2016;
+ing knowledge in LLMs. We conduct experiments           Shalit et al., 2017; Louizos et al., 2017; Yoon et al.,
+on the counterfactual subset of CLADDER. We             2018). In artificial intelligence, counterfactual rea-
+applied the Gemini-1.5 and Gemini-1.5-8b mod-           soning is crucial for interpretability and fairness,
+els to both commonsense and anti-commonsense            enabling models to generate alternative scenarios
+queries, with the results displayed in Figure 4 and     and assess decision-making robustness. Although
+detailed examples in Appendix E. These results          recent efforts extend counterfactual reasoning to
+demonstrate that performance is consistently stable     LLMs (Jin et al., 2023), significant challenges per-
+across different reasoning paradigms, suggesting        sist, particularly regarding complex variable rela-
+that pretraining knowledge has a limited impact         tionships in high-dimensional text data. Conse-
+on the CoIn counterfactual reasoning capabilities.      quently, bridging the gap between textual complex-
+Furthermore, our method achieves an accuracy of         ity and robust causal inference remains a focal point
+78.98%, outperforming both CausalCoT at 64.77%          for future research.
+and the Standard method at 64.20%. This perfor-
+mance underscores CoIn’s generalizability and its       LLMs in Counterfactual Learning. With the
+potential for broader application in various coun-      rapid evolution of LLMs, the research community
+has increasingly focused on their ability to perform    Sébastien Bubeck, Varun Chandrasekaran, Ronen El-
+causal inference (Zhang et al., 2023; Ashwani et al.,     dan, Johannes Gehrke, Eric Horvitz, Ece Kamar,
+                                                          Peter Lee, Yin Tat Lee, Yuanzhi Li, Scott Lund-
+2024). A prominent example is Causal Agent, an
+                                                          berg, et al. 2023. Sparks of artificial general intelli-
+agent-based LLM framework that merges an LLM              gence: Early experiments with gpt-4. arXiv preprint
+with causal tools for complex tasks (Han et al.,          arXiv:2303.12712.
+2024). While it excels at identifying causal asso-
+                                                        Ivi Chatzi, Nina Corvelo Benz, Eleni Straitouri, Stratis
+ciations and conducting interventions, it largely          Tsirtsis, and Manuel Gomez-Rodriguez. 2024. Coun-
+omits counterfactual reasoning, limiting its applica-      terfactual token generation in large language models.
+bility to more advanced scenarios. Current efforts         arXiv preprint arXiv:2409.17027.
+to integrate counterfactual reasoning into LLMs
+                                                        Huigang Chen, Totte Harinen, Jeong-Yoon Lee, Mike
+typically follow two paths. First, commonsense-           Yung, and Zhenyu Zhao. 2020. Causalml: Python
+based approaches leverage background knowledge            package for causal machine learning. arXiv preprint
+to imagine scenarios that defy established facts          arXiv:2002.11631.
+(Ning et al., 2024; Chatzi et al., 2024; Musi and
+                                                        DeepSeek. 2024. DeepSeek: AI-Powered Search En-
+Palmieri, 2024; Vicuna, 2023), such as positing           gine. Accessed: 2025-02-15.
+alternative historical outcomes. Second, graph-
+based methods employ formal causal graphs and           Amir Feder, Katherine A Keith, Emaad Manzoor, Reid
+external Python packages for computations, as seen       Pryzant, Dhanya Sridhar, Zach Wood-Doughty, Jacob
+                                                         Eisenstein, Justin Grimmer, Roi Reichart, Margaret E
+in CausalTool (Hua et al., 2024). Although these         Roberts, et al. 2022. Causal inference in natural lan-
+methods effectively incorporate structured causal        guage processing: Estimation, prediction, interpreta-
+information, they often offload key calculations         tion and beyond. Transactions of the Association for
+outside the LLM.                                         Computational Linguistics, 10:1138–1158.
+
+                                                        Google. 2024. Gemini. https://gemini.google.
+7   Conclusion                                            com/. Accessed: 2025-01-06.
+
+In this work, we develop and extend CounterBench,       Ian D Gow, David F Larcker, and Peter C Reiss. 2016.
+a counterfactual reasoning dataset with five prob-         Causal inference in accounting research. Journal of
+                                                          Accounting Research, 54(2):477–523.
+lem types for LLM evaluation. Our findings re-
+veal that most LLMs perform near-randomly, with         Emilia Gvozdenović, Lucio Malvisi, Elisa Cinconze,
+state-of-the-art methods showing minimal improve-         Stijn Vansteelandt, Phoebe Nakanwagi, Emmanuel
+ment. To address these challenges, we propose             Aris, and Dominique Rosillon. 2021. Causal infer-
+                                                          ence concepts applied to three observational studies
+CoIn, a reasoning paradigm inspired by formal             in the context of vaccine development: from theory
+causal inference principles and planning strategies.      to practice. BMC Medical Research Methodology,
+CoIn guides LLMs through iterative thinking and           21:1–10.
+backtracking to explore reasoning paths more effec-
+                                                        Kairong Han, Kun Kuang, Ziyu Zhao, Junjian Ye, and
+tively. Our approach significantly enhances coun-         Fei Wu. 2024. Causal agent based on large language
+terfactual reasoning capabilities of LLMs.                model. arXiv preprint arXiv:2408.06849.
+
+                                                        Paul W Holland. 1986. Statistics and causal infer-
+                                                          ence. Journal of the American statistical Association,
+References                                                81(396):945–960.
+Alwin. 2023. Understanding causal ai: Bridging the
+                                                        Zhenyang Hua, Shuyue Xing, Huixing Jiang, Chen
+  gap between correlation and causation. https://
+                                                          Wei, and Xiaojie Wang. 2024. Improving causal
+  www.alwin.io/causal-ai. Accessed: 2025-01-06.
+                                                          inference of large language models with scm tools.
+                                                          In CCF International Conference on Natural Lan-
+Anthropic. 2024. Claude. https://www.anthropic.           guage Processing and Chinese Computing, pages
+  com/api. Accessed: 2025-01-06.                          3–14. Springer.
+
+Swagata Ashwani, Kshiteesh Hegde, Nishith Reddy         Zhijing Jin, Yuen Chen, Felix Leeb, Luigi Gresele,
+  Mannuru, Dushyant Singh Sengar, Mayank Jindal,          Ojasv Kamal, LYU Zhiheng, Kevin Blin, Fer-
+  Krishna Chaitanya Rao Kathala, Dishant Banga,           nando Gonzalez Adauto, Max Kleiman-Weiner,
+  Vinija Jain, and Aman Chadha. 2024. Cause and           Mrinmaya Sachan, et al. 2023. Cladder: Assess-
+  effect: Can large language models truly understand      ing causal reasoning in language models. In Thirty-
+  causality? In Proceedings of the AAAI Symposium         seventh conference on neural information processing
+  Series, volume 4, pages 2–9.                            systems.
+Fredrik Johansson, Uri Shalit, and David Sontag. 2016.     Jing Ma. 2024. Causal inference with large language
+  Learning representations for counterfactual inference.      model: A survey. arXiv preprint arXiv:2409.09822.
+  In International conference on machine learning,
+  pages 3020–3029. PMLR.                                   SL Morgan. 2015. Counterfactuals and causal infer-
+                                                             ence. Cambridge University Press.
+Atoosa Kasirzadeh and Andrew Smart. 2021. The use
+  and misuse of counterfactuals in ethical machine         Elena Musi and Rudi Palmieri. 2024. The fallacy of
+  learning. In Proceedings of the 2021 ACM Confer-           explainable generative ai: evidence from argumenta-
+  ence on Fairness, Accountability, and Transparency,        tive prompting in two domains. In CEUR Workshop
+  pages 228–236.                                             Proceedings, volume 3769, pages 59–69.
+
+Emre Kıcıman, Robert Ness, Amit Sharma, and Chen-          Xuefei Ning, Zinan Lin, Zixuan Zhou, Zifu Wang,
+  hao Tan. 2023. Causal reasoning and large language         Huazhong Yang, and Yu Wang. 2024. Skeleton-of-
+  models: Opening a new frontier for causality. arXiv        thought: Prompting llms for efficient parallel gener-
+  preprint arXiv:2305.00050.                                 ation. In The Twelfth International Conference on
+                                                             Learning Representations.
+Lisa Koonce, Karen K Nelson, and Catherine M Shake-
+   speare. 2011. Judging the relevance of fair value       OpenAI. 2024. Models. https://platform.openai.
+   for financial instruments. The Accounting Review,         com/docs/models. Accessed: 2025-01-06.
+   86(6):2075–2098.
+                                                           Judea Pearl. 2009. Causality. Cambridge university
+Parthasarathy Krishnamurthy and Anuradha Sivaraman.          press.
+  2002. Counterfactual thinking and advertising re-
+  sponses. Journal of Consumer Research, 28(4):650–        Judea Pearl and Dana Mackenzie. 2018. The book of
+  658.                                                       why: the new science of cause and effect. Basic
+                                                             books.
+Evangelia Kyrimi, Somayyeh Mossadegh, Jared M
+  Wohlgemut, Rebecca S Stoner, Nigel RM Tai, and           Fabio Petroni, Tim Rocktäschel, Patrick Lewis, An-
+  William Marsh. 2025. Counterfactual reasoning us-          ton Bakhtin, Yuxiang Wu, Alexander H Miller, and
+  ing causal bayesian networks as a healthcare gover-        Sebastian Riedel. 2019. Language models as knowl-
+  nance tool. International Journal of Medical Infor-        edge bases? arXiv preprint arXiv:1909.01066.
+  matics, 193:105681.
+                                                           Neil Sahota. 2023.         Causal ai:   Bridging
+Jia Li and Xiang Li. 2024. Relation-first modeling           the gap between correlation and causation.
+   paradigm for causal representation learning toward        https://www.neilsahota.com. Accessed: 2025-01-
+   the development of agi. Preprint, arXiv:2307.16387.       06.
+
+Weixin Liang, Yaohui Zhang, Zhengxuan Wu, Haley            Bilgehan Sel, Ahmad Al-Tawaha, Vanshaj Khattar,
+ Lepp, Wenlong Ji, Xuandong Zhao, Hancheng Cao,              Ruoxi Jia, and Ming Jin. 2023. Algorithm of
+ Sheng Liu, Siyu He, Zhi Huang, et al. 2024. Mapping         thoughts: Enhancing exploration of ideas in large
+ the increasing use of llms in scientific papers. arXiv      language models. arXiv preprint arXiv:2308.10379.
+ preprint arXiv:2404.01268.
+                                                           Uri Shalit, Fredrik D Johansson, and David Sontag.
+Jinxin Liu, Shulin Cao, Jiaxin Shi, Tingjian Zhang, Lun-     2017. Estimating individual treatment effect: gen-
+   yiu Nie, Linmei Hu, Lei Hou, and Juanzi Li. 2024a.        eralization bounds and algorithms. In International
+   How proficient are large language models in formal        conference on machine learning, pages 3076–3085.
+   languages? an in-depth insight for knowledge base         PMLR.
+   question answering. In Findings of the Association
+   for Computational Linguistics ACL 2024, pages 792–      Amit Sharma and Emre Kiciman. 2020. Dowhy:
+   815.                                                     An end-to-end library for causal inference. arXiv
+                                                            preprint arXiv:2011.04216.
+Xiaoyu Liu, Paiheng Xu, Junda Wu, Jiaxin Yuan, Yifan
+  Yang, Yuhang Zhou, Fuxiao Liu, Tianrui Guan, Hao-        Artur Tarassow. 2023. The potential of llms for coding
+  liang Wang, Tong Yu, et al. 2024b. Large language          with low-resource and domain-specific programming
+  models and causal inference in collaboration: A com-       languages. arXiv preprint arXiv:2307.13018.
+  prehensive survey. arXiv preprint arXiv:2403.09606.
+                                                           Vicuna. 2023. Vicuna: An open-source chatbot im-
+Massimo Loi and Margarida Rodrigues. 2012. A note            pressing GPT-4 with 90%* ChatGPT quality. https:
+ on the impact evaluation of public policies: the coun-      //vicuna.lmsys.org/. Accessed: 2023.
+ terfactual analysis.
+                                                           Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten
+Christos Louizos, Uri Shalit, Joris M Mooij, David Son-       Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou,
+  tag, Richard Zemel, and Max Welling. 2017. Causal           et al. 2022. Chain-of-thought prompting elicits rea-
+  effect inference with deep latent-variable models. Ad-      soning in large language models. Advances in neural
+  vances in neural information processing systems, 30.        information processing systems, 35:24824–24837.
+Jinsung Yoon, James Jordon, and Mihaela Van                 lems of sufficient complexity to effectively evaluate
+   Der Schaar. 2018. Ganite: Estimation of individ-         counterfactual reasoning abilities of models. The
+   ualized treatment effects using generative adversarial
+                                                            inter-annotator agreement between the two PhD
+   nets. In International conference on learning repre-
+   sentations.                                              annotators was approximately 95%, demonstrating
+                                                            strong consistency in their judgments. Before the
+Matej Zečević, Moritz Willig, Devendra Singh Dhami,       full annotation began, both annotators were pro-
+ and Kristian Kersting. 2023. Causal parrots: Large
+ language models may talk causality but are not causal.     vided with a set of practice examples and detailed
+ arXiv preprint arXiv:2308.13067.                           reasoning guidelines. They participated in a cali-
+                                                            bration phase involving discussion and alignment
+Cheng Zhang, Stefan Bauer, Paul Bennett, Jiangfeng
+  Gao, Wenbo Gong, Agrin Hilmkil, Joel Jennings,            on annotation standards, ensuring a shared under-
+  Chao Ma, Tom Minka, Nick Pawlowski, et al. 2023.          standing of the task. This preparatory step helped
+  Understanding causality with large language mod-          establish consistency and reliability across the full
+  els: Feasibility and opportunities. arXiv preprint        dataset.
+  arXiv:2304.05524.
+                                                            C. More Experiment Details
+Appendix
+                                                            Table 5 presents a comprehensive performance
+A. Method Prompt Design                                     comparison between the Solver method and our
+Our prompt design, as illustrated in Figure 5, has          CoIn approach across various models on the Coun-
+been carefully structured to optimize the interaction       terBench dataset. Our analysis reveals several sig-
+between our algorithm and Large Language Mod-               nificant patterns in model performance across dif-
+els (LLMs). At its core, the design incorporates            ferent counterfactual reasoning tasks. First and
+multiple few-shot examples that serve as compre-            foremost, CoIn demonstrates consistent superiority
+hensive demonstrations of our algorithm’s opera-            over the Solver method across all task categories
+tional framework. These examples are strategically          and model architectures. This improvement is par-
+selected to showcase various reasoning patterns             ticularly pronounced in newer model architectures,
+and problem-solving approaches, providing LLMs              with state-of-the-art models like GPT-4o, Claude-3
+with a robust foundation for understanding the algo-        (Sonnet), and Gemini-1.5-flash showing remark-
+rithm’s methodology. Within the prompt, we have             able performance gains. Notably, GPT-4o achieves
+meticulously detailed step-by-step instructions, cre-       perfect accuracy (100.0%) on basic reasoning tasks
+ating a clear and structured information flow that          under our method. Deepseek-V3 demonstrates ex-
+guides the model through the reasoning process.             ceptional consistency with high performance across
+This structured approach leverages LLMs’ inherent           all task types. Its accuracy comes to 99.6% for
+in-context learning capabilities, enabling them to          basic tasks and maintaining above 90% average
+systematically explore solution paths rather than           accuracy. The performance distribution across dif-
+relying on intuitive responses. This approach not           ferent task types reveals interesting patterns. Basic
+only enhances the model’s ability to break down             reasoning tasks consistently yield the highest ac-
+problems and evaluate paths efficiently but also            curacy under our method, particularly evident in
+reducing the likelihood of generating erroneous in-         larger models. However, this category also exhibits
+termediate steps and improving reasoning stability.         the most significant performance variation across
+                                                            different model architectures, suggesting that ba-
+                                                            sic counterfactual reasoning capabilities are highly
+B. Human Evaluation                                         sensitive to model scale and architecture. In con-
+To assess the quality of our dataset, we asked two          trast, joint reasoning tasks show relatively stable
+Ph.D. students with expertise in causal inference           performance across different models, indicating
+to answer 200 randomly selected questions. They             that these capabilities may be more fundamentally
+achieved an average accuracy of 97.75% and re-              tied to the reasoning framework rather than model
+quired four hours to complete them, reflecting the          size. Moreover, we observe a clear correlation be-
+substantial cognitive effort involved. According            tween model recency and performance, with newer
+to participant feedback, these questions demanded           models like GPT-4o and Claude-3 (Sonnet) achiev-
+careful consideration of multiple causal factors and        ing significantly higher average accuracies (89.8%,
+explicit counterfactual reasoning steps. These find-        89.4%) compared to their predecessors. This trend
+ings demonstrate that our dataset presents prob-            holds true across all task types, though the magni-
+tude of improvement varies by category. The con-          in Figure 12, the approach breaks down the rea-
+sistent performance improvements across newer             soning process into distinct phases: counterfactual
+model architectures suggest that recent advances in       information collection, and systematic exploration
+language model development have enhanced their            of inference paths. This structured decomposition
+capacity for structured counterfactual reasoning          contrasts sharply with the standard approach shown
+when combined with our methodology.                       in Figure 9, which provides minimal guidance for
+                                                          navigating the reasoning process. Through explicit
+D. Error Analysis comparison between Our                  variable mapping and systematic path exploration,
+Method and CausalCoT                                      CoIn enables models to systematically evaluate
+By randomly sampling 50 instances and catego-             possible causal chains, leading to more reliable
+rizing errors into three distinct types, wrong rela-      and traceable inference outcomes. The key reason
+tions, wrong inferences, and wrong conclusions,           why only CoIn arrived at the correct answer lies
+we systematically evaluated the model’s perfor-           in its explicit structured reasoning process, which
+mance. The analysis demonstrated notable differ-          ensures a systematic and robust approach to coun-
+ences in the relative distribution of errors, with        terfactual inference. Unlike CausalCoT and the
+inference-related errors decreasing from 86% to           standard method, CoIn employs a step-by-step al-
+46%. This significant reduction combining with            gorithmic framework that systematically processes
+the diminished error quantity substantiates an en-        causal dependencies, preventing shortcut reasoning
+hanced counterfactual inference capability. Con-          and heuristic errors.
+currently, we also observed a relative increase in
+relationship-related errors, 12% to 50%. Conse-
+quently, the overall effect of our strategy is positive
+as the number of errors come down notably.
+
+E. CLADDER Dataset Example
+Two examples are generated from the CLADDER
+dataset. It is shown in Figure 7 and Figure 8, are
+designed to evaluate a model’s ability to distinguish
+between commonsense and anti-commonsense rea-
+soning in counterfactual scenarios. Commonsense
+reasoning follows causal relationships that align
+                                                          G. Forward Inference Algorithm
+with human intuition and everyday knowledge,
+making it easier for models to infer outcomes based
+on familiar patterns. In contrast, anti-commonsense
+reasoning presents causal structures that contra-
+dict intuitive expectations, requiring models to rely
+solely on explicitly provided causal relationships
+rather than prior knowledge. By testing both rea-
+soning paradigms, these examples assess whether           The part is forward inference Algorithm, the core
+a model can accurately differentiate between intu-        methodological component that systematically ap-
+itive and counterintuitive causal structures, ensur-      plies gathered information from previous Extrac-
+ing that real-world biases do not interfere with its      tion, Abduction, and Action steps to evaluate the
+counterfactual reasoning abilities.                       target event. The framework employs iterative
+                                                          counterfactual reasoning to progressively explore
+F. Answer of our methods                                  and infer event values, ultimately determining the
+Here, we provide a comparative analysis between           target outcome. Moreover, through integrated eval-
+our CoIn method, CausalCoT and the standard               uation and backtracking mechanisms, the frame-
+approach. The results are shown in Figure 9,              work enables models to systematically optimize
+Figure 11 and Figure 12. In results, our CoIn             their reasoning paths and improve reasoning accu-
+method introduces a structured, step-by-step rea-         racy. This process follows an algorithmic strategy
+soning framework that systematically addresses            designed to systematically determine the counter-
+complex counterfactual scenarios. As illustrated          factual outcome.
+                                    Solver                                           Ours
+ Models              Basic Cond. Joint Nested Back.         Avg.     Basic Cond. Joint Nested Back. Avg.
+ GPT-3 (Davinci-002) 50.4 50.0 50.4 50.0 49.5               50.1     51.2 48.4    48    51.6 48.5 49.6
+ GPT-3     (Babbage- 44.8 48.8 48.4 48.0 50.0               47.9     45.2 46.4    46    45.6 46.0 45.8
+ 002)
+ GPT-3.5 turbo       50.0 50.0 50.0 50.0 47.5               49.6     65.2         54.0         61.2       63.2        49.0       58.9
+ GPT-4o mini         35.2 54.4 50.4 50.0 45.5               47.2     82.8         79.2         80.0       80.4        76.5       79.9
+ GPT-4o              45.6 60.8 51.6 50.4 48.0               51.4     100.0        89.6         90.0       88.4        76.5       89.4
+ Claude-3 (Sonnet)   55.6 58.0 43.6 50.4 51.5               51.8     97.6         84.8         90.0       94.0        80.5       89.8
+ Claude-3.5 (Haiku)  49.2 49.2 48.8 49.6 43.5               48.3     88.0         76.8         81.2       83.2        63.0       79.1
+ Gemini-1.5-flash    54.8 58.8 50.8 50.8 48.0               52.8     98.4         89.6         90.0       94.0        74.5       89.9
+ Gemini-1.5-flash-8b 52.4 50.8 49.2 51.2 47.0               50.3     94.8         80.0         88.0       88.4        64.5       83.9
+ Deepseek-V3         51.2 48.0 48.4 50.4 48.0               49.3     99.6         90.0         90.4       94.0        83.0       91.8
+
+            Table 5: Performance of Solvers and Our CoIn Across Different Reasoning Categories
+
+
+Algorithm 1 Forward Inference Algorithm               an error analysis, categorizing the errors into three
+Input:                                                distinct types: Blank Response: This occurs when
+ 1: R: A set of causal graph relations                the model produces an empty response. Repeat-
+ 2: E: A set of events                                ing Error: This occurs when the model’s infer-
+ 3: N: A set of {event, value} pairs                  ence is only repeating the questions and given in-
+Output:                                               formations. The example is shown in Figure 13.
+ 4: Y : target event Y                                Type Mismatch: It represents that the answer is
+ 5: procedure R EASONING (R, E, N)                    expected to be a binary value “yes” or “no”. The
+ 6:     K ← R ANDOM(E), E ∈ E \ N.events              response returns a list with multiple “yes” or “no”.
+ 7:     while K ∈ / N.events do                       The example is shown in Figure 14.
+ 8:         for all relation r ∈ R do
+ 9:             if ∃ INFER(r, N) → value(K)
+                                                             1.20
+    then
+10:                  N ← N ∪ {K, value(K)}                   1.00
+                                                                    0.18                      0.19
+11:                  if K = Y then                           0.80
+                                                                    0.10         0.46                      0.43
+                                                                                                                          0.32
+                                                                                              0.12
+12:                      return value(K)
+                                                             0.60
+                                                                                                                          0.24
+13:                  else
+14:                      K ← R ANDOM(E), E ∈                 0.40
+                                                                    0.72
+                                                                                 0.30
+                                                                                              0.69         0.42
+
+    E \ N.events                                             0.20                                                         0.45
+                                                                                 0.24
+15:                  end if                                                                                0.14
+                                                             0.00
+16:             end if                                              Basic       Cond.         Joint       Nested          Avg.
+                                                                      Blank Response    Repeating Error   Type Mismatch
+17:         end for
+18:     end while
+19: end procedure                                      Figure 10: Error Analysis for Babbage-002 in Causal-
+                                                       CoT
+H. Benchmark Result Analysis: CausalCoT
+We compared the responses generated by Babbage-
+002 under the CausalCoT framework with those
+from other LLMs. The results reveal that the major-
+ity of Babbage-002’s responses were nonsensical
+when following the CausalCoT instructions, result-
+ing in a remarkably low accuracy of just 8.0%.
+A deeper analysis showed that 82.4% of the re-
+sponses were classified as incomprehensible, which
+explains why the accuracy was notably lower than
+random guessing. The following chart provides
+Question:
+—————-
+User: Imagine a self-contained, hypothetical world with only the following conditions, and without
+any unmentioned factors or causal relationships: Pexu has a direct effect on Kraz. Not Kraz and
+Pexu has a direct effect on hwax. Hwax has a direct effect on rukz. Kraz is unobserved. We know
+that pexu and not kraz causes hwax. pexu causes kraz. hwax causes rukz. We observed an individual
+is hwax. Would an individual is rukz if not kraz instead of kraz? Please follow the instructions step
+by step. Step 1. Extract the causal graph: Identify the causal graph that depicts the relationships in
+the scenario. Let X = kraz; V2 = pexu; V3 = hwax; Y = rukz. The diagram should simply consist of
+edges denoted in "var1 → var2" format, separated by commas. If you get V1 → Not V2 for example,
+you need to replace into V1 → V2. Step 2. Abduction and Action for information collection: Collect
+all the directly given information into given values set. 1 means given observed in question or
+observed. 0 means given not in question. Do not assume or infer other variables values by relations.
+Then, describe relations about how multiple variables influence another variable; it can result in
+AND, OR, or NOT. Step 3. Infer and Predict the Y by information step by step. Step 4. Based on the
+result from the Step3, derive the final answer. There is an identifiable answer.
+Assistant:
+Step 1) Extract the causal graph: Identify the causal graph that depicts the relationships in the
+scenario. Let V2 = kraz; X = pexu; V3 = hwax; Y = rukz. The causal graph is V2→V3, V2→X,
+X→V3,V3→Y.
+Step 2) Abduction and Action for information collection: All given values: V2 = 1, and X = 0 (by
+abduction, V2 occurs), X = 0 (by action, X not occur); Relations: Y: (NOT V2) AND V3, V3: X
+AND NOT V2.
+Step 3) Trying a promising first operation:
+1. V3 = not X and V2 = 1
+- Y = V3 = 1 → found it !
+Backtracking the solution:
+Step 3a:
+V3 = not X and V2 = 1
+Step 3b:
+Y = V3 = 1
+Step 4) Since the result for the Y is 1, the overall answer to the question is yes.
+—————-
+User: Imagine a self-contained, hypothetical world with only the following conditions, and without
+any unmentioned factors or causal relationships: Vank has a direct effect on Praf, Praf has a direct
+effect on Scud, Scud has a direct effect on Wrenk, Wrenk and Scud have direct effects on Yobb,
+Yobb has a direct effect on Glim, Glim and Scud have direct effects on Spog, and Spog has a direct
+effect on Klep. Vank Bern(0.6). We observed Wrenk. We know that Vank causes Praf, Praf causes
+Scud, Scud causes Wrenk, Wrenk and Scud together cause Yobb, Yobb causes Glim, Glim and Scud
+together cause Spog, and Spog causes Klep. Vank Bern(0.6). We observed Wrenk. Would Klep
+occur if not Praf instead of Praf? Step 1. Extract the causal graph: Identify the causal graph that
+depicts the relationships in the scenario. Let X = Ziklo; V1 = Blaf; V2 = Trune; V3 = Vork; V4 =
+Sline; V5 = Frim; V6 = Qado; Y = Lumbo. The diagram should simply consist of edges denoted
+in "var1 → var2" format, separated by commas. If you get V1 → Not V2 for example, you need
+to replace into V1 → V2. Step 2. Abduction and Action for information collection: Collect all the
+directly given information into given values set. 1 means given observed in question or observed.
+0 means given not in question. Do not assume or infer other variables values by relations. Then,
+describe relations about how multiple variables influence another variable; it can result in AND, OR,
+or NOT. Step 3. Infer and Predict the Y by information step by step. Step 4. Based on the result from
+the Step3, derive the final answer. There is an identifiable answer.
+Assistant:
+
+                             Figure 5: The prompt design example of CoIn
+     100%
+
+      90%
+
+      80%
+
+      70%
+
+      60%
+
+      50%
+
+      40%
+
+      30%
+
+      20%
+
+      10%
+
+      0%
+              Wrong Relations      Wrong Inference   Wrong Conclusion
+                                CausalCoT   Ours
+
+
+
+
+Figure 6: Error Analysis comparison between Our
+Method and CausalCoT.
+
+
+                                                                        Question: Imagine a self-contained, hy-
+  Question: Imagine a self-contained, hypothet-                         pothetical world with only the following
+  ical world with only the following conditions,                        conditions, and without any unmentioned
+  and without any unmentioned factors or causal                         factors or causal relationships: Nuv has a
+  relationships: Having a brother has a direct                          direct effect on Splee, Blen and Druk, not
+  effect on room. The candle has a direct effect                        Druk has a direct effect on Plog, Plog has a
+  on room. We know that having a brother and                            direct effect on Skrim, Skrim or Druk has
+  candle with wax causes dark room. We ob-                              a direct effect on Zimb, Zimb has a direct
+  served the candle has wax. Would the room is                          effect on Yurd, and Yurd has a direct effect on
+  dark if not having a brother instead of having                        Wrox. We know that Nuv causes Splee, Blen
+  a brother?                                                            and Druk, not Druk causes Plog, Plog causes
+  Start your answer with “Yes” or “No”, fol-                            Skrim, Skrim or Druk causes Zimb, Zimb
+  lowed by additional reasoning or evidence to                          causes Yurd, and Yurd causes Wrox. Would
+  support your explanation.                                             Wrox occur if not Nuv and not Splee?
+
+      Figure 7: Anti-commonsense Example                                Answer: No.
+
+                                                                            Figure 9: Standard Instruction Example
+
+  Question: Imagine a self-contained, hypo-
+  thetical world with only the following condi-
+  tions, and without any unmentioned factors
+  or causal relationships: The man in the room
+  has a direct effect on room. The candle has a
+  direct effect on room. We know that blowing
+  out the candle and candle with wax causes
+  dark room. We observed the candle has wax.
+  Would the room is dark if not blowing out the
+  candle instead of blowing out the candle?
+  Start your answer with “Yes” or “No”, fol-
+  lowed by additional reasoning or evidence to
+  support your explanation.
+
+            Figure 8: Commonsense Example
+Question: Imagine a self-contained, hypothetical world with only the following conditions, and
+without any unmentioned factors or causal relationships: Nuv has a direct effect on Splee, Blen and
+Druk, not Druk has a direct effect on Plog, Plog has a direct effect on Skrim, Skrim or Druk has a
+direct effect on Zimb, Zimb has a direct effect on Yurd, and Yurd has a direct effect on Wrox. We
+know that Nuv causes Splee, Blen and Druk, not Druk causes Plog, Plog causes Skrim, Skrim or Druk
+causes Zimb, Zimb causes Yurd, and Yurd causes Wrox. Would Wrox occur if not Nuv and not Splee?
+
+Answer: To address the problem, we will follow the steps outlined:
+ Step 1: Extract the causal graph
+ Based on the given conditions, the causal graph can be represented as follows:
+- Nuv → Splee - Nuv → Blen - Nuv → Druk - Druk → Plog - Plog → Skrim - Skrim → Zimb - Druk
+ → Zimb - Zimb → Yurd - Yurd → Wrox
+ Step 2: Determine the query type
+The question asks whether Wrox would occur if not Nuv and not Splee. This is a counterfactual
+ query because it involves reasoning about what would happen under a hypothetical scenario that
+ differs from the observed world.
+The query type is: “counterfactual”
+ Step 3: Formalize the query
+The formal expression for the counterfactual query is:
+
+                                       W roxN uv=0,Splee=0
+This notation represents the value of Wrox in the counterfactual world where Nuv and Splee do not
+ occur.
+ Step 4: Gather all relevant data
+ From the problem statement, we have the following data:
+- Nuv = 0 (not Nuv) - Splee = 0 (not Splee)
+ Step 5: Deduce the estimand using causal inference
+To deduce the estimand, we need to consider the causal pathways from Nuv and Splee to Wrox:
+1. Nuv directly affects Splee, Blen, and Druk. 2. Druk affects Plog, which affects Skrim, which
+ affects Zimb, which affects Yurd, which affects Wrox. 3. Druk also directly affects Zimb. 4. Zimb
+ affects Yurd, which affects Wrox.
+ Given that Nuv = 0, Splee = 0, we need to determine if Wrox can still occur:
+- Since Nuv = 0, Splee = 0, Blen = 0, and Druk = 0. - Druk = 0 implies Plog = 0 and Zimb = 0 (since
+ Druk affects both Plog and Zimb). - Plog = 0 implies Skrim = 0. - Skrim = 0 and Druk = 0 imply
+ Zimb = 0. - Zimb = 0 implies Yurd = 0. - Yurd = 0 implies Wrox = 0.
+Thus, the counterfactual scenario results in Wrox = 0.
+ Step 6: Calculate the estimand
+ Given the deductions above, the counterfactual value of Wrox when Nuv = 0 and Splee = 0 is:
+
+                                     W roxN uv=0,Splee=0 = 0
+Therefore, Wrox would not occur if not Nuv and not Splee.
+
+                             Figure 11: CausalCoT Instruction Example
+Question: Imagine a self-contained, hypothetical world with only the following conditions, and
+without any unmentioned factors or causal relationships: Nuv has a direct effect on Splee, Blen and
+Druk, not Druk has a direct effect on Plog, Plog has a direct effect on Skrim, Skrim or Druk has a
+direct effect on Zimb, Zimb has a direct effect on Yurd, and Yurd has a direct effect on Wrox. We
+know that Nuv causes Splee, Blen and Druk, not Druk causes Plog, Plog causes Skrim, Skrim or Druk
+causes Zimb, Zimb causes Yurd, and Yurd causes Wrox. Would Wrox occur if not Nuv and not Splee?
+
+Answer: Step 1) Extract the causal graph: Identify the causal graph that depicts the relationships in
+the scenario. Let X = Nuv; V1 = Splee; V2 = Blen; V3 = Druk; V4 = Plog; V5 = Skrim; V6 = Zimb;
+V7 = Yurd; Y = Wrox. The causal graph is:
+X → V1, X → V2, X → V3, V3 → V4, V4 → V5, V5 → V6, V3 → V6, V6 → V7, V7 → Y.
+Step 2) Abduction and Action for information collection: All given values: X = 0 (not Nuv), V1 = 0
+(not Splee). Relations:
+- V1: X
+- V2: X
+- V3: X
+- V4: NOT V3
+- V5: V4
+- V6: V5 OR V3
+- V7: V6
+- Y: V7
+Step 3) Adopt the following algorithm to get the result: Infer the Y by information step by step.
+1. V1 = X = 0
+2. V2 = X = 0
+3. V3 = X = 0
+4. V4 = NOT V3 = 1
+5. V5 = V4 = 1
+6. V6 = V5 OR V3 = 1 OR 0 = 1
+7. V7 = V6 = 1
+8. Y = V7 = 1
+Step 4) Conclude the final answer: Since the result for Y (Wrox) is 1, the overall answer to the
+question is yes. Wrox would occur if not Nuv and not Splee.
+
+                                 Figure 12: CoIn Instruction Example
+Response
+Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and Melf
+and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+B: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+C: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+D: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+E: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+F: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+G: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+H: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+I: Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn, Zurn causes Melf, and
+Melf and Razz together cause Zlim. Would Zlim occur if not Glent instead of Glent?
+
+                                      Figure 13: Conclusion Error Example
+
+
+
+
+Response
+The correct answer is (0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+                                            Figure 14: Type Mismatch
+

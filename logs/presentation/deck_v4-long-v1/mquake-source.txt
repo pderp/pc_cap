@@ -1,0 +1,1057 @@
+                                                                    MQ UAKE: Assessing Knowledge Editing in
+                                                                    Language Models via Multi-Hop Questions
+                                                                        Zexuan Zhong†∗ , Zhengxuan Wu‡∗ ,
+                                                          Christopher D. Manning‡ , Christopher Potts‡ and Danqi Chen†
+                                                                    † Princeton University ‡ Stanford University
+
+                                                                       {zzhong,danqic}@cs.princeton.edu
+                                                                   {wuzhengx,manning,cgpotts}@stanford.edu
+
+                                                                                                                                                                           Model            Model
+                                                                    Abstract                                                                                             Before Edit       After Edit
+
+
+
+
+                                                                                                        Our       Recall      Recall
+                                                                                                                                          Who is the current British   Boris Johnson       Rishi Sunak
+                                             The information stored in large language mod-                                                Prime Minister?
+                                             els (LLMs) falls out of date quickly, and re-
+                                             training from scratch is often not an option.                                                                             Boris Johnson      Rishi Sunak
+
+
+
+
+arXiv:2305.14795v3 [cs.CL] 9 Sep 2024
+                                                                                                                                          Who is currently the head
+                                             This has recently given rise to a range of tech-
+
+
+                                                                                                      Question Related Fact Edited Fact
+                                                                                                                                          of the British government?
+                                             niques for injecting new facts through updating
+                                             model weights. Current evaluation paradigms                                                  Who is married to the        Carrie Johnson   Carrie Johnson
+                                             are extremely limited, mainly validating the                                                 British Prime Minister?
+                                             recall of edited facts, but changing one fact
+                                             should cause rippling changes to the model’s                                                  New Fact: The current British Prime Minister is Rishi Sunak.
+                                             related beliefs. If we edit the UK Prime Min-
+                                             ister to now be Rishi Sunak, then we should              Figure 1: An example of our benchmark MQ UAKE.
+                                             get a different answer to Who is married to              Existing knowledge-editing methods often perform well
+                                             the British Prime Minister? In this work, we             at answering paraphrased questions of the edited fact
+                                             present a benchmark, MQ UAKE (Multi-hop                  but fail on multi-hop questions that are entailed conse-
+                                             Question Answering for Knowledge Editing),               quences of the edited fact.
+                                             comprising multi-hop questions that assess
+                                             whether edited models correctly answer ques-
+                                             tions where the answer should change as an               et al., 2021; Meng et al., 2022a,b; Mitchell et al.,
+                                             entailed consequence of edited facts. While we           2022a,b), but it is not yet clear whether these meth-
+                                             find that current knowledge-editing approaches           ods provide a viable solution of updating and main-
+                                             can recall edited facts accurately, they fail catas-     taining deployed LLMs.
+                                             trophically on the constructed multi-hop ques-              To evaluate these methods, existing benchmarks
+                                             tions. We thus propose a simple memory-based             often focus on measuring whether the edited model
+                                             approach MeLLo, which stores all edited facts
+                                                                                                      can recall the newly injected facts and whether un-
+                                             externally while prompting the language model
+                                             iteratively to generate answers that are consis-         related knowledge remains unchanged post-editing.
+                                             tent with the edited facts. While MQ UAKE re-            However, a vital unaddressed question is whether
+                                             mains challenging, we show that MeLLo scales             the edited model can handle questions where the an-
+                                             well with LLMs (e.g., OpenAI GPT-3.5-turbo)              swer should change as an entailed consequence of
+                                             and outperforms previous model editors by a              edited facts. For example (see Figure 1), if we up-
+                                             large margin.1                                           date the British Prime Minister from Boris Johnson
+                                                                                                      to Rishi Sunak within a model, the answer to Who
+                                        1    Introduction
+                                                                                                      is married to the British Prime Minister? should
+                                        As large language models (LLMs) are deployed                  also change as a consequence of this edit.
+                                        widely, the need to keep their knowledge correct                 Therefore, we propose MQ UAKE (Multi-hop
+                                        and up-to-date without massive retraining costs               Question Answering for Knowledge Editing), a
+                                        becomes increasingly important (Sinitsin et al.,              new benchmark for a more complete evaluation
+                                        2020). Prior work has proposed knowledge editing              of knowledge-editing methods. Each example in
+                                        methods to incrementally inject a set of new facts            MQ UAKE consists of a multi-hop question (in-
+                                        into a language model (Zhu et al., 2021; De Cao               cluding {2, 3, 4}-hop questions) which corresponds
+                                            * Equal contribution.
+                                                                                                      to a chain of facts. When we edit one or a few facts
+                                           1
+                                             Our datasets and code are publicly available at https:   in a chain, the edited model needs to propagate
+                                        //github.com/princeton-nlp/MQuAKE.                            the change to entailed consequences of the edited
+facts. MQ UAKE includes a dataset MQ UAKE- CF            guage model (Petroni et al., 2019). This template
+based on counterfactual edits, and another dataset       takes a subject s as input and generates a ques-
+MQ UAKE- T of temporal knowledge updates to              tion or a cloze-style statement tr (s). For instance,
+evaluate model editors on real-world changes.            given the subject United Kingdom and the relation
+   We evaluate state-of-the-art knowledge-editing        head of government, we can form a cloze sentence
+methods on MQ UAKE, testing from editing facts           The Prime Minister of the United Kingdom is __.
+mentioned in one question to editing facts men-              We consider an autoregressive language model
+tioned in a large set of questions. The latter setting   f ∶ X → Y, which takes a piece of text x ∈ X as in-
+evaluates approaches that are designed to handle         put and predicts y ∈ Y, the continuation of x. Given
+many edits, such as MEMIT (Meng et al., 2022b).          a fact triple (s, r, o), we can query the language
+Surprisingly, existing knowledge-editing methods         model to recall the fact by feeding the prompt tr (s)
+often perform well on answering questions that are       as input and matching the output f (tr (s)) with
+paraphrases of the edited fact but fail drastically      the object o. While prior work has studied how
+on questions where the answer should change as           to prompt to extract more knowledge (Jiang et al.,
+a consequence of an edited fact. For example, a          2020; Shin et al., 2020; Zhong et al., 2021), we sim-
+GPT-J model edited by ROME (Meng et al., 2022a)          ply use manually-written templates, as enhancing
+can only answer 7.4% of multi-hop questions in           knowledge retrieval is not our focus.
+MQ UAKE- CF, even though it could answer 40.5%
+of the questions before editing.
+   Towards faithful knowledge editing, we propose        2.2   Knowledge Editing
+a simple but effective method, MeLLo, that sig-
+nificantly outperforms existing model editors even       The knowledge stored in a language model can
+with a large number of edits. Instead of updating        be incorrect or become outdated over time. One
+model weights, MeLLo stores edits in an explicit         possible solution is to edit the knowledge on the
+memory inspired by memory-based editing meth-            fly without retraining. A fact edit is defined as a
+ods (Mitchell et al., 2022b) and prompts the lan-        pair of fact triples that share the same subject and
+guage model iteratively to interact with the edited      relation e = ((s, r, o), (s, r, o∗ )), which represents
+facts. Specifically, it decomposes a multi-hop ques-     the associated object is updated from o to o∗ . For
+tion into sub-questions successively, generates ten-     simplicity, we abbreviate the notation for an edit as
+tative answers, and checks whether it is consistent      e = (s, r, o → o∗ ) throughout the paper.
+with edited facts before returning the final answer.
+                                                            Given a collection of fact edits E = {e1 , e2 , . . . }
+Such a method does not require any additional
+                                                         and a language model f , knowledge editing in-
+training, and can be easily scaled up to large LMs
+                                                         volves learning a function K ∶ F × E → F that
+such as GPT-3.5-turbo (Brown et al., 2020; Ouyang
+                                                         yields an edited language model f ∗ ∶ X → Y,
+et al., 2022) unlike methods requiring weight up-
+                                                         K(f, E) = f ∗ . For the methods we assess in Sec-
+dates. We hope that both our benchmark and pro-
+                                                         tion 4, K modifies the weights of f in an attempt to
+posed method provide additional insights into build-
+                                                         incorporate E. Our proposed alternative, MeLLo,
+ing faithful knowledge-editing methods.
+                                                         is much more lightweight: it keeps f frozen and
+                                                         instead uses E as an external knowledge store to
+2     Problem Definition
+                                                         guide generation (Section 5).
+This section introduces our setting and argues that         In previous work (De Cao et al., 2021; Mitchell
+a model edit is only truly successful if the edited      et al., 2022a,c; Meng et al., 2022a,b), the evaluation
+model also returns new correct answers for ques-         focuses on assessing whether the edited model re-
+tions that change as a consequence of the edits.         calls the updated knowledge and whether unrelated
+                                                         knowledge remains unchanged post-editing. To
+2.1    Querying Factual Knowledge in LLMs                evaluate whether a “single-hop” edit e = (s, r, o →
+We represent a fact as a triple (s, r, o), consist-      o∗ ) is successful with an edited model f ∗ (⋅), exist-
+ing of a subject (s), a relation (r), and an object      ing paradigms assess whether f ∗ (tr (s)) is equal
+(o), and manually construct a natural language           to o∗ (or assigns o∗ a high probability). Addition-
+prompt template tr (⋅) for each type of relation         ally, they check correctness by varying tr (s) while
+r as a way of querying knowledge from a lan-             keeping semantic equivalence (Meng et al., 2022b).
+2.3    Evaluation of Multi-hop Questions                      subgraph that solely comprises these relations and
+By only evaluating single-hop questions, exist-               the top 20% of common entities based on hyperlink
+ing methods were tested for recalling edited facts.           counts in Wikipedia articles.2 We collect chains
+It remains unknown whether an edited model                    that contain N = 2, 3, 4 triples from the Wikidata
+can handle a question where the answer should                 subgraph. We also adopt heuristics rules to ensure
+change as an entailed consequence of an edited                that the sampled fact triples are coherent and lead
+fact. We propose to evaluate edited models with               to natural questions (see Appendix A.1 for details).
+multi-hop questions by considering a chain of                 Filtering unrecallable facts As answering multi-
+facts C = ⟨(s1 , r1 , o1 ), . . . , (sn , rn , on )⟩, where   hop questions requires the model to leverage each
+the object of ith fact also serves as the subject             single-hop fact, we filter out any chain of facts
+of the next fact in the chain, i.e., oi = si+1 . We           which contain at least one fact that cannot be re-
+denote R = [r1 , . . . , rn ] as the relation set and         called by GPT-J (Wang and Komatsuzaki, 2021),
+S = [s1 , . . . , sn ] as the subject set. We then use C      which we will mainly evaluate on. To recall single-
+to construct a multi-hop question that asks about             hop facts, we curate a question template for each
+the head entity s1 , with the answer being the tail           relation type following prior work (Petroni et al.,
+entity on . Similar to a single-hop question, we              2019; Meng et al., 2022a), and query the model
+generate a question as tR (S). For example, with              using in-context learning with 8 demonstration ex-
+a chain consisting of two facts (United Kingdom,              amples (see Appendix A.2 for more details).
+head of government, Boris Johnson), (Boris John-
+son, spouse, Carrie Johnson), one can write a 2-              Generating multi-hop questions Given C =
+hop question Who is married to the British Prime              ⟨(s1 , r1 , o1 ), . . . , (sn , rn , on )⟩, we aim to write a
+Minister? Once one or more facts in the chain are             set of questions Q about the head entity s1 with
+edited, e.g., (United Kingdom, head of government,            the gold answer a being the tail entity oN . We
+Boris Johnson → Rishi Sunak), the language model              leverage ChatGPT (gpt-3.5-turbo-instruct) to
+has to leverage the updated knowledge to answer               automatically generate questions given a chain of
+the question, which we posit as a crucial indicator           facts C, because (1) this provides us more diverse
+of a model faithfully updating the fact.                      question formats of good quality; (2) it is challeng-
+                                                              ing to manually write question templates for all the
+3     MQ UAKE: Multi-hop Question                             different types. We prompt ChatGPT to generate
+      Answering for Knowledge Editing                         three questions for each sampled chain of facts.
+                                                              We include the prompt we used and examples of
+We construct the benchmark MQ UAKE (Multi-                    generated multi-hop questions in Appendix A.3.
+hop Question Answering for Knowledge Editing),
+which contains two datasets. The first, MQ UAKE-              Sampling counterfactual edits So far, we
+CF, is designed as a diagnostic dataset for the evalu-        have collected ⟨Q, a, C⟩ (questions, answer, fact
+ation of knowledge editing methods on counterfac-             triples) for each instance in the dataset. Next,
+tual edits. The second, MQ UAKE- T, comprises                 we sample counterfactual edits E and col-
+temporal-based knowledge updates and is intended              lect the corresponding fact triples C ∗ and an-
+to assess the effectiveness of knowledge editing              swer a∗ . Given a chain of n factual triples C =
+methods in updating outdated information with cur-            ⟨(s1 , r1 , o1 ), . . . , (sn , rn , on )⟩, we randomly sam-
+rent, real facts. We first present the data construc-         ple t ∈ {1, . . . , N } counterfactual edits in C. For
+tion process for MQ UAKE- CF and MQ UAKE- T.                  a triple (s, r, o), we sample a counterfactual ob-
+Then, we present the data statistics and evaluation           ject o∗ from all possible objects that are related to
+settings, followed by evaluation metrics in the end.          relation r. We replace (s, r, o) with (s, r, o∗ ) in
+                                                              the chain and update other facts accordingly. We
+3.1    Data Construction of MQ UAKE- CF                       make sure that, after injecting counterfactual ed-
+Sampling chains of facts Our dataset is con-                  its, the new chain still exists so that we are able
+structed based on Wikidata (Vrandečić and                   to find an updated answer a∗ . We only keep the
+Krötzsch, 2014), a knowledge base consisting of               sampled edits if the corresponding updated answer
+fact triples associated with millions of entities. We         a∗ is not identical to the original one a. We use the
+first sample chains of facts from Wikidata. We man-              2
+                                                                   We focus on common entities as LMs can recall facts
+ually select 37 common relations and consider a               about common entities more reliably (Mallen et al., 2023).
+  E      (WALL-E, creator, Andrew Stanton → James Watt)            two versions of Wikidata. Note that different from
+         (University of Glasgow, headquarters location,            MQ UAKE- CF, each instance in MQ UAKE- T re-
+         Glasgow → Beijing)
+                                                                   lates to only one edit, because all the edits are about
+  Q      In which city is the headquarters of the employer of
+         WALL-E’s creator located?                                 position changes (e.g., head of state) and involving
+         What is the location of the headquarters of the company   two in a question is not coherent. The goal of this
+         that employed the creator of WALL-E?                      dataset is to evaluate how successfully edited lan-
+         Where is the headquarters of the company that employed
+         the creator of WALL-E situated?                           guage models can answer questions which involve
+ a       Emeryville
+                                                                   authentic updates to real-world knowledge.
+ a∗      Beijing
+  C      (WALL-E, creator, Andrew Stanton)
+                                                                   3.3    Dataset Summary
+         (Andrew Stanton, employer, Pixar)                         Dataset format As shown in Table 1, each in-
+         (Pixar, headquarters location, Emeryville)
+ C   ∗
+         (WALL-E,    creator, James Watt)
+         ::::::::::::::::::::::::::::
+                                                                   stance in the MQ UAKE dataset is denoted by a tu-
+         (James Watt, employer, University of Glasgow)             ple d = ⟨E, Q, a, a∗ , C, C ∗ ⟩, where E is a set of edits
+         (University of Glasgow, headquarters location, Beijing)
+         :::::::::::::::::::::::::::::::::::::::::::::::::         that we want to inject into the language model, Q
+                                                                   represents multi-hop questions we use to evaluate
+Table 1: An instance in the MQ UAKE- CF dataset,
+which consists of an edit set E, a set of three multi-hop          editing methods (we provide three multi-hop ques-
+questions Q, the desirable answer pre- and post-editing            tions), a and a∗ denote the correct answer before
+a, a∗ , and the chain of facts pre- and post-editing C, C ∗ .      and after edits, and C and C ∗ correspondingly repre-
+The edited facts are marked as (s,   r, o∗ ).
+                                  :::::::
+                                                                   sent the factual triples associated with this question
+                                                                   before and after editing. A desirable knowledge
+                      #Edits    2-hop    3-hop    4-hop    Total   editing method will inject all the edits in E into the
+                      1         2,454      855      446    3,755   model, and enable the model to internally use the
+                      2         2,425      853      467    3,745   edits and answer the questions.
+  MQ UAKE- CF         3             -      827      455    1,282
+                      4             -        -      436      436
+                                                                   Data statistics Table 2 summarizes the statistics
+                      All       4,879    2,535    1,804    9,218
+                                                                   of the MQ UAKE- CF and MQ UAKE- T datasets.
+  MQ UAKE- T          1 (All)   1,421      445         2   1,868
+                                                                   The MQ UAKE- CF dataset consists of more than
+           Table 2: Data statistics of MQ UAKE.                    9K N -hop questions (N ∈ {2, 3, 4}), each of which
+                                                                   associates with one or more edits. We subsampled
+                                                                   3K questions from the full dataset for a more ef-
+same filtering process as Appendix A.2 to make                     ficient evaluation and to ensure there is no knowl-
+sure GPT-J can recall all unedited single-hop facts                edge conflict across different instances in this sub-
+in the chains.                                                     set (Appendix B). Throughout the paper, we con-
+                                                                   duct our experiments on this subset.3
+3.2      Data Construction of MQ UAKE- T
+                                                                      We regard it as a diagnostic dataset to study
+Following a similar procedure to building                          the ability of edited models leveraging newly in-
+MQ UAKE- CF, we construct the other segment:                       jected knowledge through editing methods. The
+MQ UAKE- T, focusing on temporal-based, real-                      MQ UAKE- T dataset includes 1.8K instances, each
+world fact updates. We take two dumps of Wiki-                     of them associates with one real-world fact change.
+data: 2021-04 and 2023-04, and obtain the differ-
+ences between the two versions. We find that most                  Number of edited facts We consider two eval-
+changes in Wikidata come from schema changes,                      uation scenarios: a) First, we perform knowl-
+i.e., (Encyclopédie, instance of, encyclopedia →                   edge editing on only one instance d, which is as-
+written work) instead of actual fact updates. We                   sociated with up to four edited facts. b) Then,
+then manually select 6 relations where the changes                 we split the dataset into groups of k instances
+are most likely to align with real fact changes, e.g.,             (k ∈ {1, 100, 1000, 3000} on MQ UAKE- CF and
+(United Kingdom, head of government, Boris John-                   k ∈ {1, 100, 500, 1868} on MQ UAKE- T), and con-
+son → Rishi Sunak). Similarly, we sample chains of                 sider all instances in a group at the same time
+facts and filter out unrecallable facts using GPT-J.               and inject all the edited facts of these instances
+When we generate edits given a fact chain, instead                    3
+                                                                        We have fixed this subset in 2024/9 to resolve an issue of
+of sampling artificial counterfactual facts, we re-                knowledge conflict, and we recommend future readers follow
+quire that edits come from the diff set between the                this setting as well.
+into the model at once. This harder setting is par-             ters. We follow Zhu et al. (2021) and fine-tune
+ticularly interesting for editing methods such as               one layer in the model with a norm constraint
+MEMIT, which can handle large numbers of edits                  on weight changes.
+effectively (Meng et al., 2022b).
+                                                             • MEND (Mitchell et al., 2022a) trains a hyper-
+3.4    Evaluation Metrics                                      network to produce weight updates by trans-
+                                                               forming the raw fine-tuning gradients given
+We use the following metrics to measure whether                an edited fact.
+the edits are made successfully. We include de-
+tailed formal definitions in Appendix C.                     • ROME (Meng et al., 2022a) first localizes
+                                                               the factual knowledge at a certain layer in the
+    • Edit-wise success rate measures how many
+                                                               Transformer architecture, and then updates the
+      facts can be successfully recalled from the
+                                                               feedforward network in that layer to insert the
+      edited language model.
+                                                               new facts.
+    • Instance-wise accuracy measures in how
+      many multi-hop instances, the model can re-            • MEMIT (Meng et al., 2022b) extends ROME
+      call all the individual single-hop facts. This is        to edit a large set of facts. It updates feedfor-
+      a reference metric for multi-hop performance,            ward networks in a range of layers to encode
+      as the model must encode each individual fact            all the facts.
+      in order to answer the multi-hop question. We       Given an edited fact (s, r, o → o∗ ), we convert it
+      measure instance-wise accuracy both before          to a cloze statement tr (s) and apply knowledge
+      and after editing the model.                        editing approaches with the objective of correctly
+                                                          predicting the edited object o∗ given tr (s). We
+    • Multi-hop accuracy measures the accuracy
+                                                          include the templates of cloze statement tr for each
+      of the original and edited language models
+                                                          relation type r in Appendix J.
+      on multi-hop questions. In our datasets, there
+      are three generated multi-hop questions for         Evaluation metrics As discussed in Section 3.4,
+      each instance. If any of the three questions is     we report edit-wise success rate, instance-wise ac-
+      correctly answered by the model, we regard it       curacy, and multi-hop accuracy in our evaluation.
+      as accurate. This is the main metric that we        We query the model with either manually-written
+      focus on to study models’ ability to use edited     prompt templates (for single-hop facts) or GPT-
+      knowledge consistently.                             generated questions (for multi-hop fact chains). We
+                                                          adapt in-context learning and prompt the model
+4     MQ UAKE Challenges Model Editors
+                                                          with demonstrations when calculating instance-
+4.1    Experimental Setup                                 wise and multi-hop accuracy, in order to encourage
+                                                          the language model to recall and output knowledge
+Language models We use GPT-J (6B) and
+                                                          in the desirable format (Brown et al., 2020).
+Vicuna-7B (Chiang et al., 2023), which is a fine-
+tuned model based on LLaMA-7B (Touvron et al.,               We also consider chain-of-thought prompting
+2023) as the baseline models to evaluate knowl-           (Wei et al., 2022) with in-context demonstrations
+edge editing approaches. It is worth noting that          to ensure the model’s reasoning ability is fully uti-
+existing parameter-update methods require access          lized. See Appendix E for detailed prompts that
+to a white-box language model and are very com-           we used to query language models. We denote the
+putationally expensive to apply to large models.          multi-hop accuracy with chain-of-thought prompt-
+In Section 5, we propose a lightweight approach,          ing as multi-hop (CoT).
+which can be applied to large black-box language
+                                                          4.2   Results on MQ UAKE- CF
+models (Ouyang et al., 2022; Brown et al., 2020).
+                                                          Table 3 shows the results on MQ UAKE- CF when
+Knowledge editing approaches We evaluate the              considering each instance individually across dif-
+following state-of-the-art knowledge editing ap-          ferent methods with GPT-J and Vicuna-7B as the
+proaches on our datasets (more details can be found       editing base models. As shown, all of the editing
+in Appendix D).                                           methods perform better than our fine-tuning base-
+    • Fine-tuning (FT) simply performs gradient           line. In addition, they all gain traction on edit-wise
+      descent on the edits to update model parame-        evaluation, with MEMIT and ROME achieving
+              Base Model       Method     Edit-wise    Instance-wise                      Multi-hop          Multi-hop (CoT)
+                               Base            –           100.0                               40.5                  39.5
+                               FT            46.9           26.5                              1.5 ↓39.0             1.4 ↓38.1
+              GPT-J            MEND          73.2           60.4                              8.0 ↓32.5            11.7 ↓27.8
+                               ROME          88.3           84.6                              7.4 ↓33.1            19.9 ↓19.6
+                               MEMIT         96.2           91.3                              7.0 ↓33.5            11.8 ↓27.7
+                               Base            –           62.4                                30.2                   36.1
+                               FT            21.7          10.0                               0.5 ↓29.7             0.3 ↓35.8
+              Vicuna-7B        MEND          69.2          48.2                               5.2 ↓25.0             7.0 ↓29.1
+                               ROME          99.7          92.1                               6.9 ↓23.3            12.1 ↓24.0
+                               MEMIT         95.8          84.4                               4.9 ↓25.3             6.7 ↓29.4
+
+Table 3: Performance results on MQ UAKE- CF (maximally 4 edits) for different knowledge editing methods
+using two base models, GPT-J and Vicuna-7B. We consider edits associated with each instance independently.
+Chain-of-thought (CoT) is included as a more advanced variant of prompt. Base denotes the model before editing.
+We include breakdown multi-hop (CoT) performance on MQ UAKE- CF for {2,3,4}-hop questions and for questions
+with {1,2,3,4} edits in Appendix H.
+
+
+           Edit-   Instance-     Multi-      Multi-hop                               40
+ Method    wise      wise         hop         (CoT)
+
+
+
+
+                                                                Multi-hop Acc. (%)
+ Base        –        100.0       34.3          46.8                                 30
+
+ FT         19.5       19.0      0.0 ↓34.3     0.2 ↓46.6                                                                FT           MEMIT
+                                                                                     20                                 MEND         ROME
+ MEND       99.0       98.5     16.0 ↓18.3    38.2 ↓8.6                                                                 Base
+ ROME      100.0       97.7      0.3 ↓34.0    11.3 ↓35.5
+ MEMIT     100.0       98.9      0.3 ↓34.0     4.8 ↓42.0                             10
+
+Table 4: Performance results on MQ UAKE- T for differ-                                0
+ent knowledge editing methods using GPT-J as the base                                     0        500      1000    1500   2000   2500   3000
+model.We consider edits associated with each instance
+                                                                                                    Number of Edited Instances
+independently. Base denotes the model before editing.                                                     (a) MQ UAKE- CF
+
+
+                                                                                    40
+higher than 90% accuracy with GPT-J and Vicuna-
+
+
+
+                                                               Multi-hop Acc. (%)
+7B. In other words, when injecting a small number                                   30
+                                                                                                                       FT           MEMIT
+of edits, these techniques successfully inject the ed-                                                                 MEND         ROME
+its into language models and have the edited model                                  20                                 Base
+recall them at inference time, which corroborates                                   10
+previous findings (Zhu et al., 2021; De Cao et al.,
+2021; Meng et al., 2022a; Mitchell et al., 2022a,b).                                 0
+Subsequently, a low edit-wise success rate entails                                        0      250 500 750 1000 1250 1500 1750
+                                                                                                    Number of Edited Instances
+a worse instance-wise accuracy (e.g., 59.6% for
+                                                                                                          (b) MQ UAKE- T
+MEND vs. 94.0% for MEND), as instance-wise
+correctness relies on recalling every fact from the         Figure 2: Multi-hop performance (CoT) of GPT-J
+                                                            before and after editing on (a) MQ UAKE- CF and
+model correctly for multi-hop questions.
+                                                            (b) MQ UAKE- T across four different knowledge-
+   Surprisingly, the performance of edited models           editing methods with k edited instances drawn for edit-
+fails catastrophically at answering multi-hop ques-         ing. k ∈ {1, 100, 1000, 3000} on MQ UAKE- CF. k ∈
+tions. Even with the strongest baseline approach,           {1, 100, 500, 1868} on MQ UAKE- T.
+MEMIT, multi-hop performance changes from
+40.5% → 7.0% with GPT-J and 30.2% → 4.9%
+with Vicuna-7B. Our results lead to a surprising             hop questions that rely on the edited facts. More im-
+conclusion that, although these methods act faith-           portantly, compared to the ability to answer multi-
+fully when evaluating with single-hop questions,             hop questions prior to edits, model performance
+all of them fail catastrophically at answering multi-        drops significantly as well. Our findings suggest
+                                 Our Approach: MeLLo
+                             What is the capital city of the country of
+                                                                                                                   Edited Fact Memory
+       Multi-hop question
+                             citizenship of Ivanka Trump’s spouse?
+                                                                                                         David Cameron is married to Courtney Love
+             Subquestion      Who is Ivanka Trump’s spouse?                                              The capital of the US is Seattle
+         Tentative answer     Ivanka Trump’s spouse is Jared Kushner                                     The CEO of Apple is Carlos Slim
+            Retrieved fact    David Cameron is married to Courtney Love
+                                                                           😐 not contradict              Jared Kushner is a citizen of Canada
+                  Answer      Jared Kushner
+                                                                                                                                   …
+             Subquestion      What is the country of citizenship of Jared Kushner?
+         Tentative answer     The country of citizenship of Jared Kushner is United States
+                                                                                                                 Query the memory with a subquestion
+            Retrieved fact    Jared Kushner is a citizen of Canada
+                                                                          ⚠ contradict!                          Retrieve an edited fact from the memory
+                  Answer      Canada
+                                                                                                                 Tentative answers generated by the model
+                     ……       ……
+                                                                                                                 Retrieved facts
+
+             Final answer    Ottawa                                                                              Edited facts stored in the memory
+
+
+
+Figure 3: The illustration of our proposed method MeLLo. MeLLo decompose a multi-hop question into subques-
+tions iteratively. When a subquestion is generated, the base model generates a tentative answer to the subquestion.
+Then, the subquestion is used to retrieve a most relevant fact from the edited fact memory. The model checks if the
+retrieved fact contradicts the generated answer and updates the prediction accordingly. The concrete prompts used
+in MeLLo are shown in Appedix G.
+
+
+that current knowledge-editing techniques, instead                                   questions, the performance drops significantly com-
+of integrating new facts into the model as new inter-                                pared to the base model before editing. We find
+nal knowledge, are rather hard coding them into the                                  that MEND works surprisingly well with CoT on
+model by updating weights locally. We hope these                                     MQ UAKE- T. We hypothesize that this may be
+results can act as a call to the community to rethink                                due to MEND being particularly effective in edit-
+the faithfulness of knowledge-editing methods and                                    ing certain relations (e.g., head of state). On the
+conduct deeper evaluations of edited models.                                         other hand, our results show that the edited model
+   One hypothesis that these edited models cannot                                    with CoT can substantially boost multi-hop perfor-
+answer our multi-hop questions faithfully is that                                    mance. This suggests that explicit knowledge recall
+our prompt is not effective enough. Recent works                                     greatly helps the edited models answer multi-hop
+suggest that providing explanations as Chain-of-                                     questions, while these models struggle to utilize
+thought (CoT) can greatly increase model perfor-                                     the edited knowledge internally.
+mance even for models at the scale of 6B models
+(Wei et al., 2022). We further enhance our prompt                                    4.4      Evaluation with Edits at Scale
+with explanations and reevaluate all methods. De-                                    We extend our evaluation and consider all the ed-
+tails about our CoT prompt template can be found                                     its from a randomly split group of k instances
+in Appendix E. As shown in Table 3, CoT helps                                        at the same time (k ∈ {1, 100, 1000, 3000} on
+slightly across all settings yet still fails catastroph-                             MQ UAKE- CF and k ∈ {1, 100, 500, 1868} on
+ically at answering multi-hop questions. This fur-                                   MQ UAKE- T). The results are shown in Fig-
+ther suggests that current knowledge-editing meth-                                   ure 2. We find that, on both MQ UAKE- CF and
+ods fail to update knowledge faithfully.                                             MQ UAKE- T, the multi-hop performance of all
+                                                                                     methods further drops when injecting more edits
+4.3      Results on MQ UAKE- T
+                                                                                     into language models at the same time.
+We evaluate all methods on GPT-J with real-world
+knowledge edit on MQ UAKE.4 The evaluation                                           5       MeLLo: A Proposal for Editing Large
+results are shown in Table 4. We find that in                                                Language Models
+this setting, all methods except fine-tuning achieve
+near-perfect performance in terms of edit-wise and                                   In Section 4, our evaluation results show that ex-
+instance-wise accuracy. However, on multi-hop                                        isting knowledge-editing methods fail catastroph-
+   4
+                                                                                     ically on multi-hop questions of MQ UAKE. In
+   We exclude Vicuna-7B on MQ UAKE- T as it is trained
+more recently, and is likely to be contaminated with the new                         this section, we present a simple but effective alter-
+knowledge in our temporal questions.                                                 native, MeLLo (Memory-based Editing for Large
+Language Models).                                        5.2    Evaluation Results
+                                                         We apply MeLLo on GPT-J (Wang and Komat-
+5.1   Method
+                                                         suzaki, 2021), Vicuna-7B (Chiang et al., 2023),
+Figure 3 illustrates how MeLLo answers multi-hop         and GPT-3.5 (Ouyang et al., 2022; Brown et al.,
+questions. Inspired by memory-based knowledge-           2020). Table 5 shows performance of MeLLo on
+editing methods (Mitchell et al., 2022b), MeLLo          MQ UAKE- CF and MQ UAKE- T. We find that
+keeps the base language model frozen and main-           with the same base model (i.e., GPT-J), MeLLo out-
+tains all the edits in an explicit memory. During in-    performs MEMIT and MEND significantly across
+ference, MeLLo (1) decomposes a multi-hop ques-          all the settings while being more efficient and re-
+tions into subquestions; (2) prompts the base lan-       quiring no training. When incorporating MeLLo
+guage model to provide tentative answers to sub-         with a stronger LLM (GPT-3.5), MeLLo enlarges
+questions; and (3) self-checks whether the tentative     the performance gap substantially. This suggests
+answers contradict any edited facts in the mem-          that MeLLo works particularly well on strong base
+ory. MeLLo can be applied easily to LLMs such as         language models which can easily follow the in-
+GPT-3.5 (Ouyang et al., 2022; Brown et al., 2020).       structions in our prompts. Along with its simplic-
+                                                         ity and efficacy, we think MeLLo can serve as a
+Edited fact memory MeLLo stores all the edited           strong knowledge-editing baseline for future re-
+facts explicitly in memory. Specifically, all edited     search. First, it does not require access to white-
+facts are first converted into sentence statements       box model weights, so it is very extensible without
+through manually-defined templates. Then, an off-        any adaptation. Second, our base language model
+the-shelf retrieval model (we use the pretrained         remains intact, avoiding the pitfall of overfitting to
+Contriever model; Izacard et al. 2021) is used to        editing facts or destroying existing capacities due
+embed all the edit statements and save them in a         to weight updates. Third, we store edits in an ex-
+retrieval index. The index takes a query as input        plicit memory component instead of injecting facts
+and returns an edited fact that is the most relevant     into model parameters, which provides greater con-
+(i.e., closest in the embedding space) to the query.     trollability in removing or adding knowledge on
+                                                         the fly.
+Step-by-step generation and self-checking To
+                                                            We note that in order to answer multi-hop ques-
+answer multi-hop questions with LLMs, we fol-
+                                                         tions correctly after editing, the retriever we use in
+low previous works and first prompt the model to
+                                                         MeLLo needs to retrieve all the associated edited
+decompose the multi-hop questions into multiple
+                                                         facts from the memory. In Appendix I, we investi-
+simple subquestions (Press et al., 2022; Zhou et al.,
+                                                         gate how retrieval accuracy affects the performance
+2023a). For example, in Figure 3, the first subques-
+                                                         of MeLLo when using GPT-3.5 as the base model.
+tion is Who is Ivanka Trump’s spouse? Second,
+the model generates a tentative answer (e.g., Jared      6     Related Work
+Kushner) to the subquestion based on the (unedited)
+knowledge stored in the model. Third, to assess          Knowledge-editing methods Past work has in-
+whether the generated answer conflicts with any          vestigated different approaches in editing LLMs
+new knowledge edits, the subquestion is used as a        at scale by injecting new knowledge into static
+query to retrieve a most relevant editing statement      model artifacts (Zhu et al., 2021; Sotoudeh and
+from the edited facts saved in memory. Fourth,           Thakur, 2019; Dai et al., 2022a; Hase et al., 2023;
+the model is prompted to self-check if the retrieved     Zhou et al., 2023b; Dong et al., 2022; Huang et al.,
+fact contradicts the generated answer. If it does, the   2023). Some of these approaches include locating
+model adjusts the intermediate answer to this sub-       and modifying model weights that are responsi-
+question using the retrieved statement. Note that it     ble for specific concepts (Meng et al., 2022a,b;
+is possible that a subquestion does not relate to any    Dai et al., 2022b), and fast adaptation through a
+edited fact in memory as the corresponding fact is       small auxiliary editing network (Mitchell et al.,
+not edited; in this case, the model is prompted to       2022a; De Cao et al., 2021). Recent work edits
+keep the generated answer as the retrieved edit does     knowledge representations during decoding pro-
+not cause a contradiction. Finally, the model either     cedures of LLMs (Hernandez et al., 2023). Our
+generates the next subquestion of the multi-hop          proposed approach MeLLo share a similar spirit
+question or outputs the final answer.                    with SERAC (Mitchell et al., 2022b) where an ex-
+                                                 MQ UAKE- CF                     MQ UAKE- T
+                   # Edited instances       1     100 1000 3000            1      100 500 1868
+                 Base Model     Method
+                 GPT-J          MEMIT     11.8    10.5      7.9     5.4    4.8    1.0    0.2    0.0
+                 GPT-J          MEND      11.7     9.6      7.6     6.1   38.2   17.4   12.7    4.6
+                 GPT-J          MeLLo     38.9    20.3     15.6    14.2   85.9   45.7   33.8   30.7
+                 Vicuna-7B      MeLLo     38.7    13.1     10.3    10.0   84.4   56.3   52.6   51.3
+                 GPT-3.5        MeLLo     52.1    35.3     31.8    30.9   91.1   87.4   86.2   85.5
+
+Table 5: Performance results of MeLLo (ours) on MQ UAKE- CF and MQ UAKE- T with GPT-J, Vicuna-7B, or
+GPT-3.5 (gpt-3.5-turbo-instruct for MQ UAKE- CF and text-davinci-003 for MQ UAKE- T) as the base
+language model. We consider a batch of k instances as once (k ∈ {1, 100, 1000, 3000} on MQ UAKE- CF and
+k ∈ {1, 100, 500, 1868} on MQ UAKE- T). We include the best results with GPT-J from existing methods (MEMIT
+for MQ UAKE- CF and MEND for MQ UAKE- T) for comparison.
+
+
+plicit memory component is used to maintain all              questions (Mitchell et al., 2022c). Our method is
+the edited facts. Different from SERAC, which                similar but more generic since we rely on the LLM
+trains additional models to incorporate the memory,          itself to perform NLI step-by-step before reaching
+MeLLo directly uses the base model to self-check             the final answer.
+whether the model generations need be adjusted.
+This allows MeLLo to be easily applied to black-             7     Conclusion
+box LMs without any extra training.
+                                                             In this work, we present a benchmark MQ UAKE
+Knowledge-editing evaluation The evaluation                  that assesses knowledge editing methods for lan-
+metrics for knowledge-editing techniques often in-           guage models via multi-hop questions. We find
+volve verifying the updated answers by querying              that although edited language models can effec-
+the edited facts or related facts (paraphrased or            tively recall edited facts, they fail on multi-hop
+logically-entailed facts), as well as verifying that ir-     questions that are entailed consequences of the ed-
+relevant facts are not corrupted (Meng et al., 2022a;        its. We propose a simple but effective alternative,
+Mitchell et al., 2022a; De Cao et al., 2021; Zhu             MeLLo, which significantly outperforms existing
+et al., 2021; Hase et al., 2023). More recent work           knowledge editing methods. MeLLo does not re-
+takes a step forward by evaluating LLMs’ abilities           quire any additional training and can be applied to
+to make inferences based on injected facts (Onoe             large LMs such as GPT-3.5 (Brown et al., 2020).
+et al., 2023) (e.g., after learning iPhone is a smart-       We hope our work can facilitate future research on
+phone, the model should also know iPhone can                 developing faithful knowledge editing methods.
+browse the internet), or measuring the absence of
+unintended side effects of model edits (Hoelscher-
+                                                             Limitations
+Obermaier et al., 2023). Complementary with                  The limitations of our work are as follows.
+existing evaluation tools, MQ UAKE particularly
+focuses on assessing whether edited models can an-                • We mainly evaluate existing knowledge edit-
+swer multi-hop questions where the answer should                    ing methods on GPT-J (Wang and Komat-
+change as an entailed consequence, showing that                     suzaki, 2021) and Vicuna (Chiang et al., 2023).
+existing approaches fail on those questions.                        The efficacy of these methods on other LLMs
+                                                                    remains less explored. Note that existing edit-
+Prompting methods for multi-hop QA Since                            ing methods are very computationally expen-
+the debut of effective base models such as GPT-3.5,                 sive. We leave the evaluation on other models
+prompt-based methods combined with an optional                      as future work.
+retrieval module have become a popular approach
+in handling multi-step QA tasks (Press et al., 2022;              • We demonstrate that MeLLo outperforms ex-
+Yao et al., 2023; Khattab et al., 2022). Recent                     isting knowledge editing methods on models
+work also seeks to combine external NLI mod-                        with > 6B parameters. As MeLLo relies on
+ules to justify whether answers to prompt-based                     language models for question decomposition
+queries are able to handle reasoning-based QA                       and self-checking, future work may study how
+     MeLLo works with smaller models such as             Damai Dai, Li Dong, Yaru Hao, Zhifang Sui, Baobao
+     GPT-2 (Radford et al., 2019).                         Chang, and Furu Wei. 2022b. Knowledge neurons in
+                                                           pretrained transformers. In Association for Computa-
+   • Our proposed memory-based approach,                   tional Linguistics (ACL).
+     MeLLo, while being very effective on the            Nicola De Cao, Wilker Aziz, and Ivan Titov. 2021.
+     MQ UAKE benchmark, requires manually                  Editing factual knowledge in language models. In
+     defined prompts to drive language models              Empirical Methods in Natural Language Processing
+                                                           (EMNLP).
+     on new tasks. Although we believe MeLLo
+     is easy to instantiate on different tasks, we       Qingxiu Dong, Damai Dai, Yifan Song, Jingjing Xu,
+     acknowledge this limitation and leave the             Zhifang Sui, and Lei Li. 2022. Calibrating factual
+     evaluation on other tasks as future work.             knowledge in pretrained language models. In Find-
+                                                           ings of Empirical Methods in Natural Language Pro-
+                                                           cessing (EMNLP).
+   • The multi-hop questions in MQ UAKE are
+     automatically generated by ChatGPT, rather          Peter Hase, Mona Diab, Asli Celikyilmaz, Xian Li, Zor-
+     than being crafted by humans. Although                nitsa Kozareva, Veselin Stoyanov, Mohit Bansal, and
+     MQ UAKE- T already involves real knowl-               Srinivasan Iyer. 2023. Do language models have
+                                                           beliefs? Methods for detecting, updating, and visu-
+     edge changes, we posit that the use of                alizing model beliefs. In European Chapter of the
+     human-authored questions could further align          Association for Computational Linguistics (EACL).
+     MQ UAKE with the realistic applications of
+     knowledge editing methods.                          Evan Hernandez, Belinda Z Li, and Jacob Andreas.
+                                                           2023. Measuring and manipulating knowledge rep-
+                                                           resentations in language models. arXiv preprint
+Acknowledgements                                           arXiv:2304.00740.
+We thank Henry Zhong from Rice University                Jason Hoelscher-Obermaier, Julia Persson, Esben Kran,
+for pointing out an evaluation issue with the               Ioannis Konstas, and Fazl Barez. 2023. Detect-
+MQ UAKE- CF dataset, which we have fixed in the             ing edit failures in large language models: An
+                                                            improved specificity benchmark. arXiv preprint
+current version. We thank Dan Friedman, Tianyu
+                                                            arXiv:2305.17553.
+Gao, Eric Mitchell, Mengzhou Xia, Howard Yen,
+Jiayi Geng for providing valuable feedback. This         Zeyu Huang, Yikang Shen, Xiaofeng Zhang, Jie Zhou,
+research is partially supported by an NSF CAREER           Wenge Rong, and Zhang Xiong. 2023. Transformer-
+                                                           patcher: One mistake worth one neuron. In Inter-
+award (IIS-2239290), a Sloan Research Fellowship,          national Conference on Learning Representations
+and Microsoft Azure credits through the “Acceler-          (ICLR).
+ate Foundation Models Academic Research” Ini-
+tiative. ZZ is supported by a JP Morgan Ph.D.            Gautier Izacard, Mathilde Caron, Lucas Hosseini, Se-
+                                                           bastian Riedel, Piotr Bojanowski, Armand Joulin,
+Fellowship. CM is a CIFAR Fellow.                          and Edouard Grave. 2021. Towards unsupervised
+                                                           dense information retrieval with contrastive learn-
+                                                           ing. Transactions on Machine Learning Research
+References                                                 (TMLR).
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie            Zhengbao Jiang, Frank F Xu, Jun Araki, and Graham
+  Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind       Neubig. 2020. How can we know what language
+  Neelakantan, Pranav Shyam, Girish Sastry, Amanda         models know? In Transactions of the Association of
+  Askell, et al. 2020. Language models are few-shot        Computational Linguistics (TACL).
+  learners. In Advances in Neural Information Process-
+  ing Systems (NeurIPS).                                 Omar Khattab, Keshav Santhanam, Xiang Lisa
+                                                          Li, David Hall, Percy Liang, Christopher Potts,
+Wei-Lin Chiang, Zhuohan Li, Zi Lin, Ying Sheng,           and Matei Zaharia. 2022. Demonstrate-search-
+ Zhanghao Wu, Hao Zhang, Lianmin Zheng, Siyuan            predict: Composing retrieval and language mod-
+ Zhuang, Yonghao Zhuang, Joseph E. Gonzalez, Ion          els for knowledge-intensive NLP. arXiv preprint
+ Stoica, and Eric P. Xing. 2023. Vicuna: An open-         arXiv:2212.14024.
+ source chatbot impressing GPT-4 with 90%* Chat-
+ GPT quality.                                            Alex Mallen, Akari Asai, Victor Zhong, Rajarshi Das,
+                                                           Hannaneh Hajishirzi, and Daniel Khashabi. 2023.
+Damai Dai, Li Dong, Yaru Hao, Zhifang Sui, Baobao          When not to trust language models: Investigating
+  Chang, and Furu Wei. 2022a. Knowledge neurons in         effectiveness and limitations of parametric and non-
+  pretrained transformers. In Association for Computa-     parametric memories. In Association for Computa-
+  tional Linguistics (ACL).                                tional Linguistics (ACL).
+Kevin Meng, David Bau, Alex Andonian, and Yonatan         Anton Sinitsin, Vsevolod Plokhotnyuk, Dmitry Pyrkin,
+  Belinkov. 2022a. Locating and editing factual asso-       Sergei Popov, and Artem Babenko. 2020. Editable
+  ciations in GPT. In Advances in Neural Information        neural networks. In International Conference on
+  Processing Systems (NeurIPS).                             Machine Learning (ICML).
+
+Kevin Meng, Arnab Sen Sharma, Alex Andonian,              Matthew Sotoudeh and Aditya V Thakur. 2019. Cor-
+  Yonatan Belinkov, and David Bau. 2022b. Mass-            recting deep neural networks with small, generalizing
+  editing memory in a transformer. In International        patches. In Workshop on Safety and Robustness in
+  Conference on Learning Representations (ICLR).           Decision Making.
+
+Eric Mitchell, Charles Lin, Antoine Bosselut, Chelsea     Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier
+  Finn, and Christopher D Manning. 2022a. Fast model        Martinet, Marie-Anne Lachaux, Timothée Lacroix,
+  editing at scale. In International Conference on          Baptiste Rozière, Naman Goyal, Eric Hambro,
+  Learning Representations (ICLR).                          Faisal Azhar, et al. 2023. LLaMA: Open and ef-
+                                                            ficient foundation language models. arXiv preprint
+Eric Mitchell, Charles Lin, Antoine Bosselut, Christo-      arXiv:2302.13971.
+  pher D Manning, and Chelsea Finn. 2022b. Memory-
+  based model editing at scale. In International Con-     Denny Vrandečić and Markus Krötzsch. 2014. Wiki-
+  ference on Machine Learning (ICML).                       data: a free collaborative knowledgebase. Communi-
+                                                            cations of the ACM, 57(10):78–85.
+Eric Mitchell, Joseph J. Noh, Siyan Li, William S. Arm-
+   strong, Ananth Agarwal, Patrick Liu, Chelsea Finn,     Ben Wang and Aran Komatsuzaki. 2021. GPT-J-
+   and Christopher D. Manning. 2022c. Enhancing self-       6B: A 6 Billion Parameter Autoregressive Lan-
+   consistency and performance of pretrained language       guage Model. https://github.com/kingoflolz/
+   models with NLI. In Empirical Methods in Natural         mesh-transformer-jax.
+   Language Processing (EMNLP).
+                                                          Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten
+Yasumasa Onoe, Michael JQ Zhang, Shankar Padman-             Bosma, Ed Chi, Quoc Le, and Denny Zhou. 2022.
+  abhan, Greg Durrett, and Eunsol Choi. 2023. Can            Chain of thought prompting elicits reasoning in large
+  lms learn new entities from descriptions? Challenges       language models. In Advances in Neural Information
+  in propagating injected knowledge. In Association          Processing Systems (NeurIPS).
+  for Computational Linguistics (ACL).
+                                                          Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak
+Long Ouyang, Jeff Wu, Xu Jiang, Diogo Almeida, Car-         Shafran, Karthik Narasimhan, and Yuan Cao. 2023.
+  roll L. Wainwright, Pamela Mishkin, Chong Zhang,          ReAct: Synergizing reasoning and acting in language
+  Sandhini Agarwal, Katarina Slama, Alex Ray, John          models. In International Conference on Learning
+  Schulman, Jacob Hilton, Fraser Kelton, Luke E.            Representations (ICLR).
+  Miller, Maddie Simens, Amanda Askell, Peter Welin-      Zexuan Zhong, Dan Friedman, and Danqi Chen. 2021.
+  der, Paul Francis Christiano, Jan Leike, and Ryan J.      Factual probing is [MASK]: Learning vs. learning to
+  Lowe. 2022. Training language models to follow            recall. In North American Chapter of the Association
+  instructions with human feedback. In Advances in          for Computational Linguistics (NAACL).
+  Neural Information Processing Systems (NeurIPS).
+                                                          Denny Zhou, Nathanael Schärli, Le Hou, Jason Wei,
+Fabio Petroni, Tim Rocktäschel, Patrick Lewis, An-          Nathan Scales, Xuezhi Wang, Dale Schuurmans,
+  ton Bakhtin, Yuxiang Wu, Alexander H Miller, and          Olivier Bousquet, Quoc Le, and Ed Chi. 2023a.
+  Sebastian Riedel. 2019. Language models as knowl-         Least-to-most prompting enables complex reasoning
+  edge bases? In Empirical Methods in Natural Lan-          in large language models. In International Confer-
+  guage Processing (EMNLP).                                 ence on Learning Representations (ICLR).
+Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt,        Wenxuan Zhou, Sheng Zhang, Hoifung Poon, and
+  Noah A Smith, and Mike Lewis. 2022. Measuring            Muhao Chen. 2023b. Context-faithful prompt-
+  and narrowing the compositionality gap in language       ing for large language models. arXiv preprint
+  models. arXiv preprint arXiv:2210.03350.                 arXiv:2303.11315.
+Alec Radford, Jeffrey Wu, Rewon Child, David Luan,        Chen Zhu, Ankit Singh Rawat, Manzil Zaheer, Srinadh
+  Dario Amodei, Ilya Sutskever, et al. 2019. Language       Bhojanapalli, Daliang Li, Felix Yu, and Sanjiv Kumar.
+  models are unsupervised multitask learners. OpenAI        2021. Modifying memories in transformer models.
+  blog.                                                     In International Conference on Machine Learning
+                                                            (ICML).
+Taylor Shin, Yasaman Razeghi, Robert L Logan IV,
+  Eric Wallace, and Sameer Singh. 2020. Autoprompt:
+  Eliciting knowledge from language models with auto-
+  matically generated prompts. In Empirical Methods
+  in Natural Language Processing (EMNLP), pages
+  4222–4235.
+A     Details of Dataset Construction                   these generated questions are of sufficient qual-
+                                                        ity for assessing the efficacy of knowledge-editing
+A.1    Sampling Fact Chains from Wikidata               methods.
+We collect chains of facts that contain N = {2, 3, 4}
+triples from Wikidata. We adopt heuristic rules to      B    Details of Subsampling MQ UAKE- CF
+ensure that the sampled fact triples are coherent       Throughout the paper, our experiments on
+and lead to natural questions. Specifically, we ap-     MQ UAKE- CF are conducted on a subset of the
+ply the following constraints when sampling fact        full dataset which includes 3000 instances. Table 9
+chains from Wikidata. (1) The sampled chain does        shows the data statistics of this subset.
+not involve a circle; (2) The sampled chain does           When subsampling from the full dataset
+not contain two triples that share the same relation    MQ UAKE- CF, we ensure that there is no knowl-
+type; (3) The triples with the object being a country   edge conflict across different instances in this sub-
+can only appear in the last two hops of the chain;      set. Specifically, after perform editing with all the
+(4) The sampled chain contains up to three object       edited facts of the subset, for a subject s and a rela-
+types; (5) All triples with a person or location ob-    tion r, there exist up to one corresponding objective
+ject are consecutive in the chain; (6) The subject      o that forms a fact triple (s, r, o).
+entity associated with the relation headquarters
+location (P159) must be a company or an organi-         C    Evaluation Metrics
+zation; (7) In all triples with the relation capital
+(P36), the subject has to be a country. To use these    We evaluate the editing results based on three evalu-
+heuristic rules, we manually label the object types     ation metrics: edit-wise success rate, instance-wise
+for each relation we consider. For example, the         accuracy, and multi-hop accuracy. Suppose we
+relation head of state (P35) corresponds to a person    have edited a language model and obtain the edited
+as the object.                                          model f ∗ (⋅).
+                                                           Edit-wise success rate measures how many
+A.2    Filtering Unrecallable Facts with GPT-J          edited facts can be recalled by the edited language
+                                                        model. Given an edit e = (s, r, o → o∗ ), the editing
+We filter out any chain of facts which contain at       success is defined as 1[f ∗ (tr (s)) = o∗ ]. We take
+least one fact that cannot be recalled by GPT-J. For    the averaged value of the all edits in the dataset and
+each relation type, we manually define a question       refer it as the edit-wise success rate metric.
+template as well as 8 demonstration examples for           Instance-wise accuracy measures how many in-
+in-context-learning. We use in-context-learning to      stances are there where all the associated facts
+ensure the model can capture the answer format          can be recalled by the language model (either
+from the context. Table 6 shows an example of the       the original or edited one). Given an instance
+prompt we use to recall facts of the relation devel-    d = ⟨E, Q, a, a∗ , C, C ∗ ⟩, the instance-wise accuracy
+oper (P178). We include the question templates of       before editing is defined as
+all relations on MQ UAKE in Appendix J.
+                                                                      ⎡                    ⎤
+                                                                      ⎢                    ⎥
+A.3    Generating Questions using ChatGPT                           1 ⎢ ⋀ [f (tr (s)) = o]⎥⎥ ,
+                                                                      ⎢
+                                                                      ⎢(s,r,o)∈C           ⎥
+Given a chain of facts, we prompt ChatGPT                             ⎣                    ⎦
+(gpt-3.5-turbo) to automatically generate multi-        and the instance-wise accuracy post editing is de-
+hop questions. The prompt we used is shown in           fined as
+Table 7.
+                                                                    ⎡                     ⎤
+                                                                    ⎢                  ∗ ⎥
+   In Table 8, we show some randomly selected
+                                                                  1 ⎢ ⋀ [f (tr (s)) = o ]⎥⎥ .
+                                                                    ⎢            ∗
+examples of the questions generated by ChatGPT                      ⎢(s,r,o)∈C ∗          ⎥
+                                                                    ⎣                     ⎦
+on MQ UAKE- CF. We select 3 instances from
+2, 3, 4−hop questions, each of which contains three     We report the averaged instance-wise accuracy in
+generated questions. As shown, ChatGPT success-         our evaluation.
+fully transforms the chain of triples into grammati-      Multi-hop accuracy measures the accuracy on
+cally correct questions. Although these multi-hop       multi-hop questions. We regard an instance be-
+questions are synthetic, they are logically consis-     ing predicted correctly if any of the multi-hop
+tent with the flow of the triple chains. We believe     questions are answered correctly by the language
+ (In-context-learning examples)
+ Q: Who is the developer of Telegram? A: Telegram FZ-LLC
+ Q: Who is the developer of Microsoft Windows? A: Microsoft
+ Q: Who is the developer of PlayStation 2? A: Sony Interactive Entertainment
+ Q: Who is the developer of iTunes? A: Apple Inc.
+ Q: Who is the developer of SR-71 Blackbird? A: Kelly Johnson
+ Q: Who is the developer of Moblin? A: Linux Foundation
+ Q: Who is the developer of Xbox 360? A: Microsoft
+ Q: Who is the developer of Kinsey scale? A: Alfred Kinsey
+ (Query during inference)
+ Q: Who is the developer of SteamOS? A: Valve Corporation
+
+Table 6: An example of the prompt we used to recall single-hop factf with relation developer (P178) from language
+models. We use in-context-learning with 8 demonstration examples to ensure the model can output the answer in a
+desirable format.
+
+ System:
+ You are a powerful multi-hop question generator. Users will provide a chain of Wikidata triples,
+ and you will help write questions to ask the tail entity from the head entity. You shouldn’t
+ include bridge entities in generated questions. The questions should only include the head entity.
+
+ [12 in-context demonstrations abbreviated]
+
+ User:
+ Given Wikidata triples (Daredevil/Bullseye: The Target, author, x1), (x1, country of citizenship,
+ x2), (x2, continent, x3), write a question to ask x3. Don’t mention x1, x2, ... Write three
+ possible questions in natural English.
+
+ System:
+ 1. What continent is the country of citizenship of the author of Daredevil/Bullseye: The Target
+ located in?
+ 2. From which continent does the author of Daredevil/Bullseye: The Target’s country of citizenship
+ belong?
+ 3. What continent is the author’s country of citizenship, who wrote Daredevil/Bullseye: The Target,
+ situated in?
+
+Table 7: An example of using ChatGPT (gpt-3.5-turbo) to generate questions from Wikidata triples. We manually
+write 12 demonstrations as the prompt when querying ChatGPT.
+
+
+model. Given an instance d = ⟨E, Q, a, a∗ , C, C ∗ ⟩,     norm constraint on weight changes with a coeffi-
+the multi-hop accuracy before editing is defined as       cient 5 × 10−5 in our implementation.
+                    ⎡                  ⎤
+                  1 ⎢⎢⎢ ⋁ [f (q) = a]⎥⎥⎥ ,                D.2    MEND
+                    ⎣q∈Q               ⎦
+                                                          We use the GPT-J MEND editor trained by Meng
+and the multi-hop accuracy post editing is defined        et al. (2022a). For Vicuna-7B, we train our own
+as                                                        MEND editor model on the Wikitext generation
+                  ⎡                    ⎤
+              1 ⎢⎢⎢ ⋁ [f ∗ (q) = a∗ ]⎥⎥⎥ .                editing dataset (Mitchell et al., 2022a) with the
+                  ⎣q∈Q                 ⎦                  different hyperparameters. During inference, we
+We report the averaged multi-hop accuracy in our          set the learning rate scale to be 1.0.
+evaluation.
+                                                          D.3    ROME
+D     Implementation Details for Knowledge
+      Editing Methods                                     For GPT-J, we use the default hyperparameters of
+                                                          ROME and the pre-computed covariance statistics
+D.1    Fine-tuning                                        released by Meng et al. (2022a). For Vicuna-7B,
+Our fine-tuning baseline (FT) performs gradient           we run ROME to update model weights at layer
+descent on the edits to update model parameters.          9 with the default hyperparameters. We compute
+We fine-tune layer 21 of GPT-J and layer 31 of            the covariance statistics for Vicuna-7B on Wikitext
+Vicuna-7B. We follow Zhu et al. (2021) and use a          using a sample size of 100,000.
+                                                Examples of 2-hop questions
+ C    (Jacques Necker, employer, University of Geneva) (University of Geneva, headquarters location, Geneva)
+ Q    What is the location of the headquarters of the employer of Jacques Necker?
+      Where is the employer of Jacques Necker headquartered?
+      In which city is the head office located for the company that employed Jacques Necker?
+ C    (Percival Lowell, educated at, Harvard University) (Harvard University, headquarters location, Cambridge)
+ Q    What is the location of the headquarters of the institution where Percival Lowell was educated?
+      In which city is the institution located where Percival Lowell received his education?
+      Where is the headquarters of the educational institution attended by Percival Lowell located?
+ C    (Gordon Moore, country of citizenship, United States of America) (United States of America, capital, Washington, D.C.)
+ Q    What is the capital of the country where Gordon Moore holds citizenship?
+      Which is the capital city of the country to which Gordon Moore belongs?
+      In which city is the seat of the government of the country where Gordon Moore is a citizen?
+                                                Examples of 3-hop questions
+ C    (Kim Kardashian, spouse, Kanye West) (Kanye West, genre, hip hop music)
+      (hip hop music, country of origin, United States of America)
+ Q    What is the country of origin of the genre associated with the spouse of Kim Kardashian?
+      From which country does the genre of the partner of Kim Kardashian hail?
+      Which country is the genre of the partner of Kim Kardashian associated with originally from?
+ C    (Nicholas of Tolentino, religion or worldview, Catholic Church) (Catholic Church, founded by, Jesus Christ)
+      (Jesus Christ, place of birth, Bethlehem)
+ Q    Where was the founder of Nicholas of Tolentino’s religion born?
+      In which city was the founder of the religion that Nicholas of Tolentino adhered to born?
+      What is the birthplace of the founder of the religion that Nicholas of Tolentino followed?
+ C    (Boston, head of government, Marty Walsh) (Marty Walsh, educated at, Boston College)
+      (Boston College, headquarters location, Chestnut Hill)
+ Q    In what city is the headquarters of the institution where the head of government of Boston was educated located?
+      Where is the location of the headquarters of the educational institution where the head of government of Boston
+      received their education?
+      What is the city where the headquarters of the institution where the head of government of Boston was educated
+      at located?
+                                                Examples of 4-hop questions
+ C    (Xbox Live, developer, Microsoft) (Microsoft, chief executive officer, Satya Nadella)
+      (Satya Nadella, place of birth, Hyderabad) (Hyderabad, continent, Asia)
+ Q    Which continent is home to the birthplace of the CEO of Xbox Live developer?
+      Where was the CEO of the developer of Xbox Live born in which continent?
+      In what continent was the CEO of Xbox Live’s developer born?
+ C    (Winnie the Pooh, creator, A. A. Milne) (A. A. Milne, child, Christopher Robin Milne)
+      (Christopher Robin Milne, country of citizenship, United Kingdom) (United Kingdom, official language, English)
+ Q    What is the official language of the country where the child of Winnie the Pooh’s creator holds citizenship?
+      Which language is officially spoken in the country where the child of the creator of Winnie the Pooh is a citizen?
+      What is the officiated language of the country where the child of Winnie the Pooh’s creator is a citizen of?
+ C    (watchOS, developer, Apple Inc.) (Apple Inc., chief executive officer, Tim Cook)
+      (Tim Cook, country of citizenship, United States of America) (United States of America, capital, Washington, D.C.)
+ Q    What is the capital of the country where the CEO of the developer of watchOS holds citizenship?
+      In which city does the CEO of the company that developed watchOS hold citizenship?
+      Which city is the capital of the home country of the CEO of the developer of watchOS?
+
+Table 8: Qualitative examples of the generated multi-hop questions on MQ UAKE- CF. Given a chain of facts, we
+query ChatGPT (gpt-3.5-turbo) to generate multi-hop questions with the prompt shown in Table 7.
+
+
+D.4   MEMIT                                                     Wikitext using a sample size of 100,000.
+
+                                                                E     Chain-of-thought Prompting for
+For GPT-J, we use the default hyperparameters of
+                                                                      Multi-hop Questions
+MEMIT and the pre-computed covariance statistics
+released by Meng et al. (2022b). For Vicuana-7B,                We use chain-of-thought (CoT) prompting (Wei
+we update model weights at layers {5, 6, 7, 8, 9}               et al., 2022) to maximize model performance. Ta-
+with the default hyperparameters. Similarly, we                 ble 13 shows one simplified example of our prompt
+compute the covariance statistics for Vicuna-7B on              with CoT.
+     #Edits        2-hop     3-hop           4-hop           Total     Specifically, we allow outdated answers given
+                                                                       smaller language models tend to be less calibrated.
+     1               599        423              51      1,073         To extend the golden labels, we use GPT-3.5
+     2               536        374             136      1,046         (text-davinci-003) to query outdated answers.
+     3                 -        339             229        568         See the prompt we used in Table 14.
+     4                 -          -             313        313
+     All           1,135      1,136             729      3,000         G    Prompts used in MeLLo
+Table 9: Our experiments on MQ UAKE- CF are con-                       The prompt we used in MeLLo is shown in Ta-
+ducted on a subset of the full dataset which consists of               ble 15. We first prompt the language model to de-
+3000 instances. Here we show the data statistics of the                compose subquestions. Then the language model
+subset. We ensure that there is no knowledge conflict                  generates a tentative question to the subquestion
+across different instances in this subset.                             (marked in green text); then we use the generated
+                                                                       subquestion to retrieve the most relevant edited fact
+    # Instances (k =)             1       100         1000     3000    (marked in light blue text) and append it to the
+    Retrieval acc.            88.1       68.5         62.0      59.7   prompt. The model self-checks if the retrieved fact
+    MeLLo (on GPT-3)          52.1       35.3         31.8      30.9   contradicts the generated answer. The prompting
+                                                                       procedure goes iteratively until the model generates
+Table 10: How retrieval accuracy affects the multi-hop                 the final answer.
+performance of MeLLo on MQ UAKE- CF. We consider
+a group of k instances at the same time. Retrieval acc.:               H    Breakdown Results on MQ UAKE- CF
+how many instances where all the associated edited facts
+are correctly retrieved from the memory.                               Table 11 and Table 12 present the breakdown re-
+                                                                       sults on MQ UAKE- CF when using GPT-J as the
+                     2-hop     3-hop           4-hop     All           base model. We find that, in all editing methods
+                                                                       (1) the performance on 2-hop questions is much
+        Base         39.5         31.1         52.4      39.5
+                                                                       higher than 3-hop and 4-hop questions; (2) the
+        FT           2.7          1.0           0.0      1.4           performance is worse when there are more edits
+        MEND         11.3         13.4          9.6      11.7          asssociated with the edited instances.
+        ROME         37.3         10.0          7.7      19.9
+        MEMIT        23.3          4.7          5.1      11.8          I   Impact of Retrieval Performance
+Table 11: Breakdown multi-hop performance (CoT) on                     In MeLLo, in order to answer multi-hop questions
+MQ UAKE- CF for {2,3,4}-hop questions. We use GPT-                     correctly after editing, the retrieval model needs to
+J as the base model in this experiment.                                retrieve all the associated edited facts (each ques-
+                                                                       tion is associated with 1-4 edited facts) from the
+       # Edits =     1        2          3        4          All       memory. Here we investigate how retrieval ac-
+       Base         29.1     40.2     50.0       53.9        39.5      curacy affects the performance of MeLLo when
+       FT           2.8      0.6         0.9      0.0        1.4
+                                                                       using GPT-3.5 as the base model. We compute
+       MEND         12.7     14.1        7.2      8.3        11.7      the retrieval accuracy (i.e., how many instances
+       ROME         23.7     26.5        8.2      5.0        19.9      where all the associated edited facts are correctly
+       MEMIT        16.7     13.0        5.0      3.5        11.8      retrieved from the memory) when applying MeLLo
+                                                                       on MQ UAKE- CF with GPT-3.5 by considering dif-
+Table 12: Breakdown multi-hop performance (CoT) on                     ferent numbers of edited instances at the same time.
+MQ UAKE- CF for questions with {1,2,3,4} edits. We                     As Table 10 shows, the performance of MeLLo de-
+use GPT-J as the base model in this experiment.
+                                                                       creases if the retrieval accuracy is lower (as a result
+                                                                       of considering more instances at the same time).
+F     Extended Golden Labels for                                       Among those questions where all associated facts
+      MQ UAKE- T                                                       are successfully retrieved from memory, MeLLo
+                                                                       can answer 73.1% of them correctly. This indicates
+Our MQ UAKE- T contains limited test cases. To                         that retrieval performance can significantly impact
+better assess the model’s original performance                         the model performance. When we consider more
+on multi-hop questions, we extend the possi-                           irrelevant knowledge edits in the memory, retrieval
+ble golden labels for each multi-hop question.                         can be more challenging, and we expect that using
+ Question: What is the capital of the country where Plainfield Town Hall is located?
+ Thoughts: Plainfield Town Hall is located in the country of the United States of America. The
+ capital of United States is Washington, D.C.
+ Answer: Washington, D.C.
+
+ Question: In which country is the company that created Nissan 200SX located?
+ Thoughts: Nissan 200SX was created by Nissan. Nissan is located in the country of Japan.
+ Answer: Japan
+
+ [3 in-context demonstrations abbreviated]
+
+ Question: Who has ownership of the developer of the Chevrolet Corvette (C4)?
+ Thoughts: The developer of Chevrolet Corvette (C4) is Chevrolet. Chevrolet is owned by General
+ Motors.
+ Answer: Model Generated Answer Goes Here
+
+     Table 13: The template of the prompt we used for asking multi-hop questions using chain-of-thoughts.
+
+ Please answer the following question faithfully using the knowledge you have from Wikipedia.
+ Provide 10 possible answers to the question, using all the Wikipedia data you know. Rank them from
+ the most current to the most outdated.
+
+ Input: What is the name of the current head of the United States of America government?
+ Output:
+ Joe Biden
+ Donald Trump
+ Barack Obama
+ George W. Bush
+ Bill Clinton
+ George H. W. Bush
+ Ronald Reagan
+ Jimmy Carter
+ Gerald Ford
+ Richard Nixon
+
+ Input: What is the name of the current head of the New York City government?
+ Output: Model Generated Answer Goes Here
+
+
+Table 14: The template of the prompt we used for extending golden labels for MQ UAKE- T. The prompt contains
+one demonstration for better aligning model behaviors.
+
+ [4 in-context demonstrations abbreviated]
+
+ Question: What is the capital city of the country of citizenship of Ivanka Trump’s spouse?
+ Subquestion: Who is Ivanka Trump’s spouse?
+ Generated answer: Ivanka Trump’s spouse is Jared Kushner.
+ Retrieved fact: David Cameron is married to Samantha Cameron.
+ Retrieved fact does not contradict to generated answer, so the intermediate answer is: Jared
+ Kushner
+ Subquestion: What is the country of citizenship of Jared Kushner?
+ Generated answer: The country of citizenship of Jared Kushner is United States.
+ Retrieved fact: Jared Kushner is a citizen of Canada.
+ Retrieved fact contradicts to generated answer, so the intermediate answer is: Canada
+ Subquestion: What is the capital city of Canada?
+ Generated answer: The capital city of Canada is Ottawa.
+ Retrieved fact: The capital city of United States is Seattle.
+ Retrieved fact does not contradict to generated answer, so the intermediate answer is: Ottawa
+ Final answer: Ottawa
+
+Table 15: A step-by-step illustration of MeLLo solving one simplified example. Green parts are generated by the
+language model, and blue parts are facts retrieved by the retriever.
+
+
+more advanced retrieval techniques can improve
+the performance.
+ Relation   Question template                                             Cloze-style statement template
+ P30        Which continent is [S] located in?                            [S] is located in the continent of
+ P36        What is the capital of [S]?                                   The capital of [S] is
+ P35        What is the name of the current head of state in [S]?         The name of the current head of state in [S] is
+ P6         What is the name of the current head of the [S] government?   The name of the current head of the [S] government is
+ P20        Which city did [S] die in?                                    [S] died in the city of
+ P26        Who is [S] married to?                                        [S] is married to
+ P140       Which religion is [S] affiliated with?                        [S] is affiliated with the religion of
+ P1412      What language does [S] speak?                                 [S] speaks the language of
+ P19        Which city was [S] born in?                                   [S] was born in the city of
+ P69        Which university was [S] educated at?                         The univeristy where [S] was educated is
+ P40        Who is [S]’s child?                                           [S]’s child is
+ P27        What is the country of citizenship of [S]?                    [S] is a citizen of
+ P175       Who performed [S]?                                            [S] was performed by
+ P108       Who is the employer of [S]?                                   [S] is employed by
+ P112       Who founded [S]?                                              [S] was founded by
+ P50        Who is the author of [S]?                                     The author of [S] is
+ P170       Who was [S] created by?                                       [S] was created by
+ P407       Which language was [S] written in?                            [S] was written in the language of
+ P37        What is the official language of [S]?                         The official language of [S] is
+ P740       Where was [S] founded?                                        [S] was founded in the city of
+ P495       Which country was [S] created in?                             [S] was created in the country of
+ P106       What kind of work does [S] do?                                [S] works in the field of
+ P136       What type of music does [S] play?                             The type of music that [S] plays is
+ P364       What is the original language of [S]?                         The original language of [S] is
+ P937       Which city did [S] work in?                                   [S] worked in the city of
+ P800       What is [S] famous for?                                       [S] is famous for
+ P641       Which sport is [S] associated with?                           [S] is associated with the sport of
+ P413       What position does [S] play?                                  [S] plays the position of
+ P286       Who is the head coach of [S]?                                 The head coach of [S] is
+ P159       Which city is the headquarter of [S] located in?              The headquarters of [S] is located in the city of
+ P178       Who is the developer of [S]?                                  [S] was developed by
+ P488       Who is the chairperson of [S]?                                The chairperson of [S] is
+ P169       Who is the chief executive officer of [S]?                    The chief executive officer of [S] is
+ P449       Who is the original broadcaster of [S]?                       The origianl broadcaster of [S] is
+ P176       Which company is [S] produced by?                             The company that produced [S] is
+ P1037      Who is the director of [S]?                                   The director of [S] is
+ P1308      Who is the [S]?                                               The [S] is
+
+Table 16: Question templates and cloze-style statement templates that are used in MQ UAKE. “[S]” represents a
+placeholder for the subject entity of the fact. We use the question templates to query single-hop facts when we use
+GPT-J for filtering and use the cloze-style statement templates to convert an edited fact to a statement.
+
+
+J   Question/Cloze Statement Templates
+    used in MQ UAKE
+Table 16 shows the question templates and
+the cloze-style statement templates we use in
+MQ UAKE. We use the question templates to query
+single-hop facts when we use GPT-J for filtering
+and use the cloze-style statement templates to con-
+vert an edited fact to a natural language statement.
+

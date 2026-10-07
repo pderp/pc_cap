@@ -1,0 +1,681 @@
+              1 / The research question
+
+
+
+
+01 · Learning corrections without
+losing the rest
+
+Active Inference in the Extremes
+
+Can a small adaptive memory improve a frozen language model while
+limiting the damage elsewhere?
+
+charlie derr · research with Matthew Iklé
+Colleague practice · 6 October 2026 · 35–40 minutes
+
+
+A working correction system, mixed predictive-coding results, and a useful bound
+on harm.
+
+Source: Completed project results through 4 October 2026; presentation prepared 5 October.
+1 / The research question
+
+
+02 · The original bet: make learning selective
+
+Attach a small learning system to a frozen transformer. Read its internal state, then add a bounded
+correction where it helps.
+
+
+   Preserve useful                                                        Share what should                Test the mechanism and
+   knowledge                                                              transfer                         cost
+   Learn a supplied answer                                                Recognize the same fact in       Separate representation,
+   without needlessly changing                                            different wording, while         learning signal and retrieval.
+   unrelated predictions.                                                 keeping nearby facts distinct.   Measure useful retention,
+                                                                                                           interference and compute
+                                                                                                           together.
+
+
+
+
+  The first cap was motivated by predictive coding. Later experiments explicitly tested error
+  inference.
+Source: Original plan; Stage-4 report; corrected PC-v0, PC-v1 and PC-reader reports.
+2 / The motivating concepts
+
+
+03 · Three ideas guided the programme
+
+We aimed to connect selective learning, decisions under uncertainty and the consequences of
+extreme errors.
+
+
+   Active inference                                                        Predictive coding                  Heavy-tailed
+   Update beliefs and choose                                               Use mismatches between             distributions
+   actions using a model of                                                predictions and observations       Large deviations can remain
+   observations, preferred                                                 to infer corrections. We tested    more probable than an
+   outcomes and information                                                iterative error inference in       exponential tail predicts. We
+   value. Our autonomous                                                   acquisition and reader training.   measured harmful prediction
+   action-selection loop remains                                                                              changes and tested tail
+   future work.                                                                                               descriptions over the observed
+                                                                                                              range.
+
+
+
+
+  The integration is incomplete. The experiments still reveal which components help, fail or
+  cost too much.
+Source: Presentation brief; completed additional-work report; HT-17 distribution analysis.
+3 / Inside the experiments
+
+
+04 · What the cap actually does
+
+The main testbed uses GPT-2 small: 124 million parameters, with its base weights frozen.
+
+
+   A new question                                                      Memory and a reader               A corrected prediction
+   The transformer computes                                            The reader compares the           Bounded residual vectors are
+   internal features. The cap                                          question with stored facts. A     added at the write sites. The
+   reads features at blocks 4, 8                                       gate can select a correction or   transformer produces its
+   and 12.                                                             choose none.                      next-token probabilities.
+
+
+
+
+  Frozen weights do not guarantee frozen behavior: changing an activation changes what
+  happens downstream.
+Source: Stage-4 implementation and report. Memory acquisition precedes these evaluation-time reads.
+3 / Inside the experiments
+
+
+05 · Who supplies the answer to be learned?
+
+The targets were fixed in downloaded datasets before our runs. Our experiment did not invent
+replacement answers on the fly.
+
+
+   zsRE: teach a reference answer                                                                       CounterFact: teach a controlled
+   Prompt: “What league was Sporting Canamy?”                                                           replacement
+                                                                                                        Prompt: “James Howell speaks”
+   Target: Tercera División de México
+                                                                                                        Stored original: English · New target: Spanish
+   We used the record's first reference answer,
+   answers[0]. This is answer acquisition, not a                                                        We used target_new from the record. Success
+   deliberately false replacement.                                                                      means following the supplied edit; Spanish is not
+                                                                                                        being asserted as historical truth.
+
+
+
+
+  A dataset's original-answer label is separate from what our frozen model actually generated.
+
+Source: Saved support examples zsre-train-14871 and cf-9366; downloaded zsRE and CounterFact records.
+3 / Inside the experiments
+
+
+06 · Does the answer survive different wording?
+
+Teach: “What league was Sporting Canamy?” → Tercera División de México
+Test paraphrase: “What league did Sporting Canamy join with?”
+
+  After 1,000 edits                                   Original prompt                                           Paraphrase
+
+  Learned reader                                      Tercera División de México                                Tercera División de México
+
+
+  Random reader                                       Tercera División de México                                CD Atlético Baleares
+
+
+  Stable v0 cap                                       [empty answer]                                            forward
+
+
+The alternative question came from zsRE's rephrase field. During testing, the model saw the question
+without the target answer.
+
+   Remembering the teaching prompt and recognizing the same request are different
+   achievements.
+Source: Saved realization 0, order 100. All three acquired this target immediately; this is one illustration.
+3 / Inside the experiments
+
+
+07 · A paraphrase can also add distracting context
+
+Teach: “James Howell speaks” → Spanish
+Test: “Cataraqui is also the name of a municipal electoral district. The language used by James
+Howell is”
+
+  After 1,000 edits                                     Original prompt                                      Paraphrase
+
+  Learned reader                                        Spanish                                              Spanish
+
+
+  Random reader                                         Spanish                                              Ukrainian
+
+
+  Stable v0 cap                                         Spanish                                              "the city of the people."
+
+
+The entire test prompt came from CounterFact's paraphrase_prompts. We retained its unrelated opening
+sentence.
+
+  We test the supplied alternative wordings. They are not a guarantee of understanding every
+  possible question.
+Source: Saved cf-9366, realization 0, order 100. Display removes leading spaces; this is one illustration.
+3 / Inside the experiments
+
+
+08 · An edit must pass more than one test
+
+Generated answers stop at newline or end-of-sequence, with a 32-token limit. Editing scores use
+complete-answer matches to accepted variants.
+
+
+   Acquire and retain                                                                                     Generalize the wording
+   Can the cap produce the target now, and again                                                          Can it answer the supplied paraphrases? Retained
+   after many later edits?                                                                                paraphrase score is the main editing outcome.
+
+
+
+
+   Preserve and revise                                                                                    Inspect probabilities
+   Do unrelated and nearby prompts retain the base's                                                      On ordinary text, compare the full token
+   output? Can a newer answer replace an older one?                                                       distribution and the probability of the actual next
+                                                                                                          token.
+
+
+  Preservation means preserving behavior. If the base gave a bad answer, preserving it is still a
+  pass.
+Source: Stage-4 scoring and checkpoint assays. CounterFact can average multiple paraphrases within an item.
+3 / Inside the experiments
+
+
+09 · Recalling a fact is only the first step
+
+The two supplied papers help locate our work within a larger question: can a system use changed
+knowledge consistently?
+
+
+   MQuAKE: consequences of an edit                                                                 CounterBench: causal counterfactuals
+   The paper tests questions that require chains of                                                The paper asks what follows when variables in
+   facts after an edit. Our runs extracted single-fact                                             an explicit causal system are changed. It studies
+   changes from MQuAKE-CF and tested their                                                         causal inference, rather than simply recalling an
+   alternative prompts at 300 edits.                                                               edited association.
+
+
+
+
+  We did not run CounterBench or MQuAKE's full multi-hop benchmark. Those remain stronger
+  future tests.
+Source: Zhong et al., MQuAKE, arXiv:2305.14795v3; Chen et al., CounterBench, arXiv:2502.11008v2.
+3 / Inside the experiments
+
+
+10 · The central comparison changes the reader
+
+Same main-study base and supplied edit streams. These three conditions make the retrieval
+question easiest to see.
+
+
+   Learned reader                                                                Random reader                Stable v0 cap
+   A trained reader routes                                                       Random-geometry retrieval    The earlier activation-memory
+   questions to the correction                                                   with a gate tests how much   cap provides a reference for
+   memory and can abstain.                                                       the learned representation   the newer reader architecture.
+                                                                                 contributes.
+
+
+
+
+Three subject realizations × five orders. zsRE and CounterFact reach 1,000 edits; MQuAKE reaches 300 and
+is descriptive.
+
+   Five orders reuse a realization's facts. They do not turn three subject populations into fifteen.
+
+Source: Stage-4 triplet report; additional controls remain in the full report.
+4 / What we learned
+
+
+11 · Learning the reader improves paraphrase retention
+
+Retained paraphrase score, averaged over orders within each realization, then over the three
+realizations. Higher is better.
+Dataset and endpoint                               Learned reader                                       Random reader   Stable v0 cap
+
+ zsRE · 1,000 edits                                96.0%                                                52.4%           18.6%
+
+
+ CounterFact · 1,000                               67.8%                                                12.1%           0.0%
+ edits
+
+ MQuAKE · 300 edits                                71.6%                                                0.0%            0.0%
+
+
+The learned-reader realization means span 95.5–96.5% on zsRE, 66.6–69.2% on CounterFact and 70.3–72.3%
+on MQuAKE.
+
+  The cap often carries an answer beyond its teaching prompt. The strength of that transfer
+  depends on the dataset.
+Source: Stage-4 triplet summary. Bars start at zero on a common 0–100% scale; ranges are descriptive.
+4 / What we learned
+
+
+12 · Successful edits can still disturb other predictions
+
+We replayed ordinary text at identical prefixes, comparing capped and uncapped predictions at
+245,237 positions per cell.
+
+
+   Distribution change: KL                                              Observed-token harm: Δ                    Why a small mean can
+   KL compares the whole                                                Δ = log(p_base / p_cap) for the           mislead
+   next-token probability                                               token actually present in the             Most positions change little. A
+   distribution. All 45 main                                            text. Positive values mean that           small minority can suffer much
+   learned-reader cells exceeded                                        token became less likely.                 larger losses. Measure how
+   the registered mean-KL limit of                                      Negative values are                       often, how severely and how
+   0.001.                                                               improvements.                             far into the tail.
+
+
+
+
+  The runs passed data-integrity checks. The learned reader failed the specified
+  distribution-fidelity benchmark.
+Source: Stage-4 report and HT-17. Positions share text windows and are not independent experimental replicates.
+4 / What we learned
+
+
+13 · How often harm occurs and how large it is
+
+Count a harmful change when Δ exceeds 0.01 nat. Severity is the mean Δ among those harmful
+positions.
+Dataset and cap                                           Harmful positions                                Conditional severity
+
+ zsRE · learned                                           0.1594%                                          1.630 nats
+
+ zsRE · random                                            0.0266%                                          1.806 nats
+
+ zsRE · stable                                            0.1041%                                          1.716 nats
+
+ CounterFact · learned                                    0.2984%                                          1.913 nats
+
+ CounterFact · random                                     2.0450%                                          3.486 nats
+
+ CounterFact · stable                                     0.0000%                                          Undefined
+
+
+  Zero observed CounterFact harm for stable v0 accompanies zero paraphrase retention.
+  Quietness alone is insufficient.
+Source: HT-17; 15 cells per row, each with 245,237 positions. Both bar axes start at zero; units differ.
+                     4 / What we learned
+
+
+
+                     14 · Extreme losses have different observed tails
+
+                       A survival curve shows the fraction of positions whose loss increase exceeds a chosen size. Farther right
+                       means a larger loss.
+
+                                            zsRE · learned reader                                                                                zsRE · stable v0
+
+
+
+Fraction of all positions above
+                                  0.1%                                                                                                0.1%
+
+
+
+                                  0.01%                                                                                               0.01%
+
+
+
+
+that loss
+                                              Observed survival                                                                                    Observed survival
+                                              Saved exponential fit                                                                                Saved exponential fit
+                                  0.001%                                                                                              0.001%
+
+
+                                           0.01                   0.1                       1                         10                        0.01            0.1        1   10
+
+                                                                                  Loss increase Δ (nats; logarithmic scale)
+
+
+                                  Stable v0 has a more pronounced tail here. The learned reader gains little from a more
+                                  flexible tail fit.
+                       Source: HT-17; illustrative realization 0, order 100; saved fits, no refitting. Finite-range evidence, not a tail law.
+4 / What we learned
+
+
+15 · A probability floor gives a bound we can prove
+
+Mix the original next-token distribution with the cap's distribution at the same text prefix.
+
+
+   Keep some of the base                                                   Add the corrected              Bound the loss increase
+   ρ = exp(−1) ≈ 0.368                                                     distribution                   q ≥ ρ p_base
+                                                                           q = ρ p_base + (1 − ρ) p_cap
+   About 37% of the original                                                                              log(p_base / q) ≤ 1 nat
+   distribution remains in the                                             About 63% comes from the
+   mixture.                                                                capped model.
+
+
+
+
+  This bounds a token's loss at a shared prefix. It is not a one-nat bound on a whole generated
+  answer.
+Source: AW-B analytic mixture bound. The guarantee does not require a particular fitted tail family.
+4 / What we learned
+
+
+16 · The mixture reduced severity to about one-third
+
+Mean loss increase among positions with Δ > 0.01 nat, on ten exposed memories: two datasets ×
+five orders at 300 edits.
+Dataset                                                Original cap                                            Probability mixture
+
+ zsRE                                                  1.619 nats                                              0.542 nats
+
+
+
+ CounterFact                                           1.925 nats                                              0.581 nats
+
+
+All ten memories met the declared retention-and-preservation rule. Paraphrase retention was unchanged on
+zsRE and fell by 0.67–1.17 percentage points on CounterFact.
+Harm frequency barely changed. CounterFact mean KL still exceeded 0.001.
+
+
+
+  This is a measured reduction in the severity of unintended changes, with a small editing
+  trade-off.
+Source: AW-B evaluation and HT-17. Mixture selected on development data; bars share a zero origin and scale.
+4 / What we learned
+
+
+17 · “Using predictive coding” has several meanings
+
+Changing the base representation, the acquisition signal and the reader's training rule are
+separate interventions.
+
+
+   Base representation                                                   Acquisition credit              Reader training
+   The legacy study uses a frozen                                        Hold the base and reader        Hold the base fixed. Train the
+   50M ePC base. The main study                                          fixed. Change the signal that   retrieval/controller network
+   uses frozen 124M GPT-2.                                               tells a new memory correction   with backpropagation or
+   Results across these models                                           which direction to move.        iterative error inference, then
+   are not a controlled                                                                                  acquire fresh memories.
+   representation comparison.
+
+
+
+
+  The next results isolate acquisition credit and reader training within their own paired
+  experiments.
+Source: Corrected PC-v0, fixed-v5 PC-v1 and PC-reader specifications and completed reports.
+4 / What we learned
+
+
+18 · What our error-inference experiment computes
+
+Both acquisition arms start with the same target and use the same bounded memory-update rule.
+
+
+   Adjoint credit                                                                                            Error-inference credit
+   Differentiate the answer loss through the frozen                                                          Hold existing writes fixed. Start temporary site
+   model. Use the negative, normalized gradient to                                                           errors at zero. Minimize a quadratic error penalty
+   direct the correction.                                                                                    plus the answer loss, then normalize the inferred
+                                                                                                             errors.
+
+
+
+
+E(e) = ½ Σ ||e||² + answer loss with e
+The default uses eight settling steps at rate 0.1. A one-step normalized update matches the adjoint
+direction to numerical tolerance.
+
+  This implementation uses automatic differentiation. Its PC component is iterative error
+  inference, not biological locality.
+Source: Corrected PC acquisition implementation and one-step controls; all results shown use the repaired energy.
+4 / What we learned
+
+
+19 · More settling bought retention at a cost
+
+Legacy 50M ePC base with the v0 live cap: zsRE, three exposed realizations, order 100, after 1,000
+edits.
+Settling steps                                       Original-prompt                                          Paraphrase retention   Learning time per cell
+                                                     retention
+
+ 1                                                   51.5%                                                    13.1%                  5.7 min
+
+
+ 8                                                   53.4%                                                    13.1%                  10.2 min
+
+
+ 32                                                  56.5%                                                    12.2%                  25.4 min
+
+
+Mean ordinary-text loss increase rose from 0.00145 to 0.00221 nats between one and 32 steps. CounterFact
+paraphrase retention stayed at zero.
+
+  More inference preserved more teaching prompts, but did not establish better transfer or
+  lower harm.
+Source: PC-controls report. Means over three realizations; timing is learning only, not whole-process time.
+4 / What we learned
+
+
+20 · With the learned reader, credit effects were small
+
+Frozen GPT-2 and the selected v5 reader; only acquisition credit changes. Each arm acquires 300
+edits.
+
+  Dataset                                       Credit                               Paraphrase                              Acquisition process   Largest token loss
+                                                                                     retention
+
+  zsRE                                          Adjoint                              98.3%                                   316 s                 9.26 nats
+
+  zsRE                                          Error inference                      98.3%                                   426 s                 12.27 nats
+
+  CounterFact                                   Adjoint                              80.7%                                   297 s                 11.74 nats
+
+  CounterFact                                   Error inference                      80.3%                                   359 s                 12.23 nats
+
+Mean harm improved on zsRE and worsened on CounterFact. Small score differences are not proof of
+equivalent behavior.
+
+  This transfer check provides no clear practical advantage for eight-step error credit.
+
+Source: PC-v1; one exposed realization and order. Harm uses 245,237 positions; its separate readout cost is excluded here.
+4 / What we learned
+
+
+21 · Training the reader with PC gave mixed outcomes
+
+Three paired training seeds, the same 300 updates and 3.35M reader parameters. All evaluations
+use adjoint acquisition and 300 edits.
+Dataset and training                                   BP paraphrase retention                                        ePC paraphrase retention
+seed
+
+ zsRE · seed 0                                         97.3%                                                          94.7%
+
+ zsRE · seed 1                                         99.0%                                                          97.0%
+
+ zsRE · seed 2                                         97.7%                                                          98.0%
+
+ CounterFact · seed 0                                  81.0%                                                          56.8%
+
+ CounterFact · seed 1                                  80.0%                                                          77.8%
+
+ CounterFact · seed 2                                  83.5%                                                          66.0%
+
+  CounterFact paraphrase retention fell in every pair. Its ordinary-text harm changed direction
+  across seeds.
+Source: PC-reader report, 12 completed evaluations. Training seeds reuse one subject population; bars share 0–100%.
+4 / What we learned
+
+
+22 · The reader-training cost difference was large
+
+Whole-training process time for the same 300 updates, including construction and caching. Each
+pair starts from matched parameters.
+Training seed                                           Backpropagation                                                      Error-inference training
+
+ Seed 0                                                 0.241 h                                                              24.579 h
+
+
+ Seed 1                                                 0.252 h                                                              24.112 h
+
+
+ Seed 2                                                 0.242 h                                                              23.432 h
+
+
+Measured paired cost ratios: 102.1×, 95.8× and 96.7×. Backpropagation took about 14–15 minutes per
+reader; ePC took about a day.
+
+  The installed ePC training procedure was substantially more expensive, without a consistent
+  efficacy-and-harm gain.
+Source: Completed PC-reader process receipts. Acquisition and evaluation are separate; bars share a zero origin and scale.
+4 / What we learned
+
+
+23 · Last-layer writes increased measured harm
+
+Last-only versus all-site writes, with readers using either all taps or the upper two. Bars show the
+ratio of mean signed loss increases.
+Dataset and training                                    All read taps                                                       Upper read taps
+seed
+
+ zsRE · seed 0                                          3.82×                                                               2.64×
+
+ zsRE · seed 1                                          3.38×                                                               2.71×
+
+ zsRE · seed 2                                          3.17×                                                               4.37×
+
+ CounterFact · seed 0                                   3.29×                                                               2.97×
+
+ CounterFact · seed 1                                   2.87×                                                               3.30×
+
+ CounterFact · seed 2                                   3.14×                                                               3.63×
+Upper-only reading also lowered CounterFact paraphrase retention in all three seeds.
+
+  Every write restriction raised this harm measure, while paraphrase scores changed by at most
+  0.67 percentage points.
+Source: AW-L, 24 evaluations including 6 shared controls. Ratio 1 means no change; readers were trained with full writes.
+4 / What we learned
+
+
+24 · What the experiments changed in our thinking
+
+Useful retrieval, a good learning direction and control of collateral effects must be evaluated
+separately.
+
+
+   Retrieval is central                                                                                      PC still has trade-offs
+   Learning the reader greatly improves paraphrase                                                           An adjoint control used 53–58% of its offered
+   retention. Restricting the interface to upper layers                                                      budget. Credit direction versus actual compute
+   did not provide the hoped-for benefit.                                                                    remains unresolved.
+
+
+
+   A simple bound was useful                                                                                 The wider theory is still open
+   Mixing with the base reduced harmful-event                                                                The bounded κ-loss pilot missed its success rule.
+   severity while largely retaining edits. It did not                                                        That pilot did not implement the full
+   solve every fidelity failure.                                                                             coupled-entropy/free-energy proposal.
+
+
+  The best next experiment should isolate one proposed mechanism and preserve both
+  usefulness and harm as outcomes.
+Source: Stage-4 and completed additional-work synthesis; PC-matched control; AW-B; κ-pilot interpretation.
+5 / A more faithful next experiment
+
+
+
+25 · After the conference: make the blanket measurable
+
+A Markov blanket is a set of variables that makes internal and external states conditionally
+independent. Drawing a software boundary does not establish this property.
+
+
+   Specify the states                                                    Specify the interfaces           Test the asserted
+   Name the environment, the                                             Define which observations        property
+   adaptive cap's internal state                                         enter, which corrections leave   Use a small controlled model
+   and the frozen transformer's                                          and what a proposed coupled      with known dependencies.
+   state in a probabilistic model.                                       or porous boundary actually      Measure residual dependence
+                                                                         asserts.                         and perturb the interface
+                                                                                                          before scaling up.
+
+
+
+
+  The existing read/write interfaces are a starting point. A classical or coupled blanket requires
+  its own stated test.
+Source: Submitted abstract; abstract-to-testbed map; post-conference proposal. This work is proposed.
+5 / A more faithful next experiment
+
+
+26 · Coupled entropy needs a complete objective
+
+The proposed framework changes how probabilities and rare states contribute to uncertainty.
+Replacing one loss function is only part of that specification.
+
+
+   Define the distribution                                              Define the mathematics                                  Connect theory to a test
+   Choose the modeled variable:                                         Agree the coupled logarithm,                            Recover the ordinary limit and
+   correction state, residual or                                        normalized weighting,                                   check values and gradients
+   predicted token. Specify its                                         scale/root and constraints.                             against independent
+   support, normalization, units                                        Include their derivatives when                          calculations. Then ask whether
+   and reference distribution.                                          optimizing the chosen free                              useful corrections cause less
+                                                                        energy.                                                 harm.
+
+
+
+
+  A fitted tail shape is not automatically the objective's coupling parameter. Our earlier κ pilot
+  did not test this full model.
+Source: Nelson manuscript; coupled-objective note; post-conference collaboration proposal. Local JAX implementation proposed.
+5 / A more faithful next experiment
+
+
+27 · First isolate the objective, then the learning rule
+
+Proposed first comparison: an agreed ordinary objective versus its coupled counterpart, using the
+same architecture and learning method.
+
+
+   Pair the training                                                     Measure the trade-off                      Extend only after that
+   Three matched initializations,                                        Evaluate both readers on the               test
+   the same data and update                                              same two 300-edit streams: 12              Add a matched
+   schedule. Keep exact-gradient                                         cells. Report paraphrase                   predictive-coding comparison,
+   learning in both arms first, to                                       retention, preservation, harm              then multi-hop or explicit
+   isolate the objective's effect.                                       frequency, severity, extremes              causal tasks. Reused subjects
+                                                                         and actual cost.                           support exploratory follow-up,
+                                                                                                                    not fresh confirmation.
+
+
+
+
+  The question is whether the coupled objective improves the usefulness–harm trade-off,
+  including when the answer is negative.
+Source: Post-conference collaboration proposal. Timing and compute require a new local profile; no run has begun.
+5 / A more faithful next experiment
+
+
+28 · Toward an agent that chooses what to investigate
+
+Active inference adds a decision: which observation or action is worth its cost, given current
+uncertainty and preferred outcomes?
+
+
+   Observe                                                               Infer and choose                                 Learn and test
+   A correction arrives, a                                               Model the uncertainty.                           Use the result to update
+   paraphrase fails or a nearby                                          Compare an audit, a                              beliefs. Compare the policy
+   fact changes unexpectedly.                                            correction and abstention by                     with fixed or random audits at
+                                                                         their expected consequences                      the same resource budget.
+                                                                         and information value.
+
+
+
+
+  For the conference talk: which result best explains the promise, and which limitation most
+  needs a clearer explanation?
+Source: Active-inference presentation brief and post-conference proposal. Autonomous policy selection remains proposed.
+

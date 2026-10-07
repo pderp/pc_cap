@@ -1,0 +1,1131 @@
+{
+  "task": "support-field-explanations",
+  "agent": "Capex",
+  "created_utc": "2026-10-05T17:32:56.680511+00:00",
+  "status": "complete",
+  "model_calls": 0,
+  "gpu_seconds": 0,
+  "raw_sources_sha256": {
+    "/home/derp/cap/assets/data/raw/zsre/zsre_mend_train.json": "4f3ac245e9c0baaf633f9e6cb765ffa8e83d594a74520a6cc3539497328c0722",
+    "/home/derp/cap/assets/data/raw/counterfact/counterfact.json": "d017056125178a13728594e66a801357a8db9ed7973a7425554bb4271de9fc6f",
+    "/home/derp/cap/assets/data/raw/mquake/MQuAKE-CF.json": "fbf1ab9e5243e52da429f7636990096ae0b5f8fbf60f1d4d3a4bf0c9214cd6ea"
+  },
+  "payloads_sha256": {
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-8e4df877ccad361ba231bd0a49c4e2d3bff9990db7c1a9070157a6a54bc470dc.json": "66a3c7d79210dbfc50d642474d0c084da9cdd8b64141230038138e18971ccc7e",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-b0acc16f0f979c8203fdf4a384b2d0a830a7db2537dfabcfdc4cd9f679df1d91.json": "8e9c7bca19f622f0a1a88938863cd53e102be633805d951284ac832bce834ac1",
+    "/home/derp/cap/assets/runs/pc_cap/R1/r1_63o/v15/d9/seal/payload-b14a47935dbf1e007f4b09587d7d749019bb8ba9ce250597383f3ca5710e9d26.json": "b1e583b366456d0a7b8b83ba504d8878254057f24ca33b660011df6589a4b5d7"
+  },
+  "unchanged_examples_json_sha256": {
+    "/home/derp/cap/assets/support-information/examples.json": "0e7a481fda595dc66cfe33ae6c0d7a78d4105ad3e73067fbffd6eeb496519461",
+    "/home/derp/cap/assets/support-information/examples-random.json": "508a0f3f6f27f5b66ae824b390e057d7f6d637db1e77f117674d7e164023eaf4"
+  },
+  "before_documents_sha256": {
+    "/home/derp/cap/assets/support-information/examples-zsre.md": "87a0424c07d56f4ab044699bf2237c9f1767c6b427ba7405d2f39d09459b087b",
+    "/home/derp/cap/assets/support-information/examples-counterfact.md": "cc0a3af5b0ddf6c6685d8631a06329935a3037dcc415cc604e602a03efd7171c",
+    "/home/derp/cap/assets/support-information/examples-mquake.md": "61a060da102ff78bc3cb16e94e0ff35c2448a45d3840264cfd49aac719e02027",
+    "/home/derp/cap/assets/support-information/examples-zsre-random.md": "2b6fabf5151c5d847f7fef1b175c9bb7141c63013460bb9933a273733db7a7cd",
+    "/home/derp/cap/assets/support-information/examples-counterfact-random.md": "4af98a56e240f0354741a493a1ff2fd31d0f79f3c1e14eb096e5a2e4c4fc0e31",
+    "/home/derp/cap/assets/support-information/examples-mquake-random.md": "08c6acad64f806c4ce68b6502288c0acfb24baea034f6bdd68ff64527db74130",
+    "/home/derp/cap/assets/support-information/Capstan-README.md": "6d5493471308ee026dfbe3f91fdbcc9725e7ae36fcf83ec0e7d7b7bed7eb080c",
+    "/home/derp/cap/assets/support-information/README-random-sample.md": "1f872480883aab5c546f0872b914dec018785e21361b44aec1115942d7dec468"
+  },
+  "after_documents_sha256": {
+    "/home/derp/cap/assets/support-information/examples-zsre.md": "4f5f20cedef8c1d3af075f93b4877a3c23636235234459ff0c10ea464b0771fe",
+    "/home/derp/cap/assets/support-information/examples-counterfact.md": "8a4fa33e28d17908c2f7d74821039a2751be2010d644c57c249bbf8cbfe992c5",
+    "/home/derp/cap/assets/support-information/examples-mquake.md": "0ac31d4e542ef2f3cf3096f9eea63cd173c24e880abd5add9aefd7aefdb929a2",
+    "/home/derp/cap/assets/support-information/examples-zsre-random.md": "87e79a5e0e20a78b582b1292d2ee271218237850da1ca46812a5521c9339b2ed",
+    "/home/derp/cap/assets/support-information/examples-counterfact-random.md": "86d71d9ed4a38711aa625a4e59a889641cc6178011ef9308187bad3e3a23c8ec",
+    "/home/derp/cap/assets/support-information/examples-mquake-random.md": "556e7d7f4ed93fa39e906c612ee524716fefbc0107541c091d647da07d610ac6",
+    "/home/derp/cap/assets/support-information/Capstan-README.md": "f73cf000fd540853f4590908e98e662a4b1acd021f9c90f575953d90321c70da",
+    "/home/derp/cap/assets/support-information/README-random-sample.md": "a1b2b5772731204d887aae62095cf1fd6b1ab674f642cc38bb5fb62bdb602313"
+  },
+  "generator_sha256": "943f24ae824f51304a7a3a0c1fba12c5b8a9cd48c8065fbf75f7a58fbda3b66c",
+  "verified_rows": [
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-14871",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-8237",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-11729",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-4432",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-2421",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-2768",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-17771",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-3402",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-10258",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-1768",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-9968",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-605",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-10401",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-8232",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16863",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-4913",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-14780",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-5996",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-5863",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-11831",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-10324",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-9940",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-13591",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-894",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-4424",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-3084",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-10728",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-15186",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-11638",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-12208",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9366",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9706",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-6570",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-10698",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-6587",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-1158",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-3250",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-4795",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-6335",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2684",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9025",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-4086",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9688",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9845",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-3348",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2041",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-3586",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-138",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-142",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9721",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-10456",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-8044",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-8884",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2861",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-6392",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-1322",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-105",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-5253",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-10689",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "counterfact",
+      "item_id": "cf-1476",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:3218c8106c48e72c7297475f",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:347280026977b8d78c05f27b",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:c10cb823738d53866264f767",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:f14bb41c4706241d480a5904",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:c0695f97f7a213ecb993d171",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:ad6c3ec32c6e9be3f6a214bf",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:010b699a3ed22681564cf483",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:0b3022ab6155e0f1835ffc35",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:b4180cd4a2a7d7e373463e90",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:6db670895781d1ecedab90b4",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:30a2102c1fae8534df511fb3",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:6a1b957de601f7d618c32b7f",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:d8fb3b4c35c839ba4139978a",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:dded792b726bc6fbe8884253",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:5983e5ad2aad0e9ef0370756",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:cafc9c46752adb72b59e4341",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:d8b53509d028af7d45662f22",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:9e7b4b8a4b5425acf90b46ef",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:86977dff9dc9fdc3d9b9a9f5",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:f8ed1984c839077a8f854044",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:3f7f735061ec739017fd4384",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:ef1d7821d2cfc2b57cf1f080",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:d4d21e354a6ac2b06844c9a4",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:ca230bfb293f5586672a0bb8",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:81154302e7f75ff1cd2c3326",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:31c3390a01bc7d298dc1d520",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:31efe52e79416569f0b8156a",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:5cd1b91dc759a3e160b6daa6",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:ff40dcae5c6d037ae7d9a22e",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples.json",
+      "dataset": "mquake",
+      "item_id": "mquake:80611ef9bc713e95403814b5",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-17522",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-1912",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16552",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-6323",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-26",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-9902",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16973",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-5317",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-6167",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-11954",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-11371",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-13469",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16353",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-5762",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16583",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16289",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-17166",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-11805",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-8943",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-7539",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-764",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-8698",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-863",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-12814",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-7381",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-7004",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-14731",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-16580",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-678",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "zsre",
+      "item_id": "zsre-train-12120",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-3950",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-5671",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2149",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-7936",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-8980",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-363",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2485",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-7306",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-4464",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-10255",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9799",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-267",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-1368",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9825",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-5205",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-8443",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-7901",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-7060",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-3496",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-644",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-5601",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-6266",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-3554",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2135",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2493",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-9717",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-2565",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-5746",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-11",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "counterfact",
+      "item_id": "cf-4627",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:d11877b5bf3e1fac06b6fb25",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:84c79ff950933bf2de429b4a",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:2562d1d5ce4c75edd5d90075",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:d6191cedd756e1542827bfe1",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:8827d8574b61061a5cf9855a",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:559b7f4897c9ae87beb6d48f",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:136e59dc8ae5a30078a13144",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:3af51ea73da817945dd95236",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:262bf6b6f2d98dbf3bc9adda",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:e65622697ac5e6b06abb6299",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:dafd7e17384a0a45fb136cce",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:e78b882f1adf1b7ea2b6c4a1",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:1f997cec0a1c1abe868276a7",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:54e4911cf00f973823010b88",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:52045b9433dd16585c908c0b",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:7d53bf578f4ca7e1a86af8c9",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:21a7986d972d183d6d74758e",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:fd360c33c3f78bec517fdbee",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:7a1777228dc767e22da58724",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:f292713ca4bd99f610ee22e4",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:ba1d3a0d2743053ad58ad3ce",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:7404ee3d353bf7a26df759f4",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:fcab104e299da818044afc67",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:7a0afdaaa178ad1a3300e8c2",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:61e4ac71e90d72f5e63333d1",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:e79661a311db7fb38144ee5d",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:005e0c0bf941b4414a4eb258",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:7231a3303093d9cd34c20e00",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:d15bf19b4997e40762227c10",
+      "raw_fields_match": true
+    },
+    {
+      "collection": "examples-random.json",
+      "dataset": "mquake",
+      "item_id": "mquake:b69614e524756c00c17439df",
+      "raw_fields_match": true
+    }
+  ],
+  "checks": {
+    "rows_checked": 180,
+    "all_saved_model_answers_tables_and_counts_unchanged": true,
+    "existing_readme_text_unchanged": true,
+    "all_six_dataset_pages_include_explanation": true
+  }
+}
