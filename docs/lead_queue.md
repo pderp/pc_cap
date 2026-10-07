@@ -1794,3 +1794,18 @@ transfer 0.16 vs 0.79 trained, item 25); MQuAKE pool size (superseded by the sel
     the same quantity as DEC-073's 150 GPU-hour stop ceiling (exclusive occupancy). FIN-2 will state both definitions,
     give the best occupancy figure the lease records allow, and leave the judgement to you in the exceptions register
     rather than assert or deny an overrun. No other lane until your rehearsal notes on the colleague deck.
+
+168. (2026-10-07, 07:15 EDT) **Freeze dry run done (DEC-084); one document to read on Oct 9:
+    `docs/freeze_handoff_20261009_draft.md`.** I took FIN-2 myself per your instruction. Executed today: the closed
+    inventory check; receipt closure; the full CPU refresh in dependency order (16/16 steps, 279 s, no GPU); X25 PASS
+    (25 groups, 6,221 files); X26 rerun; 274 tests; a dated deck snapshot with a hash manifest. Two findings:
+    (1) the refresh initially failed because LINT-1's lint-only edit of `aw/scoring.py` broke the historical hash
+    checks in four report generators; they now use the archive-aware resolver Capex built for the presentation helper,
+    with their prior bytes archived (`docs/tasks/round66-source-archive/`); no report content changed; recorded as
+    exception E10. (2) GPU occupancy after the halt, as the union of the 85 logged intervals, is **136.0 h** (80 % of
+    the 169.5-h span); the receipt-envelope total is 152.7 process-hours (lower bound). The DEC-073 items alone (AW-B,
+    AW-L, Option R) used 40.6 process-hours; the PC refocus and reader study were authorised separately. The handoff's
+    exception E3 lays out both readings of the 150-h ceiling and leaves the judgement to you; my reading is that the
+    ceiling named the DEC-073 portfolio and the binding constraint, the Oct 6 line, was met. Open before Oct 9: you and
+    Capex commit the presentation edits in progress; I rerun the dry run on the morning of Oct 9 and regenerate the
+    handoff with final hashes; you sign. Nothing else is pending.

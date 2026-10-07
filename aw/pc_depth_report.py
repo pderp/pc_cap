@@ -17,7 +17,10 @@ from aw import pc_treatments as treatment
 from aw import pc_v0_report as native
 from aw.pc_complete_report import HARM0, OUT0, read
 from aw.pc_harm_readout import summarize
-from aw.pc_historical import ROOT, Sources, sha
+from aw.pc_historical import ROOT, sha
+from aw.reporting_sources import (
+    Sources,  # archive-aware (reporting only; runtime resolver unchanged)
+)
 
 BASE = ROOT / "results/additional_work/PC-v0"
 OUTPUT = ROOT / "logs/additional_work/PC-v0/controls-report-20260929"

@@ -10,7 +10,10 @@ import json
 from pathlib import Path
 
 from aw.pc_depth_report import DOCUMENT, OUTPUT
-from aw.pc_historical import ROOT, Sources, sha
+from aw.pc_historical import ROOT, sha
+from aw.reporting_sources import (
+    Sources,  # archive-aware (reporting only; runtime resolver unchanged)
+)
 
 MARKER = "<!-- PC-13 settling-depth controls -->"
 LEDGER = ROOT / "docs/talk_claim_ledger_v7.md"

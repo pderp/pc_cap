@@ -21,7 +21,10 @@ import numpy as np
 
 from aw import pc_v0_report as generator
 from aw.pc_harm_readout import summarize
-from aw.pc_historical import ROOT, Sources, bind, sha
+from aw.pc_historical import ROOT, bind, sha
+from aw.reporting_sources import (
+    Sources,  # archive-aware (reporting only; runtime resolver unchanged)
+)
 from aw.x24_final import V0, V1
 
 OUT0 = ROOT / "logs/additional_work/PC-v0/report-60-20260927"

@@ -15,9 +15,12 @@ import numpy as np
 
 from aw import aw_b_calibrate as driver
 from aw.pc_complete_report import read
-from aw.pc_historical import ROOT, Sources, sha
+from aw.pc_historical import ROOT, sha
 from aw.pc_v0_report import table
 from aw.pc_v1_run import metrics
+from aw.reporting_sources import (
+    Sources,  # archive-aware (reporting only; runtime resolver unchanged)
+)
 
 CALIBRATION = ROOT / "results/additional_work/AW-B/calibration-20260929"
 EVALUATION = ROOT / "results/additional_work/AW-B/evaluation-20260929"

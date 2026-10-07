@@ -29,6 +29,7 @@ modules go under `src/pccap/revision_v1/` as planned; anything drafted under `re
 
 ## 1. State (2026-09-14, 17:20 EDT)
 
+- **2026-10-07 07:15** — DEC-084: freeze dry run executed by Capstan (refresh 16/16, X25 PASS, 274 tests, deck snapshot, `docs/freeze_handoff_20261009_draft.md` with exceptions E1–E10). Reporting resolver repair (round66 archive). Final run + signature Oct 9. Capex on presentation with the lead; no lanes handed off.
 - **2026-10-05 08:50** — Capex round 65 committed (FIN-1 `docs/additional_work_report.md`; LINT-1; DOC-3). Round 66: FIN-2 freeze dry run on Oct 6 with a disclosed-exceptions register (missing durations; AW-L gate; 152.7 process-hour lower bound vs the DEC-073 150 GPU-hour ceiling). Then rehearsal-driven PRES-10.
 - **2026-10-05 06:00** — Capex's colleague long-talk deck committed (30 pages, HTML, notes). Round 64 lanes not yet done → carried as round 65 (FIN-1, FIN-2 on Oct 6, LINT-1, DOC-3 + support-information link).
 - **2026-10-04 06:30** — Capex round 63 committed (final PC-reader, Option R, AW-L reports; HT-17 complete; deck refresh; X25/X26/reproduction pass). DEC-083: portfolio closed. Round 64: FIN-1 consolidated report, FIN-2 freeze dry run (Oct 6), LINT-1, DOC-3. Capstan: deck file assembly (DECK-1), report slice review.
