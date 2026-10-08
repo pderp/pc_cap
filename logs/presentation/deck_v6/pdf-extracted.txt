@@ -1,0 +1,372 @@
+Active Inference in the Extremes · CCS 2026
+
+
+
+
+Predictive coding cap
+experiments
+Learning corrections on a frozen transformer
+
+
+charlie derr · Matthew Iklé
+15 October 2026 · Binghamton, New York
+
+
+
+Retrieval, learning signals, and the consequences of extreme errors.
+
+
+Source: Project results through October 2026.                          01 / 15
+The scientific question
+
+
+
+Can a small cap learn without disrupting the rest?
+
+Teach a frozen language model new answers while preserving its other
+predictions.
+
+
+    Active inference                                                            Predictive coding          Heavy-tailed
+    The longer-term goal:                                                       Test whether iterative     distributions
+    update beliefs and choose                                                   error inference provides   Ask whether rare, large
+    informative actions.                                                        useful learning signals.   losses change the story
+                                                                                                           told by averages.
+
+
+
+
+   We tested components of this programme. The full active-inference agent remains open.
+
+Source: Submitted abstract; shared presentation brief; completed experiments.                                                   02 / 15
+The testbed
+
+
+
+What a cap is
+
+GPT-2 small: 12 blocks, 124M parameters. Base weights stay fixed during the edit
+experiments.
+
+
+    Frozen transformer                                   Cap and memory
+    Prompt → blocks 1–12 → next-token                    Read activations → retrieve a
+    probabilities                                        correction or abstain → add bounded
+                                                         write vectors
+
+
+
+
+Read/write sites: after blocks 4, 8 and 12.
+One local GPU; transfer to larger models is untested.
+
+
+   No correction reproduces the base. Frozen weights can still produce changed behavior.
+
+Source: Stage-4 implementation and architecture audit.                                     03 / 15
+Separate retrieval from stored knowledge
+
+
+
+Which reader finds the correction?
+
+
+  Condition                                          Retrieval rule
+
+
+  Stable v0                                          Fixed activation-distance thresholds select stored corrections.
+
+
+                                                     A trained reader selects a relevant correction or chooses no
+  Learned reader
+                                                     correction.
+
+  Random-reader
+                                                     Untrained random geometry, with its specified gate configuration.
+  control
+
+The main learned reader was trained by backpropagation before these edit streams.
+
+
+
+   Reusable reader weights stay fixed; the correction memory continues to learn.
+
+Source: Stage-4 condition definitions; architecture/comparator audit.                                                  04 / 15
+What the experiment measures
+
+
+
+Teach, test, then retest after more learning
+
+Teach a fact → test it now → teach more facts → retest earlier facts and paraphrases.
+
+
+
+  Main-study dataset
+                                                  Edits per   Usefulness
+                                                  stream
+                                                              Does the original question—and a held-out
+  zsRE                                            1,000       rewording—still produce the taught answer?
+
+  CounterFact                                     1,000
+                                                              Preservation
+  MQuAKE                                          300         Do unrelated questions retain their answers? How
+                                                              do predictions change on ordinary text?
+
+
+Three fact samples, each tested in five orders. Our MQuAKE assay uses single-fact edits.
+
+
+   Original-prompt retention and paraphrase retention answer different questions.
+
+Source: Main-study protocol and triplet report.                                                            05 / 15
+Main study · retention at the final checkpoint
+
+
+
+Remembering a prompt is not enough
+
+
+                                                           Stable v0: original   Stable v0:   Learned reader:
+  Dataset
+                                                           prompt                paraphrase   paraphrase
+
+
+  zsRE · 1,000 edits                                       66.68%                18.56%       96.03%
+
+  CounterFact · 1,000
+                                                           100%                  0%           67.80%
+  edits
+
+  MQuAKE · 300 edits                                       100%                  0%           71.56%
+
+Means across orders within each of three fact samples, then across samples.
+Four-sample extension: learned versus random reader gained 44.1 points on zsRE and 56.2 on CounterFact in
+paraphrase retention.
+
+   Learned retrieval greatly improved access to corrections under new wording.
+
+Source: R1 triplet report; supplemental Option R report.                                                        06 / 15
+Keep usefulness and preservation together
+
+
+
+Better retrieval did not meet every preservation goal
+
+
+    45 / 45 cells                                                    CounterFact             MQuAKE
+    The learned reader                                               The comparison with     The shorter 300-edit run
+    exceeded the registered                                          stable v0 remained      remains descriptive.
+    preservation limit: mean                                         formally inconclusive
+    KL ≤ 0.001 nats per token                                        because its locality
+    on ordinary text.                                                requirement failed.
+
+
+
+
+KL measures change in the full next-token probability distribution.
+
+
+   A large paraphrase gain is not a complete preservation success.
+
+Source: Main-study registered classification and fidelity results.                                                07 / 15
+Two ways to obtain a learning signal
+
+
+
+Where predictive coding enters
+
+Teaching a fact needs a direction for changing its stored correction.
+
+
+    Adjoint credit                                                  Error-based PC credit
+    Differentiate answer loss through the                           Relax temporary error variables against
+    frozen transformer. Use the negative                            prediction loss and an error penalty. Use
+    normalized gradient.                                            the settled site errors to direct the
+                                                                    correction.
+
+
+
+Our digital solver uses automatic differentiation through the graph.
+We separately tested PC credit for acquiring facts and for training the reader/controller.
+
+   PC is a tested learning mechanism here; autonomous action selection is still future work.
+
+Source: Corrected ePC solver; PC-v1 and PC-reader specifications.                                         08 / 15
+Fixed GPT-2 and selected reader · one exposed fact sample/order · 300 edits
+
+
+
+Changing acquisition credit gave little retention gain
+
+
+                                                                Paraphrase    Whole-process   Max. loss increase vs.
+  Dataset                                Credit
+                                                                retention     time            base
+
+  zsRE                                   Adjoint                98.3%         316 s           9.26 nats
+
+  zsRE                                   Error inference        98.3%         426 s           12.27 nats
+
+  CounterFact                            Adjoint                80.7%         297 s           11.74 nats
+
+  CounterFact                            Error inference        80.3%         359 s           12.23 nats
+
+Mean harm moved in different directions across the two datasets. Small endpoint differences do not
+prove equivalence.
+
+   This changes how facts are acquired; it does not retrain the reader.
+
+Source: PC-v1 completed report; full ordinary-text inventory.                                                  09 / 15
+Three paired training seeds · same exposed fact sample/order · 300 edits
+
+
+
+PC training reduced paraphrase retention in 5 of 6 pairs
+
+
+  Dataset and seed                                 BP retention                ePC retention   96–102× training time
+  zsRE · 0                                         97.3%                       94.7%           ePC: 23–25 hours per seed. BP:
+                                                                                               about 15 minutes.
+  zsRE · 1                                         99.0%                       97.0%
+
+  zsRE · 2                                         97.7%                       98.0%
+                                                                                               Controlled comparison
+  CounterFact · 0                                  81.0%                       56.8%
+                                                                                               300 updates; 3.35M reader/controller
+  CounterFact · 1                                  80.0%                       77.8%           parameters. Every evaluation uses
+                                                                                               adjoint acquisition.
+  CounterFact · 2                                  83.5%                       66.0%
+
+
+   Some harm measures improved, but PC was much more costly in this configuration.
+
+Source: Completed PC-reader report. Training seeds are not new fact samples.                                                    10 / 15
+Older distilled base and live v0 cap · zsRE · 1,000 edits
+
+
+
+More settling improved original-prompt retention
+
+
+  Credit / settling steps                                                     Original prompt   Paraphrase   Learning time
+
+  Adjoint reference                                                           51.5%             13.1%        4.6 min
+
+  Error inference · 1                                                         51.5%             13.1%        5.7 min
+
+  Error inference · 8                                                         53.4%             13.1%        10.2 min
+
+  Error inference · 32                                                        56.5%             12.2%        25.4 min
+
+Mean ordinary-text loss increase rose from 0.00145 to 0.00221 nats between 1 and 32 steps.
+
+124M-parameter base distilled over 50M training tokens. Three exposed fact samples, one order; a separate
+comparison from the main study.
+
+   The original-prompt gain did not extend to paraphrases, and cost more time and harm.
+
+Source: PC-v0 settling-depth controls. Learning time is a subset of total process time.                                  11 / 15
+Why averages are insufficient
+
+
+
+Extreme losses have different observed tails
+
+Δ = loss with cap − loss without cap, at the same prefix. Positive Δ means worse prediction.
+
+Positions above threshold (log scale)
+                 zsRE · learned reader                                                               zsRE · stable v0
+
+ 0.1%                                                                                      0.1%
+
+
+ 0.01%                                                                                     0.01%
+
+                          Observed survival                                                                Observed survival
+ 0.001%                   Exponential excess fit                                           0.001%          Exponential excess fit
+
+              0.01                    0.1                     1                       10            0.01           0.1              1   10
+
+                                                 Loss increase Δ (nats; logarithmic scale)
+1 nat = a probability decrease by a factor of about 2.72. Fits use excesses above 0.01 nat.
+
+   Stable v0 has the more pronounced tail here. A power-law family is not established.
+
+Source: HT-17; fact sample 0/order 100; 1,000 edits; 245,237 shared text positions.                                                          12 / 15
+Mathematical guarantee, measured usefulness
+
+
+
+A simple mixture bounds token loss increase
+
+    p_mix = ρ p_base + (1 − ρ) p_cap, where ρ = e⁻¹ ≈ 0.37
+    At the same prefix: p_mix ≥ ρ p_base, so loss increase over the base is at most 1 nat.
+
+
+                 Conditional severity                                               Original cap   Mixture
+
+                 zsRE                                                               1.619 nats     0.542 nats
+
+                 CounterFact                                                        1.925 nats     0.581 nats
+
+Severity averages positions with Δ > 0.01 nat. Ten exposed streams; 300 edits.
+
+Paraphrase retention: unchanged on zsRE; down 0.7–1.2 points on CounterFact. CounterFact still missed
+the mean-KL limit.
+
+
+   The guarantee bounds per-token loss increase; unchanged greedy answers are not
+   guaranteed.
+Source: AW-B probability-mixture experiment; HT-17 conditional-severity analysis.                               13 / 15
+What the results make possible next
+
+
+
+Toward active inference in the extremes
+
+
+    Established components                                                  Open scientific step
+    We measured retrieval, PC                                               Can an active-inference policy choose which
+    learning trade-offs, and                                                facts to audit or update more effectively
+    concentrated prediction losses.                                         under the same budget?
+
+
+
+
+Autonomous action selection and a tested probabilistic Markov blanket remain open.
+
+We welcome collaboration on a precise coupled-entropy model and a discriminating experiment.
+The full coupled theory remains untested here.
+
+  Evaluate usefulness, the learning mechanism, and extreme consequences together.
+
+Source: Submitted programme; completed experiments; proposed future work.                                          14 / 15
+Active Inference in the Extremes · CCS 2026
+
+
+
+Questions and discussion
+
+
+earthland.ai/ccs/
+Canonical Google deck and presentation links
+
+
+charlie derr · Matthew Iklé
+SingularityNET · EarthLand · BGI Labs · TrueAGI
+
+Predictive-coding implementation: FabricPC
+
+Code: github.com/pderp/pc_cap
+
+Materials: github.com/pderp/cap-assets
+
+Agentic assistance: Capex · Capstan · Derp Peoples
+
+
+
+   Which mechanism would you test next—and which failure would matter most?
+
+Source: Scientific results and supporting material are linked from the project repositories.   15 / 15
+
