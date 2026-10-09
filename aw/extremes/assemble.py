@@ -22,6 +22,7 @@ import pandas as pd
 
 from aw.extremes.common import DATA, OUT, Status, atomic_csv, atomic_parquet, read_json
 from aw.extremes.models import PCR, eval_dir
+from aw.extremes.common import ROOT as M_ROOT
 from aw.extremes.score import M_MODELS, scores_dir
 
 HORIZONS = {"frozen": [None], **{m: [100, 300] for m in M_MODELS() if m != "frozen"}}
@@ -178,8 +179,65 @@ def benchmark_standardized(scores):
     return df, pd.DataFrame(marg)
 
 
+def mquake_reasoning():
+    """Registered composition endpoint rows -> question accuracy, any-/all-question success, by hop count and edit count.
+
+    Sources: this study's six PC-reader MQuAKE evaluations (family EXT) and, as context, the fifteen Stage-4 v5 cells
+    (family S4) at 300 edits. Each case teaches its dependency edits from a fresh start state and asks three questions.
+    """
+    import glob as _glob
+
+    from aw.extremes.stats import mquake_aggregate
+
+    rows = []
+    from aw.extremes.models import payload as _payload
+
+    hop_of = {}
+    try:
+        for cr in _payload("mquake")[0]["endpoints"]["composition"]["rows"]:
+            hop_of[cr["composition_id"]] = len((cr.get("orig") or {}).get("triples", []))
+    except Exception:
+        pass
+
+    def add(label, family, comp_rows, source):
+        q = []
+        for cr in comp_rows:
+            if cr.get("status") != "ok":
+                continue
+            hops = hop_of.get(cr.get("composition_id"))
+            for qi, qq in enumerate(cr.get("queries", [])):
+                q.append(dict(case_id=cr["composition_id"], question_index=qi, correct=bool(qq["post_edit_exact"]), old=bool(qq["pre_edit_answer_reappeared"]), base_new=bool(qq["cap_off_post_edit_exact"]), base_old=bool(qq["cap_off_pre_edit_exact"]),
+                              n_edits=len(cr.get("dependency_ids", [])), hops=hops))
+        if not q:
+            return
+        qd = pd.DataFrame(q)
+        agg = mquake_aggregate(q)
+        rows.append(dict(model=label, family=family, stratum="all", **agg, old_answer_reappeared_fraction=float(qd["old"].mean()), frozen_question_new_exact=float(qd["base_new"].mean()), frozen_question_old_exact=float(qd["base_old"].mean()), source=source))
+        for col in ("n_edits", "hops"):
+            for val, z in qd.groupby(col):
+                if pd.isna(val):
+                    continue
+                a = mquake_aggregate(z.to_dict("records"))
+                rows.append(dict(model=label, family=family, stratum=f"{col}={int(val)}", **a, old_answer_reappeared_fraction=float(z["old"].mean()), frozen_question_new_exact=float(z["base_new"].mean()), frozen_question_old_exact=float(z["base_old"].mean()), source=source))
+
+    for rule in ("bp", "epc"):
+        for seed in (0, 1, 2):
+            p = eval_dir(rule, seed, "mquake") / "composition.json"
+            if p.exists():
+                add(f"{rule}_reader_s{seed}", "EXT", read_json(p)["rows"], str(p))
+    for p in sorted(_glob.glob(str(M_ROOT / "results/R1/stage4_sealed_cells/R1_learned_ff-mquake-*/attempt-0000/checkpoint-300.json"))):
+        cell = p.split("/")[-3]
+        add(f"v5_stage4:{cell.split('-')[2]}-{cell.split('-')[3]}", "S4", read_json(p)["endpoints"]["composition"]["rows"], p)
+    return pd.DataFrame(rows)
+
+
 def main():
     scores, gens, probes_meta = load_scores()
+    try:
+        mr = mquake_reasoning()
+        atomic_csv(OUT / "tables" / "mquake_composition.csv", mr)
+    except Exception as e:
+        Status().warn(f"mquake_reasoning failed: {e!r}")
     if scores.empty:
         print("no completed scoring directories yet")
         return

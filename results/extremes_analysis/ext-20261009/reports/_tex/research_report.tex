@@ -7,7 +7,7 @@
 \begin{document}\maketitle\tableofcontents\clearpage
 
 
-Study \texttt{ext-20261009} $\cdot$ Capstan $\cdot$ 2026-10-09 $\cdot$ pc\_cap code revision \texttt{791a184fdd12} $\cdot$ commissioned by \texttt{docs/AgentHandoffForResearchInTheExtremes.md} as amended by \texttt{docs/mandatory\_ammendment.md}.
+Study \texttt{ext-20261009} $\cdot$ Capstan $\cdot$ 2026-10-09 $\cdot$ pc\_cap code revision \texttt{862c61829d79} $\cdot$ commissioned by \texttt{docs/AgentHandoffForResearchInTheExtremes.md} as amended by \texttt{docs/mandatory\_ammendment.md}.
 
 
 
@@ -1183,6 +1183,17 @@ Exploratory coupled-entropy profile (discrete, $\alpha$ = 1, k = 1; q($\kappa$) 
 
 
 
+Per-dataset paired contrasts at 300 edits (seed-level intervals from 2,000 item-group bootstrap draws; three seeds share one subject population):
+
+
+
+\begin{itemize}
+\item \textbf{zsre:} paraphrase-prompt contrast ePC $-$ BP (positive favours ePC), seed mean -0.076 [-0.136, -0.027] nats/token (seed 0: -0.159 [-0.282, -0.055]; seed 1: -0.092 [-0.176, -0.023]; seed 2: 0.021 [-0.048, 0.099]). On the frozen model's hardest 5 \% of paraphrases, mean per-token loss falls from 11.37 (frozen) to 0.05 (BP, seed mean) and 0.05 (ePC); exact-match success there is 100.0 \% (BP) vs 100.0 \% (ePC). ePC-minus-BP deteriorations above 1 nat/token occur on 2.7 \%, 2.0 \%, 0.7 \% of paraphrases (seeds 0–2); BP-minus-ePC improvements of the same size on 0.3 \%, 0.0 \%, 1.0 \%.
+\item \textbf{counterfact:} paraphrase-prompt contrast ePC $-$ BP (positive favours ePC), seed mean -1.117 [-1.313, -0.916] nats/token (seed 0: -1.821 [-2.168, -1.447]; seed 1: -0.149 [-0.357, 0.057]; seed 2: -1.379 [-1.666, -1.085]). On the frozen model's hardest 5 \% of paraphrases, mean per-token loss falls from 10.42 (frozen) to 2.05 (BP, seed mean) and 2.78 (ePC); exact-match success there is 78.9 \% (BP) vs 74.4 \% (ePC). ePC-minus-BP deteriorations above 1 nat/token occur on 28.5 \%, 8.2 \%, 22.3 \% of paraphrases (seeds 0–2); BP-minus-ePC improvements of the same size on 3.5 \%, 4.8 \%, 3.3 \%.
+\end{itemize}
+
+
+
 \textbf{Extremes.} The caps' collateral effects on ordinary text are rare and sometimes severe (HT-17 reproduced exactly; new MQuAKE rows in 6.2); the per-probe loss tails are dominated by the frozen model's own difficulty, with GPD shapes near zero. Severe per-probe regressions are concentrated on prompts where a wrong or stale record fired, which is why they correlate with write magnitude rather than with frozen difficulty.
 
 
@@ -1196,7 +1207,7 @@ Exploratory coupled-entropy profile (discrete, $\alpha$ = 1, k = 1; q($\kappa$) 
 
 
 \begin{itemize}
-\item \textbf{Code:} \texttt{pc\_cap/aw/extremes/} at revision \texttt{791a184fdd12}; tests \texttt{aw/tests/test\_extremes\_stats.py} (CPU) and \texttt{aw/extremes/validate\_gpu.py} (GPU; record in \texttt{validation/gpu\_checks.json}).
+\item \textbf{Code:} \texttt{pc\_cap/aw/extremes/} at revision \texttt{862c61829d79}; tests \texttt{aw/tests/test\_extremes\_stats.py} (CPU) and \texttt{aw/extremes/validate\_gpu.py} (GPU; record in \texttt{validation/gpu\_checks.json}).
 \item \textbf{Commands:} \texttt{results/extremes\_analysis/ext-20261009/scripts/run\_gpu\_chain.sh} (frozen scoring $\to$ reader scoring $\to$ MQuAKE evaluations $\to$ MQuAKE scoring) and \texttt{scripts/run\_cpu\_pipeline.sh} (assemble $\to$ paired $\to$ tails $\to$ datasets $\to$ nelson $\to$ figures $\to$ report). Environment: Python 3.12.15, jax/jaxlib 0.11.1, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5, pyarrow 25.0.1, matplotlib 3.11.1; RTX 5070 (12 GiB), driver 615.71.09.
 \item \textbf{Inputs (hash-checked at load):} sealed recipes \texttt{docs/tasks/R1-final-cell-recipes/\{61348508\ldots{}, ce0d0ffc\ldots{}, 43925e53\ldots{}\}.json} and their payloads; reader artifacts \texttt{assets/runs/additional\_work/PC-reader/train-*/theta\_avg150-300.npz}; memory snapshots \texttt{\ldots{}/eval-*/stream/checkpoint-\{100,300\}.snapshot}; harm vectors \texttt{results/additional\_work/PC-reader/eval-*/harm/vectors.npz}; HT-17 \texttt{logs/additional\_work/HT-17/snapshot-20261004-complete/report.json}.
 \item \textbf{Outputs:} parquet under \texttt{assets/extremes\_analysis/ext-20261009/data/} (example manifest = \texttt{scores.parquet} metadata columns + \texttt{case\_populations.parquet}; \texttt{scores.parquet}, \texttt{generations.parquet}, \texttt{paired\_cases.parquet}, \texttt{dataset\_statistics.parquet}, \texttt{tail\_fits.parquet}, \texttt{bootstrap\_results.parquet}, \texttt{paired\_gains.parquet}, \texttt{difficulty\_deciles.parquet}); CSV tables under \texttt{tables/}; figures under \texttt{assets/extremes\_analysis/ext-20261009/figures/} with \texttt{captions.json}; raw per-probe records as JSONL chunks with a hash manifest under \texttt{assets/extremes\_analysis/ext-20261009/checkpoints/scores/}; MQuAKE evaluation receipts under \texttt{results/extremes\_analysis/ext-20261009/mquake\_eval/}.

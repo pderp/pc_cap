@@ -356,6 +356,38 @@ def main():
         kmin, kmax = float(z["kappa"].min()), float(z["kappa"].max())
         tail_sentence = (f"the generalized-Pareto shapes of per-token target surprisal (pooled probe families, P95 threshold, {len(z)} model/dataset fits) range from {kmin:.2f} to {kmax:.2f}; "
                          f"{neg} intervals lie entirely below zero (finite upper endpoint within the measured range), {inc} include zero, {pos} lie entirely above zero")
+    # data-driven discussion sentences
+    disc = []
+    try:
+        for ds in ("zsre", "counterfact", "mquake"):
+            m, cci = gm(ds, "paraphrase", "G_PCvsBP")
+            if m is None:
+                continue
+            per_seed = [gm(ds, "paraphrase", "G_PCvsBP", seed=str(sd)) for sd in range(3)]
+            seeds_txt = "; ".join(f"seed {sd}: {f(v[0])} {ci(*v[1])}" for sd, v in enumerate(per_seed) if v[0] is not None)
+            hb = c[(c["dataset"] == ds) & (c["family"] == "paraphrase") & (c["target"] == "new") & (c["horizon"] == 300)]
+            hb_txt = ""
+            if not hb.empty:
+                bpv = hb[hb["model"].str.startswith("bp")]["B_mean_loss_on_frozen_hard5"].mean(); ev = hb[hb["model"].str.startswith("epc")]["B_mean_loss_on_frozen_hard5"].mean(); fz = hb[hb["model"] == "frozen"]["B_mean_loss_on_frozen_hard5"].mean()
+                sb = hb[hb["model"].str.startswith("bp")]["B_success_on_frozen_hard5"].mean(); se = hb[hb["model"].str.startswith("epc")]["B_success_on_frozen_hard5"].mean()
+                hb_txt = f" On the frozen model's hardest 5 % of paraphrases, mean per-token loss falls from {f(fz, 2)} (frozen) to {f(bpv, 2)} (BP, seed mean) and {f(ev, 2)} (ePC); exact-match success there is {pct(sb)} (BP) vs {pct(se)} (ePC)."
+            rr = r[(r["dataset"] == ds) & (r["family"] == "paraphrase") & (r["target"] == "new") & (r["horizon"] == 300) & r["model"].str.contains("minus")]
+            rr_txt = ""
+            if not rr.empty:
+                rr_txt = f" ePC-minus-BP deteriorations above 1 nat/token occur on {', '.join(pct(v, d=1) for v in rr['frac_D_gt_1.0'])} of paraphrases (seeds 0–2); ePC is better than BP by more than 1 nat/token on {', '.join(pct(v, d=1) for v in rr['frac_D_lt_minus_1.0'])}." if "frac_D_lt_minus_1.0" in rr else ""
+            disc.append(f"- **{ds}:** paraphrase-prompt contrast ePC − BP (positive favours ePC), seed mean {f(m)} {ci(*cci)} nats/token ({seeds_txt}).{hb_txt}{rr_txt}")
+    except Exception as e:
+        disc.append(f"- (discussion numbers unavailable: {e!r})")
+    disc_txt = chr(10).join(disc) if disc else "- (pending)"
+    mqc = csv("mquake_composition")
+    sec_mq = "_not available_"
+    if not mqc.empty:
+        rows_ = []
+        for _, x in mqc.sort_values(["family", "model", "stratum"]).iterrows():
+            if x["family"] == "S4" and x["stratum"] != "all":
+                continue
+            rows_.append([MODEL_LABEL.get(x["model"], x["model"]), x["family"], x["stratum"], int(x["cases"]), int(x["questions"]), pct(x["question_accuracy"], x["question_correct"], x["questions"]), pct(x["any_question_success"], x["any_numerator"], x["cases"]), pct(x["all_question_success"], x["all_numerator"], x["cases"]), pct(x["old_answer_reappeared_fraction"]), pct(x["frozen_question_new_exact"]), pct(x["frozen_question_old_exact"])])
+        sec_mq = md_table(["model", "family", "stratum", "cases", "questions", "question accuracy", "any-question success", "all-question success", "old answer reappeared", "frozen: new exact", "frozen: old exact"], rows_)
     today = date.today().isoformat()
     md = f"""# Frozen GPT-2, ePC-trained reader cap and BP-trained reader cap on zsRE, CounterFact and MQuAKE: ordinary performance, dataset extremes and heavy tails
 
@@ -521,7 +553,9 @@ Rank correlations (Spearman) and joint extremes:
 
 ## 9. MQuAKE reasoning and sequential behaviour
 
-MQuAKE's registered composition endpoint teaches each case's dependency edits from a fresh start state and asks all three multi-hop questions (all-question success; any-question and question-level rates are additional, not replacements). The Stage-4 v5 reader scored 0/80 all-question and 2/240 question-level at 300 edits **[record]**. This study's results for the six readers are in table 4.1 (MQuAKE rows, `composition`), with the frozen model's question-level old/new exact rates for reference; a failed multi-hop question is not by itself a cap failure, since GPT-2 small may lack the compositional step.
+MQuAKE's registered composition endpoint teaches each case's dependency edits from a fresh start state and asks all three multi-hop questions (all-question success; any-question and question-level rates are additional, not replacements). The Stage-4 v5 reader scored 0/80 all-question and 2/240 question-level at 300 edits in realization 0 **[record]**. The same aggregation applied to this study's six readers (family EXT) and to the fifteen Stage-4 cells (context) is below; `frozen_question_*` are the cap-off (frozen) exact rates on the same questions recorded by the endpoint itself. A failed multi-hop question is not by itself a cap failure, since GPT-2 small may lack the compositional step: the frozen model answers none of the questions with either the old or the new answer.
+
+{sec_mq}
 
 ![MQuAKE PC-reader evaluations]({FIGREL}/mquake_pcreader.png)
 
@@ -540,6 +574,10 @@ Exploratory coupled-entropy profile (discrete, α = 1, k = 1; q(κ) = (1+2κ)/(1
 ## 11. Discussion and conclusions
 
 **What the results establish.** On GPT-2 small, both reader caps install the taught facts (own-prompt per-token loss ≈ 0.01 nats against ≈ 6 for the frozen model) and are exactly the frozen model where they abstain. The ePC- and BP-trained readers differ in gating, not in the installed corrections (the memory payloads are produced by the same adjoint rule, so own-prompt losses coincide across all six readers). The frozen record's negative CounterFact result for ePC reader training is reproduced in the per-probe losses and persists across difficulty deciles, on the frozen model's hardest cases and in the regression tails; on zsRE the two rules are close. No analysis in this study isolates a rare-event regime in which ePC reader training is reliably better than BP reader training; the measured cost difference (≈ 100×) is unchanged.
+
+Per-dataset paired contrasts at 300 edits (seed-level intervals from 2,000 item-group bootstrap draws; three seeds share one subject population):
+
+{disc_txt}
 
 **Extremes.** The caps' collateral effects on ordinary text are rare and sometimes severe (HT-17 reproduced exactly; new MQuAKE rows in 6.2); the per-probe loss tails are dominated by the frozen model's own difficulty, with GPD shapes near zero. Severe per-probe regressions are concentrated on prompts where a wrong or stale record fired, which is why they correlate with write magnitude rather than with frozen difficulty.
 
