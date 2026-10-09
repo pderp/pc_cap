@@ -1,0 +1,76 @@
+{
+  "run_id": "ext-20261009",
+  "code_sha": "d003c1070591121456af5bdf04419968f177ecec",
+  "started": "2026-10-09T22:07:30+00:00",
+  "checks": {
+    "direct_weights_digest": {
+      "digest": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "expected": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+      "passed": true
+    },
+    "direct_forward_vs_saved_capoff": {
+      "windows": [
+        31,
+        78,
+        144,
+        337,
+        518,
+        592,
+        982,
+        1223,
+        1253,
+        1568,
+        1633,
+        1762
+      ],
+      "positions": 1524,
+      "max_abs_diff_nats": 4.960898452033291e-05,
+      "passed": true,
+      "vector": "/home/derp/cap/pc_cap/results/additional_work/PC-reader/eval-bp-s0-zsre/harm/vectors.npz"
+    },
+    "bpbase_vs_direct_forward": {
+      "prompts": 20,
+      "max_abs_logit_diff": 0.0,
+      "passed": true
+    },
+    "empty_memory_cap_equals_frozen": {
+      "prompts": 20,
+      "max_abs_logit_diff": 0.0,
+      "passed": true
+    },
+    "loaded_memory_abstention_equals_frozen": {
+      "prompts": 40,
+      "abstained": 38,
+      "fired": 2,
+      "max_abs_logit_diff_when_abstaining": 0.0,
+      "passed": true
+    },
+    "teacher_forced_hand_check": {
+      "items": 3,
+      "max_abs_diff_nats": 0.00010104763162210872,
+      "passed": true,
+      "note": "prompt-only prefixes recomputed per step vs one full pass; causal shift verified; float32 bucket-length reduction noise ~1e-4 nats, same scale as check 2"
+    },
+    "residual_site_arithmetic": {
+      "max_abs_logit_diff": 0.0,
+      "passed": true,
+      "write_changed_logits": true,
+      "site_row_equals_prewrite_hidden": true
+    },
+    "tokenisation_boundary": {
+      "items": 300,
+      "joint_tokenisation_differs": 0,
+      "note": "the project scores prompt_ids + answer_ids (separately tokenised, leading space, newline); joint re-tokenisation differences are reported, not used"
+    },
+    "saved_metric_recompute": {
+      "RET_GS_recomputed": 0.9733333333333334,
+      "RET_GS_saved": 0.9733333333333334,
+      "RET_ES_recomputed": 1.0,
+      "RET_ES_saved": 1.0,
+      "passed": true
+    }
+  },
+  "finished": "2026-10-09T22:07:38+00:00",
+  "seconds": 8.448835475999658,
+  "all_passed": true
+}

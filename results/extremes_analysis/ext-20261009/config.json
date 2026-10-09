@@ -1,0 +1,33 @@
+{
+  "run_id": "ext-20261009",
+  "commissioned_by": ["docs/AgentHandoffForResearchInTheExtremes.md @ 22d19ab", "docs/mandatory_ammendment.md @ d003c10"],
+  "backbone": {
+    "name": "GPT-2 small (openai-community/gpt2)",
+    "hf_snapshot": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "safetensors_blob_sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+    "params_digest_sha256": "c4ac3fb867dad146dbddfcd4af0b9b110d8de3bce41127bb1fc11b1e533bc082",
+    "params_digest_rule": "sha256 over flatten_named float32 arrays (src/pccap/bases/bp.py:_digest)",
+    "parameters": 124439808,
+    "blocks": 12, "d_model": 768, "heads": 12, "vocab": 50257
+  },
+  "principal_models": {
+    "frozen": "direct BPBase / gpt2_jax forward, no reader, no memory, no writes",
+    "bp_reader_s{0,1,2}": "results/additional_work/PC-reader/train-bp-s*/ theta_avg150-300.npz (BP, AdamW, 300 updates)",
+    "epc_reader_s{0,1,2}": "results/additional_work/PC-reader/train-epc-s*/ theta_avg150-300.npz (ePC, 8 settling steps, rate 0.1, corrected SD-24 energy)"
+  },
+  "reader": {"parameters": 3348228, "read_taps": [1, 2, 3], "write_sites": [1, 2, 3], "blocks_zero_based": [3, 7, 11],
+             "null_threshold": 0.5, "top_k": 4, "budget_A": 0.3, "bank_scales": [70.70187377929688, 106.5766658782959, 425.5740661621094],
+             "delta_rule": {"steps": 5, "lr": 0.1, "tau": 0.1}, "checkpoint_average": [150, 200, 250, 300]},
+  "acquisition": "adjoint in every PCR arm",
+  "horizons": {"PCR": [100, 300], "S4_zsre_counterfact": [100, 300, 1000], "S4_mquake": [100, 300]},
+  "datasets": {
+    "zsre": {"eligible_pool": "assets/data/prepared/editing/zsre_eligible.jsonl", "items_per_realization": 1000, "source_split": "mend_train (zsRE MEND release)", "target": "first answers[] entry (true answer); base must not already produce it"},
+    "counterfact": {"eligible_pool": "assets/data/prepared/editing/counterfact_eligible.jsonl", "items_per_realization": 1000, "target": "target_new (counterfactual); target_true retained"},
+    "mquake": {"raw": "assets/data/raw/mquake/MQuAKE-CF.json (DEC-045)", "items_per_realization": 300, "target": "requested_rewrite target_new per single-hop edit; composition cases carry multi-hop questions"}
+  },
+  "ordinary_text_assay": {"windows": 1931, "window_tokens": 128, "positions": 245237, "context": "reset every window", "source": "assets/data/prepared/lm/drift_tokens.npy", "inventory": "manifests/dev/lm_sets.json"},
+  "environment": {"python": "3.12.15", "jax": "0.11.1", "jaxlib": "0.11.1", "numpy": "2.5.3", "scipy": "1.18.1", "pandas": "3.0.5", "pyarrow": "25.0.1",
+                   "matplotlib": "3.11.1 (assets/envs/status-paper-20260911 site-packages appended at import)",
+                   "gpu": "NVIDIA GeForce RTX 5070, 12227 MiB, driver 615.71.09", "venv": "/home/derp/cap/venv"},
+  "statistics": {"bootstrap_replicates": 2000, "seed": 20261009, "ci": "95% percentile", "resampling_unit": "independent edit/case groups; windows for ordinary text; seeds reported separately"}
+}
