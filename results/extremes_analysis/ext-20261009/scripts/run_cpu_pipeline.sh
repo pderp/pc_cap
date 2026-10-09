@@ -8,5 +8,5 @@ PY=/home/derp/cap/venv/bin/python
 LOG=results/extremes_analysis/ext-20261009/logs/cpu_pipeline.log
 for m in assemble paired tails datasets nelson figures report; do
   echo "$(date -u +%FT%TZ) start $m" >> $LOG
-  $PY -m aw.extremes.$m >> $LOG 2>&1; echo "$(date -u +%FT%TZ) end $m exit $?" >> $LOG
+  $PY -m aw.extremes.$m >> $LOG 2>&1; rc=$?; echo "$(date -u +%FT%TZ) end $m exit $rc" >> $LOG
 done

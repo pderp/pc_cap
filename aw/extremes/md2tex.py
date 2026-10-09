@@ -15,8 +15,18 @@ from pathlib import Path
 ESC = {"&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#", "_": r"\_", "{": r"\{", "}": r"\}", "~": r"\textasciitilde{}", "^": r"\textasciicircum{}", "\\": r"\textbackslash{}"}
 
 
+SYM = {"≈": r"$\approx$", "≤": r"$\le$", "≥": r"$\ge$", "×": r"$\times$", "−": r"$-$", "‖": r"$\|$", "Δ": r"$\Delta$", "κ": r"$\kappa$", "ξ": r"$\xi$", "σ": r"$\sigma$", "α": r"$\alpha$",
+       "ρ": r"$\rho$", "τ": r"$\tau$", "Σ": r"$\sum$", "→": r"$\to$", "∩": r"$\cap$", "·": r"$\cdot$", "…": r"\ldots{}", "⁻¹": r"$^{-1}$", "²": r"$^{2}$", "≠": r"$\ne$", "∞": r"$\infty$", "√": r"$\surd$", "μ": r"$\mu$", "λ": r"$\lambda$", "ε": r"$\varepsilon$", "π": r"$\pi$", "Ω": r"$\Omega$", "ℓ": r"$\ell$"}
+
+
 def esc(s: str) -> str:
-    return "".join(ESC.get(ch, ch) for ch in s)
+    out = []
+    for ch in s:
+        if ch in SYM:
+            out.append(SYM[ch])
+        else:
+            out.append(ESC.get(ch, ch))
+    return "".join(out)
 
 
 def inline(s: str) -> str:
@@ -47,7 +57,9 @@ def table(lines: list[str]) -> str:
     ncol = max(len(r) for r in rows)
     head, body = rows[0], rows[1:]
     spec = "@{}" + "".join("l" if i == 0 else "l" for i in range(ncol)) + "@{}"
-    out = [r"\begin{center}\footnotesize", r"\begin{tabularx}{\textwidth}{" + "@{}" + "p{0.22\\textwidth}" + "".join("X" for _ in range(ncol - 1)) + "@{}}", r"\toprule"]
+    size = r"\footnotesize" if ncol <= 6 else (r"\scriptsize" if ncol <= 9 else r"\tiny")
+    first = "p{0.18\\textwidth}" if ncol <= 6 else "p{0.11\\textwidth}"
+    out = [r"\begin{center}" + size, r"\begin{tabularx}{\textwidth}{" + "@{}" + first + "".join("X" for _ in range(ncol - 1)) + "@{}}", r"\toprule"]
     out.append(" & ".join(inline(c) for c in head + [""] * (ncol - len(head))) + r" \\ \midrule")
     for r in body:
         out.append(" & ".join(inline(c) for c in r + [""] * (ncol - len(r))) + r" \\")
@@ -77,8 +89,11 @@ def convert(md: str, root: Path) -> str:
         m = re.match(r"^(#{1,4})\s+(.*)$", l)
         if m:
             level = len(m.group(1))
-            cmd = {1: r"\section", 2: r"\subsection", 3: r"\subsubsection", 4: r"\paragraph"}[level]
-            out.append(cmd + "{" + inline(m.group(2)) + "}")
+            if level == 1:  # the document title is set from the command line; the first H1 is not repeated
+                i += 1; continue
+            cmd, toc = {2: (r"\section*", "section"), 3: (r"\subsection*", "subsection"), 4: (r"\subsubsection*", "subsubsection")}[level]
+            title = inline(m.group(2))
+            out.append(cmd + "{" + title + "}" + r"\addcontentsline{toc}{" + toc + "}{" + title + "}")
             i += 1; continue
         if l.strip().startswith("|"):
             j = i

@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/aw/extremes/paired.py", line 265, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/aw/extremes/paired.py", line 257, in main
+    atomic_parquet(DATA / "data" / f"{name}.parquet", df)
+  File "/home/derp/cap/pc_cap/aw/extremes/common.py", line 95, in atomic_parquet
+    frame.to_parquet(buf, engine="pyarrow", index=False)
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/pandas/core/frame.py", line 3135, in to_parquet
+    return to_parquet(
+           ^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/pandas/io/parquet.py", line 490, in to_parquet
+    impl.write(
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/pandas/io/parquet.py", line 191, in write
+    table = self.api.Table.from_pandas(df, **from_pandas_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/table.pxi", line 4769, in pyarrow.lib.Table.from_pandas
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/pyarrow/pandas_compat.py", line 656, in dataframe_to_arrays
+    arrays = [convert_column(c, f)
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/pyarrow/pandas_compat.py", line 644, in convert_column
+    raise e
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/pyarrow/pandas_compat.py", line 638, in convert_column
+    result = pa.array(col, type=type_, from_pandas=True, safe=safe)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/array.pxi", line 408, in pyarrow.lib.array
+  File "pyarrow/array.pxi", line 91, in pyarrow.lib._ndarray_to_array
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+pyarrow.lib.ArrowInvalid: ("Could not convert 'mean' with type str: tried to convert to int64", 'Conversion failed for column seed with type object')
+DONE

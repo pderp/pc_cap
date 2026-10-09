@@ -159,7 +159,10 @@ def section_regressions(r, w):
     if r.empty:
         return "_not available yet_", ""
     rows = []
-    for _, x in r[(r["horizon"] == 300) & (r["target"].isin(["new", "true"])) & (r["family"].isin(["edit", "paraphrase", "unseen", "locality_item", "near_miss_neighbour"]))].sort_values(["dataset", "family", "model"]).iterrows():
+    keep = {("edit", "new"), ("paraphrase", "new"), ("unseen", "new"), ("locality_item", "true"), ("locality", "true"), ("near_miss_neighbour", "true")}
+    r = r[[(a, b) in keep for a, b in zip(r["family"], r["target"])]] if not r.empty else r
+    w = w[[(a, b) in keep for a, b in zip(w["family"], w["target"])]] if not w.empty else w
+    for _, x in r[(r["horizon"] == 300)].sort_values(["dataset", "family", "model"]).iterrows():
         rows.append([x["dataset"], x["family"], x["target"], MODEL_LABEL.get(x["model"], x["model"]), int(x["n"]), pct(x["frac_worse"]), f(x["mean_positive_deterioration"]), f(x["p99_D"]), f(x["worst5pct_mean_D"]), f(x["max_D"]), pct(x["frac_D_gt_0.5"], d=2), pct(x["frac_D_gt_1.0"], d=2)])
     t1 = md_table(["dataset", "family", "target", "model (D = L_model − L_ref)", "n", "P(D>0)", "mean D | D>0", "P99 D", "worst-5 % mean D", "max D", "P(D>0.5)", "P(D>1)"], rows)
     rows = []
@@ -238,8 +241,8 @@ def section_mechanism(corr, joint, sc):
     t1 = md_table(["dataset", "family", "model", "n", "fired", "ρ(frozen NLL, write)", "ρ(write, gain)", "ρ(frozen NLL, gain)", "ρ(write, gain) fired only"], rows) if rows else "_not available_"
     rows = []
     for _, r in joint[joint["horizon"] == 300].sort_values(["dataset", "model"]).iterrows():
-        rows.append([r["dataset"], MODEL_LABEL.get(r["model"], r["model"]), int(r["n"]), int(r["n_A"]), int(r["n_B"]), int(r["n_AB"]), f(r["P_A"]), f(r["P_A_given_B"]), f(r["tail_lift"], 2), r["B_definition"]])
-    t2 = md_table(["dataset", "model", "n (locality-type probes)", "|A|", "|B|", "|A∩B|", "P(A)", "P(A|B)", "tail lift", "B"], rows) if rows else "_not available_"
+        rows.append([r["dataset"], MODEL_LABEL.get(r["model"], r["model"]), int(r["n"]), int(r["n_A"]), int(r["n_B"]), int(r["n_AB"]), f(r["P_A"]), f(r["P_A_given_B"]), f(r["tail_lift"], 2), r.get("A_definition", ""), r["B_definition"]])
+    t2 = md_table(["dataset", "model", "n (locality-type probes)", "|A|", "|B|", "|A∩B|", "P(A)", "P(A|B)", "tail lift", "A", "B"], rows) if rows else "_not available_"
     rows = []
     for ds in ("zsre", "counterfact", "mquake"):
         for m in [f"bp_reader_s{s}" for s in range(3)] + [f"epc_reader_s{s}" for s in range(3)]:

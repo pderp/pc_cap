@@ -60,7 +60,7 @@ def load_scores():
                                 rows.append(dict(base, target=key, status=t.get("status")))
                                 continue
                             wn = t.get("write_norms") or []
-                            wrow = {}
+                            wrow = {} if model == "frozen" else dict(write_rel_max_over_sites=0.0, write_abs_max_over_sites=0.0, write_energy_sum=0.0, write_energy_mean=0.0)  # abstained: structural zero write
                             if wn:
                                 A = np.asarray([x["abs"] for x in wn], float)
                                 R = np.asarray([[v if v is not None else np.nan for v in x["rel"]] for x in wn], float)
@@ -141,7 +141,10 @@ def benchmark_original(scores, gens):
             continue
         def rate(fam, col):
             x = g[g["family"] == fam]
-            return dict(value=(float(x[col].mean()) if len(x) else None), numerator=int(x[col].sum()) if len(x) else None, planned=int(len(x)))
+            if x.empty:
+                return dict(value=None, numerator=None, planned=0)
+            per_item = x.groupby("item_id")[col].mean()  # item-level fractional credit, as the registered RET-GS
+            return dict(value=float(per_item.mean()), numerator=float(per_item.sum()), planned=int(len(per_item)))
         m = {"ES": rate("edit", "exact_new"), "RET-ES": rate("edit", "exact_new"), "RET-GS": rate("paraphrase", "exact_new"),
              "LS": dict(value=1.0, numerator=50, planned=50), "near_miss": dict(value=1.0, numerator=100, planned=100), "revision": dict(value=None, numerator=None, planned=50), "revision_latest_answer": dict(value=None, numerator=None, planned=50)}
         extra = dict(source="ext-20261009 frozen scoring", note="ES/RET-ES/RET-GS: frozen greedy answers vs taught aliases (no adaptation possible); LS and near-miss are 1 by definition (the frozen response is the reference); revision and unseen firing are N/A",

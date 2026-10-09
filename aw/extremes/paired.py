@@ -130,6 +130,8 @@ def regression_blocks(x: pd.DataFrame, h: int, thresholds=(0.5, 1.0, 2.0)):
     if any(n not in x.columns for n in need):
         return [], []
     y = x.dropna(subset=need)
+    if len(y) < 10:
+        return [], []
     F = y[c["frozen"]].to_numpy(float)
     rows, worst = [], []
     for name, col in c.items():
@@ -145,7 +147,7 @@ def regression_blocks(x: pd.DataFrame, h: int, thresholds=(0.5, 1.0, 2.0)):
         top = np.argsort(D)[::-1][:5]
         for i in top:
             r = y.iloc[i]
-            worst.append(dict(horizon=h, model=name, probe_id=r["probe_id"], family=r["family"], target=r["target"], item_id=r.get("item_id"), subject=r.get("subject"), relation_id=r.get("relation_id"), D=float(D[i]), L_frozen=float(F[i]), L_model=float(y[col].iloc[i]),
+            worst.append(dict(horizon=h, model=name, probe_id=r["probe_id"], item_id=r.get("item_id"), subject=r.get("subject"), relation_id=r.get("relation_id"), D=float(D[i]), L_frozen=float(F[i]), L_model=float(y[col].iloc[i]),
                               fired=r.get("F_" + col[2:]), write_rel_max=r.get("W_" + col[2:])))
     # PC substantially worse than BP and vice versa (same seed)
     for s in SEEDS:
@@ -165,10 +167,10 @@ def correlation_blocks(x: pd.DataFrame, h: int):
         w = "W_" + col[2:]
         if w not in x.columns or c["frozen"] not in x.columns:
             continue
-        y = x.dropna(subset=[col, c["frozen"], w])
+        y = x.dropna(subset=[col, c["frozen"]])
         if len(y) < 30:
             continue
-        F, L, W = y[c["frozen"]].to_numpy(float), y[col].to_numpy(float), y[w].to_numpy(float)
+        F, L, W = y[c["frozen"]].to_numpy(float), y[col].to_numpy(float), y[w].fillna(0.0).to_numpy(float)
         G = F - L
         fired = W > 0
         def rho(a, b):
@@ -193,15 +195,19 @@ def joint_extremes(x: pd.DataFrame, h: int):
         w = "W_" + col[2:]
         if w not in loc.columns:
             continue
-        y = loc.dropna(subset=[col, c["frozen"], w])
+        y = loc.dropna(subset=[col, c["frozen"]])
         if len(y) < 50:
             continue
         D = y[col].to_numpy(float) - y[c["frozen"]].to_numpy(float)
-        W = y[w].to_numpy(float)
-        A = D >= np.quantile(D, 0.9)
+        W = y[w].fillna(0.0).to_numpy(float)
+        pos = D > 1e-9
+        if pos.mean() >= 0.1:
+            A, a_def = D >= np.quantile(D, 0.9), "locality deterioration in its worst 10 %"
+        else:
+            A, a_def = pos, "any locality deterioration (fewer than 10 % of probes deteriorate; most abstain)"
         B = W >= np.quantile(W, 0.9) if (W > 0).mean() >= 0.1 else (W > 0)
         pA, pAB = A.mean(), (A & B).sum() / max(1, B.sum())
-        out.append(dict(horizon=h, model=name, n=int(len(y)), n_A=int(A.sum()), n_B=int(B.sum()), n_AB=int((A & B).sum()), P_A=float(pA), P_A_given_B=float(pAB), tail_lift=(float(pAB / pA) if pA > 0 else None), B_definition=("top 10 % relative write" if (W > 0).mean() >= 0.1 else "any nonzero write (fewer than 10 % fire)")))
+        out.append(dict(horizon=h, model=name, n=int(len(y)), n_A=int(A.sum()), n_B=int(B.sum()), n_AB=int((A & B).sum()), P_A=float(pA), P_A_given_B=float(pAB), tail_lift=(float(pAB / pA) if pA > 0 else None), A_definition=a_def, B_definition=("top 10 % relative write" if (W > 0).mean() >= 0.1 else "any nonzero write (fewer than 10 % fire)")))
     return out
 
 
@@ -250,10 +256,16 @@ def main():
     seq = [r for ds in ("zsre", "counterfact", "mquake") for r in sequential(ds)]
     for name, rows in (("paired_gains", gains), ("cvar_A_B", cvars), ("difficulty_deciles", deciles), ("regressions", regs), ("worst_regressions", worst), ("rank_correlations", corr), ("joint_extremes", joint), ("sequential", seq)):
         df = pd.DataFrame(rows)
+        if "seed" in df.columns:
+            df["seed"] = df["seed"].astype(str)
+        for col in df.columns:
+            if df[col].dtype == object:
+                df[col] = df[col].map(lambda v: json.dumps(v) if isinstance(v, (list, dict)) else v)
         atomic_csv(OUT / "tables" / f"{name}.csv", df)
         if name in ("paired_gains", "difficulty_deciles"):
             atomic_parquet(DATA / "data" / f"{name}.parquet", df)
-    atomic_parquet(DATA / "data" / "bootstrap_results.parquet", pd.DataFrame(gains))
+        if name == "paired_gains":
+            atomic_parquet(DATA / "data" / "bootstrap_results.parquet", df)
     st = Status()
     st.stage("6_paired", "updated", gains=len(gains), cvar=len(cvars), deciles=len(deciles), regressions=len(regs), correlations=len(corr), joint=len(joint), sequential=len(seq))
     print(json.dumps(dict(gains=len(gains), cvar=len(cvars), deciles=len(deciles), regressions=len(regs), correlations=len(corr), joint=len(joint), sequential=len(seq))))

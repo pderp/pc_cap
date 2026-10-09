@@ -1,6 +1,6 @@
 # Frozen GPT-2, ePC-trained reader cap and BP-trained reader cap on zsRE, CounterFact and MQuAKE: ordinary performance, dataset extremes and heavy tails
 
-Study `ext-20261009` · Capstan · 2026-10-09 · pc_cap code revision `b376dfe5cb32` · commissioned by `docs/AgentHandoffForResearchInTheExtremes.md` as amended by `docs/mandatory_ammendment.md`.
+Study `ext-20261009` · Capstan · 2026-10-09 · pc_cap code revision `27915e25fa88` · commissioned by `docs/AgentHandoffForResearchInTheExtremes.md` as amended by `docs/mandatory_ammendment.md`.
 
 Provenance tags: **[record]** previously established in the frozen record and copied with its hashes; **[recomputed]** recomputed in this study from saved data; **[new]** newly evaluated in this study (own manifest `results/extremes_analysis/ext-20261009/manifest.json`). The frozen record was not modified.
 
@@ -8,12 +8,14 @@ Provenance tags: **[record]** previously established in the frozen record and co
 
 **Question.** Across zsRE, CounterFact and MQuAKE, how do (i) frozen GPT-2 small without a cap, (ii) GPT-2 with the reader cap trained by error predictive coding (ePC) and (iii) GPT-2 with the same cap trained by backprop (BP) compare in ordinary benchmark performance, prediction difficulty, heavy-tail behaviour, extreme losses, adaptation benefit, correction magnitude, locality and stability — and does the ePC-trained cap show advantages in rare or extreme cases that survive a direct comparison with the BP-trained cap?
 
-**Design.** The principal comparison is the frozen record's PC-reader study (family PCR): three paired training seeds per rule, identical architecture (3,348,228 reader parameters, taps and writes at blocks 4/8/12), identical initial parameters and training episodes within seed, adjoint acquisition in both arms, evaluated on realization 0 / order 100 with 300 edits on zsRE and CounterFact (checkpoints 100 and 300). This study adds **[new]**: a directly loaded frozen GPT-2 scored on exactly the same probes; teacher-forced target log-probabilities for all seven models on every probe (edit prompts, paraphrases, locality, near-miss, revision, unseen, MQuAKE multi-hop questions); the six saved readers evaluated on the sealed MQuAKE stream (0/6 complete at report time); write-vector magnitudes at every scored position; dataset frequency/entropy/shift statistics; and finite-range tail fits that start from a field-by-field reproduction of HT-17.
+**Design.** The principal comparison is the frozen record's PC-reader study (family PCR): three paired training seeds per rule, identical architecture (3,348,228 reader parameters, taps and writes at blocks 4/8/12), identical initial parameters and training episodes within seed, adjoint acquisition in both arms, evaluated on realization 0 / order 100 with 300 edits on zsRE and CounterFact (checkpoints 100 and 300). This study adds **[new]**: a directly loaded frozen GPT-2 scored on exactly the same probes; teacher-forced target log-probabilities for all seven models on every probe (edit prompts, paraphrases, locality, near-miss, revision, unseen, MQuAKE multi-hop questions); the six saved readers evaluated on the sealed MQuAKE stream (1/6 complete at report time); write-vector magnitudes at every scored position; dataset frequency/entropy/shift statistics; and finite-range tail fits that start from a field-by-field reproduction of HT-17.
 
 **Headline findings.**
 
 - **zsre, paraphrase retention at 300 edits:** BP 97.3 %, 99.0 %, 97.7 %; ePC 94.7 %, 97.0 %, 98.0 % (seeds 0, 1, 2; 300 items each). Frozen: 0.0 %.
+- **zsre, paraphrase per-token loss gain over frozen (seed mean):** BP 5.972 [5.708, 6.217]; ePC 5.895 [5.621, 6.146]; ePC − BP contrast -0.076 [-0.136, -0.027] nats/token (positive favours ePC).
 - **counterfact, paraphrase retention at 300 edits:** BP 81.0 %, 80.0 %, 83.5 %; ePC 56.8 %, 77.8 %, 66.0 % (seeds 0, 1, 2; 300 items each). Frozen: 0.0 %.
+- **counterfact, paraphrase per-token loss gain over frozen (seed mean):** BP 6.057 [5.807, 6.309]; ePC 4.941 [4.648, 5.228]; ePC − BP contrast -1.117 [-1.313, -0.916] nats/token (positive favours ePC).
 - **Neither cap beats the frozen model everywhere.** Both caps convert the taught facts (own-prompt loss falls from ≈ 6 nats/token to ≈ 0.01) and both leave the frozen model's behaviour unchanged where they abstain; the differences between ePC- and BP-trained readers are differences of *gating*: which paraphrases and un-taught prompts trigger a write. Where a reader abstains, its loss equals the frozen loss to the bit.
 - **ePC vs BP.** On CounterFact the ePC-trained reader retains fewer paraphrases in all three seeds (frozen record), and its per-probe paraphrase loss is higher than BP's in the paired contrast; on zsRE the two rules are close with mixed signs. No analysis in this study (difficulty deciles, frozen-hard subsets, regressions, correction magnitudes) finds a regime of rare or extreme cases where the ePC-trained reader is reliably better than the BP-trained reader. Training cost remains 96–102× **[record]**.
 - **Extremes.** Frozen difficulty is heavy in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset) but the fitted generalized-Pareto shapes of the *probe* losses are near zero or negative with intervals that include zero; the ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large deteriorations exist for both caps and are concentrated on prompts where a wrong record fired.
@@ -74,14 +76,14 @@ Uncertainty: 2,000-draw percentile bootstrap resampling whole groups (items for 
 
 | edits | model | ES | RET-ES | RET-GS (primary) | LS | near-miss | unseen false fires | MQuAKE composition (all 3 questions) |
 |---|---|---|---|---|---|---|---|---|
-| 300 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/600) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
+| 300 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/300) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
 | 300 | BP reader s0 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 81.0 % (243/300) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 300 | BP reader s1 [record] | 99.0 % (297/300) | 99.0 % (297/300) | 80.0 % (240/300) | 100.0 % (50/50) | 99.0 % (99/100) | 1/100 |  |
 | 300 | BP reader s2 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 83.5 % (250.5/300) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 300 | ePC reader s0 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 56.8 % (170.5/300) | 100.0 % (50/50) | 98.0 % (98/100) | 0/100 |  |
 | 300 | ePC reader s1 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 77.8 % (233.5/300) | 100.0 % (50/50) | 95.0 % (95/100) | 1/100 |  |
 | 300 | ePC reader s2 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 66.0 % (198/300) | 100.0 % (50/50) | 99.0 % (99/100) | 0/100 |  |
-| 100 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/600) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
+| 100 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/300) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
 | 100 | BP reader s0 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 85.0 % (85/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s1 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 85.0 % (85/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s2 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 86.5 % (86.5/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
@@ -101,7 +103,7 @@ Uncertainty: 2,000-draw percentile bootstrap resampling whole groups (items for 
 | 300 | ePC reader s1 | not evaluated |  |  |  |  |  |  |
 | 300 | ePC reader s2 | not evaluated |  |  |  |  |  |  |
 | 100 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/300) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A | question-level new-answer exact 0.0 %; old-answer exact 0.0 % (N/A as all-question success: no edits) |
-| 100 | BP reader s0 | not evaluated |  |  |  |  |  |  |
+| 100 | BP reader s0 [new] | 100.0 % (100/100) | 100.0 % (100/100) | 62.0 % (62/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s1 | not evaluated |  |  |  |  |  |  |
 | 100 | BP reader s2 | not evaluated |  |  |  |  |  |  |
 | 100 | ePC reader s0 | not evaluated |  |  |  |  |  |  |
@@ -114,17 +116,17 @@ Reading: the frozen model's ES/RET-ES/RET-GS are its greedy answers against the 
 
 | dataset | family | target | frozen | BP s0 | BP s1 | BP s2 | ePC s0 | ePC s1 | ePC s2 |
 |---|---|---|---|---|---|---|---|---|---|
-| zsre | edit | new | 6.009 (n=300) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | — |
-| zsre | paraphrase | new | 6.098 (n=300) | 0.161 (n=300, fire 98 %) | 0.077 (n=300, fire 99 %) | 0.142 (n=300, fire 98 %) | 0.320 (n=300, fire 95 %) | 0.168 (n=300, fire 97 %) | — |
-| zsre | locality_item | true | 6.223 (n=296) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | — |
-| zsre | near_miss_neighbour | true | 5.974 (n=100) | 6.192 (n=100, fire 8 %) | 6.161 (n=100, fire 21 %) | 6.141 (n=100, fire 16 %) | 6.048 (n=100, fire 3 %) | 6.147 (n=100, fire 8 %) | — |
-| zsre | unseen | new | 6.128 (n=100) | 6.229 (n=100, fire 4 %) | 6.209 (n=100, fire 14 %) | 6.281 (n=100, fire 11 %) | 6.209 (n=100, fire 2 %) | 6.328 (n=100, fire 5 %) | — |
-| counterfact | edit | new | 6.956 (n=300) | — | — | — | — | — | — |
-| counterfact | paraphrase | new | 7.369 (n=600) | — | — | — | — | — | — |
-| counterfact | locality_item | true | 6.295 (n=900) | — | — | — | — | — | — |
-| counterfact | near_miss_neighbour | true | 7.167 (n=100) | — | — | — | — | — | — |
-| counterfact | unseen | new | 6.924 (n=100) | — | — | — | — | — | — |
-| counterfact | edit | true | 6.382 (n=300) | — | — | — | — | — | — |
+| zsre | edit | new | 6.009 (n=300) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) |
+| zsre | paraphrase | new | 6.098 (n=300) | 0.161 (n=300, fire 98 %) | 0.077 (n=300, fire 99 %) | 0.142 (n=300, fire 98 %) | 0.320 (n=300, fire 95 %) | 0.168 (n=300, fire 97 %) | 0.120 (n=300, fire 98 %) |
+| zsre | locality_item | true | 6.223 (n=296) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) | 6.223 (n=296, fire 0 %) |
+| zsre | near_miss_neighbour | true | 5.974 (n=100) | 6.192 (n=100, fire 8 %) | 6.161 (n=100, fire 21 %) | 6.141 (n=100, fire 16 %) | 6.048 (n=100, fire 3 %) | 6.147 (n=100, fire 8 %) | 6.106 (n=100, fire 7 %) |
+| zsre | unseen | new | 6.128 (n=100) | 6.229 (n=100, fire 4 %) | 6.209 (n=100, fire 14 %) | 6.281 (n=100, fire 11 %) | 6.209 (n=100, fire 2 %) | 6.328 (n=100, fire 5 %) | 6.289 (n=100, fire 4 %) |
+| counterfact | edit | new | 6.956 (n=300) | 0.019 (n=300, fire 100 %) | 0.100 (n=300, fire 99 %) | 0.019 (n=300, fire 100 %) | 0.019 (n=300, fire 100 %) | 0.019 (n=300, fire 100 %) | 0.019 (n=300, fire 100 %) |
+| counterfact | paraphrase | new | 7.369 (n=600) | 1.362 (n=600, fire 86 %) | 1.449 (n=600, fire 84 %) | 1.125 (n=600, fire 88 %) | 3.183 (n=600, fire 59 %) | 1.598 (n=600, fire 81 %) | 2.504 (n=600, fire 68 %) |
+| counterfact | locality_item | true | 6.295 (n=900) | 6.288 (n=900, fire 0 %) | 6.287 (n=900, fire 0 %) | 6.292 (n=900, fire 0 %) | 6.269 (n=900, fire 1 %) | 6.272 (n=900, fire 2 %) | 6.288 (n=900, fire 0 %) |
+| counterfact | near_miss_neighbour | true | 7.167 (n=100) | 7.167 (n=100, fire 0 %) | 7.148 (n=100, fire 1 %) | 7.167 (n=100, fire 0 %) | 7.110 (n=100, fire 2 %) | 7.091 (n=100, fire 5 %) | 7.157 (n=100, fire 1 %) |
+| counterfact | unseen | new | 6.924 (n=100) | 6.924 (n=100, fire 0 %) | 6.920 (n=100, fire 1 %) | 6.924 (n=100, fire 0 %) | 6.924 (n=100, fire 0 %) | 6.920 (n=100, fire 1 %) | 6.924 (n=100, fire 0 %) |
+| counterfact | edit | true | 6.382 (n=300) | 5.215 (n=300, fire 100 %) | 5.237 (n=300, fire 99 %) | 5.215 (n=300, fire 100 %) | 5.215 (n=300, fire 100 %) | 5.215 (n=300, fire 100 %) | 5.215 (n=300, fire 100 %) |
 | mquake | edit | new | 5.171 (n=300) | — | — | — | — | — | — |
 | mquake | paraphrase | new | 6.048 (n=300) | — | — | — | — | — | — |
 | mquake | locality_item | true | 4.487 (n=600) | — | — | — | — | — | — |
@@ -138,7 +140,19 @@ Reading: the frozen model's ES/RET-ES/RET-GS are its greedy answers against the 
 
 | dataset | family | model | n | mean margin_total (nats) | P(margin_total > 0) | mean margin_token | P(margin_token > 0) |
 |---|---|---|---|---|---|---|---|
+| counterfact | edit | BP reader s0 | 300 | 10.392 | 100.0 % | 5.196 | 100.0 % |
+| counterfact | edit | BP reader s1 | 300 | 10.274 | 99.0 % | 5.137 | 99.0 % |
+| counterfact | edit | BP reader s2 | 300 | 10.392 | 100.0 % | 5.196 | 100.0 % |
+| counterfact | edit | ePC reader s0 | 300 | 10.392 | 100.0 % | 5.196 | 100.0 % |
+| counterfact | edit | ePC reader s1 | 300 | 10.392 | 100.0 % | 5.196 | 100.0 % |
+| counterfact | edit | ePC reader s2 | 300 | 10.392 | 100.0 % | 5.196 | 100.0 % |
 | counterfact | edit | frozen GPT-2 | 300 | -1.149 | 30.3 % | -0.574 | 30.3 % |
+| counterfact | paraphrase | BP reader s0 | 600 | 7.264 | 86.7 % | 3.632 | 86.7 % |
+| counterfact | paraphrase | BP reader s1 | 600 | 7.122 | 85.2 % | 3.561 | 85.2 % |
+| counterfact | paraphrase | BP reader s2 | 600 | 7.532 | 88.3 % | 3.766 | 88.3 % |
+| counterfact | paraphrase | ePC reader s0 | 600 | 4.716 | 69.3 % | 2.358 | 69.3 % |
+| counterfact | paraphrase | ePC reader s1 | 600 | 6.930 | 84.3 % | 3.465 | 84.3 % |
+| counterfact | paraphrase | ePC reader s2 | 600 | 5.644 | 73.8 % | 2.822 | 73.8 % |
 | counterfact | paraphrase | frozen GPT-2 | 600 | -1.146 | 31.2 % | -0.573 | 31.2 % |
 | mquake | edit | frozen GPT-2 | 300 | -2.467 | 36.0 % | -0.592 | 45.0 % |
 | mquake | paraphrase | frozen GPT-2 | 300 | -2.988 | 27.7 % | -0.758 | 37.3 % |
@@ -261,29 +275,86 @@ Per-token NLL of the taught target on edit/paraphrase/unseen prompts; exceedance
 
 | dataset | family | model | n | P95 | max | CVaR95 | u = P95 | excesses | fit | κ | item-bootstrap 95 % κ | σ_u | GPD − exp (in-sample nats/excess) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| counterfact | edit | bp_reader_s0_h100 | 300 | 9.07 | 11.70 | 9.91 | 9.07 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | BP reader s0 | 300 | 0.05 | 0.06 | 0.05 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | bp_reader_s1_h100 | 300 | 9.07 | 11.70 | 9.91 | 9.07 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | BP reader s1 | 300 | 0.05 | 9.43 | 1.57 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | bp_reader_s2_h100 | 300 | 9.07 | 11.70 | 9.91 | 9.07 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | BP reader s2 | 300 | 0.05 | 0.06 | 0.05 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | epc_reader_s0_h100 | 300 | 9.07 | 11.70 | 9.91 | 9.07 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | ePC reader s0 | 300 | 0.05 | 0.06 | 0.05 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | epc_reader_s1_h100 | 300 | 9.07 | 11.70 | 9.91 | 9.07 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | ePC reader s1 | 300 | 0.05 | 0.06 | 0.05 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | epc_reader_s2_h100 | 300 | 9.07 | 11.70 | 9.91 | 9.07 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | edit | ePC reader s2 | 300 | 0.05 | 0.06 | 0.05 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
 | counterfact | edit | frozen GPT-2 | 300 | 9.12 | 11.70 | 10.06 | 9.12 | 15 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | bp_reader_s0_h100 | 600 | 9.69 | 11.93 | 10.26 | 9.69 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | BP reader s0 | 600 | 8.19 | 10.50 | 9.00 | 8.19 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | bp_reader_s1_h100 | 600 | 9.66 | 11.93 | 10.26 | 9.66 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | BP reader s1 | 600 | 8.37 | 11.70 | 9.19 | 8.37 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | bp_reader_s2_h100 | 600 | 9.69 | 11.93 | 10.29 | 9.69 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | BP reader s2 | 600 | 7.78 | 10.83 | 8.69 | 7.78 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | epc_reader_s0_h100 | 600 | 9.70 | 11.93 | 10.28 | 9.70 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | ePC reader s0 | 600 | 9.11 | 11.56 | 9.66 | 9.11 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | epc_reader_s1_h100 | 600 | 9.66 | 11.93 | 10.26 | 9.66 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | ePC reader s1 | 600 | 8.40 | 15.56 | 9.32 | 8.40 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | epc_reader_s2_h100 | 600 | 9.69 | 11.93 | 10.26 | 9.69 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | paraphrase | ePC reader s2 | 600 | 8.86 | 11.93 | 9.69 | 8.86 | 30 | insufficient | — | [—, —] | — | — |
 | counterfact | paraphrase | frozen GPT-2 | 600 | 9.78 | 11.93 | 10.40 | 9.78 | 30 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | bp_reader_s0_h100 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | BP reader s0 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | bp_reader_s1_h100 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | BP reader s1 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | bp_reader_s2_h100 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | BP reader s2 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | epc_reader_s0_h100 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | ePC reader s0 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | epc_reader_s1_h100 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | ePC reader s1 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | epc_reader_s2_h100 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
+| counterfact | unseen | ePC reader s2 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
 | counterfact | unseen | frozen GPT-2 | 100 | 9.45 | 10.01 | 9.70 | 9.45 | 5 | insufficient | — | [—, —] | — | — |
 | mquake | edit | frozen GPT-2 | 300 | 7.53 | 9.99 | 8.39 | 7.53 | 15 | insufficient | — | [—, —] | — | — |
 | mquake | paraphrase | frozen GPT-2 | 300 | 9.31 | 12.27 | 10.12 | 9.31 | 15 | insufficient | — | [—, —] | — | — |
 | mquake | unseen | frozen GPT-2 | 100 | 7.21 | 10.18 | 7.98 | 7.21 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | edit | bp_reader_s0_h100 | 300 | 9.32 | 11.69 | 10.44 | 9.32 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | edit | BP reader s0 | 300 | 0.04 | 0.06 | 0.04 | 0.04 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | edit | bp_reader_s1_h100 | 300 | 10.25 | 11.69 | 10.90 | 10.25 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | edit | BP reader s1 | 300 | 0.04 | 0.06 | 0.04 | 0.04 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | edit | bp_reader_s2_h100 | 300 | 9.40 | 11.69 | 10.46 | 9.40 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | edit | BP reader s2 | 300 | 0.04 | 0.06 | 0.04 | 0.04 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | edit | epc_reader_s0_h100 | 300 | 9.31 | 11.69 | 10.38 | 9.31 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | edit | ePC reader s0 | 300 | 0.04 | 0.06 | 0.04 | 0.04 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | edit | epc_reader_s1_h100 | 300 | 9.40 | 11.69 | 10.46 | 9.40 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | edit | ePC reader s1 | 300 | 0.04 | 0.06 | 0.04 | 0.04 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | edit | epc_reader_s2_h100 | 300 | 9.31 | 11.69 | 10.38 | 9.31 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | edit | ePC reader s2 | 300 | 0.04 | 0.06 | 0.04 | 0.04 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | edit | frozen GPT-2 | 300 | 9.71 | 12.22 | 10.91 | 9.71 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | bp_reader_s0_h100 | 300 | 9.74 | 12.69 | 10.76 | 9.74 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | paraphrase | BP reader s0 | 300 | 0.07 | 6.43 | 2.70 | 0.07 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | bp_reader_s1_h100 | 300 | 9.85 | 12.69 | 10.86 | 9.85 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | paraphrase | BP reader s1 | 300 | 0.05 | 6.43 | 1.13 | 0.05 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | bp_reader_s2_h100 | 300 | 9.78 | 12.69 | 10.78 | 9.78 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | paraphrase | BP reader s2 | 300 | 0.06 | 6.43 | 2.34 | 0.06 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | epc_reader_s0_h100 | 300 | 9.74 | 12.69 | 10.76 | 9.74 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | paraphrase | ePC reader s0 | 300 | 2.17 | 7.93 | 5.63 | 2.17 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | epc_reader_s1_h100 | 300 | 9.74 | 12.69 | 10.76 | 9.74 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | paraphrase | ePC reader s1 | 300 | 0.08 | 6.43 | 2.83 | 0.08 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | epc_reader_s2_h100 | 300 | 9.74 | 12.69 | 10.76 | 9.74 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | paraphrase | ePC reader s2 | 300 | 0.06 | 6.43 | 1.93 | 0.06 | 15 | insufficient | — | [—, —] | — | — |
 | zsre | paraphrase | frozen GPT-2 | 300 | 10.83 | 12.69 | 11.33 | 10.83 | 15 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | bp_reader_s0_h100 | 100 | 10.13 | 15.03 | 12.05 | 10.13 | 5 | insufficient | — | [—, —] | — | — |
 | zsre | unseen | BP reader s0 | 100 | 10.07 | 15.03 | 11.58 | 10.07 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | bp_reader_s1_h100 | 100 | 11.36 | 15.03 | 12.79 | 11.36 | 5 | insufficient | — | [—, —] | — | — |
 | zsre | unseen | BP reader s1 | 100 | 11.35 | 15.03 | 12.71 | 11.35 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | bp_reader_s2_h100 | 100 | 10.92 | 15.03 | 12.34 | 10.92 | 5 | insufficient | — | [—, —] | — | — |
 | zsre | unseen | BP reader s2 | 100 | 11.35 | 15.03 | 12.71 | 11.35 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | epc_reader_s0_h100 | 100 | 9.65 | 15.03 | 11.30 | 9.65 | 5 | insufficient | — | [—, —] | — | — |
 | zsre | unseen | ePC reader s0 | 100 | 10.07 | 15.03 | 11.58 | 10.07 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | epc_reader_s1_h100 | 100 | 10.13 | 15.03 | 11.87 | 10.13 | 5 | insufficient | — | [—, —] | — | — |
 | zsre | unseen | ePC reader s1 | 100 | 10.92 | 15.03 | 12.62 | 10.92 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | epc_reader_s2_h100 | 100 | 10.13 | 15.03 | 11.87 | 10.13 | 5 | insufficient | — | [—, —] | — | — |
+| zsre | unseen | ePC reader s2 | 100 | 10.13 | 15.03 | 12.05 | 10.13 | 5 | insufficient | — | [—, —] | — | — |
 | zsre | unseen | frozen GPT-2 | 100 | 9.38 | 12.08 | 10.35 | 9.38 | 5 | insufficient | — | [—, —] | — | — |
 
 ![GPD shapes of per-probe target loss](../../../../../assets/extremes_analysis/ext-20261009/figures/tail_shapes_probe_loss.png)
@@ -292,13 +363,160 @@ Per-token NLL of the taught target on edit/paraphrase/unseen prompts; exceedance
 
 ### 7.1 Paired gains over frozen GPT-2 and ePC vs BP
 
-_paired gains not available yet_
+### zsre (300 edits; 2,000 group-bootstrap draws, groups = items/rows)
+
+| family | target | gain | seed | n | mean | 95 % CI | median | helped (G>0) | harmed (G<0) | mean of worst 5 % (−G) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| edit | new | G_BP | 0 | 300 | 5.995 | [5.765, 6.211] | 5.761 | 100.0 % [1.00, 1.00] | 0.0 % | 2.662 |
+| edit | new | G_BP | 1 | 300 | 5.995 | [5.765, 6.211] | 5.761 | 100.0 % [1.00, 1.00] | 0.0 % | 2.662 |
+| edit | new | G_BP | 2 | 300 | 5.995 | [5.765, 6.211] | 5.761 | 100.0 % [1.00, 1.00] | 0.0 % | 2.662 |
+| edit | new | G_BP | mean | 300 | 5.995 | [5.765, 6.211] | — | 100.0 % [1.00, 1.00] | — | — |
+| edit | new | G_PC | 0 | 300 | 5.995 | [5.765, 6.211] | 5.761 | 100.0 % [1.00, 1.00] | 0.0 % | 2.662 |
+| edit | new | G_PC | 1 | 300 | 5.995 | [5.765, 6.211] | 5.761 | 100.0 % [1.00, 1.00] | 0.0 % | 2.662 |
+| edit | new | G_PC | 2 | 300 | 5.995 | [5.765, 6.211] | 5.761 | 100.0 % [1.00, 1.00] | 0.0 % | 2.662 |
+| edit | new | G_PC | mean | 300 | 5.995 | [5.765, 6.211] | — | 100.0 % [1.00, 1.00] | — | — |
+| edit | new | G_PCvsBP | 0 | 300 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| edit | new | G_PCvsBP | 1 | 300 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| edit | new | G_PCvsBP | 2 | 300 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| edit | new | G_PCvsBP | mean | 300 | 0.000 | [0.000, 0.000] | — | 0.0 % [0.00, 0.00] | — | — |
+| paraphrase | new | G_BP | 0 | 300 | 5.937 | [5.666, 6.190] | 5.695 | 97.3 % [0.95, 0.99] | 0.3 % | 1.114 |
+| paraphrase | new | G_BP | 1 | 300 | 6.021 | [5.762, 6.267] | 5.720 | 99.0 % [0.98, 1.00] | 0.3 % | 2.009 |
+| paraphrase | new | G_BP | 2 | 300 | 5.956 | [5.689, 6.205] | 5.699 | 97.7 % [0.96, 0.99] | 0.3 % | 1.297 |
+| paraphrase | new | G_BP | mean | 300 | 5.972 | [5.708, 6.217] | — | 99.0 % [0.98, 1.00] | — | — |
+| paraphrase | new | G_PC | 0 | 300 | 5.778 | [5.486, 6.048] | 5.600 | 94.7 % [0.92, 0.97] | 0.0 % | -0.000 |
+| paraphrase | new | G_PC | 1 | 300 | 5.930 | [5.654, 6.190] | 5.699 | 97.0 % [0.95, 0.99] | 0.3 % | 0.933 |
+| paraphrase | new | G_PC | 2 | 300 | 5.978 | [5.711, 6.226] | 5.701 | 98.0 % [0.96, 0.99] | 0.0 % | 1.577 |
+| paraphrase | new | G_PC | mean | 300 | 5.895 | [5.621, 6.146] | — | 98.0 % [0.96, 0.99] | — | — |
+| paraphrase | new | G_PCvsBP | 0 | 300 | -0.159 | [-0.282, -0.055] | 0.000 | 0.3 % [0.00, 0.01] | 2.7 % | -3.082 |
+| paraphrase | new | G_PCvsBP | 1 | 300 | -0.092 | [-0.176, -0.023] | 0.000 | 0.0 % [0.00, 0.00] | 2.0 % | -1.719 |
+| paraphrase | new | G_PCvsBP | 2 | 300 | 0.021 | [-0.048, 0.099] | 0.000 | 1.0 % [0.00, 0.02] | 0.7 % | -0.598 |
+| paraphrase | new | G_PCvsBP | mean | 300 | -0.076 | [-0.136, -0.027] | — | 0.3 % [0.00, 0.01] | — | — |
+| unseen | new | G_BP | 0 | 100 | -0.102 | [-0.243, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 4.0 % | -1.696 |
+| unseen | new | G_BP | 1 | 100 | -0.082 | [-0.376, 0.243] | 0.000 | 4.0 % [0.01, 0.08] | 10.0 % | -4.044 |
+| unseen | new | G_BP | 2 | 100 | -0.154 | [-0.435, 0.125] | 0.000 | 2.0 % [0.00, 0.05] | 9.0 % | -4.044 |
+| unseen | new | G_BP | mean | 100 | -0.112 | [-0.328, 0.096] | — | 5.0 % [0.01, 0.10] | — | — |
+| unseen | new | G_PC | 0 | 100 | -0.082 | [-0.220, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 2.0 % | -1.361 |
+| unseen | new | G_PC | 1 | 100 | -0.200 | [-0.406, -0.039] | 0.000 | 0.0 % [0.00, 0.00] | 5.0 % | -3.339 |
+| unseen | new | G_PC | 2 | 100 | -0.162 | [-0.354, -0.017] | 0.000 | 0.0 % [0.00, 0.00] | 4.0 % | -2.696 |
+| unseen | new | G_PC | mean | 100 | -0.148 | [-0.310, -0.024] | — | 1.0 % [0.00, 0.03] | — | — |
+| unseen | new | G_PCvsBP | 0 | 100 | 0.020 | [0.000, 0.057] | 0.000 | 2.0 % [0.00, 0.05] | 0.0 % | -0.000 |
+| unseen | new | G_PCvsBP | 1 | 100 | -0.118 | [-0.381, 0.093] | 0.000 | 5.0 % [0.01, 0.10] | 4.0 % | -3.450 |
+| unseen | new | G_PCvsBP | 2 | 100 | -0.008 | [-0.235, 0.184] | 0.000 | 5.0 % [0.01, 0.10] | 2.0 % | -1.940 |
+| unseen | new | G_PCvsBP | mean | 100 | -0.035 | [-0.189, 0.094] | — | 7.0 % [0.02, 0.13] | — | — |
+| locality_item | true | G_BP | 0 | 296 | 0.000 | [-0.000, 0.000] | 0.000 | 1.0 % [0.00, 0.02] | 1.0 % | -0.000 |
+| locality_item | true | G_BP | 1 | 296 | 0.000 | [-0.000, 0.000] | 0.000 | 1.0 % [0.00, 0.02] | 1.0 % | -0.000 |
+| locality_item | true | G_BP | 2 | 296 | 0.000 | [-0.000, 0.000] | 0.000 | 1.0 % [0.00, 0.02] | 1.0 % | -0.000 |
+| locality_item | true | G_BP | mean | 296 | 0.000 | [-0.000, 0.000] | — | 4.4 % [0.02, 0.07] | — | — |
+| locality_item | true | G_PC | 0 | 296 | 0.000 | [-0.000, 0.000] | 0.000 | 1.0 % [0.00, 0.02] | 1.0 % | -0.000 |
+| locality_item | true | G_PC | 1 | 296 | 0.000 | [-0.000, 0.000] | 0.000 | 1.0 % [0.00, 0.02] | 1.0 % | -0.000 |
+| locality_item | true | G_PC | 2 | 296 | 0.000 | [-0.000, 0.000] | 0.000 | 1.0 % [0.00, 0.02] | 1.0 % | -0.000 |
+| locality_item | true | G_PC | mean | 296 | 0.000 | [-0.000, 0.000] | — | 4.4 % [0.02, 0.07] | — | — |
+| locality_item | true | G_PCvsBP | 0 | 296 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| locality_item | true | G_PCvsBP | 1 | 296 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| locality_item | true | G_PCvsBP | 2 | 296 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| locality_item | true | G_PCvsBP | mean | 296 | 0.000 | [0.000, 0.000] | — | 0.0 % [0.00, 0.00] | — | — |
+| near_miss_neighbour | true | G_BP | 0 | 100 | -0.218 | [-0.465, -0.021] | 0.000 | 2.0 % [0.00, 0.05] | 7.0 % | -4.114 |
+| near_miss_neighbour | true | G_BP | 1 | 100 | -0.187 | [-0.525, 0.133] | 0.000 | 8.0 % [0.03, 0.14] | 14.0 % | -4.994 |
+| near_miss_neighbour | true | G_BP | 2 | 100 | -0.166 | [-0.475, 0.113] | 0.000 | 6.0 % [0.02, 0.11] | 11.0 % | -4.616 |
+| near_miss_neighbour | true | G_BP | mean | 100 | -0.190 | [-0.474, 0.061] | — | 13.0 % [0.07, 0.20] | — | — |
+| near_miss_neighbour | true | G_PC | 0 | 100 | -0.074 | [-0.285, 0.070] | 0.000 | 2.0 % [0.00, 0.05] | 2.0 % | -1.788 |
+| near_miss_neighbour | true | G_PC | 1 | 100 | -0.173 | [-0.402, 0.008] | 0.000 | 2.0 % [0.00, 0.05] | 7.0 % | -3.360 |
+| near_miss_neighbour | true | G_PC | 2 | 100 | -0.132 | [-0.344, 0.030] | 0.000 | 2.0 % [0.00, 0.05] | 6.0 % | -2.749 |
+| near_miss_neighbour | true | G_PC | mean | 100 | -0.126 | [-0.332, 0.028] | — | 7.0 % [0.03, 0.12] | — | — |
+| near_miss_neighbour | true | G_PCvsBP | 0 | 100 | 0.144 | [0.018, 0.319] | 0.000 | 5.0 % [0.01, 0.10] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_PCvsBP | 1 | 100 | 0.014 | [-0.234, 0.252] | 0.000 | 7.0 % [0.03, 0.12] | 6.0 % | -3.314 |
+| near_miss_neighbour | true | G_PCvsBP | 2 | 100 | 0.035 | [-0.178, 0.264] | 0.000 | 5.0 % [0.01, 0.10] | 4.0 % | -2.303 |
+| near_miss_neighbour | true | G_PCvsBP | mean | 100 | 0.064 | [-0.109, 0.246] | — | 11.0 % [0.05, 0.17] | — | — |
+
+### counterfact (300 edits; 2,000 group-bootstrap draws, groups = items/rows)
+
+| family | target | gain | seed | n | mean | 95 % CI | median | helped (G>0) | harmed (G<0) | mean of worst 5 % (−G) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| edit | new | G_BP | 0 | 300 | 6.938 | [6.774, 7.091] | 6.986 | 100.0 % [1.00, 1.00] | 0.0 % | 4.314 |
+| edit | new | G_BP | 1 | 300 | 6.857 | [6.683, 7.027] | 6.942 | 99.0 % [0.98, 1.00] | 0.0 % | 3.435 |
+| edit | new | G_BP | 2 | 300 | 6.938 | [6.774, 7.091] | 6.986 | 100.0 % [1.00, 1.00] | 0.0 % | 4.314 |
+| edit | new | G_BP | mean | 300 | 6.911 | [6.750, 7.069] | — | 100.0 % [1.00, 1.00] | — | — |
+| edit | new | G_PC | 0 | 300 | 6.938 | [6.774, 7.091] | 6.986 | 100.0 % [1.00, 1.00] | 0.0 % | 4.314 |
+| edit | new | G_PC | 1 | 300 | 6.938 | [6.774, 7.091] | 6.986 | 100.0 % [1.00, 1.00] | 0.0 % | 4.314 |
+| edit | new | G_PC | 2 | 300 | 6.938 | [6.774, 7.091] | 6.986 | 100.0 % [1.00, 1.00] | 0.0 % | 4.314 |
+| edit | new | G_PC | mean | 300 | 6.938 | [6.774, 7.091] | — | 100.0 % [1.00, 1.00] | — | — |
+| edit | new | G_PCvsBP | 0 | 300 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| edit | new | G_PCvsBP | 1 | 300 | 0.081 | [0.000, 0.182] | 0.000 | 1.0 % [0.00, 0.02] | 0.0 % | -0.000 |
+| edit | new | G_PCvsBP | 2 | 300 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| edit | new | G_PCvsBP | mean | 300 | 0.027 | [0.000, 0.061] | — | 1.0 % [0.00, 0.02] | — | — |
+| paraphrase | new | G_BP | 0 | 600 | 6.007 | [5.706, 6.282] | 6.741 | 84.8 % [0.81, 0.88] | 1.0 % | -0.058 |
+| paraphrase | new | G_BP | 1 | 600 | 5.921 | [5.628, 6.197] | 6.679 | 84.2 % [0.81, 0.88] | 0.3 % | -0.017 |
+| paraphrase | new | G_BP | 2 | 600 | 6.244 | [5.980, 6.515] | 6.814 | 87.7 % [0.85, 0.91] | 0.3 % | -0.000 |
+| paraphrase | new | G_BP | mean | 600 | 6.057 | [5.807, 6.309] | — | 94.0 % [0.92, 0.96] | — | — |
+| paraphrase | new | G_PC | 0 | 600 | 4.186 | [3.838, 4.555] | 5.607 | 59.0 % [0.54, 0.64] | 0.5 % | -0.040 |
+| paraphrase | new | G_PC | 1 | 600 | 5.771 | [5.464, 6.070] | 6.687 | 81.2 % [0.77, 0.85] | 0.7 % | -0.200 |
+| paraphrase | new | G_PC | 2 | 600 | 4.865 | [4.511, 5.205] | 6.204 | 68.3 % [0.64, 0.73] | 0.3 % | -0.040 |
+| paraphrase | new | G_PC | mean | 600 | 4.941 | [4.648, 5.228] | — | 85.3 % [0.82, 0.89] | — | — |
+| paraphrase | new | G_PCvsBP | 0 | 600 | -1.821 | [-2.168, -1.447] | 0.000 | 3.7 % [0.02, 0.06] | 29.5 % | -9.353 |
+| paraphrase | new | G_PCvsBP | 1 | 600 | -0.149 | [-0.357, 0.057] | 0.000 | 5.2 % [0.04, 0.07] | 8.7 % | -7.370 |
+| paraphrase | new | G_PCvsBP | 2 | 600 | -1.379 | [-1.666, -1.085] | 0.000 | 3.5 % [0.02, 0.05] | 22.7 % | -9.211 |
+| paraphrase | new | G_PCvsBP | mean | 600 | -1.117 | [-1.313, -0.916] | — | 5.8 % [0.04, 0.08] | — | — |
+| unseen | new | G_BP | 0 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_BP | 1 | 100 | 0.004 | [0.000, 0.011] | 0.000 | 1.0 % [0.00, 0.03] | 0.0 % | -0.000 |
+| unseen | new | G_BP | 2 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_BP | mean | 100 | 0.001 | [0.000, 0.004] | — | 1.0 % [0.00, 0.03] | — | — |
+| unseen | new | G_PC | 0 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_PC | 1 | 100 | 0.004 | [0.000, 0.011] | 0.000 | 1.0 % [0.00, 0.03] | 0.0 % | -0.000 |
+| unseen | new | G_PC | 2 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_PC | mean | 100 | 0.001 | [0.000, 0.004] | — | 1.0 % [0.00, 0.03] | — | — |
+| unseen | new | G_PCvsBP | 0 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_PCvsBP | 1 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_PCvsBP | 2 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| unseen | new | G_PCvsBP | mean | 100 | 0.000 | [0.000, 0.000] | — | 0.0 % [0.00, 0.00] | — | — |
+| locality_item | true | G_BP | 0 | 900 | 0.007 | [0.000, 0.016] | 0.000 | 0.4 % [0.00, 0.01] | 0.0 % | -0.000 |
+| locality_item | true | G_BP | 1 | 900 | 0.009 | [0.000, 0.020] | 0.000 | 0.4 % [0.00, 0.01] | 0.0 % | -0.000 |
+| locality_item | true | G_BP | 2 | 900 | 0.003 | [0.000, 0.010] | 0.000 | 0.1 % [0.00, 0.00] | 0.0 % | -0.000 |
+| locality_item | true | G_BP | mean | 900 | 0.006 | [0.001, 0.014] | — | 0.7 % [0.00, 0.01] | — | — |
+| locality_item | true | G_PC | 0 | 900 | 0.027 | [0.006, 0.050] | 0.000 | 0.9 % [0.00, 0.02] | 0.1 % | -0.049 |
+| locality_item | true | G_PC | 1 | 900 | 0.024 | [0.006, 0.042] | 0.000 | 1.3 % [0.01, 0.02] | 0.3 % | -0.081 |
+| locality_item | true | G_PC | 2 | 900 | 0.007 | [0.000, 0.016] | 0.000 | 0.4 % [0.00, 0.01] | 0.0 % | -0.000 |
+| locality_item | true | G_PC | mean | 900 | 0.019 | [0.007, 0.033] | — | 2.0 % [0.01, 0.03] | — | — |
+| locality_item | true | G_PCvsBP | 0 | 900 | 0.020 | [-0.001, 0.044] | 0.000 | 0.8 % [0.00, 0.02] | 0.4 % | -0.122 |
+| locality_item | true | G_PCvsBP | 1 | 900 | 0.015 | [0.000, 0.031] | 0.000 | 1.0 % [0.00, 0.02] | 0.4 % | -0.086 |
+| locality_item | true | G_PCvsBP | 2 | 900 | 0.004 | [0.000, 0.010] | 0.000 | 0.3 % [0.00, 0.01] | 0.0 % | -0.000 |
+| locality_item | true | G_PCvsBP | mean | 900 | 0.013 | [0.003, 0.023] | — | 1.6 % [0.01, 0.02] | — | — |
+| near_miss_neighbour | true | G_BP | 0 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_BP | 1 | 100 | 0.020 | [0.000, 0.059] | 0.000 | 1.0 % [0.00, 0.03] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_BP | 2 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_BP | mean | 100 | 0.007 | [0.000, 0.020] | — | 1.0 % [0.00, 0.03] | — | — |
+| near_miss_neighbour | true | G_PC | 0 | 100 | 0.057 | [0.000, 0.148] | 0.000 | 2.0 % [0.00, 0.05] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_PC | 1 | 100 | 0.076 | [0.009, 0.166] | 0.000 | 4.0 % [0.01, 0.08] | 1.0 % | -0.015 |
+| near_miss_neighbour | true | G_PC | 2 | 100 | 0.010 | [0.000, 0.031] | 0.000 | 1.0 % [0.00, 0.03] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_PC | mean | 100 | 0.048 | [0.003, 0.107] | — | 4.0 % [0.01, 0.08] | — | — |
+| near_miss_neighbour | true | G_PCvsBP | 0 | 100 | 0.057 | [0.000, 0.148] | 0.000 | 2.0 % [0.00, 0.05] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_PCvsBP | 1 | 100 | 0.057 | [-0.029, 0.151] | 0.000 | 4.0 % [0.01, 0.08] | 2.0 % | -0.343 |
+| near_miss_neighbour | true | G_PCvsBP | 2 | 100 | 0.010 | [0.000, 0.031] | 0.000 | 1.0 % [0.00, 0.03] | 0.0 % | -0.000 |
+| near_miss_neighbour | true | G_PCvsBP | mean | 100 | 0.041 | [-0.006, 0.102] | — | 4.0 % [0.01, 0.08] | — | — |
 
 ![Paired ePC − BP differences on paraphrases](../../../../../assets/extremes_analysis/ext-20261009/figures/paired_pc_minus_bp.png)
 
 ### 7.2 Gain versus frozen difficulty (deciles fixed by the frozen per-token NLL)
 
-_not available yet_
+| dataset | family | decile | n | frozen NLL range | G_BP (seed mean) | G_PC (seed mean) | G_PCvsBP |
+|---|---|---|---|---|---|---|---|
+| counterfact | edit | 1 | 30 | 3.57–4.97 | 4.581 [4.45, 4.71] | 4.581 [4.45, 4.71] | 0.000 [0.00, 0.00] |
+| counterfact | edit | 5 | 30 | 6.51–6.98 | 6.751 [6.70, 6.81] | 6.751 [6.70, 6.81] | 0.000 [0.00, 0.00] |
+| counterfact | edit | 10 | 30 | 8.86–11.70 | 9.434 [9.06, 9.76] | 9.538 [9.27, 9.85] | 0.104 [0.00, 0.42] |
+| counterfact | paraphrase | 1 | 60 | 3.62–5.51 | 3.941 [3.45, 4.36] | 3.222 [2.68, 3.73] | -0.719 [-1.05, -0.38] |
+| counterfact | paraphrase | 5 | 60 | 6.86–7.38 | 5.727 [5.08, 6.25] | 4.492 [3.75, 5.15] | -1.234 [-1.79, -0.67] |
+| counterfact | paraphrase | 10 | 60 | 9.39–11.93 | 8.580 [7.84, 9.16] | 7.221 [6.41, 8.09] | -1.359 [-2.05, -0.69] |
+| counterfact | unseen | 1 | 10 | 3.30–4.82 | 0.000 [0.00, 0.00] | 0.000 [0.00, 0.00] | 0.000 [0.00, 0.00] |
+| counterfact | unseen | 5 | 10 | 6.59–6.87 | 0.000 [0.00, 0.00] | 0.000 [0.00, 0.00] | 0.000 [0.00, 0.00] |
+| counterfact | unseen | 10 | 10 | 8.99–10.01 | 0.000 [0.00, 0.00] | 0.000 [0.00, 0.00] | 0.000 [0.00, 0.00] |
+| zsre | edit | 1 | 30 | 1.81–3.75 | 3.080 [2.87, 3.27] | 3.080 [2.87, 3.27] | 0.000 [0.00, 0.00] |
+| zsre | edit | 5 | 30 | 5.26–5.76 | 5.510 [5.46, 5.56] | 5.510 [5.46, 5.56] | 0.000 [0.00, 0.00] |
+| zsre | edit | 10 | 30 | 8.92–12.22 | 10.163 [9.83, 10.48] | 10.163 [9.83, 10.48] | 0.000 [0.00, 0.00] |
+| zsre | paraphrase | 1 | 30 | 1.92–3.93 | 2.959 [2.53, 3.26] | 2.965 [2.64, 3.22] | 0.006 [-0.14, 0.18] |
+| zsre | paraphrase | 5 | 30 | 5.37–5.74 | 5.359 [4.97, 5.58] | 5.296 [4.87, 5.56] | -0.062 [-0.22, 0.00] |
+| zsre | paraphrase | 10 | 30 | 9.25–12.69 | 10.637 [10.35, 10.94] | 10.637 [10.35, 10.94] | 0.000 [0.00, 0.00] |
+| zsre | unseen | 1 | 10 | 2.41–3.67 | -0.192 [-0.89, 0.51] | -0.110 [-0.33, 0.00] | 0.082 [-0.62, 0.80] |
+| zsre | unseen | 5 | 10 | 5.39–6.07 | 0.202 [0.00, 0.61] | 0.000 [0.00, 0.00] | -0.202 [-0.61, 0.00] |
+| zsre | unseen | 10 | 10 | 8.62–12.08 | -1.214 [-2.35, -0.25] | -0.945 [-2.08, 0.00] | 0.269 [0.00, 0.68] |
 
 ![Deciles, zsRE paraphrase](../../../../../assets/extremes_analysis/ext-20261009/figures/deciles_zsre_paraphrase.png)
 
@@ -306,31 +524,274 @@ _not available yet_
 
 ### 7.3 Two worst-case summaries (A: each model's own worst 5 %; B: the frozen model's hardest 5 %, fixed)
 
-_not available yet_
+| dataset | family | model | n | mean loss | A: own CVaR95 | k | B: mean loss on frozen-hard 5 % | B: success on frozen-hard 5 % | B: mean loss on frozen-hard 1 % |
+|---|---|---|---|---|---|---|---|---|---|
+| counterfact | edit | BP s0 | 300 | 0.019 | 0.054 | 15 | 0.018 | 100.0 % | 0.008 |
+| counterfact | edit | BP s1 | 300 | 0.100 | 1.568 | 15 | 0.644 | 93.3 % | 0.008 |
+| counterfact | edit | BP s2 | 300 | 0.019 | 0.054 | 15 | 0.018 | 100.0 % | 0.008 |
+| counterfact | edit | ePC s0 | 300 | 0.019 | 0.054 | 15 | 0.018 | 100.0 % | 0.008 |
+| counterfact | edit | ePC s1 | 300 | 0.019 | 0.054 | 15 | 0.018 | 100.0 % | 0.008 |
+| counterfact | edit | ePC s2 | 300 | 0.019 | 0.054 | 15 | 0.018 | 100.0 % | 0.008 |
+| counterfact | edit | frozen GPT-2 | 300 | 6.956 | 10.063 | 15 | 10.126 | 0.0 % | 11.271 |
+| counterfact | paraphrase | BP s0 | 600 | 1.362 | 8.998 | 30 | 2.217 | 76.7 % | 1.944 |
+| counterfact | paraphrase | BP s1 | 600 | 1.449 | 9.191 | 30 | 2.003 | 80.0 % | 4.171 |
+| counterfact | paraphrase | BP s2 | 600 | 1.125 | 8.689 | 30 | 1.933 | 80.0 % | 3.744 |
+| counterfact | paraphrase | ePC s0 | 600 | 3.183 | 9.660 | 30 | 2.908 | 73.3 % | 2.097 |
+| counterfact | paraphrase | ePC s1 | 600 | 1.598 | 9.317 | 30 | 2.028 | 80.0 % | 4.815 |
+| counterfact | paraphrase | ePC s2 | 600 | 2.504 | 9.690 | 30 | 3.408 | 70.0 % | 7.722 |
+| counterfact | paraphrase | frozen GPT-2 | 600 | 7.369 | 10.396 | 30 | 10.416 | 0.0 % | 11.394 |
+| counterfact | unseen | BP s0 | 100 | 6.924 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| counterfact | unseen | BP s1 | 100 | 6.920 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| counterfact | unseen | BP s2 | 100 | 6.924 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| counterfact | unseen | ePC s0 | 100 | 6.924 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| counterfact | unseen | ePC s1 | 100 | 6.920 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| counterfact | unseen | ePC s2 | 100 | 6.924 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| counterfact | unseen | frozen GPT-2 | 100 | 6.924 | 9.699 | 5 | 9.752 | 0.0 % | 10.008 |
+| zsre | edit | BP s0 | 300 | 0.015 | 0.043 | 15 | 0.022 | 100.0 % | 0.008 |
+| zsre | edit | BP s1 | 300 | 0.015 | 0.043 | 15 | 0.022 | 100.0 % | 0.008 |
+| zsre | edit | BP s2 | 300 | 0.015 | 0.043 | 15 | 0.022 | 100.0 % | 0.008 |
+| zsre | edit | ePC s0 | 300 | 0.015 | 0.043 | 15 | 0.022 | 100.0 % | 0.008 |
+| zsre | edit | ePC s1 | 300 | 0.015 | 0.043 | 15 | 0.022 | 100.0 % | 0.008 |
+| zsre | edit | ePC s2 | 300 | 0.015 | 0.043 | 15 | 0.022 | 100.0 % | 0.008 |
+| zsre | edit | frozen GPT-2 | 300 | 6.009 | 10.908 | 15 | 10.988 | 0.0 % | 11.952 |
+| zsre | paraphrase | BP s0 | 300 | 0.161 | 2.695 | 15 | 0.046 | 100.0 % | 0.045 |
+| zsre | paraphrase | BP s1 | 300 | 0.077 | 1.130 | 15 | 0.046 | 100.0 % | 0.045 |
+| zsre | paraphrase | BP s2 | 300 | 0.142 | 2.338 | 15 | 0.046 | 100.0 % | 0.045 |
+| zsre | paraphrase | ePC s0 | 300 | 0.320 | 5.635 | 15 | 0.046 | 100.0 % | 0.045 |
+| zsre | paraphrase | ePC s1 | 300 | 0.168 | 2.831 | 15 | 0.046 | 100.0 % | 0.045 |
+| zsre | paraphrase | ePC s2 | 300 | 0.120 | 1.934 | 15 | 0.046 | 100.0 % | 0.045 |
+| zsre | paraphrase | frozen GPT-2 | 300 | 6.098 | 11.331 | 15 | 11.365 | 0.0 % | 12.332 |
+| zsre | unseen | BP s0 | 100 | 6.229 | 11.584 | 5 | 10.551 | 0.0 % | 12.078 |
+| zsre | unseen | BP s1 | 100 | 6.209 | 12.712 | 5 | 11.323 | 0.0 % | 12.078 |
+| zsre | unseen | BP s2 | 100 | 6.281 | 12.712 | 5 | 11.323 | 0.0 % | 12.078 |
+| zsre | unseen | ePC s0 | 100 | 6.209 | 11.584 | 5 | 10.551 | 0.0 % | 12.078 |
+| zsre | unseen | ePC s1 | 100 | 6.328 | 12.620 | 5 | 11.323 | 0.0 % | 12.078 |
+| zsre | unseen | ePC s2 | 100 | 6.289 | 12.054 | 5 | 10.551 | 0.0 % | 12.078 |
+| zsre | unseen | frozen GPT-2 | 100 | 6.128 | 10.353 | 5 | 10.551 | 0.0 % | 12.078 |
 
 ![CVaR A and B](../../../../../assets/extremes_analysis/ext-20261009/figures/cvar_A_B.png)
 
 ### 7.4 Rare and severe regressions (D = L_model − L_frozen; rows `epc{s}_minus_bp{s}` use L_BP as reference)
 
-_not available yet_
+| dataset | family | target | model (D = L_model − L_ref) | n | P(D>0) | mean D | D>0 | P99 D | worst-5 % mean D | max D | P(D>0.5) | P(D>1) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| counterfact | edit | new | BP s0 | 300 | 0.0 % | — | -4.079 | -4.314 | -3.564 | 0.00 % | 0.00 % |
+| counterfact | edit | new | BP s1 | 300 | 0.0 % | — | -3.528 | -3.435 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | edit | new | BP s2 | 300 | 0.0 % | — | -4.079 | -4.314 | -3.564 | 0.00 % | 0.00 % |
+| counterfact | edit | new | ePC s0 | 300 | 0.0 % | — | -4.079 | -4.314 | -3.564 | 0.00 % | 0.00 % |
+| counterfact | edit | new | epc0_minus_bp0 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | edit | new | ePC s1 | 300 | 0.0 % | — | -4.079 | -4.314 | -3.564 | 0.00 % | 0.00 % |
+| counterfact | edit | new | epc1_minus_bp1 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | edit | new | ePC s2 | 300 | 0.0 % | — | -4.079 | -4.314 | -3.564 | 0.00 % | 0.00 % |
+| counterfact | edit | new | epc2_minus_bp2 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | BP s0 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | BP s1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | BP s2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | ePC s0 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | epc0_minus_bp0 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | ePC s1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | epc1_minus_bp1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | ePC s2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality | true | epc2_minus_bp2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality_item | true | BP s0 | 900 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality_item | true | BP s1 | 900 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality_item | true | BP s2 | 900 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality_item | true | ePC s0 | 900 | 0.1 % | 2.264 | 0.000 | 0.049 | 2.264 | 0.11 % | 0.11 % |
+| counterfact | locality_item | true | epc0_minus_bp0 | 900 | 0.4 % | 1.407 | 0.000 | 0.122 | 2.264 | 0.44 % | 0.33 % |
+| counterfact | locality_item | true | ePC s1 | 900 | 0.3 % | 1.240 | 0.000 | 0.081 | 2.264 | 0.22 % | 0.22 % |
+| counterfact | locality_item | true | epc1_minus_bp1 | 900 | 0.4 % | 0.987 | 0.000 | 0.086 | 2.264 | 0.22 % | 0.22 % |
+| counterfact | locality_item | true | ePC s2 | 900 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | locality_item | true | epc2_minus_bp2 | 900 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | BP s0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | BP s1 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | BP s2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | ePC s0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | epc0_minus_bp0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | ePC s1 | 100 | 1.0 % | 0.090 | 0.001 | 0.015 | 0.090 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | epc1_minus_bp1 | 100 | 2.0 % | 1.029 | 0.109 | 0.343 | 1.969 | 1.00 % | 1.00 % |
+| counterfact | near_miss_neighbour | true | ePC s2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | near_miss_neighbour | true | epc2_minus_bp2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | paraphrase | new | BP s0 | 600 | 1.0 % | 0.299 | 0.000 | 0.058 | 1.237 | 0.17 % | 0.17 % |
+| counterfact | paraphrase | new | BP s1 | 600 | 0.3 % | 0.262 | 0.000 | 0.017 | 0.523 | 0.17 % | 0.00 % |
+| counterfact | paraphrase | new | BP s2 | 600 | 0.3 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | paraphrase | new | ePC s0 | 600 | 0.5 % | 0.412 | 0.000 | 0.040 | 1.237 | 0.17 % | 0.17 % |
+| counterfact | paraphrase | new | epc0_minus_bp0 | 600 | 29.5 % | 6.987 | 9.587 | 9.353 | 10.516 | 28.67 % | 28.50 % |
+| counterfact | paraphrase | new | ePC s1 | 600 | 0.7 % | 1.552 | 0.000 | 0.200 | 3.865 | 0.50 % | 0.50 % |
+| counterfact | paraphrase | new | epc1_minus_bp1 | 600 | 8.7 % | 5.856 | 8.646 | 7.370 | 9.494 | 8.17 % | 8.17 % |
+| counterfact | paraphrase | new | ePC s2 | 600 | 0.3 % | 0.618 | 0.000 | 0.040 | 1.237 | 0.17 % | 0.17 % |
+| counterfact | paraphrase | new | epc2_minus_bp2 | 600 | 22.7 % | 7.032 | 9.704 | 9.211 | 11.317 | 22.33 % | 22.33 % |
+| counterfact | unseen | new | BP s0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | BP s1 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | BP s2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | ePC s0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | epc0_minus_bp0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | ePC s1 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | epc1_minus_bp1 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | ePC s2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| counterfact | unseen | new | epc2_minus_bp2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | edit | new | BP s0 | 300 | 0.0 % | — | -2.208 | -2.662 | -1.792 | 0.00 % | 0.00 % |
+| zsre | edit | new | BP s1 | 300 | 0.0 % | — | -2.208 | -2.662 | -1.792 | 0.00 % | 0.00 % |
+| zsre | edit | new | BP s2 | 300 | 0.0 % | — | -2.208 | -2.662 | -1.792 | 0.00 % | 0.00 % |
+| zsre | edit | new | ePC s0 | 300 | 0.0 % | — | -2.208 | -2.662 | -1.792 | 0.00 % | 0.00 % |
+| zsre | edit | new | epc0_minus_bp0 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | edit | new | ePC s1 | 300 | 0.0 % | — | -2.208 | -2.662 | -1.792 | 0.00 % | 0.00 % |
+| zsre | edit | new | epc1_minus_bp1 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | edit | new | ePC s2 | 300 | 0.0 % | — | -2.208 | -2.662 | -1.792 | 0.00 % | 0.00 % |
+| zsre | edit | new | epc2_minus_bp2 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | BP s0 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | BP s1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | BP s2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | ePC s0 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | epc0_minus_bp0 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | ePC s1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | epc1_minus_bp1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | ePC s2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality | true | epc2_minus_bp2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | BP s0 | 296 | 1.0 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | BP s1 | 296 | 1.0 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | BP s2 | 296 | 1.0 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | ePC s0 | 296 | 1.0 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | epc0_minus_bp0 | 296 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | ePC s1 | 296 | 1.0 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | epc1_minus_bp1 | 296 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | ePC s2 | 296 | 1.0 % | 0.000 | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | locality_item | true | epc2_minus_bp2 | 296 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | near_miss_neighbour | true | BP s0 | 100 | 7.0 % | 3.586 | 5.418 | 4.114 | 7.749 | 6.00 % | 6.00 % |
+| zsre | near_miss_neighbour | true | BP s1 | 100 | 14.0 % | 2.991 | 5.418 | 4.994 | 7.749 | 13.00 % | 11.00 % |
+| zsre | near_miss_neighbour | true | BP s2 | 100 | 11.0 % | 3.070 | 5.418 | 4.616 | 7.749 | 10.00 % | 9.00 % |
+| zsre | near_miss_neighbour | true | ePC s0 | 100 | 2.0 % | 5.363 | 3.026 | 1.788 | 7.749 | 2.00 % | 2.00 % |
+| zsre | near_miss_neighbour | true | epc0_minus_bp0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | near_miss_neighbour | true | ePC s1 | 100 | 7.0 % | 2.940 | 5.202 | 3.360 | 7.749 | 6.00 % | 5.00 % |
+| zsre | near_miss_neighbour | true | epc1_minus_bp1 | 100 | 6.0 % | 3.314 | 4.229 | 3.314 | 4.863 | 6.00 % | 5.00 % |
+| zsre | near_miss_neighbour | true | ePC s2 | 100 | 6.0 % | 2.749 | 3.026 | 2.749 | 7.749 | 5.00 % | 4.00 % |
+| zsre | near_miss_neighbour | true | epc2_minus_bp2 | 100 | 4.0 % | 3.454 | 4.229 | 2.303 | 4.863 | 4.00 % | 3.00 % |
+| zsre | paraphrase | new | BP s0 | 300 | 0.3 % | 1.552 | 0.000 | -1.114 | 1.552 | 0.33 % | 0.33 % |
+| zsre | paraphrase | new | BP s1 | 300 | 0.3 % | 1.552 | -1.894 | -2.009 | 1.552 | 0.33 % | 0.33 % |
+| zsre | paraphrase | new | BP s2 | 300 | 0.3 % | 1.552 | 0.000 | -1.297 | 1.552 | 0.33 % | 0.33 % |
+| zsre | paraphrase | new | ePC s0 | 300 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | paraphrase | new | epc0_minus_bp0 | 300 | 2.7 % | 6.165 | 6.022 | 3.082 | 7.906 | 2.67 % | 2.67 % |
+| zsre | paraphrase | new | ePC s1 | 300 | 0.3 % | 1.552 | 0.000 | -0.933 | 1.552 | 0.33 % | 0.33 % |
+| zsre | paraphrase | new | epc1_minus_bp1 | 300 | 2.0 % | 4.584 | 4.763 | 1.719 | 6.285 | 2.00 % | 2.00 % |
+| zsre | paraphrase | new | ePC s2 | 300 | 0.0 % | — | 0.000 | -1.577 | 0.000 | 0.00 % | 0.00 % |
+| zsre | paraphrase | new | epc2_minus_bp2 | 300 | 0.7 % | 4.783 | 0.000 | 0.598 | 4.804 | 0.67 % | 0.67 % |
+| zsre | unseen | new | BP s0 | 100 | 4.0 % | 2.543 | 2.529 | 1.696 | 5.669 | 3.00 % | 3.00 % |
+| zsre | unseen | new | BP s1 | 100 | 10.0 % | 2.890 | 5.676 | 4.044 | 6.349 | 9.00 % | 8.00 % |
+| zsre | unseen | new | BP s2 | 100 | 9.0 % | 3.001 | 5.676 | 4.044 | 6.349 | 8.00 % | 7.00 % |
+| zsre | unseen | new | ePC s0 | 100 | 2.0 % | 4.084 | 2.529 | 1.361 | 5.669 | 2.00 % | 2.00 % |
+| zsre | unseen | new | epc0_minus_bp0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
+| zsre | unseen | new | ePC s1 | 100 | 5.0 % | 4.007 | 5.676 | 3.339 | 6.349 | 5.00 % | 5.00 % |
+| zsre | unseen | new | epc1_minus_bp1 | 100 | 4.0 % | 5.175 | 6.091 | 3.450 | 8.253 | 4.00 % | 4.00 % |
+| zsre | unseen | new | ePC s2 | 100 | 4.0 % | 4.043 | 5.676 | 2.696 | 6.349 | 4.00 % | 4.00 % |
+| zsre | unseen | new | epc2_minus_bp2 | 100 | 2.0 % | 5.820 | 3.436 | 1.940 | 8.253 | 2.00 % | 2.00 % |
 
 Worst fifteen regressions at 300 edits:
 
-
+| dataset | family | target | model | item | subject | D | L_frozen | L_model | fired | max rel. write |
+|---|---|---|---|---|---|---|---|---|---|---|
+| zsre | near_miss_neighbour | true | ePC s2 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | ePC s0 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | ePC s1 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | BP s0 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | BP s2 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | BP s1 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | unseen | new | ePC s2 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | BP s2 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | ePC s1 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | BP s1 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | BP s2 | zsre-train-2345 | Angela Petrelli | 5.67 | 9.37 | 15.03 | True | 0.123 |
+| zsre | unseen | new | ePC s1 | zsre-train-2345 | Angela Petrelli | 5.67 | 9.37 | 15.03 | True | 0.123 |
+| zsre | unseen | new | ePC s0 | zsre-train-2345 | Angela Petrelli | 5.67 | 9.37 | 15.03 | True | 0.123 |
+| zsre | unseen | new | BP s0 | zsre-train-2345 | Angela Petrelli | 5.67 | 9.37 | 15.03 | True | 0.123 |
+| zsre | unseen | new | BP s1 | zsre-train-2345 | Angela Petrelli | 5.67 | 9.37 | 15.03 | True | 0.123 |
 
 ## 8. CAP correction mechanisms [new]
 
 Write magnitudes are the vectors actually added at the three sites at each scored prediction position (captured from the base's partial-pass call during `predict`), with ‖h_m‖ the pre-write residual row at the same position; the frozen model has structural zeros and is not fitted.
 
-_section unavailable at this stage (KeyError('horizon'))_
+| dataset | family | model | n | fired | mean max ‖W‖ site 1 (block 4) | site 2 (block 8) | site 3 (block 12) | mean max rel. site 1 | site 2 | site 3 | P95 rel. (max over sites) | max rel. |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| zsre | edit | BP reader s0 | 300 | 300 | 7.069 | 10.658 | 47.257 | 0.1075 | 0.1057 | 0.1232 | 0.1735 | 0.2306 |
+| zsre | paraphrase | BP reader s0 | 300 | 293 | 7.069 | 10.658 | 47.336 | 0.1070 | 0.1054 | 0.1234 | 0.1749 | 0.2097 |
+| zsre | edit | BP reader s1 | 300 | 300 | 7.069 | 10.658 | 47.257 | 0.1075 | 0.1057 | 0.1232 | 0.1735 | 0.2306 |
+| zsre | paraphrase | BP reader s1 | 300 | 298 | 7.069 | 10.658 | 47.307 | 0.1071 | 0.1055 | 0.1234 | 0.1748 | 0.2097 |
+| zsre | edit | BP reader s2 | 300 | 300 | 7.069 | 10.658 | 47.257 | 0.1075 | 0.1057 | 0.1232 | 0.1735 | 0.2306 |
+| zsre | paraphrase | BP reader s2 | 300 | 294 | 7.069 | 10.658 | 47.313 | 0.1071 | 0.1055 | 0.1233 | 0.1741 | 0.2097 |
+| zsre | edit | ePC reader s0 | 300 | 300 | 7.069 | 10.658 | 47.257 | 0.1075 | 0.1057 | 0.1232 | 0.1735 | 0.2306 |
+| zsre | paraphrase | ePC reader s0 | 300 | 284 | 7.069 | 10.658 | 47.284 | 0.1070 | 0.1054 | 0.1230 | 0.1746 | 0.2097 |
+| zsre | edit | ePC reader s1 | 300 | 300 | 7.069 | 10.658 | 47.257 | 0.1075 | 0.1057 | 0.1232 | 0.1735 | 0.2306 |
+| zsre | paraphrase | ePC reader s1 | 300 | 292 | 7.069 | 10.658 | 47.305 | 0.1070 | 0.1054 | 0.1233 | 0.1749 | 0.2097 |
+| zsre | edit | ePC reader s2 | 300 | 300 | 7.069 | 10.658 | 47.257 | 0.1075 | 0.1057 | 0.1232 | 0.1735 | 0.2306 |
+| zsre | paraphrase | ePC reader s2 | 300 | 294 | 7.069 | 10.658 | 47.280 | 0.1070 | 0.1054 | 0.1231 | 0.1748 | 0.2097 |
+| counterfact | edit | BP reader s0 | 300 | 300 | 7.066 | 10.658 | 44.890 | 0.1076 | 0.1043 | 0.1199 | 0.1409 | 0.1906 |
+| counterfact | paraphrase | BP reader s0 | 600 | 513 | 7.064 | 10.658 | 44.912 | 0.1110 | 0.1093 | 0.1176 | 0.1381 | 0.1620 |
+| counterfact | edit | BP reader s1 | 300 | 297 | 7.066 | 10.658 | 44.859 | 0.1076 | 0.1044 | 0.1199 | 0.1409 | 0.1906 |
+| counterfact | paraphrase | BP reader s1 | 600 | 504 | 7.065 | 10.658 | 44.842 | 0.1111 | 0.1094 | 0.1172 | 0.1377 | 0.1620 |
+| counterfact | edit | BP reader s2 | 300 | 300 | 7.066 | 10.658 | 44.890 | 0.1076 | 0.1043 | 0.1199 | 0.1409 | 0.1906 |
+| counterfact | paraphrase | BP reader s2 | 600 | 526 | 7.066 | 10.659 | 44.812 | 0.1111 | 0.1095 | 0.1173 | 0.1379 | 0.1620 |
+| counterfact | edit | ePC reader s0 | 300 | 300 | 7.066 | 10.658 | 44.890 | 0.1076 | 0.1043 | 0.1199 | 0.1409 | 0.1906 |
+| counterfact | paraphrase | ePC reader s0 | 600 | 353 | 7.063 | 10.658 | 45.017 | 0.1104 | 0.1086 | 0.1164 | 0.1381 | 0.1620 |
+| counterfact | edit | ePC reader s1 | 300 | 300 | 7.066 | 10.658 | 44.890 | 0.1076 | 0.1043 | 0.1199 | 0.1409 | 0.1906 |
+| counterfact | paraphrase | ePC reader s1 | 600 | 488 | 7.065 | 10.658 | 44.893 | 0.1110 | 0.1093 | 0.1174 | 0.1379 | 0.1620 |
+| counterfact | edit | ePC reader s2 | 300 | 300 | 7.066 | 10.658 | 44.890 | 0.1076 | 0.1043 | 0.1199 | 0.1409 | 0.1906 |
+| counterfact | paraphrase | ePC reader s2 | 600 | 410 | 7.064 | 10.658 | 45.096 | 0.1107 | 0.1088 | 0.1173 | 0.1389 | 0.1620 |
 
 ![Write norms vs difficulty and gain](../../../../../assets/extremes_analysis/ext-20261009/figures/write_norms.png)
 
 Rank correlations (Spearman) and joint extremes:
 
-_section unavailable at this stage (KeyError('horizon'))_
+| dataset | family | model | n | fired | ρ(frozen NLL, write) | ρ(write, gain) | ρ(frozen NLL, gain) | ρ(write, gain) fired only |
+|---|---|---|---|---|---|---|---|---|
+| counterfact | edit | BP s0 | 300 | 300 | +0.15 (p=0.0081) | +0.15 (p=0.0078) | +1.00 (p=0) | +0.15 (p=0.0078) |
+| counterfact | edit | BP s1 | 300 | 297 | +0.14 (p=0.015) | +0.18 (p=0.0014) | +0.96 (p=9.6e-175) | +0.16 (p=0.006) |
+| counterfact | edit | BP s2 | 300 | 300 | +0.15 (p=0.0081) | +0.15 (p=0.0078) | +1.00 (p=0) | +0.15 (p=0.0078) |
+| counterfact | edit | ePC s0 | 300 | 300 | +0.15 (p=0.0081) | +0.15 (p=0.0078) | +1.00 (p=0) | +0.15 (p=0.0078) |
+| counterfact | edit | ePC s1 | 300 | 300 | +0.15 (p=0.0081) | +0.15 (p=0.0078) | +1.00 (p=0) | +0.15 (p=0.0078) |
+| counterfact | edit | ePC s2 | 300 | 300 | +0.15 (p=0.0081) | +0.15 (p=0.0078) | +1.00 (p=0) | +0.15 (p=0.0078) |
+| counterfact | paraphrase | BP s0 | 600 | 513 | +0.11 (p=0.0059) | +0.47 (p=1e-34) | +0.66 (p=1.2e-76) | +0.17 (p=0.00013) |
+| counterfact | paraphrase | BP s1 | 600 | 504 | +0.04 (p=0.32) | +0.48 (p=4.1e-36) | +0.60 (p=4.7e-61) | +0.13 (p=0.003) |
+| counterfact | paraphrase | BP s2 | 600 | 526 | +0.10 (p=0.015) | +0.41 (p=2.8e-25) | +0.72 (p=5.6e-98) | +0.12 (p=0.0056) |
+| counterfact | paraphrase | ePC s0 | 600 | 353 | +0.03 (p=0.46) | +0.82 (p=2.3e-149) | +0.30 (p=1.2e-13) | +0.22 (p=2.7e-05) |
+| counterfact | paraphrase | ePC s1 | 600 | 488 | +0.12 (p=0.0042) | +0.53 (p=6.6e-45) | +0.62 (p=8.8e-65) | +0.15 (p=0.0011) |
+| counterfact | paraphrase | ePC s2 | 600 | 410 | +0.06 (p=0.12) | +0.72 (p=7.7e-96) | +0.43 (p=5.1e-29) | +0.15 (p=0.0019) |
+| counterfact | unseen | BP s0 | 100 | 0 | — | — | — | — |
+| counterfact | unseen | BP s1 | 100 | 1 | -0.12 (p=0.23) | +1.00 (p=0) | -0.12 (p=0.23) | — |
+| counterfact | unseen | BP s2 | 100 | 0 | — | — | — | — |
+| counterfact | unseen | ePC s0 | 100 | 0 | — | — | — | — |
+| counterfact | unseen | ePC s1 | 100 | 1 | -0.12 (p=0.23) | +1.00 (p=0) | -0.12 (p=0.23) | — |
+| counterfact | unseen | ePC s2 | 100 | 0 | — | — | — | — |
+| zsre | edit | BP s0 | 300 | 300 | -0.22 (p=0.00015) | -0.22 (p=0.00016) | +1.00 (p=0) | -0.22 (p=0.00016) |
+| zsre | edit | BP s1 | 300 | 300 | -0.22 (p=0.00015) | -0.22 (p=0.00016) | +1.00 (p=0) | -0.22 (p=0.00016) |
+| zsre | edit | BP s2 | 300 | 300 | -0.22 (p=0.00015) | -0.22 (p=0.00016) | +1.00 (p=0) | -0.22 (p=0.00016) |
+| zsre | edit | ePC s0 | 300 | 300 | -0.22 (p=0.00015) | -0.22 (p=0.00016) | +1.00 (p=0) | -0.22 (p=0.00016) |
+| zsre | edit | ePC s1 | 300 | 300 | -0.22 (p=0.00015) | -0.22 (p=0.00016) | +1.00 (p=0) | -0.22 (p=0.00016) |
+| zsre | edit | ePC s2 | 300 | 300 | -0.22 (p=0.00015) | -0.22 (p=0.00016) | +1.00 (p=0) | -0.22 (p=0.00016) |
+| zsre | paraphrase | BP s0 | 300 | 293 | -0.16 (p=0.0054) | -0.09 (p=0.11) | +0.97 (p=2.9e-177) | -0.17 (p=0.003) |
+| zsre | paraphrase | BP s1 | 300 | 298 | -0.18 (p=0.0022) | -0.15 (p=0.0092) | +0.99 (p=3e-239) | -0.17 (p=0.0027) |
+| zsre | paraphrase | BP s2 | 300 | 294 | -0.16 (p=0.0049) | -0.11 (p=0.068) | +0.97 (p=4.6e-189) | -0.17 (p=0.0028) |
+| zsre | paraphrase | ePC s0 | 300 | 284 | -0.14 (p=0.018) | +0.02 (p=0.74) | +0.91 (p=1e-116) | -0.16 (p=0.0086) |
+| zsre | paraphrase | ePC s1 | 300 | 292 | -0.14 (p=0.012) | -0.08 (p=0.15) | +0.97 (p=6.7e-189) | -0.17 (p=0.0028) |
+| zsre | paraphrase | ePC s2 | 300 | 294 | -0.15 (p=0.011) | -0.10 (p=0.091) | +0.98 (p=9.1e-207) | -0.17 (p=0.0042) |
+| zsre | unseen | BP s0 | 100 | 4 | +0.04 (p=0.72) | -1.00 (p=7.7e-159) | -0.04 (p=0.68) | — |
+| zsre | unseen | BP s1 | 100 | 14 | +0.06 (p=0.58) | -0.48 (p=4.6e-07) | -0.03 (p=0.79) | -0.73 (p=0.0029) |
+| zsre | unseen | BP s2 | 100 | 11 | +0.05 (p=0.61) | -0.67 (p=4.3e-14) | -0.07 (p=0.49) | -0.66 (p=0.026) |
+| zsre | unseen | ePC s0 | 100 | 2 | +0.22 (p=0.031) | -1.00 (p=0) | -0.22 (p=0.031) | — |
+| zsre | unseen | ePC s1 | 100 | 5 | +0.16 (p=0.11) | -1.00 (p=3e-157) | -0.16 (p=0.11) | — |
+| zsre | unseen | ePC s2 | 100 | 4 | +0.10 (p=0.34) | -1.00 (p=3.3e-182) | -0.10 (p=0.32) | — |
 
-_section unavailable at this stage (KeyError('horizon'))_
+| dataset | model | n (locality-type probes) | |A| | |B| | |A∩B| | P(A) | P(A|B) | tail lift | A | B |
+|---|---|---|---|---|---|---|---|---|---|---|
+| counterfact | BP s0 | 1150 | 0 | 4 | 0 | 0.000 | 0.000 | — | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| counterfact | BP s1 | 1150 | 0 | 6 | 0 | 0.000 | 0.000 | — | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| counterfact | BP s2 | 1150 | 0 | 1 | 0 | 0.000 | 0.000 | — | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| counterfact | ePC s0 | 1150 | 1 | 11 | 1 | 0.001 | 0.091 | 104.55 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| counterfact | ePC s1 | 1150 | 4 | 21 | 4 | 0.003 | 0.190 | 54.76 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| counterfact | ePC s2 | 1150 | 0 | 5 | 0 | 0.000 | 0.000 | — | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| zsre | BP s0 | 546 | 14 | 12 | 11 | 0.026 | 0.917 | 35.75 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| zsre | BP s1 | 546 | 27 | 35 | 24 | 0.049 | 0.686 | 13.87 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| zsre | BP s2 | 546 | 23 | 27 | 20 | 0.042 | 0.741 | 17.58 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| zsre | ePC s0 | 546 | 7 | 5 | 4 | 0.013 | 0.800 | 62.40 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| zsre | ePC s1 | 546 | 15 | 13 | 12 | 0.027 | 0.923 | 33.60 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| zsre | ePC s2 | 546 | 13 | 11 | 10 | 0.024 | 0.909 | 38.18 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
 
 ## 9. MQuAKE reasoning and sequential behaviour
 
@@ -348,6 +809,7 @@ Sequential behaviour along the real teaching order (order 100) **[recomputed]** 
 | counterfact | epc s0 | 300 | 100.0 % | 56.3 % | 0 | 0 | -0.04 | 0.08 | -0.05 |
 | counterfact | epc s1 | 300 | 100.0 % | 78.3 % | 0 | 0 | 0.01 | -0.03 | -0.17 |
 | counterfact | epc s2 | 300 | 100.0 % | 66.5 % | 0 | 0 | -0.09 | 0.08 | 0.01 |
+| mquake | bp s0 | 300 | 100.0 % | 62.0 % | 0 | 0 | -0.02 | -0.00 | -0.01 |
 | zsre | bp s0 | 300 | 100.0 % | 97.3 % | 0 | 0 | -0.03 | -0.03 | -0.03 |
 | zsre | bp s1 | 300 | 100.0 % | 99.3 % | 0 | 0 | -0.01 | -0.01 | -0.01 |
 | zsre | bp s2 | 300 | 100.0 % | 97.7 % | 0 | 0 | -0.02 | -0.02 | -0.02 |
@@ -373,9 +835,9 @@ Exploratory coupled-entropy profile (discrete, α = 1, k = 1; q(κ) = (1+2κ)/(1
 
 ## 12. Reproducibility appendix
 
-- **Code:** `pc_cap/aw/extremes/` at revision `b376dfe5cb32`; tests `aw/tests/test_extremes_stats.py` (CPU) and `aw/extremes/validate_gpu.py` (GPU; record in `validation/gpu_checks.json`).
+- **Code:** `pc_cap/aw/extremes/` at revision `27915e25fa88`; tests `aw/tests/test_extremes_stats.py` (CPU) and `aw/extremes/validate_gpu.py` (GPU; record in `validation/gpu_checks.json`).
 - **Commands:** `results/extremes_analysis/ext-20261009/scripts/run_gpu_chain.sh` (frozen scoring → reader scoring → MQuAKE evaluations → MQuAKE scoring) and `scripts/run_cpu_pipeline.sh` (assemble → paired → tails → datasets → nelson → figures → report). Environment: Python 3.12.15, jax/jaxlib 0.11.1, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5, pyarrow 25.0.1, matplotlib 3.11.1; RTX 5070 (12 GiB), driver 615.71.09.
 - **Inputs (hash-checked at load):** sealed recipes `docs/tasks/R1-final-cell-recipes/{61348508…, ce0d0ffc…, 43925e53…}.json` and their payloads; reader artifacts `assets/runs/additional_work/PC-reader/train-*/theta_avg150-300.npz`; memory snapshots `…/eval-*/stream/checkpoint-{100,300}.snapshot`; harm vectors `results/additional_work/PC-reader/eval-*/harm/vectors.npz`; HT-17 `logs/additional_work/HT-17/snapshot-20261004-complete/report.json`.
 - **Outputs:** parquet under `assets/extremes_analysis/ext-20261009/data/` (example manifest = `scores.parquet` metadata columns + `case_populations.parquet`; `scores.parquet`, `generations.parquet`, `paired_cases.parquet`, `dataset_statistics.parquet`, `tail_fits.parquet`, `bootstrap_results.parquet`, `paired_gains.parquet`, `difficulty_deciles.parquet`); CSV tables under `tables/`; figures under `assets/extremes_analysis/ext-20261009/figures/` with `captions.json`; raw per-probe records as JSONL chunks with a hash manifest under `assets/extremes_analysis/ext-20261009/checkpoints/scores/`; MQuAKE evaluation receipts under `results/extremes_analysis/ext-20261009/mquake_eval/`.
-- **Data dictionary:** `reports/data_dictionary.md`. **Artifact registry:** `manifest.json` (29 artifacts with SHA-256).
+- **Data dictionary:** `reports/data_dictionary.md`. **Artifact registry:** `manifest.json` (37 artifacts with SHA-256).
 - **Formulas:** §3 (losses, margins), §6 (harm, ES99+, GPD), §7 (gains, D, CVaR, deciles), §10 (coupled entropy). Natural logarithms throughout.

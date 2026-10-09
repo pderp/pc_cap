@@ -1,0 +1,31 @@
+/home/derp/cap/pc_cap/aw/extremes/paired.py:140: RuntimeWarning: Mean of empty slice
+  row = dict(horizon=h, model=name, n=int(len(y)), frac_worse=float((D > 0).mean()), mean_positive_deterioration=(float(pos.mean()) if pos.size else None), p95_D=float(np.percentile(D, 95)), p99_D=float(np.percentile(D, 99)),
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/aw/extremes/paired.py", line 263, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/aw/extremes/paired.py", line 243, in main
+    rr, ww = regression_blocks(x, h)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/extremes/paired.py", line 140, in regression_blocks
+    row = dict(horizon=h, model=name, n=int(len(y)), frac_worse=float((D > 0).mean()), mean_positive_deterioration=(float(pos.mean()) if pos.size else None), p95_D=float(np.percentile(D, 95)), p99_D=float(np.percentile(D, 99)),
+                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_function_base_impl.py", line 4258, in percentile
+    return _quantile_unchecked(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_function_base_impl.py", line 4522, in _quantile_unchecked
+    return _ureduce(a,
+           ^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_function_base_impl.py", line 3892, in _ureduce
+    r = func(a, **kwargs)
+        ^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_function_base_impl.py", line 4681, in _quantile_ureduce_func
+    result = _quantile(arr,
+             ^^^^^^^^^^^^^^
+  File "/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_function_base_impl.py", line 4805, in _quantile
+    slices_having_nans = np.isnan(arr[-1, ...])
+                                  ~~~^^^^^^^^^
+IndexError: index -1 is out of bounds for axis 0 with size 0
