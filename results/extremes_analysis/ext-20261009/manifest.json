@@ -182,6 +182,61 @@
       "dataset": "zsre",
       "horizon": 100,
       "n_probes": 1350
+    },
+    "scores/bp_reader_s0/counterfact/h300": {
+      "path": "/home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/scores/bp_reader_s0/counterfact/h300/chunks.json",
+      "sha256": "c3a4815c17e10fb1bf3836739df3ae8054e3f0763dd6ac3ca2978bc0a911764a",
+      "recorded": "2026-10-09T22:19:53+00:00",
+      "model": "bp_reader_s0",
+      "dataset": "counterfact",
+      "horizon": 300,
+      "n_probes": 2300
+    },
+    "scores/bp_reader_s1/counterfact/h300": {
+      "path": "/home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/scores/bp_reader_s1/counterfact/h300/chunks.json",
+      "sha256": "5617afcab28a7008f01b9d12f5cf23d0e340f25fe95aaef9850f9dfac3ae1c56",
+      "recorded": "2026-10-09T22:21:12+00:00",
+      "model": "bp_reader_s1",
+      "dataset": "counterfact",
+      "horizon": 300,
+      "n_probes": 2300
+    },
+    "scores/bp_reader_s2/counterfact/h300": {
+      "path": "/home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/scores/bp_reader_s2/counterfact/h300/chunks.json",
+      "sha256": "d69605c01d33644680426ba5e4caa2dbf49ead47a7c6362dc27df3476d58395d",
+      "recorded": "2026-10-09T22:22:30+00:00",
+      "model": "bp_reader_s2",
+      "dataset": "counterfact",
+      "horizon": 300,
+      "n_probes": 2300
+    },
+    "scores/epc_reader_s0/counterfact/h300": {
+      "path": "/home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/scores/epc_reader_s0/counterfact/h300/chunks.json",
+      "sha256": "fa54a310f5d5fd4333106b70b4936392392a8f732dd0cbea4006f1c2051c0e87",
+      "recorded": "2026-10-09T22:23:52+00:00",
+      "model": "epc_reader_s0",
+      "dataset": "counterfact",
+      "horizon": 300,
+      "n_probes": 2300
+    },
+    "scores/epc_reader_s1/counterfact/h300": {
+      "path": "/home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/scores/epc_reader_s1/counterfact/h300/chunks.json",
+      "sha256": "f419b8e3819118a291631e4647517eb48c72ffb987e4cc639e4c708191c73132",
+      "recorded": "2026-10-09T22:25:12+00:00",
+      "model": "epc_reader_s1",
+      "dataset": "counterfact",
+      "horizon": 300,
+      "n_probes": 2300
+    },
+    "reports/research_report_md": {
+      "path": "/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/research_report.md",
+      "sha256": "c012e3b6531c505ee0a6370e6a33ade716f1c6948d6d3443c6e0078653d176e9",
+      "recorded": "2026-10-09T22:25:48+00:00"
+    },
+    "reports/research_report_pdf": {
+      "path": "/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/research_report.pdf",
+      "sha256": "f0c2a3029f38db7415497916e08c7ca16be0fc594d1946083280ee1cb347f7ca",
+      "recorded": "2026-10-09T22:25:48+00:00"
     }
   },
   "stages": {
@@ -232,8 +287,8 @@
     },
     "8_figures": {
       "status": "updated",
-      "updated": "2026-10-09T22:19:03+00:00",
-      "code_sha": "44e19ff831e0e944d288e7a4896a40577c597102",
+      "updated": "2026-10-09T22:25:45+00:00",
+      "code_sha": "b376dfe5cb3275d255ea8ce4635352d4163a7ead",
       "figures": [
         "frozen_surprisal",
         "harm_survival_pcreader",
@@ -245,7 +300,46 @@
         "fig_cvar",
         "fig_deciles"
       ]
+    },
+    "7_nelson": {
+      "status": "complete",
+      "updated": "2026-10-09T22:20:44+00:00",
+      "code_sha": "b376dfe5cb3275d255ea8ce4635352d4163a7ead",
+      "tests": {
+        "point_mass_zero": true,
+        "shannon_at_zero": true,
+        "uniform_closed_form": true,
+        "convergence_to_shannon": true,
+        "rejects_unnormalized": true
+      },
+      "profiles": 60,
+      "scale_checks": 6,
+      "identity_all_hold": true
+    },
+    "8_report": {
+      "status": "updated",
+      "updated": "2026-10-09T22:25:48+00:00",
+      "code_sha": "b376dfe5cb3275d255ea8ce4635352d4163a7ead",
+      "pdf": "ok",
+      "pdf_log": "\n )\n(see the transcript file for additional information)\nOutput written on /home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/\nreports/_tex/research_report.pdf (18 pages).\nTranscript written on /home/derp/cap/pc_cap/results/extremes_analysis/ext-20261\n009/reports/_tex/research_report.log.\n"
     }
   },
-  "warnings": []
+  "warnings": [
+    {
+      "time": "2026-10-09T22:25:10+00:00",
+      "text": "report section section_mechanism unavailable: KeyError('horizon')"
+    },
+    {
+      "time": "2026-10-09T22:25:15+00:00",
+      "text": "report section section_mechanism unavailable: KeyError('horizon')"
+    },
+    {
+      "time": "2026-10-09T22:25:23+00:00",
+      "text": "report section section_mechanism unavailable: KeyError('horizon')"
+    },
+    {
+      "time": "2026-10-09T22:25:46+00:00",
+      "text": "report section section_mechanism unavailable: KeyError('horizon')"
+    }
+  ]
 }

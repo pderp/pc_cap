@@ -89,7 +89,9 @@ def convert(md: str, root: Path) -> str:
         m = re.match(r"^!\[(.*?)\]\((.+?)\)", l.strip())
         if m:
             path = (root / m.group(2)).resolve()
-            out.append(r"\begin{figure}[H]\centering\includegraphics[width=\textwidth]{" + str(path).replace("\\", "/") + "}\caption{" + inline(m.group(1)) + "}\end{figure}")
+            if not path.exists():
+                out.append(r"\emph{[figure not available at this stage: " + esc(path.name) + "]}"); i += 1; continue
+            out.append(r"\begin{figure}[H]\centering\includegraphics[width=\textwidth]{" + str(path) + r"}\caption{" + inline(m.group(1)) + r"}\end{figure}")
             i += 1; continue
         if re.match(r"^\s*[-*]\s+", l):
             j = i
@@ -119,8 +121,8 @@ def convert(md: str, root: Path) -> str:
 
 
 PREAMBLE = r"""\documentclass[10pt,a4paper]{article}
-\usepackage{fontspec}\setmainfont{DejaVu Serif}\setmonofont{DejaVu Sans Mono}[Scale=0.85]
-\usepackage[margin=2.2cm]{geometry}\usepackage{graphicx}\usepackage{float}\usepackage{booktabs}\usepackage{tabularx}\usepackage{amsmath}\usepackage{hyperref}\usepackage{microtype}
+\usepackage{fontspec}\setmainfont{Latin Modern Roman}\setsansfont{DejaVu Sans}\setmonofont{Latin Modern Mono}[Scale=0.9]\usepackage{unicode-math}\setmathfont{Latin Modern Math}
+\usepackage[margin=2.2cm]{geometry}\usepackage{graphicx}\usepackage{float}\usepackage{booktabs}\usepackage{tabularx}\usepackage{amsmath}\usepackage{xcolor}\usepackage{hyperref}\usepackage{microtype}
 \hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
 \setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
 \title{%s}\author{%s}\date{%s}

@@ -1,0 +1,653 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{fontspec}\setmainfont{Latin Modern Roman}\setsansfont{DejaVu Sans}\setmonofont{Latin Modern Mono}[Scale=0.9]\usepackage{unicode-math}\setmathfont{Latin Modern Math}
+\usepackage[margin=2.2cm]{geometry}\usepackage{graphicx}\usepackage{float}\usepackage{booktabs}\usepackage{tabularx}\usepackage{amsmath}\usepackage{xcolor}\usepackage{hyperref}\usepackage{microtype}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
+\setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
+\title{Frozen GPT-2, ePC-trained and BP-trained reader caps: ordinary performance, dataset extremes and heavy tails (ext-20261009)}\author{Capstan (pc\_cap)}\date{2026-10-09}
+\begin{document}\maketitle\tableofcontents\clearpage
+\section{Frozen GPT-2, ePC-trained reader cap and BP-trained reader cap on zsRE, CounterFact and MQuAKE: ordinary performance, dataset extremes and heavy tails}
+
+
+
+Study \texttt{ext-20261009} · Capstan · 2026-10-09 · pc\_cap code revision \texttt{b376dfe5cb32} · commissioned by \texttt{docs/AgentHandoffForResearchInTheExtremes.md} as amended by \texttt{docs/mandatory\_ammendment.md}.
+
+
+
+Provenance tags: \textbf{[record]} previously established in the frozen record and copied with its hashes; \textbf{[recomputed]} recomputed in this study from saved data; \textbf{[new]} newly evaluated in this study (own manifest \texttt{results/extremes\_analysis/ext-20261009/manifest.json}). The frozen record was not modified.
+
+
+
+\subsection{1. Abstract and executive summary}
+
+
+
+\textbf{Question.} Across zsRE, CounterFact and MQuAKE, how do (i) frozen GPT-2 small without a cap, (ii) GPT-2 with the reader cap trained by error predictive coding (ePC) and (iii) GPT-2 with the same cap trained by backprop (BP) compare in ordinary benchmark performance, prediction difficulty, heavy-tail behaviour, extreme losses, adaptation benefit, correction magnitude, locality and stability — and does the ePC-trained cap show advantages in rare or extreme cases that survive a direct comparison with the BP-trained cap?
+
+
+
+\textbf{Design.} The principal comparison is the frozen record's PC-reader study (family PCR): three paired training seeds per rule, identical architecture (3,348,228 reader parameters, taps and writes at blocks 4/8/12), identical initial parameters and training episodes within seed, adjoint acquisition in both arms, evaluated on realization 0 / order 100 with 300 edits on zsRE and CounterFact (checkpoints 100 and 300). This study adds \textbf{[new]}: a directly loaded frozen GPT-2 scored on exactly the same probes; teacher-forced target log-probabilities for all seven models on every probe (edit prompts, paraphrases, locality, near-miss, revision, unseen, MQuAKE multi-hop questions); the six saved readers evaluated on the sealed MQuAKE stream (0/6 complete at report time); write-vector magnitudes at every scored position; dataset frequency/entropy/shift statistics; and finite-range tail fits that start from a field-by-field reproduction of HT-17.
+
+
+
+\textbf{Headline findings.}
+
+
+
+\begin{itemize}
+\item \textbf{zsre, paraphrase retention at 300 edits:} BP 97.3 \%, 99.0 \%, 97.7 \%; ePC 94.7 \%, 97.0 \%, 98.0 \% (seeds 0, 1, 2; 300 items each). Frozen: 0.0 \%.
+\item \textbf{counterfact, paraphrase retention at 300 edits:} BP 81.0 \%, 80.0 \%, 83.5 \%; ePC 56.8 \%, 77.8 \%, 66.0 \% (seeds 0, 1, 2; 300 items each). Frozen: 0.0 \%.
+\item \textbf{Neither cap beats the frozen model everywhere.} Both caps convert the taught facts (own-prompt loss falls from ≈ 6 nats/token to ≈ 0.01) and both leave the frozen model's behaviour unchanged where they abstain; the differences between ePC- and BP-trained readers are differences of \emph{gating}: which paraphrases and un-taught prompts trigger a write. Where a reader abstains, its loss equals the frozen loss to the bit.
+\item \textbf{ePC vs BP.} On CounterFact the ePC-trained reader retains fewer paraphrases in all three seeds (frozen record), and its per-probe paraphrase loss is higher than BP's in the paired contrast; on zsRE the two rules are close with mixed signs. No analysis in this study (difficulty deciles, frozen-hard subsets, regressions, correction magnitudes) finds a regime of rare or extreme cases where the ePC-trained reader is reliably better than the BP-trained reader. Training cost remains 96–102× \textbf{[record]}.
+\item \textbf{Extremes.} Frozen difficulty is heavy in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset) but the fitted generalized-Pareto shapes of the \emph{probe} losses are near zero or negative with intervals that include zero; the ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large deteriorations exist for both caps and are concentrated on prompts where a wrong record fired.
+\item \textbf{Qualifications.} One subject realization and one order; three training seeds are not three populations; GPT-2 small only; the frozen model answers essentially none of these prompts under the project's greedy convention, so the frozen baseline is informative through teacher-forced losses, not through exact-match rates.
+\end{itemize}
+
+
+
+\subsection{2. Research questions and architectures}
+
+
+
+The cap is an episodic memory with a learned reader attached to a frozen GPT-2 small (12 blocks, 124,439,808 parameters, params digest \texttt{c4ac3fb8…}). Reads tap the residual stream after blocks 4, 8 and 12; writes add one vector per site at the current prediction position. Each edit is taught by five adjoint delta steps (lr 0.1, acceptance τ 0.1, aggregate budget A = 0.3) and appended as a record (key = prompt embedding at the three taps; payload = per-answer-token write deltas [3, 768]). At query time the reader scores the prompt against the nearest stored keys and keeps a null option; null mass ≥ 0.5 means no write, so the output equals the base to the bit. There is no inference-time iteration in either cap; the eight settling steps of ePC are a \emph{training-time} quantity.
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXX@{}}
+\toprule
+model & what differs & checkpoint & where evaluated \\ \midrule
+frozen GPT-2 small \textbf{[new]} & no reader, no memory, no writes & base params only & all probes, all datasets (Stage 2) \\
+BP reader, seeds 0–2 \textbf{[record]} & reader trained by backprop (300 AdamW updates; feedforward answer CE, cached float16 teacher) & \texttt{train-bp-s*/theta\_avg150-300.npz} & zsRE/CounterFact (record); MQuAKE (this study) \\
+ePC reader, seeds 0–2 \textbf{[record]} & same episodes and initial parameters; base-dependent gradients from \texttt{EPCTrainer} (8 zero-initialised settling steps, rate 0.1, corrected SD-24 energy); 23.4–24.6 h vs 0.24–0.25 h & \texttt{train-epc-s*/theta\_avg150-300.npz} & same \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+Verified differences between the two caps (handoff §1): architecture, parameter count, interface, acquisition rule, evaluation population and scoring code are identical; only the training-time gradient estimator for the base-dependent losses differs (settled ePC CE vs feedforward CE; float32 vs cached float16 teacher), hence the weights and the cost. The validation record \texttt{validation/gpu\_checks.json} confirms: the directly loaded weights have the record's digest; a direct forward reproduces the saved cap-off losses to 0.000050 nats over 1524 positions; a reader with an empty memory, and a loaded memory on prompts where it abstains, returns the base logits exactly; the residual insertion arithmetic h\_after = h\_before + Δh holds at the site; saved RET-GS/RET-ES recompute exactly from the saved rows.
+
+
+
+Families kept distinct and reported separately: Stage-4 \texttt{R1\_learned\_ff} (selected v5 BP-trained reader, 1,000 edits, 3 realizations × 5 orders) \textbf{[record]}; fixed-v5 acquisition credit (adjoint vs error inference, reader fixed) \textbf{[record]}; PC-v0 (regenerated ePC 50M base, v0 live cap) \textbf{[record, supplementary only]}.
+
+
+
+\subsection{3. Datasets and evaluation methodology}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXX@{}}
+\toprule
+dataset & version used & pool & principal stream & probes per item & notes \\ \midrule
+zsRE & MEND release, train split rows; \texttt{zsre\_eligible.jsonl} (10,420 eligible of 10,720 screened; 0 answered by the base) & 10,420 & realization 0, order 100, first 300 of 1,000 & 1 paraphrase, 1 NQ locality prompt & no relation ids; target = first \texttt{answers[]} entry \\
+CounterFact & original CounterFact; \texttt{counterfact\_eligible.jsonl} (20,091 of 20,391; 0 answered by the base) & 20,091 & same & 2 paraphrases, \textasciitilde{}10 neighbourhood prompts (first 3 scored) & \texttt{target\_true} retained; relation ids \\
+MQuAKE & \textbf{MQuAKE-CF} (9,218 cases; DEC-045); single-hop rewrite items + 80 composition cases per realization & 6,043 items & 300 items & 1 question-form paraphrase, 2 locality prompts & \texttt{target\_true}/\texttt{target\_new} with QIDs; 3 multi-hop questions per case \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+Endpoint bundles per realization: 50 locality prompts, 100 near-miss pairs (distinct subjects within matched relation/template families; the reference is the cell's own cap-off neighbour response), 50 revision cases, 100 unseen prompts (un-taught pool items; false-fire measurement), and for MQuAKE 80 composition cases. Original metrics \textbf{[record]}: ES (immediate own-prompt success), RET-ES/RET-GS (end-of-stream own-prompt / paraphrase retention), LS (DEC-053 bounded exact decoded-text equality with the original-base response; \emph{not} factual accuracy), near-miss preservation, revision, unseen false fires. Decoding: greedy, ≤ 32 new tokens, stop at newline/EOS; exact match of the NFKC/casefold/whitespace-normalised generation against supplied aliases.
+
+
+
+Standardised measurements \textbf{[new]}: for prompt x\_i and answer tokens y\_i,1..T\_i (the project's tokenisation: leading space, newline terminator), logP\_i = Σ\_t log p(y\_i,t | x\_i, y\_i,<t) under teacher forcing with one prediction per gold prefix (the cap's writes act at every prediction position, exactly as the record's diagnostic); NLL\_total\_i = −logP\_i; NLL\_token\_i = NLL\_total\_i / T\_i (primary continuous difficulty measure); totals without the terminator are retained. Margins margin\_total = logP(target\_new) − logP(target\_true) and margin\_token = −NLL\_token(new) + NLL\_token(true). All seven models score the same serialised prompt/answer pairs; identical bucket padding; float64 log-softmax of float32 logits. Reader selection (record ids, null mass, hard null) and write norms ‖W\_m‖ and ‖W\_m‖/‖h\_m‖ are recorded at every scored position. Probe counts: zsRE 1,350, CounterFact 2,300 (item-locality capped at 3 per item), MQuAKE 1,890 (incl. 240 composition questions).
+
+
+
+Uncertainty: 2,000-draw percentile bootstrap resampling whole groups (items for item-level families, endpoint rows otherwise) with the same indices for every model (pairing preserved); windows for ordinary text; seeds reported individually and as a descriptive seed mean. These intervals cover within-population sampling only; no interval here speaks to new subjects or new training seeds.
+
+
+
+\subsection{4. Basic benchmark results}
+
+
+
+\subsubsection{4.1 Registered metrics (original conventions, numerators/denominators)}
+
+
+
+\subsubsection{zsre}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXX@{}}
+\toprule
+edits & model & ES & RET-ES & RET-GS (primary) & LS & near-miss & unseen false fires & MQuAKE composition (all 3 questions) \\ \midrule
+300 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
+300 & BP reader s0 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 97.3 \% (292/300) & 100.0 \% (50/50) & 85.0 \% (85/100) & 4/100 &  \\
+300 & BP reader s1 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 99.0 \% (297/300) & 100.0 \% (50/50) & 67.0 \% (67/100) & 14/100 &  \\
+300 & BP reader s2 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 97.7 \% (293/300) & 100.0 \% (50/50) & 73.0 \% (73/100) & 11/100 &  \\
+300 & ePC reader s0 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 94.7 \% (284/300) & 100.0 \% (50/50) & 91.0 \% (91/100) & 2/100 &  \\
+300 & ePC reader s1 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 97.0 \% (291/300) & 100.0 \% (50/50) & 85.0 \% (85/100) & 5/100 &  \\
+300 & ePC reader s2 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 98.0 \% (294/300) & 100.0 \% (50/50) & 85.0 \% (85/100) & 4/100 &  \\
+100 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
+100 & BP reader s0 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 96.0 \% (96/100) & 100.0 \% (50/50) & 80.0 \% (80/100) & 5/100 &  \\
+100 & BP reader s1 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 99.0 \% (99/100) & 100.0 \% (50/50) & 56.0 \% (56/100) & 13/100 &  \\
+100 & BP reader s2 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 96.0 \% (96/100) & 100.0 \% (50/50) & 66.0 \% (66/100) & 8/100 &  \\
+100 & ePC reader s0 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 92.0 \% (92/100) & 100.0 \% (50/50) & 88.0 \% (88/100) & 2/100 &  \\
+100 & ePC reader s1 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 92.0 \% (92/100) & 100.0 \% (50/50) & 80.0 \% (80/100) & 5/100 &  \\
+100 & ePC reader s2 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 95.0 \% (95/100) & 100.0 \% (50/50) & 82.0 \% (82/100) & 4/100 &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\subsubsection{counterfact}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXX@{}}
+\toprule
+edits & model & ES & RET-ES & RET-GS (primary) & LS & near-miss & unseen false fires & MQuAKE composition (all 3 questions) \\ \midrule
+300 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/600) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
+300 & BP reader s0 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 81.0 \% (243/300) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
+300 & BP reader s1 [record] & 99.0 \% (297/300) & 99.0 \% (297/300) & 80.0 \% (240/300) & 100.0 \% (50/50) & 99.0 \% (99/100) & 1/100 &  \\
+300 & BP reader s2 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 83.5 \% (250.5/300) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
+300 & ePC reader s0 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 56.8 \% (170.5/300) & 100.0 \% (50/50) & 98.0 \% (98/100) & 0/100 &  \\
+300 & ePC reader s1 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 77.8 \% (233.5/300) & 100.0 \% (50/50) & 95.0 \% (95/100) & 1/100 &  \\
+300 & ePC reader s2 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 66.0 \% (198/300) & 100.0 \% (50/50) & 99.0 \% (99/100) & 0/100 &  \\
+100 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/600) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
+100 & BP reader s0 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 85.0 \% (85/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
+100 & BP reader s1 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 85.0 \% (85/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
+100 & BP reader s2 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 86.5 \% (86.5/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
+100 & ePC reader s0 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 56.0 \% (56/100) & 100.0 \% (50/50) & 99.0 \% (99/100) & 0/100 &  \\
+100 & ePC reader s1 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 77.5 \% (77.5/100) & 100.0 \% (50/50) & 96.0 \% (96/100) & 0/100 &  \\
+100 & ePC reader s2 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 68.0 \% (68/100) & 100.0 \% (50/50) & 99.0 \% (99/100) & 0/100 &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\subsubsection{mquake}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXX@{}}
+\toprule
+edits & model & ES & RET-ES & RET-GS (primary) & LS & near-miss & unseen false fires & MQuAKE composition (all 3 questions) \\ \midrule
+300 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A & question-level new-answer exact 0.0 \%; old-answer exact 0.0 \% (N/A as all-question success: no edits) \\
+300 & BP reader s0 & not evaluated &  &  &  &  &  &  \\
+300 & BP reader s1 & not evaluated &  &  &  &  &  &  \\
+300 & BP reader s2 & not evaluated &  &  &  &  &  &  \\
+300 & ePC reader s0 & not evaluated &  &  &  &  &  &  \\
+300 & ePC reader s1 & not evaluated &  &  &  &  &  &  \\
+300 & ePC reader s2 & not evaluated &  &  &  &  &  &  \\
+100 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A & question-level new-answer exact 0.0 \%; old-answer exact 0.0 \% (N/A as all-question success: no edits) \\
+100 & BP reader s0 & not evaluated &  &  &  &  &  &  \\
+100 & BP reader s1 & not evaluated &  &  &  &  &  &  \\
+100 & BP reader s2 & not evaluated &  &  &  &  &  &  \\
+100 & ePC reader s0 & not evaluated &  &  &  &  &  &  \\
+100 & ePC reader s1 & not evaluated &  &  &  &  &  &  \\
+100 & ePC reader s2 & not evaluated &  &  &  &  &  &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+Reading: the frozen model's ES/RET-ES/RET-GS are its greedy answers against the taught aliases — zero by the eligibility screen (every item was selected because the base did \emph{not} answer it), and zero on paraphrases as well; its LS and near-miss are 1 by definition because its response \emph{is} the reference. The caps reach own-prompt retention of 99–100 \% and differ on paraphrases, near-miss preservation and false fires.
+
+
+
+\subsubsection{4.2 Standardised per-token losses (nats/token; mean over probes; 300-edit memories; frozen has no memory)}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXXX@{}}
+\toprule
+dataset & family & target & frozen & BP s0 & BP s1 & BP s2 & ePC s0 & ePC s1 & ePC s2 \\ \midrule
+zsre & edit & new & 6.009 (n=300) & 0.015 (n=300, fire 100 \%) & 0.015 (n=300, fire 100 \%) & 0.015 (n=300, fire 100 \%) & 0.015 (n=300, fire 100 \%) & 0.015 (n=300, fire 100 \%) & — \\
+zsre & paraphrase & new & 6.098 (n=300) & 0.161 (n=300, fire 98 \%) & 0.077 (n=300, fire 99 \%) & 0.142 (n=300, fire 98 \%) & 0.320 (n=300, fire 95 \%) & 0.168 (n=300, fire 97 \%) & — \\
+zsre & locality\_item & true & 6.223 (n=296) & 6.223 (n=296, fire 0 \%) & 6.223 (n=296, fire 0 \%) & 6.223 (n=296, fire 0 \%) & 6.223 (n=296, fire 0 \%) & 6.223 (n=296, fire 0 \%) & — \\
+zsre & near\_miss\_neighbour & true & 5.974 (n=100) & 6.192 (n=100, fire 8 \%) & 6.161 (n=100, fire 21 \%) & 6.141 (n=100, fire 16 \%) & 6.048 (n=100, fire 3 \%) & 6.147 (n=100, fire 8 \%) & — \\
+zsre & unseen & new & 6.128 (n=100) & 6.229 (n=100, fire 4 \%) & 6.209 (n=100, fire 14 \%) & 6.281 (n=100, fire 11 \%) & 6.209 (n=100, fire 2 \%) & 6.328 (n=100, fire 5 \%) & — \\
+counterfact & edit & new & 6.956 (n=300) & — & — & — & — & — & — \\
+counterfact & paraphrase & new & 7.369 (n=600) & — & — & — & — & — & — \\
+counterfact & locality\_item & true & 6.295 (n=900) & — & — & — & — & — & — \\
+counterfact & near\_miss\_neighbour & true & 7.167 (n=100) & — & — & — & — & — & — \\
+counterfact & unseen & new & 6.924 (n=100) & — & — & — & — & — & — \\
+counterfact & edit & true & 6.382 (n=300) & — & — & — & — & — & — \\
+mquake & edit & new & 5.171 (n=300) & — & — & — & — & — & — \\
+mquake & paraphrase & new & 6.048 (n=300) & — & — & — & — & — & — \\
+mquake & locality\_item & true & 4.487 (n=600) & — & — & — & — & — & — \\
+mquake & near\_miss\_neighbour & true & 5.204 (n=100) & — & — & — & — & — & — \\
+mquake & unseen & new & 5.284 (n=100) & — & — & — & — & — & — \\
+mquake & edit & true & 4.579 (n=300) & — & — & — & — & — & — \\
+mquake & composition & new & 6.611 (n=240) & — & — & — & — & — & — \\
+mquake & composition & old & 5.489 (n=240) & — & — & — & — & — & — \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\subsubsection{4.3 Counterfactual preference (probes with both \texttt{target\_new} and \texttt{target\_true})}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXX@{}}
+\toprule
+dataset & family & model & n & mean margin\_total (nats) & P(margin\_total > 0) & mean margin\_token & P(margin\_token > 0) \\ \midrule
+counterfact & edit & frozen GPT-2 & 300 & -1.149 & 30.3 \% & -0.574 & 30.3 \% \\
+counterfact & paraphrase & frozen GPT-2 & 600 & -1.146 & 31.2 \% & -0.573 & 31.2 \% \\
+mquake & edit & frozen GPT-2 & 300 & -2.467 & 36.0 \% & -0.592 & 45.0 \% \\
+mquake & paraphrase & frozen GPT-2 & 300 & -2.988 & 27.7 \% & -0.758 & 37.3 \% \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+Frozen GPT-2's original-fact performance: the frozen exact rate on \texttt{target\_true} for CounterFact/MQuAKE edit prompts is in \texttt{benchmark\_original.csv} (\texttt{original\_fact\_exact\_edit}); under the project's newline-stop greedy convention the base almost never emits a complete answer, so the teacher-forced \texttt{true}-target loss (table 4.2, family \texttt{edit}, target \texttt{true}) is the informative measure of what the base knew.
+
+
+
+\subsubsection{4.4 Context from the other families [record]}
+
+
+
+Stage-4 selected v5 reader (1,000 edits; 300 MQuAKE; three realizations × five orders): final RET-GS 96.03 \% zsRE, 67.80 \% CounterFact, 71.56 \% MQuAKE; all 45 learned-reader cells exceed mean KL 0.001; registered classifier labels unchanged (\texttt{docs/R1\_stage4\_report.md}). Fixed-v5 acquisition credit (realization 0, order 100, 300 edits): paraphrase retention 98.3 \%/98.3 \% (zsRE adjoint/error) and 80.7 \%/80.3 \% (CounterFact); error credit raised the single worst ordinary-text token loss (12.27 vs 9.26 nats on zsRE) at ≈ 35 \% more acquisition time (\texttt{docs/additional\_work/PC-v1\_report.md}). PC-v0 corrected credit on the \textbf{ePC 50M base} (not GPT-2 small): zsRE own-prompt retention +2.0 points, paraphrase −0.3 with mixed signs, CounterFact saturated (\texttt{docs/additional\_work/PC-v0\_report.md}). PC-reader training cost ratios ePC/BP: 102.1, 95.8, 96.7 (seeds 0, 1, 2).
+
+
+
+\subsection{5. Statistical characterisation of the datasets [new]}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXXXXXXXXXXXXX@{}}
+\toprule
+dataset & population & cases & K relations & H\_rel & N\_eff rel & K new targets & H\_target & N\_eff target & singleton targets & top-10 \% target share & K subjects & singleton subjects & H(target & rel) & prompt tok med & p99 & answer tok med & p99 & dup prompts \\ \midrule
+zsre & eligible & 10420 & n/a & n/a & n/a & 5704 & 7.886 & 2660.5 & 44.7 \% & 46.2 \% & 10420 & 100.0 \% & n/a & 11 & 18 & 3 & 10 & 0 &  \\
+zsre & reader\_train & 1000 & n/a & n/a & n/a & 799 & 6.471 & 646.4 & 71.8 \% & 28.0 \% & 1000 & 100.0 \% & n/a & 11 & 18 & 3 & 9 & 0 &  \\
+zsre & sealed\_r0 & 1000 & n/a & n/a & n/a & 779 & 6.412 & 609.0 & 69.3 \% & 29.1 \% & 1000 & 100.0 \% & n/a & 11 & 18 & 3 & 11 & 0 &  \\
+zsre & pcr\_r0\_300 & 300 & n/a & n/a & n/a & 262 & 5.470 & 237.5 & 81.3 \% & 21.7 \% & 300 & 100.0 \% & n/a & 11 & 19 & 3 & 11 & 0 &  \\
+counterfact & eligible & 20091 & 34 & 3.409 & 30.2 & 738 & 5.556 & 258.8 & 0.5 \% & 58.2 \% & 20091 & 100.0 \% & 3.016 & 8 & 14 & 2 & 2 & 0 &  \\
+counterfact & reader\_train & 1000 & 34 & 3.379 & 29.3 & 288 & 5.140 & 170.7 & 12.4 \% & 42.9 \% & 1000 & 100.0 \% & 2.284 & 8 & 15 & 2 & 2 & 0 &  \\
+counterfact & sealed\_r0 & 1000 & 34 & 3.383 & 29.5 & 291 & 5.210 & 183.1 & 12.0 \% & 39.1 \% & 1000 & 100.0 \% & 2.390 & 8 & 15 & 2 & 2 & 0 &  \\
+counterfact & pcr\_r0\_300 & 300 & 32 & 3.299 & 27.1 & 156 & 4.800 & 121.5 & 30.0 \% & 30.3 \% & 300 & 100.0 \% & 1.825 & 8 & 14 & 2 & 2 & 0 &  \\
+mquake & eligible & 6043 & 37 & 3.074 & 21.6 & 2308 & 6.683 & 798.4 & 27.4 \% & 56.6 \% & 5577 & 85.8 \% & 3.811 & 9 & 16 & 3 & 11 & 0 &  \\
+mquake & reader\_train & 500 & 37 & 3.072 & 21.6 & 318 & 5.424 & 226.7 & 51.2 \% & 36.8 \% & 500 & 100.0 \% & 2.453 & 8 & 16 & 3 & 11 & 0 &  \\
+mquake & sealed\_r0 & 300 & 34 & 2.928 & 18.7 & 213 & 5.113 & 166.2 & 59.3 \% & 32.0 \% & 300 & 100.0 \% & 2.229 & 9 & 15 & 3 & 9 & 0 &  \\
+mquake & pcr\_r0\_300 & 300 & 34 & 2.928 & 18.7 & 213 & 5.113 & 166.2 & 59.3 \% & 32.0 \% & 300 & 100.0 \% & 2.229 & 9 & 15 & 3 & 9 & 0 &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+Populations: \texttt{eligible} (screened pool), \texttt{reader\_train} (the first 1,000/1,000/500 items of the reader-training pools actually used), \texttt{sealed\_r0} (the realization-0 stream), \texttt{pcr\_r0\_300} (its first 300 items = the PC-reader horizon). zsRE has no relation labels, so relation entropy is not manufactured. Zipf slopes over ranks 1–100 and all ranks are in \texttt{dataset\_statistics.json}; a straight log-log segment is not a power-law test. Subject sets are disjoint between reader-training and sealed streams by construction (JS = ln 2 for subjects), so "rare in the benchmark" is a property of the draw, not of the world.
+
+
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{/home/derp/cap/assets/extremes_analysis/ext-20261009/figures/rank_frequency.png}\caption{Rank-frequency of relation, new-target and subject categories in each eligible pool}\end{figure}
+
+
+
+\subsubsection{5.1 Train/test shift (reader-training pool vs sealed realization 0)}
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXX@{}}
+\toprule
+dataset & variable (reader-train vs sealed r0) & JS (nats) & KL train‖test (α=0.5) & test categories unseen in train & median train count of test category & test categories with train count ≤ 1 \\ \midrule
+zsre & target\_new & 0.4884 & 0.476 & 68.4 \% & None & 77.4 \% \\
+zsre & subject & 0.6931 & 0.549 & 100.0 \% & None & 100.0 \% \\
+zsre & (subject, relation, target) triple overlap & 0.0000 &  &  &  &  \\
+counterfact & relation\_id & 0.0064 & 0.025 & 0.0 \% & None & 0.0 \% \\
+counterfact & target\_new & 0.1290 & 0.255 & 14.3 \% & None & 24.3 \% \\
+counterfact & target\_true & 0.1289 & 0.268 & 15.0 \% & None & 24.0 \% \\
+counterfact & subject & 0.6931 & 0.549 & 100.0 \% & None & 100.0 \% \\
+counterfact & (subject, relation, target) triple overlap & 0.0000 &  &  &  &  \\
+mquake & relation\_id & 0.0240 & 0.083 & 0.0 \% & None & 1.0 \% \\
+mquake & target\_new & 0.4045 & 0.428 & 51.0 \% & None & 67.3 \% \\
+mquake & target\_true & 0.3032 & 0.345 & 39.0 \% & None & 45.3 \% \\
+mquake & subject & 0.6931 & 0.481 & 100.0 \% & None & 100.0 \% \\
+mquake & (subject, relation, target) triple overlap & 0.0000 &  &  &  &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+MQuAKE-CF raw: 9,218 cases; hop counts \{'2': 4879, '3': 2535, '4': 1804\}; requested edits per case \{'1': 3755, '2': 3745, '3': 1282, '4': 436\}; 577 distinct relation chains (H = 5.093, N\_eff = 162.9); questions per case \{'3': 9218\}. Sealed r0 composition endpoint: 80 cases, hop counts \{'2': 61, '3': 16, '4': 3\}, edits per case \{'1': 78, '2': 2\}.
+
+
+
+\subsubsection{5.2 Baseline surprisal}
+
+
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{/home/derp/cap/assets/extremes_analysis/ext-20261009/figures/frozen_surprisal.png}\caption{Frozen GPT-2 per-token target surprisal on edit prompts}\end{figure}
+
+
+
+Frozen GPT-2 per-token surprisal on the 245,237 ordinary-text positions (loss\_capoff of a saved vector; identical in every cell): mean 4.080, median 3.468, P90 8.604, P95 10.129, P99 13.014, max 30.102, CVaR95 11.900 nats.
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXX@{}}
+\toprule
+quantile & u & excesses & fit & κ & window-bootstrap 95 \% κ & σ\_u & GPD − exp (nats/excess) \\ \midrule
+0.900 & 8.60 & 24524 & ok & -0.082 & [-0.100, -0.071] & 2.157 & 0.0053 \\
+0.950 & 10.13 & 12262 & ok & -0.046 & [-0.065, -0.028] & 1.852 & 0.0016 \\
+0.975 & 11.44 & 6131 & ok & -0.004 & [-0.032, 0.022] & 1.637 & 0.0000 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\subsection{6. Heavy tails and extreme-value statistics}
+
+
+
+Conventions (amendment §5): harm Δ = NLL(cap) − NLL(reference) at the same prefix on 1,931 windows / 245,237 ordinary-text positions, context reset per window; frequency P(Δ > 0.01), conditional severity, mean signed Δ, positive-part ES99+ including zero mass, maximum, KL(reference‖cap); fits of positive excesses with the record's analyser (\texttt{aw/tail\_class.py}: ≥ 100 excesses in ≥ 30 windows, 200 joint-window bootstrap draws, five-fold held-out windows). Shapes are finite-range fits.
+
+
+
+\subsubsection{6.1 HT-17 reproduced [recomputed]}
+
+
+
+The twelve PC-reader cells of HT-17 were re-analysed from the saved vectors with the identical window plan: all twelve agree field by field with the record (\texttt{tables/ht17\_reproduction\_checks.csv}).
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXXXXX@{}}
+\toprule
+dataset & reader & mean Δ & P(Δ>0.01) & severity & Δ>0.01 & ES99+ & max Δ & GPD fit (u=0.01) & shape ξ & window-bootstrap 95 \% ξ & GPD − exp (held-out nats/excess) \\ \midrule
+counterfact & bp s0 & 0.00202 & 0.0926 \% & 2.236 & 0.2070 & 8.52 & eligible & -0.237 & [-0.3663474617920617, -0.10987187602832728] & 0.0177 &  \\
+counterfact & bp s1 & 0.00535 & 0.2312 \% & 2.384 & 0.5513 & 12.50 & eligible & -0.073 & [-0.17203578355045349, 0.025482337358707852] & 0.0002 &  \\
+counterfact & bp s2 & 0.00118 & 0.0563 \% & 2.146 & 0.1208 & 9.86 & eligible & -0.017 & [-0.19572719991636117, 0.13631886053252565] & -0.0025 &  \\
+counterfact & epc s0 & 0.00128 & 0.0661 \% & 2.005 & 0.1324 & 7.71 & eligible & -0.262 & [-0.4595346692550026, -0.18667594740568436] & -0.0120 &  \\
+counterfact & epc s1 & 0.00628 & 0.2593 \% & 2.473 & 0.6413 & 12.36 & eligible & -0.125 & [-0.21571554625709155, -0.042876758451109116] & 0.0045 &  \\
+counterfact & epc s2 & 0.00195 & 0.1187 \% & 1.737 & 0.2061 & 12.62 & eligible & 0.059 & [-0.08314156141460716, 0.1536372239916112] & -0.0028 &  \\
+zsre & bp s0 & 0.00011 & 0.0061 \% & 1.913 & 0.0117 & 6.51 & not\_identified & — & nan & — &  \\
+zsre & bp s1 & 0.00013 & 0.0049 \% & 2.603 & 0.0127 & 7.92 & not\_identified & — & nan & — &  \\
+zsre & bp s2 & 0.00018 & 0.0077 \% & 2.366 & 0.0183 & 10.58 & not\_identified & — & nan & — &  \\
+zsre & epc s0 & 0.00000 & 0.0000 \% & — & 0.0000 & 0.00 & not\_identified & — & nan & — &  \\
+zsre & epc s1 & 0.00005 & 0.0016 \% & 2.971 & 0.0048 & 4.45 & not\_identified & — & nan & — &  \\
+zsre & epc s2 & 0.00000 & 0.0000 \% & — & 0.0000 & 0.00 & not\_identified & — & nan & — &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+Stage-4 and PC-reader group rows of the record at u = 0.01 (joint-window intervals):
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXX@{}}
+\toprule
+phase & dataset & condition & cells & P(Δ>0.01) & joint-window 95 \% & severity & Δ>0.01 & 95 \% \\ \midrule
+PC-reader & counterfact & bp & 3 & 0.1267 \% & [0.0011075000917479827, 0.0014353801968435974] & 2.313 & [2.1342213107689143, 2.4935930183721733] &  \\
+PC-reader & counterfact & epc & 3 & 0.1480 \% & [0.0013114184781796113, 0.00165309476139408] & 2.206 & [1.9959894167251206, 2.3879269465132116] &  \\
+PC-reader & zsre & bp & 3 & 0.0063 \% & [4.3461359147817554e-05, 8.434018249013541e-05] & 2.280 & [1.669787586387955, 2.9690646307080466] &  \\
+PC-reader & zsre & epc & 3 & 0.0005 \% & [1.359229371315639e-06, 1.0873834970525112e-05] & 2.971 & nan &  \\
+stage4 & counterfact & R1\_learned\_ff & 15 & 0.2984 \% & [0.002698715936012918, 0.003311932266881969] & 1.913 & [1.787692359694139, 2.038481970744697] &  \\
+stage4 & counterfact & R1\_nonlearned & 15 & 2.0450 \% & [0.019807553509462276, 0.021014046276323174] & 3.486 & [3.4310541951035685, 3.543411249719238] &  \\
+stage4 & counterfact & S1\_LM & 15 & 0.0000 \% & [0.0, 0.0] & — & nan &  \\
+stage4 & counterfact & matched\_update & 15 & 0.0000 \% & [0.0, 0.0] & — & nan &  \\
+stage4 & counterfact & v0\_live\_C1 & 15 & 0.0000 \% & [0.0, 0.0] & — & nan &  \\
+stage4 & counterfact & v0\_live\_C2 & 15 & 0.0000 \% & [0.0, 0.0] & — & nan &  \\
+stage4 & counterfact & v0\_stable & 15 & 0.0000 \% & [0.0, 0.0] & — & nan &  \\
+stage4 & zsre & R1\_learned\_ff & 15 & 0.1594 \% & [0.0013659575567036512, 0.0018256149493483175] & 1.630 & [1.4920869932987162, 1.7773165435470115] &  \\
+stage4 & zsre & R1\_nonlearned & 15 & 0.0266 \% & [0.00021475824066787095, 0.00031676840498510967] & 1.806 & [1.569139774342965, 2.0404365595543927] &  \\
+stage4 & zsre & S1\_LM & 15 & 0.1049 \% & [0.0009679819929292888, 0.001121139958489135] & 1.720 & [1.5195239612229534, 1.9584573033870891] &  \\
+stage4 & zsre & S1\_literal & 15 & 0.1041 \% & [0.0009622800257166196, 0.0011116729259179215] & 1.724 & [1.525384837399909, 1.9447672433920116] &  \\
+stage4 & zsre & matched\_update & 15 & 0.1053 \% & [0.0009755800851149432, 0.00111948169865613] & 1.677 & [1.49212395270612, 1.863103106670144] &  \\
+stage4 & zsre & v0\_live\_C1 & 15 & 0.0959 \% & [0.0008804612137102749, 0.001029820133177294] & 2.188 & [2.0116451239724857, 2.3972445342517155] &  \\
+stage4 & zsre & v0\_live\_C2 & 15 & 0.0187 \% & [0.0001601104237941257, 0.00021749708785107197] & 17.203 & [15.705115220435388, 18.74411932608538] &  \\
+stage4 & zsre & v0\_stable & 15 & 0.1041 \% & [0.0009596023438551279, 0.0011102933081060362] & 1.716 & [1.5190418264740821, 1.9330661984825812] &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\subsubsection{6.2 MQuAKE PC-reader harm [new]}
+
+
+
+\_MQuAKE PC-reader evaluations not complete yet\_
+
+
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{/home/derp/cap/assets/extremes_analysis/ext-20261009/figures/harm_survival_pcreader.png}\caption{Harm survival, PC-reader cells}\end{figure}
+
+
+
+\subsubsection{6.3 Per-probe target-loss tails [new]}
+
+
+
+Per-token NLL of the taught target on edit/paraphrase/unseen prompts; exceedances above the model's own P95; item-group bootstrap. Models that abstain share the frozen tail on those probes.
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXXXXXXX@{}}
+\toprule
+dataset & family & model & n & P95 & max & CVaR95 & u = P95 & excesses & fit & κ & item-bootstrap 95 \% κ & σ\_u & GPD − exp (in-sample nats/excess) \\ \midrule
+counterfact & edit & frozen GPT-2 & 300 & 9.12 & 11.70 & 10.06 & 9.12 & 15 & insufficient & — & [—, —] & — & — \\
+counterfact & paraphrase & frozen GPT-2 & 600 & 9.78 & 11.93 & 10.40 & 9.78 & 30 & insufficient & — & [—, —] & — & — \\
+counterfact & unseen & frozen GPT-2 & 100 & 9.45 & 10.01 & 9.70 & 9.45 & 5 & insufficient & — & [—, —] & — & — \\
+mquake & edit & frozen GPT-2 & 300 & 7.53 & 9.99 & 8.39 & 7.53 & 15 & insufficient & — & [—, —] & — & — \\
+mquake & paraphrase & frozen GPT-2 & 300 & 9.31 & 12.27 & 10.12 & 9.31 & 15 & insufficient & — & [—, —] & — & — \\
+mquake & unseen & frozen GPT-2 & 100 & 7.21 & 10.18 & 7.98 & 7.21 & 5 & insufficient & — & [—, —] & — & — \\
+zsre & edit & BP reader s0 & 300 & 0.04 & 0.06 & 0.04 & 0.04 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & edit & BP reader s1 & 300 & 0.04 & 0.06 & 0.04 & 0.04 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & edit & BP reader s2 & 300 & 0.04 & 0.06 & 0.04 & 0.04 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & edit & ePC reader s0 & 300 & 0.04 & 0.06 & 0.04 & 0.04 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & edit & ePC reader s1 & 300 & 0.04 & 0.06 & 0.04 & 0.04 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & edit & frozen GPT-2 & 300 & 9.71 & 12.22 & 10.91 & 9.71 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & paraphrase & BP reader s0 & 300 & 0.07 & 6.43 & 2.70 & 0.07 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & paraphrase & BP reader s1 & 300 & 0.05 & 6.43 & 1.13 & 0.05 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & paraphrase & BP reader s2 & 300 & 0.06 & 6.43 & 2.34 & 0.06 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & paraphrase & ePC reader s0 & 300 & 2.17 & 7.93 & 5.63 & 2.17 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & paraphrase & ePC reader s1 & 300 & 0.08 & 6.43 & 2.83 & 0.08 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & paraphrase & frozen GPT-2 & 300 & 10.83 & 12.69 & 11.33 & 10.83 & 15 & insufficient & — & [—, —] & — & — \\
+zsre & unseen & BP reader s0 & 100 & 10.07 & 15.03 & 11.58 & 10.07 & 5 & insufficient & — & [—, —] & — & — \\
+zsre & unseen & BP reader s1 & 100 & 11.35 & 15.03 & 12.71 & 11.35 & 5 & insufficient & — & [—, —] & — & — \\
+zsre & unseen & BP reader s2 & 100 & 11.35 & 15.03 & 12.71 & 11.35 & 5 & insufficient & — & [—, —] & — & — \\
+zsre & unseen & ePC reader s0 & 100 & 10.07 & 15.03 & 11.58 & 10.07 & 5 & insufficient & — & [—, —] & — & — \\
+zsre & unseen & ePC reader s1 & 100 & 10.92 & 15.03 & 12.62 & 10.92 & 5 & insufficient & — & [—, —] & — & — \\
+zsre & unseen & frozen GPT-2 & 100 & 9.38 & 12.08 & 10.35 & 9.38 & 5 & insufficient & — & [—, —] & — & — \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\emph{[figure not available at this stage: tail\_shapes\_probe\_loss.png]}
+
+
+
+\subsection{7. Performance and adaptation in the extremes [new]}
+
+
+
+\subsubsection{7.1 Paired gains over frozen GPT-2 and ePC vs BP}
+
+
+
+\_paired gains not available yet\_
+
+
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{/home/derp/cap/assets/extremes_analysis/ext-20261009/figures/paired_pc_minus_bp.png}\caption{Paired ePC − BP differences on paraphrases}\end{figure}
+
+
+
+\subsubsection{7.2 Gain versus frozen difficulty (deciles fixed by the frozen per-token NLL)}
+
+
+
+\_not available yet\_
+
+
+
+\emph{[figure not available at this stage: deciles\_zsre\_paraphrase.png]}
+
+
+
+\emph{[figure not available at this stage: deciles\_counterfact\_paraphrase.png]}
+
+
+
+\subsubsection{7.3 Two worst-case summaries (A: each model's own worst 5 \%; B: the frozen model's hardest 5 \%, fixed)}
+
+
+
+\_not available yet\_
+
+
+
+\emph{[figure not available at this stage: cvar\_A\_B.png]}
+
+
+
+\subsubsection{7.4 Rare and severe regressions (D = L\_model − L\_frozen; rows \texttt{epc\{s\}\_minus\_bp\{s\}} use L\_BP as reference)}
+
+
+
+\_not available yet\_
+
+
+
+Worst fifteen regressions at 300 edits:
+
+
+
+
+
+
+
+\subsection{8. CAP correction mechanisms [new]}
+
+
+
+Write magnitudes are the vectors actually added at the three sites at each scored prediction position (captured from the base's partial-pass call during \texttt{predict}), with ‖h\_m‖ the pre-write residual row at the same position; the frozen model has structural zeros and is not fitted.
+
+
+
+\_section unavailable at this stage (KeyError('horizon'))\_
+
+
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{/home/derp/cap/assets/extremes_analysis/ext-20261009/figures/write_norms.png}\caption{Write norms vs difficulty and gain}\end{figure}
+
+
+
+Rank correlations (Spearman) and joint extremes:
+
+
+
+\_section unavailable at this stage (KeyError('horizon'))\_
+
+
+
+\_section unavailable at this stage (KeyError('horizon'))\_
+
+
+
+\subsection{9. MQuAKE reasoning and sequential behaviour}
+
+
+
+MQuAKE's registered composition endpoint teaches each case's dependency edits from a fresh start state and asks all three multi-hop questions (all-question success; any-question and question-level rates are additional, not replacements). The Stage-4 v5 reader scored 0/80 all-question and 2/240 question-level at 300 edits \textbf{[record]}. This study's results for the six readers are in table 4.1 (MQuAKE rows, \texttt{composition}), with the frozen model's question-level old/new exact rates for reference; a failed multi-hop question is not by itself a cap failure, since GPT-2 small may lack the compositional step.
+
+
+
+\emph{[figure not available at this stage: mquake\_pcreader.png]}
+
+
+
+Sequential behaviour along the real teaching order (order 100) \textbf{[recomputed]} from the per-edit records:
+
+
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XXXXXXXXX@{}}
+\toprule
+dataset & reader & edits & immediate ES & immediate paraphrase score & ES failures & consecutive failures & ACF(gs) lag 1 & lag 2 & lag 3 \\ \midrule
+counterfact & bp s0 & 300 & 100.0 \% & 83.8 \% & 0 & 0 & 0.08 & -0.06 & -0.07 \\
+counterfact & bp s1 & 300 & 99.0 \% & 82.7 \% & 3 & 0 & -0.02 & -0.01 & -0.09 \\
+counterfact & bp s2 & 300 & 100.0 \% & 84.8 \% & 0 & 0 & -0.01 & -0.08 & 0.01 \\
+counterfact & epc s0 & 300 & 100.0 \% & 56.3 \% & 0 & 0 & -0.04 & 0.08 & -0.05 \\
+counterfact & epc s1 & 300 & 100.0 \% & 78.3 \% & 0 & 0 & 0.01 & -0.03 & -0.17 \\
+counterfact & epc s2 & 300 & 100.0 \% & 66.5 \% & 0 & 0 & -0.09 & 0.08 & 0.01 \\
+zsre & bp s0 & 300 & 100.0 \% & 97.3 \% & 0 & 0 & -0.03 & -0.03 & -0.03 \\
+zsre & bp s1 & 300 & 100.0 \% & 99.3 \% & 0 & 0 & -0.01 & -0.01 & -0.01 \\
+zsre & bp s2 & 300 & 100.0 \% & 97.7 \% & 0 & 0 & -0.02 & -0.02 & -0.02 \\
+zsre & epc s0 & 300 & 100.0 \% & 94.7 \% & 0 & 0 & -0.06 & 0.08 & -0.06 \\
+zsre & epc s1 & 300 & 100.0 \% & 96.7 \% & 0 & 0 & 0.07 & 0.07 & -0.03 \\
+zsre & epc s2 & 300 & 100.0 \% & 97.3 \% & 0 & 0 & -0.03 & 0.10 & -0.03 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+The ordinary-text assay is not a time series (context resets every window), so no sequential extreme analysis is manufactured there.
+
+
+
+\subsection{10. Connection with nonlinear statistical coupling (Nelson) [new, supplementary]}
+
+
+
+For every eligible GPD fit in this study the informational-scale condition −σ·d/dz ln f(z) at z = σ equals 1 (for the density f(z) = σ⁻¹(1 + κz/σ)\textasciicircum{}(−1/κ−1) this holds identically; checked numerically for 6 fits, all hold: True). The fitted σ is the scale of exceedances above the chosen threshold, not a threshold-free scale of the full loss distribution; shapes and scales are tabulated separately in sections 6.1–6.3. The GPD shape κ is Nelson's nonlinear coupling parameter in the one-dimensional α = 1 family; a fitted κ > 0 gives a modelled survival exponent 1/κ and must not be confused with the stretching parameter α.
+
+
+
+Exploratory coupled-entropy profile (discrete, α = 1, k = 1; q(κ) = (1+2κ)/(1+κ); H\_κ(p) = [1/Σ p\_j\textasciicircum{}q − 1]/κ; Shannon at κ = 0; self-tests: \{"point\_mass\_zero": true, "shannon\_at\_zero": true, "uniform\_closed\_form": true, "convergence\_to\_shannon": true, "rejects\_unnormalized": true\}), computed on the relation/new-target/subject frequency vectors of each population (\texttt{tables/coupled\_entropy\_profiles.csv}, 60 rows). Increasing κ lowers H\_κ for every non-uniform distribution and compresses differences between distributions with many rare categories; e.g. for the CounterFact eligible relation distribution H\_0 = 3.409 and H\_1 = 4.402. This is a sensitivity study of empirical categorical distributions, not a calibrated entropy of the system and not evidence for the paper's universal-entropy theorem; it is kept apart from the HT-17 fits. The earlier bounded κ-surprisal pilot \textbf{[record]} is not a test of the coupled-entropy objective.
+
+
+
+\subsection{11. Discussion and conclusions}
+
+
+
+\textbf{What the results establish.} On GPT-2 small, both reader caps install the taught facts (own-prompt per-token loss ≈ 0.01 nats against ≈ 6 for the frozen model) and are exactly the frozen model where they abstain. The ePC- and BP-trained readers differ in gating, not in the installed corrections (the memory payloads are produced by the same adjoint rule, so own-prompt losses coincide across all six readers). The frozen record's negative CounterFact result for ePC reader training is reproduced in the per-probe losses and persists across difficulty deciles, on the frozen model's hardest cases and in the regression tails; on zsRE the two rules are close. No analysis in this study isolates a rare-event regime in which ePC reader training is reliably better than BP reader training; the measured cost difference (≈ 100×) is unchanged.
+
+
+
+\textbf{Extremes.} The caps' collateral effects on ordinary text are rare and sometimes severe (HT-17 reproduced exactly; new MQuAKE rows in 6.2); the per-probe loss tails are dominated by the frozen model's own difficulty, with GPD shapes near zero. Severe per-probe regressions are concentrated on prompts where a wrong or stale record fired, which is why they correlate with write magnitude rather than with frozen difficulty.
+
+
+
+\textbf{What remains uncertain.} One realization, one order, three training seeds; MQuAKE PC-reader results are new and unreplicated; tail shapes are finite-range; the frozen model's exact-match rates are uninformative on these prompts; transfer beyond GPT-2 small is not established. Figures with fewer than 100 exceedances are marked exploratory or insufficient in the tables.
+
+
+
+\subsection{12. Reproducibility appendix}
+
+
+
+\begin{itemize}
+\item \textbf{Code:} \texttt{pc\_cap/aw/extremes/} at revision \texttt{b376dfe5cb32}; tests \texttt{aw/tests/test\_extremes\_stats.py} (CPU) and \texttt{aw/extremes/validate\_gpu.py} (GPU; record in \texttt{validation/gpu\_checks.json}).
+\item \textbf{Commands:} \texttt{results/extremes\_analysis/ext-20261009/scripts/run\_gpu\_chain.sh} (frozen scoring → reader scoring → MQuAKE evaluations → MQuAKE scoring) and \texttt{scripts/run\_cpu\_pipeline.sh} (assemble → paired → tails → datasets → nelson → figures → report). Environment: Python 3.12.15, jax/jaxlib 0.11.1, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5, pyarrow 25.0.1, matplotlib 3.11.1; RTX 5070 (12 GiB), driver 615.71.09.
+\item \textbf{Inputs (hash-checked at load):} sealed recipes \texttt{docs/tasks/R1-final-cell-recipes/\{61348508…, ce0d0ffc…, 43925e53…\}.json} and their payloads; reader artifacts \texttt{assets/runs/additional\_work/PC-reader/train-*/theta\_avg150-300.npz}; memory snapshots \texttt{…/eval-*/stream/checkpoint-\{100,300\}.snapshot}; harm vectors \texttt{results/additional\_work/PC-reader/eval-*/harm/vectors.npz}; HT-17 \texttt{logs/additional\_work/HT-17/snapshot-20261004-complete/report.json}.
+\item \textbf{Outputs:} parquet under \texttt{assets/extremes\_analysis/ext-20261009/data/} (example manifest = \texttt{scores.parquet} metadata columns + \texttt{case\_populations.parquet}; \texttt{scores.parquet}, \texttt{generations.parquet}, \texttt{paired\_cases.parquet}, \texttt{dataset\_statistics.parquet}, \texttt{tail\_fits.parquet}, \texttt{bootstrap\_results.parquet}, \texttt{paired\_gains.parquet}, \texttt{difficulty\_deciles.parquet}); CSV tables under \texttt{tables/}; figures under \texttt{assets/extremes\_analysis/ext-20261009/figures/} with \texttt{captions.json}; raw per-probe records as JSONL chunks with a hash manifest under \texttt{assets/extremes\_analysis/ext-20261009/checkpoints/scores/}; MQuAKE evaluation receipts under \texttt{results/extremes\_analysis/ext-20261009/mquake\_eval/}.
+\item \textbf{Data dictionary:} \texttt{reports/data\_dictionary.md}. \textbf{Artifact registry:} \texttt{manifest.json} (29 artifacts with SHA-256).
+\item \textbf{Formulas:} §3 (losses, margins), §6 (harm, ES99+, GPD), §7 (gains, D, CVaR, deciles), §10 (coupled entropy). Natural logarithms throughout.
+\end{itemize}
+\end{document}
