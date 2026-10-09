@@ -24,6 +24,7 @@ from aw.extremes import stats as S
 from aw.extremes.common import DATA, OUT, Status, atomic_csv, atomic_json, atomic_parquet
 
 SEEDS = (0, 1, 2)
+NOISE = 1e-3  # nats; float32 bucket-length reduction noise between scoring paths is ~1e-4 (validation/gpu_checks.json)
 FAMILIES_ITEM = ("edit", "paraphrase", "locality_item")
 DRAWS = 2000
 SEED = 20261009
@@ -54,7 +55,7 @@ def paired_block(x: pd.DataFrame, h: int):
         for name, g in (("G_PC", F - P), ("G_BP", F - B), ("G_PCvsBP", B - P)):
             def stat(idx, g=g):
                 v = g[idx]
-                return np.array([v.mean(), np.median(v), (v > 0).mean(), (v < 0).mean(), np.percentile(v, 5), np.percentile(v, 95), S.cvar(-v, 0.95)["value"]])
+                return np.array([v.mean(), np.median(v), (v > NOISE).mean(), (v < -NOISE).mean(), np.percentile(v, 5), np.percentile(v, 95), S.cvar(-v, 0.95)["value"]])
             bs = S.grouped_bootstrap(stat, groups, draws=DRAWS, seed=SEED)
             pt = bs["point"]
             out.append(dict(horizon=h, seed=s, gain=name, n=int(len(y)), n_groups=bs["n_groups"], mean=pt[0], median=pt[1], frac_helped=pt[2], frac_harmed=pt[3], p5=pt[4], p95=pt[5], worst5pct_mean_negative_gain=-pt[6], sd=float(g.std(ddof=1)),
@@ -63,7 +64,7 @@ def paired_block(x: pd.DataFrame, h: int):
     Bm = np.mean([y[c[f"bp{s}"]].to_numpy(float) for s in SEEDS], axis=0)
     Pm = np.mean([y[c[f"epc{s}"]].to_numpy(float) for s in SEEDS], axis=0)
     for name, g in (("G_PC", F - Pm), ("G_BP", F - Bm), ("G_PCvsBP", Bm - Pm)):
-        bs = S.grouped_bootstrap(lambda idx, g=g: np.array([g[idx].mean(), (g[idx] > 0).mean()]), groups, draws=DRAWS, seed=SEED)
+        bs = S.grouped_bootstrap(lambda idx, g=g: np.array([g[idx].mean(), (g[idx] > NOISE).mean()]), groups, draws=DRAWS, seed=SEED)
         out.append(dict(horizon=h, seed="mean", gain=name, n=int(len(y)), n_groups=bs["n_groups"], mean=bs["point"][0], frac_helped=bs["point"][1], mean_ci=[bs["ci_low"][0], bs["ci_high"][0]], frac_helped_ci=[bs["ci_low"][1], bs["ci_high"][1]]))
     return out
 
@@ -138,8 +139,8 @@ def regression_blocks(x: pd.DataFrame, h: int, thresholds=(0.5, 1.0, 2.0)):
         if name == "frozen":
             continue
         D = y[col].to_numpy(float) - F
-        pos = D[D > 0]
-        row = dict(horizon=h, model=name, n=int(len(y)), frac_worse=float((D > 0).mean()), mean_positive_deterioration=(float(pos.mean()) if pos.size else None), p95_D=float(np.percentile(D, 95)), p99_D=float(np.percentile(D, 99)),
+        pos = D[D > NOISE]
+        row = dict(horizon=h, model=name, n=int(len(y)), frac_worse=float((D > NOISE).mean()), mean_positive_deterioration=(float(pos.mean()) if pos.size else None), p95_D=float(np.percentile(D, 95)), p99_D=float(np.percentile(D, 99)),
                    worst5pct_mean_D=S.cvar(D, 0.95)["value"], max_D=float(D.max()))
         for t in thresholds:
             row[f"frac_D_gt_{t}"] = float((D > t).mean()); row[f"n_D_gt_{t}"] = int((D > t).sum())
@@ -152,7 +153,7 @@ def regression_blocks(x: pd.DataFrame, h: int, thresholds=(0.5, 1.0, 2.0)):
     # PC substantially worse than BP and vice versa (same seed)
     for s in SEEDS:
         D = y[c[f"epc{s}"]].to_numpy(float) - y[c[f"bp{s}"]].to_numpy(float)
-        rows.append(dict(horizon=h, model=f"epc{s}_minus_bp{s}", n=int(len(y)), frac_worse=float((D > 0).mean()), mean_positive_deterioration=(float(D[D > 0].mean()) if (D > 0).any() else None), p95_D=float(np.percentile(D, 95)), p99_D=float(np.percentile(D, 99)),
+        rows.append(dict(horizon=h, model=f"epc{s}_minus_bp{s}", n=int(len(y)), frac_worse=float((D > NOISE).mean()), mean_positive_deterioration=(float(D[D > NOISE].mean()) if (D > NOISE).any() else None), p95_D=float(np.percentile(D, 95)), p99_D=float(np.percentile(D, 99)),
                          worst5pct_mean_D=S.cvar(D, 0.95)["value"], max_D=float(D.max()), **{f"frac_D_gt_{t}": float((D > t).mean()) for t in thresholds}, **{f"frac_D_lt_minus_{t}": float((D < -t).mean()) for t in thresholds}))
     return rows, worst
 
@@ -200,7 +201,7 @@ def joint_extremes(x: pd.DataFrame, h: int):
             continue
         D = y[col].to_numpy(float) - y[c["frozen"]].to_numpy(float)
         W = y[w].fillna(0.0).to_numpy(float)
-        pos = D > 1e-9
+        pos = D > NOISE
         if pos.mean() >= 0.1:
             A, a_def = D >= np.quantile(D, 0.9), "locality deterioration in its worst 10 %"
         else:

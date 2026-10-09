@@ -107,6 +107,39 @@ def probe_surprisal_tails(paired: pd.DataFrame):
     return pd.DataFrame(rows)
 
 
+def token_level_tails(scores: pd.DataFrame):
+    """Per-token target surprisal pooled over all target tokens of a family (one value per token), groups = item_id.
+
+    Probe-level fits at P90/P95/P97.5 have 15-60 exceedances with 300-600 probes and are reported as insufficient;
+    the token-level variable (300 items x 2-6 target tokens, terminator excluded) reaches the 100-exceedance screen.
+    """
+    rows = []
+    ok = scores[(scores["status"] == "ok") & (scores["horizon"].isin([0, 300]))].copy()
+    # pooled probe families: new target for edit-type prompts, true target for locality-type prompts
+    keep = {("edit", "new"), ("paraphrase", "new"), ("unseen", "new"), ("locality_item", "true"), ("locality", "true"), ("near_miss_neighbour", "true")}
+    pooled = ok[[(a, b) in keep for a, b in zip(ok["family"], ok["target"])]].copy()
+    pooled["family"] = "pooled_probes"
+    pooled["target"] = "new/true"
+    ok = pd.concat([ok, pooled], ignore_index=True)
+    for (ds, fam, tgt, model), x in ok.groupby(["dataset", "family", "target", "model"]):
+        if fam == "composition":
+            continue
+        vals, groups = [], []
+        for pt, iid in zip(x["per_token_nll"], x["item_id"]):
+            v = json.loads(pt)[:-1]  # terminator excluded
+            vals += v
+            groups += [iid] * len(v)
+        v = np.asarray(vals, float)
+        if v.size < 200:
+            continue
+        d = S.describe(v)
+        for fit in S.threshold_fits(v, groups=np.asarray(groups), draws=200, seed=3):
+            rows.append(dict(dataset=ds, family=fam, target=tgt, model=model, n_tokens=d["n"], n_items=int(x["item_id"].nunique()), mean=d["mean"], p95=d["p95"], p99=d["p99"], max=d["max"], cvar95=d["cvar95"],
+                             **{("n_exceedances" if k == "n" else k): val for k, val in fit.items() if k != "bootstrap"},
+                             kappa_ci_low=(fit.get("bootstrap") or {}).get("kappa_ci", [None, None])[0], kappa_ci_high=(fit.get("bootstrap") or {}).get("kappa_ci", [None, None])[1]))
+    return pd.DataFrame(rows)
+
+
 def frozen_text_surprisal():
     """Per-token ordinary-text surprisal of the frozen base from a saved vector (identical in every cell: loss_capoff)."""
     vec = PCR / "eval-bp-s0-zsre/harm/vectors.npz"
@@ -129,13 +162,16 @@ def main():
     paired = pd.read_parquet(DATA / "data" / "paired_cases.parquet")
     pt = probe_surprisal_tails(paired)
     atomic_csv(OUT / "tables" / "probe_loss_tail_fits.csv", pt)
+    scores = pd.read_parquet(DATA / "data" / "scores.parquet")
+    tt = token_level_tails(scores)
+    atomic_csv(OUT / "tables" / "token_loss_tail_fits.csv", tt)
     atomic_parquet(DATA / "data" / "tail_fits.parquet", pd.concat([pt.assign(source="probes"), mq.assign(source="mquake_harm")], ignore_index=True) if not mq.empty else pt.assign(source="probes"))
     ft = frozen_text_surprisal()
     atomic_json(OUT / "tables" / "frozen_text_surprisal_tails.json", ft)
     st = Status()
     st.artifact("tables/ht17_reproduction_checks", OUT / "tables" / "ht17_reproduction_checks.csv", all_equal=bool(checks.drop(columns=["id"]).all().all()))
     st.artifact("data/tail_fits", DATA / "data" / "tail_fits.parquet")
-    st.stage("5_tails", "updated", ht17_cells_reproduced=int(len(checks)), ht17_all_equal=bool(checks.drop(columns=["id"]).all().all()), mquake_new_rows=int(len(mq)), probe_fit_rows=int(len(pt)))
+    st.stage("5_tails", "updated", ht17_cells_reproduced=int(len(checks)), ht17_all_equal=bool(checks.drop(columns=["id"]).all().all()), mquake_new_rows=int(len(mq)), probe_fit_rows=int(len(pt)), token_fit_rows=int(len(tt)))
     print(json.dumps(dict(ht17_cells=len(checks), all_equal=bool(checks.drop(columns=["id"]).all().all()), mquake_rows=len(mq), probe_fits=len(pt), frozen_text=ft["describe"])))
 
 

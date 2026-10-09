@@ -81,3 +81,45 @@
 {"status": "complete", "n_probes": 2300, "seconds": 80.05217452600118}
 2026-10-09T22:34:34Z end score epc_reader_s2 counterfact 100 exit 0
 2026-10-09T22:34:34Z start mquake_eval bp 0
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/derp/cap/pc_cap/aw/extremes/mquake_eval.py", line 118, in <module>
+    main()
+  File "/home/derp/cap/pc_cap/aw/extremes/mquake_eval.py", line 93, in main
+    reader = InterfacePositionBatchReader(adapter, batch_size=a.batch_size, guard=memory_guard,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/derp/cap/pc_cap/aw/interface_readout.py", line 29, in __init__
+    raise ValueError("batch_size must be an integer in [1,32]")
+ValueError: batch_size must be an integer in [1,32]
+2026-10-09T22:44:44Z end mquake_eval bp 0 exit 1
+2026-10-09T22:44:44Z start mquake_eval epc 0
+2026-10-09T22:46:20Z chain start
+2026-10-09T22:46:20Z skip score frozen zsre 
+2026-10-09T22:46:20Z skip score frozen counterfact 
+2026-10-09T22:46:20Z skip score frozen mquake 
+2026-10-09T22:46:20Z skip score bp_reader_s0 zsre 300
+2026-10-09T22:46:20Z skip score bp_reader_s1 zsre 300
+2026-10-09T22:46:20Z skip score bp_reader_s2 zsre 300
+2026-10-09T22:46:20Z skip score epc_reader_s0 zsre 300
+2026-10-09T22:46:20Z skip score epc_reader_s1 zsre 300
+2026-10-09T22:46:20Z skip score epc_reader_s2 zsre 300
+2026-10-09T22:46:20Z skip score bp_reader_s0 zsre 100
+2026-10-09T22:46:20Z skip score bp_reader_s1 zsre 100
+2026-10-09T22:46:20Z skip score bp_reader_s2 zsre 100
+2026-10-09T22:46:20Z skip score epc_reader_s0 zsre 100
+2026-10-09T22:46:20Z skip score epc_reader_s1 zsre 100
+2026-10-09T22:46:20Z skip score epc_reader_s2 zsre 100
+2026-10-09T22:46:20Z skip score bp_reader_s0 counterfact 300
+2026-10-09T22:46:20Z skip score bp_reader_s1 counterfact 300
+2026-10-09T22:46:20Z skip score bp_reader_s2 counterfact 300
+2026-10-09T22:46:20Z skip score epc_reader_s0 counterfact 300
+2026-10-09T22:46:20Z skip score epc_reader_s1 counterfact 300
+2026-10-09T22:46:20Z skip score epc_reader_s2 counterfact 300
+2026-10-09T22:46:20Z skip score bp_reader_s0 counterfact 100
+2026-10-09T22:46:20Z skip score bp_reader_s1 counterfact 100
+2026-10-09T22:46:20Z skip score bp_reader_s2 counterfact 100
+2026-10-09T22:46:20Z skip score epc_reader_s0 counterfact 100
+2026-10-09T22:46:20Z skip score epc_reader_s1 counterfact 100
+2026-10-09T22:46:20Z skip score epc_reader_s2 counterfact 100
+2026-10-09T22:46:20Z start mquake_eval bp 0

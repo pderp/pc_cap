@@ -20,7 +20,7 @@ score(){ # model dataset [horizon]
 mq(){ # rule seed
   local dir=$RUN/mquake_eval/eval-$1-s$2-mquake
   if [ -f "$dir/report.json" ]; then log "skip mquake_eval $1 $2"; return 0; fi
-  if [ -d "$dir" ]; then mv "$dir" "$dir.failed-$(date -u +%Y%m%dT%H%M%SZ)"; mv /home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/mquake_eval/eval-$1-s$2-mquake /home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/mquake_eval/eval-$1-s$2-mquake.failed-$(date -u +%Y%m%dT%H%M%SZ) 2>/dev/null; fi
+  if [ -d "$dir" ] && [ ! -f "$dir/stream/finish.json" ]; then mv "$dir" "$dir.failed-$(date -u +%Y%m%dT%H%M%SZ)"; mv /home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/mquake_eval/eval-$1-s$2-mquake /home/derp/cap/assets/extremes_analysis/ext-20261009/checkpoints/mquake_eval/eval-$1-s$2-mquake.failed-$(date -u +%Y%m%dT%H%M%SZ) 2>/dev/null; fi
   log "start mquake_eval $1 $2"
   $PY -m aw.extremes.mquake_eval --rule "$1" --seed "$2" --execute >> "$LOG" 2>&1
   log "end mquake_eval $1 $2 exit $?"

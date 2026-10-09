@@ -35,7 +35,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--rule", required=True, choices=["bp", "epc"])
     ap.add_argument("--seed", required=True, type=int, choices=[0, 1, 2])
-    ap.add_argument("--batch-size", type=int, default=64)
+    ap.add_argument("--batch-size", type=int, default=32)  # InterfacePositionBatchReader accepts 1..32
     ap.add_argument("--execute", action="store_true")
     a = ap.parse_args(argv)
     if not a.execute:
@@ -52,10 +52,13 @@ def main(argv=None):
 
     out = OUT / "mquake_eval" / f"eval-{a.rule}-s{a.seed}-mquake"
     resources = DATA / "checkpoints" / "mquake_eval" / f"eval-{a.rule}-s{a.seed}-mquake"
-    if out.exists() or resources.exists():
-        raise FileExistsError(f"new output required: {out}")
-    out.mkdir(parents=True)
-    resources.mkdir(parents=True)
+    if (out / "report.json").exists():
+        raise FileExistsError(f"evaluation already complete: {out}")
+    resume = (out / "stream" / "finish.json").exists() and json.loads((out / "stream" / "finish.json").read_bytes()).get("status") == "complete"
+    if (out.exists() or resources.exists()) and not resume:
+        raise FileExistsError(f"partial output present without a complete stream; move it aside: {out}")
+    out.mkdir(parents=True, exist_ok=True)
+    resources.mkdir(parents=True, exist_ok=True)
     t0 = time.monotonic()
     receipt = dict(status="failed", run_id=RUN_ID, family="EXT", scope="construction + acquisition/endpoints + composition + harm; components are subsets", code_sha=git_head(), started=now())
     try:
@@ -77,17 +80,27 @@ def main(argv=None):
                            population="new supplemental (ext-20261009): sealed R1_learned_ff MQuAKE realization 0 order 100, 300 edits",
                            source_recipe=identity["recipe"], payload_recipe=identity["recipe"], payload=pay_binding, sources_sha256=sources(), run_id=RUN_ID, family="EXT")
             fresh_state = cap.export_state().clone()
-            stream = run_stream(adapter, tok, pay, [100, 300], out / "stream", resources / "stream", context)
+            if resume:
+                # Resume after a failure past the stream: reload the completed 300-edit memory (hash-checked) and continue.
+                stream = json.loads((out / "stream" / "finish.json").read_bytes())
+                cp300 = json.loads((out / "stream" / "checkpoint-300.json").read_bytes())
+                M.restore_memory(adapter, cap, cp300["snapshot"])
+                receipt["resumed_from"] = dict(stream_finish=str(out / "stream" / "finish.json"), snapshot=cp300["snapshot"]["sha256"], note="stream and (if present) composition reused; harm readout rerun")
+            else:
+                stream = run_stream(adapter, tok, pay, [100, 300], out / "stream", resources / "stream", context)
             # Registered composition endpoint, as the Stage-4 backend ran it: independent fresh start state per case.
             assays = CellAssays(adapter, tok, max_new=32)
             state_before = cap.state_hash()
             items = [as_edit(r, tok) for r in pay["items"]]
-            t1 = time.monotonic()
-            comp = assays.composition(pay["endpoints"]["composition"], items, fresh_state)
-            if cap.state_hash() != state_before:
-                raise RuntimeError("composition changed the stream memory")
-            comp["elapsed_process_seconds"] = time.monotonic() - t1
-            atomic_json(out / "composition.json", comp)
+            if (out / "composition.json").exists():
+                comp = json.loads((out / "composition.json").read_bytes())
+            else:
+                t1 = time.monotonic()
+                comp = assays.composition(pay["endpoints"]["composition"], items, fresh_state)
+                if cap.state_hash() != state_before:
+                    raise RuntimeError("composition changed the stream memory")
+                comp["elapsed_process_seconds"] = time.monotonic() - t1
+                atomic_json(out / "composition.json", comp)
             adapter.reset_queries()
             windows, meta = selection("v5")
             reader = InterfacePositionBatchReader(adapter, batch_size=a.batch_size, guard=memory_guard,
@@ -101,6 +114,8 @@ def main(argv=None):
                           gate_telemetry=reader.telemetry, interface_accounting=cap.interface_accounting(), device_memory=device_memory(), other_cuda_processes=others)
             if sources() != context["sources_sha256"]:
                 raise ValueError("evaluation sources changed during execution")
+            if resume:
+                report["resumed_from"] = receipt["resumed_from"]
             atomic_json(out / "report.json", report)
             receipt["status"] = "complete"
     except BaseException as exc:
@@ -108,6 +123,8 @@ def main(argv=None):
         raise
     finally:
         receipt.update(elapsed_process_seconds=time.monotonic() - t0, peak_host_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024, finished=now())
+        if (out / "cost.json").exists():
+            (out / "cost.json").rename(out / f"cost.failed-{int(time.time())}.json")
         atomic_json(out / "cost.json", receipt)
         log_line("mquake_eval", f"{a.rule} s{a.seed} {receipt['status']} {receipt['elapsed_process_seconds']:.0f}s")
     Status().artifact(f"mquake_eval/{a.rule}_s{a.seed}", out / "report.json", rule=a.rule, seed=a.seed, seconds=receipt["elapsed_process_seconds"])

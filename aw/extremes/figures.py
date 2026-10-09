@@ -65,11 +65,11 @@ def fig_frozen_surprisal():
 
 
 def fig_tail_shapes():
-    p = OUT / "tables" / "probe_loss_tail_fits.csv"
+    p = OUT / "tables" / "token_loss_tail_fits.csv"
     if not p.exists():
         return
     t = pd.read_csv(p)
-    t = t[(t["family"] == "edit") & (t["target"] == "new") & (t["quantile"] == 0.95) & t["kappa"].notna()]
+    t = t[(t["family"] == "pooled_probes") & (t["quantile"] == 0.95) & t["kappa"].notna()]
     if t.empty:
         return
     fig, ax = plt.subplots(figsize=(9, 3.8))
@@ -77,10 +77,10 @@ def fig_tail_shapes():
     for i, (_, r) in enumerate(t.sort_values(["dataset", "model"]).iterrows()):
         lo, hi = r.get("kappa_ci_low"), r.get("kappa_ci_high")
         ax.errorbar(i, r["kappa"], yerr=[[r["kappa"] - lo] if pd.notna(lo) else [0], [hi - r["kappa"]] if pd.notna(hi) else [0]], fmt="o", color=COL["epc"] if "epc" in r["model"] else COL["bp"] if "bp" in r["model"] else COL["frozen"])
-        labels.append(f"{r['dataset']}\n{r['model']}")
-    ax.axhline(0, color="k", lw=0.5); ax.set_xticks(range(len(labels))); ax.set_xticklabels(labels, fontsize=6, rotation=90); ax.set_ylabel("GPD shape kappa (P95 threshold)")
-    ax.set_title("Per-probe target loss tails (edit prompts, new target): GPD shape with item-bootstrap 95 % CI")
-    save(fig, "tail_shapes_probe_loss", "Generalized-Pareto shape fitted to exceedances of per-token target NLL above its P95 (edit prompts, new target, 300 items) for each model; 200 item-group bootstrap draws. Finite-range fits, not asymptotic classes; models differ in which positions carry mass.")
+        labels.append(f"{r['dataset']} {r['family']}\n{r['model']}")
+    ax.axhline(0, color="k", lw=0.5); ax.set_xticks(range(len(labels))); ax.set_xticklabels(labels, fontsize=5, rotation=90); ax.set_ylabel("GPD shape kappa (P95 threshold)")
+    ax.set_title("Token-level target-surprisal tails, pooled probe families: GPD shape with item-bootstrap 95 % CI")
+    save(fig, "tail_shapes_probe_loss", "Generalized-Pareto shape fitted to exceedances of per-token target surprisal above its P95, pooled over all target tokens (terminator excluded) of the edit/paraphrase/unseen prompts (new target) and locality/near-miss prompts (true target) for each model at 300 edits (frozen: no memory); 200 item-group bootstrap draws. Finite-range fits, not asymptotic classes.")
 
 
 def fig_deciles():

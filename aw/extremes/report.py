@@ -43,6 +43,31 @@ def ci(lo, hi, d=3):
     return f"[{f(lo, d)}, {f(hi, d)}]"
 
 
+def iv(v, d=4):
+    """Format a saved interval (JSON list string or list) compactly."""
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return "—"
+    if isinstance(v, str):
+        try:
+            v = json.loads(v)
+        except Exception:
+            return v
+    if isinstance(v, (list, tuple)) and len(v) == 2 and all(isinstance(x, (int, float)) for x in v):
+        return ci(v[0], v[1], d)
+    return str(v)
+
+
+def pct_iv(v):
+    if isinstance(v, str):
+        try:
+            v = json.loads(v)
+        except Exception:
+            return v
+    if isinstance(v, (list, tuple)) and len(v) == 2:
+        return f"[{100 * v[0]:.4f} %, {100 * v[1]:.4f} %]"
+    return "—"
+
+
 def csv(name):
     p = T / f"{name}.csv"
     if not p.exists() or p.stat().st_size == 0:
@@ -175,13 +200,13 @@ def section_regressions(r, w):
 def section_tails(h17, groups, mq, pt, ft):
     rows = []
     for _, r in h17.sort_values(["dataset", "rule", "seed"]).iterrows():
-        rows.append([r["dataset"], f"{r['rule']} s{int(r['seed'])}", f(r["mean_signed"], 5), pct(r["freq_0p01"], d=4), f(r["conditional_mean_0p01"]), f(r["es99_positive"], 4), f(r["maximum"], 2), r["fit_status_0p01"], f(r.get("shape_0p01")), str(r.get("shape_interval_0p01")), f(r.get("gpd_minus_exp_0p01"), 4)])
+        rows.append([r["dataset"], f"{r['rule']} s{int(r['seed'])}", f(r["mean_signed"], 5), pct(r["freq_0p01"], d=4), f(r["conditional_mean_0p01"]), f(r["es99_positive"], 4), f(r["maximum"], 2), r["fit_status_0p01"], f(r.get("shape_0p01")), iv(r.get("shape_interval_0p01"), 3), f(r.get("gpd_minus_exp_0p01"), 4)])
     t_h17 = md_table(["dataset", "reader", "mean Δ", "P(Δ>0.01)", "severity | Δ>0.01", "ES99+", "max Δ", "GPD fit (u=0.01)", "shape ξ", "window-bootstrap 95 % ξ", "GPD − exp (held-out nats/excess)"], rows)
     t_mq = "_MQuAKE PC-reader evaluations not complete yet_"
     if not mq.empty:
         rows = []
         for _, r in mq[mq["threshold"] == 0.01].sort_values(["rule", "seed"]).iterrows():
-            rows.append(["mquake", f"{r['rule']} s{int(r['seed'])}", f(r["mean_signed"], 5), pct(r["fraction"], d=4), f(r["conditional_mean"]), f(r["es99_positive"], 4), f(r["maximum"], 2), r["fit_status"], f(r.get("shape")), str(r.get("shape_interval")), f(r.get("gpd_minus_exp"), 4)])
+            rows.append(["mquake", f"{r['rule']} s{int(r['seed'])}", f(r["mean_signed"], 5), pct(r["fraction"], d=4), f(r["conditional_mean"]), f(r["es99_positive"], 4), f(r["maximum"], 2), r["fit_status"], f(r.get("shape")), iv(r.get("shape_interval"), 3), f(r.get("gpd_minus_exp"), 4)])
         t_mq = md_table(["dataset", "reader", "mean Δ", "P(Δ>0.01)", "severity | Δ>0.01", "ES99+", "max Δ", "GPD fit (u=0.01)", "shape ξ", "window-bootstrap 95 % ξ", "GPD − exp (held-out nats/excess)"], rows)
         thr = []
         for _, r in mq.sort_values(["rule", "seed", "threshold"]).iterrows():
@@ -189,16 +214,27 @@ def section_tails(h17, groups, mq, pt, ft):
         t_mq += "\n\nThreshold sensitivity (all four registered thresholds):\n\n" + md_table(["reader", "u", "excesses", "P(Δ>u)", "severity | Δ>u", "fit", "ξ"], thr)
     rows = []
     if not pt.empty:
-        for _, r in pt[(pt["family"].isin(["edit", "paraphrase", "unseen"])) & (pt["target"] == "new") & (pt["quantile"] == 0.95)].sort_values(["dataset", "family", "model"]).iterrows():
-            rows.append([r["dataset"], r["family"], MODEL_LABEL.get(r["model"].replace("_h300", "").replace("_h0", "").replace("_h100", " (h100)"), r["model"]), int(r["n_values"]), f(r["p95"], 2), f(r["max"], 2), f(r["cvar95"], 2), f(r["threshold"], 2), int(r["n_exceedances"]), r["status"], f(r["kappa"]), ci(r.get("kappa_ci_low"), r.get("kappa_ci_high"), 2), f(r["sigma"]), f(r["loglik_gain_per_excess"], 4)])
-    t_pt = md_table(["dataset", "family", "model", "n", "P95", "max", "CVaR95", "u = P95", "excesses", "fit", "κ", "item-bootstrap 95 % κ", "σ_u", "GPD − exp (in-sample nats/excess)"], rows) if rows else "_not available_"
+        sel = pt[(pt["family"].isin(["edit", "paraphrase", "unseen"])) & (pt["target"] == "new") & (pt["quantile"] == 0.95) & (~pt["model"].str.endswith("_h100"))]
+        for _, r in sel.sort_values(["dataset", "family", "model"]).iterrows():
+            rows.append([r["dataset"], r["family"], MODEL_LABEL.get(r["model"].replace("_h300", "").replace("_h0", ""), r["model"]), int(r["n_values"]), f(r["mean"], 2), f(r["p95"], 2), f(r["p99"], 2), f(r["max"], 2), f(r["cvar95"], 2), int(r["n_exceedances"]), r["status"]])
+    t_pt = "Probe-level (one value per probe; 300 edit items, 300–600 paraphrases, 100 unseen prompts): exceedances above P95 number 15–30, below the 50-excess floor, so no probe-level shape is reported — only the descriptive extremes.\n\n" + (md_table(["dataset", "family", "model", "n probes", "mean", "P95", "P99", "max", "CVaR95", "excesses > P95", "fit"], rows) if rows else "_not available_")
+    tt = csv("token_loss_tail_fits")
+    rows = []
+    if not tt.empty:
+        for _, r in tt[(tt["family"].isin(["pooled_probes", "paraphrase", "locality_item"])) & (tt["quantile"].isin([0.9, 0.95]))].sort_values(["dataset", "family", "target", "model", "quantile"]).iterrows():
+            if (r["family"] == "paraphrase" and r["target"] != "new") or (r["family"] == "locality_item" and r["target"] != "true"):
+                continue
+            if r["family"] != "pooled_probes" and r["quantile"] != 0.9:
+                continue
+            rows.append([r["dataset"], r["family"], MODEL_LABEL.get(r["model"], r["model"]), int(r["n_tokens"]), f(r["p99"], 2), f(r["max"], 2), f"P{int(round(100 * r['quantile']))} = {f(r['threshold'], 2)}", int(r["n_exceedances"]), r["status"], f(r.get("kappa")), ci(r.get("kappa_ci_low"), r.get("kappa_ci_high"), 2), f(r.get("sigma")), f(r.get("loglik_gain_per_excess"), 4)])
+    t_pt += "\n\nToken-level (one value per target token, terminator excluded; groups = items for the bootstrap). `pooled_probes` pools edit, paraphrase and unseen prompts (new target) with item-locality, sealed locality and near-miss neighbour prompts (true target) and is the only population that clears the 100-excess screen at P95 and P90; the per-family rows are shown at P90 and are exploratory or insufficient:\n\n" + (md_table(["dataset", "family", "model", "n tokens", "P99", "max", "threshold", "excesses", "fit", "κ", "item-bootstrap 95 % κ", "σ_u", "GPD − exp (in-sample nats/excess)"], rows) if rows else "_not available_")
     d = ft.get("describe", {})
     fits = ft.get("fits", [])
     rows = [[f(x["quantile"], 3), f(x["threshold"], 2), int(x["n"]), x["status"], f(x.get("kappa")), ci(*(x.get("bootstrap", {}).get("kappa_ci", [None, None])), 3), f(x.get("sigma")), f(x.get("loglik_gain_per_excess"), 4)] for x in fits]
     t_ft = f"Frozen GPT-2 per-token surprisal on the 245,237 ordinary-text positions (loss_capoff of a saved vector; identical in every cell): mean {f(d.get('mean'))}, median {f(d.get('median'))}, P90 {f(d.get('p90'))}, P95 {f(d.get('p95'))}, P99 {f(d.get('p99'))}, max {f(d.get('max'))}, CVaR95 {f(d.get('cvar95'))} nats.\n\n" + md_table(["quantile", "u", "excesses", "fit", "κ", "window-bootstrap 95 % κ", "σ_u", "GPD − exp (nats/excess)"], rows)
     grows = []
     for _, r in groups.sort_values(["phase", "dataset", "condition"]).iterrows():
-        grows.append([r["phase"], r["dataset"], r["condition"], int(r["cells"]), pct(r["freq_0p01"], d=4), str(r.get("freq_interval")), f(r["conditional_mean_0p01"]), str(r.get("conditional_interval"))])
+        grows.append([r["phase"], r["dataset"], r["condition"], int(r["cells"]), pct(r["freq_0p01"], d=4), pct_iv(r.get("freq_interval")), f(r["conditional_mean_0p01"]), iv(r.get("conditional_interval"), 3)])
     t_groups = md_table(["phase", "dataset", "condition", "cells", "P(Δ>0.01)", "joint-window 95 %", "severity | Δ>0.01", "95 %"], grows)
     return t_h17, t_mq, t_pt, t_ft, t_groups
 
@@ -312,6 +348,14 @@ def main():
         mdd, cdd = gm(ds, "paraphrase", "G_PCvsBP")
         if mpc is not None:
             head.append(f"- **{ds}, paraphrase per-token loss gain over frozen (seed mean):** BP {f(mbp)} {ci(*cbp)}; ePC {f(mpc)} {ci(*cpc)}; ePC − BP contrast {f(mdd)} {ci(*cdd)} nats/token (positive favours ePC).")
+    tt = csv("token_loss_tail_fits")
+    tail_sentence = "(token-level pooled fits pending)"
+    if not tt.empty:
+        z = tt[(tt["family"] == "pooled_probes") & (tt["quantile"] == 0.95) & tt["kappa"].notna()]
+        neg = int(((z["kappa_ci_high"] < 0)).sum()); pos = int(((z["kappa_ci_low"] > 0)).sum()); inc = int(len(z) - neg - pos)
+        kmin, kmax = float(z["kappa"].min()), float(z["kappa"].max())
+        tail_sentence = (f"the generalized-Pareto shapes of per-token target surprisal (pooled probe families, P95 threshold, {len(z)} model/dataset fits) range from {kmin:.2f} to {kmax:.2f}; "
+                         f"{neg} intervals lie entirely below zero (finite upper endpoint within the measured range), {inc} include zero, {pos} lie entirely above zero")
     today = date.today().isoformat()
     md = f"""# Frozen GPT-2, ePC-trained reader cap and BP-trained reader cap on zsRE, CounterFact and MQuAKE: ordinary performance, dataset extremes and heavy tails
 
@@ -330,7 +374,7 @@ Provenance tags: **[record]** previously established in the frozen record and co
 {chr(10).join(head) if head else '- (paired results pending)'}
 - **Neither cap beats the frozen model everywhere.** Both caps convert the taught facts (own-prompt loss falls from ≈ 6 nats/token to ≈ 0.01) and both leave the frozen model's behaviour unchanged where they abstain; the differences between ePC- and BP-trained readers are differences of *gating*: which paraphrases and un-taught prompts trigger a write. Where a reader abstains, its loss equals the frozen loss to the bit.
 - **ePC vs BP.** On CounterFact the ePC-trained reader retains fewer paraphrases in all three seeds (frozen record), and its per-probe paraphrase loss is higher than BP's in the paired contrast; on zsRE the two rules are close with mixed signs. No analysis in this study (difficulty deciles, frozen-hard subsets, regressions, correction magnitudes) finds a regime of rare or extreme cases where the ePC-trained reader is reliably better than the BP-trained reader. Training cost remains 96–102× **[record]**.
-- **Extremes.** Frozen difficulty is heavy in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset) but the fitted generalized-Pareto shapes of the *probe* losses are near zero or negative with intervals that include zero; the ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large deteriorations exist for both caps and are concentrated on prompts where a wrong record fired.
+- **Extremes.** Frozen difficulty is large in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset), but it is not heavy-tailed in the fitted sense: {tail_sentence}. No model/dataset shows a positive shape with an interval excluding zero. The ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large per-probe deteriorations exist for both caps and occur almost only where a record fired (joint-extremes tail lift 14–62 on zsRE).
 - **Qualifications.** One subject realization and one order; three training seeds are not three populations; GPT-2 small only; the frozen model answers essentially none of these prompts under the project's greedy convention, so the frozen baseline is informative through teacher-forced losses, not through exact-match rates.
 
 ## 2. Research questions and architectures
