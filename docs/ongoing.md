@@ -1037,6 +1037,7 @@ counting) and the fidelity-watch observations; a plain integrity statement or th
 
 
 - **2026-09-26 (assets):** sealed-cell learner snapshots (`*.snapshot`, ≈ 100 MB per cell, 27 GB in total) are no longer tracked in the assets repo: the unpushed commits were rewritten without them (backup ref `backup/master-before-snapshot-prune`), `*.snapshot` is ignored, the files stay on disk, and their SHA-256 values remain in the checkpoint receipts and `.snapshot.json` sidecars. GitHub refuses packs over 2 GiB; the remaining unpushed volume is 67 MB.
+- **2026-10-10 (assets):** size rule relaxed at the lead's request: files up to 99 MB commit directly from `assets/` (GitHub refuses a single file at 100 MB); `assets/.githooks/pre-commit` now runs `aw/assets_size_policy.py` (same split/join format as the frozen `scripts/repo_size_policy.py`, which keeps the 45 MB rule for pc_cap and is not edited because it is bound by the Stage-4 content lock). `data/prepared/revision_v1/r1_d1c_v1/record_review.jsonl` (119.8 MB) is committed as three split parts + index with the original kept on disk.
 ## 4. Interfaces and coordination
 
 As before: `pccap.contracts`, `pccap.bases.gpt2_jax`, `pccap.bases.bp.BPBase`, `pccap.harness.arms.make_learner/
