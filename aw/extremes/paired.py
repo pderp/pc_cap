@@ -30,6 +30,18 @@ DRAWS = 2000
 SEED = 20261009
 
 
+def at_horizon(x: pd.DataFrame, h: int) -> pd.DataFrame:
+    """The memory at horizon h holds the first h stream items: item-level families are restricted to stream_index <= h.
+
+    Audit 2026-10-10: before this, horizon-100 rows scored all 300 edit/paraphrase/locality_item probes against a 100-edit
+    memory, mixing taught and not-yet-taught items (200 of 300 'edits' were effectively unseen prompts).
+    """
+    if h >= 300 or "stream_index" not in x.columns:
+        return x
+    keep = (~x["family"].isin(FAMILIES_ITEM)) | (x["stream_index"] <= h)
+    return x[keep]
+
+
 def cols(h):
     return dict(frozen="L_frozen_h0", **{f"bp{s}": f"L_bp_reader_s{s}_h{h}" for s in SEEDS}, **{f"epc{s}": f"L_epc_reader_s{s}_h{h}" for s in SEEDS})
 
@@ -238,8 +250,9 @@ def sequential(dataset: str):
 def main():
     pc = pd.read_parquet(DATA / "data" / "paired_cases.parquet")
     gains, cvars, deciles, regs, worst, corr, joint = [], [], [], [], [], [], []
-    for (ds, fam, tgt), x in pc.groupby(["dataset", "family", "target"]):
+    for (ds, fam, tgt), x0 in pc.groupby(["dataset", "family", "target"]):
         for h in (300, 100):
+            x = at_horizon(x0, h)
             for r in paired_block(x, h):
                 gains.append(dict(dataset=ds, family=fam, target=tgt, **r))
             for r in cvar_blocks(x, h):
@@ -253,7 +266,7 @@ def main():
             corr += [dict(dataset=ds, family=fam, target=tgt, **r) for r in correlation_blocks(x, h)]
     for ds, x in pc.groupby("dataset"):
         for h in (300, 100):
-            joint += [dict(dataset=ds, **r) for r in joint_extremes(x, h)]
+            joint += [dict(dataset=ds, **r) for r in joint_extremes(at_horizon(x, h), h)]
     seq = [r for ds in ("zsre", "counterfact", "mquake") for r in sequential(ds)]
     for name, rows in (("paired_gains", gains), ("cvar_A_B", cvars), ("difficulty_deciles", deciles), ("regressions", regs), ("worst_regressions", worst), ("rank_correlations", corr), ("joint_extremes", joint), ("sequential", seq)):
         df = pd.DataFrame(rows)

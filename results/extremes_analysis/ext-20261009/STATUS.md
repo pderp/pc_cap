@@ -1,9 +1,9 @@
 # STATUS — ext-20261009
 
-Updated: 2026-10-10 02:05 UTC (22:05 EDT, 9 Oct) · Capstan
+Updated: 2026-10-10 21:40 UTC (17:40 EDT) · Capstan
 
 ## Current stage
-**Complete.** All GPU work finished (chain log `logs/gpu_chain.log`, chain end 01:45:52 UTC); the CPU pipeline (`scripts/run_cpu_pipeline.sh`) has been run on the complete data; the report (`reports/research_report.md` + `.pdf`) and all tables/figures/parquet are final. Only post-hoc wording edits to the report generator would change anything from here.
+**Complete, plus the CAP-value supplement (10 Oct).** `reports/cap_value_report.pdf`, `tables/cap_value/`, `figures/cap_value/` (+ `slides/`) added from the recorded scores; horizon-100 denominators corrected and the main report regenerated. All GPU work finished (chain log `logs/gpu_chain.log`, chain end 01:45:52 UTC); the CPU pipeline (`scripts/run_cpu_pipeline.sh`) has been run on the complete data; the report (`reports/research_report.md` + `.pdf`) and all tables/figures/parquet are final. Only post-hoc wording edits to the report generator would change anything from here.
 
 ## Stage plan and state
 | stage | content | state |
@@ -16,6 +16,7 @@ Updated: 2026-10-10 02:05 UTC (22:05 EDT, 9 Oct) · Capstan
 | 6 | paired analysis (gains, CVaR A/B, deciles, regressions, correlations, joint extremes, sequential) | complete |
 | 7 | Nelson supplementary (informational-scale identity; coupled-entropy profiles; self-tests) | complete |
 | 8 | figures, report MD + PDF, data dictionary | complete |
+| 9 | CAP-value supplement: three-model tables, figures, slide package, report (CPU only) | complete — `tables/cap_value/`, `reports/cap_value_report.{md,pdf}` |
 
 ## Completed evaluations (probes per model / dataset; `manifest.json` has hashes)
 frozen: zsRE 1,350, CounterFact 2,300, MQuAKE 1,890. Each of bp_reader_s{0,1,2}, epc_reader_s{0,1,2}: the same probe sets at the 100- and 300-edit memories (zsRE/CounterFact memories from the frozen record; MQuAKE memories from this study). MQuAKE evaluations: 300 edits, checkpoints 100/300, endpoints 50/100/50/100, composition 80 cases, harm 245,237 positions, each.

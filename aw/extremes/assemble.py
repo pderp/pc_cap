@@ -140,21 +140,23 @@ def benchmark_original(scores, gens):
         g = gens[(gens["model"] == "frozen") & (gens["dataset"] == ds)]
         if g.empty:
             continue
-        def rate(fam, col):
-            x = g[g["family"] == fam]
+        def rate(fam, col, h):
+            # horizon h covers the first h stream items only (audit 2026-10-10: the frozen rows at horizon 100 previously
+            # used all 300 items, so their denominators disagreed with the readers' 100-item denominators)
+            x = g[(g["family"] == fam) & (g["stream_index"] <= h)]
             if x.empty:
                 return dict(value=None, numerator=None, planned=0)
             per_item = x.groupby("item_id")[col].mean()  # item-level fractional credit, as the registered RET-GS
             return dict(value=float(per_item.mean()), numerator=float(per_item.sum()), planned=int(len(per_item)))
-        m = {"ES": rate("edit", "exact_new"), "RET-ES": rate("edit", "exact_new"), "RET-GS": rate("paraphrase", "exact_new"),
-             "LS": dict(value=1.0, numerator=50, planned=50), "near_miss": dict(value=1.0, numerator=100, planned=100), "revision": dict(value=None, numerator=None, planned=50), "revision_latest_answer": dict(value=None, numerator=None, planned=50)}
-        extra = dict(source="ext-20261009 frozen scoring", note="ES/RET-ES/RET-GS: frozen greedy answers vs taught aliases (no adaptation possible); LS and near-miss are 1 by definition (the frozen response is the reference); revision and unseen firing are N/A",
+        extra = dict(source="ext-20261009 frozen scoring", note="ES/RET-ES/RET-GS: frozen greedy answers vs taught aliases (no adaptation possible; zero by the eligibility screen on edit prompts, measured zero on paraphrases); LS and near-miss are 1 by definition (the frozen response is the reference); revision and unseen firing are N/A; denominators cover the first h stream items",
                      original_fact_exact_edit=(float(g[g["family"] == "edit"]["exact_true"].mean()) if "exact_true" in g and g[g["family"] == "edit"]["exact_true"].notna().any() else None),
                      unseen_false_fires=None)
         if ds == "mquake":
             x = g[g["family"] == "composition"]
             extra.update(composition_question_new_exact=float(x["exact_new"].mean()), composition_question_old_exact=float(x["exact_old"].mean()), composition_questions=int(len(x)))
         for h in (100, 300):
+            m = {"ES": rate("edit", "exact_new", h), "RET-ES": rate("edit", "exact_new", h), "RET-GS": rate("paraphrase", "exact_new", h),
+                 "LS": dict(value=1.0, numerator=50, planned=50), "near_miss": dict(value=1.0, numerator=100, planned=100), "revision": dict(value=None, numerator=None, planned=50), "revision_latest_answer": dict(value=None, numerator=None, planned=50)}
             rows.append(_metric_row(ds, "frozen", "FROZEN", h, m, extra))
     return pd.DataFrame(rows)
 
@@ -243,6 +245,7 @@ def main():
         return
     meta = meta_frame(probes_meta)
     scores = scores.merge(meta.drop(columns=["family", "item_id"]), on=["dataset", "probe_id"], how="left")
+    gens = gens.merge(meta[["dataset", "probe_id", "stream_index"]], on=["dataset", "probe_id"], how="left")
     atomic_parquet(DATA / "data" / "scores.parquet", scores)
     atomic_parquet(DATA / "data" / "generations.parquet", gens)
     pc = paired(scores, meta)

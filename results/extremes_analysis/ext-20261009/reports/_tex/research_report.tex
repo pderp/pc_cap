@@ -3,11 +3,11 @@
 \usepackage[margin=2.2cm]{geometry}\usepackage{graphicx}\usepackage{float}\usepackage{booktabs}\usepackage{tabularx}\usepackage{amsmath}\usepackage{xcolor}\usepackage{hyperref}\usepackage{microtype}
 \hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
 \setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
-\title{Frozen GPT-2, ePC-trained and BP-trained reader caps: ordinary performance, dataset extremes and heavy tails (ext-20261009)}\author{Capstan (pc\_cap)}\date{2026-10-09}
+\title{Frozen GPT-2, ePC-trained and BP-trained reader caps: ordinary performance, dataset extremes and heavy tails (ext-20261009)}\author{Capstan (pc\_cap)}\date{2026-10-10}
 \begin{document}\maketitle\tableofcontents\clearpage
 
 
-Study \texttt{ext-20261009} $\cdot$ Capstan $\cdot$ 2026-10-09 $\cdot$ pc\_cap code revision \texttt{c480f073cf67} $\cdot$ commissioned by \texttt{docs/AgentHandoffForResearchInTheExtremes.md} as amended by \texttt{docs/mandatory\_ammendment.md}.
+Study \texttt{ext-20261009} $\cdot$ Capstan $\cdot$ 2026-10-10 $\cdot$ pc\_cap code revision \texttt{507504c8cae8} $\cdot$ commissioned by \texttt{docs/AgentHandoffForResearchInTheExtremes.md} as amended by \texttt{docs/mandatory\_ammendment.md}.
 
 
 
@@ -127,7 +127,7 @@ edits & model & ES & RET-ES & RET-GS (primary) & LS & near-miss & unseen false f
 300 & ePC reader s0 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 94.7 \% (284/300) & 100.0 \% (50/50) & 91.0 \% (91/100) & 2/100 &  \\
 300 & ePC reader s1 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 97.0 \% (291/300) & 100.0 \% (50/50) & 85.0 \% (85/100) & 5/100 &  \\
 300 & ePC reader s2 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 98.0 \% (294/300) & 100.0 \% (50/50) & 85.0 \% (85/100) & 4/100 &  \\
-100 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
+100 & frozen GPT-2 [new] & 0.0 \% (0/100) & 0.0 \% (0/100) & 0.0 \% (0/100) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
 100 & BP reader s0 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 96.0 \% (96/100) & 100.0 \% (50/50) & 80.0 \% (80/100) & 5/100 &  \\
 100 & BP reader s1 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 99.0 \% (99/100) & 100.0 \% (50/50) & 56.0 \% (56/100) & 13/100 &  \\
 100 & BP reader s2 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 96.0 \% (96/100) & 100.0 \% (50/50) & 66.0 \% (66/100) & 8/100 &  \\
@@ -155,7 +155,7 @@ edits & model & ES & RET-ES & RET-GS (primary) & LS & near-miss & unseen false f
 300 & ePC reader s0 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 56.8 \% (170.5/300) & 100.0 \% (50/50) & 98.0 \% (98/100) & 0/100 &  \\
 300 & ePC reader s1 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 77.8 \% (233.5/300) & 100.0 \% (50/50) & 95.0 \% (95/100) & 1/100 &  \\
 300 & ePC reader s2 [record] & 100.0 \% (300/300) & 100.0 \% (300/300) & 66.0 \% (198/300) & 100.0 \% (50/50) & 99.0 \% (99/100) & 0/100 &  \\
-100 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
+100 & frozen GPT-2 [new] & 0.0 \% (0/100) & 0.0 \% (0/100) & 0.0 \% (0/100) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A &  \\
 100 & BP reader s0 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 85.0 \% (85/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
 100 & BP reader s1 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 85.0 \% (85/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
 100 & BP reader s2 [record] & 100.0 \% (100/100) & 100.0 \% (100/100) & 86.5 \% (86.5/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
@@ -183,7 +183,7 @@ edits & model & ES & RET-ES & RET-GS (primary) & LS & near-miss & unseen false f
 300 & ePC reader s0 [new] & 100.0 \% (300/300) & 100.0 \% (300/300) & 60.0 \% (180/300) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 & 0.0 \% (0/80) \\
 300 & ePC reader s1 [new] & 100.0 \% (300/300) & 100.0 \% (300/300) & 60.3 \% (181/300) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 & 0.0 \% (0/80) \\
 300 & ePC reader s2 [new] & 100.0 \% (300/300) & 100.0 \% (300/300) & 58.3 \% (175/300) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 & 0.0 \% (0/80) \\
-100 & frozen GPT-2 [new] & 0.0 \% (0/300) & 0.0 \% (0/300) & 0.0 \% (0/300) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A & question-level new-answer exact 0.0 \%; old-answer exact 0.0 \% (N/A as all-question success: no edits) \\
+100 & frozen GPT-2 [new] & 0.0 \% (0/100) & 0.0 \% (0/100) & 0.0 \% (0/100) & 100.0 \% (50/50) (by definition) & 100.0 \% (100/100) (by definition) & N/A & question-level new-answer exact 0.0 \%; old-answer exact 0.0 \% (N/A as all-question success: no edits) \\
 100 & BP reader s0 [new] & 100.0 \% (100/100) & 100.0 \% (100/100) & 62.0 \% (62/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
 100 & BP reader s1 [new] & 86.0 \% (86/100) & 90.0 \% (90/100) & 68.0 \% (68/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
 100 & BP reader s2 [new] & 100.0 \% (100/100) & 100.0 \% (100/100) & 62.0 \% (62/100) & 100.0 \% (50/50) & 100.0 \% (100/100) & 0/100 &  \\
@@ -1586,11 +1586,11 @@ Per-dataset paired contrasts at 300 edits (seed-level intervals from 2,000 item-
 
 
 \begin{itemize}
-\item \textbf{Code:} \texttt{pc\_cap/aw/extremes/} at revision \texttt{c480f073cf67}; tests \texttt{aw/tests/test\_extremes\_stats.py} (CPU) and \texttt{aw/extremes/validate\_gpu.py} (GPU; record in \texttt{validation/gpu\_checks.json}).
+\item \textbf{Code:} \texttt{pc\_cap/aw/extremes/} at revision \texttt{507504c8cae8}; tests \texttt{aw/tests/test\_extremes\_stats.py} (CPU) and \texttt{aw/extremes/validate\_gpu.py} (GPU; record in \texttt{validation/gpu\_checks.json}).
 \item \textbf{Commands:} \texttt{results/extremes\_analysis/ext-20261009/scripts/run\_gpu\_chain.sh} (frozen scoring $\to$ reader scoring $\to$ MQuAKE evaluations $\to$ MQuAKE scoring) and \texttt{scripts/run\_cpu\_pipeline.sh} (assemble $\to$ paired $\to$ tails $\to$ datasets $\to$ nelson $\to$ figures $\to$ report). Environment: Python 3.12.15, jax/jaxlib 0.11.1, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5, pyarrow 25.0.1, matplotlib 3.11.1; RTX 5070 (12 GiB), driver 615.71.09.
 \item \textbf{Inputs (hash-checked at load):} sealed recipes \texttt{docs/tasks/R1-final-cell-recipes/\{61348508\ldots{}, ce0d0ffc\ldots{}, 43925e53\ldots{}\}.json} and their payloads; reader artifacts \texttt{assets/runs/additional\_work/PC-reader/train-*/theta\_avg150-300.npz}; memory snapshots \texttt{\ldots{}/eval-*/stream/checkpoint-\{100,300\}.snapshot}; harm vectors \texttt{results/additional\_work/PC-reader/eval-*/harm/vectors.npz}; HT-17 \texttt{logs/additional\_work/HT-17/snapshot-20261004-complete/report.json}.
 \item \textbf{Outputs:} parquet under \texttt{assets/extremes\_analysis/ext-20261009/data/} (example manifest = \texttt{scores.parquet} metadata columns + \texttt{case\_populations.parquet}; \texttt{scores.parquet}, \texttt{generations.parquet}, \texttt{paired\_cases.parquet}, \texttt{dataset\_statistics.parquet}, \texttt{tail\_fits.parquet}, \texttt{bootstrap\_results.parquet}, \texttt{paired\_gains.parquet}, \texttt{difficulty\_deciles.parquet}); CSV tables under \texttt{tables/}; figures under \texttt{assets/extremes\_analysis/ext-20261009/figures/} with \texttt{captions.json}; raw per-probe records as JSONL chunks with a hash manifest under \texttt{assets/extremes\_analysis/ext-20261009/checkpoints/scores/}; MQuAKE evaluation receipts under \texttt{results/extremes\_analysis/ext-20261009/mquake\_eval/}.
-\item \textbf{Data dictionary:} \texttt{reports/data\_dictionary.md}. \textbf{Artifact registry:} \texttt{manifest.json} (55 artifacts with SHA-256).
+\item \textbf{Data dictionary:} \texttt{reports/data\_dictionary.md}. \textbf{Artifact registry:} \texttt{manifest.json} (72 artifacts with SHA-256).
 \item \textbf{Formulas:} §3 (losses, margins), §6 (harm, ES99+, GPD), §7 (gains, D, CVaR, deciles), §10 (coupled entropy). Natural logarithms throughout.
 \end{itemize}
 \end{document}

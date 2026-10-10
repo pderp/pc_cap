@@ -15,12 +15,12 @@ under `assets/extremes_analysis/ext-20261009/`, and every new model execution ca
 | `README.md`, `STATUS.md`, `config.json`, `manifest.json` | this file; live progress; study configuration; artifact registry (paths + SHA-256) |
 | `audit/` | Stage 1: `model_and_dataset_inventory.md`, `analysis_matrix.md`, baseline completeness matrix |
 | `validation/` | unit-test and smoke-test records (frozen equivalence, log-likelihood, joins, GPD, CVaR, bootstrap...) |
-| `tables/` | CSV summary tables (every percentage with numerator and denominator) |
-| `reports/` | `research_report.md`, `research_report.pdf`, data dictionary |
+| `tables/` | CSV summary tables (every percentage with numerator and denominator); `tables/cap_value/` = the CAP-value supplement (frozen vs BP-CAP vs PC-CAP) |
+| `reports/` | `research_report.md/.pdf` (main study), `cap_value_report.md/.pdf` (supplement: value of a CAP vs frozen GPT-2, 10 Oct), data dictionary |
 | `logs/` | per-stage logs and GPU receipts |
 | `scripts/` | reproduction commands |
 | `assets/extremes_analysis/ext-20261009/data/` | parquet: example manifest, scores, paired cases, dataset statistics, tail fits, bootstrap, residual statistics |
-| `assets/extremes_analysis/ext-20261009/figures/` | PNG/SVG figures |
+| `assets/extremes_analysis/ext-20261009/figures/` | PNG/SVG figures; `figures/cap_value/` detailed three-model figures and `figures/cap_value/slides/` the 5-slide package |
 | `assets/extremes_analysis/ext-20261009/checkpoints/` | new memory snapshots / chunked raw outputs from this study's GPU work |
 
 Code: `pc_cap/aw/extremes/` (new package; nothing under `scripts/` or `src/pccap/` is touched). Tests:
@@ -59,3 +59,15 @@ rare and extreme situations, and are those robust against the BP-trained cap rat
 | PDF renders with equations/figures | yes — `reports/research_report.pdf` (xelatex via `aw/extremes/md2tex.py`) |
 | Raw data and scripts complete and reload | yes — parquet under `assets/extremes_analysis/ext-20261009/data/`, JSONL chunks with hash manifests, `scripts/run_gpu_chain.sh`, `scripts/run_cpu_pipeline.sh` |
 | Final STATUS.md marks completed / unavailable / incomplete | see `STATUS.md` |
+
+## Supplement (2026-10-10): the value of a CAP vs frozen GPT-2
+
+Requested by the lead after the main report: every performance and extreme-case comparison with all three models (frozen
+GPT-2 small without a cap, BP-CAP, PC-CAP), question A (what a CAP adds, especially on extremes) primary and question B
+(PC vs BP) inside it. Built from the existing recorded scores only (no new GPU work). Entry points:
+`reports/cap_value_report.pdf` (24 pages), `tables/cap_value/*.csv` (support matrix, denominator audit, basic performance,
+improvements, own-worst and frozen-hardest extremes, deciles of actual loss, token tails at common thresholds, collateral vs
+frozen, unrelated-text harm, gating failures), `assets/.../figures/cap_value/` and its `slides/` (5 slide-ready figures).
+Denominator audit outcome: horizon-100 rows previously mixed taught and not-yet-taught items (frozen rows used 300 as the
+denominator); fixed in `aw/extremes/assemble.py` and `aw/extremes/paired.py` (`at_horizon`), main report regenerated.
+Code: `aw/extremes/cap_value.py`, `cap_value_figures.py`, `cap_value_report.py`; the CPU pipeline script runs them last.

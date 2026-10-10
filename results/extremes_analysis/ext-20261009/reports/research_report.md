@@ -1,6 +1,6 @@
 # Frozen GPT-2, ePC-trained reader cap and BP-trained reader cap on zsRE, CounterFact and MQuAKE: ordinary performance, dataset extremes and heavy tails
 
-Study `ext-20261009` · Capstan · 2026-10-09 · pc_cap code revision `c480f073cf67` · commissioned by `docs/AgentHandoffForResearchInTheExtremes.md` as amended by `docs/mandatory_ammendment.md`.
+Study `ext-20261009` · Capstan · 2026-10-10 · pc_cap code revision `507504c8cae8` · commissioned by `docs/AgentHandoffForResearchInTheExtremes.md` as amended by `docs/mandatory_ammendment.md`.
 
 Provenance tags: **[record]** previously established in the frozen record and copied with its hashes; **[recomputed]** recomputed in this study from saved data; **[new]** newly evaluated in this study (own manifest `results/extremes_analysis/ext-20261009/manifest.json`). The frozen record was not modified.
 
@@ -66,7 +66,7 @@ Uncertainty: 2,000-draw percentile bootstrap resampling whole groups (items for 
 | 300 | ePC reader s0 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 94.7 % (284/300) | 100.0 % (50/50) | 91.0 % (91/100) | 2/100 |  |
 | 300 | ePC reader s1 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 97.0 % (291/300) | 100.0 % (50/50) | 85.0 % (85/100) | 5/100 |  |
 | 300 | ePC reader s2 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 98.0 % (294/300) | 100.0 % (50/50) | 85.0 % (85/100) | 4/100 |  |
-| 100 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/300) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
+| 100 | frozen GPT-2 [new] | 0.0 % (0/100) | 0.0 % (0/100) | 0.0 % (0/100) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
 | 100 | BP reader s0 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 96.0 % (96/100) | 100.0 % (50/50) | 80.0 % (80/100) | 5/100 |  |
 | 100 | BP reader s1 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 99.0 % (99/100) | 100.0 % (50/50) | 56.0 % (56/100) | 13/100 |  |
 | 100 | BP reader s2 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 96.0 % (96/100) | 100.0 % (50/50) | 66.0 % (66/100) | 8/100 |  |
@@ -85,7 +85,7 @@ Uncertainty: 2,000-draw percentile bootstrap resampling whole groups (items for 
 | 300 | ePC reader s0 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 56.8 % (170.5/300) | 100.0 % (50/50) | 98.0 % (98/100) | 0/100 |  |
 | 300 | ePC reader s1 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 77.8 % (233.5/300) | 100.0 % (50/50) | 95.0 % (95/100) | 1/100 |  |
 | 300 | ePC reader s2 [record] | 100.0 % (300/300) | 100.0 % (300/300) | 66.0 % (198/300) | 100.0 % (50/50) | 99.0 % (99/100) | 0/100 |  |
-| 100 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/300) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
+| 100 | frozen GPT-2 [new] | 0.0 % (0/100) | 0.0 % (0/100) | 0.0 % (0/100) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A |  |
 | 100 | BP reader s0 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 85.0 % (85/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s1 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 85.0 % (85/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s2 [record] | 100.0 % (100/100) | 100.0 % (100/100) | 86.5 % (86.5/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
@@ -104,7 +104,7 @@ Uncertainty: 2,000-draw percentile bootstrap resampling whole groups (items for 
 | 300 | ePC reader s0 [new] | 100.0 % (300/300) | 100.0 % (300/300) | 60.0 % (180/300) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 | 0.0 % (0/80) |
 | 300 | ePC reader s1 [new] | 100.0 % (300/300) | 100.0 % (300/300) | 60.3 % (181/300) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 | 0.0 % (0/80) |
 | 300 | ePC reader s2 [new] | 100.0 % (300/300) | 100.0 % (300/300) | 58.3 % (175/300) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 | 0.0 % (0/80) |
-| 100 | frozen GPT-2 [new] | 0.0 % (0/300) | 0.0 % (0/300) | 0.0 % (0/300) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A | question-level new-answer exact 0.0 %; old-answer exact 0.0 % (N/A as all-question success: no edits) |
+| 100 | frozen GPT-2 [new] | 0.0 % (0/100) | 0.0 % (0/100) | 0.0 % (0/100) | 100.0 % (50/50) (by definition) | 100.0 % (100/100) (by definition) | N/A | question-level new-answer exact 0.0 %; old-answer exact 0.0 % (N/A as all-question success: no edits) |
 | 100 | BP reader s0 [new] | 100.0 % (100/100) | 100.0 % (100/100) | 62.0 % (62/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s1 [new] | 86.0 % (86/100) | 90.0 % (90/100) | 68.0 % (68/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
 | 100 | BP reader s2 [new] | 100.0 % (100/100) | 100.0 % (100/100) | 62.0 % (62/100) | 100.0 % (50/50) | 100.0 % (100/100) | 0/100 |  |
@@ -1220,9 +1220,9 @@ Per-dataset paired contrasts at 300 edits (seed-level intervals from 2,000 item-
 
 ## 12. Reproducibility appendix
 
-- **Code:** `pc_cap/aw/extremes/` at revision `c480f073cf67`; tests `aw/tests/test_extremes_stats.py` (CPU) and `aw/extremes/validate_gpu.py` (GPU; record in `validation/gpu_checks.json`).
+- **Code:** `pc_cap/aw/extremes/` at revision `507504c8cae8`; tests `aw/tests/test_extremes_stats.py` (CPU) and `aw/extremes/validate_gpu.py` (GPU; record in `validation/gpu_checks.json`).
 - **Commands:** `results/extremes_analysis/ext-20261009/scripts/run_gpu_chain.sh` (frozen scoring → reader scoring → MQuAKE evaluations → MQuAKE scoring) and `scripts/run_cpu_pipeline.sh` (assemble → paired → tails → datasets → nelson → figures → report). Environment: Python 3.12.15, jax/jaxlib 0.11.1, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5, pyarrow 25.0.1, matplotlib 3.11.1; RTX 5070 (12 GiB), driver 615.71.09.
 - **Inputs (hash-checked at load):** sealed recipes `docs/tasks/R1-final-cell-recipes/{61348508…, ce0d0ffc…, 43925e53…}.json` and their payloads; reader artifacts `assets/runs/additional_work/PC-reader/train-*/theta_avg150-300.npz`; memory snapshots `…/eval-*/stream/checkpoint-{100,300}.snapshot`; harm vectors `results/additional_work/PC-reader/eval-*/harm/vectors.npz`; HT-17 `logs/additional_work/HT-17/snapshot-20261004-complete/report.json`.
 - **Outputs:** parquet under `assets/extremes_analysis/ext-20261009/data/` (example manifest = `scores.parquet` metadata columns + `case_populations.parquet`; `scores.parquet`, `generations.parquet`, `paired_cases.parquet`, `dataset_statistics.parquet`, `tail_fits.parquet`, `bootstrap_results.parquet`, `paired_gains.parquet`, `difficulty_deciles.parquet`); CSV tables under `tables/`; figures under `assets/extremes_analysis/ext-20261009/figures/` with `captions.json`; raw per-probe records as JSONL chunks with a hash manifest under `assets/extremes_analysis/ext-20261009/checkpoints/scores/`; MQuAKE evaluation receipts under `results/extremes_analysis/ext-20261009/mquake_eval/`.
-- **Data dictionary:** `reports/data_dictionary.md`. **Artifact registry:** `manifest.json` (55 artifacts with SHA-256).
+- **Data dictionary:** `reports/data_dictionary.md`. **Artifact registry:** `manifest.json` (72 artifacts with SHA-256).
 - **Formulas:** §3 (losses, margins), §6 (harm, ES99+, GPD), §7 (gains, D, CVaR, deciles), §10 (coupled entropy). Natural logarithms throughout.
