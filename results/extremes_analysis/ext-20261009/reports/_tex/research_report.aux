@@ -4,15 +4,15 @@
 \HyPL@Entry{0<</S/D>>}
 \@writefile{toc}{\contentsline {section}{1. Abstract and executive summary}{3}{section*.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{2. Research questions and architectures}{4}{section*.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{3. Datasets and evaluation methodology}{4}{section*.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{4. Basic benchmark results}{5}{section*.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{4.1 Registered metrics (original conventions, numerators/denominators)}{5}{section*.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{zsre}{5}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{3. Datasets and evaluation methodology}{5}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{4. Basic benchmark results}{6}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{4.1 Registered metrics (original conventions, numerators/denominators)}{6}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{zsre}{6}{section*.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{counterfact}{6}{section*.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{mquake}{7}{section*.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{4.2 Standardised per-token losses (nats/token; mean over probes; 300-edit memories; frozen has no memory)}{8}{section*.10}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{4.3 Counterfactual preference (probes with both \texttt  {target\_new} and \texttt  {target\_true})}{8}{section*.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{4.4 Context from the other families [record]}{8}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{4.4 Context from the other families [record]}{9}{section*.12}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{5. Statistical characterisation of the datasets [new]}{9}{section*.13}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Rank-frequency of relation, new-target and subject categories in each eligible pool}}{9}{figure.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{5.1 Train/test shift (reader-training pool vs sealed realization 0)}{10}{section*.14}\protected@file@percent }
@@ -28,17 +28,19 @@
 \@writefile{toc}{\contentsline {subsection}{7.1 Paired gains over frozen GPT-2 and ePC vs BP}{17}{section*.21}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{zsre (300 edits; 2,000 group-bootstrap draws, groups = items/rows)}{17}{section*.22}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{counterfact (300 edits; 2,000 group-bootstrap draws, groups = items/rows)}{18}{section*.23}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Paired ePC $-$ BP differences on paraphrases}}{19}{figure.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{7.2 Gain versus frozen difficulty (deciles fixed by the frozen per-token NLL)}{19}{section*.24}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Deciles, zsRE paraphrase}}{20}{figure.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Deciles, CounterFact paraphrase}}{20}{figure.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{7.3 Two worst-case summaries (A: each model's own worst 5 \%; B: the frozen model's hardest 5 \%, fixed)}{21}{section*.25}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces CVaR A and B}}{21}{figure.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{7.4 Rare and severe regressions (D = L\_model $-$ L\_frozen; rows \texttt  {epc\{s\}\_minus\_bp\{s\}} use L\_BP as reference)}{22}{section*.26}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{8. CAP correction mechanisms [new]}{23}{section*.27}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Write norms vs difficulty and gain}}{24}{figure.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{9. MQuAKE reasoning and sequential behaviour}{27}{section*.28}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{10. Connection with nonlinear statistical coupling (Nelson) [new, supplementary]}{27}{section*.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{11. Discussion and conclusions}{27}{section*.30}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{12. Reproducibility appendix}{28}{section*.31}\protected@file@percent }
-\gdef \@abspage@last{28}
+\@writefile{toc}{\contentsline {subsection}{mquake (300 edits; 2,000 group-bootstrap draws, groups = items/rows)}{19}{section*.24}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Paired ePC $-$ BP differences on paraphrases}}{20}{figure.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{7.2 Gain versus frozen difficulty (deciles fixed by the frozen per-token NLL)}{20}{section*.25}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Deciles, zsRE paraphrase}}{21}{figure.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Deciles, CounterFact paraphrase}}{21}{figure.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{7.3 Two worst-case summaries (A: each model's own worst 5 \%; B: the frozen model's hardest 5 \%, fixed)}{22}{section*.26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces CVaR A and B}}{23}{figure.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{7.4 Rare and severe regressions (D = L\_model $-$ L\_frozen; rows \texttt  {epc\{s\}\_minus\_bp\{s\}} use L\_BP as reference)}{24}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{8. CAP correction mechanisms [new]}{25}{section*.28}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Write norms vs difficulty and gain}}{27}{figure.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{9. MQuAKE reasoning and sequential behaviour}{30}{section*.29}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces MQuAKE PC-reader evaluations}}{32}{figure.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{10. Connection with nonlinear statistical coupling (Nelson) [new, supplementary]}{32}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{11. Discussion and conclusions}{33}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{12. Reproducibility appendix}{33}{section*.32}\protected@file@percent }
+\gdef \@abspage@last{34}

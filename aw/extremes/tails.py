@@ -121,6 +121,13 @@ def token_level_tails(scores: pd.DataFrame):
     pooled["family"] = "pooled_probes"
     pooled["target"] = "new/true"
     ok = pd.concat([ok, pooled], ignore_index=True)
+    frozen_u = {}  # common absolute thresholds: the frozen model's P90/P95/P97.5 for each (dataset, family, target)
+    for (ds, fam, tgt, model), x in ok.groupby(["dataset", "family", "target", "model"]):
+        if fam == "composition" or model != "frozen":
+            continue
+        v = np.asarray([t for pt in x["per_token_nll"] for t in json.loads(pt)[:-1]], float)
+        if v.size >= 200:
+            frozen_u[(ds, fam, tgt)] = {q: float(np.quantile(v, q)) for q in (0.90, 0.95, 0.975)}
     for (ds, fam, tgt, model), x in ok.groupby(["dataset", "family", "target", "model"]):
         if fam == "composition":
             continue
@@ -133,7 +140,17 @@ def token_level_tails(scores: pd.DataFrame):
         if v.size < 200:
             continue
         d = S.describe(v)
-        for fit in S.threshold_fits(v, groups=np.asarray(groups), draws=200, seed=3):
+        g = np.asarray(groups)
+        fits = [dict(f, threshold_rule="own quantile") for f in S.threshold_fits(v, groups=g, draws=200, seed=3)]
+        for q, u in frozen_u.get((ds, fam, tgt), {}).items():  # same absolute threshold for every model
+            m = v > u
+            z = v[m] - u
+            f = S.gpd_fit(z)
+            row = dict(quantile=q, threshold=u, threshold_rule="frozen quantile (common)", **f)
+            if f.get("kappa") is not None:
+                row["bootstrap"] = S.gpd_bootstrap(z, g[m], draws=200, seed=3)
+            fits.append(row)
+        for fit in fits:
             rows.append(dict(dataset=ds, family=fam, target=tgt, model=model, n_tokens=d["n"], n_items=int(x["item_id"].nunique()), mean=d["mean"], p95=d["p95"], p99=d["p99"], max=d["max"], cvar95=d["cvar95"],
                              **{("n_exceedances" if k == "n" else k): val for k, val in fit.items() if k != "bootstrap"},
                              kappa_ci_low=(fit.get("bootstrap") or {}).get("kappa_ci", [None, None])[0], kappa_ci_high=(fit.get("bootstrap") or {}).get("kappa_ci", [None, None])[1]))

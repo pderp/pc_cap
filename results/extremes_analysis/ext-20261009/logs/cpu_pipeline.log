@@ -32,3 +32,27 @@ mquake overlap ids/subjects 0 0 {'relation_id': 0.024, 'subject': 0.6931, 'targe
 2026-10-09T22:35:31Z start report
 {"md": "/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/research_report.md", "pdf": "ok", "words": 9931}
 2026-10-09T22:35:33Z end report exit 0
+2026-10-10T01:46:00Z start assemble
+{"scores": 99190, "generations": 48620, "paired": 7626, "models": ["bp_reader_s0", "bp_reader_s1", "bp_reader_s2", "epc_reader_s0", "epc_reader_s1", "epc_reader_s2", "frozen"], "benchmark_rows": 42}
+2026-10-10T01:46:06Z end assemble exit 0
+2026-10-10T01:46:06Z start paired
+{"gains": 936, "cvar": 546, "deciles": 380, "regressions": 702, "correlations": 468, "joint": 36, "sequential": 18}
+2026-10-10T01:47:55Z end paired exit 0
+2026-10-10T01:47:55Z start tails
+{"ht17_cells": 12, "all_equal": true, "mquake_rows": 24, "probe_fits": 936, "frozen_text": {"n": 245237, "missing": 0, "mean": 4.08007681304953, "sd": 3.2044768071696383, "median": 3.467867299509205, "iqr": 4.695329881894207, "p90": 8.603983087077133, "p95": 10.128948134895172, "p99": 13.01394329250421, "max": 30.101820879057627, "min": 2.50813110579513e-07, "cvar95": 11.899895990888675}}
+2026-10-10T01:50:25Z end tails exit 0
+2026-10-10T01:50:25Z start datasets
+{"zsre": {"eligible": 10420, "reader_train": 1000, "sealed_r0": 1000, "pcr_r0_300": 300, "sealed_r1": 1000, "sealed_r2": 1000}, "counterfact": {"eligible": 20091, "reader_train": 1000, "sealed_r0": 1000, "pcr_r0_300": 300, "sealed_r1": 1000, "sealed_r2": 1000}, "mquake": {"eligible": 6043, "reader_train": 500, "sealed_r0": 300, "pcr_r0_300": 300, "sealed_r1": 300, "sealed_r2": 300}}
+zsre overlap ids/subjects 0 0 {'subject': 0.6931, 'target_new': 0.4884}
+counterfact overlap ids/subjects 0 0 {'relation_id': 0.0064, 'subject': 0.6931, 'target_new': 0.129, 'target_true': 0.1289}
+mquake overlap ids/subjects 0 0 {'relation_id': 0.024, 'subject': 0.6931, 'target_new': 0.4045, 'target_true': 0.3032}
+2026-10-10T01:50:28Z end datasets exit 0
+2026-10-10T01:50:28Z start nelson
+{"tests": {"point_mass_zero": true, "shannon_at_zero": true, "uniform_closed_form": true, "convergence_to_shannon": true, "rejects_unnormalized": true}, "profiles": 60, "scale_checks": 10, "identity_all": true}
+2026-10-10T01:50:28Z end nelson exit 0
+2026-10-10T01:50:28Z start figures
+{"rank_frequency": "Rank-frequency (log-log) of relation, ne", "frozen_surprisal": "Frozen GPT-2 small: teacher-forced per-t", "tail_shapes_probe_loss": "Generalized-Pareto shape fitted to excee", "deciles_counterfact_edit": "Mean paired gain over frozen GPT-2 by fr", "deciles_counterfact_paraphrase": "Mean paired gain over frozen GPT-2 by fr", "deciles_counterfact_unseen": "Mean paired gain over frozen GPT-2 by fr", "deciles_mquake_edit": "Mean paired gain over frozen GPT-2 by fr", "deciles_mquake_paraphrase": "Mean paired gain over frozen GPT-2 by fr", "deciles_mquake_unseen": "Mean paired gain over frozen GPT-2 by fr", "deciles_zsre_edit": "Mean paired gain over frozen GPT-2 by fr", "deciles_zsre_paraphrase": "Mean paired gain over frozen GPT-2 by fr", "deciles_zsre_unseen": "Mean paired gain over frozen GPT-2 by fr", "cvar_A_B": "Two different worst-case summaries at 30", "paired_pc_minus_bp": "Paired per-probe differences of per-toke", "write_norms": "Relative write magnitude (||W_m|| / ||h_", "mquake_pcreader": "MQuAKE realization 0, order 100, 300 edi", "harm_survival_pcreader": "Ordinary-text harm (loss with cap minus "}
+2026-10-10T01:50:32Z end figures exit 0
+2026-10-10T01:50:32Z start report
+{"md": "/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/research_report.md", "pdf": "ok", "words": 31257}
+2026-10-10T01:50:36Z end report exit 0

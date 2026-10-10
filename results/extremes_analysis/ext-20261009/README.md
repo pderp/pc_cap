@@ -43,3 +43,19 @@ Across zsRE, CounterFact and MQuAKE, how do frozen GPT-2, the ePC-trained reader
 compare in ordinary benchmark performance, prediction difficulty, heavy-tail behaviour, extreme losses, adaptation
 benefit, residual correction magnitude, locality and stability? Does the ePC-trained cap show distinctive advantages in
 rare and extreme situations, and are those robust against the BP-trained cap rather than only against the frozen base?
+
+## Final completion checklist (handoff §29)
+
+| item | state |
+|---|---|
+| All three datasets represented with exact versions | yes — zsRE (MEND train rows, eligible pool), CounterFact (original, eligible pool), MQuAKE-CF (9,218 cases; v2 and T present but unused) — `audit/model_and_dataset_inventory.md` §3 |
+| All three models have comparable basic benchmark results | yes for zsRE/CounterFact (record + frozen [new]); yes for MQuAKE after this study's six supplemental evaluations [new] — `tables/benchmark_original.csv` |
+| Missing frozen-only tests genuinely performed | yes — direct frozen scoring of every probe family on all datasets, validated against the cap-off path (`validation/gpu_checks.json`) |
+| PC/BP prior results preserved and reconciled | yes — copied with hashes; HT-17 PC-reader cells reproduced field by field (`tables/ht17_reproduction_checks.csv`) |
+| Per-example joins and loss definitions tested | yes — `aw/tests/test_extremes_stats.py` (10 tests), `validation/gpu_checks.json` (9 checks), joins on explicit keys only |
+| Tail fitting and uncertainty diagnostics documented | yes — `tables/*tail*`, thresholds P90/P95/P97.5 and the record's u = 0.01/0.1/0.5/1; insufficient/exploratory statuses retained |
+| All available locality and residual metrics included | yes — locality/near-miss/unseen families scored for all models; write norms per site at every scored position |
+| MQuAKE success aggregation correct | yes — all-question, any-question and question-level with denominators (`tables/mquake_composition.csv`; unit test) |
+| PDF renders with equations/figures | yes — `reports/research_report.pdf` (xelatex via `aw/extremes/md2tex.py`) |
+| Raw data and scripts complete and reload | yes — parquet under `assets/extremes_analysis/ext-20261009/data/`, JSONL chunks with hash manifests, `scripts/run_gpu_chain.sh`, `scripts/run_cpu_pipeline.sh` |
+| Final STATUS.md marks completed / unavailable / incomplete | see `STATUS.md` |

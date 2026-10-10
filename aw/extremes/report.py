@@ -221,13 +221,15 @@ def section_tails(h17, groups, mq, pt, ft):
     tt = csv("token_loss_tail_fits")
     rows = []
     if not tt.empty:
-        for _, r in tt[(tt["family"].isin(["pooled_probes", "paraphrase", "locality_item"])) & (tt["quantile"].isin([0.9, 0.95]))].sort_values(["dataset", "family", "target", "model", "quantile"]).iterrows():
+        for _, r in tt[(tt["family"].isin(["pooled_probes", "paraphrase", "locality_item"])) & (tt["quantile"].isin([0.9, 0.95]))].sort_values(["dataset", "family", "target", "threshold_rule", "model", "quantile"]).iterrows():
             if (r["family"] == "paraphrase" and r["target"] != "new") or (r["family"] == "locality_item" and r["target"] != "true"):
                 continue
-            if r["family"] != "pooled_probes" and r["quantile"] != 0.9:
+            if r["family"] != "pooled_probes" and (r["quantile"] != 0.9 or r["threshold_rule"] != "own quantile"):
                 continue
-            rows.append([r["dataset"], r["family"], MODEL_LABEL.get(r["model"], r["model"]), int(r["n_tokens"]), f(r["p99"], 2), f(r["max"], 2), f"P{int(round(100 * r['quantile']))} = {f(r['threshold'], 2)}", int(r["n_exceedances"]), r["status"], f(r.get("kappa")), ci(r.get("kappa_ci_low"), r.get("kappa_ci_high"), 2), f(r.get("sigma")), f(r.get("loglik_gain_per_excess"), 4)])
-    t_pt += "\n\nToken-level (one value per target token, terminator excluded; groups = items for the bootstrap). `pooled_probes` pools edit, paraphrase and unseen prompts (new target) with item-locality, sealed locality and near-miss neighbour prompts (true target) and is the only population that clears the 100-excess screen at P95 and P90; the per-family rows are shown at P90 and are exploratory or insufficient:\n\n" + (md_table(["dataset", "family", "model", "n tokens", "P99", "max", "threshold", "excesses", "fit", "κ", "item-bootstrap 95 % κ", "σ_u", "GPD − exp (in-sample nats/excess)"], rows) if rows else "_not available_")
+            if r["family"] == "pooled_probes" and r["quantile"] != 0.95:
+                continue
+            rows.append([r["dataset"], r["family"], MODEL_LABEL.get(r["model"], r["model"]), r["threshold_rule"], int(r["n_tokens"]), f(r["p99"], 2), f(r["max"], 2), f"P{int(round(100 * r['quantile']))} = {f(r['threshold'], 2)}", int(r["n_exceedances"]), r["status"], f(r.get("kappa")), ci(r.get("kappa_ci_low"), r.get("kappa_ci_high"), 2), f(r.get("sigma")), f(r.get("loglik_gain_per_excess"), 4)])
+    t_pt += "\n\nToken-level (one value per target token, terminator excluded; groups = items for the bootstrap). `pooled_probes` pools edit, paraphrase and unseen prompts (new target) with item-locality, sealed locality and near-miss neighbour prompts (true target) and is the only population that clears the 100-excess screen. Two threshold rules are shown for it: each model's *own* P95 (the handoff's rule; a cap that has driven many losses to zero has a much lower P95, so its 'tail' starts in the frozen model's body) and the *common* absolute threshold u = frozen P95 (the same cases for every model, the comparison that answers the three-model question). Per-family rows are own-P90 and exploratory or insufficient:\n\n" + (md_table(["dataset", "family", "model", "threshold rule", "n tokens", "P99", "max", "threshold", "excesses", "fit", "κ", "item-bootstrap 95 % κ", "σ_u", "GPD − exp (in-sample nats/excess)"], rows) if rows else "_not available_")
     d = ft.get("describe", {})
     fits = ft.get("fits", [])
     rows = [[f(x["quantile"], 3), f(x["threshold"], 2), int(x["n"]), x["status"], f(x.get("kappa")), ci(*(x.get("bootstrap", {}).get("kappa_ci", [None, None])), 3), f(x.get("sigma")), f(x.get("loglik_gain_per_excess"), 4)] for x in fits]
@@ -351,11 +353,15 @@ def main():
     tt = csv("token_loss_tail_fits")
     tail_sentence = "(token-level pooled fits pending)"
     if not tt.empty:
-        z = tt[(tt["family"] == "pooled_probes") & (tt["quantile"] == 0.95) & tt["kappa"].notna()]
-        neg = int(((z["kappa_ci_high"] < 0)).sum()); pos = int(((z["kappa_ci_low"] > 0)).sum()); inc = int(len(z) - neg - pos)
-        kmin, kmax = float(z["kappa"].min()), float(z["kappa"].max())
-        tail_sentence = (f"the generalized-Pareto shapes of per-token target surprisal (pooled probe families, P95 threshold, {len(z)} model/dataset fits) range from {kmin:.2f} to {kmax:.2f}; "
-                         f"{neg} intervals lie entirely below zero (finite upper endpoint within the measured range), {inc} include zero, {pos} lie entirely above zero")
+        def summ(rule):
+            z = tt[(tt["family"] == "pooled_probes") & (tt["quantile"] == 0.95) & tt["kappa"].notna() & (tt["threshold_rule"] == rule)]
+            if z.empty:
+                return "n/a"
+            neg = int(((z["kappa_ci_high"] < 0)).sum()); pos = int(((z["kappa_ci_low"] > 0)).sum()); inc = int(len(z) - neg - pos)
+            posl = ", ".join(f"{a} {MODEL_LABEL.get(b, b)}" for a, b in zip(z[z["kappa_ci_low"] > 0]["dataset"], z[z["kappa_ci_low"] > 0]["model"]))
+            return f"{len(z)} fits, shapes {z['kappa'].min():.2f} to {z['kappa'].max():.2f}; {neg} intervals entirely below zero, {inc} include zero, {pos} entirely above zero" + (f" ({posl})" if pos else "")
+        tail_sentence = (f"at a common absolute threshold (the frozen model's P95 of the pooled probe surprisal, same cases for every model) the generalized-Pareto shapes are: {summ('frozen quantile (common)')}; "
+                         f"at each model's own P95 they are: {summ('own quantile')} — the own-quantile positives arise because a cap that drives many losses to zero lowers its own P95 into the frozen body, not because its extremes are heavier")
     # data-driven discussion sentences
     disc = []
     try:
@@ -405,8 +411,8 @@ Provenance tags: **[record]** previously established in the frozen record and co
 
 {chr(10).join(head) if head else '- (paired results pending)'}
 - **Neither cap beats the frozen model everywhere.** Both caps convert the taught facts (own-prompt loss falls from ≈ 6 nats/token to ≈ 0.01) and both leave the frozen model's behaviour unchanged where they abstain; the differences between ePC- and BP-trained readers are differences of *gating*: which paraphrases and un-taught prompts trigger a write. Where a reader abstains, its loss equals the frozen loss to the bit.
-- **ePC vs BP.** On CounterFact the ePC-trained reader retains fewer paraphrases in all three seeds (frozen record), and its per-probe paraphrase loss is higher than BP's in the paired contrast; on zsRE the two rules are close with mixed signs. No analysis in this study (difficulty deciles, frozen-hard subsets, regressions, correction magnitudes) finds a regime of rare or extreme cases where the ePC-trained reader is reliably better than the BP-trained reader. Training cost remains 96–102× **[record]**.
-- **Extremes.** Frozen difficulty is large in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset), but it is not heavy-tailed in the fitted sense: {tail_sentence}. No model/dataset shows a positive shape with an interval excluding zero. The ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large per-probe deteriorations exist for both caps and occur almost only where a record fired (joint-extremes tail lift 14–62 on zsRE).
+- **ePC vs BP.** On CounterFact (frozen record) and on MQuAKE (this study's six supplemental evaluations) the ePC-trained reader retains fewer paraphrases than the BP-trained reader in all three seeds, and its per-probe paraphrase loss is higher in the paired contrast; on zsRE the two rules are close, with the seed-mean contrast slightly favouring BP and mixed per-seed signs. No analysis in this study (difficulty deciles, frozen-hard subsets, regressions, correction magnitudes) finds a regime of rare or extreme cases where the ePC-trained reader is reliably better than the BP-trained reader. Training cost remains 96–102× **[record]**.
+- **Extremes.** Frozen difficulty is large in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset), but it is not heavy-tailed in the fitted sense: {tail_sentence}. The ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large per-probe deteriorations exist for both caps and occur almost only where a record fired (joint-extremes tail lift 14–62 on zsRE).
 - **Qualifications.** One subject realization and one order; three training seeds are not three populations; GPT-2 small only; the frozen model answers essentially none of these prompts under the project's greedy convention, so the frozen baseline is informative through teacher-forced losses, not through exact-match rates.
 
 ## 2. Research questions and architectures
