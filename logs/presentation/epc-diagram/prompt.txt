@@ -1,0 +1,44 @@
+Use case: scientific-educational
+Create an ORIGINAL, publication-quality educational infographic as a single wide 16:9 PNG, preferably 2400 by 1350 or higher. This is an explanatory presentation slide about error-based predictive coding (ePC). Do not copy any published figure. No reference images are supplied.
+
+Visual style: polished, clean slide infographic on pure white. Large bold dark charcoal sans-serif text, light gray network blocks, saturated teal for temporary error inference, warm orange for persistent weight learning. Rounded rectangles, precise orthogonal arrows, restrained pale fills, no decorative illustrations or unnecessary texture. Match a companion infographic whose style is a white canvas with large charcoal headings, teal numbered step circles and gray network boxes, with orange accents for applied changes. Readable at projected slide size. Generous whitespace, crisp geometry, consistent type hierarchy. This should explain through diagrams rather than paragraphs.
+
+Exact title: "Error predictive coding"
+Subtitle: "Adjust temporary errors first; learn from the inferred states."
+
+Two broad horizontal panels, numbered 1 in teal and 2 in orange. Panel 1 takes about 55% of the content area, panel 2 about 30%. A compact footer below. All visible text listed below should be spelled correctly; do not add claims or extra prose.
+
+PANEL 1 heading: "1  SETTLE ERRORS"
+Badge next to heading: "Weights held fixed"
+Draw a forward computational chain from left to right:
+"Input" → gray "Block 1" → teal circular plus → gray "Block 2" → teal circular plus → gray "Block 3" → teal circular plus → "Readout" → "Prediction".
+Three blocks illustrate a generic hidden stack, not the exact number of GPT-2 layers. A small label says "Schematic: three blocks shown".
+At each plus, a distinct teal error-variable pill "ε₁", "ε₂", "ε₃" supplies an input arrow into that plus. These are temporary added activity adjustments, NOT weights. Label these collectively "Errors ε start at zero".
+Prediction and a separate box "Target" both feed an objective box. Its two-line text:
+"Task loss + ½ Σ‖ε‖²"
+"Fit the target • keep adjustments small"
+The objective includes ALL three error variables' quadratic penalty, not just the last error.
+Use a clear teal feedback path from that objective back to ALL THREE error-variable pills (arrowheads must point into the error pills). This path is labeled:
+"Global gradients → update all ε → repeat"
+This is a feedback loop over repeated forward reconstructions and global reverse-mode differentiation. The diagram MUST show that the error-inference computation is global; DO NOT depict weight updates on the blocks in panel 1. Avoid confusing the feedback with the main forward flow; use adequate vertical separation and tidy routed lines. It is fine to use a shared feedback rail branching to all three error pills.
+
+A modest downward transition arrow between panels is labeled "Use the inferred states as local targets".
+
+PANEL 2 heading: "2  UPDATE TRAINABLE WEIGHTS"
+Badge: "Inferred states held fixed"
+Show THREE small side-by-side independent local-learning diagrams in pale orange cards, one for each illustrated block. Each card contains a small box labeled "Block 1", "Block 2", or "Block 3". A "Fixed input" enters that block from the left. Its predicted output goes to a small comparison node on the right. A "Fixed target" enters the same comparison node from above. A short orange feedback arrow runs from the comparison node back to the block, labeled "Local weight update". There are no learning arrows between the three cards. The fixed input and fixed target are the inferred neighboring states from panel 1, not the original end-to-end training label. Only these local block weights are being adjusted in this general training schematic. Make the small diagrams clean and legible; use a plus/minus comparison circle if it improves clarity, with the prediction and fixed target entering separately.
+
+Footer in a lightly shaded unobtrusive band, clearly separate from the general method:
+"Our cap experiments: GPT-2 weights stay frozen; ePC guides cap learning."
+Small but readable credit underneath:
+"Concept: Goemaere et al. • arXiv:2505.20137"
+
+Scientific invariants:
+- The top feedback phase uses gradients through the whole network with respect to the error variables. Locality applies to the subsequent weight updates, not to all ePC computation.
+- No claim of eliminating backward passes, no claim of biological locality for the global inference computation.
+- Three temporary errors, three plus nodes, each error added after its corresponding hidden block and before the next block/readout.
+- Do not draw output loss directly training the weights in panel 1.
+- Do not draw the whole GPT-2 model being retrained in our cap experiments.
+- Finite settling steps need not reach exact convergence. Say "inferred", not "optimal" or "converged".
+- No timing data, result charts, invented measurements, speedup promises, logos, or copied publication graphics.
+- Exact mathematical penalty is half the SUM OF SQUARED NORMS, ½ Σ‖ε‖², not the norm of a sum.

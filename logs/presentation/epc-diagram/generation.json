@@ -1,0 +1,41 @@
+{
+  "generated_at_utc": "2026-10-08T22:31:57.464721+00:00",
+  "tool": "built-in image_gen",
+  "workflow": "Original generation followed by a targeted label and arrow correction.",
+  "output": "/home/derp/cap/assets/presentation-materials/figures/epc_diagram.png",
+  "size_pixels": [
+    1672,
+    941
+  ],
+  "bytes": 1649452,
+  "sha256": "2b61dde3a0f3544bd6a930c94ab4364de4dfc8c395ea390db67c3b63a5de0c56",
+  "original_generation": "/home/derp/.codex/generated_images/01a0862d-9685-75e0-9bbc-89b37b2d85a4/exec-5c1e6caa-deee-49ad-a59b-f75ee7871903.png",
+  "final_generation": "/home/derp/.codex/generated_images/01a0862d-9685-75e0-9bbc-89b37b2d85a4/exec-38145bd3-0dc6-4842-b60c-00ff5027b504.png",
+  "prompt_files": [
+    "prompt.txt",
+    "edit-prompt.txt"
+  ],
+  "deck_source": "https://docs.google.com/presentation/d/1ofdKlNOS3n_cKVoS4Ga_81xDDU7Rt0_j8sSf2aVuPLg/edit",
+  "deck_page": 3,
+  "deck_pdf_snapshot_sha256": "ca5af07fe413e4d2240cd1761ca613a380654bf7f0ccaf3c697eea5c808edd61",
+  "paper_source": "https://arxiv.org/pdf/2505.20137",
+  "paper_version_read": "v5 (2026-06-08), especially sections 2, 4.1, 4.2 and Algorithm 2",
+  "implementation_checked": "src/pccap/pc/epc_inference.py",
+  "review": {
+    "original_artwork": "No published figures used as input or copied.",
+    "error_variables": "Three distinct labels epsilon_1, epsilon_2, epsilon_3; each enters the plus after its own block.",
+    "objective": "Task loss plus one half the sum of squared error norms.",
+    "feedback": "Objective sends global gradients to all error variables; corrected objective-end arrow direction.",
+    "weight_updates": "Separate local comparisons using fixed inferred inputs and targets after settling.",
+    "project_scope": "Footer explicitly states that GPT-2 weights stay frozen in our cap experiments.",
+    "schematic_scope": "Three hidden blocks shown for illustration; this is not the GPT-2 layer count.",
+    "convergence": "No claim of exact convergence from finite error-inference iterations.",
+    "visible_text_and_arrows": "Inspected final image visually; labels, mathematical penalty, phase separation, and arrow directions checked."
+  },
+  "slide3_correction": {
+    "current_claim": "without a single end-to-end backward pass",
+    "recommended_replacement": "Error settling uses gradients through the whole network; subsequent weight updates use local targets.",
+    "reason": "ePC uses reverse-mode automatic differentiation with respect to the error variables during inference. The local weight-update phase does not eliminate this global differentiation.",
+    "canonical_deck_modified": false
+  }
+}

@@ -1,0 +1,31 @@
+Use case: scientific-educational / infographic-diagram.
+Create one polished, accurate explanatory diagram for a scientific conference presentation, as a high-resolution landscape PNG, ideally 3840 x 2160, 16:9. Pure white background to blend into a white Google Slides deck. Flat clean 2D shapes, large dark-gray sans-serif typography, restrained teal for reading/retrieval, warm orange for applied corrections, gray for the frozen transformer. No photorealism, 3D, decorative brains, abstract neural webs, equations, logos, or watermark. Prioritize legible concise labels and unambiguous arrows, generous whitespace.
+
+Title exactly: "What a cap is"
+Subtitle: "A correction memory around a frozen GPT-2"
+This is the MAIN LEARNED-READER path. Show an explicit three-stage sequence arranged in three horizontal bands, from top to bottom. A cap is an external memory/reader mechanism, not an extra transformer layer.
+
+TOP BAND — header "1  READ THE FROZEN MODEL"
+Draw a clean left-to-right pipeline with boxes:
+"Prompt" → "Blocks 1–4" → "Blocks 5–8" → "Blocks 9–12" → "Base prediction".
+Enclose the three block groups in a light-gray frame labeled "GPT-2 small · 12 blocks · 124M parameters".
+Put teal read taps at the OUTPUTS of blocks 4, 8, and 12, labeled "4", "8", "12". Thin teal arrows from these THREE taps converge toward the Reader in the middle band. Label this connection "Read activations". This first pass has NO orange writes and no plus signs.
+
+MIDDLE BAND — header "2  SELECT A STORED CORRECTION"
+A pale teal outlined container labeled "CAP" contains two main components and a selected-write output:
+Left: a simple recognizable stack of memory cards labeled "Correction memory". Show a single example record with exactly two fields: "Prompt key" and "Correction vectors". Beneath memory, a concise label: "One record per taught fact".
+Center: a prominent box labeled "Reader", with the short question "Which record applies?" inside. It receives the teal observations from the top. Connect memory and reader to show retrieval of a stored record.
+Right/lower: a small orange-accent box labeled "Selected correction", reached from the reader by an arrow labeled "Match".
+A separate gray branch from the reader labeled "No match" ends in a clearly separated box labeled "Use base prediction". This no-match branch must NOT lead to any orange writes. Do not connect base prediction to memory as training data.
+
+BOTTOM BAND — header "3  APPLY THE CORRECTION"
+Draw a left-to-right CORRECTED CONTINUATION of the same transformer:
+"Reuse state after block 4" → orange circular plus node labeled "After 4" → "Blocks 5–8" → orange circular plus node labeled "After 8" → "Blocks 9–12" → orange circular plus node labeled "After 12" → "Corrected prediction".
+Orange arrows branch from the MIDDLE band's "Selected correction" to ALL THREE orange plus nodes, and nowhere else. Label their shared orange bus "Bounded writes". All horizontal computation arrows point to the right.
+Make clear visually that this bottom row reuses the same model's fixed weights; it is not a second separately trained network. The read pass occurs first, selection second, and writes apply only in this corrected continuation. The plus nodes add activation corrections, not weight updates.
+
+At the bottom, use two concise footer statements:
+"Same frozen weights. Memory grows as facts are taught."
+"Three write sites share one size budget."
+
+Accuracy and design constraints: exactly three read taps at 4, 8, 12 and exactly three write plus nodes after 4, 8, 12. No writes inside blocks 1–4; the first write follows block 4. Distinguish the correction memory from the reader. Show no-match as unchanged base prediction, not a zero output or a blocked response. Do not imply the answer is always correct. No extra text beyond the specified labels. Keep all arrowheads clear and attached to their intended node; route with whitespace so lines do not run through text. Use large labels appropriate for a projected slide, crisp clean scientific illustration rather than a paragraph-heavy infographic.
