@@ -32,6 +32,7 @@ DATASETS = ("zsre", "counterfact", "mquake")
 def load_scores():
     rows, gens = [], []
     probes_meta = {}
+    taught = {}
     for model in M_MODELS():
         for ds in DATASETS:
             for h in HORIZONS[model]:
@@ -44,12 +45,13 @@ def load_scores():
                     continue
                 if ds not in probes_meta:
                     probes_meta[ds] = {p["probe_id"]: p for p in json.loads((d / "probes.json").read_bytes())}
+                    taught[ds] = {p["prompt"] for p in probes_meta[ds].values() if p["family"] == "edit"}
                 for f in sorted(glob.glob(str(d / "chunk-*.jsonl"))):
                     for line in open(f):
                         r = json.loads(line)
                         sel = r.get("selection") or {}
                         g = r.get("generation")
-                        base = dict(model=model, dataset=ds, horizon=(h or 0), probe_id=r["probe_id"], family=r["family"], item_id=r.get("item_id"), prompt_tokens=r["prompt_tokens"],
+                        base = dict(model=model, dataset=ds, horizon=(h or 0), probe_id=r["probe_id"], family=relabel(r["family"], probes_meta[ds].get(r["probe_id"], {}).get("prompt"), taught[ds]), item_id=r.get("item_id"), prompt_tokens=r["prompt_tokens"],
                                     fired=(None if not sel else (not sel["hard_null"])), null_mass=sel.get("null_mass"), best_score=sel.get("best_score"), n_records=len(sel.get("record_ids", [])) if sel else None,
                                     selected_own_record=(any(rid.endswith(":" + str(r.get("item_id")) + ":r1") or (":" + str(r.get("item_id")) + ":") in rid for rid in sel.get("record_ids", [])) if sel else None))
                         if g:
@@ -76,11 +78,19 @@ def load_scores():
     return pd.DataFrame(rows), pd.DataFrame(gens), probes_meta
 
 
+def relabel(family: str, prompt, taught_prompts: set) -> str:
+    """Corrigendum 2026-10-20: item-locality prompts that are themselves taught stream items (40 of 600 on MQuAKE; the
+    locality rows of other MQuAKE cases) are a separate family. A cap that fires on them is applying its own record,
+    not damaging an unrelated fact; counting them as collateral overstated MQuAKE locality deterioration."""
+    return "locality_item_taught" if (family == "locality_item" and prompt is not None and prompt in taught_prompts) else family
+
+
 def meta_frame(probes_meta):
     out = []
     for ds, pm in probes_meta.items():
+        taught_prompts = {p["prompt"] for p in pm.values() if p["family"] == "edit"}
         for p in pm.values():
-            out.append(dict(dataset=ds, probe_id=p["probe_id"], family=p["family"], item_id=p.get("item_id"), stream_index=p.get("stream_index"), subject=p.get("subject"), relation_id=p.get("relation_id"),
+            out.append(dict(dataset=ds, probe_id=p["probe_id"], family=relabel(p["family"], p.get("prompt"), taught_prompts), item_id=p.get("item_id"), stream_index=p.get("stream_index"), subject=p.get("subject"), relation_id=p.get("relation_id"),
                             answer_tokens=p.get("answer_tokens"), hop_count=p.get("hop_count"), n_edits=p.get("n_edits"), case_id=p.get("case_id"), question_index=p.get("question_index"), paraphrase_index=p.get("paraphrase_index"),
                             locality_index=p.get("locality_index"), family_key=p.get("family_key"), edit_item_id=p.get("edit_item_id"), targets=",".join(sorted(p["targets"]))))
     return pd.DataFrame(out)
