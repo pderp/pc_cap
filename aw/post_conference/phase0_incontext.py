@@ -28,26 +28,8 @@ import pandas as pd
 
 from aw.extremes.probes import build_probes
 from aw.post_conference.common import CACHE, DATA, DATASETS, HORIZON, READERS, SEVERE, TABLES, Status, atomic_csv, atomic_json, atomic_parquet, ensure_dirs, frozen_losses, label, log_line, read_json, scores, sha
-from aw.post_conference.common import EXT_DATA
+from aw.post_conference.common import EXT_DATA, prefix_match
 from aw.post_conference.phase0_locality import stop_tokens
-import re
-import unicodedata
-
-
-def _norm(t: str) -> str:
-    return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", t).casefold()).strip()
-
-
-def prefix_match(generated, aliases) -> float:
-    """1.0 if the normalised generation starts with a normalised alias at a word boundary (or equals it)."""
-    if not isinstance(generated, str):
-        return float("nan")
-    g = _norm(generated)
-    for a in aliases:
-        a = _norm(str(a))
-        if a and g.startswith(a) and (len(g) == len(a) or not g[len(a)].isalnum()):
-            return 1.0
-    return 0.0
 
 FAMILIES = ("edit", "paraphrase", "locality_item", "near_miss_neighbour", "unseen", "composition")
 ITEM = ("edit", "paraphrase")
@@ -166,6 +148,65 @@ def execute(datasets=DATASETS, limit: int | None = None) -> dict:
     return manifest
 
 
+def execute_matched(models=READERS, datasets=DATASETS, limit: int | None = None) -> dict:
+    """Matched comparator (Capex §6): for every probe on which a reader fired, place the record it applied (its taught
+    fact) in frozen GPT-2's context; abstentions keep the frozen answer by construction. Per-probe wall time recorded."""
+    import pccap  # noqa: F401  # isort: skip
+
+    from aw.extremes import models as M
+    from aw.extremes.score import score_probe
+    from aw.pc_v0 import blocking_cuda_processes
+    from pccap.harness.lease import gpu_lease
+
+    ensure_dirs()
+    out = CACHE / "incontext_matched"
+    out.mkdir(parents=True, exist_ok=True)
+    manifest_path = out / "manifest.json"
+    manifest = read_json(manifest_path) if manifest_path.exists() else dict(cells={})
+    sel = pd.read_parquet(DATA / "selection_table.parquet")
+    t_all = time.monotonic()
+    with gpu_lease("phase0 matched in-context comparator (frozen, forward-only)", stage="post_conference", projected_seconds=3600, exclusive=True) as lease:
+        others = lease.other_cuda_processes()
+        if blocking_cuda_processes(others):
+            raise RuntimeError("another project process holds the GPU: " + json.dumps(others))
+        for ds in datasets:
+            model, parent, tok, binding = M.load_frozen(ds)
+            probes, _ = build_probes(ds)
+            probes = [p for p in probes if p["family"] in FAMILIES and (p["family"] != "locality_item" or p["locality_index"] < 3)]
+            by_id = {p["probe_id"]: p for p in probes}
+            items = {p["item_id"]: dict(item_id=p["item_id"], prompt=p["prompt"], answer=p["targets"]["new"]["text"]) for p in probes if p["family"] == "edit"}
+            for reader in models:
+                key = f"{reader}/{ds}"
+                if manifest["cells"].get(key, {}).get("status") == "complete":
+                    continue
+                fired = sel[(sel.model == reader) & (sel.dataset == ds) & (~sel.hard_null.astype(bool)) & (sel.family != "composition")]
+                if limit:
+                    fired = fired.head(limit)
+                t0 = time.monotonic()
+                lines = []
+                for r in fired.itertuples(index=False):
+                    p = by_id.get(r.probe_id)
+                    rid = str(r.top_record)
+                    item = next((it for iid, it in items.items() if (":" + iid + ":") in rid), None)
+                    if p is None or item is None:
+                        continue
+                    ctx = fact_text(item)
+                    t1 = time.monotonic()
+                    rec = score_probe(model, tok, dict(p, prompt=ctx + p["prompt"]), None, None)
+                    rec.update(arm="matched", reader=reader, retrieved_item=item["item_id"], retrieved_is_own=(item["item_id"] == p.get("item_id")), context=ctx, prompt=p["prompt"], wall_seconds=time.monotonic() - t1, context_tokens=len(tok.encode(ctx)))
+                    lines.append(json.dumps(rec, ensure_ascii=False))
+                d = out / reader
+                d.mkdir(parents=True, exist_ok=True)
+                (d / f"{ds}.jsonl").write_text("\n".join(lines) + ("\n" if lines else ""))
+                manifest["cells"][key] = dict(status="complete", n_rows=len(lines), sha256=sha(d / f"{ds}.jsonl"), elapsed=time.monotonic() - t0)
+                atomic_json(manifest_path, manifest)
+                log_line("incontext", f"matched {key} n={len(lines)} {time.monotonic() - t0:.0f}s")
+            del model, parent
+    manifest.update(elapsed_total=time.monotonic() - t_all, other_cuda_processes=others, base_sha256=binding.get("sha256") if isinstance(binding, dict) else None)
+    atomic_json(manifest_path, manifest)
+    return manifest
+
+
 def assemble() -> dict:
     ensure_dirs()
     out = CACHE / "incontext"
@@ -178,7 +219,7 @@ def assemble() -> dict:
             for tgt, t in r["targets"].items():
                 if t.get("status") != "ok":
                     continue
-                rows.append(dict(dataset=ds, arm=r["arm"], probe_id=r["probe_id"], family=r["family"], item_id=r.get("item_id"), target=tgt, nll_token=t["nll_token"], exact=g.get("exact", {}).get(tgt), generated=g.get("text"),
+                rows.append(dict(dataset=ds, arm=r["arm"], probe_id=r["probe_id"], family=r["family"], item_id=r.get("item_id"), prompt_tokens=r["prompt_tokens"], target=tgt, nll_token=t["nll_token"], nll_noterm=t.get("nll_token_no_terminator"), exact=g.get("exact", {}).get(tgt), generated=g.get("text"),
                                  retrieved_item=r["retrieved_item"], retrieval_score=r["retrieval_score"], retrieved_is_own=r["retrieved_is_own"], stream_index=r.get("stream_index")))
     ic = pd.DataFrame(rows)
     s = scores(HORIZON)
@@ -193,18 +234,44 @@ def assemble() -> dict:
             for tgt, t in p["targets"].items():
                 aliases[(ds, p["probe_id"], tgt)] = list(t.get("aliases") or [t["text"]])
     ic["exact_prefix"] = [prefix_match(g, aliases.get((d, pid, t), [])) for g, d, pid, t in zip(ic.generated, ic.dataset, ic.probe_id, ic.target)]
+    ptok = s[s.model == "frozen"][["dataset", "probe_id", "prompt_tokens"]].drop_duplicates(["dataset", "probe_id"]).rename(columns={"prompt_tokens": "probe_tokens"})
+    ic = ic.merge(ptok, on=["dataset", "probe_id"], how="left")
+    ic["context_tokens"] = ic.prompt_tokens - ic.probe_tokens
     atomic_parquet(DATA / "incontext.parquet", ic)
+    # matched comparator rows (one per reader): fired probes carry the in-context result, abstained ones the frozen result
+    mrows = []
+    mout = CACHE / "incontext_matched"
+    if (mout / "manifest.json").exists():
+        for key in read_json(mout / "manifest.json")["cells"]:
+            reader, ds = key.split("/")
+            path = mout / reader / f"{ds}.jsonl"
+            for line in path.read_text().splitlines():
+                r = json.loads(line)
+                g = r.get("generation") or {}
+                for tgt, t in r["targets"].items():
+                    if t.get("status") != "ok":
+                        continue
+                    mrows.append(dict(dataset=ds, reader=reader, rule=reader.split("_")[0], probe_id=r["probe_id"], family=r["family"], target=tgt, nll_token=t["nll_token"], nll_noterm=t.get("nll_token_no_terminator"), exact=g.get("exact", {}).get(tgt), generated=g.get("text"),
+                                      retrieved_is_own=r["retrieved_is_own"], wall_seconds=r["wall_seconds"], context_tokens=r["context_tokens"]))
+    matched = pd.DataFrame(mrows)
+    if len(matched):
+        matched["exact_prefix"] = [prefix_match(g, aliases.get((d, pid, t), [])) for g, d, pid, t in zip(matched.generated, matched.dataset, matched.probe_id, matched.target)]
+        matched = matched.merge(fz, on=["dataset", "probe_id", "target"], how="left")
+        matched["D"] = matched.nll_token - matched.L_frozen
+        atomic_parquet(DATA / "incontext_matched.parquet", matched)
     gens = pd.read_parquet(EXT_DATA / "data" / "generations.parquet")
     gens = gens[(gens.horizon == HORIZON) | (gens.model == "frozen")]
 
     # cap seed means on the same probes for the comparison table
-    caps = s[(s.model.isin(READERS)) & (s.status == "ok")][["dataset", "model", "probe_id", "family", "target", "nll_token", "exact"]].copy()
+    caps = s[(s.model.isin(READERS)) & (s.status == "ok")][["dataset", "model", "probe_id", "family", "target", "nll_token", "nll_token_no_terminator", "exact"]].copy().rename(columns={"nll_token_no_terminator": "nll_noterm"})
     caps = caps.merge(gens[["dataset", "model", "probe_id", "text"]], on=["dataset", "model", "probe_id"], how="left")
     caps["exact_prefix"] = [prefix_match(g, aliases.get((d, pid, t), [])) if isinstance(g, str) else np.nan for g, d, pid, t in zip(caps.text, caps.dataset, caps.probe_id, caps.target)]
     caps["rule"] = caps.model.str.split("_").str[0]
     caps["exact"] = caps.exact.astype(float)
-    cm = caps.groupby(["dataset", "rule", "probe_id", "family", "target"]).agg(nll_token=("nll_token", "mean"), exact=("exact", "mean"), exact_prefix=("exact_prefix", "mean")).reset_index()
+    cm = caps.groupby(["dataset", "rule", "probe_id", "family", "target"]).agg(nll_token=("nll_token", "mean"), nll_noterm=("nll_noterm", "mean"), exact=("exact", "mean"), exact_prefix=("exact_prefix", "mean")).reset_index()
     fzg = gens[gens.model == "frozen"][["dataset", "probe_id", "text"]].drop_duplicates(["dataset", "probe_id"])
+    sel_fired = pd.read_parquet(DATA / "selection_table.parquet")
+    sel_fired = sel_fired[~sel_fired.hard_null.astype(bool)]
     cm = cm.merge(fz, on=["dataset", "probe_id", "target"], how="left")
     cm["D"] = cm.nll_token - cm.L_frozen
     rows = []
@@ -216,19 +283,40 @@ def assemble() -> dict:
                 continue
             k = max(1, int(np.ceil(0.05 * len(base_rows))))
             bg = base_rows.merge(fzg, on=["dataset", "probe_id"], how="left")
-            rows.append(dict(dataset=ds, family=fam, target=tgt, arm="frozen", n=len(base_rows), mean_nll=base_rows.nll_token.mean(), cvar95=base_rows.nll_token.nlargest(k).mean(), exact=base_rows.exact.astype(float).mean(),
+            rows.append(dict(dataset=ds, family=fam, target=tgt, arm="frozen", n=len(base_rows), context_tokens=0.0, mean_nll=base_rows.nll_token.mean(), mean_nll_noterm=base_rows.nll_token_no_terminator.mean(), cvar95=base_rows.nll_token.nlargest(k).mean(), exact=base_rows.exact.astype(float).mean(),
                              exact_prefix=np.nanmean([prefix_match(g, aliases.get((ds, pid, tgt), [])) if isinstance(g, str) else np.nan for g, pid in zip(bg.text, bg.probe_id)]), frac_worse_1nat=0.0, frac_severe=0.0, frac_better_1nat=0.0, retrieved_own_rate=np.nan))
             for arm in ("oracle", "knn", "lex"):
                 x = ic[(ic.dataset == ds) & (ic.family == fam) & (ic.target == tgt) & (ic.arm == arm)]
                 if not len(x):
                     continue
-                rows.append(dict(dataset=ds, family=fam, target=tgt, arm=f"in-context {arm}", n=len(x), mean_nll=x.nll_token.mean(), cvar95=x.nll_token.nlargest(k).mean(), exact=x.exact.astype(float).mean(), exact_prefix=x.exact_prefix.astype(float).mean(),
+                rows.append(dict(dataset=ds, family=fam, target=tgt, arm=f"in-context {arm}", n=len(x), context_tokens=x.context_tokens.mean(), mean_nll=x.nll_token.mean(), mean_nll_noterm=x.nll_noterm.mean(), cvar95=x.nll_token.nlargest(k).mean(), exact=x.exact.astype(float).mean(), exact_prefix=x.exact_prefix.astype(float).mean(),
                                  frac_worse_1nat=(x.D > 1).mean(), frac_severe=(x.D > SEVERE).mean(), frac_better_1nat=(x.D < -1).mean(), retrieved_own_rate=(x.retrieved_is_own.astype(float).mean() if x.retrieved_is_own.notna().any() else np.nan)))
+            # matched comparator: per reader, fired probes from the in-context run, abstained probes = frozen; then seed mean
+            if len(matched):
+                for rule, lab in (("bp", "matched in-context (BP-CAP's records) seed mean"), ("epc", "matched in-context (PC-CAP's records) seed mean")):
+                    per = []
+                    for reader in [m for m in READERS if m.startswith(rule)]:
+                        fired_sel = sel_fired[(sel_fired.model == reader) & (sel_fired.dataset == ds)]
+                        all_probes = base_rows[["probe_id", "nll_token", "nll_token_no_terminator", "exact"]].copy()
+                        mm = matched[(matched.reader == reader) & (matched.dataset == ds) & (matched.family == fam) & (matched.target == tgt)].set_index("probe_id")
+                        all_probes["L"] = [mm.nll_token.get(pid, l) for pid, l in zip(all_probes.probe_id, all_probes.nll_token)]
+                        all_probes["Ln"] = [mm.nll_noterm.get(pid, l) for pid, l in zip(all_probes.probe_id, all_probes.nll_token_no_terminator)]
+                        all_probes["X"] = [mm.exact_prefix.get(pid, float(bool(e))) for pid, e in zip(all_probes.probe_id, all_probes.exact)]
+                        all_probes["ctx"] = [mm.context_tokens.get(pid, 0.0) for pid in all_probes.probe_id]
+                        all_probes["fired"] = all_probes.probe_id.isin(mm.index)
+                        per.append(all_probes)
+                    if not per:
+                        continue
+                    pm = pd.concat(per).groupby("probe_id").agg(L=("L", "mean"), Ln=("Ln", "mean"), X=("X", "mean"), ctx=("ctx", "mean"), fired=("fired", "mean"), L0=("nll_token", "first")).reset_index()
+                    Dm = pm.L - pm.L0
+                    rows.append(dict(dataset=ds, family=fam, target=tgt, arm=lab, n=len(pm), context_tokens=pm.ctx.mean(), mean_nll=pm.L.mean(), mean_nll_noterm=pm.Ln.mean(), cvar95=pm.L.nlargest(k).mean(), exact=np.nan, exact_prefix=pm.X.mean(),
+                                     frac_worse_1nat=(Dm > 1).mean(), frac_severe=(Dm > SEVERE).mean(), frac_better_1nat=(Dm < -1).mean(), retrieved_own_rate=np.nan, fire_rate=pm.fired.mean(),
+                                     wall_seconds_per_fired_query=matched[(matched.rule == rule) & (matched.dataset == ds) & (matched.family == fam)].wall_seconds.mean()))
             for rule, lab in (("bp", "BP-CAP seed mean"), ("epc", "PC-CAP seed mean")):
                 x = cm[(cm.dataset == ds) & (cm.family == fam) & (cm.target == tgt) & (cm.rule == rule)]
                 if not len(x):
                     continue
-                rows.append(dict(dataset=ds, family=fam, target=tgt, arm=lab, n=len(x), mean_nll=x.nll_token.mean(), cvar95=x.nll_token.nlargest(k).mean(), exact=x.exact.mean(), exact_prefix=x.exact_prefix.mean(), frac_worse_1nat=(x.D > 1).mean(), frac_severe=(x.D > SEVERE).mean(), frac_better_1nat=(x.D < -1).mean(), retrieved_own_rate=np.nan))
+                rows.append(dict(dataset=ds, family=fam, target=tgt, arm=lab, n=len(x), context_tokens=0.0, mean_nll=x.nll_token.mean(), mean_nll_noterm=x.nll_noterm.mean(), cvar95=x.nll_token.nlargest(k).mean(), exact=x.exact.mean(), exact_prefix=x.exact_prefix.mean(), frac_worse_1nat=(x.D > 1).mean(), frac_severe=(x.D > SEVERE).mean(), frac_better_1nat=(x.D < -1).mean(), retrieved_own_rate=np.nan))
     summ = pd.DataFrame(rows)
     atomic_csv(TABLES / "incontext_summary.csv", summ)
 
@@ -264,12 +352,16 @@ def assemble() -> dict:
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--execute", action="store_true")
+    ap.add_argument("--matched", action="store_true", help="run the matched comparator (cap-applied record in context) on the GPU")
     ap.add_argument("--assemble", action="store_true")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--datasets", default=",".join(DATASETS))
     a = ap.parse_args(argv)
     if a.execute:
         m = execute(a.datasets.split(","), a.limit)
+        print(json.dumps({k: v.get("status") for k, v in m["cells"].items()}))
+    if a.matched:
+        m = execute_matched(datasets=a.datasets.split(","), limit=a.limit)
         print(json.dumps({k: v.get("status") for k, v in m["cells"].items()}))
     if a.assemble:
         print(assemble())

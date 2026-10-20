@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 
 from aw.extremes.probes import build_probes, load_payload
-from aw.post_conference.common import ASSETS, CACHE, DATA, HORIZON, READERS, TABLES, Status, atomic_csv, atomic_json, atomic_parquet, ensure_dirs, frozen_losses, label, log_line, read_json, rule_of, scores
+from aw.post_conference.common import ASSETS, prefix_match, CACHE, DATA, HORIZON, READERS, TABLES, Status, atomic_csv, atomic_json, atomic_parquet, ensure_dirs, frozen_losses, label, log_line, read_json, rule_of, scores
 
 RAW = ASSETS / "data/raw/mquake/MQuAKE-CF.json"
 
@@ -163,28 +163,34 @@ def assemble_gpu() -> dict:
             if t.get("status") != "ok":
                 continue
             rows.append(dict(kind=r["kind"], composition_id=r["composition_id"], case_id=r["case_id"], question_index=r["question_index"], hops=r["hops"], hop_index=r.get("hop_index"), hop_is_edited=r.get("hop_is_edited"), prompt=r["prompt"], target=key,
-                             target_text=t["text"], nll_token=t["nll_token"], exact=g.get("exact", {}).get(key), generated=g.get("text")))
+                             target_text=t["text"], nll_token=t["nll_token"], exact=g.get("exact", {}).get(key), generated=g.get("text"), stopped_by=g.get("stopped_by"), steps=g.get("steps")))
     f = pd.DataFrame(rows)
+    al = {}
+    for pr in gpu_probes():
+        for k, t in pr["targets"].items():
+            al[(pr["kind"], pr["composition_id"], pr["question_index"], k)] = t["aliases"]
+    f["exact_prefix"] = [prefix_match(g, al.get((k, c, q, t), [])) for g, k, c, q, t in zip(f.generated, f.kind, f.composition_id, f.question_index, f.target)]
+    f["newline_immediately"] = (f.steps == 1) & (f.stopped_by == "newline")
     atomic_parquet(DATA / "composition_frozen.parquet", f)
     summ = []
     for (kind, target), x in f.groupby(["kind", "target"]):
-        summ.append(dict(kind=kind, target=target, n=len(x), exact=x.exact.astype(float).mean(), mean_nll=x.nll_token.mean(), median_nll=x.nll_token.median(), n_cases=x.composition_id.nunique()))
+        summ.append(dict(kind=kind, target=target, n=len(x), exact=x.exact.astype(float).mean(), exact_prefix=x.exact_prefix.mean(), newline_immediately=x.newline_immediately.mean(), mean_nll=x.nll_token.mean(), median_nll=x.nll_token.median(), n_cases=x.composition_id.nunique()))
     # unedited hops only (hop-2 knowledge of the frozen base), edited hop separately
     for kind in ("single_hop_cloze", "single_hop_question"):
         for edited in (False, True):
             x = f[(f.kind == kind) & (f.hop_is_edited == edited)]
             if len(x):
-                summ.append(dict(kind=kind + (" (edited hop)" if edited else " (unedited hop)"), target="new", n=len(x), exact=x.exact.astype(float).mean(), mean_nll=x.nll_token.mean(), median_nll=x.nll_token.median(), n_cases=x.composition_id.nunique()))
+                summ.append(dict(kind=kind + (" (edited hop)" if edited else " (unedited hop)"), target="new", n=len(x), exact=x.exact.astype(float).mean(), exact_prefix=x.exact_prefix.mean(), newline_immediately=x.newline_immediately.mean(), mean_nll=x.nll_token.mean(), median_nll=x.nll_token.median(), n_cases=x.composition_id.nunique()))
     # cases where frozen knows every unedited hop: upper bound on composition reachable by fixing hop 1
     un = f[(f.kind == "single_hop_cloze") & (f.hop_is_edited == False)]  # noqa: E712
-    per_case = un.groupby("composition_id").exact.apply(lambda v: bool(np.all(v.astype(bool)))) if len(un) else pd.Series(dtype=bool)
+    per_case = un.groupby("composition_id").exact_prefix.apply(lambda v: bool(np.all(v.astype(bool)))) if len(un) else pd.Series(dtype=bool)
     ic = f[(f.kind == "multihop_in_context") & (f.target == "new")]
-    summ.append(dict(kind="cases whose unedited hops frozen GPT-2 answers exactly (cloze)", target="new", n=int(per_case.sum()) if len(per_case) else 0, exact=np.nan, mean_nll=np.nan, median_nll=np.nan, n_cases=int(len(per_case))))
+    summ.append(dict(kind="cases whose unedited hops frozen GPT-2 answers (cloze, prefix match)", target="new", n=int(per_case.sum()) if len(per_case) else 0, exact=np.nan, exact_prefix=(per_case.mean() if len(per_case) else np.nan), newline_immediately=np.nan, mean_nll=np.nan, median_nll=np.nan, n_cases=int(len(per_case))))
     if len(ic):
-        any_case = ic.groupby("composition_id").exact.apply(lambda v: bool(np.any(v.astype(bool))))
-        all_case = ic.groupby("composition_id").exact.apply(lambda v: bool(np.all(v.astype(bool))))
-        summ.append(dict(kind="multihop_in_context: any question correct (case level)", target="new", n=int(any_case.sum()), exact=any_case.mean(), mean_nll=np.nan, median_nll=np.nan, n_cases=int(len(any_case))))
-        summ.append(dict(kind="multihop_in_context: all three correct (case level)", target="new", n=int(all_case.sum()), exact=all_case.mean(), mean_nll=np.nan, median_nll=np.nan, n_cases=int(len(all_case))))
+        any_case = ic.groupby("composition_id").exact_prefix.apply(lambda v: bool(np.any(v.astype(bool))))
+        all_case = ic.groupby("composition_id").exact_prefix.apply(lambda v: bool(np.all(v.astype(bool))))
+        summ.append(dict(kind="multihop_in_context: any question correct (case level, prefix match)", target="new", n=int(any_case.sum()), exact=np.nan, exact_prefix=any_case.mean(), newline_immediately=np.nan, mean_nll=np.nan, median_nll=np.nan, n_cases=int(len(any_case))))
+        summ.append(dict(kind="multihop_in_context: all three correct (case level, prefix match)", target="new", n=int(all_case.sum()), exact=np.nan, exact_prefix=all_case.mean(), newline_immediately=np.nan, mean_nll=np.nan, median_nll=np.nan, n_cases=int(len(all_case))))
     t = pd.DataFrame(summ)
     atomic_csv(TABLES / "composition_frozen_ceiling.csv", t)
     st = Status()

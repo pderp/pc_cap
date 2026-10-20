@@ -1,6 +1,6 @@
 # The value of a CAP on frozen GPT-2 small: frozen GPT-2 vs BP-CAP vs PC-CAP on zsRE, CounterFact and MQuAKE — ordinary performance, extremes, collateral change
 
-Supplement to study `ext-20261009` · Capstan · 2026-10-10 · pc_cap code revision `507504c8cae8` · requested by the lead on 2026-10-10 ("Frozen/no-CAP baseline must be central"). Built from the existing recorded scores of `ext-20261009` (no new GPU evaluations); the frozen record was not modified.
+Supplement to study `ext-20261009` · Capstan · 2026-10-20 · pc_cap code revision `94f5917deb29` · requested by the lead on 2026-10-10 ("Frozen/no-CAP baseline must be central"). Built from the existing recorded scores of `ext-20261009` (no new GPU evaluations); the frozen record was not modified.
 
 **Two-part question.** **A.** What is gained by adding a CAP (episodic memory + learned reader, 3,348,228 parameters, writes at blocks 4/8/12) to frozen GPT-2 small, especially on extreme examples? **B.** Given that a CAP is beneficial, does training its reader by error predictive coding (PC-CAP) offer any advantage over backprop (BP-CAP)? Question A is primary here; question B is reported inside it.
 
@@ -13,9 +13,9 @@ Supplement to study `ext-20261009` · Capstan · 2026-10-10 · pc_cap code revis
 - **A1. Ordinary adaptation.** On paraphrases of the taught facts (the cap never saw these prompts), mean per-token NLL falls from frozen to cap: zsRE 6.10 → 0.13 (BP-CAP, −98 %) / 0.20 (PC-CAP, −97 %); CounterFact 7.37 → 1.31 (BP-CAP, −82 %) / 2.43 (PC-CAP, −67 %); MQuAKE 6.05 → 1.59 (BP-CAP, −74 %) / 2.09 (PC-CAP, −65 %). Exact-match paraphrase retention rises from a measured 0 % (frozen) to zsRE 98.0 % (BP) / 96.6 % (PC); CounterFact 81.5 % (BP) / 66.9 % (PC); MQuAKE 67.4 % (BP) / 59.6 % (PC). On the taught prompts themselves both caps reach 99–100 % (frozen: 0 % by the eligibility screen).
 - **A2. The frozen model's hardest examples.** On the fixed 5 % of paraphrases that frozen GPT-2 finds hardest, mean NLL falls zsRE (k = 15): 11.37 → 0.05 (BP, −100 % vs −98 % overall) / 0.05 (PC, −100 % vs −97 % overall); exact match on the set 100.0 % / 100.0 %; CounterFact (k = 30): 10.42 → 2.05 (BP, −80 % vs −82 % overall) / 2.78 (PC, −73 % vs −67 % overall); exact match on the set 78.9 % / 74.4 %; MQuAKE (k = 15): 10.17 → 3.13 (BP, −69 % vs −74 % overall) / 3.13 (PC, −69 % vs −65 % overall); exact match on the set 33.3 % / 33.3 %. The absolute reduction is largest where the frozen model is worst (decile figures), while the caps' own loss also rises with frozen difficulty, so the relative reduction on the hardest cases is somewhat smaller than overall on CounterFact and MQuAKE and complete on zsRE.
 - **A3. Each model's own worst errors.** The caps' own worst 5 % and 1 % of paraphrase losses are lower than the frozen model's own worst cases, but by much less than the mean improvement: zsRE: CVaR95 11.33 → 2.05 (BP, −82 %) / 3.36 (PC, −70 %); CVaR99 12.16 → 5.27 / 5.75; CounterFact: CVaR95 10.40 → 7.93 (BP, −24 %) / 8.78 (PC, −15 %); CVaR99 11.27 → 9.21 / 9.55; MQuAKE: CVaR95 10.12 → 6.84 (BP, −32 %) / 7.62 (PC, −25 %); CVaR99 11.37 → 8.82 / 8.92. A cap's residual worst cases are the prompts on which its reader abstained (loss = frozen loss to the bit) or fired without fixing the answer (table 9.2).
-- **A4. Collateral change.** Against frozen GPT-2 directly (not only against each cap's own cap-off reference), the caps leave most locality-type prompts bit-identical; the exceptions are rare but can be severe: zsRE: worse than frozen on 0.0 % (BP) / 0.0 % (PC) of item-locality prompts, severe (> 2 nats/token) events 0 / 0 over three seeds (296 prompts each); CounterFact: worse than frozen on 0.0 % (BP) / 0.3 % (PC) of item-locality prompts, severe (> 2 nats/token) events 0 / 2 over three seeds (900 prompts each); MQuAKE: worse than frozen on 7.7 % (BP) / 7.7 % (PC) of item-locality prompts, severe (> 2 nats/token) events 97 / 101 over three seeds (600 prompts each). On 245,237 positions of unrelated text per cell the mean change is 0.0e+00 to 6.3e-03 nats, with single-position maxima of 0.0–13.1 nats and 0–419 positions changed by more than 1 nat per cell (table 8.3).
+- **A4. Collateral change.** Against frozen GPT-2 directly (not only against each cap's own cap-off reference), the caps leave most locality-type prompts bit-identical; the exceptions are rare but can be severe: zsRE: worse than frozen on 0.0 % (BP) / 0.0 % (PC) of item-locality prompts, severe (> 2 nats/token) events 0 / 0 over three seeds (296 prompts each); CounterFact: worse than frozen on 0.0 % (BP) / 0.3 % (PC) of item-locality prompts, severe (> 2 nats/token) events 0 / 2 over three seeds (900 prompts each); MQuAKE: worse than frozen on 1.1 % (BP) / 1.1 % (PC) of item-locality prompts, severe (> 2 nats/token) events 4 / 8 over three seeds (560 prompts each). On 245,237 positions of unrelated text per cell the mean change is 0.0e+00 to 6.3e-03 nats, with single-position maxima of 0.0–13.1 nats and 0–419 positions changed by more than 1 nat per cell (table 8.3).
 - **A5. What the CAP does not fix.** MQuAKE multi-hop composition stays at the frozen level: all-three-questions success 0.0 % (BP) / 0.0 % (PC) of 80 cases, question accuracy 0.6 % / 0.4 % vs frozen 0.0 %; and every abstained paraphrase keeps the frozen model's full loss.
-- **A6. Tail shape.** At common absolute thresholds (frozen P95 and 8 nats) 42 GPD fits with ≥ 50 exceedances have shapes from -0.42 to 0.21; 1 interval(s) lie entirely above zero (Frozen GPT-2 (no CAP) on MQuAKE at frozen P95 (κ = 0.16 [0.01, 0.31], 194 exceedances)), and that cell turns negative at 8 nats. At every common threshold both caps have fewer exceedances than frozen GPT-2 (table 7.1): the caps thin the frozen tail rather than change its class, and none of these finite-sample fits is evidence of a power law.
+- **A6. Tail shape.** At common absolute thresholds (frozen P95 and 8 nats) 42 GPD fits with ≥ 50 exceedances have shapes from -0.42 to 0.32; 3 interval(s) lie entirely above zero (BP-CAP seed 0 on MQuAKE at frozen P95 (κ = 0.30 [0.04, 0.51], 75 exceedances); PC-CAP seed 0 on MQuAKE at frozen P95 (κ = 0.32 [0.01, 0.66], 67 exceedances); PC-CAP seed 2 on MQuAKE at frozen P95 (κ = 0.32 [0.04, 0.61], 68 exceedances)), and that cell turns negative at 8 nats. At every common threshold both caps have fewer exceedances than frozen GPT-2 (table 7.1): the caps thin the frozen tail rather than change its class, and none of these finite-sample fits is evidence of a power law.
 - **B. PC vs BP within the CAP benefit.** The paired seed-mean contrast PC − BP on paraphrase NLL (positive favours PC) is zsRE -0.076 [-0.136, -0.027]; CounterFact -1.117 [-1.313, -0.916]; MQuAKE -0.495 [-0.651, -0.347] nats/token: a small fraction of either cap's gain over frozen, and negative on every dataset. PC-CAP retains fewer paraphrases than BP-CAP on CounterFact and MQuAKE in all three seeds and is close on zsRE. Its gate is more conservative, which shows up as fewer false fires and less unrelated-text harm on zsRE (zsRE false fires 9.7 % (BP) vs 3.7 % (PC), text-harm ES99+ 0.0143 vs 0.0016; CounterFact false fires 0.3 % (BP) vs 0.3 % (PC), text-harm ES99+ 0.2930 vs 0.3266; MQuAKE false fires 0.0 % (BP) vs 0.0 % (PC), text-harm ES99+ 0.2302 vs 0.2322), not as better behaviour on hard cases: in no extreme-case view (frozen-hardest sets, own worst cases, deciles, severe collateral events) is the PC-trained reader reliably better. The two caps share architecture, acquisition and inference; only the reader's training differs, and PC training cost ≈ 100× more GPU time.
 
 **Zeros that are not measurements.** Frozen ES/RET-ES are 0 **by the eligibility screen** (items the base already answered were excluded from every pool); frozen LS and near-miss preservation are 1 **by definition** (the frozen output is the reference). These cells are marked in every table and are never used to compute a relative improvement.
@@ -91,14 +91,14 @@ Probe populations (identical for every model): zsRE 1,350 probes (300 edit, 300 
 | model | ES | RET-ES | RET-GS | NLL taught prompt | NLL paraphrase | NLL original fact | LS (own ref.) | locality worse than frozen | near-miss | unseen false fires | multi-hop Q acc. | multi-hop all-3 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Frozen GPT-2 (no CAP) | 0.0 % ‡ | 0.0 % | 0.0 % § | 5.171 | 6.048 | 4.579 | 100.0 % ¶ | 0 % (reference) | 100.0 % | 0.0 % | 0.0 % | — |
-| BP-CAP (seed mean) | 97.0 % | 98.0 % | 67.4 % | 0.124 | 1.592 | 7.941 | 100.0 % | 7.7 % | 100.0 % | 0.0 % | 0.6 % | 0.0 % |
-| PC-CAP (seed mean) | 100.0 % | 100.0 % | 59.6 % | 0.015 | 2.087 | 8.010 | 100.0 % | 7.7 % | 100.0 % | 0.0 % | 0.4 % | 0.0 % |
-| BP-CAP seed 0 | 100.0 % | 100.0 % | 62.3 % | 0.015 | 2.009 | 8.010 | 100.0 % | 7.0 % | 100.0 % | 0.0 % | 0.0 % | 0.0 % |
-| BP-CAP seed 1 | 91.0 % | 94.0 % | 72.3 % | 0.342 | 1.276 | 7.804 | 100.0 % | 7.2 % | 100.0 % | 0.0 % | 0.8 % | 0.0 % |
-| BP-CAP seed 2 | 100.0 % | 100.0 % | 67.7 % | 0.015 | 1.491 | 8.010 | 100.0 % | 7.5 % | 100.0 % | 0.0 % | 0.8 % | 0.0 % |
-| PC-CAP seed 0 | 100.0 % | 100.0 % | 60.0 % | 0.015 | 2.099 | 8.010 | 100.0 % | 7.2 % | 100.0 % | 0.0 % | 0.0 % | 0.0 % |
-| PC-CAP seed 1 | 100.0 % | 100.0 % | 60.3 % | 0.015 | 1.994 | 8.010 | 100.0 % | 7.7 % | 100.0 % | 0.0 % | 0.4 % | 0.0 % |
-| PC-CAP seed 2 | 100.0 % | 100.0 % | 58.3 % | 0.015 | 2.168 | 8.010 | 100.0 % | 7.3 % | 100.0 % | 0.0 % | 0.8 % | 0.0 % |
+| BP-CAP (seed mean) | 97.0 % | 98.0 % | 67.4 % | 0.124 | 1.592 | 7.941 | 100.0 % | 1.1 % | 100.0 % | 0.0 % | 0.6 % | 0.0 % |
+| PC-CAP (seed mean) | 100.0 % | 100.0 % | 59.6 % | 0.015 | 2.087 | 8.010 | 100.0 % | 1.1 % | 100.0 % | 0.0 % | 0.4 % | 0.0 % |
+| BP-CAP seed 0 | 100.0 % | 100.0 % | 62.3 % | 0.015 | 2.009 | 8.010 | 100.0 % | 0.4 % | 100.0 % | 0.0 % | 0.0 % | 0.0 % |
+| BP-CAP seed 1 | 91.0 % | 94.0 % | 72.3 % | 0.342 | 1.276 | 7.804 | 100.0 % | 0.5 % | 100.0 % | 0.0 % | 0.8 % | 0.0 % |
+| BP-CAP seed 2 | 100.0 % | 100.0 % | 67.7 % | 0.015 | 1.491 | 8.010 | 100.0 % | 0.9 % | 100.0 % | 0.0 % | 0.8 % | 0.0 % |
+| PC-CAP seed 0 | 100.0 % | 100.0 % | 60.0 % | 0.015 | 2.099 | 8.010 | 100.0 % | 0.5 % | 100.0 % | 0.0 % | 0.0 % | 0.0 % |
+| PC-CAP seed 1 | 100.0 % | 100.0 % | 60.3 % | 0.015 | 1.994 | 8.010 | 100.0 % | 1.1 % | 100.0 % | 0.0 % | 0.4 % | 0.0 % |
+| PC-CAP seed 2 | 100.0 % | 100.0 % | 58.3 % | 0.015 | 2.168 | 8.010 | 100.0 % | 0.7 % | 100.0 % | 0.0 % | 0.8 % | 0.0 % |
 
 ‡ zero **by the eligibility screen**: every stream item was selected because frozen GPT-2 did not produce the answer (zsRE 0/10,720, CounterFact 0/20,391 screened; MQuAKE items pass the same screen). § measured zero (paraphrases were not part of the screen). ¶ 1 **by definition**: the locality reference *is* the frozen response. Frozen multi-hop question accuracy is the recorded cap-off exact match on the post-edit answer (0/240 on every cell); case-level all-3 success for the frozen path is not separately stored (it is 0 because no question is correct). Readers' ES/RET-ES/RET-GS/LS/near-miss/false-fire values are the registered record metrics; losses are this study's teacher-forced measurements on identical prompt/answer pairs.
 
@@ -165,9 +165,9 @@ Loss improvements are reported as absolute reductions and as a percentage of the
 | MQuAKE | unseen | Frozen GPT-2 (no CAP) | 100 | 5.284 [5.012, 5.550] | 7.985 [7.168, 9.019] | 9.034 [7.394, 10.184] | 10.184 |
 | MQuAKE | unseen | BP-CAP (seed mean) | 100 | 5.284 [5.012, 5.550] | 7.985 [7.168, 9.019] | 9.034 [7.394, 10.184] | 10.184 |
 | MQuAKE | unseen | PC-CAP (seed mean) | 100 | 5.284 [5.012, 5.550] | 7.985 [7.168, 9.019] | 9.034 [7.394, 10.184] | 10.184 |
-| MQuAKE | locality_item | Frozen GPT-2 (no CAP) | 600 | 4.487 [4.338, 4.628] | 7.664 [7.214, 8.090] | 8.656 [7.997, 9.441] | 10.456 |
-| MQuAKE | locality_item | BP-CAP (seed mean) | 600 | 4.731 [4.558, 4.899] | 9.599 [8.707, 10.555] | 12.766 [10.768, 14.112] | 15.184 |
-| MQuAKE | locality_item | PC-CAP (seed mean) | 600 | 4.738 [4.565, 4.907] | 9.723 [8.789, 10.702] | 12.903 [11.003, 14.112] | 15.184 |
+| MQuAKE | locality_item | Frozen GPT-2 (no CAP) | 560 | 4.480 [4.323, 4.629] | 7.717 [7.253, 8.157] | 8.759 [8.034, 9.633] | 10.456 |
+| MQuAKE | locality_item | BP-CAP (seed mean) | 560 | 4.492 [4.337, 4.641] | 7.762 [7.312, 8.186] | 8.759 [8.077, 9.633] | 10.456 |
+| MQuAKE | locality_item | PC-CAP (seed mean) | 560 | 4.500 [4.342, 4.650] | 7.917 [7.399, 8.471] | 9.396 [8.161, 10.954] | 11.951 |
 
 ![Own worst cases](../../../../../assets/extremes_analysis/ext-20261009/figures/cap_value/own_worst.png)
 
@@ -321,38 +321,38 @@ Variable: token-level target NLL (terminator excluded) pooled over the probe fam
 | CounterFact | 10 nats | 10.00 | PC-CAP seed 0 | 2,150 | 328 | 15.26 % | 1.77 | -0.11 [-0.20, -0.04] | 0.0058 |
 | CounterFact | 10 nats | 10.00 | PC-CAP seed 1 | 2,150 | 301 | 14.00 % | 1.98 | 0.02 [-0.21, 0.12] | 0.0004 |
 | CounterFact | 10 nats | 10.00 | PC-CAP seed 2 | 2,150 | 311 | 14.47 % | 1.85 | -0.12 [-0.24, -0.04] | 0.0061 |
-| MQuAKE | frozen P95 | 11.57 | Frozen GPT-2 (no CAP) | 3,879 | 194 | 5.00 % | 2.16 | 0.16 [0.01, 0.31] | 0.0070 |
-| MQuAKE | frozen P95 | 11.57 | BP-CAP seed 0 | 3,879 | 109 | 2.81 % | 2.92 | 0.15 [-0.09, 0.40] | 0.0074 |
-| MQuAKE | frozen P95 | 11.57 | BP-CAP seed 1 | 3,879 | 91 | 2.35 % | 2.72 | 0.18 [-0.06, 0.39] | 0.0125 |
-| MQuAKE | frozen P95 | 11.57 | BP-CAP seed 2 | 3,879 | 89 | 2.29 % | 2.60 | 0.21 [-0.02, 0.42] | 0.0173 |
-| MQuAKE | frozen P95 | 11.57 | PC-CAP seed 0 | 3,879 | 101 | 2.60 % | 2.95 | 0.16 [-0.11, 0.36] | 0.0076 |
-| MQuAKE | frozen P95 | 11.57 | PC-CAP seed 1 | 3,879 | 102 | 2.63 % | 2.67 | 0.19 [-0.02, 0.37] | 0.0139 |
-| MQuAKE | frozen P95 | 11.57 | PC-CAP seed 2 | 3,879 | 102 | 2.63 % | 2.93 | 0.18 [-0.06, 0.40] | 0.0107 |
-| MQuAKE | 8 nats | 8.00 | Frozen GPT-2 (no CAP) | 3,879 | 889 | 22.92 % | 2.44 | -0.08 [-0.13, -0.02] | 0.0034 |
-| MQuAKE | 8 nats | 8.00 | BP-CAP seed 0 | 3,879 | 557 | 14.36 % | 2.47 | 0.04 [-0.03, 0.10] | 0.0010 |
-| MQuAKE | 8 nats | 8.00 | BP-CAP seed 1 | 3,879 | 539 | 13.90 % | 2.31 | 0.02 [-0.06, 0.09] | 0.0003 |
-| MQuAKE | 8 nats | 8.00 | BP-CAP seed 2 | 3,879 | 529 | 13.64 % | 2.28 | 0.01 [-0.07, 0.07] | 0.0002 |
-| MQuAKE | 8 nats | 8.00 | PC-CAP seed 0 | 3,879 | 556 | 14.33 % | 2.40 | 0.04 [-0.05, 0.10] | 0.0011 |
-| MQuAKE | 8 nats | 8.00 | PC-CAP seed 1 | 3,879 | 558 | 14.39 % | 2.36 | 0.02 [-0.05, 0.09] | 0.0002 |
-| MQuAKE | 8 nats | 8.00 | PC-CAP seed 2 | 3,879 | 561 | 14.46 % | 2.40 | 0.05 [-0.03, 0.12] | 0.0014 |
-| MQuAKE | 10 nats | 10.00 | Frozen GPT-2 (no CAP) | 3,879 | 417 | 10.75 % | 2.14 | 0.03 [-0.03, 0.11] | 0.0006 |
-| MQuAKE | 10 nats | 10.00 | BP-CAP seed 0 | 3,879 | 246 | 6.34 % | 2.40 | 0.20 [0.06, 0.34] | 0.0175 |
-| MQuAKE | 10 nats | 10.00 | BP-CAP seed 1 | 3,879 | 233 | 6.01 % | 2.13 | 0.20 [0.08, 0.33] | 0.0211 |
-| MQuAKE | 10 nats | 10.00 | BP-CAP seed 2 | 3,879 | 225 | 5.80 % | 2.08 | 0.20 [0.06, 0.32] | 0.0215 |
-| MQuAKE | 10 nats | 10.00 | PC-CAP seed 0 | 3,879 | 241 | 6.21 % | 2.31 | 0.23 [0.11, 0.36] | 0.0237 |
-| MQuAKE | 10 nats | 10.00 | PC-CAP seed 1 | 3,879 | 244 | 6.29 % | 2.19 | 0.19 [0.03, 0.33] | 0.0187 |
-| MQuAKE | 10 nats | 10.00 | PC-CAP seed 2 | 3,879 | 241 | 6.21 % | 2.32 | 0.23 [0.10, 0.36] | 0.0247 |
+| MQuAKE | frozen P95 | 11.60 | Frozen GPT-2 (no CAP) | 3,779 | 189 | 5.00 % | 2.19 | 0.14 [-0.04, 0.28] | 0.0056 |
+| MQuAKE | frozen P95 | 11.60 | BP-CAP seed 0 | 3,779 | 75 | 1.98 % | 2.12 | 0.30 [0.04, 0.51] | 0.0269 |
+| MQuAKE | frozen P95 | 11.60 | BP-CAP seed 1 | 3,779 | 58 | 1.53 % | 1.53 | 0.17 [-0.24, 0.38] | 0.0151 |
+| MQuAKE | frozen P95 | 11.60 | BP-CAP seed 2 | 3,779 | 55 | 1.46 % | 1.31 | 0.07 [-0.26, 0.26] | 0.0016 |
+| MQuAKE | frozen P95 | 11.60 | PC-CAP seed 0 | 3,779 | 67 | 1.77 % | 2.07 | 0.32 [0.01, 0.66] | 0.0309 |
+| MQuAKE | frozen P95 | 11.60 | PC-CAP seed 1 | 3,779 | 68 | 1.80 % | 1.67 | 0.20 [-0.17, 0.43] | 0.0189 |
+| MQuAKE | frozen P95 | 11.60 | PC-CAP seed 2 | 3,779 | 68 | 1.80 % | 2.06 | 0.32 [0.04, 0.61] | 0.0389 |
+| MQuAKE | 8 nats | 8.00 | Frozen GPT-2 (no CAP) | 3,779 | 874 | 23.13 % | 2.45 | -0.07 [-0.13, -0.02] | 0.0032 |
+| MQuAKE | 8 nats | 8.00 | BP-CAP seed 0 | 3,779 | 498 | 13.18 % | 2.12 | -0.03 [-0.11, 0.04] | 0.0009 |
+| MQuAKE | 8 nats | 8.00 | BP-CAP seed 1 | 3,779 | 480 | 12.70 % | 1.94 | -0.10 [-0.26, -0.04] | 0.0085 |
+| MQuAKE | 8 nats | 8.00 | BP-CAP seed 2 | 3,779 | 470 | 12.44 % | 1.89 | -0.18 [-0.27, -0.12] | 0.0207 |
+| MQuAKE | 8 nats | 8.00 | PC-CAP seed 0 | 3,779 | 497 | 13.15 % | 2.05 | -0.04 [-0.12, 0.03] | 0.0012 |
+| MQuAKE | 8 nats | 8.00 | PC-CAP seed 1 | 3,779 | 499 | 13.20 % | 2.01 | -0.08 [-0.23, -0.03] | 0.0059 |
+| MQuAKE | 8 nats | 8.00 | PC-CAP seed 2 | 3,779 | 502 | 13.28 % | 2.05 | -0.03 [-0.12, 0.03] | 0.0007 |
+| MQuAKE | 10 nats | 10.00 | Frozen GPT-2 (no CAP) | 3,779 | 410 | 10.85 % | 2.16 | 0.03 [-0.04, 0.11] | 0.0004 |
+| MQuAKE | 10 nats | 10.00 | BP-CAP seed 0 | 3,779 | 205 | 5.42 % | 1.83 | 0.13 [0.01, 0.24] | 0.0099 |
+| MQuAKE | 10 nats | 10.00 | BP-CAP seed 1 | 3,779 | 192 | 5.08 % | 1.47 | 0.03 [-0.16, 0.16] | 0.0006 |
+| MQuAKE | 10 nats | 10.00 | BP-CAP seed 2 | 3,779 | 184 | 4.87 % | 1.38 | -0.05 [-0.21, 0.05] | 0.0013 |
+| MQuAKE | 10 nats | 10.00 | PC-CAP seed 0 | 3,779 | 200 | 5.29 % | 1.72 | 0.15 [0.01, 0.25] | 0.0129 |
+| MQuAKE | 10 nats | 10.00 | PC-CAP seed 1 | 3,779 | 203 | 5.37 % | 1.58 | 0.06 [-0.10, 0.18] | 0.0022 |
+| MQuAKE | 10 nats | 10.00 | PC-CAP seed 2 | 3,779 | 200 | 5.29 % | 1.73 | 0.15 [0.01, 0.26] | 0.0148 |
 
 ### 7.2 Threshold sensitivity (per-seed cells, three datasets)
 
 | threshold | model×dataset cells | fitted (≥ 50 exc.) | insufficient (< 50) | exploratory (50–99) | κ range | CI entirely > 0 | CI entirely < 0 | CI includes 0 |
 |---|---|---|---|---|---|---|---|---|
-| frozen P90 | 21 | 21 | 0 | 0 | -0.24 to 0.23 | 6 | 9 | 6 |
-| frozen P95 | 21 | 21 | 0 | 8 | -0.42 to 0.21 | 1 | 4 | 16 |
-| frozen P97.5 | 21 | 12 | 9 | 12 | -0.34 to 0.25 | 0 | 2 | 10 |
-| 5 nats | 21 | 21 | 0 | 0 | -0.36 to -0.12 | 0 | 21 | 0 |
-| 8 nats | 21 | 21 | 0 | 0 | -0.30 to 0.05 | 0 | 15 | 6 |
-| 10 nats | 21 | 21 | 0 | 0 | -0.26 to 0.23 | 6 | 12 | 3 |
+| frozen P90 | 21 | 21 | 0 | 0 | -0.24 to 0.17 | 3 | 9 | 9 |
+| frozen P95 | 21 | 21 | 0 | 12 | -0.42 to 0.32 | 3 | 4 | 14 |
+| frozen P97.5 | 21 | 7 | 14 | 7 | -0.34 to 0.25 | 0 | 2 | 5 |
+| 5 nats | 21 | 21 | 0 | 0 | -0.36 to -0.15 | 0 | 21 | 0 |
+| 8 nats | 21 | 21 | 0 | 0 | -0.30 to -0.03 | 0 | 18 | 3 |
+| 10 nats | 21 | 21 | 0 | 0 | -0.26 to 0.15 | 3 | 12 | 6 |
 
 ![Token-loss survival](../../../../../assets/extremes_analysis/ext-20261009/figures/cap_value/token_survival.png)
 
@@ -380,8 +380,8 @@ For these GPT-2 small readers the "own cap-off reference" of the record (the sam
 | CounterFact | near_miss_neighbour | PC-CAP (seed mean) | 100 | 1.0 % [0.0, 3.0] | 4.0 % | -0.0478 | 0.030 | 0.03 | 0 / 0 / 0 | 2.7 % | near_miss = 98.0 %, 95.0 %, 99.0 % |
 | CounterFact | unseen | BP-CAP (seed mean) | 100 | 0.0 % [0.0, 0.0] | 1.0 % | -0.0012 | 0.000 | 0.00 | 0 / 0 / 0 | 0.3 % | unseen_false_fire_rate = 0.0 %, 1.0 %, 0.0 % |
 | CounterFact | unseen | PC-CAP (seed mean) | 100 | 0.0 % [0.0, 0.0] | 1.0 % | -0.0012 | 0.000 | 0.00 | 0 / 0 / 0 | 0.3 % | unseen_false_fire_rate = 0.0 %, 1.0 %, 0.0 % |
-| MQuAKE | locality_item | BP-CAP (seed mean) | 600 | 7.7 % [5.7, 9.8] | 0.3 % | 0.2435 | 3.198 | 10.12 | 124 / 97 / 19 | n/a (not generated) | — |
-| MQuAKE | locality_item | PC-CAP (seed mean) | 600 | 7.7 % [5.7, 9.8] | 0.3 % | 0.2506 | 3.326 | 10.12 | 127 / 101 / 21 | n/a (not generated) | — |
+| MQuAKE | locality_item | BP-CAP (seed mean) | 560 | 1.1 % [0.4, 2.0] | 0.4 % | 0.0123 | 1.313 | 1.92 | 10 / 4 / 1 | n/a (not generated) | — |
+| MQuAKE | locality_item | PC-CAP (seed mean) | 560 | 1.1 % [0.4, 2.0] | 0.4 % | 0.0199 | 2.295 | 5.75 | 13 / 8 / 3 | n/a (not generated) | — |
 | MQuAKE | locality | BP-CAP (seed mean) | 50 | 0.0 % [0.0, 0.0] | 0.0 % | 0.0000 | 0.000 | 0.00 | 0 / 0 / 0 | 0.0 % | LS = 100.0 %, 100.0 %, 100.0 % |
 | MQuAKE | locality | PC-CAP (seed mean) | 50 | 0.0 % [0.0, 0.0] | 0.0 % | 0.0000 | 0.000 | 0.00 | 0 / 0 / 0 | 0.0 % | LS = 100.0 %, 100.0 %, 100.0 % |
 | MQuAKE | near_miss_neighbour | BP-CAP (seed mean) | 100 | 0.0 % [0.0, 0.0] | 0.0 % | -0.0000 | 0.000 | 0.00 | 0 / 0 / 0 | 0.0 % | near_miss = 100.0 %, 100.0 %, 100.0 % |
@@ -390,6 +390,31 @@ For these GPT-2 small readers the "own cap-off reference" of the record (the sam
 | MQuAKE | unseen | PC-CAP (seed mean) | 100 | 0.0 % [0.0, 0.0] | 0.0 % | 0.0000 | 0.000 | 0.00 | 0 / 0 / 0 | 0.0 % | unseen_false_fire_rate = 0.0 %, 0.0 %, 0.0 % |
 
 ![Collateral change vs frozen](../../../../../assets/extremes_analysis/ext-20261009/figures/cap_value/collateral_vs_frozen.png)
+
+### 8.1b Corrigendum (2026-10-20): item-locality prompts that are themselves taught items
+
+40 of the item-locality prompts (all on MQuAKE; 40 rows, 39 distinct prompts of 600) are the exact prompts of other items taught in the same 300-edit stream, scored here against their *old* answers. A cap that fires on such a prompt is applying its own record for that item, and the registered new answer is the one it was taught; counting these rows as collateral damage overstated MQuAKE item-locality deterioration in the 10 October version of this report (7.7 % of prompts worse than frozen, about 33 severe events per seed). Since this date `aw/extremes/assemble.py` labels them `locality_item_taught`, the `locality_item` rows above are the genuinely unrelated stratum, and this table keeps the historical all-row figures beside both strata (found independently by Capex's 20 October audit and by Phase 0 of the post-conference programme). zsRE and CounterFact have no such overlap.
+
+| dataset | model | all rows (historical) | worse than frozen (historical) | severe D > 2 (historical) | rows that are taught items | fired on them | severe on them | genuinely unrelated rows | worse than frozen | severe | max D |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| CounterFact | BP-CAP seed 0 | 900 | 0.0 % | 0 | 0 | 0 | 0 | 900 | 0.0 % | 0 | 0.00 |
+| CounterFact | BP-CAP seed 1 | 900 | 0.0 % | 0 | 0 | 0 | 0 | 900 | 0.0 % | 0 | 0.00 |
+| CounterFact | BP-CAP seed 2 | 900 | 0.0 % | 0 | 0 | 0 | 0 | 900 | 0.0 % | 0 | 0.00 |
+| CounterFact | PC-CAP seed 0 | 900 | 0.1 % | 1 | 0 | 0 | 0 | 900 | 0.1 % | 1 | 2.26 |
+| CounterFact | PC-CAP seed 1 | 900 | 0.3 % | 1 | 0 | 0 | 0 | 900 | 0.3 % | 1 | 2.26 |
+| CounterFact | PC-CAP seed 2 | 900 | 0.0 % | 0 | 0 | 0 | 0 | 900 | 0.0 % | 0 | 0.00 |
+| MQuAKE | BP-CAP seed 0 | 600 | 7.0 % | 31 | 40 | 40 | 31 | 560 | 0.4 % | 0 | 1.39 |
+| MQuAKE | BP-CAP seed 1 | 600 | 7.2 % | 32 | 40 | 40 | 31 | 560 | 0.5 % | 1 | 5.75 |
+| MQuAKE | BP-CAP seed 2 | 600 | 7.5 % | 34 | 40 | 40 | 31 | 560 | 0.9 % | 3 | 3.68 |
+| MQuAKE | PC-CAP seed 0 | 600 | 7.2 % | 32 | 40 | 40 | 31 | 560 | 0.5 % | 1 | 5.75 |
+| MQuAKE | PC-CAP seed 1 | 600 | 7.7 % | 35 | 40 | 40 | 31 | 560 | 1.1 % | 4 | 5.75 |
+| MQuAKE | PC-CAP seed 2 | 600 | 7.3 % | 34 | 40 | 40 | 31 | 560 | 0.7 % | 3 | 5.75 |
+| zsRE | BP-CAP seed 0 | 296 | 0.0 % | 0 | 0 | 0 | 0 | 296 | 0.0 % | 0 | 0.00 |
+| zsRE | BP-CAP seed 1 | 296 | 0.0 % | 0 | 0 | 0 | 0 | 296 | 0.0 % | 0 | 0.00 |
+| zsRE | BP-CAP seed 2 | 296 | 0.0 % | 0 | 0 | 0 | 0 | 296 | 0.0 % | 0 | 0.00 |
+| zsRE | PC-CAP seed 0 | 296 | 0.0 % | 0 | 0 | 0 | 0 | 296 | 0.0 % | 0 | 0.00 |
+| zsRE | PC-CAP seed 1 | 296 | 0.0 % | 0 | 0 | 0 | 0 | 296 | 0.0 % | 0 | 0.00 |
+| zsRE | PC-CAP seed 2 | 296 | 0.0 % | 0 | 0 | 0 | 0 | 296 | 0.0 % | 0 | 0.00 |
 
 ### 8.2 Largest collateral deteriorations (two per family and dataset)
 
@@ -402,8 +427,8 @@ For these GPT-2 small readers the "own cap-off reference" of the record (the sam
 | CounterFact | locality_item | PC-CAP seed 0 | nan | 6.15 | 8.41 | 2.26 | True | 0.140 |
 | CounterFact | locality_item | PC-CAP seed 1 | nan | 6.15 | 8.41 | 2.26 | True | 0.140 |
 | CounterFact | near_miss_neighbour | PC-CAP seed 1 | nan | 5.33 | 5.42 | 0.09 | True | 0.115 |
-| MQuAKE | locality_item | BP-CAP seed 0 | nan | 5.06 | 15.18 | 10.12 | True | 0.127 |
-| MQuAKE | locality_item | BP-CAP seed 1 | nan | 5.06 | 15.18 | 10.12 | True | 0.127 |
+| MQuAKE | locality_item | BP-CAP seed 1 | nan | 6.20 | 11.95 | 5.75 | True | 0.120 |
+| MQuAKE | locality_item | PC-CAP seed 2 | nan | 6.20 | 11.95 | 5.75 | True | 0.120 |
 
 ### 8.3 Unrelated text: 1,931 windows, 245,237 positions per cell; change = NLL(cap) minus NLL(frozen) at the same prefix [record]
 

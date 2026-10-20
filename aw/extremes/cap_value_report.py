@@ -186,6 +186,23 @@ def sec_collateral(coll, h=300):
     return md_table(["dataset", "family", "model", "n", "worse than frozen (> 1e-3 nats) [CI]", "better than frozen", "mean D", "mean positive D", "max D", "severe D > 1 / 2 / 5 nats (3 seeds)", "decoded answer changed vs frozen (seed mean)", "record metric vs own cap-off (seeds 0–2)"], rows)
 
 
+def sec_corrigendum(h=300):
+    """Corrigendum 2026-10-20: item-locality prompts that are themselves taught stream items (family
+    `locality_item_taught` since this date) beside the genuinely unrelated stratum, with the historical all-row figures."""
+    sc = pd.read_parquet(DATA / "data" / "scores.parquet")
+    sc = sc[(sc["status"] == "ok") & (sc["target"] == "true") & (sc["family"].isin(["locality_item", "locality_item_taught"]))]
+    fz = sc[sc["model"] == "frozen"][["dataset", "probe_id", "nll_token"]].rename(columns={"nll_token": "L_frozen"})
+    r = sc[(sc["horizon"] == h) & (sc["model"] != "frozen")].merge(fz, on=["dataset", "probe_id"])
+    r["D"] = r["nll_token"] - r["L_frozen"]
+    rows = []
+    for (ds, m), x in r.groupby(["dataset", "model"]):
+        t, o = x[x["family"] == "locality_item_taught"], x[x["family"] == "locality_item"]
+        rows.append([DS[ds], LAB.get(m, m), int(len(x)), f"{pct((x['D'] > 1e-3).mean())}", int((x["D"] > 2).sum()), int(len(t)), int(t["fired"].astype(bool).sum()) if len(t) else 0, int((t["D"] > 2).sum()) if len(t) else 0,
+                     int(len(o)), f"{pct((o['D'] > 1e-3).mean())}", int((o["D"] > 2).sum()), f(o["D"].max(), 2)])
+    table = md_table(["dataset", "model", "all rows (historical)", "worse than frozen (historical)", "severe D > 2 (historical)", "rows that are taught items", "fired on them", "severe on them", "genuinely unrelated rows", "worse than frozen", "severe", "max D"], rows)
+    return table, int(r[r["family"] == "locality_item_taught"].drop_duplicates("probe_id").shape[0])
+
+
 def sec_worst(worst, h=300, k=2):
     rows = []
     for ds in DS:
@@ -333,6 +350,7 @@ def main():
     gains = pd.read_csv(OUT / "tables" / "paired_gains.csv")
     t_audit, n_bad, n_mixed = sec_audit(rec, audit)
     t_pcbp1, t_pcbp2 = sec_pc_vs_bp(gains, basic)
+    t_corr, n_taught = sec_corrigendum()
     today = date.today().isoformat()
     figs = sorted(p.name for p in (DATA / "figures" / "cap_value").glob("*.png"))
     slides = sorted(p.name for p in (DATA / "figures" / "cap_value" / "slides").glob("*.png"))
@@ -429,6 +447,12 @@ For these GPT-2 small readers the "own cap-off reference" of the record (the sam
 {sec_collateral(coll)}
 
 ![Collateral change vs frozen]({FIGREL}/collateral_vs_frozen.png)
+
+### 8.1b Corrigendum (2026-10-20): item-locality prompts that are themselves taught items
+
+{n_taught} of the item-locality prompts (all on MQuAKE; 40 rows, 39 distinct prompts of 600) are the exact prompts of other items taught in the same 300-edit stream, scored here against their *old* answers. A cap that fires on such a prompt is applying its own record for that item, and the registered new answer is the one it was taught; counting these rows as collateral damage overstated MQuAKE item-locality deterioration in the 10 October version of this report (7.7 % of prompts worse than frozen, about 33 severe events per seed). Since this date `aw/extremes/assemble.py` labels them `locality_item_taught`, the `locality_item` rows above are the genuinely unrelated stratum, and this table keeps the historical all-row figures beside both strata (found independently by Capex's 20 October audit and by Phase 0 of the post-conference programme). zsRE and CounterFact have no such overlap.
+
+{t_corr}
 
 ### 8.2 Largest collateral deteriorations (two per family and dataset)
 

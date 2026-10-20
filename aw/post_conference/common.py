@@ -121,6 +121,26 @@ def selection_table(models=READERS, datasets=DATASETS, horizon: int = HORIZON) -
     return t
 
 
+def _norm(t: str) -> str:
+    import re
+    import unicodedata
+
+    return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", t).casefold()).strip()
+
+
+def prefix_match(generated, aliases) -> float:
+    """1.0 if the normalised generation starts with a normalised alias at a word boundary (or equals it); the project's
+    strict rule stops the generation at a newline, which a one-shot context or a cloze continuation often suppresses."""
+    if not isinstance(generated, str):
+        return float("nan")
+    g = _norm(generated)
+    for a in aliases:
+        a = _norm(str(a))
+        if a and g.startswith(a) and (len(g) == len(a) or not g[len(a)].isalnum()):
+            return 1.0
+    return 0.0
+
+
 def own_record_id(store, dataset: str, item_id: str) -> str | None:
     key = ":" + str(item_id) + ":"
     for r in store.records:

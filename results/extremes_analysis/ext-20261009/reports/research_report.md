@@ -1,6 +1,6 @@
 # Frozen GPT-2, ePC-trained reader cap and BP-trained reader cap on zsRE, CounterFact and MQuAKE: ordinary performance, dataset extremes and heavy tails
 
-Study `ext-20261009` · Capstan · 2026-10-10 · pc_cap code revision `507504c8cae8` · commissioned by `docs/AgentHandoffForResearchInTheExtremes.md` as amended by `docs/mandatory_ammendment.md`.
+Study `ext-20261009` · Capstan · 2026-10-20 · pc_cap code revision `a3727cf5e248` · commissioned by `docs/AgentHandoffForResearchInTheExtremes.md` as amended by `docs/mandatory_ammendment.md`.
 
 Provenance tags: **[record]** previously established in the frozen record and copied with its hashes; **[recomputed]** recomputed in this study from saved data; **[new]** newly evaluated in this study (own manifest `results/extremes_analysis/ext-20261009/manifest.json`). The frozen record was not modified.
 
@@ -20,7 +20,7 @@ Provenance tags: **[record]** previously established in the frozen record and co
 - **mquake, paraphrase per-token loss gain over frozen (seed mean):** BP 4.456 [4.193, 4.708]; ePC 3.961 [3.633, 4.261]; ePC − BP contrast -0.495 [-0.651, -0.347] nats/token (positive favours ePC).
 - **Neither cap beats the frozen model everywhere.** Both caps convert the taught facts (own-prompt loss falls from ≈ 6 nats/token to ≈ 0.01) and both leave the frozen model's behaviour unchanged where they abstain; the differences between ePC- and BP-trained readers are differences of *gating*: which paraphrases and un-taught prompts trigger a write. Where a reader abstains, its loss equals the frozen loss to the bit.
 - **ePC vs BP.** On CounterFact (frozen record) and on MQuAKE (this study's six supplemental evaluations) the ePC-trained reader retains fewer paraphrases than the BP-trained reader in all three seeds, and its per-probe paraphrase loss is higher in the paired contrast; on zsRE the two rules are close, with the seed-mean contrast slightly favouring BP and mixed per-seed signs. No analysis in this study (difficulty deciles, frozen-hard subsets, regressions, correction magnitudes) finds a regime of rare or extreme cases where the ePC-trained reader is reliably better than the BP-trained reader. Training cost remains 96–102× **[record]**.
-- **Extremes.** Frozen difficulty is large in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset), but it is not heavy-tailed in the fitted sense: at a common absolute threshold (the frozen model's P95 of the pooled probe surprisal, same cases for every model) the generalized-Pareto shapes are: 21 fits, shapes -0.41 to 0.19; 4 intervals entirely below zero, 17 include zero, 0 entirely above zero; at each model's own P95 they are: 21 fits, shapes -0.41 to 0.34; 4 intervals entirely below zero, 11 include zero, 6 entirely above zero (mquake BP reader s0, mquake BP reader s1, mquake BP reader s2, mquake ePC reader s0, mquake ePC reader s1, mquake ePC reader s2) — the own-quantile positives arise because a cap that drives many losses to zero lowers its own P95 into the frozen body, not because its extremes are heavier. The ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large per-probe deteriorations exist for both caps and occur almost only where a record fired (joint-extremes tail lift 14–62 on zsRE).
+- **Extremes.** Frozen difficulty is large in the descriptive sense (per-token target surprisal has P99 above 10 nats on every dataset), but it is not heavy-tailed in the fitted sense: at a common absolute threshold (the frozen model's P95 of the pooled probe surprisal, same cases for every model) the generalized-Pareto shapes are: 19 fits, shapes -0.41 to 0.27; 4 intervals entirely below zero, 14 include zero, 1 entirely above zero (mquake ePC reader s2); at each model's own P95 they are: 21 fits, shapes -0.41 to 0.12; 5 intervals entirely below zero, 16 include zero, 0 entirely above zero — the own-quantile positives arise because a cap that drives many losses to zero lowers its own P95 into the frozen body, not because its extremes are heavier. The ordinary-text harm tails of the PC-reader cells reproduce HT-17 exactly (12/12 fields) and remain finite-range fits. Rare large per-probe deteriorations exist for both caps and occur almost only where a record fired (joint-extremes tail lift 14–62 on zsRE).
 - **Qualifications.** One subject realization and one order; three training seeds are not three populations; GPT-2 small only; the frozen model answers essentially none of these prompts under the project's greedy convention, so the frozen baseline is informative through teacher-forced losses, not through exact-match rates.
 
 ## 2. Research questions and architectures
@@ -131,7 +131,7 @@ Reading: the frozen model's ES/RET-ES/RET-GS are its greedy answers against the 
 | counterfact | edit | true | 6.382 (n=300) | 5.215 (n=300, fire 100 %) | 5.237 (n=300, fire 99 %) | 5.215 (n=300, fire 100 %) | 5.215 (n=300, fire 100 %) | 5.215 (n=300, fire 100 %) | 5.215 (n=300, fire 100 %) |
 | mquake | edit | new | 5.171 (n=300) | 0.015 (n=300, fire 100 %) | 0.342 (n=300, fire 94 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) | 0.015 (n=300, fire 100 %) |
 | mquake | paraphrase | new | 6.048 (n=300) | 2.009 (n=300, fire 72 %) | 1.276 (n=300, fire 86 %) | 1.491 (n=300, fire 83 %) | 2.099 (n=300, fire 71 %) | 1.994 (n=300, fire 72 %) | 2.168 (n=300, fire 69 %) |
-| mquake | locality_item | true | 4.487 (n=600) | 4.722 (n=600, fire 7 %) | 4.733 (n=600, fire 7 %) | 4.737 (n=600, fire 8 %) | 4.729 (n=600, fire 7 %) | 4.746 (n=600, fire 8 %) | 4.739 (n=600, fire 8 %) |
+| mquake | locality_item | true | 4.480 (n=560) | 4.484 (n=560, fire 1 %) | 4.495 (n=560, fire 1 %) | 4.499 (n=560, fire 1 %) | 4.490 (n=560, fire 1 %) | 4.508 (n=560, fire 1 %) | 4.501 (n=560, fire 1 %) |
 | mquake | near_miss_neighbour | true | 5.204 (n=100) | 5.204 (n=100, fire 0 %) | 5.204 (n=100, fire 0 %) | 5.204 (n=100, fire 0 %) | 5.204 (n=100, fire 0 %) | 5.204 (n=100, fire 0 %) | 5.204 (n=100, fire 0 %) |
 | mquake | unseen | new | 5.284 (n=100) | 5.284 (n=100, fire 0 %) | 5.284 (n=100, fire 0 %) | 5.284 (n=100, fire 0 %) | 5.284 (n=100, fire 0 %) | 5.284 (n=100, fire 0 %) | 5.284 (n=100, fire 0 %) |
 | mquake | edit | true | 4.579 (n=300) | 8.010 (n=300, fire 100 %) | 7.804 (n=300, fire 94 %) | 8.010 (n=300, fire 100 %) | 8.010 (n=300, fire 100 %) | 8.010 (n=300, fire 100 %) | 8.010 (n=300, fire 100 %) |
@@ -423,13 +423,13 @@ Token-level (one value per target token, terminator excluded; groups = items for
 | counterfact | pooled_probes | ePC reader s1 | own quantile | 2050 | 14.68 | 31.11 | P95 = 11.98 | 103 | ok | 0.088 | [-0.31, 0.26] | 1.743 | 0.0077 |
 | counterfact | pooled_probes | ePC reader s2 | own quantile | 2050 | 14.65 | 18.93 | P95 = 11.97 | 103 | ok | -0.161 | [-0.36, 0.02] | 1.922 | 0.0094 |
 | counterfact | pooled_probes | frozen GPT-2 | own quantile | 2050 | 14.85 | 18.93 | P95 = 12.70 | 103 | ok | -0.032 | [-0.31, 0.23] | 1.330 | 0.0003 |
-| mquake | locality_item | BP reader s0 | own quantile | 1481 | 15.17 | 27.15 | P90 = 9.22 | 148 | ok | 0.185 | [-0.00, 0.35] | 2.138 | 0.0170 |
-| mquake | locality_item | BP reader s1 | own quantile | 1481 | 15.73 | 27.15 | P90 = 9.22 | 148 | ok | 0.203 | [0.01, 0.36] | 2.158 | 0.0194 |
-| mquake | locality_item | BP reader s2 | own quantile | 1481 | 15.73 | 27.15 | P90 = 9.27 | 148 | ok | 0.178 | [0.02, 0.35] | 2.177 | 0.0154 |
-| mquake | locality_item | ePC reader s0 | own quantile | 1481 | 15.73 | 27.15 | P90 = 9.21 | 148 | ok | 0.209 | [0.02, 0.38] | 2.141 | 0.0203 |
-| mquake | locality_item | ePC reader s1 | own quantile | 1481 | 16.24 | 27.15 | P90 = 9.27 | 148 | ok | 0.196 | [0.03, 0.36] | 2.200 | 0.0177 |
-| mquake | locality_item | ePC reader s2 | own quantile | 1481 | 15.73 | 27.15 | P90 = 9.25 | 148 | ok | 0.212 | [0.02, 0.38] | 2.126 | 0.0206 |
-| mquake | locality_item | frozen GPT-2 | own quantile | 1481 | 11.61 | 15.06 | P90 = 8.65 | 148 | ok | -0.244 | [-0.64, -0.17] | 1.843 | 0.0373 |
+| mquake | locality_item | BP reader s0 | own quantile | 1381 | 11.61 | 15.06 | P90 = 8.65 | 138 | ok | -0.235 | [-0.60, -0.13] | 1.817 | 0.0330 |
+| mquake | locality_item | BP reader s1 | own quantile | 1381 | 11.64 | 22.50 | P90 = 8.65 | 138 | ok | -0.003 | [-0.57, 0.11] | 1.575 | 0.0000 |
+| mquake | locality_item | BP reader s2 | own quantile | 1381 | 11.70 | 16.41 | P90 = 8.68 | 138 | ok | -0.164 | [-0.56, -0.04] | 1.802 | 0.0183 |
+| mquake | locality_item | ePC reader s0 | own quantile | 1381 | 11.64 | 22.50 | P90 = 8.65 | 138 | ok | 0.002 | [-0.57, 0.12] | 1.550 | 0.0000 |
+| mquake | locality_item | ePC reader s1 | own quantile | 1381 | 11.89 | 22.50 | P90 = 8.68 | 138 | ok | -0.003 | [-0.40, 0.11] | 1.648 | 0.0000 |
+| mquake | locality_item | ePC reader s2 | own quantile | 1381 | 11.70 | 22.50 | P90 = 8.65 | 138 | ok | -0.007 | [-0.54, 0.11] | 1.597 | 0.0001 |
+| mquake | locality_item | frozen GPT-2 | own quantile | 1381 | 11.61 | 15.06 | P90 = 8.65 | 138 | ok | -0.229 | [-0.59, -0.14] | 1.791 | 0.0302 |
 | mquake | paraphrase | BP reader s0 | own quantile | 755 | 17.87 | 23.13 | P90 = 8.48 | 76 | exploratory | -0.145 | [-0.40, 0.04] | 4.261 | 0.0071 |
 | mquake | paraphrase | BP reader s1 | own quantile | 755 | 13.41 | 17.65 | P90 = 5.91 | 76 | exploratory | -0.267 | [-0.49, -0.07] | 4.314 | 0.0224 |
 | mquake | paraphrase | BP reader s2 | own quantile | 755 | 12.03 | 17.65 | P90 = 6.35 | 76 | exploratory | -0.281 | [-0.50, -0.18] | 4.016 | 0.0377 |
@@ -437,20 +437,20 @@ Token-level (one value per target token, terminator excluded; groups = items for
 | mquake | paraphrase | ePC reader s1 | own quantile | 755 | 14.62 | 20.33 | P90 = 8.34 | 76 | exploratory | -0.159 | [-0.46, 0.00] | 3.226 | 0.0125 |
 | mquake | paraphrase | ePC reader s2 | own quantile | 755 | 15.52 | 23.45 | P90 = 8.47 | 76 | exploratory | -0.004 | [-0.21, 0.13] | 3.137 | 0.0000 |
 | mquake | paraphrase | frozen GPT-2 | own quantile | 755 | 18.87 | 23.13 | P90 = 12.76 | 76 | exploratory | -0.344 | [-0.66, -0.14] | 4.154 | 0.0430 |
-| mquake | pooled_probes | BP reader s0 | frozen quantile (common) | 3632 | 14.60 | 27.15 | P95 = 11.60 | 99 | exploratory | 0.089 | [-0.11, 0.31] | 2.831 | 0.0025 |
-| mquake | pooled_probes | BP reader s1 | frozen quantile (common) | 3632 | 13.78 | 27.15 | P95 = 11.60 | 82 | exploratory | 0.135 | [-0.05, 0.33] | 2.512 | 0.0073 |
-| mquake | pooled_probes | BP reader s2 | frozen quantile (common) | 3632 | 13.18 | 27.15 | P95 = 11.60 | 79 | exploratory | 0.153 | [-0.10, 0.36] | 2.375 | 0.0095 |
-| mquake | pooled_probes | ePC reader s0 | frozen quantile (common) | 3632 | 14.33 | 27.15 | P95 = 11.60 | 91 | exploratory | 0.082 | [-0.17, 0.32] | 2.901 | 0.0021 |
-| mquake | pooled_probes | ePC reader s1 | frozen quantile (common) | 3632 | 13.99 | 27.15 | P95 = 11.60 | 92 | exploratory | 0.141 | [-0.06, 0.34] | 2.453 | 0.0077 |
-| mquake | pooled_probes | ePC reader s2 | frozen quantile (common) | 3632 | 14.31 | 27.15 | P95 = 11.60 | 92 | exploratory | 0.114 | [-0.11, 0.34] | 2.787 | 0.0043 |
-| mquake | pooled_probes | frozen GPT-2 | frozen quantile (common) | 3632 | 15.41 | 23.13 | P95 = 11.60 | 182 | ok | 0.130 | [-0.05, 0.29] | 1.945 | 0.0047 |
-| mquake | pooled_probes | BP reader s0 | own quantile | 3632 | 14.60 | 27.15 | P95 = 10.55 | 182 | ok | 0.340 | [0.14, 0.56] | 1.689 | 0.0364 |
-| mquake | pooled_probes | BP reader s1 | own quantile | 3632 | 13.78 | 27.15 | P95 = 10.27 | 182 | ok | 0.229 | [0.06, 0.39] | 1.752 | 0.0254 |
-| mquake | pooled_probes | BP reader s2 | own quantile | 3632 | 13.18 | 27.15 | P95 = 10.13 | 182 | ok | 0.192 | [0.04, 0.34] | 1.824 | 0.0191 |
-| mquake | pooled_probes | ePC reader s0 | own quantile | 3632 | 14.33 | 27.15 | P95 = 10.36 | 182 | ok | 0.266 | [0.10, 0.43] | 1.857 | 0.0267 |
-| mquake | pooled_probes | ePC reader s1 | own quantile | 3632 | 13.99 | 27.15 | P95 = 10.39 | 182 | ok | 0.230 | [0.07, 0.42] | 1.808 | 0.0236 |
-| mquake | pooled_probes | ePC reader s2 | own quantile | 3632 | 14.31 | 27.15 | P95 = 10.36 | 182 | ok | 0.259 | [0.11, 0.41] | 1.883 | 0.0268 |
-| mquake | pooled_probes | frozen GPT-2 | own quantile | 3632 | 15.41 | 23.13 | P95 = 11.60 | 182 | ok | 0.130 | [-0.05, 0.29] | 1.945 | 0.0047 |
+| mquake | pooled_probes | BP reader s0 | frozen quantile (common) | 3532 | 12.68 | 23.13 | P95 = 11.62 | 65 | exploratory | 0.233 | [-0.08, 0.50] | 1.794 | 0.0155 |
+| mquake | pooled_probes | BP reader s1 | frozen quantile (common) | 3532 | 12.06 | 22.50 | P95 = 11.62 | 48 | insufficient | — | [—, —] | — | — |
+| mquake | pooled_probes | BP reader s2 | frozen quantile (common) | 3532 | 11.98 | 17.65 | P95 = 11.62 | 45 | insufficient | — | [—, —] | — | — |
+| mquake | pooled_probes | ePC reader s0 | frozen quantile (common) | 3532 | 12.54 | 22.50 | P95 = 11.62 | 57 | exploratory | 0.247 | [-0.08, 0.64] | 1.748 | 0.0174 |
+| mquake | pooled_probes | ePC reader s1 | frozen quantile (common) | 3532 | 12.51 | 22.50 | P95 = 11.62 | 58 | exploratory | 0.165 | [-0.19, 0.42] | 1.506 | 0.0129 |
+| mquake | pooled_probes | ePC reader s2 | frozen quantile (common) | 3532 | 12.57 | 23.45 | P95 = 11.62 | 58 | exploratory | 0.267 | [0.03, 0.49] | 1.688 | 0.0261 |
+| mquake | pooled_probes | frozen GPT-2 | frozen quantile (common) | 3532 | 15.43 | 23.13 | P95 = 11.62 | 177 | ok | 0.101 | [-0.08, 0.25] | 2.043 | 0.0028 |
+| mquake | pooled_probes | BP reader s0 | own quantile | 3532 | 12.68 | 23.13 | P95 = 9.89 | 177 | ok | 0.081 | [-0.04, 0.19] | 1.865 | 0.0039 |
+| mquake | pooled_probes | BP reader s1 | own quantile | 3532 | 12.06 | 22.50 | P95 = 9.72 | 177 | ok | -0.022 | [-0.21, 0.10] | 1.700 | 0.0004 |
+| mquake | pooled_probes | BP reader s2 | own quantile | 3532 | 11.98 | 17.65 | P95 = 9.65 | 177 | ok | -0.109 | [-0.22, -0.01] | 1.736 | 0.0072 |
+| mquake | pooled_probes | ePC reader s0 | own quantile | 3532 | 12.54 | 22.50 | P95 = 9.85 | 177 | ok | 0.104 | [-0.01, 0.20] | 1.690 | 0.0066 |
+| mquake | pooled_probes | ePC reader s1 | own quantile | 3532 | 12.51 | 22.50 | P95 = 9.89 | 177 | ok | 0.022 | [-0.18, 0.12] | 1.690 | 0.0004 |
+| mquake | pooled_probes | ePC reader s2 | own quantile | 3532 | 12.57 | 23.45 | P95 = 9.86 | 177 | ok | 0.117 | [-0.03, 0.23] | 1.665 | 0.0090 |
+| mquake | pooled_probes | frozen GPT-2 | own quantile | 3532 | 15.43 | 23.13 | P95 = 11.62 | 177 | ok | 0.101 | [-0.08, 0.25] | 2.043 | 0.0028 |
 | zsre | locality_item | BP reader s0 | own quantile | 1390 | 16.18 | 19.58 | P90 = 12.51 | 139 | ok | -0.198 | [-0.37, -0.07] | 1.936 | 0.0189 |
 | zsre | locality_item | BP reader s1 | own quantile | 1390 | 16.18 | 19.58 | P90 = 12.51 | 139 | ok | -0.198 | [-0.37, -0.07] | 1.936 | 0.0189 |
 | zsre | locality_item | BP reader s2 | own quantile | 1390 | 16.18 | 19.58 | P90 = 12.51 | 139 | ok | -0.198 | [-0.37, -0.07] | 1.936 | 0.0189 |
@@ -656,18 +656,18 @@ Token-level (one value per target token, terminator excluded; groups = items for
 | unseen | new | G_PCvsBP | 1 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
 | unseen | new | G_PCvsBP | 2 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
 | unseen | new | G_PCvsBP | mean | 100 | 0.000 | [0.000, 0.000] | — | 0.0 % [0.00, 0.00] | — | — |
-| locality_item | true | G_BP | 0 | 600 | -0.235 | [-0.318, -0.156] | 0.000 | 0.2 % [0.00, 0.01] | 7.0 % | -4.142 |
-| locality_item | true | G_BP | 1 | 600 | -0.246 | [-0.328, -0.166] | 0.000 | 0.0 % [0.00, 0.00] | 7.2 % | -4.256 |
-| locality_item | true | G_BP | 2 | 600 | -0.250 | [-0.337, -0.169] | 0.000 | 0.2 % [0.00, 0.01] | 7.5 % | -4.262 |
-| locality_item | true | G_BP | mean | 600 | -0.244 | [-0.326, -0.163] | — | 0.3 % [0.00, 0.01] | — | — |
-| locality_item | true | G_PC | 0 | 600 | -0.242 | [-0.323, -0.161] | 0.000 | 0.2 % [0.00, 0.01] | 7.2 % | -4.256 |
-| locality_item | true | G_PC | 1 | 600 | -0.258 | [-0.346, -0.176] | 0.000 | 0.3 % [0.00, 0.01] | 7.7 % | -4.372 |
-| locality_item | true | G_PC | 2 | 600 | -0.252 | [-0.336, -0.171] | 0.000 | 0.2 % [0.00, 0.01] | 7.3 % | -4.339 |
-| locality_item | true | G_PC | mean | 600 | -0.251 | [-0.334, -0.169] | — | 0.3 % [0.00, 0.01] | — | — |
-| locality_item | true | G_PCvsBP | 0 | 600 | -0.006 | [-0.030, 0.011] | 0.000 | 0.2 % [0.00, 0.01] | 0.3 % | -0.200 |
-| locality_item | true | G_PCvsBP | 1 | 600 | -0.013 | [-0.033, 0.001] | 0.000 | 0.3 % [0.00, 0.01] | 0.5 % | -0.342 |
-| locality_item | true | G_PCvsBP | 2 | 600 | -0.002 | [-0.029, 0.017] | 0.000 | 0.3 % [0.00, 0.01] | 0.2 % | -0.186 |
-| locality_item | true | G_PCvsBP | mean | 600 | -0.007 | [-0.023, 0.002] | — | 0.3 % [0.00, 0.01] | — | — |
+| locality_item | true | G_BP | 0 | 560 | -0.004 | [-0.011, 0.002] | 0.000 | 0.2 % [0.00, 0.01] | 0.4 % | -0.084 |
+| locality_item | true | G_BP | 1 | 560 | -0.015 | [-0.040, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.5 % | -0.282 |
+| locality_item | true | G_BP | 2 | 560 | -0.019 | [-0.040, -0.002] | 0.000 | 0.2 % [0.00, 0.01] | 0.9 % | -0.449 |
+| locality_item | true | G_BP | mean | 560 | -0.012 | [-0.024, -0.003] | — | 0.4 % [0.00, 0.01] | — | — |
+| locality_item | true | G_PC | 0 | 560 | -0.010 | [-0.037, 0.009] | 0.000 | 0.2 % [0.00, 0.01] | 0.5 % | -0.282 |
+| locality_item | true | G_PC | 1 | 560 | -0.028 | [-0.059, -0.006] | 0.000 | 0.4 % [0.00, 0.01] | 1.1 % | -0.647 |
+| locality_item | true | G_PC | 2 | 560 | -0.021 | [-0.050, -0.002] | 0.000 | 0.2 % [0.00, 0.01] | 0.7 % | -0.495 |
+| locality_item | true | G_PC | mean | 560 | -0.020 | [-0.047, -0.002] | — | 0.4 % [0.00, 0.01] | — | — |
+| locality_item | true | G_PCvsBP | 0 | 560 | -0.007 | [-0.032, 0.013] | 0.000 | 0.2 % [0.00, 0.01] | 0.4 % | -0.214 |
+| locality_item | true | G_PCvsBP | 1 | 560 | -0.014 | [-0.034, 0.001] | 0.000 | 0.4 % [0.00, 0.01] | 0.5 % | -0.365 |
+| locality_item | true | G_PCvsBP | 2 | 560 | -0.002 | [-0.029, 0.018] | 0.000 | 0.4 % [0.00, 0.01] | 0.2 % | -0.198 |
+| locality_item | true | G_PCvsBP | mean | 560 | -0.008 | [-0.025, 0.002] | — | 0.4 % [0.00, 0.01] | — | — |
 | near_miss_neighbour | true | G_BP | 0 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
 | near_miss_neighbour | true | G_BP | 1 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
 | near_miss_neighbour | true | G_BP | 2 | 100 | 0.000 | [0.000, 0.000] | 0.000 | 0.0 % [0.00, 0.00] | 0.0 % | -0.000 |
@@ -877,15 +877,15 @@ Token-level (one value per target token, terminator excluded; groups = items for
 | mquake | locality | true | epc1_minus_bp1 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
 | mquake | locality | true | ePC s2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
 | mquake | locality | true | epc2_minus_bp2 | 50 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
-| mquake | locality_item | true | BP s0 | 600 | 7.0 % | 3.372 | 4.721 | 4.142 | 10.119 | 6.67 % | 6.67 % |
-| mquake | locality_item | true | BP s1 | 600 | 7.2 % | 3.428 | 5.303 | 4.256 | 10.119 | 6.83 % | 6.83 % |
-| mquake | locality_item | true | BP s2 | 600 | 7.5 % | 3.383 | 4.721 | 4.262 | 10.119 | 7.17 % | 7.17 % |
-| mquake | locality_item | true | ePC s0 | 600 | 7.2 % | 3.428 | 5.303 | 4.256 | 10.119 | 6.83 % | 6.83 % |
-| mquake | locality_item | true | epc0_minus_bp0 | 600 | 0.3 % | 3.096 | 0.000 | 0.200 | 5.755 | 0.17 % | 0.17 % |
-| mquake | locality_item | true | ePC s1 | 600 | 7.7 % | 3.434 | 5.303 | 4.372 | 10.119 | 7.33 % | 7.33 % |
-| mquake | locality_item | true | epc1_minus_bp1 | 600 | 0.5 % | 3.532 | 0.000 | 0.342 | 3.684 | 0.50 % | 0.50 % |
-| mquake | locality_item | true | ePC s2 | 600 | 7.3 % | 3.490 | 5.303 | 4.339 | 10.119 | 7.00 % | 7.00 % |
-| mquake | locality_item | true | epc2_minus_bp2 | 600 | 0.2 % | 5.755 | 0.000 | 0.186 | 5.755 | 0.17 % | 0.17 % |
+| mquake | locality_item | true | BP s0 | 560 | 0.4 % | 1.213 | 0.000 | 0.084 | 1.386 | 0.36 % | 0.36 % |
+| mquake | locality_item | true | BP s1 | 560 | 0.5 % | 2.727 | 0.000 | 0.282 | 5.755 | 0.54 % | 0.54 % |
+| mquake | locality_item | true | BP s2 | 560 | 0.9 % | 2.604 | 0.000 | 0.449 | 3.684 | 0.89 % | 0.89 % |
+| mquake | locality_item | true | ePC s0 | 560 | 0.5 % | 2.727 | 0.000 | 0.282 | 5.755 | 0.54 % | 0.54 % |
+| mquake | locality_item | true | epc0_minus_bp0 | 560 | 0.4 % | 3.096 | 0.000 | 0.214 | 5.755 | 0.18 % | 0.18 % |
+| mquake | locality_item | true | ePC s1 | 560 | 1.1 % | 3.129 | 0.426 | 0.647 | 5.755 | 1.07 % | 1.07 % |
+| mquake | locality_item | true | epc1_minus_bp1 | 560 | 0.5 % | 3.532 | 0.000 | 0.365 | 3.684 | 0.54 % | 0.54 % |
+| mquake | locality_item | true | ePC s2 | 560 | 0.7 % | 3.587 | 0.000 | 0.495 | 5.755 | 0.71 % | 0.71 % |
+| mquake | locality_item | true | epc2_minus_bp2 | 560 | 0.2 % | 5.755 | 0.000 | 0.198 | 5.755 | 0.18 % | 0.18 % |
 | mquake | near_miss_neighbour | true | BP s0 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
 | mquake | near_miss_neighbour | true | BP s1 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
 | mquake | near_miss_neighbour | true | BP s2 | 100 | 0.0 % | — | 0.000 | 0.000 | 0.000 | 0.00 % | 0.00 % |
@@ -972,21 +972,21 @@ Worst fifteen regressions at 300 edits:
 
 | dataset | family | target | model | item | subject | D | L_frozen | L_model | fired | max rel. write |
 |---|---|---|---|---|---|---|---|---|---|---|
-| mquake | locality_item | true | ePC s0 | mquake:c99d1e323c071e7dbfabf | nan | 10.12 | 5.06 | 15.18 | True | 0.127 |
-| mquake | locality_item | true | BP s0 | mquake:c99d1e323c071e7dbfabf | nan | 10.12 | 5.06 | 15.18 | True | 0.127 |
-| mquake | locality_item | true | BP s2 | mquake:c99d1e323c071e7dbfabf | nan | 10.12 | 5.06 | 15.18 | True | 0.127 |
-| mquake | locality_item | true | ePC s1 | mquake:c99d1e323c071e7dbfabf | nan | 10.12 | 5.06 | 15.18 | True | 0.127 |
-| mquake | locality_item | true | BP s1 | mquake:c99d1e323c071e7dbfabf | nan | 10.12 | 5.06 | 15.18 | True | 0.127 |
-| mquake | locality_item | true | ePC s2 | mquake:c99d1e323c071e7dbfabf | nan | 10.12 | 5.06 | 15.18 | True | 0.127 |
-| mquake | locality_item | true | ePC s2 | mquake:f05fa9a5df7b469882187 | nan | 9.40 | 4.33 | 13.73 | True | 0.123 |
-| mquake | locality_item | true | BP s0 | mquake:f05fa9a5df7b469882187 | nan | 9.40 | 4.33 | 13.73 | True | 0.123 |
-| mquake | locality_item | true | BP s2 | mquake:f05fa9a5df7b469882187 | nan | 9.40 | 4.33 | 13.73 | True | 0.123 |
-| mquake | locality_item | true | BP s1 | mquake:f05fa9a5df7b469882187 | nan | 9.40 | 4.33 | 13.73 | True | 0.123 |
-| mquake | locality_item | true | ePC s0 | mquake:f05fa9a5df7b469882187 | nan | 9.40 | 4.33 | 13.73 | True | 0.123 |
-| mquake | locality_item | true | ePC s1 | mquake:f05fa9a5df7b469882187 | nan | 9.40 | 4.33 | 13.73 | True | 0.123 |
+| zsre | near_miss_neighbour | true | BP s2 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | ePC s1 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | BP s0 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | near_miss_neighbour | true | BP s1 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
 | zsre | near_miss_neighbour | true | ePC s0 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
 | zsre | near_miss_neighbour | true | ePC s2 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
-| zsre | near_miss_neighbour | true | BP s2 | zsre:0:near:83 | nan | 7.75 | 6.84 | 14.59 | True | 0.121 |
+| zsre | unseen | new | ePC s1 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | ePC s2 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | BP s2 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| zsre | unseen | new | BP s1 | zsre-train-17050 | Stefan Glarner | 6.35 | 6.53 | 12.88 | True | 0.151 |
+| mquake | locality_item | true | ePC s0 | mquake:a5a3061cff3487fb95700 | nan | 5.75 | 6.20 | 11.95 | True | 0.120 |
+| mquake | locality_item | true | BP s1 | mquake:a5a3061cff3487fb95700 | nan | 5.75 | 6.20 | 11.95 | True | 0.120 |
+| mquake | locality_item | true | ePC s2 | mquake:a5a3061cff3487fb95700 | nan | 5.75 | 6.20 | 11.95 | True | 0.120 |
+| mquake | locality_item | true | ePC s1 | mquake:a5a3061cff3487fb95700 | nan | 5.75 | 6.20 | 11.95 | True | 0.120 |
+| zsre | unseen | new | BP s2 | zsre-train-2345 | Angela Petrelli | 5.67 | 9.37 | 15.03 | True | 0.123 |
 
 ## 8. CAP correction mechanisms [new]
 
@@ -1100,12 +1100,12 @@ Rank correlations (Spearman) and joint extremes:
 | counterfact | ePC s0 | 1150 | 1 | 11 | 1 | 0.001 | 0.091 | 104.55 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
 | counterfact | ePC s1 | 1150 | 4 | 21 | 4 | 0.003 | 0.190 | 54.76 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
 | counterfact | ePC s2 | 1150 | 0 | 5 | 0 | 0.000 | 0.000 | — | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
-| mquake | BP s0 | 850 | 42 | 43 | 42 | 0.049 | 0.977 | 19.77 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
-| mquake | BP s1 | 850 | 43 | 43 | 43 | 0.051 | 1.000 | 19.77 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
-| mquake | BP s2 | 850 | 45 | 46 | 45 | 0.053 | 0.978 | 18.48 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
-| mquake | ePC s0 | 850 | 43 | 44 | 43 | 0.051 | 0.977 | 19.32 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
-| mquake | ePC s1 | 850 | 46 | 48 | 46 | 0.054 | 0.958 | 17.71 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
-| mquake | ePC s2 | 850 | 44 | 45 | 44 | 0.052 | 0.978 | 18.89 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| mquake | BP s0 | 810 | 2 | 3 | 2 | 0.002 | 0.667 | 270.00 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| mquake | BP s1 | 810 | 3 | 3 | 3 | 0.004 | 1.000 | 270.00 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| mquake | BP s2 | 810 | 5 | 6 | 5 | 0.006 | 0.833 | 135.00 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| mquake | ePC s0 | 810 | 3 | 4 | 3 | 0.004 | 0.750 | 202.50 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| mquake | ePC s1 | 810 | 6 | 8 | 6 | 0.007 | 0.750 | 101.25 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
+| mquake | ePC s2 | 810 | 4 | 5 | 4 | 0.005 | 0.800 | 162.00 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
 | zsre | BP s0 | 546 | 11 | 12 | 11 | 0.020 | 0.917 | 45.50 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
 | zsre | BP s1 | 546 | 24 | 35 | 24 | 0.044 | 0.686 | 15.60 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
 | zsre | BP s2 | 546 | 20 | 27 | 20 | 0.037 | 0.741 | 20.22 | any locality deterioration (fewer than 10 % of probes deteriorate; most abstain) | any nonzero write (fewer than 10 % fire) |
@@ -1220,7 +1220,7 @@ Per-dataset paired contrasts at 300 edits (seed-level intervals from 2,000 item-
 
 ## 12. Reproducibility appendix
 
-- **Code:** `pc_cap/aw/extremes/` at revision `507504c8cae8`; tests `aw/tests/test_extremes_stats.py` (CPU) and `aw/extremes/validate_gpu.py` (GPU; record in `validation/gpu_checks.json`).
+- **Code:** `pc_cap/aw/extremes/` at revision `a3727cf5e248`; tests `aw/tests/test_extremes_stats.py` (CPU) and `aw/extremes/validate_gpu.py` (GPU; record in `validation/gpu_checks.json`).
 - **Commands:** `results/extremes_analysis/ext-20261009/scripts/run_gpu_chain.sh` (frozen scoring → reader scoring → MQuAKE evaluations → MQuAKE scoring) and `scripts/run_cpu_pipeline.sh` (assemble → paired → tails → datasets → nelson → figures → report). Environment: Python 3.12.15, jax/jaxlib 0.11.1, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5, pyarrow 25.0.1, matplotlib 3.11.1; RTX 5070 (12 GiB), driver 615.71.09.
 - **Inputs (hash-checked at load):** sealed recipes `docs/tasks/R1-final-cell-recipes/{61348508…, ce0d0ffc…, 43925e53…}.json` and their payloads; reader artifacts `assets/runs/additional_work/PC-reader/train-*/theta_avg150-300.npz`; memory snapshots `…/eval-*/stream/checkpoint-{100,300}.snapshot`; harm vectors `results/additional_work/PC-reader/eval-*/harm/vectors.npz`; HT-17 `logs/additional_work/HT-17/snapshot-20261004-complete/report.json`.
 - **Outputs:** parquet under `assets/extremes_analysis/ext-20261009/data/` (example manifest = `scores.parquet` metadata columns + `case_populations.parquet`; `scores.parquet`, `generations.parquet`, `paired_cases.parquet`, `dataset_statistics.parquet`, `tail_fits.parquet`, `bootstrap_results.parquet`, `paired_gains.parquet`, `difficulty_deciles.parquet`); CSV tables under `tables/`; figures under `assets/extremes_analysis/ext-20261009/figures/` with `captions.json`; raw per-probe records as JSONL chunks with a hash manifest under `assets/extremes_analysis/ext-20261009/checkpoints/scores/`; MQuAKE evaluation receipts under `results/extremes_analysis/ext-20261009/mquake_eval/`.

@@ -69,3 +69,41 @@ mquake overlap ids/subjects 0 0 {'relation_id': 0.024, 'subject': 0.6931, 'targe
 {"gains": 960, "cvar": 560, "deciles": 380, "regressions": 720, "correlations": 480, "joint": 36, "sequential": 18}
 2026-10-20T15:27:24Z end paired exit 0
 2026-10-20T15:27:24Z start tails
+{"ht17_cells": 12, "all_equal": true, "mquake_rows": 24, "probe_fits": 936, "frozen_text": {"n": 245237, "missing": 0, "mean": 4.08007681304953, "sd": 3.2044768071696383, "median": 3.467867299509205, "iqr": 4.695329881894207, "p90": 8.603983087077133, "p95": 10.128948134895172, "p99": 13.01394329250421, "max": 30.101820879057627, "min": 2.50813110579513e-07, "cvar95": 11.899895990888675}}
+2026-10-20T15:32:27Z end tails exit 0
+2026-10-20T15:32:27Z start datasets
+{"zsre": {"eligible": 10420, "reader_train": 1000, "sealed_r0": 1000, "pcr_r0_300": 300, "sealed_r1": 1000, "sealed_r2": 1000}, "counterfact": {"eligible": 20091, "reader_train": 1000, "sealed_r0": 1000, "pcr_r0_300": 300, "sealed_r1": 1000, "sealed_r2": 1000}, "mquake": {"eligible": 6043, "reader_train": 500, "sealed_r0": 300, "pcr_r0_300": 300, "sealed_r1": 300, "sealed_r2": 300}}
+zsre overlap ids/subjects 0 0 {'subject': 0.6931, 'target_new': 0.4884}
+counterfact overlap ids/subjects 0 0 {'relation_id': 0.0064, 'subject': 0.6931, 'target_new': 0.129, 'target_true': 0.1289}
+mquake overlap ids/subjects 0 0 {'relation_id': 0.024, 'subject': 0.6931, 'target_new': 0.4045, 'target_true': 0.3032}
+2026-10-20T15:32:30Z end datasets exit 0
+2026-10-20T15:32:30Z start nelson
+{"tests": {"point_mass_zero": true, "shannon_at_zero": true, "uniform_closed_form": true, "convergence_to_shannon": true, "rejects_unnormalized": true}, "profiles": 60, "scale_checks": 10, "identity_all": true}
+2026-10-20T15:32:31Z end nelson exit 0
+2026-10-20T15:32:31Z start figures
+{"rank_frequency": "Rank-frequency (log-log) of relation, ne", "frozen_surprisal": "Frozen GPT-2 small: teacher-forced per-t", "tail_shapes_probe_loss": "Generalized-Pareto shape fitted to excee", "deciles_counterfact_edit": "Mean paired gain over frozen GPT-2 by fr", "deciles_counterfact_paraphrase": "Mean paired gain over frozen GPT-2 by fr", "deciles_counterfact_unseen": "Mean paired gain over frozen GPT-2 by fr", "deciles_mquake_edit": "Mean paired gain over frozen GPT-2 by fr", "deciles_mquake_paraphrase": "Mean paired gain over frozen GPT-2 by fr", "deciles_mquake_unseen": "Mean paired gain over frozen GPT-2 by fr", "deciles_zsre_edit": "Mean paired gain over frozen GPT-2 by fr", "deciles_zsre_paraphrase": "Mean paired gain over frozen GPT-2 by fr", "deciles_zsre_unseen": "Mean paired gain over frozen GPT-2 by fr", "cvar_A_B": "Two different worst-case summaries at 30", "paired_pc_minus_bp": "Paired per-probe differences of per-toke", "write_norms": "Relative write magnitude (||W_m|| / ||h_", "mquake_pcreader": "MQuAKE realization 0, order 100, 300 edi", "harm_survival_pcreader": "Ordinary-text harm (loss with cap minus "}
+2026-10-20T15:32:36Z end figures exit 0
+2026-10-20T15:32:36Z start report
+{"md": "/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/research_report.md", "pdf": "ok", "words": 31653}
+2026-10-20T15:32:40Z end report exit 0
+2026-10-20T15:32:40Z start cap_value
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+/home/derp/cap/venv/lib64/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+{"denominator_audit_probes": 377, "denominator_audit_record": 42, "basic_performance": 54, "improvements": 424, "extremes_own_worst": 324, "extremes_frozen_hardest": 648, "deciles_actual_loss": 2160, "token_tails_common_thresholds": 162, "collateral_vs_frozen": 96, "collateral_worst_cases": 56, "harm_unrelated_text": 18, "gating_failures": 72, "support_matrix": 14}
+2026-10-20T15:34:55Z end cap_value exit 0
+2026-10-20T15:34:55Z start cap_value_figures
+["adaptation_losses", "adaptation_success", "collateral_vs_frozen", "deciles_edit", "deciles_locality_item", "deciles_paraphrase", "deciles_unseen", "frozen_hardest", "mquake_multihop", "own_worst", "pc_vs_bp_within_gain", "slides/slide1_cap_value_ordinary", "slides/slide2_frozen_hardest", "slides/slide3_own_worst_and_tails", "slides/slide4_locality_and_limits", "slides/slide5_pc_vs_bp", "token_survival"]
+2026-10-20T15:35:00Z end cap_value_figures exit 0
+2026-10-20T15:35:00Z start cap_value_report
+{"md": "/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/cap_value_report.md", "pdf": {"status": "ok", "pages": 0, "log": ")/m/n/10 , \\TU/LatinModernMono(0)/m/n/\n10 mquake_composition.csv\\TU/LatinModernRoman(0)/m/n/10 ,\n[24]\n(/home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/reports/_tex/cap_\nvalue_report.aux) )\n(see the transcript file for additional information)\nOutput written on /home/derp/cap/pc_cap/results/extremes_analysis/ext-20261009/\nreports/_tex/cap_value_report.pdf (24 pages).\nTranscript written on /home/derp/cap/pc_cap/results/extremes_analysis/ext-20261\n009/reports/_tex/cap_value_report.log.\n"}}
+2026-10-20T15:35:03Z end cap_value_report exit 0

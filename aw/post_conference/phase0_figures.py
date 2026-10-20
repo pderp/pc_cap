@@ -197,10 +197,12 @@ def composition(plt, cr, cf):
     ax = axes[1]
     rows = cf[cf.kind.isin(["single_hop_cloze (unedited hop)", "single_hop_question (unedited hop)", "single_hop_cloze (edited hop)", "multihop_in_context"]) & (cf.target == "new")]
     labels = {"single_hop_cloze (unedited hop)": "frozen: unedited hop\n(cloze)", "single_hop_question (unedited hop)": "frozen: unedited hop\n(question)", "single_hop_cloze (edited hop)": "frozen: edited hop\n(cloze, new answer)", "multihop_in_context": "frozen + taught fact\nin context: multi-hop"}
-    ax.bar(np.arange(len(rows)), rows.exact.astype(float), color=["#444444", "#444444", "#888888", "#9467bd"][: len(rows)])
+    ax.bar(np.arange(len(rows)), rows.exact_prefix.astype(float), color=["#444444", "#444444", "#888888", "#9467bd"][: len(rows)])
+    for k, (_, rr) in enumerate(rows.iterrows()):
+        ax.text(k, float(rr.exact_prefix) + 0.01, f"NLL {rr.mean_nll:.2f}", ha="center", fontsize=7)
     ax.set_xticks(np.arange(len(rows)))
     ax.set_xticklabels([labels.get(k, k) for k in rows.kind], fontsize=7)
-    ax.set_ylabel("exact match")
+    ax.set_ylabel("exact match (prefix rule)")
     ax.set_title("Frozen GPT-2 small: does it know the other hop?")
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()

@@ -53,7 +53,16 @@ def sec_frontier(fr, icf, ics):
                          f"{pct(reg.locality_item_fire_rate.mean())} → {pct(open_.locality_item_fire_rate.mean())}", f"{f2(best_i.tau.mean())}"])
     out.append("### 1.1 Registered gate versus the fully open gate (seed means)\n")
     out.append(md_table(["dataset", "cap", "τ = 0.5: paraphrase EM / near-miss fires / unseen fires", "τ = 1 (no null veto): same", "paraphrase mean NLL", "paraphrase CVaR95", "item-locality fire rate", "τ maximising paraphrase EM (mean over seeds)"], rows))
-    out.append("\nAt τ = 1 the only remaining abstentions are the rare-token veto and empty retrievals; the table therefore gives the whole range the null threshold can reach without changing the reader.\n")
+    out.append("\nAt τ = 1 the only remaining abstentions are the rare-token veto (evaluated on every forced acceptance, as the learner evaluates it after the null gate) and empty retrievals; the table therefore gives the whole range the null threshold can reach without changing the reader. Each arm carries its own acquired payloads, so a difference between curves mixes selection and payload; coincident curves mean similar trade-offs on this population, not identical gates or representations.\n")
+    out.append("### 1.1b Selection risk and answer risk along the sweep (paraphrases, seed means)\n")
+    rows = []
+    for ds in DATASETS:
+        for rule, lab in (("bp", "BP-CAP"), ("epc", "PC-CAP")):
+            y = fr[(fr.dataset == ds) & (fr.rule == rule)]
+            for tau in (0.3, 0.5, 0.7, 0.9, 1.0):
+                z = y[np.isclose(y.tau, tau)]
+                rows.append([DS[ds], lab, f"{tau:g}", pct(z.paraphrase_fire_rate.mean()), pct(z.paraphrase_wrong_record_rate.mean()), pct(z.paraphrase_fail_given_fired.mean()), pct(z.paraphrase_fail_given_fired_own.mean()), pct(z.paraphrase_exact.mean())])
+    out.append(md_table(["dataset", "cap", "τ", "coverage (fired)", "selection risk: wrong record accepted", "answer risk: failed given fired", "failed given fired own record", "paraphrase EM"], rows))
     # same-frontier test: compare PC curve to BP curve at matched near-miss false-fire rate
     out.append("### 1.2 Matched false-fire comparison\n")
     rows = []
@@ -136,7 +145,7 @@ def sec_oracle(orc, ics):
 
 def sec_incontext(ics):
     out = ["## 4. Equal-information baseline: frozen GPT-2 with the taught fact in context\n", f"![In-context vs cap]({FIGREL}/incontext_vs_cap.png)\n",
-           "Three retrieval arms prepend one taught fact (prompt + answer + newline) to the probe and run the frozen model: `oracle` prepends the probe's own fact (collateral families get no context: an oracle knows they are unrelated), `knn` the nearest taught prompt by cosine of the frozen residual keys at blocks 4/8/12 (the cap's own key feature, no learning), `lex` the best IDF-weighted token overlap. `knn`/`lex` always prepend, so their collateral columns are the worst case; §1.3 sweeps their retrieval scores as a threshold. Exact match is reported two ways: the project's strict rule (generation stops at a newline) and a prefix rule (generation starts with an alias), because a one-shot context often makes the model continue past the answer instead of emitting a newline; the caps' generations are rescored with the same prefix rule.\n"]
+           "Three retrieval arms prepend one taught fact (prompt + answer + newline) to the probe and run the frozen model: `oracle` prepends the probe's own fact (collateral families get no context: an oracle knows they are unrelated), `knn` the nearest taught prompt by cosine of the frozen residual keys at blocks 4/8/12 (the cap's own key feature, no learning), `lex` the best IDF-weighted token overlap. `knn`/`lex` always prepend, so their collateral columns are the worst case; §1.3 sweeps their retrieval scores as a threshold. Exact match is reported two ways: the project's strict rule (generation stops at a newline) and a prefix rule (generation starts with an alias), because a one-shot context often makes the model continue past the answer instead of emitting a newline; the caps' generations are rescored with the same prefix rule. The per-token NLL includes the newline terminator; a one-shot context demonstrates the answer format and so lowers the terminator's loss on *every* prompt, related or not, which is why the always-prepend arms look 'better than frozen' on unrelated prompts. The column without the terminator removes that format effect and is the one to read for collateral.\n"]
     for fam, tgt, title in (("paraphrase", "new", "Paraphrases (new answer)"), ("edit", "new", "Taught prompts (new answer)"), ("locality_item", "true", "Item-locality prompts (true answer)"), ("near_miss_neighbour", "true", "Near-miss neighbours (true answer)"), ("unseen", "new", "Unseen prompts (new answer; a 'success' here is a false fire)"), ("composition", "new", "MQuAKE multi-hop questions (new answer)")):
         rows = []
         for ds in DATASETS:
@@ -145,10 +154,10 @@ def sec_incontext(ics):
                 y = x[x.arm == arm]
                 if len(y):
                     y = y.iloc[0]
-                    rows.append([DS[ds], arm, int(y.n), f2(y.mean_nll), f2(y.cvar95), pct(y.exact), pct(y.exact_prefix), pct(y.frac_worse_1nat), pct(y.frac_severe), pct(y.frac_better_1nat), pct(y.retrieved_own_rate)])
+                    rows.append([DS[ds], arm, int(y.n), f2(y.mean_nll), f2(y.mean_nll_noterm), f2(y.cvar95), pct(y.exact), pct(y.exact_prefix), pct(y.frac_worse_1nat), pct(y.frac_severe), pct(y.frac_better_1nat), pct(y.retrieved_own_rate)])
         if rows:
             out.append(f"### {title}\n")
-            out.append(md_table(["dataset", "arm", "n", "mean NLL", "CVaR95", "EM strict", "EM prefix", "worse than frozen > 1 nat", "> 2 nats", "better > 1 nat", "retrieved own item"], rows) + "\n")
+            out.append(md_table(["dataset", "arm", "n", "mean NLL", "mean NLL w/o terminator", "CVaR95", "EM strict", "EM prefix", "worse than frozen > 1 nat", "> 2 nats", "better > 1 nat", "retrieved own item"], rows) + "\n")
     return "\n".join(out)
 
 
@@ -171,14 +180,15 @@ def sec_locality(lc, la, to):
 
 def sec_composition(cr, cf):
     out = ["## 6. Why composition scores zero\n", f"![Composition]({FIGREL}/composition.png)\n",
-           "78 of the 80 MQuAKE composition cases have exactly one dependency in the 300-edit stream; the other hop is an unedited fact the frozen base must supply. Chaining between two memory records is therefore not the mechanism that failed.\n"]
+           "78 of the 80 MQuAKE composition cases have exactly one dependency in the 300-edit stream; the other hop is an unedited fact the frozen base must supply. The learned readers select one record at the prompt from a write-free pass and apply it at all three sites, so bank-to-bank chaining is not a mechanism these readers have (Capex review §3); the registered composition endpoint evaluates fresh-start dependency-edit states, not a query into the 300-edit memory. The table below reads the reader's selection fields on those endpoint states.\n"]
     rows = []
     for _, r in cr[cr.target == "new"].sort_values("model").iterrows():
         rows.append([r.label, int(r.n_questions), pct(r.dependency_retrieved_rate), pct(r.dependency_top_rate), pct(r.fired_rate), int(r.fired_on_dependency), int(r.abstain_threshold), pct(r.exact_rate), f2(r.mean_nll_frozen), f2(r.mean_nll), f2(r.mean_D_fired), pct(r.frac_improved_gt1_when_fired)])
     out.append(md_table(["cap", "questions", "dependency record retrieved", "dependency is top candidate", "fired", "fired on the dependency", "stopped by null threshold", "new answer exact", "frozen NLL", "cap NLL", "mean D when fired", "improved > 1 nat when fired"], rows))
     out.append("\n### 6.1 Frozen GPT-2 small on the other hop\n")
-    rows = [[r.kind, r.target, int(r.n), pct(r.exact) if pd.notna(r.exact) else "—", f2(r.mean_nll), int(r.n_cases)] for _, r in cf.iterrows()]
-    out.append(md_table(["probe kind", "target", "n", "exact", "mean NLL", "cases"], rows))
+    rows = [[r.kind, r.target, int(r.n), pct(r.exact) if pd.notna(r.exact) else "—", pct(r.exact_prefix) if pd.notna(r.exact_prefix) else "—", pct(r.newline_immediately) if pd.notna(r.newline_immediately) else "—", f2(r.mean_nll), int(r.n_cases)] for _, r in cf.iterrows()]
+    out.append(md_table(["probe kind", "target", "n", "EM strict", "EM prefix", "generation = immediate newline", "mean NLL", "cases"], rows))
+    out.append("\nGreedy GPT-2 small answers a question-form prompt with a newline almost always (the 'immediate newline' column), so for question-form and in-context probes only the teacher-forced NLL is informative; on cloze prompts it continues past the answer, which the prefix rule credits.\n")
     out.append("\nReading: the reader retrieves the right record on most multi-hop wordings but the gate stops it (the question does not look like the taught prompt); when it fires, the taught delta moves the composed answer's loss only slightly, because the delta was acquired to produce the hop-1 answer at the hop-1 prompt, not to steer a two-hop question. And the frozen model's own knowledge of the unedited hop, asked directly with the new entity, bounds what any single-fact mechanism could compose. With the taught fact in its context, frozen GPT-2 small reaches the in-context row above on the multi-hop questions: that is the composition ceiling of the base model itself.\n")
     return "\n".join(out)
 
@@ -191,11 +201,34 @@ def sec_reserves(rs):
     return "\n".join(out)
 
 
+def matched_ff(fr, ds, target_ff):
+    """Paraphrase EM of every seed at a given near-miss false-fire rate, interpolated along its own threshold sweep."""
+    vals = {}
+    x = fr[fr.dataset == ds]
+    for rule in ("bp", "epc"):
+        ems = []
+        for model, y in x[x.rule == rule].groupby("model"):
+            y = y.sort_values("near_miss_neighbour_fire_rate")
+            if y.near_miss_neighbour_fire_rate.max() < target_ff:
+                ems.append(float(y.paraphrase_exact.iloc[-1]))
+            else:
+                ems.append(float(np.interp(target_ff, y.near_miss_neighbour_fire_rate.values, y.paraphrase_exact.values)))
+        vals[rule] = ems
+    return vals
+
+
 def headline(fr, pv, orc, ics, lc, cr, cf, rs):
     H = ["## Findings\n"]
     # 1 frontier
     reg = fr[np.isclose(fr.tau, NULL_THRESHOLD)]
-    H.append("1. **Same frontier.** " + "; ".join(f"{DS[ds]}: at the registered threshold BP-CAP {pct(reg[(reg.dataset == ds) & (reg.rule == 'bp')].paraphrase_exact.mean())} / PC-CAP {pct(reg[(reg.dataset == ds) & (reg.rule == 'epc')].paraphrase_exact.mean())} paraphrase EM at {pct(reg[(reg.dataset == ds) & (reg.rule == 'bp')].near_miss_neighbour_fire_rate.mean())} / {pct(reg[(reg.dataset == ds) & (reg.rule == 'epc')].near_miss_neighbour_fire_rate.mean())} near-miss false fires" for ds in DATASETS) + ". Table 1.2 gives the matched-false-fire comparison; where the PC − BP difference lies inside the seed ranges the two rules produced the same gate at different thresholds.")
+    parts = []
+    for ds in DATASETS:
+        b, p = reg[(reg.dataset == ds) & (reg.rule == "bp")], reg[(reg.dataset == ds) & (reg.rule == "epc")]
+        v2, v10 = matched_ff(fr, ds, 0.02), matched_ff(fr, ds, 0.10)
+        d2, d10 = np.mean(v2["epc"]) - np.mean(v2["bp"]), np.mean(v10["epc"]) - np.mean(v10["bp"])
+        overlap10 = (max(v10["epc"]) >= min(v10["bp"])) and (max(v10["bp"]) >= min(v10["epc"]))
+        parts.append(f"{DS[ds]}: registered {pct(b.paraphrase_exact.mean())} (BP) vs {pct(p.paraphrase_exact.mean())} (PC) at {pct(b.near_miss_neighbour_fire_rate.mean())} / {pct(p.near_miss_neighbour_fire_rate.mean())} near-miss false fires; at a matched 10 % false-fire rate PC − BP = {100 * d10:+.1f} pp ({'seed ranges overlap' if overlap10 else 'seed ranges do not overlap'}), at 2 % {100 * d2:+.1f} pp")
+    H.append("1. **Mostly the same frontier.** " + "; ".join(parts) + ". The registered PC/BP paraphrase gap is largely an operating-point difference (the PC readers sit at a more conservative threshold); what remains at matched false-fire rates is small at open settings and larger on CounterFact at tight ones, with wide PC seed ranges. Each arm carries its own acquired payloads, so even a residual difference is not a difference between gates alone (table 1.2).")
     # 2 atlas
     cf_bp = pv[(pv.dataset == "counterfact") & (pv.failure_definition == "not_exact")]
     mq = pv[(pv.dataset == "mquake") & (pv.failure_definition == "not_exact")]
@@ -215,8 +248,10 @@ def headline(fr, pv, orc, ics, lc, cr, cf, rs):
     # 6 composition
     c = cr[cr.target == "new"]
     hop = cf[cf.kind == "single_hop_cloze (unedited hop)"]
-    icm = cf[cf.kind == "multihop_in_context: any question correct (case level)"]
-    H.append(f"6. **Composition.** The dependency record is retrieved on {pct(c.dependency_retrieved_rate.min())}–{pct(c.dependency_retrieved_rate.max())} of multi-hop questions but the gate fires on {pct(c.fired_rate.min())}–{pct(c.fired_rate.max())}; when it fires the composed answer's loss moves by {f2(c.mean_D_fired.min())}–{f2(c.mean_D_fired.max())} nats/token. Frozen GPT-2 small answers the unedited hop exactly on {pct(hop.exact.iloc[0]) if len(hop) else '—'} of cloze prompts, and with the taught fact in context gets at least one multi-hop question per case right on {pct(icm.exact.iloc[0]) if len(icm) else '—'} of cases.")
+    icm = cf[cf.kind == "multihop_in_context"]
+    icm = icm[icm.target == "new"]
+    mh_frozen = cr[cr.target == "new"].mean_nll_frozen.mean()
+    H.append(f"6. **Composition.** The dependency record is retrieved on {pct(c.dependency_retrieved_rate.min())}–{pct(c.dependency_retrieved_rate.max())} of multi-hop questions but the gate fires on {pct(c.fired_rate.min())}–{pct(c.fired_rate.max())}; when it fires the composed answer's loss moves by {f2(c.mean_D_fired.min())}–{f2(c.mean_D_fired.max())} nats/token. Frozen GPT-2 small answers the unedited hop on {pct(hop.exact_prefix.iloc[0]) if len(hop) else '—'} of cloze prompts (prefix match; NLL {f2(hop.mean_nll.iloc[0]) if len(hop) else '—'}), and with the taught fact in its context its multi-hop target NLL falls from {f2(mh_frozen)} to {f2(icm.mean_nll.iloc[0]) if len(icm) else '—'} nats/token while the caps leave it at {f2(c.mean_nll.min())}–{f2(c.mean_nll.max())}: a one-shot context composes better than a write at blocks 4/8/12.")
     # 7 reserves
     H.append("7. **Reserves.** " + "; ".join(f"{DS[r.dataset]} {int(r.remaining)}" for _, r in rs.iterrows()) + " unexposed items remain (zsRE/CounterFact by the certified register; MQuAKE by population tables only), none overlapping the reader-training pool.")
     return "\n".join(H) + "\n"
@@ -246,7 +281,7 @@ def main():
           headline(fr, pv, orc, ics, lc, cr, cf, rs),
           sec_frontier(fr, icf, ics), sec_atlas(pv, orc_rate, summ, diff), sec_oracle(orc, ics), sec_incontext(ics), sec_locality(lc, la, to), sec_composition(cr, cf), sec_reserves(rs),
           "## 8. What this decides for Phase 1\n",
-          "- The selection experiment (Capex's A) should start from the hard negatives that actually fire: matched-template, different-subject prompts (zsRE near-miss neighbours, MQuAKE same-relation locality prompts). Same-subject prompts were not the problem.\n"
+          "- The selection experiment (Capex's A) should start from the hard negatives that actually fire: matched-template, different-subject prompts (zsRE near-miss neighbours, MQuAKE same-relation locality prompts), with labels defined against the whole active memory (a prompt that should invoke another taught record is a positive for that record). The proposal's same-subject hypothesis was wrong.\n"
           "- Retrieval misses on CounterFact (own record not in the top-4) cap what any gate can do; the small-reader harness needs a retrieval endpoint, not only a gate endpoint.\n"
           "- MQuAKE's payload failures (correct record applied, wrong answer) are a write-transfer problem: the per-position delta is prompt-specific. A Phase 1 arm should test deltas acquired on more than one wording, or a code-conditioned controller write, before any new learning rule.\n"
           "- The in-context arms set the accuracy bar the cap must beat or be cheaper than; every Phase 1 table carries them.\n"
